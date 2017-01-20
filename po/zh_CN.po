@@ -1,0 +1,219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-23 10:58+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../lib/ukui-menu.py:57
+msgid "Menu"
+msgstr "菜单"
+
+#: ../lib/ukui-menu.py:315
+msgid "Start"
+msgstr "开始"
+
+#: ../lib/ukui-menu.py:345
+msgid "Startup Menu"
+msgstr "开始菜单"
+
+#: ../lib/ukui-menu.py:414
+msgid "Reload plugins"
+msgstr "重载插件"
+
+#: ../lib/ukui-menu.py:417
+msgid "About"
+msgstr "关于"
+
+#: ../ukui_menu/plugins/menu.py:201
+#: ../ukui_menu/plugins/menu.py:1135
+#: ../ukui_menu/plugins/menu.py:1136
+msgid "Games"
+msgstr "游戏"
+
+#: ../ukui_menu/plugins/menu.py:389
+#: ../ukui_menu/plugins/menu.py:496
+msgid "All App"
+msgstr "所有程序"
+
+#: ../ukui_menu/plugins/menu.py:394
+#: ../ukui_menu/plugins/menu.py:485
+msgid "Favorite"
+msgstr "常用软件"
+
+#: ../ukui_menu/plugins/menu.py:424
+msgid "Power"
+msgstr "关机"
+
+#: ../ukui_menu/plugins/menu.py:507
+#: ../ukui_menu/plugins/menu.py:797
+#: ../ukui_menu/plugins/menu.py:805
+#: ../ukui_menu/plugins/menu.py:1425
+#: ../ukui_menu/plugins/menu.py:1929
+msgid "Search local program"
+msgstr "搜索本地程序"
+
+#: ../ukui_menu/plugins/menu.py:537
+msgid "Home"
+msgstr "我的电脑"
+
+#: ../ukui_menu/plugins/menu.py:545
+msgid "Settings"
+msgstr "控制面板"
+
+#: ../ukui_menu/plugins/menu.py:553
+msgid "No items matched"
+msgstr "没有与搜索条件匹配的项"
+
+#: ../ukui_menu/plugins/menu.py:845
+#: ../ukui_menu/plugins/menu.py:1582
+msgid "Open(_O)"
+msgstr "打开(_O)"
+
+#: ../ukui_menu/plugins/menu.py:848
+#: ../ukui_menu/plugins/menu.py:1585
+msgid "Add to desktop"
+msgstr "添加到桌面"
+
+#: ../ukui_menu/plugins/menu.py:852
+#: ../ukui_menu/plugins/menu.py:1588
+msgid "Lock to panel(_L)"
+msgstr "锁定到任务栏(_L)"
+
+#: ../ukui_menu/plugins/menu.py:855
+msgid "Unlock from startup menu"
+msgstr "从[开始菜单]解锁"
+
+#: ../ukui_menu/plugins/menu.py:859
+#: ../ukui_menu/plugins/menu.py:1598
+msgid "Property(_P)"
+msgstr "属性(_P)"
+
+#: ../ukui_menu/plugins/menu.py:926
+msgid "Shutdown"
+msgstr "关机"
+
+#: ../ukui_menu/plugins/menu.py:927
+msgid "Reboot"
+msgstr "重启"
+
+#: ../ukui_menu/plugins/menu.py:930
+msgid "Logout"
+msgstr "注销"
+
+#: ../ukui_menu/plugins/menu.py:931
+msgid "Switch User"
+msgstr "切换用户"
+
+#: ../ukui_menu/plugins/menu.py:932
+msgid "Lock Screen"
+msgstr "锁屏"
+
+#: ../ukui_menu/plugins/menu.py:1128
+msgid "Accessories"
+msgstr "附件"
+
+#: ../ukui_menu/plugins/menu.py:1130
+#: ../ukui_menu/plugins/menu.py:1131
+msgid "Office"
+msgstr "办公"
+
+#: ../ukui_menu/plugins/menu.py:1133
+msgid "StartUp"
+msgstr "开始"
+
+#: ../ukui_menu/plugins/menu.py:1381
+msgid "All"
+msgstr "所有"
+
+#: ../ukui_menu/plugins/menu.py:1381
+msgid "Show all applications"
+msgstr "显示所有程序"
+
+#: ../ukui_menu/plugins/menu.py:1591
+msgid "Add to startup menu"
+msgstr "附到[开始菜单]"
+
+#: ../ukui_menu/plugins/menu.py:1593
+msgid "Uninstall"
+msgstr "卸载"
+
+#: ../ukui_menu/plugins/menu.py:1594
+msgid "Remove from list(_R)"
+msgstr "从列表中删除(_R)"
+
+#: ../ukui_menu/plugins/menu.py:1596
+msgid "Remove all"
+msgstr "删除所有"
+
+#: ../ukui_menu/plugins/menu.py:1797
+msgid "Type:"
+msgstr "类型:"
+
+#: ../ukui_menu/plugins/menu.py:1799
+msgid "Name:"
+msgstr "名字:"
+
+#: ../ukui_menu/plugins/menu.py:1801
+msgid "Command:"
+msgstr "命令:"
+
+#: ../ukui_menu/plugins/menu.py:1803
+msgid "Note:"
+msgstr "注释:"
+
+#: ../ukui_menu/plugins/menu.py:1812
+msgid "Application"
+msgstr "应用程序"
+
+#: ../ukui_menu/plugins/menu.py:1814
+msgid "Application in Terminal"
+msgstr "终端程序"
+
+#: ../ukui_menu/plugins/menu.py:1823
+msgid "Property"
+msgstr "属性"
+
+#: ../ukui_menu/plugins/menu.py:1976
+msgid "Chromium Browser"
+msgstr "谷歌浏览器"
+
+#: ../ukui_menu/plugins/menu.py:1982
+msgid "Fcitx Config"
+msgstr "小企鹅配置"
+
+#: ../ukui_menu/easybuttons.py:415
+msgid "Comment:"
+msgstr "描述："
+
+#: ../ukui_menu/keybinding.py:180
+msgid "Click to set a new accelerator key for opening and closing the menu.  "
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:181
+msgid "Press Escape or click again to cancel the operation.  "
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:182
+msgid "Press Backspace to clear the existing keybinding."
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:195
+msgid "Pick an accelerator"
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:247
+msgid "<not set>"
+msgstr ""

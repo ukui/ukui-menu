@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+%:
+	dh ${@} --with python2
+
+override_dh_auto_build:
+	cp po/ukui-menu.pot po/ukui-menu.pot.bak
+	dh_auto_build
+
+override_dh_auto_clean:
+	test -f po/ukui-menu.pot.bak && mv po/ukui-menu.pot.bak po/ukui-menu.pot || true
+	rm -Rf ukui_menu.egg-info/
+	dh_auto_clean
+
+get-orig-source:
+	uscan --noconf --force-download --rename --download-current-version --destdir=..

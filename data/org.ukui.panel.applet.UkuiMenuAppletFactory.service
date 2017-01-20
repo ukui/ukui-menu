@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.ukui.panel.applet.UkuiMenuAppletFactory
+Exec=/usr/lib/ukui-menu/ukui-menu.py

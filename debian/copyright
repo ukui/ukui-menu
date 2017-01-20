@@ -1,0 +1,197 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ukui-menu
+Upstream-Contact: Kylin Team <ukui@ukuios.cn>
+Source: https://github.com/ukui/ukui-menu
+
+Files: README.md
+       COPYING
+       data/applications.list
+       data/icons/allapp-active.png
+       data/icons/allapp.png
+       data/icons/arrow-left.png
+       data/icons/arrow-right-line.png
+       data/icons/arrow-right.png
+       data/icons/computer-active.png
+       data/icons/computer.png
+       data/icons/controlcenter-active.png
+       data/icons/controlcenter.png
+       data/icons/dotted.png
+       data/icons/favapp-active.png
+       data/icons/favapp.png
+       data/icons/icon.png
+       data/icons/sep.png
+       data/icons/shutdown.svg
+       data/icons/so-close.png
+       data/icons/so.png
+       data/icons/start-click.png
+       data/icons/start-hover.png
+       data/icons/start.png
+       data/icons/stock_person.png 
+       data/ukui-menu.1
+       data/ukuimenu.css
+       data/ukui-menu.glade
+       data/org.ukui.ukui-menu.gschema.xml
+       data/org.ukui.panel.UkuiMenuApplet.ukui-panel-applet
+       data/org.ukui.panel.applet.UkuiMenuAppletFactory.service
+       data/plugins/org.ukui.ukui-menu.plugins.menu.gschema.xml
+       data/plugins/applications.glade
+       data/plugins/ukuimenu.glade
+       data/plugins/property.glade
+       data/popup.xml
+       lib/ukui-menu.py
+       lib/category.xml
+       lib/ukui-remove-application.py
+       ukui_menu/__init__.py
+       ukui_menu/plugins/__init__.py
+       ukui_menu/plugins/menu.py
+       ukui_menu/easybuttons.py
+       ukui_menu/easyfiles.py
+       ukui_menu/easygsettings.py
+       ukui_menu/execute.py
+       ukui_menu/filemonitor.py
+       ukui_menu/pointerMonitor.py
+       ukui-menu
+       .gitignore
+       .tx/config
+Copyright: 2007-2014, Clement Lefebvre <root@linuxmint.com>
+           2015-2016, Martin Wimpress <code@ubuntu-ukui.org>
+           2016, Sorokin Alexei <sor.alexei@meowr.ru>
+           2016,Tianjin UKUI Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: data/icons/ukui-logo.svg
+Copyright: 2015, Doug Torrance <dtorrance@monmouthcollege.edu>
+License: GPL-3+
+
+Files: po/*
+Copyright:
+ abuyop <abuyop@gmail.com>
+ Adriano Torres Azevedo <adrianotorres78@gmail.com>
+ Akerbeltz <fios@akerbeltz.org>
+ Almir Zulic <zalmir@yahoo.com>
+ Ari Ervasti <ari.ervasti87@gmail.com>
+ AWASHIRO Ikuya <ikunya@gmail.com>
+ Babak Alizadeh <alizadeh.babak@gmail.com>
+ Bjørn Vidar Dahle <xenoph@linux.com>
+ Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>
+ Clement Lefebvre <root@linuxmint.com>
+ Cyril Weller <cyril.yc.weller@gmail.com>
+ Daniel <danny34ever@yahoo.com>
+ Digvijay Patankar <dbpatankar@gmail.com>
+ Diogo Oliveira <diogodesigns@gmail.com>
+ dragnadh <dragnadh@gmail.com>
+ Efstathios Iosifidis <iefstathios@gmail.com>
+ Erieck Saputra <erick.1383@gmail.com>
+ Fernando Romay <ferocrom_32.9@live.com>
+ Gearóid  Ó Maelearcaidh <gearoid@omaelearcaidh.com>
+ gudeta <gudbog@gmail.com>
+ Isidro Pisa <isidro@utils.info>
+ Ismael Omar <ismaelhssn@gmail.com>
+ Ivar Smolin <okul@linux.ee>
+ Ivica  Kolić <ikoli@yahoo.com>
+ Jan-Olof Svensson <jan-olof.svensson@abc.se>
+ Joe Hansen <joedalton2@yahoo.dk>
+ Jon Stevenson <jon.stevenson@gmail.com>
+ Jorge Hinz <jh02777@googlemail.com>
+ 박정규(Jung Kyu Park) <bagjunggyu@gmail.com>
+ Khaleel Jageer <jskcse4@gmail.com>
+ KOSAL (David Salvo) <slinkeepy@gmail.com>
+ Louis <louis77@mac.com>
+ Martin Wimpress <code@flexion.org>
+ Mathieu Corbett <mathieu.corbett@gmail.com>
+ Miguel Anxo Bouzada <mbouzada@gmail.com>
+ Mihail Varantsou <meequz@gmail.com>
+ Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+ mzs.112000 <mzs.112000@gmail.com>
+ Nicat Məmmədov <n1c4t97@gmail.com>
+ Niroj Bista <nirooj56@outlook.com>
+ Ondřej Kolín <ondrej.kolin@gmail.com>
+ Piotr Strębski <strebski@o2.pl>
+ Praveen Illa <mail2ipn@gmail.com>
+ Rezső Páder <rezso@rezso.net>
+ Rhoslyn Prys <rprys@yahoo.com>
+ Robin van der Vliet <info@robinvandervliet.nl>
+ Rockworld <sumoisrock@gmail.com>
+ Saki <a4e484b@hotmail.com>
+ samson <sambelet@yahoo.com>
+ Sipan Roj <sipanroj@live.com>
+ Sveinn í Felli <sv1@fellsnet.is>
+ tibbi <tibbbi2@gmail.com>
+ tomoe_musashi <hkg.musashi@gmail.com>
+ Victor Ibragimov <victor.ibragimov@gmail.com>
+ Yngve Spjeld Landro <l10n@landro.net>
+ مهدي السطيفي <chinoune.mehdi@gmail.com>
+ Иван Старчевић <ivanstar61@gmail.com>
+ Микола Ткач <Stuartlittle1970@gmail.com>
+ Саша Петровић <salepetronije@gmail.com>
+ පසිඳු කාවින්ද <pkavinda@gmail.com>
+ 玉堂白鹤 <yjwork@qq.com>
+ Ukui Team <ukui@ukuios.cn>
+License: GPL-2+
+
+Files: setup.py
+Copyright: 2015, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+License: GPL-2+
+
+Files: ukui_menu/keybinding.py
+Copyright: 2013, Ozcan Esen <ozcanesen@gmail.com>
+           2008, Luca Bruno <lethalman88@gmail.com>
+           2016,Tianjin UKUI Information Technology Co., Ltd.
+License: Expat
+
+Files: debian/*
+Copyright: 2014-2015, Martin Wimpress <code@ubuntu-ukui.org>
+           2015, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+           2015, Vangelis Mouhtsis <vangelis@gnugr.org>
+           2016,Tianjin UKUI Information Technology Co., Ltd.
+License: GPL-2+
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-2'.
+
+License: Expat
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+
+License: GPL-3+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 3 can be found in `/usr/share/common-licenses/GPL-3'.
