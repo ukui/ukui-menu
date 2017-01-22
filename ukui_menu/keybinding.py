@@ -175,7 +175,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
                 elif event.detail == 26 and event.type == X.KeyPress:     #super+e
                     self.display.allow_events(X.SyncKeyboard, event.time)
                 elif event.detail == 26 and event.type == X.KeyRelease:   #super+e
-                    os.system("caja &")
+                    os.system("peony &")
                     self.display.allow_events(X.ReplayKeyboard, event.time)
                 else:
                     self.display.allow_events(X.ReplayKeyboard, event.time)

@@ -1,3 +1,15 @@
+ukui-menu (6.0.12.1) yakkety; urgency=medium
+
+  * remove mozo. 
+
+ -- penghuan (penghuan) <penghuan@kylinos.cn>  Sun, 22 Jan 2017 10:51:33 +0800
+
+ukui-menu (6.0.12) yakkety; urgency=medium
+
+  * rename caja to peony. 
+
+ -- penghuan (penghuan) <penghuan@kylinos.cn>  Fri, 20 Jan 2017 17:22:16 +0800
+
 ukui-menu (6.0.11) yakkety; urgency=medium
 
   * init for ukui. 

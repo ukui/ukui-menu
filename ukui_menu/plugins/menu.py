@@ -620,7 +620,7 @@ class pluginclass( object ):
         self.change_icon(self.button_computer, ICON_PATH + "computer.png")
     def on_computer_clicked(self, widget ,event):
         realPath = GLib.get_home_dir()
-        os.system("caja %s" % realPath)
+        os.system("peony %s" % realPath)
 
     def button_controlcenter_enter(self, *args, **kargs):
         self.change_icon(self.button_controlcenter, ICON_PATH + "controlcenter-active.png")

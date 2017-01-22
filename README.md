@@ -8,4 +8,4 @@ consider UKUI Menu a gift from me, to you :-)
 
 UKUI Menu needs translators!
 
-  * https://www.transifex.com/
+  * http://wiki.ukui.org/trans
