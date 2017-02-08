@@ -2,10 +2,7 @@ Source: ukui-menu
 Section: x11
 Priority: optional
 Maintainer: Kylin Team <ukui@kylinos.cn>
-Uploaders: Martin Wimpress <code@ubuntu-mate.org>,
-           Mike Gabriel <sunweaver@debian.org>,
-           Vangelis Mouhtsis <vangelis@gnugr.org>,
-           penghuan <penguan@kylinos.cn>
+Uploaders: penghuan <penguan@kylinos.cn>
 Build-Depends: debhelper (>= 9),
                dh-python,
                python,
