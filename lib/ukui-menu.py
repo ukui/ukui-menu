@@ -3,7 +3,7 @@
 
 # Copyright (C) 2007-2014 Clement Lefebvre <root@linuxmint.com>
 # Copyright (C) 2015-2016 Martin Wimpress <code@ubuntu-ukui.org>
-# Copyright: 2016,Tianjin UKUI Information Technology Co., Ltd. 
+# Copyright: 2016,Tianjin KYLIN Information Technology Co., Ltd. 
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

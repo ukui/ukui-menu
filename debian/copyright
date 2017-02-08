@@ -56,7 +56,7 @@ Files: README.md
 Copyright: 2007-2014, Clement Lefebvre <root@linuxmint.com>
            2015-2016, Martin Wimpress <code@ubuntu-ukui.org>
            2016, Sorokin Alexei <sor.alexei@meowr.ru>
-           2016,Tianjin UKUI Information Technology Co., Ltd.
+           2016,Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-2+
 
 Files: data/icons/ukui-logo.svg
@@ -136,14 +136,14 @@ License: GPL-2+
 Files: ukui_menu/keybinding.py
 Copyright: 2013, Ozcan Esen <ozcanesen@gmail.com>
            2008, Luca Bruno <lethalman88@gmail.com>
-           2016,Tianjin UKUI Information Technology Co., Ltd.
+           2016,Tianjin KYLIN Information Technology Co., Ltd.
 License: Expat
 
 Files: debian/*
 Copyright: 2014-2015, Martin Wimpress <code@ubuntu-ukui.org>
            2015, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
            2015, Vangelis Mouhtsis <vangelis@gnugr.org>
-           2016,Tianjin UKUI Information Technology Co., Ltd.
+           2016,Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-2+
 
 License: GPL-2+
