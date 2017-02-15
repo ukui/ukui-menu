@@ -53,7 +53,7 @@ from pyinotify import WatchManager, Notifier, ProcessEvent, IN_DELETE_SELF,IN_AC
 import dbus
 from configobj import ConfigObj
 import thread
-import ukuimenu
+import matemenu
 import operator
 import platform
 
@@ -304,7 +304,7 @@ class Category(GObject.GObject):
 
 class Menu:
     def __init__( self, MenuToLookup ):
-        self.tree = ukuimenu.lookup_tree( MenuToLookup )
+        self.tree = matemenu.lookup_tree( MenuToLookup )
         self.directory = self.tree.get_root_directory()
 
     def getMenus( self, parent = None ):
@@ -312,18 +312,18 @@ class Menu:
             yield self.tree.root
         else:
             for menu in parent.get_contents():
-                if menu.get_type() == ukuimenu.TYPE_DIRECTORY and self.__isVisible( menu ):
+                if menu.get_type() == matemenu.TYPE_DIRECTORY and self.__isVisible( menu ):
                     yield menu
 
     def getItems( self, menu ):
         for item in menu.get_contents():
-            if item.get_type() == ukuimenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible( item ):
+            if item.get_type() == matemenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible( item ):
                 yield item
 
     def __isVisible( self, item ):
-        if item.get_type() == ukuimenu.TYPE_ENTRY:
+        if item.get_type() == matemenu.TYPE_ENTRY:
             return not ( item.get_is_excluded() or item.get_is_nodisplay() )
-        if item.get_type() == ukuimenu.TPYE_DIRECTORY and len( item.get_contents() ):
+        if item.get_type() == matemenu.TPYE_DIRECTORY and len( item.get_contents() ):
             return True
 
 class pluginclass( object ):
@@ -565,7 +565,7 @@ class pluginclass( object ):
         self.categorybutton_list = []
 
         self.all_application_list = []
-        for mainitems in [ "ukui-applications.menu", "ukui-settings.menu" ]:
+        for mainitems in [ "mate-applications.menu", "mate-settings.menu" ]:
             mymenu = Menu( mainitems )
             mymenu.tree.add_monitor( self.menuChanged, None )
 
@@ -1322,27 +1322,27 @@ class pluginclass( object ):
 
         def find_applications_recursively(app_list, directory, catName):
             for item in directory.get_contents():
-                if item.get_type() == ukuimenu.TYPE_ENTRY:
+                if item.get_type() == matemenu.TYPE_ENTRY:
                     app_list.append( { 'desktop_file_path': item.get_desktop_file_path(),
                                        'category': entry.name } )
-                elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
+                elif item.get_type() == matemenu.TYPE_DIRECTORY:
                     find_applications_recursively(app_list, item, catName)
 
         for menu in self.menuFiles:
             root = menu.directory
             for entry in root.get_contents():
-                if entry.get_type() == ukuimenu.TYPE_DIRECTORY and len(entry.get_contents()):
+                if entry.get_type() == matemenu.TYPE_DIRECTORY and len(entry.get_contents()):
                     for item in entry.get_contents():
-                        if item.get_type() == ukuimenu.TYPE_DIRECTORY:
+                        if item.get_type() == matemenu.TYPE_DIRECTORY:
                             find_applications_recursively(application_list, item, entry.name)
-                        elif item.get_type() == ukuimenu.TYPE_ENTRY:
+                        elif item.get_type() == matemenu.TYPE_ENTRY:
                             application_list.append({ 'desktop_file_path': item.get_desktop_file_path(),
                                                       'category': entry.name })
         return application_list
 
     def loadMenuFiles( self ):
         self.menuFiles = []
-        for mainitems in [ "ukui-applications.menu", "ukui-settings.menu" ]:
+        for mainitems in [ "mate-applications.menu", "mate-settings.menu" ]:
             self.menuFiles.append( Menu( mainitems))
 
     def buildAppHistoryList( self ):
@@ -1352,19 +1352,19 @@ class pluginclass( object ):
         try:
             def find_applications_recursively(app_list, directory, catName):
                 for item in directory.get_contents():
-                    if item.get_type() == ukuimenu.TYPE_ENTRY:
+                    if item.get_type() == matemenu.TYPE_ENTRY:
                         app_list.append( { "entry": item, "category": catName } )
-                    elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
+                    elif item.get_type() == matemenu.TYPE_DIRECTORY:
                         find_applications_recursively(app_list, item, catName)
 
             for menu in self.menuFiles:
                 directory = menu.directory
                 for entry in directory.get_contents():
-                    if entry.get_type() == ukuimenu.TYPE_DIRECTORY and len(entry.get_contents()):
+                    if entry.get_type() == matemenu.TYPE_DIRECTORY and len(entry.get_contents()):
                         for item in entry.get_contents():
-                            if item.get_type() == ukuimenu.TYPE_DIRECTORY:
+                            if item.get_type() == matemenu.TYPE_DIRECTORY:
                                 find_applications_recursively(newApplicationsList, item, entry.name)
-                            elif item.get_type() == ukuimenu.TYPE_ENTRY:
+                            elif item.get_type() == matemenu.TYPE_ENTRY:
                                 newApplicationsList.append( { "entry": item, "category": entry.name } )
             return newApplicationsList
         except Exception, detail:
@@ -1378,7 +1378,7 @@ class pluginclass( object ):
 
         for menu in self.menuFiles:
             for child in menu.directory.get_contents():
-                if child.get_type() == ukuimenu.TYPE_DIRECTORY:
+                if child.get_type() == matemenu.TYPE_DIRECTORY:
                     icon = str(child.icon)
                     newCategoryList.append( { "name": child.name, "icon": child.icon, "tooltip": child.name, "filter": child.name, "index": num } )
             num += 1
