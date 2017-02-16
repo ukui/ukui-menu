@@ -437,8 +437,8 @@ class ApplicationLauncher( easyButton ):
 
         if self.appExec:
             if self.useTerminal:
-                if pathExists("ukui-terminal"):
-                    cmd = "ukui-terminal -e \"" + self.appExec + "\""
+                if pathExists("gnome-terminal"):
+                    cmd = "gnome-terminal -e \"" + self.appExec + "\""
                 elif pathExists("x-terminal-emulator"):
                     cmd = "x-terminal-emulator -e \"" + self.appExec + "\""
                 else:
@@ -470,11 +470,11 @@ class ApplicationLauncher( easyButton ):
         shutil.copyfile( self.desktopFile, self.startupFilePath )
   
         # Remove %u, etc. from Exec entry, because MATE will not replace them when it starts the app
-        item = ukuidesktop.item_new_from_uri( self.startupFilePath, ukuidesktop.LOAD_ONLY_IF_EXISTS )
+        item = matedesktop.item_new_from_uri( self.startupFilePath, matedesktop.LOAD_ONLY_IF_EXISTS )
         if item:
             r = re.compile("%[A-Za-z]");
-            tmp = r.sub("", item.get_string( ukuidesktop.KEY_EXEC ) ).strip()
-            item.set_string( ukuidesktop.KEY_EXEC, tmp )
+            tmp = r.sub("", item.get_string( matedesktop.KEY_EXEC ) ).strip()
+            item.set_string( matedesktop.KEY_EXEC, tmp )
             item.save( self.startupFilePath, 0 )
 
     def removeFromStartup( self ):

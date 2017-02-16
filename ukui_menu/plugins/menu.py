@@ -62,7 +62,7 @@ gettext.install("ukui-menu", "/usr/share/locale")
 
 ICON_PATH = "/usr/share/ukui-menu/icons/"
 ICON_SIZE = 16
-ukuimenu_settings=Gio.Settings.new("org.ukui.ukui-menu.plugins.menu")
+ukuimenu_settings=Gio.Settings.new("org.mate.ukui-menu.plugins.menu")
 FAVNUM = 5            #常用软件显示个数
 
 server = False
@@ -77,7 +77,7 @@ except Exception, e:
 
 serverx86 = False
 try:
-    (statusx86, outputx86) = commands.getstatusoutput("dpkg -l | grep ukui-server-guide")
+    (statusx86, outputx86) = commands.getstatusoutput("dpkg -l | grep mate-server-guide")
     if statusx86 == 0:
         serverx86 = True
     else:
@@ -122,9 +122,9 @@ class EventHandle(ProcessEvent):
     def process_IN_DELETE_SELF(self,event):
         ifchangegsettings = ukuimenu_settings.get_boolean("ifchange")
         if ifchangegsettings:
-            os.system("gsettings set org.ubuntu-ukui.ukuimenu.plugins.menu ifchange false")
+            os.system("gsettings set org.mate.ukui-menu.plugins.menu ifchange false")
         else:
-            os.system("gsettings set org.ubuntu-ukui.ukuimenu.plugins.menu ifchange true")
+            os.system("gsettings set org.mate.ukui-menu.plugins.menu ifchange true")
 
 def FSMonitor(self):
     wm = WatchManager()
@@ -773,7 +773,7 @@ class pluginclass( object ):
                     return None
             favButton = FavApplicationLauncher( location, 32, False)
             if favButton.appExec:
-                if favButton.appName == "Caja" or favButton.appExec == "ukui-terminal":
+                if favButton.appName == "Caja" or favButton.appExec == "gnome-terminal":
                     return None
                 favButton.show()
                 favButton.connect( "clicked", lambda w: self.ukuiMenuWin.hide() )
@@ -808,7 +808,7 @@ class pluginclass( object ):
         try:
             # Determine where the Desktop folder is (could be localized)
             import sys, commands
-            sys.path.append('/usr/lib/ubuntu-ukui/common')
+            sys.path.append('/usr/lib/ubuntu-mate/common')
             from configobj import ConfigObj
             config = ConfigObj(home + "/.config/user-dirs.dirs")
             desktopDir = home + "/Desktop"
@@ -1301,7 +1301,7 @@ class pluginclass( object ):
                                           True, 28,
                                           highlight = (True and menu_has_changed) )
         button.set_name("ButtonApp")
-        if button.appName == "Vim" or button.appExec == "/usr/bin/policytool" or button.appExec == "ukui-notification-properties" or "ImageMagick" in button.appName or "Fcitx" in button.appName:
+        if button.appName == "Vim" or button.appExec == "/usr/bin/policytool" or button.appExec == "notification-properties" or "ImageMagick" in button.appName or "Fcitx" in button.appName:
             return None
         if button.appExec:
             button.set_tooltip_text( button.getTooltip() )
@@ -1477,7 +1477,7 @@ class pluginclass( object ):
         try:
             # Determine where the Desktop folder is (could be localized)
             import commands
-            #sys.path.append('/usr/lib/ubuntu-ukui/common')
+            #sys.path.append('/usr/lib/ubuntu-mate/common')
             from configobj import ConfigObj
             config = ConfigObj(home + "/.config/user-dirs.dirs")
             desktopDir = home + "/Desktop"
@@ -1556,7 +1556,7 @@ class pluginclass( object ):
                 favoriteMenuItem.connect( "toggled", self.onAddToFavorites, widget )
             propsMenuItem.connect( "activate", self.onPropsApp, widget)     #feng
 
-            if button.appName == "Caja" or button.appName == "文件浏览器"or button.appExec == "ukui-terminal":
+            if button.appName == "Caja" or button.appName == "文件浏览器"or button.appExec == "gnome-terminal":
                 favoriteMenuItem.set_sensitive(False)
 
             mTree.connect("deactivate", self.set_item_state, widget)
@@ -1585,7 +1585,7 @@ class pluginclass( object ):
         try:
             # Determine where the Desktop folder is (could be localized)
             import commands
-            #sys.path.append('/usr/lib/ubuntu-ukui/common')
+            #sys.path.append('/usr/lib/ubuntu-mate/common')
             from configobj import ConfigObj
             config = ConfigObj(home + "/.config/user-dirs.dirs")
             desktopDir = home + "/Desktop"
@@ -1602,7 +1602,7 @@ class pluginclass( object ):
     def add_to_panel(self, widget, desktopEntry):
         self.get_panel()
         i = 0
-        panel_schema = Gio.Settings.new("org.ukui.panel")
+        panel_schema = Gio.Settings.new("org.mate.panel")
         applet_list = panel_schema.get_strv("object-id-list")
 
         while True:
@@ -1612,8 +1612,8 @@ class pluginclass( object ):
             else:
                 break
 
-        path = "/org/ukui/panel/objects/%s/" % (test_obj)
-        new_schema = Gio.Settings.new_with_path("org.ukui.panel.object", path)
+        path = "/org/mate/panel/objects/%s/" % (test_obj)
+        new_schema = Gio.Settings.new_with_path("org.mate.panel.object", path)
         new_schema.set_string("launcher-location", desktopEntry.desktopFile)
         new_schema.set_string("object-type", "launcher")
         new_schema.set_string("toplevel-id", self.panel)
@@ -1622,10 +1622,10 @@ class pluginclass( object ):
         panel_schema.set_strv("object-id-list", applet_list)
 
     def get_panel(self):
-        panelsettings = Gio.Settings.new("org.ukui.panel")
+        panelsettings = Gio.Settings.new("org.mate.panel")
         applet_list = panelsettings.get_strv("object-id-list")
         for applet in applet_list:
-            object_schema = Gio.Settings.new_with_path("org.ukui.panel.object", "/org/ukui/panel/objects/%s/" % (applet))
+            object_schema = Gio.Settings.new_with_path("org.mate.panel.object", "/org/mate/panel/objects/%s/" % (applet))
             keys = object_schema.list_keys()
             if "applet-iid" in keys:
                 iid = object_schema.get_string("applet-iid")
@@ -1969,7 +1969,7 @@ class pluginclass( object ):
                             findDesktop = True
                     if word[0].lower() == appname["entry"].name.lower() and findDesktop == False: 
                         button = MenuApplicationLauncher( appname["entry"].get_desktop_file_path(), 32, "", True, highlight=(False) )
-                        if button.appName == "Caja" or button.appExec == "ukui-terminal":
+                        if button.appName == "Caja" or button.appExec == "gnome-terminal":
                             continue
                         if button.appExec:
                             button.set_tooltip_text( button.getTooltip() )

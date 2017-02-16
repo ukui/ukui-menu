@@ -53,12 +53,12 @@ def datafilelist(installbase, sourcebase):
 
 data_files = [
     ('{prefix}/share/man/man1'.format(prefix=sys.prefix), glob('data/*.1')),
-    ('{prefix}/share/glib-2.0/schemas'.format(prefix=sys.prefix), ['data/org.ukui.ukui-menu.gschema.xml',
+    ('{prefix}/share/glib-2.0/schemas'.format(prefix=sys.prefix), ['data/org.mate.ukui-menu.gschema.xml',
                                                                   ] +
-                                                                  glob('data/plugins/org.ukui.ukui-menu.plugins.*.gschema.xml'),
+                                                                  glob('data/plugins/org.mate.ukui-menu.plugins.*.gschema.xml'),
     ),
-    ('{prefix}/share/ukui-panel/applets'.format(prefix=sys.prefix), ['data/org.ukui.panel.UkuiMenuApplet.ukui-panel-applet']),
-    ('{prefix}/share/dbus-1/services'.format(prefix=sys.prefix), ['data/org.ukui.panel.applet.UkuiMenuAppletFactory.service']),
+    ('{prefix}/share/mate-panel/applets'.format(prefix=sys.prefix), ['data/org.mate.panel.MateMenuApplet.mate-panel-applet']),
+    ('{prefix}/share/dbus-1/services'.format(prefix=sys.prefix), ['data/org.mate.panel.applet.MateMenuAppletFactory.service']),
     ('{prefix}/share/ukui-menu'.format(prefix=sys.prefix), ['data/ukui-menu.glade',
                                                             'data/popup.xml',
                                                             'data/ukuimenu.css',

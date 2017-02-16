@@ -30,10 +30,10 @@ Files: README.md
        data/ukui-menu.1
        data/ukuimenu.css
        data/ukui-menu.glade
-       data/org.ukui.ukui-menu.gschema.xml
-       data/org.ukui.panel.UkuiMenuApplet.ukui-panel-applet
-       data/org.ukui.panel.applet.UkuiMenuAppletFactory.service
-       data/plugins/org.ukui.ukui-menu.plugins.menu.gschema.xml
+       data/org.mate.ukui-menu.gschema.xml
+       data/org.mate.panel.MateMenuApplet.mate-panel-applet
+       data/org.mate.panel.applet.MateMenuAppletFactory.service
+       data/plugins/org.mate.ukui-menu.plugins.menu.gschema.xml
        data/plugins/applications.glade
        data/plugins/ukuimenu.glade
        data/plugins/property.glade

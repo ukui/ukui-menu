@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.ukui.ukui-menu.plugins.menu" path="/org/ukui/ukui-menu/plugins/menu/">
+  <schema id="org.mate.ukui-menu.plugins.menu" path="/org/mate/ukui-menu/plugins/menu/">
     <key type="b" name="ifchange">
       <default>true</default>
       <summary></summary>
