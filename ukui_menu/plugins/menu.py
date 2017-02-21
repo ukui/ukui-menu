@@ -620,7 +620,10 @@ class pluginclass( object ):
         self.change_icon(self.button_computer, ICON_PATH + "computer.png")
     def on_computer_clicked(self, widget ,event):
         realPath = GLib.get_home_dir()
-        os.system("peony %s" % realPath)
+        if os.path.exists("/usr/bin/peony"):
+            os.system("peony %s" % realPath)
+        else:
+            os.system("caja %s" % realPath)
 
     def button_controlcenter_enter(self, *args, **kargs):
         self.change_icon(self.button_controlcenter, ICON_PATH + "controlcenter-active.png")
@@ -628,9 +631,9 @@ class pluginclass( object ):
         self.change_icon(self.button_controlcenter, ICON_PATH + "controlcenter.png")
     def on_controlcenter_clicked(self, widget, event):
         if os.path.exists("/usr/bin/ukui-control-center"):
-                os.system("ukui-control-center &")
+            os.system("ukui-control-center &")
         else:
-                os.system("mate-control-center &")
+            os.system("mate-control-center &")
 
     def on_button_user_clicked ( self, widget, event):
         self.ukuiMenuWin.hide()

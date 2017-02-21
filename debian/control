@@ -38,6 +38,7 @@ Depends: ${python:Depends},
          synaptic,
          libwnck-dev
 Suggests: software-center,
+Conflicts: mate-menu
 Description: Advanced UKUI menu
  An advanced menu for UKUI. Supports filtering, favorites,
  easy-uninstallation, autosession, and many other features.
