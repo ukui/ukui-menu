@@ -13,17 +13,17 @@
 #Window {
 background-color: @ukuimenu_color;
 border-color: @ukuiside_color;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #EventBox {
 background-color: @ukui_bg_color;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #ViewportNull {
 background-color: transparent;
 border-width: 1px;
 border-color: transparent;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #ViewportButton {
 background-color: @ukui_vp_color;
@@ -34,7 +34,7 @@ border-left-color: @ukui_vp_border_color;
 border-right-color: @ukui_vp_color;
 border-top-color: @ukui_vp_border_color;
 border-bottom-color: @ukui_vp_border_color;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #Viewport {
 padding: 0px 0px;
@@ -43,7 +43,7 @@ border-width: 1px;
 border-style: solid;
 border-radius: 0px;
 border-color: @ukui_vp_border_color;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #ViewportEntry {
 padding: 0px 0px;
@@ -52,7 +52,7 @@ background-color: @ukui_vp_color;
 border-width: 1px;
 border-color: shade (@ukuimenu_color, 0.90);
 color: @ukui_fg_color;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #ViewportPower {
 background-color: @ukui_vp_color;
@@ -60,7 +60,7 @@ border-width: 1px;
 border-style: solid;
 border-radius: 0px;
 border-color: shade (@ukuimenu_color, 0.90);
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #ViewportPowerEnter {
 background-color: shade (@ukuimenu_color, 0.90);
@@ -68,20 +68,20 @@ border-width: 1px;
 border-style: solid;
 border-radius: 0px;
 border-color: shade (@ukuimenu_color, 1.05);
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #Viewport1 {
 background-color: @ukui_vp_color;
 border-style: solid;
 border-radius: 0px;
 border-width: 0px;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #Button {
 border: 1px solid transparent;
 border-radius: 0px;
 background-color: transparent;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #Button:hover {
 border-radius: 0px;
@@ -101,7 +101,7 @@ padding: 0px 2px;
 background-color: transparent;
 border-width: 0px;
 border-color: transparent;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #ButtonPower:hover {
 background-color: #daebfc;
@@ -118,7 +118,7 @@ padding: 2px 2px;
 border-radius: 0px;
 border-width: 1px;
 background-color: transparent;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #ButtonApp:hover {
 border-radius: 0px;
@@ -141,7 +141,7 @@ background-image: none;
 background-color: shade (@ukuimenu_color, 1.73);
 border-color: shade (@ukuimenu_color, 1.35);
 }
-#ButtonApp:insensitive {
+#ButtonApp:disabled {
 color: @ukui_fg_color;
 text-shadow: none;
 border-width: 1px;
@@ -161,7 +161,7 @@ padding: 0px 3px;
 background-color: @ukui_vp_color;
 border: 0px transparent;
 color: #999999; 
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 #EntryActive {
 border-radius: 0px;
@@ -169,7 +169,7 @@ padding: 0px 3px;
 background-color: @ukui_vp_color;
 border: 0px transparent;
 color: @ukui_fg_color;
-font: Ubuntu Regular 11;
+font-size: 11px;
 }
 tooltip,
 tooltip.background,
@@ -185,7 +185,7 @@ tooltip.background,
     text-shadow: none;
 }
 
-*:insensitive {
+*:disabled {
     color: @ukui_fg_color;
     text-shadow: none;
 }
