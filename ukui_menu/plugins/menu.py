@@ -88,28 +88,28 @@ except Exception, e:
 def get_user_icon():
     current_user = GLib.get_user_name ()
     try:
-        bus = Gio.bus_get_sync (Gio.BusType.SYSTEM, None)
-        result = bus.call_sync ('org.freedesktop.Accounts',
-                                '/org/freedesktop/Accounts',
-                                'org.freedesktop.Accounts',
-                                'FindUserByName',
-                                GLib.Variant ('(s)', (current_user,)),
-                                GLib.VariantType.new ('(o)'),
-                                Gio.DBusCallFlags.NONE,
-                                -1,
-                                None)
-        (path,) = result.unpack ()
+        bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        result = bus.call_sync('org.freedesktop.Accounts',
+                               '/org/freedesktop/Accounts',
+                               'org.freedesktop.Accounts',
+                               'FindUserByName',
+                               GLib.Variant ('(s)', (current_user,)),
+                               GLib.VariantType.new ('(o)'),
+                               Gio.DBusCallFlags.NONE,
+                               -1,
+                               None)
+        (path,) = result.unpack()
 
-        result = bus.call_sync ('org.freedesktop.Accounts',
-                                path,
-                                'org.freedesktop.DBus.Properties',
-                                'GetAll',
-                                GLib.Variant ('(s)', ('org.freedesktop.Accounts.User',)),
-                                GLib.VariantType.new ('(a{sv})'),
-                                Gio.DBusCallFlags.NONE,
-                                -1,
-                                None)
-        (props,) = result.unpack ()
+        result = bus.call_sync('org.freedesktop.Accounts',
+                               path,
+                               'org.freedesktop.DBus.Properties',
+                               'GetAll',
+                               GLib.Variant ('(s)', ('org.freedesktop.Accounts.User',)),
+                               GLib.VariantType.new ('(a{sv})'),
+                               Gio.DBusCallFlags.NONE,
+                               -1,
+                               None)
+        (props,) = result.unpack()
         usericon = props['IconFile']
         return usericon
     except Exception, e:
@@ -303,58 +303,58 @@ class Category(GObject.GObject):
 
 
 class Menu:
-    def __init__( self, MenuToLookup ):
-        self.tree = matemenu.lookup_tree( MenuToLookup )
+    def __init__(self, MenuToLookup):
+        self.tree = matemenu.lookup_tree(MenuToLookup)
         self.directory = self.tree.get_root_directory()
 
-    def getMenus( self, parent = None ):
+    def getMenus(self, parent = None):
         if parent == None:
             yield self.tree.root
         else:
             for menu in parent.get_contents():
-                if menu.get_type() == matemenu.TYPE_DIRECTORY and self.__isVisible( menu ):
+                if menu.get_type() == matemenu.TYPE_DIRECTORY and self.__isVisible(menu):
                     yield menu
 
-    def getItems( self, menu ):
+    def getItems(self, menu):
         for item in menu.get_contents():
-            if item.get_type() == matemenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible( item ):
+            if item.get_type() == matemenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible(item):
                 yield item
 
-    def __isVisible( self, item ):
+    def __isVisible(self, item):
         if item.get_type() == matemenu.TYPE_ENTRY:
-            return not ( item.get_is_excluded() or item.get_is_nodisplay() )
-        if item.get_type() == matemenu.TPYE_DIRECTORY and len( item.get_contents() ):
+            return not (item.get_is_excluded() or item.get_is_nodisplay())
+        if item.get_type() == matemenu.TPYE_DIRECTORY and len( item.get_contents()):
             return True
 
 class pluginclass( object ):
     TARGET_TYPE_TEXT = 80
-    toButton = ( Gtk.TargetEntry.new( "text/uri-list", 0, TARGET_TYPE_TEXT ), Gtk.TargetEntry.new( "text/uri-list", 0, TARGET_TYPE_TEXT ) )
+    toButton = (Gtk.TargetEntry.new("text/uri-list", 0, TARGET_TYPE_TEXT), Gtk.TargetEntry.new("text/uri-list", 0, TARGET_TYPE_TEXT))
     TARGET_TYPE_FAV = 81
-    toFav = ( Gtk.TargetEntry.new( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ), Gtk.TargetEntry.new( "text/plain", 0, 100 ), Gtk.TargetEntry.new( "text/uri-list", 0, 101 ) )
-    fromFav = ( Gtk.TargetEntry.new( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ), Gtk.TargetEntry.new( "FAVORITES", Gtk.TargetFlags.SAME_APP, 81 ) )
+    toFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), Gtk.TargetEntry.new("text/plain", 0, 100 ), Gtk.TargetEntry.new("text/uri-list", 0, 101))
+    fromFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81))
 
-    def __init__( self, ukuiMenuWin, toggleButton ):
+    def __init__(self, ukuiMenuWin, toggleButton):
         self.ukuiMenuWin = ukuiMenuWin
         self.toggleButton = toggleButton
         self.de = "ukui"
 
         self.builder = Gtk.Builder()
         #The Glade file for the plugin
-        self.builder.add_from_file (os.path.join( '/', 'usr', 'share', 'ukui-menu',  'plugins', 'ukuimenu.glade' ))
+        self.builder.add_from_file (os.path.join('/', 'usr', 'share', 'ukui-menu',  'plugins', 'ukuimenu.glade'))
         ukuimenu_settings.connect("changed::ifchange",self.changeimage)
         #Set 'heading' property for plugin
         self.heading = ""
         self.windowHeight = 505
         self.addedHeight = 0
 
-        self.window = self.builder.get_object( "window" )
-        self.content_holder = self.builder.get_object( "eventbox" )
+        self.window = self.builder.get_object("window")
+        self.content_holder = self.builder.get_object("eventbox")
         self.content_holder.connect( "key-press-event", self.keyPress )
         self.content_holder.set_size_request(575, self.windowHeight)
 
         style_provider = Gtk.CssProvider()
         try:
-            css = open( os.path.join( '/', 'usr', 'share', 'ukui-menu', 'ukuimenu.css' ), 'rb' )
+            css = open( os.path.join('/', 'usr', 'share', 'ukui-menu', 'ukuimenu.css'), 'rb')
             css_data = css.read()
             css.close()
             style_provider.load_from_data(css_data)
@@ -472,13 +472,13 @@ class pluginclass( object ):
 
         self.appHistoryList= self.buildAppHistoryList()
 
-        self.categoriesBox = self.builder.get_object( "categoriesbox" )
+        self.categoriesBox = self.builder.get_object("categoriesbox")
         self.categoriesBox.set_spacing(2)
-        self.applicationsBox = self.builder.get_object( "applicationsBox" )
+        self.applicationsBox = self.builder.get_object("applicationsBox")
         self.applicationsBox.set_spacing(2)
         self.applicationsScrolledWindow = self.builder.get_object( "applicationsScrolledWindow")
 
-        self.favappbutton = self.builder.get_object( "button_favapp" )
+        self.favappbutton = self.builder.get_object("button_favapp")
         self.favappbutton.set_label(_("Favorite"))
         self.favappbutton.set_name("Button")
         self.change_icon(self.favappbutton, ICON_PATH + "favapp.png")
@@ -486,10 +486,10 @@ class pluginclass( object ):
         self.favappbutton.connect("leave", self.favappbutton_leave)
         self.favappbutton.connect("clicked", lambda c1: self.changeTab(0))
 
-        self.viewportfav = self.builder.get_object( "viewportfav" )
-        self.viewportallapp = self.builder.get_object( "viewportallapp" )
+        self.viewportfav = self.builder.get_object("viewportfav")
+        self.viewportallapp = self.builder.get_object("viewportallapp")
 
-        self.allappbutton = self.builder.get_object( "button_allapp" )
+        self.allappbutton = self.builder.get_object("button_allapp")
         self.allappbutton.set_label(_("All App"))
         self.allappbutton.set_name("Button")
         self.change_icon(self.allappbutton, ICON_PATH + "allapp.png")
@@ -497,7 +497,7 @@ class pluginclass( object ):
         self.allappbutton.connect("leave", self.allappbutton_leave)
         self.allappbutton.connect("clicked", lambda c2: self.changeTab(1))
 
-        self.viewport_entry = self.builder.get_object( "viewport_entry" )
+        self.viewport_entry = self.builder.get_object("viewport_entry")
         self.viewport_entry.set_name("Viewport")
         self.searchEntry =self.builder.get_object( "search_entry" )
         self.searchEntry.set_name("Entry")
@@ -635,9 +635,12 @@ class pluginclass( object ):
         else:
             os.system("mate-control-center &")
 
-    def on_button_user_clicked ( self, widget, event):
+    def on_button_user_clicked (self, widget, event):
         self.ukuiMenuWin.hide()
-        os.system('ukui-control-center -u &')
+        if os.path.exists("/usr/bin/ukui-about-me"):
+            os.system("ukui-about-me &")
+        else:
+            os.system('mate-about-me &')
 
     def on_button_showall_clicked(self, widget):
         self.changeTab(1)
@@ -676,7 +679,7 @@ class pluginclass( object ):
         except Exception, e:
             print e
     
-    def favoritesSave( self ):
+    def favoritesSave(self):
         try:
             self.checkUkuiMenuFolder()
             appListFile = open(self.favoritesPath, "w")
@@ -691,39 +694,39 @@ class pluginclass( object ):
         except Exception, e:
             print e
 
-    def isLocationInFavorites( self, location ):
+    def isLocationInFavorites(self, location):
         for fav in self.favorites:
             if fav.type == "location" and fav.desktopFile == location:
                 return True
 
         return False
 
-    def checkUkuiMenuFolder( self ):
-        if os.path.exists( os.path.join( os.path.expanduser( "~" ), ".config", "ukui-menu", "applications" ) ):
+    def checkUkuiMenuFolder(self):
+        if os.path.exists( os.path.join( os.path.expanduser("~"), ".config", "ukui-menu", "applications" ) ):
             return True
         try:
-            os.makedirs( os.path.join( os.path.expanduser( "~" ), ".config", "ukui-menu", "applications" ) )
+            os.makedirs( os.path.join( os.path.expanduser("~"), ".config", "ukui-menu", "applications" ) )
             return True
         except:
             pass
 
         return False
 
-    def favoritesPositionOnGrid( self , favorite):
+    def favoritesPositionOnGrid(self , favorite):
         row = 0
         col = 0
         for fav in self.favorites:
             if fav.position == favorite.position:
                 break
             row +=1
-        self.favoritesBox.attach( favorite, col, col + 1, row, row + 1) #table自适应填充，随fav多少高度跟随改变
+        self.favoritesBox.attach(favorite, col, col + 1, row, row + 1) #table自适应填充，随fav多少高度跟随改变
    
-    def onFavButtonDragReorderGet( self, widget, context, selection, targetType, eventTime ):
+    def onFavButtonDragReorderGet(self, widget, context, selection, targetType, eventTime ):
         if targetType == self.TARGET_TYPE_FAV:
             self.drag_origin = widget.position
             selection.set( selection.get_target(), 8, str(widget.position))
     
-    def onFavButtonDragReorder( self, widget, context, x, y, selection, targetType, time  ):
+    def onFavButtonDragReorder(self, widget, context, x, y, selection, targetType, time):
         if targetType == self.TARGET_TYPE_FAV:
             #self.favoritesReorder( int(selection.data), widget.position )
             self.favoritesReorder( self.drag_origin, widget.position )
@@ -906,10 +909,6 @@ class pluginclass( object ):
             print detail
         return realPath
 
-    def on_button_user_clicked ( self, widget, event):
-        self.ukuiMenuWin.hide()
-        os.system('ukui-control-center -u &')
-
     def changeimage(self,settings,key,args=None):
         usericonPath = get_user_icon()
         pixbuf = Pixbuf.new_from_file(usericonPath)
@@ -993,7 +992,7 @@ class pluginclass( object ):
         self.ukuiMenuWin.hide()
         Gdk.flush()
 
-    def onShowMenu( self ):
+    def onShowMenu(self):
         screenHeight = Gdk.Screen.height()
         heightPath = os.path.join(GLib.get_home_dir(), ".windowHeight")
         if (self.currentHisCount + len(self.favAppList) - 1) < 10:
@@ -1020,7 +1019,7 @@ class pluginclass( object ):
         self.updateHeight()
         Gdk.flush()
 
-    def updateHeight( self ):
+    def updateHeight(self):
         self.layout_left.move(self.viewport_entry, 103, 465+self.addedHeight)
         self.layout_left.move(self.viewport18, 4, 465+self.addedHeight)
         self.layout_left.move(self.viewport23, 75, 465+self.addedHeight)
@@ -1029,16 +1028,16 @@ class pluginclass( object ):
         self.viewport2.set_size_request(236, 455+self.addedHeight)
         self.vp_right_container.set_size_request(227, 450+self.addedHeight)
 
-    def do_plugin( self ):
+    def do_plugin(self):
         self.Todos()
 
-    def Todos( self ):
+    def Todos(self):
         self.searchEntry.connect( "changed", self.Filter )
         self.searchEntry.connect( "activate", self.Search )
 
         self.buildButtonList()
 
-    def buildButtonList( self ):
+    def buildButtonList(self):
         if self.buildingButtonList:
             self.stopBuildingButtonList = True
             GLib.timeout_add( 100, self.buildButtonList )
@@ -1046,13 +1045,13 @@ class pluginclass( object ):
         self.stopBuildingButtonList = False
         self.updateBoxes(False)
 
-    def changeShowCategoryIcons( self, settings, key, args ):
+    def changeShowCategoryIcons(self, settings, key, args):
         categoryIconSize = self.iconSize
 
         for child in self.categoriesBox:
             child.setIconSize( categoryIconSize )
 
-    def menuChanged( self, x, y ):
+    def menuChanged(self, x, y):
         # wait some miliseconds because there a multiple events send at the same time and we don't want to rebuild the menu for each
         if self.menuChangedTimer:
             GLib.source_remove( self.menuChangedTimer )
@@ -1343,12 +1342,12 @@ class pluginclass( object ):
                                                       'category': entry.name })
         return application_list
 
-    def loadMenuFiles( self ):
+    def loadMenuFiles(self):
         self.menuFiles = []
         for mainitems in [ "mate-applications.menu", "mate-settings.menu" ]:
             self.menuFiles.append( Menu( mainitems))
 
-    def buildAppHistoryList( self ):
+    def buildAppHistoryList(self):
         self.loadMenuFiles()
         newApplicationsList = []
 
@@ -1374,7 +1373,7 @@ class pluginclass( object ):
             print detail
             return None
 
-    def buildCategoryList( self ):
+    def buildCategoryList(self):
         newCategoryList = [ { "name": _("All"), "icon": "stock_select-all", "tooltip": _("Show all applications"), "filter":"", "index": 0} ]
 
         num = 1
@@ -1414,7 +1413,7 @@ class pluginclass( object ):
                     widget1.rightbox.hide()
         self.Filter( widget, category)
 
-    def Filter( self, widget, category = None ):
+    def Filter(self, widget, category = None):
         self.filterTimer = None
 
         if  widget == self.searchEntry:
@@ -1474,7 +1473,7 @@ class pluginclass( object ):
 
         self.applicationsScrolledWindow.get_vadjustment().set_value( 0 )
 
-    def menuPopup( self, widget, event ):
+    def menuPopup(self, widget, event):
         button = MenuApplicationLauncher(widget.desktopFile, 32, "", True, highlight=(False))
         addedDesktop = False
         try:
@@ -1655,46 +1654,46 @@ class pluginclass( object ):
         self.favoritesBox.resize( self.favoritesGetNumRows(), self.favCols )
         self.updateHistoryBox()
 
-    def onAddToFavorites( self, menu, widget  ):
+    def onAddToFavorites(self, menu, widget):
         self.favoritesAdd( self.favoritesBuildLauncher( widget.desktopFile ) )
         self.updateHistoryBox()
 
-    def onRemoveFromFavorites( self, menu, widget ):
-        self.favoritesRemoveLocation( widget.desktopFile )
+    def onRemoveFromFavorites(self, menu, widget):
+        self.favoritesRemoveLocation(widget.desktopFile)
         self.updateHistoryBox()
 
-    def favoritesRemoveLocation( self, location ):
+    def favoritesRemoveLocation(self, location):
         for fav in self.favorites:
             if fav.type == "location" and fav.desktopFile == location:
-                self.favoritesRemove( fav.position )
+                self.favoritesRemove(fav.position)
         self.updateHistoryBox()
 
-    def favoritesAdd( self, favButton, position = -1 ):
+    def favoritesAdd(self, favButton, position = -1):
         if favButton:
             favButton.set_name("ButtonApp")
-            favButton.position = len( self.favorites )
+            favButton.position = len(self.favorites)
             self.favorites.append( favButton )
             for fav in self.favorites:
-                self.favoritesBox.remove( fav )
-                self.favoritesPositionOnGrid( fav )
+                self.favoritesBox.remove(fav)
+                self.favoritesPositionOnGrid(fav)
 
-            favButton.connect( "drag-data-received", self.onFavButtonDragReorder )
-            favButton.drag_dest_set( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, Gdk.DragAction.COPY )
-            favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
-            favButton.drag_source_set( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
+            favButton.connect("drag-data-received", self.onFavButtonDragReorder)
+            favButton.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP, self.fromFav, Gdk.DragAction.COPY)
+            favButton.connect("drag-data-get", self.onFavButtonDragReorderGet)
+            favButton.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY)
 
             if position >= 0:
-                self.favoritesReorder( favButton.position, position )
+                self.favoritesReorder(favButton.position, position)
 
             self.favoritesSave()
-            self.favoritesBox.resize( self.favoritesGetNumRows(), self.favCols )
+            self.favoritesBox.resize(self.favoritesGetNumRows(), self.favCols)
         self.updateHistoryBox()
 
-    def favoritesGetNumRows( self ):
+    def favoritesGetNumRows(self):
         rows = 0
         col = 0
         for fav in self.favorites:
-            if  ( fav.type == "separator" or fav.type == "space" ) and col != 0:
+            if  (fav.type == "separator" or fav.type == "space") and col != 0:
                 rows += 1
                 col = 0
             col += 1
@@ -1706,7 +1705,7 @@ class pluginclass( object ):
                 col = 0
         return rows
 
-    def onPropsApp( self, menu, widget ):
+    def onPropsApp(self, menu, widget):
         button = MenuApplicationLauncher(widget.desktopFile, 32, "", True, highlight=(False))
         self.builder1 = Gtk.Builder()
         self.builder1.add_from_file( os.path.join( '/', 'usr', 'share', 'ukui-menu',  'plugins', 'property.glade' ) )
