@@ -1632,7 +1632,7 @@ class pluginclass( object ):
             keys = object_schema.list_keys()
             if "applet-iid" in keys:
                 iid = object_schema.get_string("applet-iid")
-                if iid is not None and iid.find("UkuiMenu") != -1:
+                if iid is not None and iid.find("MateMenu") != -1:
                     self.panel = object_schema.get_string("toplevel-id")
                     self.panel_position = object_schema.get_int("position") + 1
 
