@@ -1,6 +1,11 @@
 ukui-menu (1.0.0) zesty; urgency=medium
 
-  * New release.
+  * Fix the error when click avatar.
+  * Replace ukui-panel with mate-panel.
+  * Fix some theme errors.
+  * Fix some errors in debian files.
+  * Update ukui-logo.svg.
+  * Drop ukui-menu.postinst.
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Sun, 12 Feb 2017 14:30:19 +0800
 

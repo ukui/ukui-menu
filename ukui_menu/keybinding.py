@@ -2,7 +2,7 @@
 
 # Copyright (C) 2013  Ozcan Esen <ozcanesen@gmail.com>
 # Copyright (C) 2008  Luca Bruno <lethalman88@gmail.com>
-# Copyright: 2016,Tianjin KYLIN Information Technology Co., Ltd. 
+# Copyright (C) 2016,Tianjin KYLIN Information Technology Co., Ltd.
 #
 # This a slightly modified version of the globalkeybinding.py file which is part of FreeSpeak.
 #

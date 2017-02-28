@@ -59,12 +59,11 @@ Copyright: 2007-2014, Clement Lefebvre <root@linuxmint.com>
 License: GPL-2+
 
 Files: data/icons/ukui-logo.svg
-Copyright: 2015, Doug Torrance <dtorrance@monmouthcollege.edu>
+Copyright: 2016,Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-3+
 
 Files: po/*
-Copyright:
- Ukui Team <ukui@ukuios.cn>
+Copyright: Kylin Team <ukui@kylinos.cn>
 License: GPL-2+
 
 Files: setup.py
