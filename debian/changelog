@@ -1,29 +1,29 @@
 ukui-menu (1.0.0) zesty; urgency=medium
 
-  * New release. 
+  * New release.
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Sun, 12 Feb 2017 14:30:19 +0800
 
 ukui-menu (0.9.3) yakkety; urgency=medium
 
-  * resolve when multi-user login, click startup menu no response. 
+  * resolve when multi-user login, click startup menu no response.
 
  -- penghuan (penghuan) <penghuan@kylinos.cn>  Thu, 09 Feb 2017 11:26:29 +0800
 
 ukui-menu (0.9.2) yakkety; urgency=medium
 
-  * remove mozo. 
+  * remove mozo.
 
  -- penghuan (penghuan) <penghuan@kylinos.cn>  Sun, 22 Jan 2017 10:51:33 +0800
 
 ukui-menu (0.9.1) yakkety; urgency=medium
 
-  * rename caja to peony. 
+  * rename caja to peony.
 
  -- penghuan (penghuan) <penghuan@kylinos.cn>  Fri, 20 Jan 2017 17:22:16 +0800
 
 ukui-menu (0.9.0) yakkety; urgency=medium
 
-  * init for ukui. 
+  * init for ukui.
 
  -- penghuan (penghuan) <penghuan@kylinos.cn>  Thu, 12 Jan 2017 19:22:52 +0800
