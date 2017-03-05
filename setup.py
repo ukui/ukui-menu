@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2015 by Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
@@ -53,12 +53,10 @@ def datafilelist(installbase, sourcebase):
 
 data_files = [
     ('{prefix}/share/man/man1'.format(prefix=sys.prefix), glob('data/*.1')),
-    ('{prefix}/share/glib-2.0/schemas'.format(prefix=sys.prefix), ['data/org.mate.ukui-menu.gschema.xml',
-                                                                  ] +
-                                                                  glob('data/plugins/org.mate.ukui-menu.plugins.*.gschema.xml'),
+    ('{prefix}/share/glib-2.0/schemas'.format(prefix=sys.prefix), glob('data/plugins/org.mate.ukui-menu.plugins.*.gschema.xml'),
     ),
-    ('{prefix}/share/mate-panel/applets'.format(prefix=sys.prefix), ['data/org.mate.panel.MateMenuApplet.mate-panel-applet']),
-    ('{prefix}/share/dbus-1/services'.format(prefix=sys.prefix), ['data/org.mate.panel.applet.MateMenuAppletFactory.service']),
+    ('{prefix}/share/mate-panel/applets'.format(prefix=sys.prefix), ['data/org.mate.panel.UkuiMenuApplet.mate-panel-applet']),
+    ('{prefix}/share/dbus-1/services'.format(prefix=sys.prefix), ['data/org.mate.panel.applet.UkuiMenuAppletFactory.service']),
     ('{prefix}/share/ukui-menu'.format(prefix=sys.prefix), ['data/ukui-menu.glade',
                                                             'data/popup.xml',
                                                             'data/ukuimenu.css',

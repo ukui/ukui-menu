@@ -3,56 +3,7 @@ Upstream-Name: ukui-menu
 Upstream-Contact: Kylin Team <ukui@kylinos.cn>
 Source: https://github.com/ukui/ukui-menu
 
-Files: README.md
-       COPYING
-       data/applications.list
-       data/icons/allapp-active.png
-       data/icons/allapp.png
-       data/icons/arrow-left.png
-       data/icons/arrow-right-line.png
-       data/icons/arrow-right.png
-       data/icons/computer-active.png
-       data/icons/computer.png
-       data/icons/controlcenter-active.png
-       data/icons/controlcenter.png
-       data/icons/dotted.png
-       data/icons/favapp-active.png
-       data/icons/favapp.png
-       data/icons/icon.png
-       data/icons/sep.png
-       data/icons/shutdown.svg
-       data/icons/so-close.png
-       data/icons/so.png
-       data/icons/start-click.png
-       data/icons/start-hover.png
-       data/icons/start.png
-       data/icons/stock_person.png
-       data/ukui-menu.1
-       data/ukuimenu.css
-       data/ukui-menu.glade
-       data/org.mate.ukui-menu.gschema.xml
-       data/org.mate.panel.MateMenuApplet.mate-panel-applet
-       data/org.mate.panel.applet.MateMenuAppletFactory.service
-       data/plugins/org.mate.ukui-menu.plugins.menu.gschema.xml
-       data/plugins/applications.glade
-       data/plugins/ukuimenu.glade
-       data/plugins/property.glade
-       data/popup.xml
-       lib/ukui-menu.py
-       lib/category.xml
-       lib/ukui-remove-application.py
-       ukui_menu/__init__.py
-       ukui_menu/plugins/__init__.py
-       ukui_menu/plugins/menu.py
-       ukui_menu/easybuttons.py
-       ukui_menu/easyfiles.py
-       ukui_menu/easygsettings.py
-       ukui_menu/execute.py
-       ukui_menu/filemonitor.py
-       ukui_menu/pointerMonitor.py
-       ukui-menu
-       .gitignore
-       .tx/config
+Files: *
 Copyright: 2007-2014, Clement Lefebvre <root@linuxmint.com>
            2015-2016, Martin Wimpress <code@ubuntu-ukui.org>
            2016,Tianjin KYLIN Information Technology Co., Ltd.

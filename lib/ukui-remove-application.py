@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # coding: utf-8
 
 # Copyright (C) 2007-2014 Clement Lefebvre <root@linuxmint.com>
@@ -49,7 +49,7 @@ class RemoveExecuter(threading.Thread):
         threading.Thread.__init__(self)
         self.package = package
 
-    def run(self):  
+    def run(self):
         removePackages = string.split(self.package)
         cmd = ["/usr/bin/synaptic-pkexec", "--hide-main-window",  \
                 "--non-interactive"]
@@ -65,27 +65,27 @@ class RemoveExecuter(threading.Thread):
             f.flush()
             comnd = Popen(' '.join(cmd), shell=True)
         returnCode = comnd.wait()
-        f.close()        
+        f.close()
         sys.exit(0)
 
 class ukuiRemoveWindow:
 
     def __init__(self, desktopFile):
-        self.desktopFile = desktopFile      
+        self.desktopFile = desktopFile
         (status, output) = commands.getstatusoutput("dpkg -S " + self.desktopFile)
         package = output[:output.find(":")]
-        if status != 0:            
-            warnDlg = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _("This application has been removed. Are you sure remove the menu form the startup menu?"))    
+        if status != 0:
+            warnDlg = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _("This application has been removed. Are you sure remove the menu form the startup menu?"))
             warnDlg.vbox.set_spacing(10)
             response = warnDlg.run()
             if response == Gtk.ResponseType.YES :
                 print "removing '%s'" % self.desktopFile
                 os.system("rm -f '%s'" % self.desktopFile)
                 os.system("rm -f '%s.desktop'" % self.desktopFile)
-            warnDlg.destroy()            
-            sys.exit(0)     
+            warnDlg.destroy()
+            sys.exit(0)
 
-        warnDlg = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, _("The following packages will be removed:"))            
+        warnDlg = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, _("The following packages will be removed:"))
         warnDlg.vbox.set_spacing(10)
 
         treeview = Gtk.TreeView()
@@ -103,7 +103,7 @@ class ukuiRemoveWindow:
             model.append([dependency])
         treeview.set_model(model)
         treeview.show()
-        
+
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_shadow_type(Gtk.ShadowType.ETCHED_OUT)
         scrolledwindow.set_size_request(300, 150)
@@ -120,10 +120,10 @@ class ukuiRemoveWindow:
         elif response == Gtk.ResponseType.CANCEL :
             sys.exit(0)
         warnDlg.destroy()
-                
+
         Gtk.main()
-        
+
 if __name__ == "__main__":
     mainwin = ukuiRemoveWindow(sys.argv[1])
     Gtk.main()
-    
+

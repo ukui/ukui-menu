@@ -431,6 +431,6 @@ def quit_all(widget):
     Gtk.main_quit()
     sys.exit(0)
 
-MatePanelApplet.Applet.factory_main("MateMenuAppletFactory", True,
+MatePanelApplet.Applet.factory_main("UkuiMenuAppletFactory", True,
                                     MatePanelApplet.Applet.__gtype__,
                                     applet_factory, None)

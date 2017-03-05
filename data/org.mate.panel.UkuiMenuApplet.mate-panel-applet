@@ -1,12 +1,12 @@
 [Applet Factory]
-Id=MateMenuAppletFactory
+Id=UkuiMenuAppletFactory
 InProcess=false
 Location=/usr/lib/ukui-menu/ukui-menu.py
 Name=UKUI Menu Applet Factory
 Description=Advanced UKUI Menu
 
-[MateMenuApplet]
+[UkuiMenuApplet]
 Name=UKUI Menu
 Description=Advanced UKUI Menu
 Icon=start-here
-MateComponentId=OAFIID:MATE_MateMenuApplet;
+MateComponentId=OAFIID:MATE_UkuiMenuApplet;
