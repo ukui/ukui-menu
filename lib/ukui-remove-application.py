@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # coding: utf-8
 
 # Copyright (C) 2007-2014 Clement Lefebvre <root@linuxmint.com>
@@ -33,8 +33,9 @@ try:
     import threading
     import tempfile
     import gettext
+    import dbus
 
-except Exception, detail:
+except Exception as detail:
     print detail
     sys.exit(1)
 
@@ -48,25 +49,26 @@ class RemoveExecuter(threading.Thread):
     def __init__(self, package):
         threading.Thread.__init__(self)
         self.package = package
+        self.iface = self.init_dbus_ifaces()
 
     def run(self):
         removePackages = string.split(self.package)
-        cmd = ["/usr/bin/synaptic-pkexec", "--hide-main-window",  \
-                "--non-interactive"]
-        cmd.append("--progress-str")
-        cmd.append("\"" + _("Please wait") + "\"")
-        cmd.append("--finish-str")
-        cmd.append("\"" + _("Application has been successfully removed!") + "\"")
-        f = tempfile.NamedTemporaryFile()
         for pkg in removePackages:
-            f.write("%s\tdeinstall\n" % pkg)
-            cmd.append("--set-selections-file")
-            cmd.append("%s" % f.name)
-            f.flush()
-            comnd = Popen(' '.join(cmd), shell=True)
-        returnCode = comnd.wait()
-        f.close()
-        sys.exit(0)
+            self.iface.remove(pkg)
+
+    def init_dbus_ifaces(self):
+        try:
+            bus = dbus.SystemBus()
+        except:
+            print "could not initiate dbus"
+            return False
+
+        try:
+            obj = bus.get_object("com.ubuntukylin.softwarecenter","/")
+            iface = dbus.Interface(obj, "com.ubuntukylin.softwarecenter")
+            return iface
+        except:
+            print "Get dbus failed"
 
 class ukuiRemoveWindow:
 

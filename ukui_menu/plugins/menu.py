@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2007-2014 Clement Lefebvre <root@linuxmint.com>
@@ -1536,7 +1536,7 @@ class pluginclass( object ):
                 deleteMenuItem.connect("activate", self.delete_from_menu, widget)
                 alldelete.connect("activate", self.clearAllRecent)
             else:
-                if os.path.exists("/usr/bin/synaptic-pkexec"):
+                if os.path.exists("/usr/bin/ubuntu-kylin-software-center"):
                     mTree.append(separator3)
                     mTree.append(uninstallMenuItem)
                     uninstallMenuItem.connect ( "activate", self.onUninstallApp, widget )
