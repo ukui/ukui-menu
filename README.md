@@ -9,6 +9,4 @@ This is UKUI Menu, a fork of [MintMenu](https://github.com/linuxmint/mintmenu).
     been ported to other distros that ship the UKUI Desktop
     Environment.
 
-UKUI Menu needs translators!
-
-  * http://wiki.ukui.org/trans
+![ukui-menu](http://www.ukui.org/images/feature_li1.png)
