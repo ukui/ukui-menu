@@ -27,15 +27,5 @@ if len(sys.argv) > 1:
         print("UKUI Menu - Advanced UKUI Menu\n")
         print("options:")
         print(" [--]help, [-]h Display this help.")
-        print(" [--]clean, [--]clear, [--]reset Restore settings to default.\n")
-    elif (sys.argv[1] in ["clean", "clear", "reset",
-          "--clean", "--clear", "--reset"]):
-        configPath = os.environ.get("XDG_CONFIG_HOME",
-                                    os.path.join(os.environ["HOME"], ".config"))
-
-        for path in ("org.ukui.ukui-menu.plugins.menu"):
-            os.system("gsettings reset-recursively " + path)
-        os.system("rm -rf \"" + os.path.join(configPath, "ukui-menu") + "\"")
-        print("All UKUI Menu settings are now restored to default")
 else:
     os.system("/usr/lib/ukui-menu/ukui-menu.py")

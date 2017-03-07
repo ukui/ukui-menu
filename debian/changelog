@@ -1,5 +1,5 @@
-ukui-menu (1.0.0) zesty; urgency=medium
+ukui-menu (1.0.0-1) zesty; urgency=medium
 
-  * Initial release (LP:1664229)
+  * Initial release (LP: #1664229)
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 06 Mar 2017 08:53:34 +0800

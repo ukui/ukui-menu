@@ -3,8 +3,8 @@
   <schema id="org.mate.ukui-menu.plugins.menu" path="/org/mate/ukui-menu/plugins/menu/">
     <key type="b" name="ifchange">
       <default>true</default>
-      <summary></summary>
-      <description></description>
+      <summary>The state of avatar</summary>
+      <description>This indicates the state of avatar</description>
     </key>
   </schema>
 </schemalist>
