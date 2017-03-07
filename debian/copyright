@@ -6,15 +6,15 @@ Source: https://github.com/ukui/ukui-menu
 Files: *
 Copyright: 2007-2014, Clement Lefebvre <root@linuxmint.com>
            2015-2016, Martin Wimpress <code@ubuntu-ukui.org>
-           2016,Tianjin KYLIN Information Technology Co., Ltd.
+           2016, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-2+
 
 Files: data/icons/ukui-logo.svg
-Copyright: 2016,Tianjin KYLIN Information Technology Co., Ltd.
+Copyright: 2016, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-3+
 
 Files: po/*
-Copyright: Kylin Team <ukui@kylinos.cn>
+Copyright: 2016, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-2+
 
 Files: setup.py
@@ -24,11 +24,11 @@ License: GPL-2+
 Files: ukui_menu/keybinding.py
 Copyright: 2013, Ozcan Esen <ozcanesen@gmail.com>
            2008, Luca Bruno <lethalman88@gmail.com>
-           2016,Tianjin KYLIN Information Technology Co., Ltd.
+           2016, Tianjin KYLIN Information Technology Co., Ltd.
 License: Expat
 
 Files: debian/*
-Copyright:2016,Tianjin KYLIN Information Technology Co., Ltd.
+Copyright:2016, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-2+
 
 License: GPL-2+
