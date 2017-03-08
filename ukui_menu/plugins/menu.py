@@ -57,7 +57,7 @@ import operator
 import platform
 
 # i18n
-gettext.install("ukui-menu", "/usr/share/locale") 
+gettext.install("ukui-menu", "/usr/share/locale")
 
 ICON_PATH = "/usr/share/ukui-menu/icons/"
 ICON_SIZE = 16
@@ -677,7 +677,7 @@ class pluginclass( object ):
             self.favoritesSave()
         except Exception, e:
             print e
-    
+
     def favoritesSave(self):
         try:
             self.checkUkuiMenuFolder()
@@ -719,12 +719,12 @@ class pluginclass( object ):
                 break
             row +=1
         self.favoritesBox.attach(favorite, col, col + 1, row, row + 1) #table自适应填充，随fav多少高度跟随改变
-   
+
     def onFavButtonDragReorderGet(self, widget, context, selection, targetType, eventTime ):
         if targetType == self.TARGET_TYPE_FAV:
             self.drag_origin = widget.position
             selection.set( selection.get_target(), 8, str(widget.position))
-    
+
     def onFavButtonDragReorder(self, widget, context, x, y, selection, targetType, time):
         if targetType == self.TARGET_TYPE_FAV:
             #self.favoritesReorder( int(selection.data), widget.position )
@@ -778,8 +778,6 @@ class pluginclass( object ):
                     return None
             favButton = FavApplicationLauncher( location, 32, False)
             if favButton.appExec:
-                if favButton.appName == "Caja" or favButton.appExec == "gnome-terminal":
-                    return None
                 favButton.show()
                 favButton.connect( "clicked", lambda w: self.ukuiMenuWin.hide() )
                 favButton.connect( "button-press-event", self.favPopup )
@@ -1555,11 +1553,7 @@ class pluginclass( object ):
             else:
                 favoriteMenuItem.set_active( False )
                 favoriteMenuItem.connect( "toggled", self.onAddToFavorites, widget )
-            propsMenuItem.connect( "activate", self.onPropsApp, widget)     #feng
-
-            if button.appName == "Caja" or button.appName == "文件浏览器"or button.appExec == "gnome-terminal":
-                favoriteMenuItem.set_sensitive(False)
-
+            propsMenuItem.connect( "activate", self.onPropsApp, widget)
             mTree.connect("deactivate", self.set_item_state, widget)
 
             self.ukuiMenuWin.stopHiding()
@@ -1970,17 +1964,14 @@ class pluginclass( object ):
                             findDesktop = True
                     if word[0].lower() == appname["entry"].name.lower() and findDesktop == False: 
                         button = MenuApplicationLauncher( appname["entry"].get_desktop_file_path(), 32, "", True, highlight=(False) )
-                        if button.appName == "Caja" or button.appExec == "gnome-terminal":
-                            continue
                         if button.appExec:
                             button.set_tooltip_text( button.getTooltip() )
                             button.connect( "clicked", lambda w: self.ukuiMenuWin.hide() )
-                            button.isRecentApp = True        
+                            button.isRecentApp = True
                             button.connect( "button-press-event", self.menuPopup )
 
                         found = True
                         break
-                    
                 if found and (self.currentHisCount <= historyDisplayNum):
                     self.recentAppBox.pack_start( button, False, True, 0 )
                     button.set_name("ButtonApp")
