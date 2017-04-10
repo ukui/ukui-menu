@@ -1300,8 +1300,6 @@ class pluginclass( object ):
                                           True, 28,
                                           highlight = (True and menu_has_changed) )
         button.set_name("ButtonApp")
-        if button.appName == "Vim" or button.appExec == "/usr/bin/policytool" or button.appExec == "notification-properties" or "ImageMagick" in button.appName or "Fcitx" in button.appName:
-            return None
         if button.appExec:
             button.set_tooltip_text( button.getTooltip() )
             button.connect( "clicked", lambda w: self.ukuiMenuWin.hide() )
@@ -1624,7 +1622,7 @@ class pluginclass( object ):
             keys = object_schema.list_keys()
             if "applet-iid" in keys:
                 iid = object_schema.get_string("applet-iid")
-                if iid is not None and iid.find("MateMenu") != -1:
+                if iid is not None and iid.find("UkuiMenu") != -1:
                     self.panel = object_schema.get_string("toplevel-id")
                     self.panel_position = object_schema.get_int("position") + 1
 
