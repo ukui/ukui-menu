@@ -1300,6 +1300,8 @@ class pluginclass( object ):
                                           True, 28,
                                           highlight = (True and menu_has_changed) )
         button.set_name("ButtonApp")
+        if button.appName == "Logout" or button.appName == "Shutdown" or button.appName == "Reboot":
+            return None
         if button.appExec:
             button.set_tooltip_text( button.getTooltip() )
             button.connect( "clicked", lambda w: self.ukuiMenuWin.hide() )
