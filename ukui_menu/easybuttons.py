@@ -303,10 +303,10 @@ class ApplicationLauncher( easyButton ):
         self.setupLabels()
 
         # Drag and Drop
-        #self.connectSelf( "drag-data-get", self.dragDataGet )
+        self.connectSelf( "drag-data-get", self.dragDataGet )
 
-        #targets = ( Gtk.TargetEntry.new( "text/plain", 0, 100 ), Gtk.TargetEntry.new( "text/uri-list", 0, 101 ) )
-        #self.drag_source_set( Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.COPY )
+        targets = ( Gtk.TargetEntry.new( "text/plain", 0, 100 ), Gtk.TargetEntry.new( "text/uri-list", 0, 101 ) )
+        self.drag_source_set( Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.COPY )
 
         icon = self.getIcon( Gtk.IconSize.DND )
         if icon:
