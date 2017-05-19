@@ -1,4 +1,4 @@
-This is UKUI Menu, a fork of [MintMenu](https://github.com/linuxmint/mintmenu).
+This is UKUI Menu, a fork of Mate Menu.
 
   * UKUI Menu is a new style startup menu.
 
@@ -8,5 +8,5 @@ This is UKUI Menu, a fork of [MintMenu](https://github.com/linuxmint/mintmenu).
   * This menu originated in the Linux Mint distribution and has
     been ported to other distros that ship the UKUI Desktop
     Environment.
-
-![ukui-menu](http://www.ukui.org/images/feature_li1.png)
+    
+<img src="https://wiki.ubuntu.com/ZestyZapus/ReleaseNotes/UbuntuKylin?action=AttachFile&do=get&target=ukui-menu-en.png" width="50%" height="50%" />
