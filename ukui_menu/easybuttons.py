@@ -437,8 +437,8 @@ class ApplicationLauncher( easyButton ):
 
         if self.appExec:
             if self.useTerminal:
-                if pathExists("gnome-terminal"):
-                    cmd = "gnome-terminal -e \"" + self.appExec + "\""
+                if pathExists("mate-terminal"):
+                    cmd = "mate-terminal -e \"" + self.appExec + "\""
                 elif pathExists("x-terminal-emulator"):
                     cmd = "x-terminal-emulator -e \"" + self.appExec + "\""
                 else:

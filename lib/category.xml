@@ -6,6 +6,7 @@
         <Entry name="打印机" source="system-config-printer.desktop" />
         <Entry name="计算器" source="gnome-calculator.desktop" />
         <Entry name="计算器" source="galculator.desktop" />
+        <Entry name="计算器" source="mate-calc.desktop" />
         <Entry name="记事本" source="pluma.desktop" />
         <Entry name="截图工具" source="mate-screenshot.desktop" />
         <Entry name="录音机" source="gnome-sound-recorder.desktop" />
