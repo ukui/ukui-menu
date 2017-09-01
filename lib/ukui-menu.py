@@ -63,14 +63,11 @@ from ukui_menu.execute import *
 class MainWindow( object ):
     """This is the main class for the application"""
 
-    def __init__( self, toggleButton, keybinder ):
+    def __init__( self, keybinder ):
         self.keybinder = keybinder
         self.data_path = os.path.join( '/', 'usr', 'share', 'ukui-menu' )
         self.icon = "/usr/share/ukui-menu/icons/ukui-logo.svg"
 
-        self.de = "mate"
-
-        self.toggle = toggleButton
         # Load UI file and extract widgets
         builder = Gtk.Builder()
         builder.add_from_file(os.path.join( self.data_path, "ukui-menu.glade" ))
@@ -127,7 +124,7 @@ class MainWindow( object ):
                     MyPlugin = pluginclass()
                 else:
                     # pass ukuiMenu and togglebutton instance so that the plugin can use it
-                    MyPlugin = pluginclass(self, self.toggle)
+                    MyPlugin = pluginclass(self)
 
                 #if ndddot MyPlugin.icon:
                 #    MyPlugin.icon = "ukui-logo-icon.png"
@@ -247,16 +244,16 @@ class MenuWin( object ):
         #self.loadSettings()
 
         self.createPanelButton()
+        self.applet.set_flags( MatePanelApplet.AppletFlags.EXPAND_MINOR )
         self.applet.connect( "button-press-event", self.showMenu )
         self.applet.connect( "enter-notify-event", self.enter_notify )
         self.applet.connect( "leave-notify-event", self.leave_notify )
-        GLib.idle_add( self.InitMenu )
+        GLib.timeout_add(500, self.InitMenu )
 
     def InitMenu( self ):
         self.keybinder = keybinding.GlobalKeyBinding()
         self.hotkeyText = "Super_L"
-        self.applet.set_flags( MatePanelApplet.AppletFlags.EXPAND_MINOR )
-        self.mainwin = MainWindow( self.button_box, self.keybinder )
+        self.mainwin = MainWindow( self.keybinder )
         self.mainwin.window.connect( "map-event", self.onWindowMap )
         self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
         self.mainwin.window.connect( "realize", self.onRealize )
@@ -267,15 +264,22 @@ class MenuWin( object ):
 
         self.pointerMonitor = pointerMonitor.PointerMonitor()
         self.pointerMonitor.connect("activate", self.onPointerOutside)
+        return False
 
     def onWindowMap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.SELECTED )
-        self.keybinder.set_focus_window( self.mainwin.window.get_window() )
+        if self.keybinder == None:
+            return
+        else:
+            self.keybinder.set_focus_window( self.mainwin.window.get_window() )
         return False
 
     def onWindowUnmap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.NORMAL )
-        self.keybinder.set_focus_window()
+        if self.keybinder == None:
+            return
+        else:
+            self.keybinder.set_focus_window()
         return False
 
     def onRealize( self, *args):

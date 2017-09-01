@@ -33,22 +33,33 @@ class PointerMonitor(GObject.GObject, threading.Thread):
     }
 
     def __init__(self):
-        GObject.GObject.__init__ (self)
-        threading.Thread.__init__ (self)
-        self.setDaemon (True)
-        self.display = Display()
-        self.root = self.display.screen().root
-        self.windows = []
+        try:
+            GObject.GObject.__init__ (self)
+            threading.Thread.__init__ (self)
+            self.setDaemon (True)
+            self.display = Display()
+            self.root = self.display.screen().root
+            self.windows = []
+        except Exception, cause:
+            print "init pointerMonitor error :\n", str(cause)
+            self.display = None
+            return None
 
     # Receives GDK windows
     def addWindowToMonitor(self, window):
+        if self.display == None:
+            return
         self.windows.append(window)
 
     def grabPointer(self):
+        if self.display == None:
+            return
         self.root.grab_button(X.AnyButton, X.AnyModifier, True, X.ButtonPressMask, X.GrabModeSync, X.GrabModeAsync, 0, 0)
         self.display.flush()
 
     def ungrabPointer(self):
+        if self.display == None:
+            return
         self.root.ungrab_button(X.AnyButton, X.AnyModifier)
         self.display.flush()
 
@@ -60,6 +71,8 @@ class PointerMonitor(GObject.GObject, threading.Thread):
         GLib.idle_add(self.run)
 
     def run(self):
+        if self.display == None:
+            return
         self.running = True
         while self.running:
             event = self.display.next_event()
@@ -85,6 +98,8 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                 print "Unexpected error: " + str(e)
 
     def stop(self):
+        if self.display == None:
+            return
         self.running = False
         self.root.ungrab_button(X.AnyButton, X.AnyModifier)
         self.display.close()

@@ -332,9 +332,8 @@ class pluginclass( object ):
     toFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), Gtk.TargetEntry.new("text/plain", 0, 100 ), Gtk.TargetEntry.new("text/uri-list", 0, 101))
     fromFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81))
 
-    def __init__(self, ukuiMenuWin, toggleButton):
+    def __init__(self, ukuiMenuWin):
         self.ukuiMenuWin = ukuiMenuWin
-        self.toggleButton = toggleButton
         self.de = "ukui"
 
         self.builder = Gtk.Builder()

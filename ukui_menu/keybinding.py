@@ -49,26 +49,31 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
     }
 
     def __init__(self):
-        GObject.GObject.__init__ (self)
-        threading.Thread.__init__ (self)
-        self.setDaemon (True)
+        try:
+            GObject.GObject.__init__ (self)
+            threading.Thread.__init__ (self)
+            self.setDaemon (True)
 
-        self.keymap = Gdk.Keymap().get_default()
-        self.display = Display()
-        self.screen = self.display.screen()
-        self.window = self.screen.root
-        self.showscreen = Wnck.Screen.get_default()
-        self.ignored_masks = self.get_mask_combinations(X.LockMask | X.Mod2Mask | X.Mod5Mask)
-        self.map_modifiers()
-        self.raw_keyval = None
-        self.keytext = ""
+            self.keymap = Gdk.Keymap().get_default()
+            self.display = Display()
+            self.screen = self.display.screen()
+            self.window = self.screen.root
+            self.showscreen = Wnck.Screen.get_default()
+            self.ignored_masks = self.get_mask_combinations(X.LockMask | X.Mod2Mask | X.Mod5Mask)
+            self.map_modifiers()
+            self.raw_keyval = None
+            self.keytext = ""
+        except Exception, cause:
+            print "init keybinding error: \n", str(cause)
+            self.display = None
+            return None
 
     def is_hotkey(self, key, modifier):
         keymatch = False
         modmatch = False
         modifier = modifier & ~Gdk.ModifierType.SUPER_MASK
         modint = int(modifier)
-        if self.get_keycode(key) == self.keycode:
+        if self.get_keycode(key) == self.keycode or self.get_keycode(key) == 134:
             keymatch = True
         for ignored_mask in self.ignored_masks:
             if self.modifiers | ignored_mask == modint | ignored_mask:
@@ -89,6 +94,8 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         return self.keymap.get_entries_for_keyval(keyval).keys[0].keycode
 
     def grab(self, key):
+        if self.display == None:
+            return False
         accelerator = key
         accelerator = accelerator.replace("<Super>", "<Mod4>")
         keyval, modifiers = Gtk.accelerator_parse(accelerator)
@@ -105,6 +112,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         for ignored_mask in self.ignored_masks:
             mod = modifiers | ignored_mask
             result = self.window.grab_key(self.keycode, mod, True, X.GrabModeAsync, X.GrabModeSync, onerror=catch)
+            result = self.window.grab_key(134, mod, True, X.GrabModeAsync, X.GrabModeSync, onerror=catch)
         self.display.flush()
         # sync has been blocking. Don't know why.
         #self.display.sync()
@@ -113,8 +121,11 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         return True
 
     def ungrab(self):
+        if self.display == None:
+            return
         if self.keycode:
             self.window.ungrab_key(self.keycode, X.AnyModifier, self.window)
+            self.window.ungrab_key(134, X.AnyModifier, self.window)
 
     def rebind(self, key):
         self.ungrab()
@@ -124,6 +135,8 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
             self.keytext = ""
 
     def set_focus_window(self, window = None):
+        if self.display == None:
+            return
         self.ungrab()
         if window is None:
             self.window = self.screen.root
@@ -142,6 +155,8 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         GLib.idle_add(self.run)
 
     def run(self):
+        if self.display == None:
+            return
         self.running = True
         wait_for_release = False
         showdesktop = True
@@ -149,14 +164,14 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
             event = self.display.next_event()
             try:
                 self.current_event_time = event.time
-                if event.detail == self.keycode and event.type == X.KeyPress and not wait_for_release:
+                if ( event.detail == self.keycode and event.type == X.KeyPress and not wait_for_release ) or ( event.detail == 134 and event.type == X.KeyPress and not wait_for_release ):
                     modifiers = event.state & self.known_modifiers_mask
                     if modifiers == self.modifiers:
                         wait_for_release = True
                         self.display.allow_events(X.SyncKeyboard, event.time)
                     else:
                         self.display.allow_events(X.ReplayKeyboard, event.time)
-                elif event.detail == self.keycode and wait_for_release:
+                elif ( event.detail == self.keycode and wait_for_release ) or ( event.detail == 134 and wait_for_release ):
                     if event.type == X.KeyRelease:
                         wait_for_release = False
                         GLib.idle_add(self.idle)
