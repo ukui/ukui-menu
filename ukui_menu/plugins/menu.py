@@ -641,10 +641,13 @@ class pluginclass( object ):
 
     def on_button_user_clicked (self, widget, event):
         self.ukuiMenuWin.hide()
-        if os.path.exists("/usr/bin/ukui-about-me"):
-            os.system("ukui-about-me &")
+        current_desktop = os.getenv("XDG_CURRENT_DESKTOP")
+        if current_desktop == "GNOME":
+            os.system("gnome-control-center &")
+        elif current_desktop == "MATE":
+            os.system("mate-about-me &")
         else:
-            os.system('mate-about-me &')
+            os.system("ukui-control-center -u &")
 
     def on_button_showall_clicked(self, widget):
         self.changeTab(1)
