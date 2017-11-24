@@ -53,7 +53,7 @@ def datafilelist(installbase, sourcebase):
 
 data_files = [
     ('{prefix}/share/man/man1'.format(prefix=sys.prefix), glob('data/*.1')),
-    ('{prefix}/share/glib-2.0/schemas'.format(prefix=sys.prefix), glob('data/plugins/org.mate.ukui-menu.plugins.*.gschema.xml'),
+    ('{prefix}/share/glib-2.0/schemas'.format(prefix=sys.prefix), glob('data/org.ukui.ukui-menu.gschema.xml'),
     ),
     ('{prefix}/share/mate-panel/applets'.format(prefix=sys.prefix), ['data/org.mate.panel.UkuiMenuApplet.mate-panel-applet']),
     ('{prefix}/share/dbus-1/services'.format(prefix=sys.prefix), ['data/org.mate.panel.applet.UkuiMenuAppletFactory.service']),

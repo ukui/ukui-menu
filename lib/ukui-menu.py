@@ -20,7 +20,7 @@
 # Free Software Foundation, Inc.,
 # 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 
-__VERSION__='1.0.2'
+__VERSION__='1.0.3'
 
 import gc
 import gi
@@ -31,6 +31,7 @@ import subprocess
 import sys
 import traceback
 import signal
+import debug
 
 gi.require_version("Gtk", "3.0")
 gi.require_version('MatePanelApplet', '4.0')
@@ -63,8 +64,10 @@ from ukui_menu.execute import *
 class MainWindow( object ):
     """This is the main class for the application"""
 
-    def __init__( self, keybinder ):
+    def __init__( self, keybinder, settings ):
         self.keybinder = keybinder
+        self.settings = settings
+        self.showCategoryMenu = False
         self.data_path = os.path.join( '/', 'usr', 'share', 'ukui-menu' )
         self.icon = "/usr/share/ukui-menu/icons/ukui-logo.svg"
 
@@ -107,16 +110,20 @@ class MainWindow( object ):
         ImageBox = Gtk.EventBox()
         ImageBox.show()
 
+        self.pluginlist           = self.settings.get_strv( "plugins-list" )
         self.plugins = {}
-        self.pluginlist = {'menu'}
+        print self.pluginlist
+#        self.pluginlist = {'menu'}
 
+        debug.debug("aaaaaaaaaaaaaaaaaaaa")
         for plugin in self.pluginlist:
             if plugin in self.plugins:
                 print u"Duplicate plugin in list: ", plugin
                 continue
 
-        if plugin == "menu":
+#        if plugin == "menu":
             try:
+                debug.debug(plugin)
                 plugin_module = 'ukui_menu.plugins.{plugin}'.format(plugin=plugin)
                 exec("from {plugin_module} import pluginclass".format(plugin_module=plugin_module))
                 # If no parameter passed to plugin it is autonomous
@@ -124,13 +131,14 @@ class MainWindow( object ):
                     MyPlugin = pluginclass()
                 else:
                     # pass ukuiMenu and togglebutton instance so that the plugin can use it
-                    MyPlugin = pluginclass(self)
-
+                    MyPlugin = pluginclass(self, self.showCategoryMenu)
                 #if ndddot MyPlugin.icon:
                 #    MyPlugin.icon = "ukui-logo-icon.png"
             except Exception, e:
                 print u"Unable to load " + plugin + " plugin :-("
+                debug.debug(e)
                 print e
+            debug.debug("bbbbbbbbbbbbbbbbbbbbbbbb")
             MyPlugin.content_holder.show()
 
             VBox1 = Gtk.Box( orientation=Gtk.Orientation.VERTICAL )
@@ -162,6 +170,7 @@ class MainWindow( object ):
 
             self.plugins[plugin] = MyPlugin
 
+        debug.debug("ccccccccccccccccccccccccccc")
         self.paneholder.pack_start( ImageBox, False, False, 0 )
         self.paneholder.pack_start( PluginPane, False, False, 0 )
 
@@ -241,7 +250,13 @@ class MenuWin( object ):
     def __init__( self, applet, iid ):
         self.data_path = os.path.join('/','usr','share','ukui-menu')
         self.applet = applet
+        self.settings = Gio.Settings.new("org.ukui.ukui-menu")
+        self.state = False
         #self.loadSettings()
+        self.actionNormal = Gtk.Action(name="UkuiNormalMenu", label=_("Normal Menu"), tooltip=None, stock_id="gtk-about")
+        self.actionNormal.connect("activate", self.LoadNormalMenu)
+        self.actionCategory = Gtk.Action(name="UkuiCategoryMenu", label=_("Category Menu"), tooltip=None, stock_id="gtk-about")
+        self.actionCategory.connect("activate", self.LoadCategoryMenu)
 
         self.createPanelButton()
         self.applet.set_flags( MatePanelApplet.AppletFlags.EXPAND_MINOR )
@@ -253,7 +268,7 @@ class MenuWin( object ):
     def InitMenu( self ):
         self.keybinder = keybinding.GlobalKeyBinding()
         self.hotkeyText = "Super_L"
-        self.mainwin = MainWindow( self.keybinder )
+        self.mainwin = MainWindow( self.keybinder, self.settings )
         self.mainwin.window.connect( "map-event", self.onWindowMap )
         self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
         self.mainwin.window.connect( "realize", self.onRealize )
@@ -412,9 +427,36 @@ class MenuWin( object ):
         # -"Move window"
         self.mainwin.window.move( newX, newY )
 
+    def LoadNormalMenu( self, *args, **kargs ):
+        #normal = []
+        #normal.append("menu")
+        #self.mainwin.settings.set_strv( "plugins-list", normal )
+        self.mainwin.showCategoryMenu = False
+        self.mainwin.RegenPlugins()
+        #print "1111111111111111111111111"
+        self.state = False
+
+    def LoadCategoryMenu( self, *args, **kargs ):
+        #category = []
+        #category.append("categorymenu")
+        #self.mainwin.settings.set_strv( "plugins-list", category )
+        self.mainwin.showCategoryMenu = True
+        self.mainwin.RegenPlugins()
+        self.state = True
+
     # this callback is to create a context menu
     def create_menu(self):
         action_group = Gtk.ActionGroup(name="context-menu")
+        if self.state:
+            self.actionNormal.set_sensitive(True)
+        else:
+            self.actionNormal.set_sensitive(False)
+        action_group.add_action(self.actionNormal)
+        if self.state:
+            self.actionCategory.set_sensitive(False)
+        else:
+            self.actionCategory.set_sensitive(True)
+        action_group.add_action(self.actionCategory)
         action = Gtk.Action(name="UkuiMenuReload", label=_("Reload plugins"), tooltip=None, stock_id="gtk-refresh")
         action.connect("activate", self.mainwin.RegenPlugins)
         action_group.add_action(action)

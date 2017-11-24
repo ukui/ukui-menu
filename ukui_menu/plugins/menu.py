@@ -61,7 +61,7 @@ gettext.install("ukui-menu", "/usr/share/locale")
 
 ICON_PATH = "/usr/share/ukui-menu/icons/"
 ICON_SIZE = 16
-ukuimenu_settings=Gio.Settings.new("org.mate.ukui-menu.plugins.menu")
+ukuimenu_settings=Gio.Settings.new("org.ukui.ukui-menu")
 FAVNUM = 5            #常用软件显示个数
 
 server = False
@@ -119,11 +119,11 @@ usericonPath = get_user_icon()
 
 class EventHandle(ProcessEvent):
     def process_IN_DELETE_SELF(self,event):
-        ifchangegsettings = ukuimenu_settings.get_boolean("ifchange")
+        ifchangegsettings = ukuimenu_settings.get_boolean("user-icon-changed")
         if ifchangegsettings:
-            os.system("gsettings set org.mate.ukui-menu.plugins.menu ifchange false")
+            os.system("gsettings set org.ukui.ukui-menu.plugins.menu ifchange false")
         else:
-            os.system("gsettings set org.mate.ukui-menu.plugins.menu ifchange true")
+            os.system("gsettings set org.ukui.ukui-menu.plugins.menu ifchange true")
 
 def FSMonitor(self):
     wm = WatchManager()
@@ -332,14 +332,15 @@ class pluginclass( object ):
     toFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), Gtk.TargetEntry.new("text/plain", 0, 100 ), Gtk.TargetEntry.new("text/uri-list", 0, 101))
     fromFav = (Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81), Gtk.TargetEntry.new("FAVORITES", Gtk.TargetFlags.SAME_APP, 81))
 
-    def __init__(self, ukuiMenuWin):
+    def __init__(self, ukuiMenuWin, showCategoryMenu):
         self.ukuiMenuWin = ukuiMenuWin
+        self.showCategoryMenu = showCategoryMenu
         self.de = "ukui"
 
         self.builder = Gtk.Builder()
         #The Glade file for the plugin
         self.builder.add_from_file (os.path.join('/', 'usr', 'share', 'ukui-menu',  'plugins', 'ukuimenu.glade'))
-        ukuimenu_settings.connect("changed::ifchange",self.changeimage)
+        ukuimenu_settings.connect("changed::user-icon-changed",self.changeimage)
         #Set 'heading' property for plugin
         self.heading = ""
         self.windowHeight = 505
@@ -641,13 +642,10 @@ class pluginclass( object ):
 
     def on_button_user_clicked (self, widget, event):
         self.ukuiMenuWin.hide()
-        current_desktop = os.getenv("XDG_CURRENT_DESKTOP")
-        if current_desktop == "GNOME":
-            os.system("gnome-control-center &")
-        elif current_desktop == "MATE":
-            os.system("mate-about-me &")
-        else:
+        if os.path.exists("/usr/bin/ukui-control-center"):
             os.system("ukui-control-center -u &")
+        elif os.path.exists("/usr/bin/mate-about-me"):
+            os.system('mate-about-me &')
 
     def on_button_showall_clicked(self, widget):
         self.changeTab(1)
@@ -1072,9 +1070,11 @@ class pluginclass( object ):
         self.loadMenuFiles()
 
         self.all_application_list = self.build_application_list()
-        cat = Category(self.all_application_list)
-
-        new_category_list = cat.category_list()
+        if self.showCategoryMenu:
+            new_category_list = self.buildCategoryList()
+        else:
+            cat = Category(self.all_application_list)
+            new_category_list = cat.category_list()
         added_category_list = []
         removed_category_list = []
 
@@ -1125,30 +1125,37 @@ class pluginclass( object ):
 
             for item in added_category_list:
                 try:
-                    if item["name"] == "附件":
-                        item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Accessories")], item["filter"] )
-                    if item["name"] == "办公":
-                        item["filter"] = _("Office")
-                        item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Office")], item["filter"] )
-                    if item["name"] == "启动":
-                        item["button"] = CategoryButton( item["icon"], category_icon_size, [_("StartUp")], item["filter"] )
-                    if item["name"] == "游戏":
-                        item["filter"] = _("Games")
-                        item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Games")], item["filter"] )
+                    if self.showCategoryMenu:
+                        if item["name"] == _("Preferences"):
+                            continue;
+                        item["filter"] = item["name"]
+                        item["button"] = CategoryButton( item["icon"], category_icon_size, [item["name"]], item["filter"])
+                    else:
+                        if item["name"] == "附件":
+                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Accessories")], item["filter"] )
+                        if item["name"] == "办公":
+                            item["filter"] = _("Office")
+                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Office")], item["filter"] )
+                        if item["name"] == "启动":
+                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("StartUp")], item["filter"] )
+                        if item["name"] == "游戏":
+                            item["filter"] = _("Games")
+                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Games")], item["filter"] )
                     item["button"].set_name("ButtonApp")
                     self.categorybutton_list.append(item["button"])
                     item["button"].connect( "clicked", self.FilterAndClear, item["filter"] )
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
                     item["button"].connect( "enter", self.showGoNext )
                     item["button"].connect( "leave", self.hideGoNext )
-                    if server:
-                        if item["name"] == "游戏" or item["name"] == "启动":
+                    if not self.showCategoryMenu:
+                        if server:
+                            if item["name"] == "游戏" or item["name"] == "启动":
+                                continue;
+                        if serverx86:
+                            if item["name"] == "游戏" or item["name"] == "启动":
+                                continue;
+                        if item["name"] == "启动":
                             continue;
-                    if serverx86:
-                        if item["name"] == "游戏" or item["name"] == "启动":
-                            continue;
-                    if item["name"] == "启动":
-                        continue;
                     item["button"].show()
 
                     self.categoryList.append( item )
@@ -1164,7 +1171,10 @@ class pluginclass( object ):
                 except Exception, e:
                     print e
 
-        new_application_list = cat.application_list()
+        if self.showCategoryMenu:
+            new_application_list = self.all_application_list
+        else:
+            new_application_list = cat.application_list()
         added_application_list = []
         removed_application_list = []
         #处理分类中有程序安装或删除时的显示更新
@@ -1379,7 +1389,7 @@ class pluginclass( object ):
             return None
 
     def buildCategoryList(self):
-        newCategoryList = [ { "name": _("All"), "icon": "stock_select-all", "tooltip": _("Show all applications"), "filter":"", "index": 0} ]
+        newCategoryList = [ ]
 
         num = 1
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.ukui.ukui-menu" path="/org/ukui/ukui-menu/">
+    <key type="as" name="plugins-list">
+      <default>['menu']</default>
+      <summary>plugin list</summary>
+      <description>default plugin list here</description>
+    </key>
+    <key type="b" name="user-icon-changed">
+      <default>true</default>
+      <summary>The state of avatar</summary>
+      <description>This indicates the state of avatar</description>
+    </key>
+  </schema>
+</schemalist>
