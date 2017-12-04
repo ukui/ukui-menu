@@ -46,16 +46,15 @@ msgstr "Oyunlar"
 
 #: ../ukui_menu/plugins/menu.py:387 ../ukui_menu/plugins/menu.py:492
 msgid "All App"
-msgstr "Tüm Uygulamalar"
+msgstr "Tüm Uyg."
 
 #: ../ukui_menu/plugins/menu.py:392 ../ukui_menu/plugins/menu.py:481
 msgid "Favorite"
 msgstr "Favoriler"
 
 #: ../ukui_menu/plugins/menu.py:422
-#, fuzzy
 msgid "Power"
-msgstr "Güç"
+msgstr "Kapat"
 
 #: ../ukui_menu/plugins/menu.py:503 ../ukui_menu/plugins/menu.py:802
 #: ../ukui_menu/plugins/menu.py:810 ../ukui_menu/plugins/menu.py:1424
@@ -117,7 +116,7 @@ msgstr "Ekranı Kilitle"
 
 #: ../ukui_menu/plugins/menu.py:1127
 msgid "Accessories"
-msgstr "Aksesuarlar"
+msgstr "Donatılar"
 
 #: ../ukui_menu/plugins/menu.py:1129 ../ukui_menu/plugins/menu.py:1130
 msgid "Office"
