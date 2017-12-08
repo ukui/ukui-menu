@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-24 17:30+0800\n"
+"POT-Creation-Date: 2017-12-08 16:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,193 +17,198 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../lib/ukui-menu.py:57
+#: ../lib/ukui-menu.py:59
 msgid "Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:315
+#. self.loadSettings()
+#: ../lib/ukui-menu.py:239
+msgid "Normal Menu"
+msgstr ""
+
+#: ../lib/ukui-menu.py:241
+msgid "Category Menu"
+msgstr ""
+
+#: ../lib/ukui-menu.py:317
 msgid "Start"
 msgstr ""
 
-#: ../lib/ukui-menu.py:345
+#: ../lib/ukui-menu.py:347
 msgid "Startup Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:414
+#: ../lib/ukui-menu.py:441
 msgid "Reload plugins"
 msgstr ""
 
-#: ../lib/ukui-menu.py:417
+#: ../lib/ukui-menu.py:444
 msgid "About"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:199 ../ukui_menu/plugins/menu.py:1134
-#: ../ukui_menu/plugins/menu.py:1135
+#: ../ukui_menu/plugins/menu.py:198 ../ukui_menu/plugins/menu.py:1111
+#: ../ukui_menu/plugins/menu.py:1112
 msgid "Games"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:387 ../ukui_menu/plugins/menu.py:492
+#: ../ukui_menu/plugins/menu.py:356 ../ukui_menu/plugins/menu.py:461
 msgid "All App"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:392 ../ukui_menu/plugins/menu.py:481
+#: ../ukui_menu/plugins/menu.py:361 ../ukui_menu/plugins/menu.py:450
 msgid "Favorite"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:422
+#: ../ukui_menu/plugins/menu.py:391
 msgid "Power"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:503 ../ukui_menu/plugins/menu.py:802
-#: ../ukui_menu/plugins/menu.py:810 ../ukui_menu/plugins/menu.py:1424
-#: ../ukui_menu/plugins/menu.py:1850
+#: ../ukui_menu/plugins/menu.py:472 ../ukui_menu/plugins/menu.py:771
+#: ../ukui_menu/plugins/menu.py:779 ../ukui_menu/plugins/menu.py:1408
+#: ../ukui_menu/plugins/menu.py:1834
 msgid "Search local program"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:533
+#: ../ukui_menu/plugins/menu.py:502
 msgid "Home"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:541
+#: ../ukui_menu/plugins/menu.py:510
 msgid "Settings"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:549
+#: ../ukui_menu/plugins/menu.py:518
 msgid "No items matched"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:850 ../ukui_menu/plugins/menu.py:1507
+#: ../ukui_menu/plugins/menu.py:819 ../ukui_menu/plugins/menu.py:1491
 msgid "Open(_O)"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:853 ../ukui_menu/plugins/menu.py:1510
+#: ../ukui_menu/plugins/menu.py:822 ../ukui_menu/plugins/menu.py:1494
 msgid "Add to desktop"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:857 ../ukui_menu/plugins/menu.py:1513
+#: ../ukui_menu/plugins/menu.py:826 ../ukui_menu/plugins/menu.py:1497
 msgid "Lock to panel(_L)"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:860
+#: ../ukui_menu/plugins/menu.py:829
 msgid "Unlock from startup menu"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:864 ../ukui_menu/plugins/menu.py:1523
+#: ../ukui_menu/plugins/menu.py:833 ../ukui_menu/plugins/menu.py:1507
 msgid "Property(_P)"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:926
+#: ../ukui_menu/plugins/menu.py:895
 msgid "Shutdown"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:927
+#: ../ukui_menu/plugins/menu.py:896
 msgid "Reboot"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:930
+#: ../ukui_menu/plugins/menu.py:899
 msgid "Logout"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:931
+#: ../ukui_menu/plugins/menu.py:900
 msgid "Switch User"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:932
+#: ../ukui_menu/plugins/menu.py:901
 msgid "Lock Screen"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1127
+#: ../ukui_menu/plugins/menu.py:1098
+msgid "Preferences"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1104
 msgid "Accessories"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1129 ../ukui_menu/plugins/menu.py:1130
+#: ../ukui_menu/plugins/menu.py:1106 ../ukui_menu/plugins/menu.py:1107
 msgid "Office"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1132
+#: ../ukui_menu/plugins/menu.py:1109
 msgid "StartUp"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1380
-msgid "All"
-msgstr ""
-
-#: ../ukui_menu/plugins/menu.py:1380
-msgid "Show all applications"
-msgstr ""
-
-#: ../ukui_menu/plugins/menu.py:1516
+#: ../ukui_menu/plugins/menu.py:1500
 msgid "Add to startup menu"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1518
+#: ../ukui_menu/plugins/menu.py:1502
 msgid "Uninstall"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1519
+#: ../ukui_menu/plugins/menu.py:1503
 msgid "Remove from list(_R)"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1521
+#: ../ukui_menu/plugins/menu.py:1505
 msgid "Remove all"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1718
+#: ../ukui_menu/plugins/menu.py:1702
 msgid "Type:"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1720
+#: ../ukui_menu/plugins/menu.py:1704
 msgid "Name:"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1722
+#: ../ukui_menu/plugins/menu.py:1706
 msgid "Command:"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1724
+#: ../ukui_menu/plugins/menu.py:1708
 msgid "Note:"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1733
+#: ../ukui_menu/plugins/menu.py:1717
 msgid "Application"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1735
+#: ../ukui_menu/plugins/menu.py:1719
 msgid "Application in Terminal"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1744
+#: ../ukui_menu/plugins/menu.py:1728
 msgid "Property"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1897
+#: ../ukui_menu/plugins/menu.py:1881
 msgid "Chromium Browser"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1903
+#: ../ukui_menu/plugins/menu.py:1887
 msgid "Fcitx Config"
 msgstr ""
 
-#: ../ukui_menu/easybuttons.py:416
+#: ../ukui_menu/easybuttons.py:407
 msgid "Comment:"
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:200
+#: ../ukui_menu/keybinding.py:215
 msgid "Click to set a new accelerator key for opening and closing the menu.  "
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:201
+#: ../ukui_menu/keybinding.py:216
 msgid "Press Escape or click again to cancel the operation.  "
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:202
+#: ../ukui_menu/keybinding.py:217
 msgid "Press Backspace to clear the existing keybinding."
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:215
+#: ../ukui_menu/keybinding.py:230
 msgid "Pick an accelerator"
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:267
+#: ../ukui_menu/keybinding.py:282
 msgid "<not set>"
 msgstr ""

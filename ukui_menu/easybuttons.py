@@ -25,8 +25,8 @@ import shutil
 import xdg.DesktopEntry
 import xdg.Menu
 
-from execute import *
-from filemonitor import monitor as filemonitor
+from .execute import *
+from .filemonitor import monitor as filemonitor
 from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 from gi.repository.GdkPixbuf import Pixbuf
 from gi.repository import Pango
@@ -65,10 +65,10 @@ class IconManager(GObject.GObject):
         contents = frozenset(os.listdir(self.iconDir)) - frozenset(('applications', 'applications.list'))
         for fn in contents:
             if os.path.isfile(os.path.join(self.iconDir, fn)):
-                print "Removing file : " + os.path.join(self.iconDir, fn)
+                print (("Removing file : " + os.path.join(self.iconDir, fn)))
                 os.remove(os.path.join(self.iconDir, fn))
             else:
-                print os.path.join(self.iconDir, fn) + " is not a file, skipping delete."
+                print ((os.path.join(self.iconDir, fn) + " is not a file, skipping delete."))
 
         self.defaultTheme.append_search_path(self.iconDir)
 
@@ -127,8 +127,8 @@ class IconManager(GObject.GObject):
                 image.set_pixel_size(iconSize)
 
             return image
-        except Exception, e:
-            print "Exception " + e.__class__.__name__ + ": " + e.message
+        except Exception as e:
+            print (("Exception " + e.__class__.__name__ + ": " + e.message))
             return None
 
     def themeChanged( self, theme ):
@@ -168,7 +168,7 @@ class easyButton( Gtk.Button ):
 
         if labels:
             for label in labels:
-                if isinstance( label, basestring ):
+                if isinstance( label, str ):
                     self.addLabel( label )                   
                 elif isinstance( label, list ):
                     self.addLabel( label[0], label[1] )
@@ -321,10 +321,10 @@ class ApplicationLauncher( easyButton ):
 
     def loadDesktopEntry( self, desktopItem ):
         try:
-            self.appName = self.strip_accents(desktopItem.getName())
-            self.appGenericName = self.strip_accents(desktopItem.getGenericName())
-            self.appComment = self.strip_accents(desktopItem.getComment())
-            self.appExec = self.strip_accents(desktopItem.getExec())
+            self.appName = desktopItem.getName()
+            self.appGenericName = desktopItem.getGenericName()
+            self.appComment = desktopItem.getComment()
+            self.appExec = desktopItem.getExec()
             self.appIconName = desktopItem.getIcon()
             self.appCategories = desktopItem.getCategories()
             self.appUkuiDocPath = desktopItem.get( "X-MATE-DocPath" ) or ""
@@ -351,8 +351,8 @@ class ApplicationLauncher( easyButton ):
             if os.path.exists (self.startupFilePath):
                 self.startupMonitorId = filemonitor.addMonitor( self.startupFilePath, self.startupFileChanged )
 
-        except Exception, e:
-            print e
+        except Exception as e:
+            print (e)
             self.appName            = ""
             self.appGenericName     = ""
             self.appComment         = ""
@@ -400,15 +400,6 @@ class ApplicationLauncher( easyButton ):
                     return False
                 else:
                     return True
-
-    def strip_accents(self, string):
-        value = string
-        if isinstance(string, unicode):
-            try:
-                value = string.encode('UTF8', 'ignore')
-            except:
-                pass
-        return value
 
     def getTooltip( self ):
         tooltip = self.appName
@@ -564,8 +555,8 @@ class MenuApplicationLauncher( ApplicationLauncher ):
                     #appComment = "<b>%s</b>" % (appComment);
                 appName = "<b>%s</b>" % (appName);
                 appComment = "<b>%s</b>" % (appComment);
-            except Exception, detail:
-                print detail
+            except Exception as detail:
+                print (detail)
                 pass
         
         if self.showComment and self.appComment != "":

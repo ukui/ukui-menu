@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-24 17:30+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../lib/ukui-menu.py:57
+msgid "Menu"
+msgstr ""
+
+#: ../lib/ukui-menu.py:315
+msgid "Start"
+msgstr ""
+
+#: ../lib/ukui-menu.py:345
+msgid "Startup Menu"
+msgstr ""
+
+#: ../lib/ukui-menu.py:414
+msgid "Reload plugins"
+msgstr ""
+
+#: ../lib/ukui-menu.py:417
+msgid "About"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:199 ../ukui_menu/plugins/menu.py:1134
+#: ../ukui_menu/plugins/menu.py:1135
+msgid "Games"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:387 ../ukui_menu/plugins/menu.py:492
+msgid "All App"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:392 ../ukui_menu/plugins/menu.py:481
+msgid "Favorite"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:422
+msgid "Power"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:503 ../ukui_menu/plugins/menu.py:802
+#: ../ukui_menu/plugins/menu.py:810 ../ukui_menu/plugins/menu.py:1424
+#: ../ukui_menu/plugins/menu.py:1850
+msgid "Search local program"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:533
+msgid "Home"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:541
+msgid "Settings"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:549
+msgid "No items matched"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:850 ../ukui_menu/plugins/menu.py:1507
+msgid "Open(_O)"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:853 ../ukui_menu/plugins/menu.py:1510
+msgid "Add to desktop"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:857 ../ukui_menu/plugins/menu.py:1513
+msgid "Lock to panel(_L)"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:860
+msgid "Unlock from startup menu"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:864 ../ukui_menu/plugins/menu.py:1523
+msgid "Property(_P)"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:926
+msgid "Shutdown"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:927
+msgid "Reboot"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:930
+msgid "Logout"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:931
+msgid "Switch User"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:932
+msgid "Lock Screen"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1127
+msgid "Accessories"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1129 ../ukui_menu/plugins/menu.py:1130
+msgid "Office"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1132
+msgid "StartUp"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1380
+msgid "All"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1380
+msgid "Show all applications"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1516
+msgid "Add to startup menu"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1518
+msgid "Uninstall"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1519
+msgid "Remove from list(_R)"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1521
+msgid "Remove all"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1718
+msgid "Type:"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1720
+msgid "Name:"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1722
+msgid "Command:"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1724
+msgid "Note:"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1733
+msgid "Application"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1735
+msgid "Application in Terminal"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1744
+msgid "Property"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1897
+msgid "Chromium Browser"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:1903
+msgid "Fcitx Config"
+msgstr ""
+
+#: ../ukui_menu/easybuttons.py:416
+msgid "Comment:"
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:200
+msgid "Click to set a new accelerator key for opening and closing the menu.  "
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:201
+msgid "Press Escape or click again to cancel the operation.  "
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:202
+msgid "Press Backspace to clear the existing keybinding."
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:215
+msgid "Pick an accelerator"
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:267
+msgid "<not set>"
+msgstr ""

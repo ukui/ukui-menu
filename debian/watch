@@ -1,0 +1,3 @@
+version=3
+opts=filenamemangle=s/.+\/v?(\d\S+)\.tar\.gz/ukui-menu-$1\.tar\.gz/ \
+  https://github.com/ukui/ukui-menu/releases .*/v?(\d\S+)\.tar\.gz

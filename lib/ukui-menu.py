@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2007-2014 Clement Lefebvre <root@linuxmint.com>
@@ -31,7 +31,6 @@ import subprocess
 import sys
 import traceback
 import signal
-import debug
 
 gi.require_version("Gtk", "3.0")
 gi.require_version('MatePanelApplet', '4.0')
@@ -41,12 +40,14 @@ from gi.repository import Gtk, GLib, GdkPixbuf, Gdk, GObject
 from gi.repository import MatePanelApplet
 from gi.repository import Gio
 
+from ukui_menu.plugins.menu import pluginclass
+
 try:
     import xdg.Config
     import ukui_menu.keybinding as keybinding
     import ukui_menu.pointerMonitor as pointerMonitor
-except Exception, e:
-    print e
+except Exception as e:
+    print (e)
     sys.exit( 1 )
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -67,7 +68,8 @@ class MainWindow( object ):
     def __init__( self, keybinder, settings ):
         self.keybinder = keybinder
         self.settings = settings
-        self.showCategoryMenu = False
+        
+
         self.data_path = os.path.join( '/', 'usr', 'share', 'ukui-menu' )
         self.icon = "/usr/share/ukui-menu/icons/ukui-logo.svg"
 
@@ -112,65 +114,44 @@ class MainWindow( object ):
 
         self.pluginlist           = self.settings.get_strv( "plugins-list" )
         self.plugins = {}
-        print self.pluginlist
-#        self.pluginlist = {'menu'}
 
-        debug.debug("aaaaaaaaaaaaaaaaaaaa")
-        for plugin in self.pluginlist:
-            if plugin in self.plugins:
-                print u"Duplicate plugin in list: ", plugin
-                continue
+        self.showCategoryMenu = self.settings.get_boolean("show-category-menu")
 
-#        if plugin == "menu":
-            try:
-                debug.debug(plugin)
-                plugin_module = 'ukui_menu.plugins.{plugin}'.format(plugin=plugin)
-                exec("from {plugin_module} import pluginclass".format(plugin_module=plugin_module))
-                # If no parameter passed to plugin it is autonomous
-                if pluginclass.__init__.func_code.co_argcount == 1:
-                    MyPlugin = pluginclass()
-                else:
-                    # pass ukuiMenu and togglebutton instance so that the plugin can use it
-                    MyPlugin = pluginclass(self, self.showCategoryMenu)
-                #if ndddot MyPlugin.icon:
-                #    MyPlugin.icon = "ukui-logo-icon.png"
-            except Exception, e:
-                print u"Unable to load " + plugin + " plugin :-("
-                debug.debug(e)
-                print e
-            debug.debug("bbbbbbbbbbbbbbbbbbbbbbbb")
-            MyPlugin.content_holder.show()
+        try:
+            MyPlugin = pluginclass(self, self.showCategoryMenu)
+        except Exception as e:
+            print (e)
+        MyPlugin.content_holder.show()
 
-            VBox1 = Gtk.Box( orientation=Gtk.Orientation.VERTICAL )
-            VBox1.show()
-            #Add plugin to Plugin Box under heading button
-            MyPlugin.content_holder.reparent( VBox1 )
+        VBox1 = Gtk.Box( orientation=Gtk.Orientation.VERTICAL )
+        VBox1.show()
+        #Add plugin to Plugin Box under heading button
+        MyPlugin.content_holder.reparent( VBox1 )
 
-            #Add plugin to main window
-            PaneLadder.pack_start( VBox1 , True, True, 0)
-            PaneLadder.show()
+        #Add plugin to main window
+        PaneLadder.pack_start( VBox1 , True, True, 0)
+        PaneLadder.show()
 
-            if MyPlugin.window:
-                MyPlugin.window.destroy()
+        if MyPlugin.window:
+            MyPlugin.window.destroy()
 
-            try:
-                if hasattr( MyPlugin, 'do_plugin' ):
-                    MyPlugin.do_plugin()
+        try:
+            if hasattr( MyPlugin, 'do_plugin' ):
+                MyPlugin.do_plugin()
 
-                heightPath = os.path.join(GLib.get_home_dir(), ".windowHeight")
-                if os.path.exists(heightPath):
-                    f = open(heightPath, "r")
-                    lines = f.readlines()
-                    length = lines[0]
-                    MyPlugin.windowHeight = int(length)
-                    f.close()
-                MyPlugin.content_holder.set_size_request(345, MyPlugin.windowHeight )
-            except Exception, e:
-                print e
+            heightPath = os.path.join(GLib.get_home_dir(), ".windowHeight")
+            if os.path.exists(heightPath):
+                f = open(heightPath, "r")
+                lines = f.readlines()
+                length = lines[0]
+                MyPlugin.windowHeight = int(length)
+                f.close()
+            MyPlugin.content_holder.set_size_request(345, MyPlugin.windowHeight )
+        except Exception as e:
+            print (e)
 
-            self.plugins[plugin] = MyPlugin
+        self.plugins["menu"] = MyPlugin
 
-        debug.debug("ccccccccccccccccccccccccccc")
         self.paneholder.pack_start( ImageBox, False, False, 0 )
         self.paneholder.pack_start( PluginPane, False, False, 0 )
 
@@ -183,7 +164,7 @@ class MainWindow( object ):
         for item in self.paneholder:
             item.destroy()
 
-        for plugin in self.plugins.values():
+        for plugin in list(self.plugins.values()):
             if hasattr( plugin, "destroy" ):
                 plugin.destroy()
 
@@ -208,7 +189,7 @@ class MainWindow( object ):
         return False
 
     def show( self ):
-        for plugin in self.plugins.values():
+        for plugin in list(self.plugins.values()):
             if hasattr( plugin, "onShowMenu" ):
                 plugin.onShowMenu()
 
@@ -216,14 +197,14 @@ class MainWindow( object ):
 
         self.window.get_window().focus( Gdk.CURRENT_TIME )
 
-        for plugin in self.plugins.values():
+        for plugin in list(self.plugins.values()):
             if hasattr( plugin, "changeTab" ):
                 plugin.changeTab( 0 )
 
         Gdk.flush()
 
     def hide( self ):
-        for plugin in self.plugins.values():
+        for plugin in list(self.plugins.values()):
             if hasattr( plugin, "onHideMenu" ):
                 plugin.onHideMenu()
 
@@ -251,6 +232,8 @@ class MenuWin( object ):
         self.data_path = os.path.join('/','usr','share','ukui-menu')
         self.applet = applet
         self.settings = Gio.Settings.new("org.ukui.ukui-menu")
+        self.settings.connect("changed::show-category-menu",self.changeMenuState)
+
         self.state = False
         #self.loadSettings()
         self.actionNormal = Gtk.Action(name="UkuiNormalMenu", label=_("Normal Menu"), tooltip=None, stock_id="gtk-about")
@@ -350,11 +333,11 @@ class MenuWin( object ):
             self.keybinder.connect("activate", self.onBindingPress)
             self.keybinder.start()
             # Binding menu to hotkey
-            print "Binding to Hot Key: " + self.hotkeyText
+            print (("Binding to Hot Key: " + self.hotkeyText))
 
-        except Exception, cause:
-            print "** WARNING ** - Menu Hotkey Binding Error"
-            print "Error Report :\n", str(cause)
+        except Exception as cause:
+            print ("** WARNING ** - Menu Hotkey Binding Error")
+            print (("Error Report :\n", str(cause)))
             pass
 
     def showAboutDialog( self, action, userdata = None ):
@@ -427,21 +410,19 @@ class MenuWin( object ):
         # -"Move window"
         self.mainwin.window.move( newX, newY )
 
-    def LoadNormalMenu( self, *args, **kargs ):
-        #normal = []
-        #normal.append("menu")
-        #self.mainwin.settings.set_strv( "plugins-list", normal )
-        self.mainwin.showCategoryMenu = False
+    def changeMenuState(self, settings, key, args=None):
         self.mainwin.RegenPlugins()
-        #print "1111111111111111111111111"
+
+    def LoadNormalMenu( self, *args, **kargs ):
+        self.mainwin.settings.set_boolean("show-category-menu", False)
+        #self.mainwin.showCategoryMenu = False
+        #self.mainwin.RegenPlugins()
         self.state = False
 
     def LoadCategoryMenu( self, *args, **kargs ):
-        #category = []
-        #category.append("categorymenu")
-        #self.mainwin.settings.set_strv( "plugins-list", category )
-        self.mainwin.showCategoryMenu = True
-        self.mainwin.RegenPlugins()
+        self.mainwin.settings.set_boolean("show-category-menu", True)
+        #self.mainwin.showCategoryMenu = True
+        #self.mainwin.RegenPlugins()
         self.state = True
 
     # this callback is to create a context menu

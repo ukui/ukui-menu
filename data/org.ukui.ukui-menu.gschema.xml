@@ -11,5 +11,10 @@
       <summary>The state of avatar</summary>
       <description>This indicates the state of avatar</description>
     </key>
+    <key type="b" name="show-category-menu">
+      <default>false</default>
+      <summary>current menu state</summary>
+      <description>This indicates the state of the menu</description>
+    </key>
   </schema>
 </schemalist>

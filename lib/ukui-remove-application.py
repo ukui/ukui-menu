@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # coding: utf-8
 
 # Copyright (C) 2007-2014 Clement Lefebvre <root@linuxmint.com>
@@ -29,14 +29,14 @@ try:
     import sys
     import string
     import os
-    import commands
+    import subprocess
     import threading
     import tempfile
     import gettext
     import dbus
 
 except Exception as detail:
-    print detail
+    print (detail)
     sys.exit(1)
 
 from subprocess import Popen
@@ -60,7 +60,7 @@ class RemoveExecuter(threading.Thread):
         try:
             bus = dbus.SystemBus()
         except:
-            print "could not initiate dbus"
+            print ("could not initiate dbus")
             return False
 
         try:
@@ -68,20 +68,20 @@ class RemoveExecuter(threading.Thread):
             iface = dbus.Interface(obj, "com.ubuntukylin.softwarecenter")
             return iface
         except:
-            print "Get dbus failed"
+            print ("Get dbus failed")
 
 class ukuiRemoveWindow:
 
     def __init__(self, desktopFile):
         self.desktopFile = desktopFile
-        (status, output) = commands.getstatusoutput("dpkg -S " + self.desktopFile)
+        (status, output) = subprocess.getstatusoutput("dpkg -S " + self.desktopFile)
         package = output[:output.find(":")]
         if status != 0:
             warnDlg = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _("This application has been removed. Are you sure remove the menu form the startup menu?"))
             warnDlg.vbox.set_spacing(10)
             response = warnDlg.run()
             if response == Gtk.ResponseType.YES :
-                print "removing '%s'" % self.desktopFile
+                print (("removing '%s'" % self.desktopFile))
                 os.system("rm -f '%s'" % self.desktopFile)
                 os.system("rm -f '%s.desktop'" % self.desktopFile)
             warnDlg.destroy()
@@ -98,7 +98,7 @@ class ukuiRemoveWindow:
         treeview.append_column(column1)
 
         model = Gtk.ListStore(str)
-        dependenciesString = commands.getoutput("apt-get -s -q remove " + package + " | grep Remv")
+        dependenciesString = subprocess.getoutput("apt-get -s -q remove " + package + " | grep Remv")
         dependencies = string.split(dependenciesString, "\n")
         for dependency in dependencies:
             dependency = dependency.replace("Remv ", "")

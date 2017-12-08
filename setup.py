@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2015 by Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
@@ -35,7 +35,7 @@ import DistUtilsExtra.command.clean_i18n
 
 # silence pyflakes, __VERSION__ is properly assigned below...
 __VERSION__ = '0.0.0.0'
-for line in file('lib/ukui-menu.py').readlines():
+for line in open('lib/ukui-menu.py').readlines():
     if (line.startswith('__VERSION__')):
         exec(line.strip())
         break
@@ -65,7 +65,6 @@ data_files = [
     ),
     ('{prefix}/share/ukui-menu/plugins'.format(prefix=sys.prefix), ['data/plugins/ukuimenu.glade',
                                                                     'data/plugins/property.glade',
-                                                                    'ukui_menu/plugins/menu.py',
                                                                    ],
     ),
     ('{prefix}/share/ukui-menu/icons'.format(prefix=sys.prefix), ['data/icons/ukui-logo.svg',

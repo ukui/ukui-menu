@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2007-2014 Clement Lefebvre <root@linuxmint.com>
@@ -35,7 +35,6 @@ import shutil
 import string
 import gettext
 import threading
-import commands
 import subprocess
 import filecmp
 import ctypes
@@ -44,17 +43,17 @@ from ukui_menu.easybuttons import *
 from ukui_menu.execute import Execute
 from ukui_menu.easygsettings import EasyGSettings
 from ukui_menu.easyfiles import *
-from user import home
 from ukui_menu.filemonitor import monitor as filemonitor
 from xml.etree import ElementTree as ET
 import copy
 from pyinotify import WatchManager, Notifier, ProcessEvent, IN_DELETE_SELF,IN_ACCESS
 import dbus
 from configobj import ConfigObj
-import thread
-import matemenu
+import _thread
+import ukuimenu
 import operator
 import platform
+import debug
 
 # i18n
 gettext.install("ukui-menu", "/usr/share/locale")
@@ -66,23 +65,23 @@ FAVNUM = 5            #常用软件显示个数
 
 server = False
 try:
-    (status, output) = commands.getstatusoutput("uname -a | grep server")
+    (status, output) = subprocess.getstatusoutput("uname -a | grep server")
     if status == 0:
         server = True
     else:
         server = False
-except Exception, e:
-        print e
+except Exception as e:
+        print (e)
 
 serverx86 = False
 try:
-    (statusx86, outputx86) = commands.getstatusoutput("dpkg -l | grep mate-server-guide")
+    (statusx86, outputx86) = subprocess.getstatusoutput("dpkg -l | grep mate-server-guide")
     if statusx86 == 0:
         serverx86 = True
     else:
         serverx86 = False
-except Exception, e:
-        print e
+except Exception as e:
+        print (e)
 
 def get_user_icon():
     current_user = GLib.get_user_name ()
@@ -111,8 +110,8 @@ def get_user_icon():
         (props,) = result.unpack()
         usericon = props['IconFile']
         return usericon
-    except Exception, e:
-        print e
+    except Exception as e:
+        print (e)
         return GLib.get_home_dir() + "/.face"
 
 usericonPath = get_user_icon()
@@ -142,7 +141,7 @@ def FSMonitor(self):
 def get_user_item_path():
     item_dir = None
 
-    if os.environ.has_key('XDG_DATA_HOME'):
+    if 'XDG_DATA_HOME' in os.environ:
         item_dir = os.path.join(os.environ['XDG_DATA_HOME'], 'applications')
     else:
         item_dir = os.path.join(os.environ['HOME'], '.local', 'share', 'applications')
@@ -155,7 +154,7 @@ def get_user_item_path():
 def get_system_item_paths():
     item_dirs = None
 
-    if os.environ.has_key('XDG_DATA_DIRS'):
+    if 'XDG_DATA_DIRS' in os.environ:
         item_dirs = os.environ['XDG_DATA_DIRS'].split(":")
     else:
         item_dirs = [os.path.join('usr', 'share')]
@@ -178,8 +177,8 @@ def get_desktop_file_path(desktop_filename):
 def get_category_file_path():
     dir_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     system_category_file_path = os.path.join(dir_path, 'category.xml')
-    os.system("mkdir -p %s/.config/ukui-menu/category/" % home)
-    user_category_file_path = '%s/.config/ukui-menu/category/category.xml' % home
+    os.system("mkdir -p %s/.config/ukui-menu/category/" % GLib.get_home_dir())
+    user_category_file_path = '%s/.config/ukui-menu/category/category.xml' % GLib.get_home_dir()
     if not os.path.exists(user_category_file_path):
         os.system("cp %s %s" % (system_category_file_path, user_category_file_path))
 
@@ -209,44 +208,14 @@ class Category(GObject.GObject):
         self.category_file = open(get_category_file_path(), 'r+b')
         self.tree = ET.ElementTree(file = self.category_file.name)
         self.load_tree_data()
-    def move_to_category(self, application, category):
-        found = False
-        for cat in self.category_list_m:
-            if cat['name'] == category['name'] and \
-               cat['icon'] == category['icon'] and \
-               cat['tooltip'] == category['tooltip'] and \
-               cat['filter'] == category['filter']:
-                found = True
-                break
-        if not found:
-            return
-
-        found = False
-        for app in self.all_application_list:
-            if app['desktop_file_path'] == application['desktop_file_path']:
-                found = True
-                break
-        if not found:
-            return
-
-        application['category'] = category['name']
-
-        # sync to the category file
-        for child in self.tree.getroot():
-            if child.attrib['name'] == str(category['name']).decode('UTF-8'):
-                ET.SugElement(child, 'Entry',
-                              {'name': application['name'].decode('UTF-8'), 'source': application['desktop_file_path'].decode('UTF-8')})
-                break
-        tree.write(self.category_file, 'UTF-8')
-        self.category_file.flush()
 
     def load_tree_data(self):
         for directory in self.tree.getroot():
-            name = directory.attrib['name'].encode('UTF-8')
-            icon = directory.attrib['icon'].encode('UTF-8')
+            name = directory.attrib['name']
+            icon = directory.attrib['icon']
             self.category_list_m.append( { "name": name, "icon": icon, "tooltip": name, "filter": name } )
             for entry in directory:
-                desktop_file_path = get_desktop_file_path(entry.attrib['source'].encode('UTF-8'))
+                desktop_file_path = get_desktop_file_path(entry.attrib['source'])
                 if not desktop_file_path:
                     continue
                 found = False
@@ -269,10 +238,10 @@ class Category(GObject.GObject):
         try:
             autostart_dirs = [os.path.join(p, 'autostart') for p in os.environ['XDG_CONFIG_DIRS'].split(':')]
             # home's autostart has the highest priority
-            autostart_dirs.insert(0, '%s/.config/autostart' % home)
+            autostart_dirs.insert(0, '%s/.config/autostart' % GLib.get_home_dir())
             autostart_dirs = [ d for d in autostart_dirs if os.path.exists(d) ]
-        except KeyError, e:
-            print 'No environment variable called XDG_CONFIG_DIRS'
+        except KeyError as e:
+            print ('No environment variable called XDG_CONFIG_DIRS')
 
         autostart_apps = []
         autostart_desktop_filenames = []
@@ -286,8 +255,8 @@ class Category(GObject.GObject):
                     app = Gio.DesktopAppInfo.new_from_filename(file_path)
                     if app.get_show_in('MATE'):
                         autostart_apps.append(app)
-                except TypeError,e:
-                    print "error"
+                except TypeError as e:
+                    print ("error")
 
         for app in autostart_apps:
             # we have to use get_string here since false as a boolean may indicate the
@@ -303,7 +272,7 @@ class Category(GObject.GObject):
 
 class Menu:
     def __init__(self, MenuToLookup):
-        self.tree = matemenu.lookup_tree(MenuToLookup)
+        self.tree = ukuimenu.lookup_tree(MenuToLookup)
         self.directory = self.tree.get_root_directory()
 
     def getMenus(self, parent = None):
@@ -311,18 +280,18 @@ class Menu:
             yield self.tree.root
         else:
             for menu in parent.get_contents():
-                if menu.get_type() == matemenu.TYPE_DIRECTORY and self.__isVisible(menu):
+                if menu.get_type() == ukuimenu.TYPE_DIRECTORY and self.__isVisible(menu):
                     yield menu
 
     def getItems(self, menu):
         for item in menu.get_contents():
-            if item.get_type() == matemenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible(item):
+            if item.get_type() == ukuimenu.TYPE_ENTRY and item.get_desktop_file_id()[-19:] != '-usercustom.desktop' and self.__isVisible(item):
                 yield item
 
     def __isVisible(self, item):
-        if item.get_type() == matemenu.TYPE_ENTRY:
+        if item.get_type() == ukuimenu.TYPE_ENTRY:
             return not (item.get_is_excluded() or item.get_is_nodisplay())
-        if item.get_type() == matemenu.TPYE_DIRECTORY and len( item.get_contents()):
+        if item.get_type() == ukuimenu.TPYE_DIRECTORY and len( item.get_contents()):
             return True
 
 class pluginclass( object ):
@@ -358,8 +327,8 @@ class pluginclass( object ):
             css.close()
             style_provider.load_from_data(css_data)
             Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        except Exception, e:
-            print e
+        except Exception as e:
+            print (e)
         
         self.layout_left = self.builder.get_object("layout_left")
         self.viewport1 = self.builder.get_object("viewport1")
@@ -401,11 +370,11 @@ class pluginclass( object ):
             iconpath = usericonPath
         try:
             pixbuf = Pixbuf.new_from_file(iconpath)
-        except Exception, e:
+        except Exception as e:
             iconpath = "/usr/share/ukui-menu/icons/stock_person.png"
             os.system("cp %s %s" % (iconpath, usericonPath))
             pixbuf = Pixbuf.new_from_file(iconpath)
-            print e
+            print (e)
         pixbuf = pixbuf.scale_simple(63, 63, 2)  #2 := BILINEAR
         self.image_user.set_from_pixbuf(pixbuf)
 
@@ -564,7 +533,7 @@ class pluginclass( object ):
         self.categorybutton_list = []
 
         self.all_application_list = []
-        for mainitems in [ "mate-applications.menu", "mate-settings.menu" ]:
+        for mainitems in [ "ukui-applications.menu", "ukui-settings.menu" ]:
             mymenu = Menu( mainitems )
             mymenu.tree.add_monitor( self.menuChanged, None )
 
@@ -575,9 +544,9 @@ class pluginclass( object ):
         self.bamfok = True
         try:
             self.matcher = Bamf.Matcher.get_default()
-            self.matcher.connect('view-opened', self.viewOpened, None)
-        except Exception, e:
-            print e
+            #self.matcher.connect('view-opened', self.viewOpened, None)
+        except Exception as e:
+            print (e)
             return
         self.bamfok = False
 
@@ -681,8 +650,8 @@ class pluginclass( object ):
                     favButton.drag_source_set( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
                     position += 1
             self.favoritesSave()
-        except Exception, e:
-            print e
+        except Exception as e:
+            print (e)
 
     def favoritesSave(self):
         try:
@@ -696,8 +665,8 @@ class pluginclass( object ):
                     appListFile.write( favorite.type + "\n" )
  
             appListFile.close()
-        except Exception, e:
-            print e
+        except Exception as e:
+            print (e)
 
     def isLocationInFavorites(self, location):
         for fav in self.favorites:
@@ -778,7 +747,7 @@ class pluginclass( object ):
     def favoritesBuildLauncher(self, location):
         try:
             ButtonIcon = None
-            location = string.join(location.split("%20"))
+            #location = string.join(location.split("%20"))
             for fav in self.favorites:
                 if fav.type == "location" and fav.desktopFile == location:
                     return None
@@ -790,8 +759,8 @@ class pluginclass( object ):
                 favButton.set_tooltip_text( favButton.getTooltip() )
                 favButton.type = "location"
                 return favButton
-        except Exception, e:
-            print "s"
+        except Exception as e:
+            print ("s")
 
     def entryPopup( self, widget, ev ):
         if ev.button == 3:
@@ -816,20 +785,20 @@ class pluginclass( object ):
         addedDesktop = False
         try:
             # Determine where the Desktop folder is (could be localized)
-            import sys, commands
+            import sys, subprocess
             sys.path.append('/usr/lib/ubuntu-mate/common')
             from configobj import ConfigObj
-            config = ConfigObj(home + "/.config/user-dirs.dirs")
-            desktopDir = home + "/Desktop"
+            config = ConfigObj(GLib.get_home_dir() + "/.config/user-dirs.dirs")
+            desktopDir = GLib.get_home_dir() + "/Desktop"
             tmpdesktopDir = config['XDG_DESKTOP_DIR']
-            tmpdesktopDir = commands.getoutput("echo " + tmpdesktopDir)
+            tmpdesktopDir = subprocess.getoutput("echo " + tmpdesktopDir)
             if os.path.exists(tmpdesktopDir):
                 desktopDir = tmpdesktopDir
             # Copy the desktop file to the desktop
             if (os.path.exists(desktopDir + "/" + os.path.basename(widget.desktopFile))):
                 addedDesktop = True
-        except Exception, detail:
-            print detail
+        except Exception as detail:
+            print (detail)
 
         text = ""
         if ev.button == 3:
@@ -898,18 +867,18 @@ class pluginclass( object ):
                 mTree.popup(None, None, None, None, ev.button, ev.time)
 
     def FSMthread(self):
-        thread.start_new_thread(FSMonitor,(self,))
+        _thread.start_new_thread(FSMonitor,(self,))
 
     def get_realPath(self, path, configDir):
         realPath = GLib.get_home_dir() + path
         try:
             config = ConfigObj(GLib.get_home_dir() + "/.config/user-dirs.dirs")
             chinesePath = config[configDir]
-            chinesePath = commands.getoutput("echo "+ chinesePath)
+            chinesePath = subprocess.getoutput("echo "+ chinesePath)
             if os.path.exists(chinesePath):
                 realPath = chinesePath
-        except Exception, detail:
-            print detail
+        except Exception as detail:
+            print (detail)
         return realPath
 
     def changeimage(self,settings,key,args=None):
@@ -1111,8 +1080,8 @@ class pluginclass( object ):
                 self.categoryList.remove(item)
                 button.destroy()
                 del item
-            except Exception, e:
-                print e
+            except Exception as e:
+                print (e)
 
         if added_category_list:
             sorted_category_list = []
@@ -1120,8 +1089,8 @@ class pluginclass( object ):
                 try:
                     self.categoriesBox.remove(item['button'])
                     sorted_category_list.append( ( item['name'].upper(), item['button'] ) )
-                except Exception, e:
-                    print e
+                except Exception as e:
+                    print (e)
 
             for item in added_category_list:
                 try:
@@ -1160,16 +1129,16 @@ class pluginclass( object ):
 
                     self.categoryList.append( item )
                     sorted_category_list.append( ( item["name"].upper(), item["button"] ) )
-                except Exception, e:
-                    print e
+                except Exception as e:
+                    print (e)
 
             sorted_category_list.sort()
 
             for item in sorted_category_list:
                 try:
                     self.categoriesBox.pack_start( item[1], False, False, 0 )
-                except Exception, e:
-                    print e
+                except Exception as e:
+                    print (e)
 
         if self.showCategoryMenu:
             new_application_list = self.all_application_list
@@ -1339,27 +1308,27 @@ class pluginclass( object ):
 
         def find_applications_recursively(app_list, directory, catName):
             for item in directory.get_contents():
-                if item.get_type() == matemenu.TYPE_ENTRY:
-                    app_list.append( { 'desktop_file_path': item.get_desktop_file_path(),
-                                       'category': entry.name } )
-                elif item.get_type() == matemenu.TYPE_DIRECTORY:
+                if item.get_type() == ukuimenu.TYPE_ENTRY:
+                    app_list.append( { 'desktop_file_path': item.get_desktop_file_path().decode('utf-8'),
+                                       'category': entry.get_name().decode('utf-8') } )
+                elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
                     find_applications_recursively(app_list, item, catName)
 
         for menu in self.menuFiles:
             root = menu.directory
             for entry in root.get_contents():
-                if entry.get_type() == matemenu.TYPE_DIRECTORY and len(entry.get_contents()):
+                if entry.get_type() == ukuimenu.TYPE_DIRECTORY and len(entry.get_contents()):
                     for item in entry.get_contents():
-                        if item.get_type() == matemenu.TYPE_DIRECTORY:
-                            find_applications_recursively(application_list, item, entry.name)
-                        elif item.get_type() == matemenu.TYPE_ENTRY:
-                            application_list.append({ 'desktop_file_path': item.get_desktop_file_path(),
-                                                      'category': entry.name })
+                        if item.get_type() == ukuimenu.TYPE_DIRECTORY:
+                            find_applications_recursively(application_list, item, entry.get_name().decode('utf-8'))
+                        elif item.get_type() == ukuimenu.TYPE_ENTRY:
+                            application_list.append({ 'desktop_file_path': item.get_desktop_file_path().decode('utf-8'),
+                                                      'category': entry.get_name().decode('utf-8') })
         return application_list
 
     def loadMenuFiles(self):
         self.menuFiles = []
-        for mainitems in [ "mate-applications.menu", "mate-settings.menu" ]:
+        for mainitems in [ "ukui-applications.menu", "ukui-settings.menu" ]:
             self.menuFiles.append( Menu( mainitems))
 
     def buildAppHistoryList(self):
@@ -1369,23 +1338,23 @@ class pluginclass( object ):
         try:
             def find_applications_recursively(app_list, directory, catName):
                 for item in directory.get_contents():
-                    if item.get_type() == matemenu.TYPE_ENTRY:
+                    if item.get_type() == ukuimenu.TYPE_ENTRY:
                         app_list.append( { "entry": item, "category": catName } )
-                    elif item.get_type() == matemenu.TYPE_DIRECTORY:
+                    elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
                         find_applications_recursively(app_list, item, catName)
 
             for menu in self.menuFiles:
                 directory = menu.directory
                 for entry in directory.get_contents():
-                    if entry.get_type() == matemenu.TYPE_DIRECTORY and len(entry.get_contents()):
+                    if entry.get_type() == ukuimenu.TYPE_DIRECTORY and len(entry.get_contents()):
                         for item in entry.get_contents():
-                            if item.get_type() == matemenu.TYPE_DIRECTORY:
-                                find_applications_recursively(newApplicationsList, item, entry.name)
-                            elif item.get_type() == matemenu.TYPE_ENTRY:
-                                newApplicationsList.append( { "entry": item, "category": entry.name } )
+                            if item.get_type() == ukuimenu.TYPE_DIRECTORY:
+                                find_applications_recursively(newApplicationsList, item, entry.get_name().decode('utf-8'))
+                            elif item.get_type() == ukuimenu.TYPE_ENTRY:
+                                newApplicationsList.append( { "entry": item, "category": entry.get_name().decode('utf-8') } )
             return newApplicationsList
-        except Exception, detail:
-            print detail
+        except Exception as detail:
+            print (detail)
             return None
 
     def buildCategoryList(self):
@@ -1395,9 +1364,12 @@ class pluginclass( object ):
 
         for menu in self.menuFiles:
             for child in menu.directory.get_contents():
-                if child.get_type() == matemenu.TYPE_DIRECTORY:
-                    icon = str(child.icon)
-                    newCategoryList.append( { "name": child.name, "icon": child.icon, "tooltip": child.name, "filter": child.name, "index": num } )
+                if child.get_type() == ukuimenu.TYPE_DIRECTORY:
+                    newCategoryList.append( { "name": child.get_name().decode('utf-8'), 
+                                              "icon": child.get_icon().decode('utf-8'), 
+                                              "tooltip": child.get_name().decode('utf-8'), 
+                                              "filter": child.get_name().decode('utf-8'), 
+                                              "index": num } )
             num += 1
         return newCategoryList
 
@@ -1493,20 +1465,20 @@ class pluginclass( object ):
         addedDesktop = False
         try:
             # Determine where the Desktop folder is (could be localized)
-            import commands
+            import subprocess
             #sys.path.append('/usr/lib/ubuntu-mate/common')
             from configobj import ConfigObj
-            config = ConfigObj(home + "/.config/user-dirs.dirs")
-            desktopDir = home + "/Desktop"
+            config = ConfigObj(GLib.get_home_dir() + "/.config/user-dirs.dirs")
+            desktopDir = GLib.get_home_dir() + "/Desktop"
             tmpdesktopDir = config['XDG_DESKTOP_DIR']
-            tmpdesktopDir = commands.getoutput("echo " + tmpdesktopDir)
+            tmpdesktopDir = subprocess.getoutput("echo " + tmpdesktopDir)
             if os.path.exists(tmpdesktopDir):
                 desktopDir = tmpdesktopDir
             # Copy the desktop file to the desktop
             if (os.path.exists(desktopDir + "/" + os.path.basename(widget.desktopFile))):
                 addedDesktop = True
-        except Exception, detail:
-            print detail
+        except Exception as detail:
+            print (detail)
 
         text = ""
         if event.button == 3:
@@ -1597,20 +1569,20 @@ class pluginclass( object ):
     def add_to_desktop(self, widget, desktopEntry):
         try:
             # Determine where the Desktop folder is (could be localized)
-            import commands
+            import subprocess
             #sys.path.append('/usr/lib/ubuntu-mate/common')
             from configobj import ConfigObj
-            config = ConfigObj(home + "/.config/user-dirs.dirs")
-            desktopDir = home + "/Desktop"
+            config = ConfigObj(GLib.get_home_dir() + "/.config/user-dirs.dirs")
+            desktopDir = GLib.get_home_dir() + "/Desktop"
             tmpdesktopDir = config['XDG_DESKTOP_DIR']
-            tmpdesktopDir = commands.getoutput("echo " + tmpdesktopDir)
+            tmpdesktopDir = subprocess.getoutput("echo " + tmpdesktopDir)
             if os.path.exists(tmpdesktopDir):
                 desktopDir = tmpdesktopDir
             # Copy the desktop file to the desktop
             os.system("cp \"%s\" \"%s/\"" % (desktopEntry.desktopFile, desktopDir))
             os.system("chmod a+rx %s/*.desktop" % (desktopDir))
-        except Exception, detail:
-            print detail
+        except Exception as detail:
+            print (detail)
 
     def add_to_panel(self, widget, desktopEntry):
         self.get_panel()
@@ -1779,13 +1751,13 @@ class pluginclass( object ):
              else:
                  f = open(GLib.get_home_dir() + "/.recentAppLog", 'w')
 
-             srApp = sorted(recentApp.iteritems(), key = operator.itemgetter(1), reverse=True)
+             srApp = sorted(iter(recentApp.items()), key = operator.itemgetter(1), reverse=True)
              for i in range(len(srApp)):
                  f.write(srApp[i][0] + ":" + str(srApp[i][1]) + "\n")
              f.close()
              self.updateHistoryBox()
-        except Exception, detail:
-            print detail
+        except Exception as detail:
+            print (detail)
 
     def changeTab( self, tabNum, clear = True ):
         notebook = self.builder.get_object( "notebook_left" )
@@ -1898,8 +1870,8 @@ class pluginclass( object ):
                 desktopPath = get_desktop_file_path(tempPath)
                 appInfo = Gio.DesktopAppInfo.new_from_filename(desktopname)
                 tempName = Gio.DesktopAppInfo.get_display_name(appInfo)
-        except Exception, e:
-            print e
+        except Exception as e:
+            print (e)
             return
 
         if tempName.endswith('.py'):
@@ -1920,21 +1892,21 @@ class pluginclass( object ):
                 if desktopPath:
                     button = MenuApplicationLauncher(desktopPath, 32, "", True, highlight=(False))
                     button.set_name("ButtonApp")
-                    if button.appName.lower() == appname["entry"].name.lower():
-                        appName = appname["entry"].name.lower()
+                    if button.appName.lower() == appname["entry"].get_name().decode('utf-8').lower():
+                        appName = appname["entry"].get_name().decode('utf-8').lower()
                         found = True
                         break
-                    if desktopPath == appname["entry"].get_desktop_file_path():
-                        appName = appname["entry"].name.lower()
+                    if desktopPath == appname["entry"].get_desktop_file_path().decode('utf-8'):
+                        appName = appname["entry"].get_name().decode('utf-8').lower()
                         found = True
                         break
-                    if tempName.lower() == appname["entry"].name.lower():
-                        appName = appname["entry"].name.lower()
+                    if tempName.lower() == appname["entry"].get_name().decode('utf-8').lower():
+                        appName = appname["entry"].get_name().decode('utf-8').lower()
                         found = True
                         break
                 if viewName:
-                    if viewName.lower() == appname["entry"].name.lower():
-                        appName = appname["entry"].name.lower()
+                    if viewName.lower() == appname["entry"].get_name().decode('utf-8').lower():
+                        appName = appname["entry"].get_name().decode('utf-8').lower()
                         found = True
                         break
         if not found:
@@ -1952,7 +1924,7 @@ class pluginclass( object ):
             f = open(GLib.get_home_dir() + "/.recentAppLog", 'w')
 
         recentApp[appName] = recentApp.get(appName,0) + 1
-        srApp = sorted(recentApp.iteritems(), key = operator.itemgetter(1), reverse=True)
+        srApp = sorted(iter(recentApp.items()), key = operator.itemgetter(1), reverse=True)
         for i in range(len(srApp)):
             f.write(srApp[i][0] + ":" + str(srApp[i][1]) + "\n")
         f.close()
@@ -1978,10 +1950,10 @@ class pluginclass( object ):
                     findDesktop = False
                     for tempdesktop in self.favAppList:
                         temp = tempdesktop.split(":")[1]
-                        if appname["entry"].get_desktop_file_path() in temp or os.path.basename(appname["entry"].get_desktop_file_path()) in temp or os.path.basename(temp) in appname["entry"].get_desktop_file_path():
+                        if appname["entry"].get_desktop_file_path().decode('utf-8') in temp or os.path.basename(appname["entry"].get_desktop_file_path().decode('utf-8')) in temp or os.path.basename(temp) in appname["entry"].get_desktop_file_path().decode('utf-8'):
                             findDesktop = True
-                    if word[0].lower() == appname["entry"].name.lower() and findDesktop == False: 
-                        button = MenuApplicationLauncher( appname["entry"].get_desktop_file_path(), 32, "", True, highlight=(False) )
+                    if word[0].lower() == appname["entry"].get_name().decode('utf-8').lower() and findDesktop == False: 
+                        button = MenuApplicationLauncher( appname["entry"].get_desktop_file_path().decode('utf-8'), 32, "", True, highlight=(False) )
                         if button.appExec:
                             button.set_tooltip_text( button.getTooltip() )
                             button.connect( "clicked", lambda w: self.ukuiMenuWin.hide() )
@@ -2000,8 +1972,8 @@ class pluginclass( object ):
                     else:
                         self.currentHisCount += 1
             f.close()
-        except Exception, e:
-            print e
+        except Exception as e:
+            print (e)
 
     def keyPress( self, widget, event ):
         if event.string.strip() != "" or event.keyval == Gdk.KEY_BackSpace:

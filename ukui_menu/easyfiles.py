@@ -21,7 +21,7 @@
 
 import os
 import os.path
-import urllib
+import urllib.request, urllib.parse, urllib.error
 """
 def TestForDir(dirname):
 	if not os.path.exists( os.path.join(os.path.expanduser("~"), dirname ) ):
@@ -37,7 +37,7 @@ def FileExists(f):
 """
 
 def GetFilePath(uri):
-		path = urllib.url2pathname(uri) # escape special chars
+		path = urllib.request.url2pathname(uri) # escape special chars
 		path = path.strip('\r\n\x00') # remove \r\n and NULL
 
 		# get the path to file

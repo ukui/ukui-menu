@@ -63,8 +63,8 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
             self.map_modifiers()
             self.raw_keyval = None
             self.keytext = ""
-        except Exception, cause:
-            print "init keybinding error: \n", str(cause)
+        except Exception as cause:
+            print (("init keybinding error: \n", str(cause)))
             self.display = None
             return None
 
@@ -145,7 +145,7 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
         self.grab(self.keytext)
 
     def get_mask_combinations(self, mask):
-        return [x for x in xrange(mask+1) if not (x & ~mask)]
+        return [x for x in range(mask+1) if not (x & ~mask)]
 
     def idle(self):
         self.emit("activate")

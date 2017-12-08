@@ -1,0 +1,32 @@
+ukui-menu (1.0.3-0ubuntu2) artful; urgency=medium
+
+  * add. 
+
+ -- penghuan <penghuan@kylinos.cn>  Fri, 24 Nov 2017 10:51:20 +0800
+
+ukui-menu (1.0.3-0ubuntu1) artful; urgency=medium
+
+  * Optimize startup speed.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 13 Sep 2017 10:24:27 +0800
+
+ukui-menu (1.0.2-0ubuntu1) artful; urgency=medium
+
+  * New upstream release.
+  * Active the function of 'Drag and Drop'.
+  * Use mate-terminal instead of gnome-terminal.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 26 Jun 2017 14:57:14 +0800
+
+ukui-menu (1.0.1-0ubuntu1) UNRELEASED; urgency=medium
+
+  * Fix the error when 'add to panel'. (LP: #1681796)
+  * Remove Logout, Shutdown, Reboot from 'All App'. (LP: #1681795)
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 11 Apr 2017 19:52:09 +0800
+
+ukui-menu (1.0.0-0ubuntu1) zesty; urgency=medium
+
+  * Initial release (LP: #1664229)
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 06 Mar 2017 08:53:34 +0800

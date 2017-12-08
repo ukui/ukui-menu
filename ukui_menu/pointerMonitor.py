@@ -40,8 +40,8 @@ class PointerMonitor(GObject.GObject, threading.Thread):
             self.display = Display()
             self.root = self.display.screen().root
             self.windows = []
-        except Exception, cause:
-            print "init pointerMonitor error :\n", str(cause)
+        except Exception as cause:
+            print (("init pointerMonitor error :\n", str(cause)))
             self.display = None
             return None
 
@@ -95,7 +95,7 @@ class PointerMonitor(GObject.GObject, threading.Thread):
                 else:
                     self.display.allow_events(X.ReplayPointer, X.CurrentTime)
             except Exception as e:
-                print "Unexpected error: " + str(e)
+                print (("Unexpected error: " + str(e)))
 
     def stop(self):
         if self.display == None:
