@@ -33,11 +33,11 @@ import traceback
 import signal
 
 gi.require_version("Gtk", "3.0")
-gi.require_version('MatePanelApplet', '4.0')
+gi.require_version('UkuiPanelApplet', '4.0')
 
 from ctypes import *
 from gi.repository import Gtk, GLib, GdkPixbuf, Gdk, GObject
-from gi.repository import MatePanelApplet
+from gi.repository import UkuiPanelApplet
 from gi.repository import Gio
 
 from ukui_menu.plugins.menu import pluginclass
@@ -242,7 +242,7 @@ class MenuWin( object ):
         self.actionCategory.connect("activate", self.LoadCategoryMenu)
 
         self.createPanelButton()
-        self.applet.set_flags( MatePanelApplet.AppletFlags.EXPAND_MINOR )
+        self.applet.set_flags( UkuiPanelApplet.AppletFlags.EXPAND_MINOR )
         self.applet.connect( "button-press-event", self.showMenu )
         self.applet.connect( "enter-notify-event", self.enter_notify )
         self.applet.connect( "leave-notify-event", self.leave_notify )
@@ -381,7 +381,7 @@ class MenuWin( object ):
         # Get the screen dimensions
         screenHeight = Gdk.Screen.height()
         screenWidth = Gdk.Screen.width()
-        if self.applet.get_orient() == MatePanelApplet.AppletOrient.UP or self.applet.get_orient() == MatePanelApplet.AppletOrient.DOWN:
+        if self.applet.get_orient() == UkuiPanelApplet.AppletOrient.UP or self.applet.get_orient() == UkuiPanelApplet.AppletOrient.DOWN:
             if entryX + ourWidth < screenWidth or  entryX + entryWidth / 2 < screenWidth / 2:
             # Align to the left of the entry
                 newX = entryX
@@ -458,6 +458,6 @@ def quit_all(widget):
     Gtk.main_quit()
     sys.exit(0)
 
-MatePanelApplet.Applet.factory_main("UkuiMenuAppletFactory", True,
-                                    MatePanelApplet.Applet.__gtype__,
+UkuiPanelApplet.Applet.factory_main("UkuiMenuAppletFactory", True,
+                                    UkuiPanelApplet.Applet.__gtype__,
                                     applet_factory, None)

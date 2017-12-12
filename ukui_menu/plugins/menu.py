@@ -786,7 +786,7 @@ class pluginclass( object ):
         try:
             # Determine where the Desktop folder is (could be localized)
             import sys, subprocess
-            sys.path.append('/usr/lib/ubuntu-mate/common')
+            #sys.path.append('/usr/lib/ubuntu-mate/common')
             from configobj import ConfigObj
             config = ConfigObj(GLib.get_home_dir() + "/.config/user-dirs.dirs")
             desktopDir = GLib.get_home_dir() + "/Desktop"
@@ -1587,7 +1587,7 @@ class pluginclass( object ):
     def add_to_panel(self, widget, desktopEntry):
         self.get_panel()
         i = 0
-        panel_schema = Gio.Settings.new("org.mate.panel")
+        panel_schema = Gio.Settings.new("org.ukui.panel")
         applet_list = panel_schema.get_strv("object-id-list")
 
         while True:
@@ -1597,8 +1597,8 @@ class pluginclass( object ):
             else:
                 break
 
-        path = "/org/mate/panel/objects/%s/" % (test_obj)
-        new_schema = Gio.Settings.new_with_path("org.mate.panel.object", path)
+        path = "/org/ukui/panel/objects/%s/" % (test_obj)
+        new_schema = Gio.Settings.new_with_path("org.ukui.panel.object", path)
         new_schema.set_string("launcher-location", desktopEntry.desktopFile)
         new_schema.set_string("object-type", "launcher")
         new_schema.set_string("toplevel-id", self.panel)
@@ -1607,10 +1607,10 @@ class pluginclass( object ):
         panel_schema.set_strv("object-id-list", applet_list)
 
     def get_panel(self):
-        panelsettings = Gio.Settings.new("org.mate.panel")
+        panelsettings = Gio.Settings.new("org.ukui.panel")
         applet_list = panelsettings.get_strv("object-id-list")
         for applet in applet_list:
-            object_schema = Gio.Settings.new_with_path("org.mate.panel.object", "/org/mate/panel/objects/%s/" % (applet))
+            object_schema = Gio.Settings.new_with_path("org.ukui.panel.object", "/org/ukui/panel/objects/%s/" % (applet))
             keys = object_schema.list_keys()
             if "applet-iid" in keys:
                 iid = object_schema.get_string("applet-iid")
