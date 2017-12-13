@@ -53,7 +53,6 @@ import _thread
 import ukuimenu
 import operator
 import platform
-import debug
 
 # i18n
 gettext.install("ukui-menu", "/usr/share/locale")
