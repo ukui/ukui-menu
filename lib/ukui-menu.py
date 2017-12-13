@@ -415,29 +415,23 @@ class MenuWin( object ):
 
     def LoadNormalMenu( self, *args, **kargs ):
         self.mainwin.settings.set_boolean("show-category-menu", False)
-        #self.mainwin.showCategoryMenu = False
-        #self.mainwin.RegenPlugins()
         self.state = False
 
     def LoadCategoryMenu( self, *args, **kargs ):
         self.mainwin.settings.set_boolean("show-category-menu", True)
-        #self.mainwin.showCategoryMenu = True
-        #self.mainwin.RegenPlugins()
         self.state = True
 
     # this callback is to create a context menu
     def create_menu(self):
         action_group = Gtk.ActionGroup(name="context-menu")
-        if self.state:
-            self.actionNormal.set_sensitive(True)
-        else:
-            self.actionNormal.set_sensitive(False)
         action_group.add_action(self.actionNormal)
-        if self.state:
-            self.actionCategory.set_sensitive(False)
-        else:
-            self.actionCategory.set_sensitive(True)
         action_group.add_action(self.actionCategory)
+        if self.state:
+            self.actionNormal.set_visible(True)
+            self.actionCategory.set_visible(False)
+        else:
+            self.actionNormal.set_visible(False)
+            self.actionCategory.set_visible(True)
         action = Gtk.Action(name="UkuiMenuReload", label=_("Reload plugins"), tooltip=None, stock_id="gtk-refresh")
         action.connect("activate", self.mainwin.RegenPlugins)
         action_group.add_action(action)

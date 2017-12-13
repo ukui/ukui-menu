@@ -1810,9 +1810,6 @@ class pluginclass( object ):
             for uri in selection.get_uris():
                 self.favoritesAdd( self.favoritesBuildLauncher( uri ) )
 
-    def onAddToStartup( self, menu, widget ):
-        widget.addToStartup()
-
     def showGoNext( self, widget ):
         widget.rightbox.show_all()
 

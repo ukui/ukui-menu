@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.mate.panel.applet.UkuiMenuAppletFactory
-Exec=/usr/lib/ukui-menu/ukui-menu.py
