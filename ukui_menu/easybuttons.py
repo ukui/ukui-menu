@@ -373,6 +373,8 @@ class ApplicationLauncher( easyButton ):
         self.addLabel( self.appName )
 
     def filterText( self, text, var ):
+        if text == "":
+            return
         keywords = text.lower().split()
         appName = self.appName.lower()
         appGenericName = self.appGenericName.lower()
@@ -380,22 +382,19 @@ class ApplicationLauncher( easyButton ):
         appExec = self.appExec.lower()
 
         if var == 1:
-            for keyword in keywords:
-                keyw = self.strip_accents(keyword)
+            for keyw in keywords:
                 if keyw != "" and appName.startswith( keyw ):
                     return True
                 else:
                     return False
         if var == 2:
-            for keyword in keywords:
-                keyw = self.strip_accents(keyword)
+            for keyw in keywords:
                 if keyw != "" and appName.find( keyw ) == -1:
                     return False
                 else:
                     return True
         if var == 3:
-            for keyword in keywords:
-                keyw = self.strip_accents(keyword)
+            for keyw in keywords:
                 if keyw != "" and appGenericName.find( keyw ) == -1 and appComment.find( keyw ) == -1 and appExec.find( keyw ) == -1:
                     return False
                 else:
