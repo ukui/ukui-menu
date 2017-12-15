@@ -543,9 +543,9 @@ class pluginclass( object ):
         self.bamfok = True
         try:
             self.matcher = Bamf.Matcher.get_default()
-            #self.matcher.connect('view-opened', self.viewOpened, None)
+            self.matcher.connect('view-opened', self.viewOpened, None)
         except Exception as e:
-            print (e)
+            #print (e)
             return
         self.bamfok = False
 
@@ -1867,7 +1867,7 @@ class pluginclass( object ):
                 appInfo = Gio.DesktopAppInfo.new_from_filename(desktopname)
                 tempName = Gio.DesktopAppInfo.get_display_name(appInfo)
         except Exception as e:
-            print (e)
+        #    print (e)
             return
 
         if tempName.endswith('.py'):
