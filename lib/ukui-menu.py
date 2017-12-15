@@ -239,8 +239,8 @@ class MenuWin( object ):
         self.settings = Gio.Settings.new("org.ukui.ukui-menu")
         self.settings.connect("changed::show-category-menu",self.changeMenuState)
 
-        self.state = False
-        #self.loadSettings()
+        self.state = self.settings.get_boolean("show-category-menu")
+
         self.actionNormal = Gtk.Action(name="UkuiNormalMenu", label=_("Normal Menu"), tooltip=None, stock_id="gtk-about")
         self.actionNormal.connect("activate", self.LoadNormalMenu)
         self.actionCategory = Gtk.Action(name="UkuiCategoryMenu", label=_("Category Menu"), tooltip=None, stock_id="gtk-about")
