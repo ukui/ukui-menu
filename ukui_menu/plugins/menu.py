@@ -516,7 +516,7 @@ class pluginclass( object ):
         self.label3 = self.builder.get_object("label3")
         self.label3.set_text(_("No items matched"))
 
-        self.iconSize = 20
+        self.iconSize = 24
         self.favCols = 1
 
         self.buildingButtonList = False

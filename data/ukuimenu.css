@@ -13,17 +13,17 @@
 #Window {
 background-color: @ukuimenu_color;
 border-color: @ukuiside_color;
-font-size: 11px;
+font-size: 13px;
 }
 #EventBox {
 background-color: @ukui_bg_color;
-font-size: 11px;
+font-size: 13px;
 }
 #ViewportNull {
 background-color: transparent;
 border-width: 1px;
 border-color: transparent;
-font-size: 11px;
+font-size: 13px;
 }
 #ViewportButton {
 background-color: @ukui_vp_color;
@@ -34,7 +34,7 @@ border-left-color: @ukui_vp_border_color;
 border-right-color: @ukui_vp_color;
 border-top-color: @ukui_vp_border_color;
 border-bottom-color: @ukui_vp_border_color;
-font-size: 11px;
+font-size: 13px;
 }
 #Viewport {
 padding: 0px 0px;
@@ -43,7 +43,7 @@ border-width: 1px;
 border-style: solid;
 border-radius: 0px;
 border-color: @ukui_vp_border_color;
-font-size: 11px;
+font-size: 13px;
 }
 #ViewportEntry {
 padding: 0px 0px;
@@ -52,7 +52,7 @@ background-color: @ukui_vp_color;
 border-width: 1px;
 border-color: shade (@ukuimenu_color, 0.90);
 color: @ukui_fg_color;
-font-size: 11px;
+font-size: 13px;
 }
 #ViewportPower {
 background-color: @ukui_vp_color;
@@ -60,7 +60,7 @@ border-width: 1px;
 border-style: solid;
 border-radius: 0px;
 border-color: shade (@ukuimenu_color, 0.90);
-font-size: 11px;
+font-size: 13px;
 }
 #ViewportPowerEnter {
 background-color: shade (@ukuimenu_color, 0.90);
@@ -68,20 +68,20 @@ border-width: 1px;
 border-style: solid;
 border-radius: 0px;
 border-color: shade (@ukuimenu_color, 1.05);
-font-size: 11px;
+font-size: 13px;
 }
 #Viewport1 {
 background-color: @ukui_vp_color;
 border-style: solid;
 border-radius: 0px;
 border-width: 0px;
-font-size: 11px;
+font-size: 13px;
 }
 #Button {
 border: 1px solid transparent;
 border-radius: 0px;
 background-color: transparent;
-font-size: 11px;
+font-size: 13px;
 }
 #Button:hover {
 border-radius: 0px;
@@ -101,7 +101,7 @@ padding: 0px 2px;
 background-color: transparent;
 border-width: 0px;
 border-color: transparent;
-font-size: 11px;
+font-size: 13px;
 }
 #ButtonPower:hover {
 background-color: #daebfc;
@@ -118,7 +118,7 @@ padding: 2px 2px;
 border-radius: 0px;
 border-width: 1px;
 background-color: transparent;
-font-size: 11px;
+font-size: 13px;
 }
 #ButtonApp:hover {
 border-radius: 0px;
@@ -161,7 +161,7 @@ padding: 0px 3px;
 background-color: @ukui_vp_color;
 border: 0px transparent;
 color: #999999; 
-font-size: 11px;
+font-size: 13px;
 }
 #EntryActive {
 border-radius: 0px;
@@ -169,7 +169,7 @@ padding: 0px 3px;
 background-color: @ukui_vp_color;
 border: 0px transparent;
 color: @ukui_fg_color;
-font-size: 11px;
+font-size: 13px;
 }
 tooltip,
 tooltip.background,

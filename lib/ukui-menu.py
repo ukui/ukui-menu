@@ -85,8 +85,13 @@ class MainWindow( object ):
 
         self.borderwidth = 1
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
+        defaultStyle = self.getDefaultStyle()
+        color = defaultStyle.lookup_color('taskbar_applet_border_color')[1]
+        if color == Gdk.Color(red=0, green=0, blue=0):
+            self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( "#014276" ))
+        else:
+            self.window.modify_bg( Gtk.StateType.NORMAL, color )
         self.eventbox.set_name("EventBox")
-        self.window.set_name("Window")
 
         self.window.connect( "key-press-event", self.onKeyPress )
         self.window.connect( "focus-in-event", self.onFocusIn )
