@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-13 12:01+0800\n"
+"POT-Creation-Date: 2017-12-28 09:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,37 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../lib/ukui-menu.py:59
+#: ../ukui-menu-editor:38
+msgid ""
+"\n"
+"Current menu mode is not category mode, please switch and try again!"
+msgstr ""
+
+#: ../lib/ukui-menu.py:60
 msgid "Menu"
 msgstr ""
 
-#. self.loadSettings()
-#: ../lib/ukui-menu.py:239
+#: ../lib/ukui-menu.py:245
 msgid "Normal Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:241
+#: ../lib/ukui-menu.py:247
 msgid "Category Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:317
+#: ../lib/ukui-menu.py:249 ../ukui_menu/menueditor.py:837
+msgid "Edit Category Menu"
+msgstr ""
+
+#: ../lib/ukui-menu.py:325
 msgid "Start"
 msgstr ""
 
-#: ../lib/ukui-menu.py:347
+#: ../lib/ukui-menu.py:355
 msgid "Startup Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:435
+#: ../lib/ukui-menu.py:450
 msgid "Reload plugins"
 msgstr ""
 
-#: ../lib/ukui-menu.py:438
+#: ../lib/ukui-menu.py:453
 msgid "About"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:197 ../ukui_menu/plugins/menu.py:1110
-#: ../ukui_menu/plugins/menu.py:1111
+#: ../ukui_menu/plugins/menu.py:197 ../ukui_menu/plugins/menu.py:1114
+#: ../ukui_menu/plugins/menu.py:1115
 msgid "Games"
 msgstr ""
 
@@ -64,8 +73,8 @@ msgid "Power"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:471 ../ukui_menu/plugins/menu.py:770
-#: ../ukui_menu/plugins/menu.py:778 ../ukui_menu/plugins/menu.py:1407
-#: ../ukui_menu/plugins/menu.py:1830
+#: ../ukui_menu/plugins/menu.py:778 ../ukui_menu/plugins/menu.py:1412
+#: ../ukui_menu/plugins/menu.py:1835
 msgid "Search local program"
 msgstr ""
 
@@ -81,15 +90,15 @@ msgstr ""
 msgid "No items matched"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:818 ../ukui_menu/plugins/menu.py:1490
+#: ../ukui_menu/plugins/menu.py:818 ../ukui_menu/plugins/menu.py:1495
 msgid "Open(_O)"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:821 ../ukui_menu/plugins/menu.py:1493
+#: ../ukui_menu/plugins/menu.py:821 ../ukui_menu/plugins/menu.py:1498
 msgid "Add to desktop"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:825 ../ukui_menu/plugins/menu.py:1496
+#: ../ukui_menu/plugins/menu.py:825 ../ukui_menu/plugins/menu.py:1501
 msgid "Lock to panel(_L)"
 msgstr ""
 
@@ -97,7 +106,7 @@ msgstr ""
 msgid "Unlock from startup menu"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:832 ../ukui_menu/plugins/menu.py:1506
+#: ../ukui_menu/plugins/menu.py:832 ../ukui_menu/plugins/menu.py:1511
 msgid "Property(_P)"
 msgstr ""
 
@@ -121,75 +130,71 @@ msgstr ""
 msgid "Lock Screen"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1097
-msgid "Preferences"
-msgstr ""
-
-#: ../ukui_menu/plugins/menu.py:1103
+#: ../ukui_menu/plugins/menu.py:1107
 msgid "Accessories"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1105 ../ukui_menu/plugins/menu.py:1106
+#: ../ukui_menu/plugins/menu.py:1109 ../ukui_menu/plugins/menu.py:1110
 msgid "Office"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1108
+#: ../ukui_menu/plugins/menu.py:1112
 msgid "StartUp"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1499
+#: ../ukui_menu/plugins/menu.py:1504
 msgid "Add to startup menu"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1501
+#: ../ukui_menu/plugins/menu.py:1506
 msgid "Uninstall"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1502
+#: ../ukui_menu/plugins/menu.py:1507
 msgid "Remove from list(_R)"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1504
+#: ../ukui_menu/plugins/menu.py:1509
 msgid "Remove all"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1701
+#: ../ukui_menu/plugins/menu.py:1706
 msgid "Type:"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1703
+#: ../ukui_menu/plugins/menu.py:1708
 msgid "Name:"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1705
+#: ../ukui_menu/plugins/menu.py:1710
 msgid "Command:"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1707
+#: ../ukui_menu/plugins/menu.py:1712
 msgid "Note:"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1716
+#: ../ukui_menu/plugins/menu.py:1721
 msgid "Application"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1718
+#: ../ukui_menu/plugins/menu.py:1723
 msgid "Application in Terminal"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1727
+#: ../ukui_menu/plugins/menu.py:1732
 msgid "Property"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1877
+#: ../ukui_menu/plugins/menu.py:1882
 msgid "Chromium Browser"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1883
+#: ../ukui_menu/plugins/menu.py:1888
 msgid "Fcitx Config"
 msgstr ""
 
-#: ../ukui_menu/easybuttons.py:407
+#: ../ukui_menu/easybuttons.py:406
 msgid "Comment:"
 msgstr ""
 
@@ -211,4 +216,75 @@ msgstr ""
 
 #: ../ukui_menu/keybinding.py:282
 msgid "<not set>"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:777
+#, python-format
+msgid ""
+"\n"
+"The current system is not installed [%s] software, can not display the "
+"classification!"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:836
+msgid "Revert to Original"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:838
+msgid "Restore the default menu layout"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:839
+msgid "New Menu"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:840
+msgid "New Item"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:841
+msgid "Menus:"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:842
+msgid "Items:"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:843
+msgid "Move Up"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:844
+msgid "Move Down"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:845
+msgid "Revert all menus to original settings?"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:846
+msgid "Revert Changes?"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:847
+msgid "New Separator"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:1034
+msgid "Name"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:1050
+msgid "Show"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:1058
+msgid "Item"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:1089
+#, python-format
+msgid ""
+"\n"
+"[%s] is a system autostart software, you should not show it in startup menu!"
 msgstr ""

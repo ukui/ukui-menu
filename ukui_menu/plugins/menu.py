@@ -1087,15 +1087,19 @@ class pluginclass( object ):
             for item in self.categoryList:
                 try:
                     self.categoriesBox.remove(item['button'])
-                    sorted_category_list.append( ( item['name'].upper(), item['button'] ) )
+                    if not self.showCategoryMenu:
+                        sorted_category_list.append( ( item['name'].upper(), item['button'] ) )
                 except Exception as e:
                     print (e)
 
-            for item in added_category_list:
+            if self.showCategoryMenu:
+                self.list = self.buildCategoryList()
+            else:
+                self.list = added_category_list
+
+            for item in self.list:
                 try:
                     if self.showCategoryMenu:
-                        if item["name"] == _("Preferences"):
-                            continue;
                         item["filter"] = item["name"]
                         item["button"] = CategoryButton( item["icon"], category_icon_size, [item["name"]], item["filter"])
                     else:
@@ -1131,7 +1135,8 @@ class pluginclass( object ):
                 except Exception as e:
                     print (e)
 
-            sorted_category_list.sort()
+            if not self.showCategoryMenu:
+                sorted_category_list.sort()
 
             for item in sorted_category_list:
                 try:
