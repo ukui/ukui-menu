@@ -1086,7 +1086,7 @@ class MenuEditMainWindow:
                 return
         else:
             if self.item_store[path][1] == None:
-                msg = _("\n[%s] is a system autostart software, you should not show it in startup menu!") % (item.get_name().decode('utf-8'))
+                msg = _("\n[%s] is a system autostart service software, you should not show it in startup menu!") % (item.get_name().decode('utf-8'))
                 md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
                 md.run()
                 md.destroy()
