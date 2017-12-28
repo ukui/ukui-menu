@@ -287,5 +287,5 @@ msgstr "项目"
 msgid ""
 "\n"
 "[%s] is a system autostart software, you should not show it in startup menu!"
-msgstr "[%]是一个系统自启动软件，你不应该把它显示到开始菜单中！"
+msgstr "\n[%]是一个系统自启动软件，你不应该把它显示到开始菜单中！"
 
