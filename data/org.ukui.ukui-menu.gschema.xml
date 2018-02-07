@@ -8,13 +8,28 @@
     </key>
     <key type="b" name="user-icon-changed">
       <default>true</default>
-      <summary>The state of avatar</summary>
-      <description>This indicates the state of avatar</description>
+      <summary>The state of user icon</summary>
+      <description>This indicates the state of user icon</description>
+    </key>
+    <key type="b" name="recent-file-changed">
+      <default>true</default>
+      <summary>The state of recent opened file</summary>
+      <description>This indicates the state of recent opened file</description>
+    </key>
+    <key type="b" name="permission-changed">
+      <default>true</default>
+      <summary>The permission state of recent opened file</summary>
+      <description>This indicates the permission state of recent opened file</description>
     </key>
     <key type="b" name="show-category-menu">
       <default>false</default>
       <summary>current menu state</summary>
       <description>This indicates the state of the menu</description>
+    </key>
+    <key type="b" name="show-recent-file">
+      <default>false</default>
+      <summary>determine if show recent file or not</summary>
+      <description>determine if show recent file or not</description>
     </key>
   </schema>
 </schemalist>

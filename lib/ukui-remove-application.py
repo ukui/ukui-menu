@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#! /usr/bin/python3
 # coding: utf-8
 
 # Copyright (C) 2007-2014 Clement Lefebvre <root@linuxmint.com>
@@ -27,7 +27,6 @@ from gi.repository import Gtk, Gdk, GObject
 
 try:
     import sys
-    import string
     import os
     import subprocess
     import threading
@@ -52,7 +51,7 @@ class RemoveExecuter(threading.Thread):
         self.iface = self.init_dbus_ifaces()
 
     def run(self):
-        removePackages = string.split(self.package)
+        removePackages = str.split(self.package)
         for pkg in removePackages:
             self.iface.remove(pkg)
 
@@ -99,7 +98,7 @@ class ukuiRemoveWindow:
 
         model = Gtk.ListStore(str)
         dependenciesString = subprocess.getoutput("apt-get -s -q remove " + package + " | grep Remv")
-        dependencies = string.split(dependenciesString, "\n")
+        dependencies = str.split(dependenciesString, "\n")
         for dependency in dependencies:
             dependency = dependency.replace("Remv ", "")
             model.append([dependency])

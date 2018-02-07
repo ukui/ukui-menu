@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkImage" id="image_allapp">
@@ -440,6 +440,51 @@
                                                 <child>
                                                   <placeholder/>
                                                 </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
                                               </object>
                                             </child>
                                           </object>
@@ -457,10 +502,12 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <child>
-                                          <object class="GtkHSeparator" id="hseparator4">
-                                            <property name="height_request">4</property>
+                                          <object class="GtkImage" id="image2">
+                                            <property name="width_request">100</property>
+                                            <property name="height_request">0</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="stock">gtk-missing-image</property>
                                           </object>
                                         </child>
                                       </object>
@@ -545,10 +592,12 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <child>
-                                              <object class="GtkHSeparator" id="hseparator5">
-                                                <property name="height_request">3</property>
+                                              <object class="GtkImage" id="image1">
+                                                <property name="width_request">100</property>
+                                                <property name="height_request">0</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="stock">gtk-missing-image</property>
                                               </object>
                                             </child>
                                           </object>
@@ -589,15 +638,87 @@
                                               <object class="GtkVBox" id="categoriesbox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="spacing">3</property>
+                                                <property name="valign">start</property>
+                                                <property name="spacing">2</property>
                                                 <child>
-                                                  <placeholder/>
+                                                  <object class="GtkExpander" id="expanderApp">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="expanded">True</property>
+                                                    <property name="label_fill">True</property>
+                                                    <child>
+                                                      <object class="GtkVBox" id="categoriesApp">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="margin_top">4</property>
+                                                        <property name="hexpand">False</property>
+                                                        <property name="vexpand">False</property>
+                                                        <child>
+                                                          <placeholder/>
+                                                        </child>
+                                                        <child>
+                                                          <placeholder/>
+                                                        </child>
+                                                      </object>
+                                                    </child>
+                                                    <child type="label">
+                                                      <object class="GtkLabel" id="labelExpanderApp">
+                                                        <property name="width_request">210</property>
+                                                        <property name="height_request">0</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="hexpand">True</property>
+                                                        <property name="label" translatable="yes">expander</property>
+                                                        <property name="xalign">0</property>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">True</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
                                                 </child>
                                                 <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
+                                                  <object class="GtkExpander" id="expanderSystem">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="expanded">True</property>
+                                                    <property name="label_fill">True</property>
+                                                    <child>
+                                                      <object class="GtkVBox" id="categoriesSystem">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="margin_top">4</property>
+                                                        <property name="hexpand">False</property>
+                                                        <property name="vexpand">False</property>
+                                                        <child>
+                                                          <placeholder/>
+                                                        </child>
+                                                        <child>
+                                                          <placeholder/>
+                                                        </child>
+                                                      </object>
+                                                    </child>
+                                                    <child type="label">
+                                                      <object class="GtkLabel" id="labelExpanderSystem">
+                                                        <property name="width_request">210</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="hexpand">True</property>
+                                                        <property name="label" translatable="yes">expander</property>
+                                                        <property name="xalign">0</property>
+                                                        <attributes>
+                                                          <attribute name="size" value="-100"/>
+                                                        </attributes>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">True</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
                                                 </child>
                                               </object>
                                             </child>
@@ -616,11 +737,12 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <child>
-                                          <object class="GtkHSeparator" id="hseparator3">
-                                            <property name="width_request">227</property>
-                                            <property name="height_request">3</property>
+                                          <object class="GtkImage" id="image5">
+                                            <property name="width_request">100</property>
+                                            <property name="height_request">0</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="stock">gtk-missing-image</property>
                                           </object>
                                         </child>
                                       </object>
@@ -761,13 +883,64 @@
                                         <property name="can_focus">False</property>
                                         <property name="border_width">0</property>
                                         <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
+                                          <object class="GtkExpander" id="expanderRecent">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="expanded">True</property>
+                                            <property name="label_fill">True</property>
+                                            <child>
+                                              <object class="GtkVBox" id="recentBox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="margin_top">4</property>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child type="label">
+                                              <object class="GtkBox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="spacing">4</property>
+                                                <child>
+                                                  <object class="GtkLabel" id="labelExpander">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="label" translatable="yes">aaaaa</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkImage" id="image4">
+                                                    <property name="width_request">50</property>
+                                                    <property name="height_request">0</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="margin_top">4</property>
+                                                    <property name="stock">gtk-missing-image</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">False</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
                                         </child>
                                       </object>
                                     </child>
@@ -930,6 +1103,7 @@
                     <property name="invisible_char">•</property>
                     <property name="activates_default">True</property>
                     <property name="shadow_type">none</property>
+                    <property name="progress_pulse_step">0</property>
                     <property name="secondary_icon_name">edit-find</property>
                     <property name="primary_icon_activatable">False</property>
                   </object>

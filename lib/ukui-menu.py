@@ -31,6 +31,7 @@ import subprocess
 import sys
 import traceback
 import signal
+import debug
 
 gi.require_version("Gtk", "3.0")
 gi.require_version('UkuiPanelApplet', '4.0')
@@ -238,7 +239,8 @@ class MenuWin( object ):
         self.data_path = os.path.join('/','usr','share','ukui-menu')
         self.applet = applet
         self.settings = Gio.Settings.new("org.ukui.ukui-menu")
-        self.settings.connect("changed::show-category-menu",self.changeMenuState)
+        self.settings.connect("changed::show-category-menu", self.changeMenuState)
+        self.settings.connect("changed::permission-changed", self.changeMenuState)
 
         self.state = self.settings.get_boolean("show-category-menu")
 
@@ -357,6 +359,56 @@ class MenuWin( object ):
         about.connect( "response", lambda dialog, r: dialog.destroy() )
         about.show()
 
+    def showPropertyDialog( self, action, userdata = None ):
+        builder = Gtk.Builder()
+        builder.add_from_file(os.path.join( '/', 'usr', 'share', 'ukui-menu', "menu-property.glade" ))
+        window = builder.get_object("window")
+
+        window.set_title(_("Menu Property"))
+        labelMenu = builder.get_object("label1")
+        labelMenu.set_text(_("Menu Type:"))
+        labelMenu.set_tooltip_text("aaaaaaaaaaaaaaaaa")
+        labelRecent = builder.get_object("label2")
+        labelRecent.set_text(_("File History:"))
+        labelRecent.set_tooltip_text("aaaaaaaaaaaaaaaaa")
+        self.radioButton1 = builder.get_object("radiobutton1")
+        self.radioButton1.set_label(_("Normal Menu"))
+        self.radioButton2 = builder.get_object("radiobutton2")
+        self.radioButton2.set_label(_("Category Menu"))
+        if self.mainwin.showCategoryMenu:
+            self.radioButton2.set_active(True)
+        else:
+            self.radioButton1.set_active(True)
+        self.radioButton1.connect("button-press-event", self.radioToggled)
+        self.radioButton2.connect("button-press-event", self.radioToggled)
+        self.switchButton = builder.get_object("switchButton")
+        state = self.mainwin.settings.get_boolean("show-recent-file")
+        if state:
+            self.switchButton.set_state(False)
+        else:
+            self.switchButton.set_state(True)
+        self.switchButton.connect("notify::active", self.Switched)
+        self.closeButton = builder.get_object("button1")
+        image = Gtk.Image.new_from_icon_name("gtk-close", Gtk.IconSize.MENU) 
+        self.closeButton.set_image(image)
+        self.closeButton.set_label(_("Close(_C)"))
+        self.closeButton.set_use_underline(True)
+        self.closeButton.connect("clicked", lambda w: window.hide())
+        window.show()
+
+    def Switched( self, widget, user_data ):
+        state = self.switchButton.get_state()
+        if state:
+            self.mainwin.settings.set_boolean("show-recent-file", False)
+        else:
+            self.mainwin.settings.set_boolean("show-recent-file", True)
+
+    def radioToggled( self, widget, event ):
+        if widget == self.radioButton1:
+            self.mainwin.settings.set_boolean("show-category-menu", False)
+        elif widget == self.radioButton2:
+            self.mainwin.settings.set_boolean("show-category-menu", True)
+
     def showMenu( self, widget=None, event=None ):
         if event == None or event.button == 1:
             self.toggleMenu()
@@ -450,8 +502,8 @@ class MenuWin( object ):
         action = Gtk.Action(name="UkuiMenuReload", label=_("Reload plugins"), tooltip=None, stock_id="gtk-refresh")
         action.connect("activate", self.mainwin.RegenPlugins)
         action_group.add_action(action)
-        action = Gtk.Action(name="UkuiMenuAbout", label=_("About"), tooltip=None, stock_id="gtk-about")
-        action.connect("activate", self.showAboutDialog)
+        action = Gtk.Action(name="UkuiMenuAbout", label=_("Property"), tooltip=None, stock_id="gtk-execute")
+        action.connect("activate", self.showPropertyDialog)
         action_group.add_action(action)
         action_group.set_translation_domain ("ukui-menu")
 

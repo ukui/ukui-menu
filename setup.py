@@ -58,6 +58,7 @@ data_files = [
     ('{prefix}/share/ukui-panel/applets'.format(prefix=sys.prefix), ['data/org.ukui.panel.UkuiMenuApplet.ukui-panel-applet']),
     ('{prefix}/share/dbus-1/services'.format(prefix=sys.prefix), ['data/org.ukui.panel.applet.UkuiMenuAppletFactory.service']),
     ('{prefix}/share/ukui-menu'.format(prefix=sys.prefix), ['data/ukui-menu.glade',
+                                                            'data/menu-property.glade',
                                                             'data/menueditor.ui',
                                                             'data/popup.xml',
                                                             'data/ukuimenu.css',

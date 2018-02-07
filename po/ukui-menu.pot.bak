@@ -8,193 +8,268 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-21 11:13+0800\n"
+"POT-Creation-Date: 2018-01-22 11:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../ukui-menu-editor:38
+msgid ""
+"\n"
+"Current menu mode is not category mode, please switch and try again!"
+msgstr "\n当前菜单模式不是分类模式，请切换后再试！"
 
 #: ../lib/ukui-menu.py:60
 msgid "Menu"
-msgstr ""
+msgstr "菜单"
 
 #: ../lib/ukui-menu.py:245
 msgid "Normal Menu"
-msgstr ""
+msgstr "常规菜单"
 
 #: ../lib/ukui-menu.py:247
 msgid "Category Menu"
-msgstr ""
+msgstr "分类菜单"
 
-#: ../lib/ukui-menu.py:249
+#: ../lib/ukui-menu.py:249 ../ukui_menu/menueditor.py:837
 msgid "Edit Category Menu"
-msgstr ""
+msgstr "编辑分类菜单"
 
 #: ../lib/ukui-menu.py:325
 msgid "Start"
-msgstr ""
+msgstr "开始"
 
 #: ../lib/ukui-menu.py:355
 msgid "Startup Menu"
-msgstr ""
+msgstr "开始菜单"
+
+#: ../lib/ukui-menu.py:450
+msgid "Reload plugins"
+msgstr "重载插件"
 
 #: ../lib/ukui-menu.py:453
-msgid "Reload plugins"
-msgstr ""
-
-#: ../lib/ukui-menu.py:456
 msgid "About"
+msgstr "关于"
+
+#. wps
+#: ../ukui_menu/plugins/menu.py:126 ../ukui_menu/plugins/menu.py:684
+#: ../ukui_menu/plugins/menu.py:2185
+msgid "WPS Writer"
+msgstr "WPS 文字"
+
+#: ../ukui_menu/plugins/menu.py:127 ../ukui_menu/plugins/menu.py:688
+#: ../ukui_menu/plugins/menu.py:2192
+msgid "WPS Presentation"
+msgstr "WPS 演示"
+
+#: ../ukui_menu/plugins/menu.py:128 ../ukui_menu/plugins/menu.py:692
+#: ../ukui_menu/plugins/menu.py:2199
+msgid "WPS Spreadsheets"
+msgstr "WPS 表格"
+
+#. qt app
+#: ../ukui_menu/plugins/menu.py:129 ../ukui_menu/plugins/menu.py:710
+#: ../ukui_menu/plugins/menu.py:2171
+msgid "Qt Creator"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:197 ../ukui_menu/plugins/menu.py:1110
-#: ../ukui_menu/plugins/menu.py:1111
+#. qt app
+#: ../ukui_menu/plugins/menu.py:130 ../ukui_menu/plugins/menu.py:2156
+msgid "SMPlayer"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:131 ../ukui_menu/plugins/menu.py:718
+#: ../ukui_menu/plugins/menu.py:2158
+msgid "Kylin Video"
+msgstr "麒麟影音"
+
+#. gtk app
+#: ../ukui_menu/plugins/menu.py:132 ../ukui_menu/plugins/menu.py:701
+#: ../ukui_menu/plugins/menu.py:2207
+msgid "Eye of MATE Image Viewer"
+msgstr "MATE 之眼图像查看器"
+
+#: ../ukui_menu/plugins/menu.py:133 ../ukui_menu/plugins/menu.py:705
+#: ../ukui_menu/plugins/menu.py:2214
+msgid "Atril Document Viewer"
+msgstr "Atril 文档查看器"
+
+#. gtk app
+#: ../ukui_menu/plugins/menu.py:134 ../ukui_menu/plugins/menu.py:697
+#: ../ukui_menu/plugins/menu.py:2221
+msgid "Pluma"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:240 ../ukui_menu/plugins/menu.py:1231
+#: ../ukui_menu/plugins/menu.py:1232
 msgid "Games"
-msgstr ""
+msgstr "游戏"
 
-#: ../ukui_menu/plugins/menu.py:355 ../ukui_menu/plugins/menu.py:460
+#: ../ukui_menu/plugins/menu.py:373
+msgid "Recent"
+msgstr "最近"
+
+#: ../ukui_menu/plugins/menu.py:411 ../ukui_menu/plugins/menu.py:516
 msgid "All App"
-msgstr ""
+msgstr "所有程序"
 
-#: ../ukui_menu/plugins/menu.py:360 ../ukui_menu/plugins/menu.py:449
+#: ../ukui_menu/plugins/menu.py:416 ../ukui_menu/plugins/menu.py:505
 msgid "Favorite"
-msgstr ""
+msgstr "常用软件"
 
-#: ../ukui_menu/plugins/menu.py:390
+#: ../ukui_menu/plugins/menu.py:446
 msgid "Power"
-msgstr ""
+msgstr "关机"
 
-#: ../ukui_menu/plugins/menu.py:471 ../ukui_menu/plugins/menu.py:770
-#: ../ukui_menu/plugins/menu.py:778 ../ukui_menu/plugins/menu.py:1407
-#: ../ukui_menu/plugins/menu.py:1830
+#: ../ukui_menu/plugins/menu.py:527 ../ukui_menu/plugins/menu.py:880
+#: ../ukui_menu/plugins/menu.py:888 ../ukui_menu/plugins/menu.py:1569
+#: ../ukui_menu/plugins/menu.py:2296
 msgid "Search local program"
-msgstr ""
+msgstr "搜索本地程序"
 
-#: ../ukui_menu/plugins/menu.py:501
+#: ../ukui_menu/plugins/menu.py:557
 msgid "Home"
-msgstr ""
+msgstr "我的电脑"
 
-#: ../ukui_menu/plugins/menu.py:509
+#: ../ukui_menu/plugins/menu.py:565
 msgid "Settings"
-msgstr ""
+msgstr "控制面板"
 
-#: ../ukui_menu/plugins/menu.py:517
+#: ../ukui_menu/plugins/menu.py:573
 msgid "No items matched"
-msgstr ""
+msgstr "没有与搜索条件匹配的项"
 
-#: ../ukui_menu/plugins/menu.py:818 ../ukui_menu/plugins/menu.py:1490
+#: ../ukui_menu/plugins/menu.py:928 ../ukui_menu/plugins/menu.py:1658
 msgid "Open(_O)"
-msgstr ""
+msgstr "打开(_O)"
 
-#: ../ukui_menu/plugins/menu.py:821 ../ukui_menu/plugins/menu.py:1493
+#: ../ukui_menu/plugins/menu.py:931 ../ukui_menu/plugins/menu.py:1661
 msgid "Add to desktop"
-msgstr ""
+msgstr "添加到桌面"
 
-#: ../ukui_menu/plugins/menu.py:825 ../ukui_menu/plugins/menu.py:1496
+#: ../ukui_menu/plugins/menu.py:935 ../ukui_menu/plugins/menu.py:1664
 msgid "Lock to panel(_L)"
-msgstr ""
+msgstr "锁定到任务栏(_L)"
 
-#: ../ukui_menu/plugins/menu.py:828
+#: ../ukui_menu/plugins/menu.py:938
 msgid "Unlock from startup menu"
-msgstr ""
+msgstr "从[开始菜单]解锁"
 
-#: ../ukui_menu/plugins/menu.py:832 ../ukui_menu/plugins/menu.py:1506
+#: ../ukui_menu/plugins/menu.py:942 ../ukui_menu/plugins/menu.py:1674
 msgid "Property(_P)"
-msgstr ""
+msgstr "属性(_P)"
 
-#: ../ukui_menu/plugins/menu.py:894
+#: ../ukui_menu/plugins/menu.py:1008
 msgid "Shutdown"
-msgstr ""
+msgstr "关机"
 
-#: ../ukui_menu/plugins/menu.py:895
+#: ../ukui_menu/plugins/menu.py:1009
 msgid "Reboot"
-msgstr ""
+msgstr "重启"
 
-#: ../ukui_menu/plugins/menu.py:898
+#: ../ukui_menu/plugins/menu.py:1012
 msgid "Logout"
-msgstr ""
+msgstr "注销"
 
-#: ../ukui_menu/plugins/menu.py:899
+#: ../ukui_menu/plugins/menu.py:1013
 msgid "Switch User"
-msgstr ""
+msgstr "切换用户"
 
-#: ../ukui_menu/plugins/menu.py:900
+#: ../ukui_menu/plugins/menu.py:1014
 msgid "Lock Screen"
-msgstr ""
+msgstr "锁屏"
 
-#: ../ukui_menu/plugins/menu.py:1097
-msgid "Preferences"
-msgstr ""
-
-#: ../ukui_menu/plugins/menu.py:1103
+#: ../ukui_menu/plugins/menu.py:1224
 msgid "Accessories"
-msgstr ""
+msgstr "附件"
 
-#: ../ukui_menu/plugins/menu.py:1105 ../ukui_menu/plugins/menu.py:1106
+#: ../ukui_menu/plugins/menu.py:1226 ../ukui_menu/plugins/menu.py:1227
 msgid "Office"
-msgstr ""
+msgstr "办公"
 
-#: ../ukui_menu/plugins/menu.py:1108
+#: ../ukui_menu/plugins/menu.py:1229
 msgid "StartUp"
-msgstr ""
+msgstr "开始"
 
-#: ../ukui_menu/plugins/menu.py:1499
+#. text = item[0] + "                                                     "
+#: ../ukui_menu/plugins/menu.py:1266 ../ukui_menu/plugins/menu.py:1517
+#: ../ukui_menu/plugins/menu.py:1522
+msgid "Applications"
+msgstr "应用程序"
+
+#: ../ukui_menu/plugins/menu.py:1271 ../ukui_menu/plugins/menu.py:1519
+#: ../ukui_menu/plugins/menu.py:1524
+msgid "System"
+msgstr "系统"
+
+#: ../ukui_menu/plugins/menu.py:1667
 msgid "Add to startup menu"
-msgstr ""
+msgstr "附到[开始菜单]"
 
-#: ../ukui_menu/plugins/menu.py:1501
+#: ../ukui_menu/plugins/menu.py:1669
 msgid "Uninstall"
-msgstr ""
+msgstr "卸载"
 
-#: ../ukui_menu/plugins/menu.py:1502
+#: ../ukui_menu/plugins/menu.py:1670
 msgid "Remove from list(_R)"
-msgstr ""
+msgstr "从列表中删除(_R)"
 
-#: ../ukui_menu/plugins/menu.py:1504
+#: ../ukui_menu/plugins/menu.py:1672
 msgid "Remove all"
-msgstr ""
+msgstr "删除所有"
 
-#: ../ukui_menu/plugins/menu.py:1701
+#: ../ukui_menu/plugins/menu.py:1869
 msgid "Type:"
-msgstr ""
+msgstr "类型："
 
-#: ../ukui_menu/plugins/menu.py:1703
+#: ../ukui_menu/plugins/menu.py:1871
 msgid "Name:"
-msgstr ""
+msgstr "名字："
 
-#: ../ukui_menu/plugins/menu.py:1705
+#: ../ukui_menu/plugins/menu.py:1873
 msgid "Command:"
-msgstr ""
+msgstr "命令："
 
-#: ../ukui_menu/plugins/menu.py:1707
+#: ../ukui_menu/plugins/menu.py:1875
 msgid "Note:"
-msgstr ""
+msgstr "注释："
 
-#: ../ukui_menu/plugins/menu.py:1716
+#: ../ukui_menu/plugins/menu.py:1884
 msgid "Application"
-msgstr ""
+msgstr "应用程序"
 
-#: ../ukui_menu/plugins/menu.py:1718
+#: ../ukui_menu/plugins/menu.py:1886
 msgid "Application in Terminal"
-msgstr ""
+msgstr "终端应用"
 
-#: ../ukui_menu/plugins/menu.py:1727
+#: ../ukui_menu/plugins/menu.py:1895
 msgid "Property"
+msgstr "属性"
+
+#: ../ukui_menu/plugins/menu.py:2082
+msgid "Remove"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:1877
+#: ../ukui_menu/plugins/menu.py:2255
+#, python-format
+msgid "Recent(%s)"
+msgstr "最近(%s)"
+
+#: ../ukui_menu/plugins/menu.py:2343
 msgid "Chromium Browser"
-msgstr ""
+msgstr "谷歌浏览器"
 
-#: ../ukui_menu/plugins/menu.py:1883
+#: ../ukui_menu/plugins/menu.py:2349
 msgid "Fcitx Config"
-msgstr ""
+msgstr "小企鹅配置"
 
 #: ../ukui_menu/easybuttons.py:406
 msgid "Comment:"
-msgstr ""
+msgstr "描述："
 
 #: ../ukui_menu/keybinding.py:215
 msgid "Click to set a new accelerator key for opening and closing the menu.  "
@@ -216,50 +291,73 @@ msgstr ""
 msgid "<not set>"
 msgstr ""
 
-#: ../data/menueditor.ui.h:1
-msgid "_Revert to Original"
-msgstr ""
+#: ../ukui_menu/menueditor.py:777
+#, python-format
+msgid ""
+"\n"
+"The current system is not installed [%s] software, can not display the "
+"classification!"
+msgstr "\n当前系统未安装[%s]类软件，无法显示该分类！"
 
-#: ../data/menueditor.ui.h:2
-msgid "Main Menu"
-msgstr ""
+#: ../ukui_menu/menueditor.py:836
+msgid "Revert to Original"
+msgstr "还原到原始值"
 
-#: ../data/menueditor.ui.h:3
+#: ../ukui_menu/menueditor.py:838
 msgid "Restore the default menu layout"
-msgstr ""
+msgstr "恢复默认菜单布局"
 
-#: ../data/menueditor.ui.h:4
-msgid "_Menus:"
-msgstr ""
+#: ../ukui_menu/menueditor.py:839
+msgid "New Menu"
+msgstr "新建菜单"
 
-#: ../data/menueditor.ui.h:5
-msgid "It_ems:"
-msgstr ""
+#: ../ukui_menu/menueditor.py:840
+msgid "New Item"
+msgstr "新建项目"
 
-#: ../data/menueditor.ui.h:6
-msgid "_New Menu"
-msgstr ""
+#: ../ukui_menu/menueditor.py:841
+msgid "Menus:"
+msgstr "菜单："
 
-#: ../data/menueditor.ui.h:7
-msgid "Ne_w Item"
-msgstr ""
+#: ../ukui_menu/menueditor.py:842
+msgid "Items:"
+msgstr "项数："
 
-#: ../data/menueditor.ui.h:8
-msgid "New _Separator"
-msgstr ""
-
-#: ../data/menueditor.ui.h:9
+#: ../ukui_menu/menueditor.py:843
 msgid "Move Up"
-msgstr ""
+msgstr "上移"
 
-#: ../data/menueditor.ui.h:10
+#: ../ukui_menu/menueditor.py:844
 msgid "Move Down"
-msgstr ""
+msgstr "下移"
 
-#: ../data/menueditor.ui.h:11
-msgid "Revert Changes?"
-msgstr ""
-
-#: ../data/menueditor.ui.h:12
+#: ../ukui_menu/menueditor.py:845
 msgid "Revert all menus to original settings?"
-msgstr ""
+msgstr "将全部菜单还原到原始设置吗？"
+
+#: ../ukui_menu/menueditor.py:846
+msgid "Revert Changes?"
+msgstr "还原更改吗？"
+
+#: ../ukui_menu/menueditor.py:847
+msgid "New Separator"
+msgstr "新建分隔符"
+
+#: ../ukui_menu/menueditor.py:1034
+msgid "Name"
+msgstr "名称"
+
+#: ../ukui_menu/menueditor.py:1050
+msgid "Show"
+msgstr "显示"
+
+#: ../ukui_menu/menueditor.py:1058
+msgid "Item"
+msgstr "项目"
+
+#: ../ukui_menu/menueditor.py:1089
+#, python-format
+msgid ""
+"\n"
+"[%s] is a system autostart service software, you should not show it in startup menu!"
+msgstr "\n[%s]是一个系统自启动服务软件，你不应该把它显示到开始菜单中！"

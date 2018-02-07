@@ -483,13 +483,13 @@ class MenuEditor:
 
     def __positionItem(self, parent, item, before=None, after=None):
         if after:
-            index = parent.contents.index(after) + 1
+            index = parent.get_contents().index(after) + 1
         elif before:
-            index = parent.contents.index(before)
+            index = parent.get_contents().index(before)
         else:
             # append the item to the list
-            index = len(parent.contents)
-        contents = parent.contents
+            index = len(parent.get_contents())
+        contents = parent.get_contents()
         #if this is a move to a new parent you can't remove the item
         if item in contents:
             # decrease the destination index, if we shorten the list
@@ -611,8 +611,8 @@ class MenuEditor:
     def revert(self):
         for name in ('applications', 'settings'):
             menu = getattr(self, name)
-            self.revertTree(menu.tree.root)
-            path = os.path.join(getUserMenuPath(), menu.tree.get_menu_file())
+            self.revertTree(menu.tree.get_root_directory())
+            path = os.path.join(getUserMenuPath(), menu.tree.get_menu_file().decode('utf-8'))
             try:
                 os.unlink(path)
             except OSError:
@@ -653,7 +653,7 @@ class MenuEditor:
             return
         self.__addUndo([menu,])
         file_id = os.path.split(menu.get_desktop_file_path())[1]
-        path = os.path.join(getUserDirectoryPath(), file_id)
+        path = os.path.join(getUserDirectoryPath(), file_id.decode('utf-8'))
         try:
             os.remove(path)
         except OSError:
@@ -786,6 +786,47 @@ class MenuEditor:
             self.__addXmlTextElement(menu_xml, 'DirectoryDir', getUserDirectoryPath(), dom)
         self.save()
 
+    def moveItem(self, item, new_parent, before=None, after=None):
+        undo = []
+        if item.get_parent() != new_parent:
+            #hide old item
+            self.deleteItem(item)
+            undo.append(item)
+            file_id = self.copyItem(item, new_parent)
+            item = ('Item', file_id)
+            undo.append(item)
+        self.__positionItem(new_parent, item, before, after)
+        undo.append(self.__getMenu(new_parent))
+        self.__addUndo(undo)
+        self.save()
+
+    def moveMenu(self, menu, new_parent, before=None, after=None):
+        parent = new_parent
+        #don't move a menu into it's child
+        while parent.get_parent():
+            parent = parent.get_parent()
+            if parent == menu:
+                return False
+
+        #don't move a menu into itself
+        if new_parent == menu:
+            return False
+
+        #can't move between top-level menus
+        if self.__getMenu(menu) != self.__getMenu(new_parent):
+            return False
+        if menu.get_parent() != new_parent:
+            dom = self.__getMenu(menu).dom
+            path = self.__getPath(menu)
+            root_path = path[0]
+            xml_root = self.__getXmlMenu(root_path, dom.documentElement, dom)
+            old_path = path[1:]
+            new_path = self.__getPath(new_parent)[1:] + [menu.get_menu_id()]
+            self.__addXmlMove(xml_root, '/'.join(old_path), '/'.join(new_path), dom)
+        self.__positionItem(new_parent, menu, before, after)
+        self.__addUndo([self.__getMenu(new_parent),])
+        self.save()
+
 class Layout:
     def __init__(self, node=None):
         self.order = []
@@ -825,33 +866,22 @@ class MenuEditMainWindow:
         self.setupMenuTree()
         self.setupItemTree()
         self.tree.get_object('mainwindow').set_icon_from_file('/usr/share/ukui-menu/icons/start.png')
-        self.tree.get_object('edit_delete').set_sensitive(False)
-        self.tree.get_object('edit_revert_to_original').set_sensitive(False)
-        self.tree.get_object('edit_properties').set_sensitive(False)
         self.tree.get_object('move_up_button').set_sensitive(False)
         self.tree.get_object('move_down_button').set_sensitive(False)
-        self.tree.get_object('new_separator_button').set_sensitive(False)
-        self.tree.get_object('properties_button').set_sensitive(False)
-        self.tree.get_object('delete_button').set_sensitive(False)
-        self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
+        #self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
         self.tree.get_object('mainwindow').set_title(_("Edit Category Menu"))
         self.tree.get_object('revert_button').set_tooltip_text(_("Restore the default menu layout"))
-        self.tree.get_object('label18').set_text(_("New Menu"))
-        self.tree.get_object('label19').set_text(_("New Item"))
         self.tree.get_object('label20').set_text(_("Menus:"))
         self.tree.get_object('label21').set_text(_("Items:"))
         self.tree.get_object('label22').set_text(_("Move Up"))
         self.tree.get_object('label23').set_text(_("Move Down"))
         self.tree.get_object('label24').set_text(_("Revert all menus to original settings?"))
         self.tree.get_object('revertdialog').set_title(_("Revert Changes?"))
-        self.tree.get_object('new_separator_button').set_label(_("New Separator"))
         accelgroup = Gtk.AccelGroup()
         keyval, modifier = Gtk.accelerator_parse('<Ctrl>Z')
         accelgroup.connect(keyval, modifier, Gtk.AccelFlags.VISIBLE, self.on_mainwindow_undo)
         keyval, modifier = Gtk.accelerator_parse('<Ctrl><Shift>Z')
         accelgroup.connect(keyval, modifier, Gtk.AccelFlags.VISIBLE, self.on_mainwindow_redo)
-        keyval, modifier = Gtk.accelerator_parse('F1')
-        accelgroup.connect(keyval, modifier, Gtk.AccelFlags.VISIBLE, self.on_help_button_clicked)
         self.tree.get_object('mainwindow').add_accel_group(accelgroup)
 
     def run(self):
@@ -1132,50 +1162,6 @@ class MenuEditMainWindow:
         elif item.get_type() == ukuimenu.TYPE_SEPARATOR:
             self.editor.moveSeparator(item, item.get_parent(), after=after)
 
-    def on_delete_button_clicked(self, button):
-        self.on_edit_delete_activate(None)
-
-    def on_properties_button_clicked(self, button):
-        self.on_edit_properties_activate(None)
-
-    def on_new_separator_button_clicked(self, button):
-        item_tree = self.tree.get_object('item_tree')
-        items, iter = item_tree.get_selection().get_selected()
-        if not iter:
-            return
-        else:
-            after = items[iter][3]
-            menu_tree = self.tree.get_object('menu_tree')
-            menus, iter = menu_tree.get_selection().get_selected()
-            parent = menus[iter][2]
-            self.editor.createSeparator(parent, after=after)
-
-    def on_new_item_button_clicked(self, button):
-        menu_tree = self.tree.get_object('menu_tree')
-        menus, iter = menu_tree.get_selection().get_selected()
-        if not iter:
-            parent = menus[(0,)][2]
-            menu_tree.expand_to_path((0,))
-            menu_tree.get_selection().select_path((0,))
-        else:
-            parent = menus[iter][2]
-        file_path = os.path.join(getUserItemPath(), getUniqueFileId('mozo-made', '.desktop'))
-        process = subprocess.Popen(['ukui-desktop-item-edit', file_path], env=os.environ)
-        GLib.timeout_add(100, self.waitForNewItemProcess, process, parent.menu_id, file_path)
-
-    def on_new_menu_button_clicked(self, button):
-        menu_tree = self.tree.get_object('menu_tree')
-        menus, iter = menu_tree.get_selection().get_selected()
-        if not iter:
-            parent = menus[(0,)][2]
-            menu_tree.expand_to_path((0,))
-            menu_tree.get_selection().select_path((0,))
-        else:
-            parent = menus[iter][2]
-        file_path = os.path.join(getUserDirectoryPath(), getUniqueFileId('mozo-made', '.directory'))
-        process = subprocess.Popen(['ukui-desktop-item-edit', file_path], env=os.environ)
-        GLib.timeout_add(100, self.waitForNewMenuProcess, process, parent.menu_id, file_path)
-
     def on_item_tree_popup_menu(self, item_tree, event=None):
         model, iter = item_tree.get_selection().get_selected()
         if event:
@@ -1205,16 +1191,6 @@ class MenuEditMainWindow:
         if iter is None:
             return
         item = items[iter][3]
-        self.tree.get_object('edit_delete').set_sensitive(True)
-        self.tree.get_object('new_separator_button').set_sensitive(True)
-        self.tree.get_object('delete_button').set_sensitive(True)
-
-        can_revert = self.editor.canRevert(item)
-        self.tree.get_object('edit_revert_to_original').set_sensitive(can_revert)
-
-        can_edit = not item.get_type() == ukuimenu.TYPE_SEPARATOR
-        self.tree.get_object('edit_properties').set_sensitive(can_edit)
-        self.tree.get_object('properties_button').set_sensitive(can_edit)
 
         index = items.get_path(iter).get_indices()[0]
         can_go_up = index > 0
@@ -1300,13 +1276,6 @@ class MenuEditMainWindow:
                                        Terminal=False)
         self.drag_data = None
 
-    def on_item_tree_key_press_event(self, item_tree, event):
-        if event.keyval == Gdk.KEY_Delete:
-            self.on_edit_delete_activate(item_tree)
-
-    def on_item_tree_row_activated(self, treeview, path, column):
-        self.on_edit_properties_activate(None)
-
     def on_menu_tree_cursor_changed(self, treeview):
         menus, iter = treeview.get_selection().get_selected()
         if iter is None:
@@ -1315,12 +1284,8 @@ class MenuEditMainWindow:
         item_tree = self.tree.get_object('item_tree')
         item_tree.get_selection().unselect_all()
         self.loadItems(self.menu_store[menu_path][2], menu_path)
-        self.tree.get_object('edit_delete').set_sensitive(False)
-        self.tree.get_object('edit_revert_to_original').set_sensitive(False)
-        self.tree.get_object('edit_properties').set_sensitive(False)
         self.tree.get_object('move_up_button').set_sensitive(False)
         self.tree.get_object('move_down_button').set_sensitive(False)
-        self.tree.get_object('new_separator_button').set_sensitive(False)
 
     def on_revert_button_clicked(self, button):
         dialog = self.tree.get_object('revertdialog')
@@ -1329,59 +1294,8 @@ class MenuEditMainWindow:
         if dialog.run() == Gtk.ResponseType.YES:
             self.editor.revert()
             dialog.hide()
-
-    def on_help_button_clicked(self, *args):
-        Gtk.show_uri(Gdk.Screen.get_default(), "help:ukui-user-guide/menu-editor", Gtk.get_current_event_time())
-
-    def on_edit_delete_activate(self, menu):
-        item_tree = self.tree.get_object('item_tree')
-        items, iter = item_tree.get_selection().get_selected()
-        if not iter:
-            return
-        item = items[iter][3]
-        if item.get_type() == ukuimenu.TYPE_ENTRY:
-            self.editor.deleteItem(item)
-        elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
-            self.editor.deleteMenu(item)
-        elif item.get_type() == ukuimenu.TYPE_SEPARATOR:
-            self.editor.deleteSeparator(item)
-
-    def on_edit_revert_to_original_activate(self, menu):
-        item_tree = self.tree.get_object('item_tree')
-        items, iter = item_tree.get_selection().get_selected()
-        if not iter:
-            return
-        item = items[iter][3]
-        if item.get_type() == ukuimenu.TYPE_ENTRY:
-            self.editor.revertItem(item)
-        elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
-            self.editor.revertMenu(item)
-
-    def on_edit_properties_activate(self, menu):
-        item_tree = self.tree.get_object('item_tree')
-        items, iter = item_tree.get_selection().get_selected()
-        if not iter:
-            return
-        item = items[iter][3]
-        if item.get_type() not in (ukuimenu.TYPE_ENTRY, ukuimenu.TYPE_DIRECTORY):
-            return
-
-        if item.get_type() == ukuimenu.TYPE_ENTRY:
-            file_path = os.path.join(getUserItemPath(), item.get_desktop_file_id().decode('utf-8'))
-            file_type = 'Item'
-        elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
-            file_path = os.path.join(getUserDirectoryPath(), os.path.split(item.get_desktop_file_path().decode('utf-8'))[1])
-            file_type = 'Menu'
-
-        if not os.path.isfile(file_path):
-            shutil.copy(item.get_desktop_file_path().decode('utf-8'), file_path)
-            self.editor._MenuEditor__addUndo([(file_type, os.path.split(file_path)[1]),])
         else:
-            self.editor._MenuEditor__addUndo([item,])
-        if file_path not in self.edit_pool:
-            self.edit_pool.append(file_path)
-            process = subprocess.Popen(['ukui-desktop-item-edit', file_path], env=os.environ)
-            GLib.timeout_add(100, self.waitForEditProcess, process, file_path)
+            dialog.hide()
 
     def on_mainwindow_undo(self, accelgroup, window, keyval, modifier):
         self.editor.undo()

@@ -45,6 +45,15 @@ border-radius: 0px;
 border-color: @ukui_vp_border_color;
 font-size: 13px;
 }
+#Viewport1 {
+padding: 0px 0px;
+background-color: @ukui_vp_color;
+border-width: 0px;
+border-style: solid;
+border-radius: 0px;
+border-color: @ukui_vp_border_color;
+font-size: 13px;
+}
 #ViewportEntry {
 padding: 0px 0px;
 border-radius: 0px;
@@ -97,7 +106,7 @@ border-image-source: none;
 border-color: @ukui_vp_border_color;
 }
 #ButtonPower {
-padding: 0px 2px;
+padding: 0px 0px;
 background-color: transparent;
 border-width: 0px;
 border-color: transparent;
@@ -134,6 +143,16 @@ border-width: 1px;
 background-image: none;
 background-color: #daebfc;
 }
+#ButtonAppHover {
+padding: 2px 2px;
+border-radius: 0px;
+border-style: solid;
+border-width: 1px;
+border-color: shade (@ukuimenu_color, 1.35);
+background-image: none;
+background-color: shade (@ukuimenu_color, 1.89);
+font-size: 13px;
+}
 #ButtonApp:active {
 border-radius: 0px;
 border-width: 1px;
@@ -157,7 +176,7 @@ background-color: shade (@ukuimenu_color, 1.73);
 }
 #Entry {
 border-radius: 0px;
-padding: 0px 3px;
+padding: 0px 0px;
 background-color: @ukui_vp_color;
 border: 0px transparent;
 color: #999999; 
@@ -165,7 +184,7 @@ font-size: 13px;
 }
 #EntryActive {
 border-radius: 0px;
-padding: 0px 3px;
+padding: 0px 0px;
 background-color: @ukui_vp_color;
 border: 0px transparent;
 color: @ukui_fg_color;
