@@ -1115,7 +1115,7 @@ class MenuEditMainWindow:
             if state == None:
                 return
         else:
-            if self.item_store[path][1] == None:
+            if self.item_store[path][1] == None and item.get_name().decode('utf-8') != _("Android"):
                 msg = _("\n[%s] is a system autostart service software, you should not show it in startup menu!") % (item.get_name().decode('utf-8'))
                 md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
                 md.run()

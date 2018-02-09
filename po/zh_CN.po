@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-02 17:18+0800\n"
+"POT-Creation-Date: 2018-02-09 14:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,11 +27,11 @@ msgstr "\n当前菜单模式不是分类模式，请切换后再试！"
 msgid "Menu"
 msgstr "菜单"
 
-#: ../lib/ukui-menu.py:247 ../lib/ukui-menu.py:375
+#: ../lib/ukui-menu.py:271 ../lib/ukui-menu.py:401
 msgid "Normal Menu"
 msgstr "常规菜单"
 
-#: ../lib/ukui-menu.py:249 ../lib/ukui-menu.py:377
+#: ../lib/ukui-menu.py:273 ../lib/ukui-menu.py:403
 msgid "Category Menu"
 msgstr "分类菜单"
 
@@ -39,180 +39,188 @@ msgstr "分类菜单"
 msgid "Edit Category Menu"
 msgstr "编辑分类菜单"
 
-#: ../lib/ukui-menu.py:327
+#: ../lib/ukui-menu.py:351
 msgid "Start"
 msgstr "开始"
 
-#: ../lib/ukui-menu.py:357
+#: ../lib/ukui-menu.py:381
 msgid "Startup Menu"
 msgstr "开始菜单"
 
-#: ../lib/ukui-menu.py:367
+#: ../lib/ukui-menu.py:393
 msgid "Menu Property"
 msgstr "菜单属性"
 
-#: ../lib/ukui-menu.py:369
+#: ../lib/ukui-menu.py:395
 msgid "Menu Type:"
 msgstr "菜单类型："
 
-#: ../lib/ukui-menu.py:372
+#: ../lib/ukui-menu.py:396
+msgid "This is used to set up the menu type."
+msgstr "该项用来设置菜单类型。"
+
+#: ../lib/ukui-menu.py:398
 msgid "File History:"
 msgstr "文件历史："
 
-#: ../lib/ukui-menu.py:394
+#: ../lib/ukui-menu.py:399
+msgid "This is used to set up whether the file history is displayed."
+msgstr "该项用来设置是否显示文件历史记录。"
+
+#: ../lib/ukui-menu.py:420
 msgid "Close(_C)"
 msgstr "关闭(_C)"
 
-#: ../lib/ukui-menu.py:502
+#: ../lib/ukui-menu.py:529
 msgid "Reload plugins"
 msgstr "重载插件"
 
-#: ../lib/ukui-menu.py:505 ../ukui_menu/plugins/menu.py:1954
+#: ../lib/ukui-menu.py:532 ../ukui_menu/plugins/menu.py:1975
 msgid "Property"
 msgstr "属性"
 
 #. wps
-#: ../ukui_menu/plugins/menu.py:126 ../ukui_menu/plugins/menu.py:730
-#: ../ukui_menu/plugins/menu.py:2254
+#: ../ukui_menu/plugins/menu.py:125 ../ukui_menu/plugins/menu.py:731
+#: ../ukui_menu/plugins/menu.py:2272
 msgid "WPS Writer"
 msgstr "WPS 文字"
 
-#: ../ukui_menu/plugins/menu.py:127 ../ukui_menu/plugins/menu.py:734
-#: ../ukui_menu/plugins/menu.py:2261
+#: ../ukui_menu/plugins/menu.py:126 ../ukui_menu/plugins/menu.py:735
+#: ../ukui_menu/plugins/menu.py:2279
 msgid "WPS Presentation"
 msgstr "WPS 演示"
 
-#: ../ukui_menu/plugins/menu.py:128 ../ukui_menu/plugins/menu.py:738
-#: ../ukui_menu/plugins/menu.py:2268
+#: ../ukui_menu/plugins/menu.py:127 ../ukui_menu/plugins/menu.py:739
+#: ../ukui_menu/plugins/menu.py:2286
 msgid "WPS Spreadsheets"
 msgstr "WPS 表格"
 
 #. qt app
-#: ../ukui_menu/plugins/menu.py:129 ../ukui_menu/plugins/menu.py:756
-#: ../ukui_menu/plugins/menu.py:2238
+#: ../ukui_menu/plugins/menu.py:128 ../ukui_menu/plugins/menu.py:757
+#: ../ukui_menu/plugins/menu.py:2256
 msgid "Qt Creator"
 msgstr ""
 
 #. qt app
-#: ../ukui_menu/plugins/menu.py:130 ../ukui_menu/plugins/menu.py:2223
+#: ../ukui_menu/plugins/menu.py:129 ../ukui_menu/plugins/menu.py:2241
 msgid "SMPlayer"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:131 ../ukui_menu/plugins/menu.py:764
-#: ../ukui_menu/plugins/menu.py:2225
+#: ../ukui_menu/plugins/menu.py:130 ../ukui_menu/plugins/menu.py:765
+#: ../ukui_menu/plugins/menu.py:2243
 msgid "Kylin Video"
 msgstr "麒麟影音"
 
 #. gtk app
-#: ../ukui_menu/plugins/menu.py:132 ../ukui_menu/plugins/menu.py:747
-#: ../ukui_menu/plugins/menu.py:2276
+#: ../ukui_menu/plugins/menu.py:131 ../ukui_menu/plugins/menu.py:748
+#: ../ukui_menu/plugins/menu.py:2294
 msgid "Eye of MATE Image Viewer"
 msgstr "MATE 之眼图像查看器"
 
-#: ../ukui_menu/plugins/menu.py:133 ../ukui_menu/plugins/menu.py:751
-#: ../ukui_menu/plugins/menu.py:2283
+#: ../ukui_menu/plugins/menu.py:132 ../ukui_menu/plugins/menu.py:752
+#: ../ukui_menu/plugins/menu.py:2301
 msgid "Atril Document Viewer"
 msgstr "Atril 文档查看器"
 
 #. gtk app
-#: ../ukui_menu/plugins/menu.py:134 ../ukui_menu/plugins/menu.py:743
-#: ../ukui_menu/plugins/menu.py:2290
+#: ../ukui_menu/plugins/menu.py:133 ../ukui_menu/plugins/menu.py:744
+#: ../ukui_menu/plugins/menu.py:2308
 msgid "Pluma"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:245 ../ukui_menu/plugins/menu.py:1281
-#: ../ukui_menu/plugins/menu.py:1284
+#: ../ukui_menu/plugins/menu.py:244 ../ukui_menu/plugins/menu.py:1286
+#: ../ukui_menu/plugins/menu.py:1289
 msgid "Games"
 msgstr "游戏"
 
-#: ../ukui_menu/plugins/menu.py:387
+#: ../ukui_menu/plugins/menu.py:388
 msgid "Recent"
 msgstr "最近"
 
-#: ../ukui_menu/plugins/menu.py:442 ../ukui_menu/plugins/menu.py:562
+#: ../ukui_menu/plugins/menu.py:443 ../ukui_menu/plugins/menu.py:563
 msgid "All App"
 msgstr "所有程序"
 
-#: ../ukui_menu/plugins/menu.py:447 ../ukui_menu/plugins/menu.py:551
+#: ../ukui_menu/plugins/menu.py:448 ../ukui_menu/plugins/menu.py:552
 msgid "Favorite"
 msgstr "常用软件"
 
-#: ../ukui_menu/plugins/menu.py:492
+#: ../ukui_menu/plugins/menu.py:493
 msgid "Power"
 msgstr "关机"
 
-#: ../ukui_menu/plugins/menu.py:573 ../ukui_menu/plugins/menu.py:927
-#: ../ukui_menu/plugins/menu.py:935 ../ukui_menu/plugins/menu.py:1627
-#: ../ukui_menu/plugins/menu.py:2388
+#: ../ukui_menu/plugins/menu.py:574 ../ukui_menu/plugins/menu.py:928
+#: ../ukui_menu/plugins/menu.py:936 ../ukui_menu/plugins/menu.py:1648
+#: ../ukui_menu/plugins/menu.py:2406
 msgid "Search local program"
 msgstr "搜索本地程序"
 
-#: ../ukui_menu/plugins/menu.py:603
+#: ../ukui_menu/plugins/menu.py:604
 msgid "Home"
 msgstr "我的电脑"
 
-#: ../ukui_menu/plugins/menu.py:611
+#: ../ukui_menu/plugins/menu.py:612
 msgid "Settings"
 msgstr "控制面板"
 
-#: ../ukui_menu/plugins/menu.py:619
+#: ../ukui_menu/plugins/menu.py:620
 msgid "No items matched"
 msgstr "没有与搜索条件匹配的项"
 
-#: ../ukui_menu/plugins/menu.py:975 ../ukui_menu/plugins/menu.py:1717
+#: ../ukui_menu/plugins/menu.py:976 ../ukui_menu/plugins/menu.py:1738
 msgid "Open(_O)"
 msgstr "打开(_O)"
 
-#: ../ukui_menu/plugins/menu.py:978 ../ukui_menu/plugins/menu.py:1720
+#: ../ukui_menu/plugins/menu.py:979 ../ukui_menu/plugins/menu.py:1741
 msgid "Add to desktop"
 msgstr "添加到桌面"
 
-#: ../ukui_menu/plugins/menu.py:982 ../ukui_menu/plugins/menu.py:1723
+#: ../ukui_menu/plugins/menu.py:983 ../ukui_menu/plugins/menu.py:1744
 msgid "Lock to panel(_L)"
 msgstr "锁定到任务栏(_L)"
 
-#: ../ukui_menu/plugins/menu.py:985
+#: ../ukui_menu/plugins/menu.py:986
 msgid "Unlock from startup menu"
 msgstr "从[开始菜单]解锁"
 
-#: ../ukui_menu/plugins/menu.py:989 ../ukui_menu/plugins/menu.py:1733
+#: ../ukui_menu/plugins/menu.py:990 ../ukui_menu/plugins/menu.py:1754
 msgid "Property(_P)"
 msgstr "属性(_P)"
 
-#: ../ukui_menu/plugins/menu.py:1056
+#: ../ukui_menu/plugins/menu.py:1057
 msgid "Shutdown"
 msgstr "关机"
 
-#: ../ukui_menu/plugins/menu.py:1057
+#: ../ukui_menu/plugins/menu.py:1058
 msgid "Reboot"
 msgstr "重启"
 
-#: ../ukui_menu/plugins/menu.py:1060
+#: ../ukui_menu/plugins/menu.py:1061
 msgid "Logout"
 msgstr "注销"
 
-#: ../ukui_menu/plugins/menu.py:1061
+#: ../ukui_menu/plugins/menu.py:1062
 msgid "Switch User"
 msgstr "切换用户"
 
-#: ../ukui_menu/plugins/menu.py:1062
+#: ../ukui_menu/plugins/menu.py:1063
 msgid "Lock Screen"
 msgstr "锁屏"
 
-#: ../ukui_menu/plugins/menu.py:1272
+#: ../ukui_menu/plugins/menu.py:1277
 msgid "Accessories"
 msgstr "附件"
 
-#: ../ukui_menu/plugins/menu.py:1274 ../ukui_menu/plugins/menu.py:1277
+#: ../ukui_menu/plugins/menu.py:1279 ../ukui_menu/plugins/menu.py:1282
 msgid "Office"
 msgstr "办公"
 
-#: ../ukui_menu/plugins/menu.py:1279
+#: ../ukui_menu/plugins/menu.py:1284
 msgid "StartUp"
 msgstr "开始"
 
-#: ../ukui_menu/plugins/menu.py:1317 ../ukui_menu/plugins/menu.py:1570
-#: ../ukui_menu/plugins/menu.py:1575
+#: ../ukui_menu/plugins/menu.py:1322 ../ukui_menu/plugins/menu.py:1323
+#: ../ukui_menu/plugins/menu.py:1591 ../ukui_menu/plugins/menu.py:1596
 msgid "Applications"
 msgstr "应用程序"
 
@@ -355,6 +363,10 @@ msgid "Item"
 msgstr "项目"
 
 #: ../ukui_menu/menueditor.py:1080
+msgid "Android"
+msgstr "安卓兼容"
+
+#: ../ukui_menu/menueditor.py:1119
 #, python-format
 msgid ""
 "\n"

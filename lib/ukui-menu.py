@@ -31,7 +31,7 @@ import subprocess
 import sys
 import traceback
 import signal
-import debug
+import cairo
 
 gi.require_version("Gtk", "3.0")
 gi.require_version('UkuiPanelApplet', '4.0')
@@ -97,6 +97,14 @@ class MainWindow( object ):
 
         self.window.connect( "key-press-event", self.onKeyPress )
         self.window.connect( "focus-in-event", self.onFocusIn )
+        #设置window透明
+        #self.window.set_app_paintable(True)
+        #self.window.connect( "draw", self.onDrawEvent )
+        #self.window.connect( "screen-changed", self.onScreenChanged )
+        #self.paneholder.set_app_paintable(True)
+        #self.paneholder.connect( "draw", self.onDrawEvent )
+        #self.paneholder.connect( "screen-changed", self.onScreenChanged )
+        #self.onScreenChanged(None)
         self.loseFocusId = self.window.connect( "focus-out-event", self.onFocusOut )
         self.loseFocusBlocked = False
 
@@ -228,6 +236,22 @@ class MainWindow( object ):
         if self.window.get_visible():
             self.hide()
         return False
+
+    def onDrawEvent( self, *args ):
+        cr = Gdk.cairo_create(self.window.get_window())
+        cr.set_source_rgba(0, 0, 0, 0.7)
+        cr.set_operator(cairo.OPERATOR_SOURCE)
+        cr.paint()
+        #cr.destroy()
+        return False
+
+    def onScreenChanged( self, *args ):
+        screen = self.window.get_screen()
+        visual = screen.get_rgba_visual()
+        self.window.set_visual(visual)
+        screen = self.paneholder.get_screen()
+        visual = screen.get_rgba_visual()
+        self.paneholder.set_visual(visual)
 
     def stopHiding( self ):
         if not self.loseFocusBlocked:
@@ -363,14 +387,16 @@ class MenuWin( object ):
         builder = Gtk.Builder()
         builder.add_from_file(os.path.join( '/', 'usr', 'share', 'ukui-menu', "menu-property.glade" ))
         window = builder.get_object("window")
+        window.set_resizable(False)
+        window.set_default_icon(GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.png"))
 
         window.set_title(_("Menu Property"))
         labelMenu = builder.get_object("label1")
         labelMenu.set_text(_("Menu Type:"))
-        labelMenu.set_tooltip_text("aaaaaaaaaaaaaaaaa")
+        labelMenu.set_tooltip_text(_("This is used to set up the menu type."))
         labelRecent = builder.get_object("label2")
         labelRecent.set_text(_("File History:"))
-        labelRecent.set_tooltip_text("aaaaaaaaaaaaaaaaa")
+        labelRecent.set_tooltip_text(_("This is used to set up whether the file history is displayed."))
         self.radioButton1 = builder.get_object("radiobutton1")
         self.radioButton1.set_label(_("Normal Menu"))
         self.radioButton2 = builder.get_object("radiobutton2")
@@ -393,7 +419,7 @@ class MenuWin( object ):
         self.closeButton.set_image(image)
         self.closeButton.set_label(_("Close(_C)"))
         self.closeButton.set_use_underline(True)
-        self.closeButton.connect("clicked", lambda w: window.hide())
+        self.closeButton.connect("clicked", lambda w: window.close())
         window.show()
 
     def Switched( self, widget, user_data ):
@@ -491,7 +517,8 @@ class MenuWin( object ):
         action_group.add_action(self.actionNormal)
         action_group.add_action(self.actionCategory)
         action_group.add_action(self.editCategory)
-        if self.state:
+        state = self.settings.get_boolean("show-category-menu")
+        if state:
             self.actionNormal.set_visible(True)
             self.actionCategory.set_visible(False)
             self.editCategory.set_visible(True)

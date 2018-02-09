@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-07 09:56+0800\n"
+"POT-Creation-Date: 2018-02-09 15:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,48 +27,56 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:247 ../lib/ukui-menu.py:375
+#: ../lib/ukui-menu.py:271 ../lib/ukui-menu.py:401
 msgid "Normal Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:249 ../lib/ukui-menu.py:377
+#: ../lib/ukui-menu.py:273 ../lib/ukui-menu.py:403
 msgid "Category Menu"
 msgstr ""
 
 #. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
-#: ../lib/ukui-menu.py:251 ../ukui_menu/menueditor.py:872
+#: ../lib/ukui-menu.py:275 ../ukui_menu/menueditor.py:872
 msgid "Edit Category Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:327
+#: ../lib/ukui-menu.py:351
 msgid "Start"
 msgstr ""
 
-#: ../lib/ukui-menu.py:357
+#: ../lib/ukui-menu.py:381
 msgid "Startup Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:367
+#: ../lib/ukui-menu.py:393
 msgid "Menu Property"
 msgstr ""
 
-#: ../lib/ukui-menu.py:369
+#: ../lib/ukui-menu.py:395
 msgid "Menu Type:"
 msgstr ""
 
-#: ../lib/ukui-menu.py:372
+#: ../lib/ukui-menu.py:396
+msgid "This is used to set up the menu type."
+msgstr ""
+
+#: ../lib/ukui-menu.py:398
 msgid "File History:"
 msgstr ""
 
-#: ../lib/ukui-menu.py:394
+#: ../lib/ukui-menu.py:399
+msgid "This is used to set up whether the file history is displayed."
+msgstr ""
+
+#: ../lib/ukui-menu.py:420
 msgid "Close(_C)"
 msgstr ""
 
-#: ../lib/ukui-menu.py:502
+#: ../lib/ukui-menu.py:529
 msgid "Reload plugins"
 msgstr ""
 
-#: ../lib/ukui-menu.py:505 ../ukui_menu/plugins/menu.py:1975
+#: ../lib/ukui-menu.py:532 ../ukui_menu/plugins/menu.py:1975
 msgid "Property"
 msgstr ""
 
@@ -349,6 +357,10 @@ msgstr ""
 
 #: ../ukui_menu/menueditor.py:1088
 msgid "Item"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:1118
+msgid "Android"
 msgstr ""
 
 #: ../ukui_menu/menueditor.py:1119

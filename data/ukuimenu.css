@@ -106,6 +106,7 @@ border-image-source: none;
 border-color: @ukui_vp_border_color;
 }
 #ButtonPower {
+min-width: 18px;
 padding: 0px 0px;
 background-color: transparent;
 border-width: 0px;
