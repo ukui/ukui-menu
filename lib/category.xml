@@ -34,4 +34,7 @@
     <Directory name="游戏" icon="folder">
     <!-- The content shall be read from libgnome-menus -->
     </Directory>
+    <Directory name="安卓兼容" icon="folder">
+    <!-- The content shall be read from libgnome-menus -->
+    </Directory>
 </Menu>

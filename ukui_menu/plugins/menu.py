@@ -235,6 +235,7 @@ class Category(GObject.GObject):
 
         self.hasOffice = False
         self.hasGame = False
+        self.hasAndroid = False
         self.category_list_m = []
         self.application_list_m = []
         self.current_category = None
@@ -243,6 +244,11 @@ class Category(GObject.GObject):
         for app in self.all_application_list:
             if app['category'] == 'Games' or app['category'] == _("Games") or app['category'] == '游戏':
                 self.hasGame = True
+                self.application_list_m.append(app)
+
+        for app in self.all_application_list:
+            if app['category'] == 'Android' or app['category'] == _("Android") or app['category'] == '安卓兼容':
+                self.hasAndroid = True
                 self.application_list_m.append(app)
 
 #        for app in self.all_application_list:
@@ -279,6 +285,9 @@ class Category(GObject.GObject):
                     continue
             if name == "游戏":
                 if not self.hasGame:
+                    continue
+            if name == "安卓兼容":
+                if not self.hasAndroid:
                     continue
             self.category_list_m.append( { "name": name, "icon": icon, "tooltip": name, "filter": name } )
 
@@ -1287,6 +1296,11 @@ class pluginclass( object ):
                             if cat.hasGame == False:
                                 continue;
                             item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Games")], item["filter"] )
+                        if item["name"] == "安卓兼容":
+                            item["filter"] = _("Android")
+                            if cat.hasAndroid == False:
+                                continue;
+                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Android")], item["filter"] )
                     item["button"].set_name("ButtonApp")
                     self.categorybutton_list.append(item["button"])
                     item["button"].connect( "clicked", self.FilterAndClear, item["filter"] )
