@@ -895,9 +895,28 @@ class pluginclass( object ):
         self.favoritesSave()
         self.favoritesBox.resize( self.favoritesGetNumRows(), self.favCols )
 
-    def callback(self, widget, filename=None):
+    def callback(self, widget, FileData):
+        AppName, FileName = FileData
         self.ukuiMenuWin.hide()
-        x = os.system("gvfs-open \""+filename+"\"")
+
+        if AppName == _("WPS Writer"):
+            os.system("wps %s &" % FileName)
+        if AppName == _("WPS Presentation"):
+            os.system("wpp %s &" % FileName)
+        if AppName == _("WPS Spreadsheets"):
+            os.system("et %s &" % FileName)
+        if AppName == _("Qt Creator"):
+            os.system("qtcreator %s &" % FileName)
+        if AppName == _("Kylin Video"):
+            os.system("kylin-video %s &" % FileName)
+        if AppName == _("Eye of MATE Image Viewer"):
+            os.system("eom %s &" % FileName)
+        if AppName == _("Atril Document Viewer"):
+            os.system("atril %s &" % FileName)
+        if AppName == _("Pluma"):
+            os.system("pluma %s &" % FileName)
+
+        #x = os.system("gvfs-open \"" + FileName + "\"")
         if x == 256:
             dia = Gtk.Dialog('File not found!',
                              None,
@@ -2024,7 +2043,7 @@ class pluginclass( object ):
         notebook = self.builder.get_object( "notebook_left" )
         if tabNum == 0:
             self.favappbutton.grab_focus()
-            #self.button_user.grab_focus()
+            self.button_user.grab_focus()
             if self.ButtonHoverWidgetHistory:
                 self.ButtonHoverWidgetHistory.set_name("ButtonApp")
             self.viewportfav.set_name("ViewportButton")
@@ -2192,6 +2211,7 @@ class pluginclass( object ):
     def AddRecentBtn( self, Name, RecentImage, Data ):
         DispName=os.path.basename( Name )
         uri, AppName, appname = Data
+        FileData = (AppName, Name)
 
         RecFButton = Gtk.Button( "", "ok", True )
         RecFButton.remove( RecFButton.get_children()[0] )
@@ -2200,7 +2220,7 @@ class pluginclass( object ):
         #RecFButton.connect( "enter-notify-event", self.onEnter )
         #RecFButton.connect( "focus-in-event", self.onFocusIn )
         #RecFButton.connect( "focus-out-event", self.onFocusOut )
-        #RecFButton.connect( "clicked", self.callback, Name )
+        RecFButton.connect( "clicked", self.callback, FileData )
         RecFButton.connect( "button-press-event", self.recentFilePopup, Data )
         RecFButton.set_name("ButtonApp")
         RecFButton.show()
