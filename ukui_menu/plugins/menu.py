@@ -898,23 +898,24 @@ class pluginclass( object ):
     def callback(self, widget, FileData):
         AppName, FileName = FileData
         self.ukuiMenuWin.hide()
+        x = 0
 
         if AppName == _("WPS Writer"):
-            os.system("wps %s &" % FileName)
+            x = os.system("wps %s &" % FileName)
         if AppName == _("WPS Presentation"):
-            os.system("wpp %s &" % FileName)
+            x = os.system("wpp %s &" % FileName)
         if AppName == _("WPS Spreadsheets"):
-            os.system("et %s &" % FileName)
+            x = os.system("et %s &" % FileName)
         if AppName == _("Qt Creator"):
-            os.system("qtcreator %s &" % FileName)
+            x = os.system("qtcreator %s &" % FileName)
         if AppName == _("Kylin Video"):
-            os.system("kylin-video %s &" % FileName)
+            x = os.system("kylin-video %s &" % FileName)
         if AppName == _("Eye of MATE Image Viewer"):
-            os.system("eom %s &" % FileName)
+            x = os.system("eom %s &" % FileName)
         if AppName == _("Atril Document Viewer"):
-            os.system("atril %s &" % FileName)
+            x = os.system("atril %s &" % FileName)
         if AppName == _("Pluma"):
-            os.system("pluma %s &" % FileName)
+            x = os.system("pluma %s &" % FileName)
 
         #x = os.system("gvfs-open \"" + FileName + "\"")
         if x == 256:
@@ -987,11 +988,6 @@ class pluginclass( object ):
 
         text = ""
         if ev.button == 3:
-            if ev.y > widget.get_allocation().height / 2:
-                insertBefore = False
-            else:
-                insertBefore = True
-
             if widget.type == "location":
                 if (os.path.exists(GLib.get_home_dir() + "/.applet")):
                     f = open(GLib.get_home_dir() + "/.applet")
@@ -1322,7 +1318,7 @@ class pluginclass( object ):
                             item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Android")], item["filter"] )
                     item["button"].set_name("ButtonApp")
                     self.categorybutton_list.append(item["button"])
-                    item["button"].connect( "clicked", self.FilterAndClear, item["filter"] )
+                    item["button"].connect( "button-press-event", self.FilterAndClear, item["filter"] )
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
                     item["button"].connect( "enter", self.showGoNext )
                     item["button"].connect( "leave", self.hideGoNext )
@@ -1646,7 +1642,7 @@ class pluginclass( object ):
         self.searchResultBox.destroy()
         self.searchEntry.destroy()
 
-    def FilterAndClear( self, widget, category = None ):
+    def FilterAndClear( self, widget, event, category = None ):
         for widget1 in self.categorybutton_list:
             if widget1 == widget:
                 continue
@@ -2185,11 +2181,6 @@ class pluginclass( object ):
 
     def recentFilePopup( self, widget, ev, Data ):
         if ev.button == 3:
-            if ev.y > widget.get_allocation().height / 2:
-                insertBefore = False
-            else:
-                insertBefore = True
-
             mTree = Gtk.Menu()
             mTree.set_name("myGtkLabel")
             mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
@@ -2201,8 +2192,10 @@ class pluginclass( object ):
             mTree.append(removeRecentFile)
 
             mTree.show_all()
+            widget.set_name("ButtonApp")
+            widget.set_sensitive(False)
 
-            #mTree.connect("deactivate", self.set_item_state, widget)
+            mTree.connect("deactivate", lambda w: widget.set_sensitive(True))
 
             self.ukuiMenuWin.stopHiding()
             mTree.attach_to_widget(widget)
@@ -2211,7 +2204,7 @@ class pluginclass( object ):
     def AddRecentBtn( self, Name, RecentImage, Data ):
         DispName=os.path.basename( Name )
         uri, AppName, appname = Data
-        FileData = (AppName, Name)
+        FileData = (appname, Name)
 
         RecFButton = Gtk.Button( "", "ok", True )
         RecFButton.remove( RecFButton.get_children()[0] )
