@@ -17,8 +17,8 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkWindow" id="window">
-    <property name="width_request">350</property>
-    <property name="height_request">450</property>
+    <property name="width_request">230</property>
+    <property name="height_request">400</property>
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">
@@ -51,7 +51,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="margin_left">20</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radiobutton2</property>
@@ -74,7 +73,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="padding">22</property>
+                <property name="padding">10</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -107,7 +106,7 @@
               <object class="GtkSwitch" id="switchButton">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="margin_left">24</property>
+                <property name="margin_left">4</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -144,6 +143,7 @@
               <object class="GtkSpinButton" id="recent_file_num_bt">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_left">4</property>
                 <property name="max_length">2</property>
                 <property name="progress_pulse_step">1</property>
                 <property name="input_purpose">number</property>
@@ -188,6 +188,7 @@
               <object class="GtkSpinButton" id="recent_app_num_bt">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_left">4</property>
                 <property name="max_length">2</property>
                 <property name="text" translatable="yes">0</property>
                 <property name="progress_pulse_step">1</property>
@@ -221,8 +222,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="margin_left">279</property>
-                <property name="margin_right">15</property>
+                <property name="margin_left">200</property>
+                <property name="margin_right">20</property>
                 <property name="margin_bottom">15</property>
               </object>
             </child>
@@ -246,7 +247,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_left">15</property>
-                <property name="margin_right">301</property>
+                <property name="margin_right">171</property>
               </object>
             </child>
           </object>

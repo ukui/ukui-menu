@@ -412,7 +412,15 @@ class MenuWin( object ):
         else:
             self.switchButton.set_state(True)
         self.switchButton.connect("notify::active", self.Switched)
+
+        label3 = builder.get_object("label3")
+        label3.set_text(_("Recent file number:"))
+        label4 = builder.get_object("label4")
+        label4.set_text(_("Recent app number:"))
+
         self.recent_file_num_bt = builder.get_object("recent_file_num_bt")
+        if not state:
+            self.recent_file_num_bt.set_sensitive(False)
         self.recent_file_num_bt.connect("value-changed", self.value_file_changed)
         recent_file_num = self.mainwin.settings.get_int("recent-file-num")
         self.recent_file_num_bt.set_value(recent_file_num)
@@ -423,7 +431,8 @@ class MenuWin( object ):
         self.recent_app_num_bt.set_value(recent_app_num)
 
         self.resetButton = builder.get_object("button2")
-        self.resetButton.set_label(_("Reset to default"))
+        self.resetButton.set_label(_("Reset to default(_R)"))
+        self.resetButton.set_use_underline(True)
         self.resetButton.connect("clicked", self.reset_to_default)
 
         self.closeButton = builder.get_object("button1")

@@ -54,6 +54,7 @@ import ukuimenu
 import operator
 import platform
 import configparser
+import debug
 
 class UkuiConfigParser(configparser.ConfigParser):
     def optionxform(self, optionstr):
@@ -895,39 +896,34 @@ class pluginclass( object ):
         self.favoritesBox.resize( self.favoritesGetNumRows(), self.favCols )
 
     def callback(self, widget, FileData):
-        AppName, FileName = FileData
+        Data, FileName = FileData
+        uri, AppName, appname = Data
         self.ukuiMenuWin.hide()
-        x = 0
 
+        if os.path.exists(FileName):
+            pass
+        else:
+            msg = _("\nThe file could not be found!\n")
+            md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
+            md.run()
+            md.destroy()
+            return
         if AppName == _("WPS Writer"):
-            x = os.system("wps %s &" % FileName)
+            os.system("wps %s &" % FileName)
         if AppName == _("WPS Presentation"):
-            x = os.system("wpp %s &" % FileName)
+            os.system("wpp %s &" % FileName)
         if AppName == _("WPS Spreadsheets"):
-            x = os.system("et %s &" % FileName)
+            os.system("et %s &" % FileName)
         if AppName == _("Qt Creator"):
-            x = os.system("qtcreator %s &" % FileName)
+            os.system("qtcreator %s &" % FileName)
         if AppName == _("Kylin Video"):
-            x = os.system("kylin-video %s &" % FileName)
+            os.system("kylin-video %s &" % FileName)
         if AppName == _("Eye of MATE Image Viewer"):
-            x = os.system("eom %s &" % FileName)
+            os.system("eom %s &" % FileName)
         if AppName == _("Atril Document Viewer"):
-            x = os.system("atril %s &" % FileName)
+            os.system("atril %s &" % FileName)
         if AppName == _("Pluma"):
-            x = os.system("pluma %s &" % FileName)
-
-        #x = os.system("gvfs-open \"" + FileName + "\"")
-        if x == 256:
-            dia = Gtk.Dialog('File not found!',
-                             None,
-                             Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                             ("ok", 77))
-            dia.vbox.pack_start(Gtk.Label('The location or file could not be found!'), False, False, 0)
-            dia.vbox.show_all()
-            dia.show()
-            result = dia.run()
-            if result == 77:
-                dia.destroy()
+            os.system("pluma %s &" % FileName)
 
     def favoritesBuildLauncher(self, location):
         try:
@@ -2178,16 +2174,22 @@ class pluginclass( object ):
             self.layout_applications_right.hide()
             self.content_holder.set_size_request(340, self.windowHeight)
 
-    def recentFilePopup( self, widget, ev, Data ):
+    def recentFilePopup( self, widget, ev, FileData ):
+        Data, FileName = FileData
         if ev.button == 3:
             mTree = Gtk.Menu()
             mTree.set_name("myGtkLabel")
             mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
                              Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
-            removeRecentFile = Gtk.MenuItem(_("Remove"))
+            openRecentFile = Gtk.MenuItem(_("Open(_O)"))
+            openRecentFile.set_use_underline(True)
+            removeRecentFile = Gtk.MenuItem(_("Remove from list(_R)"))
+            removeRecentFile.set_use_underline(True)
 
+            openRecentFile.connect( "activate", self.callback, FileData )
             removeRecentFile.connect( "activate", self.onRecentFileRemove, Data )
 
+            mTree.append(openRecentFile)
             mTree.append(removeRecentFile)
 
             mTree.show_all()
@@ -2203,7 +2205,7 @@ class pluginclass( object ):
     def AddRecentBtn( self, Name, RecentImage, Data ):
         DispName=os.path.basename( Name )
         uri, AppName, appname = Data
-        FileData = (appname, Name)
+        FileData = (Data, Name)
 
         RecFButton = Gtk.Button( "", "ok", True )
         RecFButton.remove( RecFButton.get_children()[0] )
@@ -2213,7 +2215,7 @@ class pluginclass( object ):
         #RecFButton.connect( "focus-in-event", self.onFocusIn )
         #RecFButton.connect( "focus-out-event", self.onFocusOut )
         RecFButton.connect( "clicked", self.callback, FileData )
-        RecFButton.connect( "button-press-event", self.recentFilePopup, Data )
+        RecFButton.connect( "button-press-event", self.recentFilePopup, FileData )
         RecFButton.set_name("ButtonApp")
         RecFButton.show()
 
