@@ -21,12 +21,6 @@
         <Entry name="分区编辑器" source="gparted.desktop" />
     </Directory>
     <Directory name="办公" icon="folder">
-	<Entry name="atril" source="atril.desktop" />
-	<Entry name="evince" source="evince.desktop" />
-	<Entry name="WPS文字" source="wps-office-wps.desktop" />
-        <Entry name="WPS表格" source="wps-office-et.desktop" />
-        <Entry name="WPS演示" source="wps-office-wpp.desktop" />
-        <Entry name="WPS演示" source="wps-office-uninstall.desktop" />
     </Directory>
     <Directory name="启动" icon="folder">
     <!-- The content shall be read from .config/autostart -->

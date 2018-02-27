@@ -64,7 +64,7 @@ gettext.install("ukui-menu", "/usr/share/locale")
 
 ICON_PATH = "/usr/share/ukui-menu/icons/"
 ICON_SIZE = 16
-ukuimenu_settings=Gio.Settings.new("org.ukui.ukui-menu")
+ukuimenu_settings = Gio.Settings.new("org.ukui.ukui-menu")
 FAVNUM = 5            #常用软件显示个数
 
 server = False
@@ -251,9 +251,10 @@ class Category(GObject.GObject):
                 self.hasAndroid = True
                 self.application_list_m.append(app)
 
-#        for app in self.all_application_list:
-#            if app['category'] == 'Office' or app['category'] == _('Office') or app['category'] == '办公':
-#                self.application_list_m.append(app)
+        for app in self.all_application_list:
+            if app['category'] == 'Office' or app['category'] == _('Office') or app['category'] == '办公':
+                self.hasOffice = True
+                self.application_list_m.append(app)
 
         if not server or not serverx86:
             self.application_list_m += self.autostart_list()
@@ -277,8 +278,6 @@ class Category(GObject.GObject):
                         break
                 if not found:
                     continue
-                if name == "办公":
-                    self.hasOffice = True
                 self.application_list_m.append( { 'desktop_file_path': desktop_file_path, 'category': name } )
             if name == "办公":
                 if not self.hasOffice:
@@ -378,6 +377,7 @@ class pluginclass( object ):
         ukuimenu_settings.connect("changed::user-icon-changed", self.changeimage)
         ukuimenu_settings.connect("changed::recent-file-changed", self.RecentFileChanged)
         ukuimenu_settings.connect("changed::show-recent-file", self.RecentFileChanged)
+        ukuimenu_settings.connect("changed::recent-app-num", self.updateHistoryBox)
         self.FileMonitorthread()
         self.windowHeight = 505
         self.addedHeight = 0
@@ -443,7 +443,6 @@ class pluginclass( object ):
         self.viewport12.set_name("Viewport1")
         self.viewport16 = self.builder.get_object("viewport16")
         self.viewport16.set_name("Viewport1")
-        self.image4 = self.builder.get_object("image4")
 
         self.button_user = self.builder.get_object("button_user")
         self.button_user.connect("button-press-event", self.on_button_user_clicked)
@@ -810,8 +809,8 @@ class pluginclass( object ):
 
                     if self.showRecentFile:
                         self.ShowRecentFile(favButton)
-                    favButton.connect( "enter", self.showHistory )
-                    favButton.connect( "leave", self.hideHistory )
+                        favButton.connect( "enter", self.showHistory )
+                        favButton.connect( "leave", self.hideHistory )
 
             self.favoritesSave()
         except Exception as e:
@@ -852,7 +851,7 @@ class pluginclass( object ):
 
         return False
 
-    def favoritesPositionOnGrid(self , favorite):
+    def favoritesPositionOnGrid(self, favorite):
         row = 0
         col = 0
         for fav in self.favorites:
@@ -1062,13 +1061,13 @@ class pluginclass( object ):
             print (detail)
         return realPath
 
-    def changeimage(self,settings,key,args=None):
+    def changeimage(self, settings, key, args = None):
         usericonPath = get_user_icon()
         pixbuf = Pixbuf.new_from_file(usericonPath)
         pixbuf = pixbuf.scale_simple(63, 63, 2)  #2 := BILINEAR
         self.image_user.set_from_pixbuf(pixbuf)
 
-    def RecentFileChanged(self,settings=None,key=None,args=None):
+    def RecentFileChanged(self, settings = None, key = None, args = None):
         self.showRecentFile = ukuimenu_settings.get_boolean("show-recent-file")
         self.AddFavBtn()
         self.updateHistoryBox()
@@ -1121,7 +1120,7 @@ class pluginclass( object ):
     def switchuser(self, menu, widget):
         system_bus = dbus.SystemBus()
         xdg_seat_path = os.environ['XDG_SEAT_PATH']
-        obj = system_bus.get_object('org.freedesktop.DisplayManager',xdg_seat_path)
+        obj = system_bus.get_object('org.freedesktop.DisplayManager', xdg_seat_path)
         interface = dbus.Interface(obj,'org.freedesktop.DisplayManager.Seat')
         interface.SwitchToGreeter()
         self.ukuiMenuWin.hide()
@@ -2357,25 +2356,15 @@ class pluginclass( object ):
             self.content_holder.set_size_request(340, self.windowHeight)
             self.showHis = False
             return
-
-        iconfile = ICON_PATH + "sep.png"
-        pixbuf = Pixbuf.new_from_file(iconfile)
-        pixbuf = pixbuf.scale_simple(165, 2, 2)  #2 := BILINEAR
-        self.image4.set_from_pixbuf(pixbuf)
+        
+        recent_file_num = ukuimenu_settings.get_int("recent-file-num")
 
         for Name in FileString:
-            if loc > 14:
+            if loc > recent_file_num - 1:
                 break
             if Name != None:
                 self.AddRecentBtn( Name, IconString[loc], (UriString[loc], AppName, appname) )
             loc = loc + 1
-
-        if loc > 9:
-            pixbuf = pixbuf.scale_simple(158, 2, 2)  #2 := BILINEAR
-            self.image4.set_from_pixbuf(pixbuf)
-        if loc == 15:
-            pixbuf = pixbuf.scale_simple(140, 2, 2)  #2 := BILINEAR
-            self.image4.set_from_pixbuf(pixbuf)
 
         self.ButtonHoverWidget.set_name("ButtonAppHover")
         self.ButtonHoverWidgetHistory = self.ButtonHoverWidget
@@ -2529,10 +2518,11 @@ class pluginclass( object ):
         f.close()
         self.updateHistoryBox()
 
-    def updateHistoryBox( self ):
+    def updateHistoryBox( self, settings = None, key = None, args = None ):
         for child in self.recentAppBox:
             child.destroy()
-        historyDisplayNum = 10
+
+        historyDisplayNum = ukuimenu_settings.get_int("recent-app-num")
         self.currentHisCount = 1
 
         try:
@@ -2561,8 +2551,8 @@ class pluginclass( object ):
 
                             if self.showRecentFile:
                                 self.ShowRecentFile(button)
-                            button.connect( "enter", self.showHistory )
-                            button.connect( "leave", self.hideHistory )
+                                button.connect( "enter", self.showHistory )
+                                button.connect( "leave", self.hideHistory )
 
                         found = True
                         break

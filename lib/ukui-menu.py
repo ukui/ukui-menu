@@ -31,7 +31,6 @@ import subprocess
 import sys
 import traceback
 import signal
-import cairo
 
 gi.require_version("Gtk", "3.0")
 gi.require_version('UkuiPanelApplet', '4.0')
@@ -70,7 +69,6 @@ class MainWindow( object ):
     def __init__( self, keybinder, settings ):
         self.keybinder = keybinder
         self.settings = settings
-        
 
         self.data_path = os.path.join( '/', 'usr', 'share', 'ukui-menu' )
         self.icon = "/usr/share/ukui-menu/icons/ukui-logo.svg"
@@ -114,7 +112,7 @@ class MainWindow( object ):
 
         self.PopulatePlugins()
 
-    def on_window1_destroy (self, widget, data=None):
+    def on_window1_destroy (self, widget, data = None):
         Gtk.main_quit()
         sys.exit(0)
 
@@ -360,7 +358,7 @@ class MenuWin( object ):
         self.applet.add( self.button_box )
         self.applet.set_background_widget( self.applet )
 
-    def bind_hot_key (self):
+    def bind_hot_key( self ):
         try:
             if self.hotkeyText != "":
                 self.keybinder.grab( self.hotkeyText )
@@ -414,6 +412,20 @@ class MenuWin( object ):
         else:
             self.switchButton.set_state(True)
         self.switchButton.connect("notify::active", self.Switched)
+        self.recent_file_num_bt = builder.get_object("recent_file_num_bt")
+        self.recent_file_num_bt.connect("value-changed", self.value_file_changed)
+        recent_file_num = self.mainwin.settings.get_int("recent-file-num")
+        self.recent_file_num_bt.set_value(recent_file_num)
+
+        self.recent_app_num_bt = builder.get_object("recent_app_num_bt")
+        self.recent_app_num_bt.connect("value-changed", self.value_app_changed)
+        recent_app_num = self.mainwin.settings.get_int("recent-app-num")
+        self.recent_app_num_bt.set_value(recent_app_num)
+
+        self.resetButton = builder.get_object("button2")
+        self.resetButton.set_label(_("Reset to default"))
+        self.resetButton.connect("clicked", self.reset_to_default)
+
         self.closeButton = builder.get_object("button1")
         image = Gtk.Image.new_from_icon_name("gtk-close", Gtk.IconSize.MENU) 
         self.closeButton.set_image(image)
@@ -422,12 +434,40 @@ class MenuWin( object ):
         self.closeButton.connect("clicked", lambda w: window.close())
         window.show()
 
+    def reset_to_default( self, widget ):
+        self.mainwin.settings.reset("show-category-menu")
+        self.mainwin.settings.reset("show-recent-file")
+        self.mainwin.settings.reset("recent-file-num")
+        self.mainwin.settings.reset("recent-app-num")
+        state = self.mainwin.settings.get_boolean("show-category-menu")
+        if state:
+            self.radioButton2.set_active(True)
+        else:
+            self.radioButton1.set_active(True)
+        state = self.mainwin.settings.get_boolean("show-recent-file")
+        if state:
+            self.switchButton.set_state(False)
+        else:
+            self.switchButton.set_state(True)
+        self.recent_file_num_bt.set_value(self.mainwin.settings.get_int("recent-file-num"))
+        self.recent_app_num_bt.set_value(self.mainwin.settings.get_int("recent-app-num"))
+
+    def value_file_changed( self, widget ):
+        num = widget.get_value_as_int()
+        self.mainwin.settings.set_int("recent-file-num", num)
+
+    def value_app_changed( self, widget ):
+        num = widget.get_value_as_int()
+        self.mainwin.settings.set_int("recent-app-num", num)
+
     def Switched( self, widget, user_data ):
         state = self.switchButton.get_state()
         if state:
             self.mainwin.settings.set_boolean("show-recent-file", False)
+            self.recent_file_num_bt.set_sensitive(False)
         else:
             self.mainwin.settings.set_boolean("show-recent-file", True)
+            self.recent_file_num_bt.set_sensitive(True)
 
     def radioToggled( self, widget, event ):
         if widget == self.radioButton1:
@@ -435,7 +475,7 @@ class MenuWin( object ):
         elif widget == self.radioButton2:
             self.mainwin.settings.set_boolean("show-category-menu", True)
 
-    def showMenu( self, widget=None, event=None ):
+    def showMenu( self, widget = None, event = None ):
         if event == None or event.button == 1:
             self.toggleMenu()
         # show right click menu
@@ -496,7 +536,7 @@ class MenuWin( object ):
         # -"Move window"
         self.mainwin.window.move( newX, newY )
 
-    def changeMenuState(self, settings, key, args=None):
+    def changeMenuState(self, settings, key, args = None):
         self.mainwin.RegenPlugins()
 
     def LoadNormalMenu( self, *args, **kargs ):

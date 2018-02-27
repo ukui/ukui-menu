@@ -31,5 +31,15 @@
       <summary>determine if show recent file or not</summary>
       <description>determine if show recent file or not</description>
     </key>
+    <key type="i" name="recent-file-num">
+      <default>10</default>
+      <summary>determine the numbers of recent file showed</summary>
+      <description>determine the numbers of recent file showed</description>
+    </key>
+    <key type="i" name="recent-app-num">
+      <default>10</default>
+      <summary>determine the numbers of recent applications showed</summary>
+      <description>determine the numbers of recent applications showed</description>
+    </key>
   </schema>
 </schemalist>

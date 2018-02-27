@@ -492,6 +492,15 @@
                                                 <child>
                                                   <placeholder/>
                                                 </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
                                               </object>
                                             </child>
                                           </object>
@@ -914,6 +923,7 @@
                                             </child>
                                             <child type="label">
                                               <object class="GtkBox">
+                                                <property name="width_request">208</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="spacing">4</property>
@@ -930,17 +940,18 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkImage" id="image4">
-                                                    <property name="width_request">50</property>
-                                                    <property name="height_request">0</property>
+                                                  <object class="GtkSeparator">
+                                                    <property name="height_request">1</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="margin_top">4</property>
-                                                    <property name="stock">gtk-missing-image</property>
+                                                    <property name="valign">center</property>
+                                                    <property name="margin_top">3</property>
+                                                    <property name="hexpand">True</property>
+                                                    <property name="orientation">vertical</property>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
-                                                    <property name="fill">False</property>
+                                                    <property name="fill">True</property>
                                                     <property name="position">1</property>
                                                   </packing>
                                                 </child>
