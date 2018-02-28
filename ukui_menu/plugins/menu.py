@@ -54,7 +54,6 @@ import ukuimenu
 import operator
 import platform
 import configparser
-import debug
 
 class UkuiConfigParser(configparser.ConfigParser):
     def optionxform(self, optionstr):
