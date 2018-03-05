@@ -902,10 +902,11 @@ class pluginclass( object ):
         if os.path.exists(FileName):
             pass
         else:
-            msg = _("\nThe file could not be found!\n")
+            msg = _("\nFile not exists, it was moved or deleted!\n\nIt will be automatically removed from the history list!\n")
             md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
             md.run()
             md.destroy()
+            self.onRecentFileRemove(None, Data)
             return
         if AppName == _("WPS Writer"):
             os.system("wps %s &" % FileName)
@@ -964,18 +965,7 @@ class pluginclass( object ):
         button.set_name("ButtonApp")
         addedDesktop = False
         try:
-            # Determine where the Desktop folder is (could be localized)
-            import sys, subprocess
-            #sys.path.append('/usr/lib/ubuntu-mate/common')
-            from configobj import ConfigObj
-            config = ConfigObj(GLib.get_home_dir() + "/.config/user-dirs.dirs")
-            desktopDir = GLib.get_home_dir() + "/Desktop"
-            tmpdesktopDir = config['XDG_DESKTOP_DIR']
-            tmpdesktopDir = subprocess.getoutput("echo " + tmpdesktopDir)
-            if os.path.exists(tmpdesktopDir):
-                desktopDir = tmpdesktopDir
-            # Copy the desktop file to the desktop
-            if (os.path.exists(desktopDir + "/" + os.path.basename(widget.desktopFile))):
+            if (os.path.exists(GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP) + "/" + os.path.basename(widget.desktopFile))):
                 addedDesktop = True
         except Exception as detail:
             print (detail)
@@ -1734,18 +1724,7 @@ class pluginclass( object ):
         button = MenuApplicationLauncher(widget.desktopFile, 32, "", True, highlight=(False))
         addedDesktop = False
         try:
-            # Determine where the Desktop folder is (could be localized)
-            import subprocess
-            #sys.path.append('/usr/lib/ubuntu-mate/common')
-            from configobj import ConfigObj
-            config = ConfigObj(GLib.get_home_dir() + "/.config/user-dirs.dirs")
-            desktopDir = GLib.get_home_dir() + "/Desktop"
-            tmpdesktopDir = config['XDG_DESKTOP_DIR']
-            tmpdesktopDir = subprocess.getoutput("echo " + tmpdesktopDir)
-            if os.path.exists(tmpdesktopDir):
-                desktopDir = tmpdesktopDir
-            # Copy the desktop file to the desktop
-            if (os.path.exists(desktopDir + "/" + os.path.basename(widget.desktopFile))):
+            if (os.path.exists(GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP) + "/" + os.path.basename(widget.desktopFile))):
                 addedDesktop = True
         except Exception as detail:
             print (detail)
@@ -1838,19 +1817,8 @@ class pluginclass( object ):
 
     def add_to_desktop(self, widget, desktopEntry):
         try:
-            # Determine where the Desktop folder is (could be localized)
-            import subprocess
-            #sys.path.append('/usr/lib/ubuntu-mate/common')
-            from configobj import ConfigObj
-            config = ConfigObj(GLib.get_home_dir() + "/.config/user-dirs.dirs")
-            desktopDir = GLib.get_home_dir() + "/Desktop"
-            tmpdesktopDir = config['XDG_DESKTOP_DIR']
-            tmpdesktopDir = subprocess.getoutput("echo " + tmpdesktopDir)
-            if os.path.exists(tmpdesktopDir):
-                desktopDir = tmpdesktopDir
-            # Copy the desktop file to the desktop
-            os.system("cp \"%s\" \"%s/\"" % (desktopEntry.desktopFile, desktopDir))
-            os.system("chmod a+rx %s/*.desktop" % (desktopDir))
+            os.system("cp \"%s\" \"%s/\"" % (desktopEntry.desktopFile, GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP)))
+            os.system("chmod a+rx %s/*.desktop" % GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP))
         except Exception as detail:
             print (detail)
 
@@ -2173,8 +2141,49 @@ class pluginclass( object ):
             self.layout_applications_right.hide()
             self.content_holder.set_size_request(340, self.windowHeight)
 
+    def openDir(self, menu, FileData):
+        Data, FileName = FileData
+        dirname = os.path.dirname(FileName)
+        if os.path.exists(FileName):
+            pass
+        else:
+            msg = _("\nFile not exists, it was moved or deleted!\n\nIt will be automatically removed from the history list!\n")
+            md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
+            md.run()
+            md.destroy()
+            self.onRecentFileRemove(menu, Data)
+            return
+        os.system("peony %s" % dirname)
+
+    def copyFile(self, menu, FileData):
+        Data, FileName = FileData
+        if os.path.exists(FileName):
+            pass
+        else:
+            msg = _("\nFile not exists, it was moved or deleted!\n\nIt will be automatically removed from the history list!\n")
+            md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
+            md.run()
+            md.destroy()
+            self.onRecentFileRemove(menu, Data)
+            return
+        os.system("cp %s %s/" % (FileName, GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP)))
+
+    def propertyFile(self, menu, FileData):
+        Data, FileName = FileData
+        if os.path.exists(FileName):
+            pass
+        else:
+            msg = _("\nFile not exists, it was moved or deleted!\n\nIt will be automatically removed from the history list!\n")
+            md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
+            md.run()
+            md.destroy()
+            self.onRecentFileRemove(menu, Data)
+            return
+        os.system("peony -a %s &" % FileName)
+
     def recentFilePopup( self, widget, ev, FileData ):
         Data, FileName = FileData
+        uri, AppName, appname = Data
         if ev.button == 3:
             mTree = Gtk.Menu()
             mTree.set_name("myGtkLabel")
@@ -2182,14 +2191,30 @@ class pluginclass( object ):
                              Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
             openRecentFile = Gtk.MenuItem(_("Open(_O)"))
             openRecentFile.set_use_underline(True)
+            openDirRecentFile = Gtk.MenuItem(_("Open directory(_D)"))
+            openDirRecentFile.set_use_underline(True)
+            newDoc = Gtk.MenuItem(_("New(_N)"))
+            newDoc.set_use_underline(True)
+            copyRecentFile = Gtk.MenuItem(_("Copy to desktop(_C)"))
+            copyRecentFile.set_use_underline(True)
             removeRecentFile = Gtk.MenuItem(_("Remove from list(_R)"))
             removeRecentFile.set_use_underline(True)
+            propertyRecentFile = Gtk.MenuItem(_("Property(_P)"))
+            propertyRecentFile.set_use_underline(True)
 
             openRecentFile.connect( "activate", self.callback, FileData )
+            openDirRecentFile.connect( "activate", self.openDir, FileData )
+            copyRecentFile.connect( "activate", self.copyFile, FileData )
             removeRecentFile.connect( "activate", self.onRecentFileRemove, Data )
+            propertyRecentFile.connect( "activate", self.propertyFile, FileData )
 
             mTree.append(openRecentFile)
+            mTree.append(openDirRecentFile)
+            if appname ==  _("WPS Writer") or appname == _("WPS Presentation") or appname == _("WPS Spreadsheets") or appname == _("Pluma"):
+                mTree.append(newDoc)
+            mTree.append(copyRecentFile)
             mTree.append(removeRecentFile)
+            mTree.append(propertyRecentFile)
 
             mTree.show_all()
             widget.set_name("ButtonApp")
@@ -2210,9 +2235,6 @@ class pluginclass( object ):
         RecFButton.remove( RecFButton.get_children()[0] )
         RecFButton.set_size_request( 200, -1 )
         RecFButton.set_relief( Gtk.ReliefStyle.NONE )
-        #RecFButton.connect( "enter-notify-event", self.onEnter )
-        #RecFButton.connect( "focus-in-event", self.onFocusIn )
-        #RecFButton.connect( "focus-out-event", self.onFocusOut )
         RecFButton.connect( "clicked", self.callback, FileData )
         RecFButton.connect( "button-press-event", self.recentFilePopup, FileData )
         RecFButton.set_name("ButtonApp")
