@@ -205,7 +205,8 @@ tooltip.background,
     text-shadow: none;
 }
 
-*:disabled {
+#Button label:disabled {
     color: @ukui_fg_color;
     text-shadow: none;
+    box-shadow: none;
 }

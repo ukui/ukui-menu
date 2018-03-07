@@ -962,7 +962,7 @@ class pluginclass( object ):
 
     def favPopup( self, widget, ev ):
         button = MenuApplicationLauncher(widget.desktopFile, 32, "", True, highlight=(False))
-        button.set_name("ButtonApp")
+        button.set_name("ButtonAppHover")
         addedDesktop = False
         try:
             if (os.path.exists(GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP) + "/" + os.path.basename(widget.desktopFile))):
@@ -1026,8 +1026,7 @@ class pluginclass( object ):
                 widget.viewport.show()
                 widget.viewport.add(widget.HBox1)
                 widget.add(widget.viewport)
-                widget.set_sensitive(False)
-                button.set_sensitive(False)
+                widget.set_name("ButtonAppHover")
                 mTree.attach_to_widget(widget)
                 mTree.popup(None, None, None, None, ev.button, ev.time)
 
@@ -1795,21 +1794,20 @@ class pluginclass( object ):
             propsMenuItem.connect( "activate", self.onPropsApp, widget)
             mTree.connect("deactivate", self.set_item_state, widget)
 
+            widget.set_name("ButtonAppHover")
             self.ukuiMenuWin.stopHiding()
             widget.remove(widget.Align1)
             widget.Align1.remove(widget.HBox1)
             widget.viewport.show()
             widget.viewport.add(widget.HBox1)
             widget.add(widget.viewport)
-            widget.set_sensitive(False)
             mTree.attach_to_widget(widget)
             mTree.popup(None, None, None, None, event.button, event.time)
 
     def set_item_state(self, menu, widget):
         button = MenuApplicationLauncher(widget.desktopFile, 32, "", True, highlight=(False))
-        button.set_sensitive(True)
-        widget.set_sensitive(True)
         widget.emit("leave")
+        widget.set_name("ButtonApp")
         widget.viewport.remove(widget.HBox1)
         widget.remove(widget.viewport)
         widget.Align1.add(widget.HBox1)
@@ -2217,10 +2215,9 @@ class pluginclass( object ):
             mTree.append(propertyRecentFile)
 
             mTree.show_all()
-            widget.set_name("ButtonApp")
-            widget.set_sensitive(False)
+            widget.set_name("ButtonAppHover")
 
-            mTree.connect("deactivate", lambda w: widget.set_sensitive(True))
+            mTree.connect("deactivate", lambda w: widget.set_name("ButtonApp"))
 
             self.ukuiMenuWin.stopHiding()
             mTree.attach_to_widget(widget)
