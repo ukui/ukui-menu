@@ -186,6 +186,10 @@ class GlobalKeyBinding(GObject.GObject, threading.Thread):
                         self.showscreen.toggle_showing_desktop(False)
                         showdesktop = True
                     self.display.allow_events(X.ReplayKeyboard, event.time)
+                elif event.detail == 33 and event.type == X.KeyPress:     #super+p
+                    self.display.allow_events(X.SyncKeyboard, event.time)
+                elif event.detail == 33 and event.type == X.KeyRelease:   #super+p
+                    self.display.allow_events(X.ReplayKeyboard, event.time)
                 elif event.detail == 26 and event.type == X.KeyPress:     #super+e
                     self.display.allow_events(X.SyncKeyboard, event.time)
                 elif event.detail == 26 and event.type == X.KeyRelease:   #super+e
