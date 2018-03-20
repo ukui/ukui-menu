@@ -399,16 +399,6 @@ class pluginclass( object ):
         self.content_holder.connect( "key-press-event", self.keyPress )
         self.content_holder.set_size_request(575, self.windowHeight)
 
-        style_provider = Gtk.CssProvider()
-        try:
-            css = open( os.path.join('/', 'usr', 'share', 'ukui-menu', 'ukuimenu.css'), 'rb')
-            css_data = css.read()
-            css.close()
-            style_provider.load_from_data(css_data)
-            Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        except Exception as e:
-            print (e)
-        
         self.layout_left = self.builder.get_object("layout_left")
         self.viewport1 = self.builder.get_object("viewport1")
         self.viewport2 = self.builder.get_object("viewport2")

@@ -210,3 +210,16 @@ tooltip.background,
     text-shadow: none;
     box-shadow: none;
 }
+#ButtonApplet {
+padding: 0px 0px 0px 5px;
+border: 0px transparent;
+border-radius: 0px;
+background-image: none;
+background-color: transparent;
+box-shadow:none;
+-gtk-icon-shadow: none;
+}
+#ButtonApplet:hover {
+-gtk-icon-shadow: 1px 1px black;
+-gtk-icon-effect: highlight;
+}

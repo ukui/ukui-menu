@@ -86,7 +86,7 @@ class MainWindow( object ):
         self.borderwidth = 1
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
         defaultStyle = self.getDefaultStyle()
-        color = defaultStyle.lookup_color('taskbar_applet_border_color')[1]
+        color = defaultStyle.lookup_color('panel_normal_border_color')[1]
         if color == Gdk.Color(red=0, green=0, blue=0):
             self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( "#014276" ))
         else:
@@ -275,9 +275,7 @@ class MenuWin( object ):
 
         self.createPanelButton()
         self.applet.set_flags( UkuiPanelApplet.AppletFlags.EXPAND_MINOR )
-        self.applet.connect( "button-press-event", self.showMenu )
-        self.applet.connect( "enter-notify-event", self.enter_notify )
-        self.applet.connect( "leave-notify-event", self.leave_notify )
+        self.button.connect( "button-press-event", self.showMenu )
         GLib.timeout_add(500, self.InitMenu )
 
     def InitMenu( self ):
@@ -326,30 +324,41 @@ class MenuWin( object ):
         self.toggleMenu()
         return True
 
-    def enter_notify(self, applet, event):
-        self.do_image(True)
-
-    def leave_notify(self, applet, event):
-	# Hack for mate-panel-test-applets focus issue (this can be commented)
-        if event.state & Gdk.ModifierType.BUTTON1_MASK and applet.get_style_context().get_state() & Gtk.StateFlags.SELECTED:
-            if event.x >= 0 and event.y >= 0 and event.x < applet.get_window().get_width() and event.y < applet.get_window().get_height():
-                self.mainwin.stopHiding()
-
-        self.do_image(False)
-
-    def do_image(self, saturate):
-        if saturate:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start-hover.png")
-        else:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.png")
-        self.button_icon.set_from_pixbuf(pixbuf)
+    def changeIcon(self, settings, key, args = None):
+        self.panel_size = self.settings_panel.get_int("size")
+        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.svg")
+        self.pixbuf = self.pixbuf.scale_simple(self.panel_size, self.panel_size, 2)
+        self.button_icon.set_from_pixbuf(self.pixbuf)
+        self.button_box.set_size_request(self.panel_size + 10, -1)
+        Gdk.flush()
 
     def createPanelButton( self ):
-        self.button_icon = Gtk.Image.new_from_file( "/usr/share/ukui-menu/icons/start.png" )
+        self.settings_panel = Gio.Settings.new_with_path("org.ukui.panel.toplevel", "/org/ukui/panel/toplevels/bottom/")
+        self.settings_panel.connect("changed::size", self.changeIcon)
+        self.panel_size = self.settings_panel.get_int("size")
+
+
+        style_provider = Gtk.CssProvider()
+        try:
+            css = open( os.path.join('/', 'usr', 'share', 'ukui-menu', 'ukuimenu.css'), 'rb')
+            css_data = css.read()
+            css.close()
+            style_provider.load_from_data(css_data)
+            Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        except Exception as e:
+            print (e)
+
+        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.svg")
+        self.pixbuf = self.pixbuf.scale_simple(self.panel_size, self.panel_size, 2)
+        self.button_icon = Gtk.Image.new()
+        self.button_icon.set_from_pixbuf(self.pixbuf)
         self.button_icon.set_tooltip_text(_("Start"))
+        self.button = Gtk.Button.new()
+        self.button.set_name("ButtonApplet")
+        self.button.set_image(self.button_icon)
         self.button_box = Gtk.Box()
-        self.button_box.set_size_request(50, -1)
-        self.button_box.pack_start( self.button_icon , True, True, 0)
+        self.button_box.set_size_request(self.panel_size + 10, -1)
+        self.button_box.pack_start( self.button , True, True, 0)
         self.button_icon.set_padding( 0, 0 )
 
         self.button_box.set_homogeneous( False )
