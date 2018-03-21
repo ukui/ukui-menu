@@ -395,7 +395,7 @@ class MenuWin( object ):
         builder.add_from_file(os.path.join( '/', 'usr', 'share', 'ukui-menu', "menu-property.glade" ))
         window = builder.get_object("window")
         window.set_resizable(False)
-        window.set_default_icon(GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.png"))
+        window.set_default_icon(GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.svg"))
 
         window.set_title(_("Menu Property"))
         labelMenu = builder.get_object("label1")
