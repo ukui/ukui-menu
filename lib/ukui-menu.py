@@ -286,6 +286,7 @@ class MenuWin( object ):
         self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
         self.mainwin.window.connect( "realize", self.onRealize )
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
+        self.mainwin.window.connect( "focus-out-event", lambda *args: self.button.set_name("ButtonApplet") )
 
         self.bind_hot_key()
         self.applet.set_can_focus(False)
@@ -505,9 +506,11 @@ class MenuWin( object ):
 
     def toggleMenu( self ):
         if self.applet.get_style_context().get_state() & Gtk.StateFlags.SELECTED:
+            self.button.set_name("ButtonApplet")
             self.mainwin.hide()
         else:
             self.positionMenu()
+            self.button.set_name("ButtonClicked")
             self.mainwin.show()
 
     def positionMenu( self ):
