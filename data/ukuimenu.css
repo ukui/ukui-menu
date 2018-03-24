@@ -211,7 +211,7 @@ tooltip.background,
     box-shadow: none;
 }
 #ButtonApplet {
-padding: 0px 0px 0px 5px;
+padding: 0px 0px 0px 0px;
 border: 0px transparent;
 border-radius: 0px;
 background-image: none;
@@ -224,7 +224,7 @@ box-shadow:none;
 -gtk-icon-effect: highlight;
 }
 #ButtonClicked {
-padding: 0px 0px 0px 5px;
+padding: 0px 0px 0px 0px;
 border: 0px transparent;
 border-radius: 0px;
 background-image: none;

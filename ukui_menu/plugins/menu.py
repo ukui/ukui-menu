@@ -170,13 +170,16 @@ def FileMonitor(self):
     while True:
         try:
             notifier.process_events()
-            ret = wm.add_watch(os.path.join(GLib.get_user_data_dir(), 'recently-used.xbel'), mask, rec = True)
-            if ret[os.path.join(GLib.get_user_data_dir(), 'recently-used.xbel')] == -1:
-                os.system("/usr/bin/python3 /usr/lib/ukui-menu/ukui-menu.py")
-                ifchangegsettings = ukuimenu_settings.get_boolean("permission-changed")
-                ukuimenu_settings.set_boolean("permission-changed", ~ifchangegsettings)
-            wm.add_watch(os.path.join(GLib.get_user_config_dir(), 'kylin-video/kylin-video.ini'), mask, rec = True)
-            wm.add_watch(os.path.join(GLib.get_user_config_dir(), 'QtProject/QtCreator.ini'), mask, rec = True)
+            if os.path.exists(os.path.join(GLib.get_user_data_dir(), 'recently-used.xbel')):
+                ret = wm.add_watch(os.path.join(GLib.get_user_data_dir(), 'recently-used.xbel'), mask, rec = True)
+                if ret[os.path.join(GLib.get_user_data_dir(), 'recently-used.xbel')] == -1:
+                    os.system("/usr/bin/python3 /usr/lib/ukui-menu/ukui-menu.py")
+                    ifchangegsettings = ukuimenu_settings.get_boolean("permission-changed")
+                    ukuimenu_settings.set_boolean("permission-changed", ~ifchangegsettings)
+            if os.path.exists(os.path.join(GLib.get_user_config_dir(), 'kylin-video/kylin-video.ini')):
+                wm.add_watch(os.path.join(GLib.get_user_config_dir(), 'kylin-video/kylin-video.ini'), mask, rec = True)
+            if os.path.exists(os.path.join(GLib.get_user_config_dir(), 'QtProject/QtCreator.ini')):
+                wm.add_watch(os.path.join(GLib.get_user_config_dir(), 'QtProject/QtCreator.ini'), mask, rec = True)
             if notifier.check_events():
                 notifier.read_events()
         except KeyboardInterrupt:
