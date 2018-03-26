@@ -865,7 +865,7 @@ class MenuEditMainWindow:
         self.tree.connect_signals(self)
         self.setupMenuTree()
         self.setupItemTree()
-        self.tree.get_object('mainwindow').set_icon_from_file('/usr/share/ukui-menu/icons/start.png')
+        self.tree.get_object('mainwindow').set_icon_from_file('/usr/share/ukui-menu/icons/start.svg')
         self.tree.get_object('move_up_button').set_sensitive(False)
         self.tree.get_object('move_down_button').set_sensitive(False)
         #self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
