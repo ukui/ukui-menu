@@ -260,11 +260,7 @@ class MenuWin( object ):
     def __init__( self, applet, iid ):
         self.data_path = os.path.join('/','usr','share','ukui-menu')
         self.applet = applet
-        self.settings = Gio.Settings.new("org.ukui.ukui-menu")
-        self.settings.connect("changed::show-category-menu", self.changeMenuState)
-        self.settings.connect("changed::permission-changed", self.changeMenuState)
-
-        self.state = self.settings.get_boolean("show-category-menu")
+        self.mainwin = None
 
         self.actionNormal = Gtk.Action(name="UkuiNormalMenu", label=_("Normal Menu"), tooltip=None, stock_id="gtk-about")
         self.actionNormal.connect("activate", self.LoadNormalMenu)
@@ -276,9 +272,15 @@ class MenuWin( object ):
         self.createPanelButton()
         self.applet.set_flags( UkuiPanelApplet.AppletFlags.EXPAND_MINOR )
         self.button.connect( "button-press-event", self.showMenu )
-        GLib.timeout_add(500, self.InitMenu )
+        GLib.timeout_add(1000, self.InitMenu )
 
     def InitMenu( self ):
+        self.settings = Gio.Settings.new("org.ukui.ukui-menu")
+        self.settings.connect("changed::show-category-menu", self.changeMenuState)
+        self.settings.connect("changed::permission-changed", self.changeMenuState)
+
+        self.state = self.settings.get_boolean("show-category-menu")
+
         self.keybinder = keybinding.GlobalKeyBinding()
         self.hotkeyText = "Super_L"
         self.mainwin = MainWindow( self.keybinder, self.settings )
@@ -505,6 +507,9 @@ class MenuWin( object ):
             self.mainwin.hide()
 
     def toggleMenu( self ):
+        if self.mainwin is None:
+            return
+
         if self.applet.get_style_context().get_state() & Gtk.StateFlags.SELECTED:
             self.button.set_name("ButtonApplet")
             self.mainwin.hide()
@@ -514,6 +519,9 @@ class MenuWin( object ):
             self.mainwin.show()
 
     def positionMenu( self ):
+        if self.mainwin is None:
+            return
+
         # Get our own dimensions & position
         ourWidth  = self.mainwin.window.get_size()[0]
         ourHeight = self.mainwin.window.get_size()[1] + self.mainwin.offset
@@ -558,14 +566,23 @@ class MenuWin( object ):
         self.mainwin.window.move( newX, newY )
 
     def changeMenuState(self, settings, key, args = None):
+        if self.mainwin is None:
+            return
+
         self.mainwin.RegenPlugins()
 
     def LoadNormalMenu( self, *args, **kargs ):
+        if self.mainwin is None:
+            return
+
         self.mainwin.settings.set_boolean("show-category-menu", False)
         os.system("killall ukui-menu-editor")
         self.state = False
 
     def LoadCategoryMenu( self, *args, **kargs ):
+        if self.mainwin is None:
+            return
+
         self.mainwin.settings.set_boolean("show-category-menu", True)
         self.state = True
 
@@ -574,6 +591,9 @@ class MenuWin( object ):
 
     # this callback is to create a context menu
     def create_menu(self):
+        if self.mainwin is None:
+            return
+
         action_group = Gtk.ActionGroup(name="context-menu")
         action_group.add_action(self.actionNormal)
         action_group.add_action(self.actionCategory)
