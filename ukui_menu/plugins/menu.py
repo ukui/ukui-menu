@@ -535,7 +535,7 @@ class pluginclass( object ):
         self.favoritesBox = self.builder.get_object("favoritesBox")
         self.favoritesBox.set_row_spacings(3)
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
-        #self.favoritesBox.drag_dest_set ( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, 2, Gdk.DragAction.COPY )
+        self.favoritesBox.drag_dest_set ( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, Gdk.DragAction.COPY )
 
         self.AddFavBtn()
 
@@ -856,7 +856,7 @@ class pluginclass( object ):
     def onFavButtonDragReorderGet(self, widget, context, selection, targetType, eventTime ):
         if targetType == self.TARGET_TYPE_FAV:
             self.drag_origin = widget.position
-            selection.set( selection.get_target(), 8, str(widget.position))
+            selection.set( selection.get_target(), 8, str(widget.position).encode())
 
     def onFavButtonDragReorder(self, widget, context, x, y, selection, targetType, time):
         if targetType == self.TARGET_TYPE_FAV:
