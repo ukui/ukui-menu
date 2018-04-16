@@ -420,9 +420,9 @@ class MenuWin( object ):
         self.switchButton = builder.get_object("switchButton")
         state = self.mainwin.settings.get_boolean("show-recent-file")
         if state:
-            self.switchButton.set_state(False)
-        else:
             self.switchButton.set_state(True)
+        else:
+            self.switchButton.set_state(False)
         self.switchButton.connect("notify::active", self.Switched)
 
         label3 = builder.get_object("label3")
@@ -467,9 +467,9 @@ class MenuWin( object ):
             self.radioButton1.set_active(True)
         state = self.mainwin.settings.get_boolean("show-recent-file")
         if state:
-            self.switchButton.set_state(False)
-        else:
             self.switchButton.set_state(True)
+        else:
+            self.switchButton.set_state(False)
         self.recent_file_num_bt.set_value(self.mainwin.settings.get_int("recent-file-num"))
         self.recent_app_num_bt.set_value(self.mainwin.settings.get_int("recent-app-num"))
 
@@ -484,11 +484,11 @@ class MenuWin( object ):
     def Switched( self, widget, user_data ):
         state = self.switchButton.get_state()
         if state:
-            self.mainwin.settings.set_boolean("show-recent-file", False)
-            self.recent_file_num_bt.set_sensitive(False)
-        else:
             self.mainwin.settings.set_boolean("show-recent-file", True)
             self.recent_file_num_bt.set_sensitive(True)
+        else:
+            self.mainwin.settings.set_boolean("show-recent-file", False)
+            self.recent_file_num_bt.set_sensitive(False)
 
     def radioToggled( self, widget, event ):
         if widget == self.radioButton1:
