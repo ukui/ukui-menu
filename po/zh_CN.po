@@ -352,7 +352,15 @@ msgstr ""
 msgid "<not set>"
 msgstr ""
 
-#: ../ukui_menu/menueditor.py:777
+#: ../ukui_menu/menueditor.py:782
+#, python-format
+msgid ""
+"\n"
+"The current system is not selected [%s] software, can not display the "
+"classification!"
+msgstr "当前系统未勾选[%s]类软件，无法显示该分类！"
+
+#: ../ukui_menu/menueditor.py:788
 #, python-format
 msgid ""
 "\n"

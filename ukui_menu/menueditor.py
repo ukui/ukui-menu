@@ -81,16 +81,17 @@ def getUniqueRedoFile(filepath):
     return new_filepath
 
 def getUniqueUndoFile(filepath):
-    filename, extension = os.path.split(filepath)[1].split('.')
+    filename = os.path.split(filepath)[1]
+    #filename, extension = os.path.split(filepath)[1].split('.')
     append = 0
     while 1:
-        if extension == 'desktop':
+        if filename.endswith('desktop'):
             path = getUserItemPath()
-        elif extension == 'directory':
+        elif filename.endswith('directory'):
             path = getUserDirectoryPath()
-        elif extension == 'menu':
+        elif filename.endswith('menu'):
             path = getUserMenuPath()
-        new_filepath = os.path.join(path, filename + '.' + extension + '.undo-' + str(append))
+        new_filepath = os.path.join(path, filename +'.undo-' + str(append))
         if not os.path.isfile(new_filepath):
             break
         else:
@@ -769,10 +770,22 @@ class MenuEditor:
                 self.__writeItem(item, NoDisplay=False)
             else:
                 self.__addXmlFilename(menu_xml, dom, item.get_desktop_file_id().decode('utf-8'), 'Exclude')
+                self.__writeItem(item, NoDisplay=True)
             self.__addXmlTextElement(menu_xml, 'AppDir', getUserItemPath(), dom)
         elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
             self.__addUndo([self.__getMenu(item), item])
             #don't mess with it if it's empty
+            nodisplay = True
+            for index in item.get_contents():
+                nodisplay = index.get_is_nodisplay()
+                if nodisplay == False:
+                    break;
+            if len(item.get_contents()) > 0 and nodisplay:
+                msg = _("\nThe current system is not selected [%s] software, can not display the classification!") % (item.get_name().decode('utf-8'))
+                md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
+                md.run()
+                md.destroy()
+                return None
             if len(item.get_contents()) == 0:
                 msg = _("\nThe current system is not installed [%s] software, can not display the classification!") % (item.get_name().decode('utf-8'))
                 md = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msg)
