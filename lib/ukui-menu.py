@@ -59,6 +59,7 @@ gettext.install("ukui-menu", "/usr/share/locale")
 
 NAME = _("Menu")
 
+os.environ['GNOME_DESKTOP_SESSION_ID'] = "this-is-deprecated"
 xdg.Config.setWindowManager('MATE')
 
 from ukui_menu.execute import *
