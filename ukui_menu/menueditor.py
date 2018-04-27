@@ -610,6 +610,12 @@ class MenuEditor:
                 os.unlink(file_path)
 
     def revert(self):
+        path = os.path.join(GLib.get_user_config_dir(), 'menus')
+        os.system("rm -rf %s/*undo*" % path)
+        path = os.path.join(GLib.get_user_data_dir(), 'desktop-directories')
+        os.system("rm -rf %s/*undo*" % path)
+        path = os.path.join(GLib.get_user_data_dir(), 'applications')
+        os.system("rm -rf %s/*" % path)
         for name in ('applications', 'settings'):
             menu = getattr(self, name)
             self.revertTree(menu.tree.get_root_directory())
