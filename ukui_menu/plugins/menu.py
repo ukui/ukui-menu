@@ -901,21 +901,23 @@ class pluginclass( object ):
             md.destroy()
             self.onRecentFileRemove(None, Data)
             return
-        if AppName == _("WPS Writer"):
+        if " " in FileName:
+            FileName = FileName.replace(" ", "\ ")
+        if appname == _("WPS Writer"):
             os.system("wps %s &" % FileName)
-        if AppName == _("WPS Presentation"):
+        if appname == _("WPS Presentation"):
             os.system("wpp %s &" % FileName)
-        if AppName == _("WPS Spreadsheets"):
+        if appname == _("WPS Spreadsheets"):
             os.system("et %s &" % FileName)
-        if AppName == _("Qt Creator"):
+        if appname == _("Qt Creator"):
             os.system("qtcreator %s &" % FileName)
-        if AppName == _("Kylin Video"):
+        if appname == _("Kylin Video"):
             os.system("kylin-video %s &" % FileName)
-        if AppName == _("Eye of MATE Image Viewer"):
+        if appname == _("Eye of MATE Image Viewer"):
             os.system("eom %s &" % FileName)
-        if AppName == _("Atril Document Viewer"):
+        if appname == _("Atril Document Viewer"):
             os.system("atril %s &" % FileName)
-        if AppName == _("Pluma"):
+        if appname == _("Pluma"):
             os.system("pluma %s &" % FileName)
 
     def favoritesBuildLauncher(self, location):
