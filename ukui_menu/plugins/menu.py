@@ -2172,6 +2172,8 @@ class pluginclass( object ):
             md.destroy()
             self.onRecentFileRemove(menu, Data)
             return
+        if " " in FileName:
+            FileName = FileName.replace(" ", "\ ")
         os.system("peony -a %s &" % FileName)
 
     def recentFilePopup( self, widget, ev, FileData ):
