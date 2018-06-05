@@ -53,6 +53,7 @@ import _thread
 import ukuimenu
 import operator
 import platform
+import locale
 import configparser
 
 class UkuiConfigParser(configparser.ConfigParser):
@@ -1142,12 +1143,6 @@ class pluginclass( object ):
             f = open(heightPath, 'w')
             f.write(str(self.windowHeight))
             f.close()
-            if os.path.exists(heightPath):
-                f = open(heightPath, "r")
-                lines = f.readlines()
-                length = lines[0]
-                aa = int(length)
-                f.close()
         if self.windowHeight > screenHeight - 60:
             self.addedHeight = screenHeight - 60 - 505
             self.windowHeight = screenHeight - 60
@@ -1407,8 +1402,8 @@ class pluginclass( object ):
                 if button:
                     item["button"] = button
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
-                sorted_application_list.append( ( item["button"].appName, item["button"] ) )
-                self.applicationList.append( item )
+                    sorted_application_list.append( ( item["button"].appName, item["button"] ) )
+                    self.applicationList.append( item )
 
         if not self.showCategoryMenu:
             sorted_application_list.sort()
@@ -1520,9 +1515,13 @@ class pluginclass( object ):
             button.connect( "button-press-event", self.menuPopup )
             button.desktop_file_path = application['desktop_file_path']
             if button.appName == "Eclipse":
-                button.set_tooltip_text( " Eclipse\n 描述：Eclipse集成开发环境" )
+                (a, b) = locale.getdefaultlocale()
+                if a == "zh_CN":
+                    button.set_tooltip_text( " Eclipse\n 描述：Eclipse集成开发环境" )
             if button.appName == "Qt Creator":
-                button.set_tooltip_text( " Qt Creator\n 描述：Qt Creator集成开发环境" )
+                (a, b) = locale.getdefaultlocale()
+                if a == "zh_CN":
+                    button.set_tooltip_text( " Qt Creator\n 描述：Qt Creator集成开发环境" )
             return button
         else:
             button.destroy()
