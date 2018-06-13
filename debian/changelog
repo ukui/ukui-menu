@@ -6,9 +6,9 @@ ukui-menu (1.1.5-1) unstable; urgency=medium
   * Add support for resize the menu icon.
   * Add right-click menu for recent files.
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 11 Apr 2017 19:52:09 +0800
- 
- ukui-menu (1.0.2-1) unstable; urgency=medium
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 13 Jun 2018 09:39:19 +0800
+
+ukui-menu (1.0.2-1) unstable; urgency=medium
 
   * Initial release (Closes: #872967)
 

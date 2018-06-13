@@ -11,7 +11,8 @@ Build-Depends: debhelper (>= 11),
                python3-distutils-extra,
 Standards-Version: 4.1.4
 Homepage: http://www.ukui.org/
-X-Python-Version: >= 3
+Vcs-Git: https://github.com/ukui/ukui-menu.git
+Vcs-Browser: https://github.com/ukui/ukui-menu
 
 Package: ukui-menu
 Architecture: all
