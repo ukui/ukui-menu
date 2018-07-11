@@ -6,7 +6,13 @@ ukui-menu (1.1.5-1) unstable; urgency=medium
   * Add support for resize the menu icon.
   * Add right-click menu for recent files.
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 13 Jun 2018 09:39:19 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 11 Jul 2018 11:58:54 +0800
+
+ukui-menu (1.0.2-2) unstable; urgency=medium
+
+  * Use tracker.d.o team address (Closes: #899863)
+
+ -- Aron Xu <aron@debian.org>  Mon, 09 Jul 2018 14:47:31 +0800
 
 ukui-menu (1.0.2-1) unstable; urgency=medium
 
