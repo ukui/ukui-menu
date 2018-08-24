@@ -34,17 +34,12 @@ import time
 import shutil
 import string
 import gettext
-import threading
 import subprocess
 import filecmp
 import ctypes
 from ctypes import *
 from ukui_menu.easybuttons import *
 from ukui_menu.execute import Execute
-from ukui_menu.easygsettings import EasyGSettings
-from ukui_menu.easyfiles import *
-from ukui_menu.filemonitor import monitor as filemonitor
-from xml.etree import ElementTree as ET
 import copy
 from pyinotify import WatchManager, Notifier, ProcessEvent, IN_DELETE_SELF, IN_CLOSE_WRITE, IN_MODIFY
 import dbus
@@ -431,12 +426,6 @@ class pluginclass( object ):
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
         self.favoritesBox.drag_dest_set ( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, Gdk.DragAction.COPY )
 
-        self.AddFavBtn()
-
-        self.hovermenupopup = False
-
-        self.appHistoryList= self.buildAppHistoryList()
-
         self.categoriesBox = self.builder.get_object("categoriesbox")
         self.categoriesBox.set_spacing(2)
         self.applicationsBox = self.builder.get_object("applicationsBox")
@@ -487,8 +476,6 @@ class pluginclass( object ):
 
         self.bamfok = False
         GLib.timeout_add( 100, self.getBamfStatus )
-
-        self.updateHistoryBox()
 
         self.label_user = self.builder.get_object("label_user")
         user_name = GLib.get_user_name()
@@ -1201,7 +1188,7 @@ class pluginclass( object ):
                         elif item["name"] == _("Accessories") or item["name"] == _("Office") or item["name"] == _("Games") or item["name"] == _("Android"):
                             item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
                         else:
-                            item["button"] = CategoryButton( item["icon"], category_icon_size, [item["name"]], item["name"] )
+                            item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
                     self.categorybutton_list.append(item["button"])
                     item["button"].connect( "button-press-event", self.FilterAndClear, item["filter"] )
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
@@ -2108,11 +2095,15 @@ class pluginclass( object ):
             md = Gtk.MessageDialog(None, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)
             response = md.run()
             if response == Gtk.ResponseType.YES:
+                if " " in FileName:
+                    FileName = FileName.replace(" ", "\ ")
                 os.system("cp %s %s/" % (FileName, GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP)))
             elif response == Gtk.ResponseType.NO:
                 pass
             md.destroy()
             return
+        if " " in FileName:
+            FileName = FileName.replace(" ", "\ ")
         os.system("cp %s %s/" % (FileName, GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP)))
 
     def propertyFile(self, menu, FileData):
