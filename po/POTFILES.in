@@ -4,8 +4,6 @@ lib/ukui-menu.py
 ukui_menu/__init__.py
 ukui_menu/plugins/__init__.py
 ukui_menu/plugins/menu.py
-ukui_menu/easygsettings.py
-ukui_menu/easyfiles.py
 ukui_menu/easybuttons.py
 ukui_menu/execute.py
 ukui_menu/filemonitor.py

@@ -40,7 +40,6 @@ import ctypes
 from ctypes import *
 from ukui_menu.easybuttons import *
 from ukui_menu.execute import Execute
-import copy
 from pyinotify import WatchManager, Notifier, ProcessEvent, IN_DELETE_SELF, IN_CLOSE_WRITE, IN_MODIFY
 import dbus
 from configobj import ConfigObj
@@ -510,11 +509,9 @@ class pluginclass( object ):
         self.rebuildLock = False
         self.activeFilter = (1, "", self.searchEntry)
         self.current_suggestion = None
-        self.categoryList = []
         self.applicationList = []
         self.uncategoriedList = []
         self.all_app_list = []
-        self.categorybutton_list = []
 
         self.all_application_list = []
         for mainitems in [ "ukui-applications.menu", "ukui-settings.menu" ]:
@@ -595,6 +592,8 @@ class pluginclass( object ):
 
     def ShowRecentFile(self, widget):
         widget.rightbox.hide()
+        if widget.appName not in APPLIST:
+            return
         RecentInfo = RecManagerInstance.get_items()
         #wps
         if widget.appName == _("WPS Writer"):
@@ -667,11 +666,6 @@ class pluginclass( object ):
                     favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
                     favButton.drag_source_set( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
                     position += 1
-
-#                    if self.showRecentFile:
-#                        self.ShowRecentFile(favButton)
- #                       favButton.connect( "enter", self.showHistory )
-#                        favButton.connect( "leave", self.hideHistory )
 
             self.favoritesSave()
         except Exception as e:
@@ -1106,137 +1100,92 @@ class pluginclass( object ):
         self.menuChangedTimer = GLib.timeout_add( 100, self.updateBoxes, True )
 
     def updateBoxes(self, menu_has_changed):
-        #update fav app and history app.
-        self.appHistoryList= self.buildAppHistoryList()
+        self.categorybutton_list = []
+        self.menuHasChanged = menu_has_changed
+
+        self.loadMenuFiles()
+        self.all_application_list = self.build_application_list()
         self.RecentFileChanged()
 
         if self.rebuildLock:
             return
 
+        for child in self.categoriesBox.get_children():
+            if child == self.expanderApp or child == self.expanderSystem:
+                continue
+            self.categoriesBox.remove( child )
+
         self.rebuildLock = True
         self.menuChangedTimer = None
-        self.loadMenuFiles()
-
-        self.all_application_list = self.build_application_list()
-        if self.showCategoryMenu:
-            new_category_list = self.buildCategoryList()
-        else:
-            cat = Category(self.all_application_list)
-            new_category_list = cat.category_list()
-        added_category_list = []
-        removed_category_list = []
-
-        if not self.categoryList:
-            added_category_list = new_category_list
-        else:
-            for item in new_category_list:
-                found = False
-                for item2 in self.categoryList:
-                    if item2['name'] == item['name'] and \
-                       item2['icon'] == item['icon'] and \
-                       item2['tooltip'] == item['tooltip'] :
-                        found = True
-                        break
-                if not found:
-                    added_category_list.append(item)
-
-            for item in self.categoryList:
-                found = False
-                for item2 in new_category_list:
-                    if item2['name'] == item['name'] and \
-                       item2['icon'] == item['icon'] and \
-                       item2['tooltip'] == item['tooltip'] :
-                        found = True
-                        break
-                if not found:
-                    removed_category_list.append(item)
 
         category_icon_size = self.iconSize
+        sorted_category_list = []
+        self.list = self.buildCategoryList()
 
-        for item in removed_category_list:
+        for item in self.list:
             try:
-                button = item['button']
-                self.categoryList.remove(item)
-                button.destroy()
-                del item
+                if self.showCategoryMenu:
+                    item["filter"] = item["name"]
+                    item["button"] = CategoryButton( item["icon"], category_icon_size, [item["name"]], item["filter"])
+                else:
+                    if item["name"] == _("Graphics") or item["name"] == _("Internet") or item["name"] == _("Programming") or item["name"] == _("Sound & Video") or item["name"] == _("System Tools") or item["name"] == _("Universal Access") or item["name"] == _("Preferences") or item["name"] == _("Administration") or item["name"] == _("Other"):
+                        continue
+                    elif item["name"] == _("Accessories") or item["name"] == _("Office") or item["name"] == _("Games") or item["name"] == _("Android"):
+                        item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
+                    else:
+                        item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
+                item["button"].connect( "button-press-event", self.FilterAndClear, item["filter"] )
+                item["button"].connect( "focus-in-event", self.scrollItemIntoView )
+                item["button"].connect( "enter", self.showGoNext )
+                item["button"].connect( "leave", self.hideGoNext )
+                item["button"].show()
+                item["button"].set_name("ButtonApp")
+                self.categorybutton_list.append(item["button"])
+
+                sorted_category_list.append( ( item["name"], item["button"] ) )
             except Exception as e:
                 print (e)
 
-        if 1:
-            sorted_category_list = []
-            for item in self.categoryList:
-                try:
-                    self.categoriesBox.remove(item['button'])
-                    if self.showCategoryMenu:
-                        self.categoriesApp.remove(item['button'])
-                        self.categoriesSystem.remove(item['button'])
-                    if not self.showCategoryMenu:
-                        sorted_category_list.append( ( item['name'], item['button'] ) )
-                except Exception as e:
-                    print (e)
+        if not self.showCategoryMenu:
+            sorted_category_list.sort()
 
-            self.list = self.buildCategoryList()
+        for child in self.categoriesApp.get_children():
+            self.categoriesApp.remove( child )
+        for child in self.categoriesSystem.get_children():
+            self.categoriesSystem.remove( child )
 
-            for item in self.list:
-                try:
-                    if self.showCategoryMenu:
-                        item["filter"] = item["name"]
-                        item["button"] = CategoryButton( item["icon"], category_icon_size, [item["name"]], item["filter"])
-                    else:
-                        if item["name"] == _("Graphics") or item["name"] == _("Internet") or item["name"] == _("Programming") or item["name"] == _("Sound & Video") or item["name"] == _("System Tools") or item["name"] == _("Universal Access") or item["name"] == _("Preferences") or item["name"] == _("Administration") or item["name"] == _("Other"):
-                            continue
-                        elif item["name"] == _("Accessories") or item["name"] == _("Office") or item["name"] == _("Games") or item["name"] == _("Android"):
-                            item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
-                        else:
-                            item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
-                    self.categorybutton_list.append(item["button"])
-                    item["button"].connect( "button-press-event", self.FilterAndClear, item["filter"] )
-                    item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
-                    item["button"].connect( "enter", self.showGoNext )
-                    item["button"].connect( "leave", self.hideGoNext )
-                    item["button"].show()
-                    item["button"].set_name("ButtonApp")
-
-                    self.categoryList.append( item )
-                    sorted_category_list.append( ( item["name"], item["button"] ) )
-                except Exception as e:
-                    print (e)
-
-            if not self.showCategoryMenu:
-                sorted_category_list.sort()
-
-            currentApp = False
-            currentSystem = False
-
-            for item in sorted_category_list:
-                try:
-                    if self.showCategoryMenu:
-                        self.categoriesBox.set_spacing(1)
-                        if item[0] == _("Applications"):
-                            self.labelExpanderApp.set_label(_("Applications"))
-                            currentApp = True
-                            currentSystem = False
-                            continue
-                        if item[0] == _("System"):
-                            self.labelExpanderSystem.set_label(_("System"))
-                            currentSystem = True
-                            currentApp = False
-                            continue
-                        if currentApp:
-                            self.categoriesApp.pack_start(item[1], False, False, 0)
-                        if currentSystem:
-                            self.categoriesSystem.pack_start(item[1], False, False, 0)
-                    else:
-                        self.expanderApp.hide()
-                        self.expanderSystem.hide()
-                        self.categoriesBox.set_spacing(2)
-                        self.categoriesBox.pack_start( item[1], False, False, 0 )
-                except Exception as e:
-                    print (e)
+        currentApp = False
+        currentSystem = False
+        for item in sorted_category_list:
+            try:
+                if self.showCategoryMenu:
+                    self.categoriesBox.set_spacing(1)
+                    if item[0] == _("Applications"):
+                        self.labelExpanderApp.set_label(_("Applications"))
+                        currentApp = True
+                        currentSystem = False
+                        continue
+                    if item[0] == _("System"):
+                        self.labelExpanderSystem.set_label(_("System"))
+                        currentSystem = True
+                        currentApp = False
+                        continue
+                    if currentApp:
+                        self.categoriesApp.pack_start(item[1], False, False, 0)
+                    if currentSystem:
+                        self.categoriesSystem.pack_start(item[1], False, False, 0)
+                else:
+                    self.expanderApp.hide()
+                    self.expanderSystem.hide()
+                    self.categoriesBox.set_spacing(2)
+                    self.categoriesBox.pack_start( item[1], False, False, 0 )
+            except Exception as e:
+                print (e)
 
         if self.showCategoryMenu:
             new_application_list = self.all_application_list
         else:
+            cat = Category(self.all_application_list)
             new_application_list = cat.application_list()
         added_application_list = []
         removed_application_list = []
@@ -1247,7 +1196,7 @@ class pluginclass( object ):
             for item in new_application_list:
                 found = False
                 for item2 in self.applicationList:
-                    if item['desktop_file_path'] == item2['desktop_file_path']:
+                    if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
                 if not found:
@@ -1257,7 +1206,7 @@ class pluginclass( object ):
             for item in self.applicationList:
                 found = False
                 for item2 in new_application_list:
-                    if item['desktop_file_path'] == item2['desktop_file_path']:
+                    if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
                 if not found:
@@ -1272,8 +1221,7 @@ class pluginclass( object ):
         sorted_application_list = []
         for child in self.applicationsBox.get_children():
             self.applicationsBox.remove( child )
-        #for item in self.applicationList:
-        #    sorted_application_list.append( ( item["button"].appName, item["button"] ) )
+
         for item in new_application_list:
             found = False
             for item1 in added_application_list:
@@ -1293,6 +1241,8 @@ class pluginclass( object ):
                 if button:
                     item["button"] = button
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
+                    if item["button"].appNoDisplay == True:
+                        continue
                     sorted_application_list.append( ( item["button"].appName, item["button"] ) )
                     self.applicationList.append( item )
 
@@ -1315,11 +1265,11 @@ class pluginclass( object ):
         for item in self.all_application_list:
             found = False
             for item2 in self.applicationList:
-                if item['desktop_file_path'] == item2['desktop_file_path'] or os.path.basename(item['desktop_file_path']) == os.path.basename(item2['desktop_file_path']):
+                if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8') or os.path.basename(item['entry'].get_desktop_file_path().decode('utf-8')) == os.path.basename(item2['entry'].get_desktop_file_path().decode('utf-8')):
                     found = True
                     break
             if not found:
-                self.uncategorized_list.append(copy.deepcopy(item))
+                self.uncategorized_list.append(item)
 
         new_uncategoried_list = self.uncategorized_list
         added_uncategoried_list = []
@@ -1331,7 +1281,7 @@ class pluginclass( object ):
             for item in new_uncategoried_list:
                 found = False
                 for item2 in self.uncategoriedList:
-                    if item['desktop_file_path'] == item2['desktop_file_path']:
+                    if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
                 if not found:
@@ -1341,7 +1291,7 @@ class pluginclass( object ):
             for item in self.uncategoriedList:
                 found = False
                 for item2 in new_uncategoried_list:
-                    if item['desktop_file_path'] == item2['desktop_file_path']:
+                    if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
                 if not found:
@@ -1355,13 +1305,15 @@ class pluginclass( object ):
 
         sorted_uncategoried_list = []
         for item in self.uncategoriedList:
-            self.categoriesBox.remove( item["button"] )
             sorted_uncategoried_list.append( ( item["button"].appName, item["button"] ) )
+
         for item in added_uncategoried_list:
             button = self.build_application_launcher(item, menu_has_changed)
             if button:
                 item["button"] = button
                 item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
+                if item["button"].appNoDisplay == True:
+                    continue
                 sorted_uncategoried_list.append( ( item["button"].appName, item["button"] ) )
                 self.uncategoriedList.append( item )
 
@@ -1378,22 +1330,10 @@ class pluginclass( object ):
             else:
                 launcherNames.append(launcherName)
 
-        sorted_all_application_list = []
-        for item in self.all_application_list:
-            button = self.build_application_launcher(item, False)
-            if button:
-                item["button"] = button
-                item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
-                sorted_all_application_list.append( ( item['button'].appName, item['button'] ) )
-        if not self.showCategoryMenu:
-            sorted_all_application_list.sort()
-
-        self.all_app_list = sorted_all_application_list
-
         self.rebuildLock = False
 
     def build_application_launcher(self, application, menu_has_changed):
-        button = MenuApplicationLauncher( application['desktop_file_path'],
+        button = MenuApplicationLauncher( application['entry'].get_desktop_file_path().decode('utf-8'),
                                           self.iconSize, application["category"],
                                           True, 28,
                                           highlight = (True and menu_has_changed) )
@@ -1404,7 +1344,7 @@ class pluginclass( object ):
             button.set_tooltip_text( button.getTooltip() )
             button.connect( "clicked", lambda w: self.ukuiMenuWin.hide() )
             button.connect( "button-press-event", self.menuPopup )
-            button.desktop_file_path = application['desktop_file_path']
+            button.desktop_file_path = application['entry'].get_desktop_file_path().decode('utf-8')
             if button.appName == "Eclipse":
                 (a, b) = locale.getdefaultlocale()
                 if a == "zh_CN":
@@ -1424,7 +1364,7 @@ class pluginclass( object ):
         def find_applications_recursively(app_list, directory, catName):
             for item in directory.get_contents():
                 if item.get_type() == ukuimenu.TYPE_ENTRY:
-                    app_list.append( { 'desktop_file_path': item.get_desktop_file_path().decode('utf-8'),
+                    app_list.append( { 'entry': item,
                                        'category': entry.get_name().decode('utf-8') } )
                 elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
                     find_applications_recursively(app_list, item, catName)
@@ -1437,7 +1377,7 @@ class pluginclass( object ):
                         if item.get_type() == ukuimenu.TYPE_DIRECTORY:
                             find_applications_recursively(application_list, item, entry.get_name().decode('utf-8'))
                         elif item.get_type() == ukuimenu.TYPE_ENTRY:
-                            application_list.append({ 'desktop_file_path': item.get_desktop_file_path().decode('utf-8'),
+                            application_list.append({ 'entry': item,
                                                       'category': entry.get_name().decode('utf-8') })
         return application_list
 
@@ -1539,6 +1479,30 @@ class pluginclass( object ):
 
     def Filter(self, widget, category = None):
         self.filterTimer = None
+        sorted_all_application_list = []
+
+        if len(self.all_app_list) > 0:
+            if self.menuHasChanged:
+                for item in self.all_application_list:
+                    button = self.build_application_launcher(item, False)
+                    if button:
+                        item["button"] = button
+                        item["button"].connect( "focus-in-event", self.scrollItemIntoView )
+                        sorted_all_application_list.append( ( item['button'].appName, item['button'] ) )
+                if not self.showCategoryMenu:
+                    sorted_all_application_list.sort()
+                self.all_app_list = sorted_all_application_list
+        else:
+            for item in self.all_application_list:
+                button = self.build_application_launcher(item, False)
+                if button:
+                    item["button"] = button
+                    item["button"].connect( "focus-in-event", self.scrollItemIntoView )
+                    sorted_all_application_list.append( ( item['button'].appName, item['button'] ) )
+            if not self.showCategoryMenu:
+                sorted_all_application_list.sort()
+            self.all_app_list = sorted_all_application_list
+
 
         if  widget == self.searchEntry:
             searchText = self.searchEntry.get_text()
@@ -2421,6 +2385,8 @@ class pluginclass( object ):
         found = False
         try:
             viewName = Bamf.View.get_name(view)
+            if viewName == "ukui-menu.py":
+                return
             if viewName == "QQ International" or viewName == "TXMenuWindow":
                 appName = "qq国际版"
                 found = True
@@ -2457,7 +2423,7 @@ class pluginclass( object ):
             found = True
 
         if not found:
-            for appname in self.appHistoryList:
+            for appname in self.all_application_list:
                 if desktopPath:
                     button = MenuApplicationLauncher(desktopPath, 32, "", True, highlight=(False))
                     button.set_name("ButtonApp")
@@ -2518,7 +2484,7 @@ class pluginclass( object ):
             for line in lines:
                 word = line.strip().split(':')
                 found = False
-                for appname in self.appHistoryList:
+                for appname in self.all_application_list:
                     findDesktop = False
                     for tempdesktop in self.favAppList:
                         temp = tempdesktop.split(":")[1]
