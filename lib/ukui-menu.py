@@ -291,27 +291,29 @@ class MenuWin( object ):
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
         self.mainwin.window.connect( "focus-out-event", lambda *args: self.button.set_name("ButtonApplet") )
 
-        self.bind_hot_key()
+        if self.keybinder is not None:
+            self.bind_hot_key()
         self.applet.set_can_focus(False)
 
         self.pointerMonitor = pointerMonitor.PointerMonitor()
-        self.pointerMonitor.connect("activate", self.onPointerOutside)
+        if self.pointerMonitor is not None:
+            self.pointerMonitor.connect("activate", self.onPointerOutside)
         return False
 
     def onWindowMap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.SELECTED )
         if self.keybinder == None:
             return
-        else:
-            self.keybinder.set_focus_window( self.mainwin.window.get_window() )
+
+        self.keybinder.set_focus_window( self.mainwin.window.get_window() )
         return False
 
     def onWindowUnmap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.NORMAL )
         if self.keybinder == None:
             return
-        else:
-            self.keybinder.set_focus_window()
+        
+        self.keybinder.set_focus_window()
         return False
 
     def onRealize( self, *args):

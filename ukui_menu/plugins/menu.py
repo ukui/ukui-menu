@@ -34,25 +34,18 @@ import time
 import shutil
 import string
 import gettext
-import threading
 import subprocess
 import filecmp
 import ctypes
 from ctypes import *
 from ukui_menu.easybuttons import *
 from ukui_menu.execute import Execute
-from ukui_menu.easygsettings import EasyGSettings
-from ukui_menu.easyfiles import *
-from ukui_menu.filemonitor import monitor as filemonitor
-from xml.etree import ElementTree as ET
-import copy
 from pyinotify import WatchManager, Notifier, ProcessEvent, IN_DELETE_SELF, IN_CLOSE_WRITE, IN_MODIFY
 import dbus
 from configobj import ConfigObj
 import _thread
 import ukuimenu
 import operator
-import platform
 import locale
 import configparser
 
@@ -68,25 +61,6 @@ ICON_SIZE = 16
 ukuimenu_settings = Gio.Settings.new("org.ukui.ukui-menu")
 FAVNUM = 5            #常用软件显示个数
 
-server = False
-try:
-    (status, output) = subprocess.getstatusoutput("uname -a | grep server")
-    if status == 0:
-        server = True
-    else:
-        server = False
-except Exception as e:
-        print (e)
-
-serverx86 = False
-try:
-    (statusx86, outputx86) = subprocess.getstatusoutput("dpkg -l | grep mate-server-guide")
-    if statusx86 == 0:
-        serverx86 = True
-    else:
-        serverx86 = False
-except Exception as e:
-        print (e)
 
 def get_user_icon():
     current_user = GLib.get_user_name()
@@ -123,15 +97,18 @@ usericonPath = get_user_icon()
 
 RecManagerInstance = Gtk.RecentManager.get_default()
 
-APPLIST = [_("WPS Writer"), 
-           _("WPS Presentation"), 
-           _("WPS Spreadsheets"), 
+APPLIST = [_("WPS Writer"),
+           _("WPS Presentation"),
+           _("WPS Spreadsheets"),
            _("Qt Creator"),
            _("SMPlayer"),
            _("Kylin Video"),
-           _("Eye of MATE Image Viewer"), 
+           _("Eye of MATE Image Viewer"),
+           "图像查看器",
            _("Atril Document Viewer"),
-           _("Pluma")]
+           "文档查看器",
+           _("Pluma"),
+           "文本编辑器"]
 
 WPS_W = ["application/wps-office.doc",
          "application/wps-office.docx",
@@ -223,118 +200,28 @@ def get_desktop_file_path(desktop_filename):
 
     return ''
 
-def get_category_file_path():
-    dir_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-    system_category_file_path = os.path.join(dir_path, 'category.xml')
-    os.system("mkdir -p %s/.config/ukui-menu/category/" % GLib.get_home_dir())
-    user_category_file_path = '%s/.config/ukui-menu/category/category.xml' % GLib.get_home_dir()
-    if not os.path.exists(user_category_file_path):
-        os.system("cp %s %s" % (system_category_file_path, user_category_file_path))
-
-    return user_category_file_path
-
 class Category(GObject.GObject):
     def __init__(self, all_application_list):
         GObject.GObject.__init__ (self)
 
-        self.hasOffice = False
-        self.hasGame = False
-        self.hasAndroid = False
         self.category_list_m = []
         self.application_list_m = []
         self.current_category = None
         self.all_application_list = all_application_list
 
         for app in self.all_application_list:
-            if app['category'] == 'Games' or app['category'] == _("Games") or app['category'] == '游戏':
-                self.hasGame = True
+            if app['category'] == _("Graphics") or app['category'] == _("Internet") or app['category'] == _("Programming") or app['category'] == _("Sound & Video") or app['category'] == _("System Tools") or app['category'] == _("Universal Access") or app['category'] == _("Preferences") or app['category'] == _("Administration") or app['category'] == _("Other"):
+                continue
+            elif app['category'] == _("Accessories") or app['category'] == _("Office") or app['category'] == _("Games") or app['category'] == _("Android"):
                 self.application_list_m.append(app)
-
-        for app in self.all_application_list:
-            if app['category'] == 'Android' or app['category'] == _("Android") or app['category'] == '安卓兼容':
-                self.hasAndroid = True
+            else:
                 self.application_list_m.append(app)
-
-        for app in self.all_application_list:
-            if app['category'] == 'Office' or app['category'] == _('Office') or app['category'] == '办公':
-                self.hasOffice = True
-                self.application_list_m.append(app)
-
-        if not server or not serverx86:
-            self.application_list_m += self.autostart_list()
-
-        self.category_file = open(get_category_file_path(), 'r+b')
-        self.tree = ET.ElementTree(file = self.category_file.name)
-        self.load_tree_data()
-
-    def load_tree_data(self):
-        for directory in self.tree.getroot():
-            name = directory.attrib['name']
-            icon = directory.attrib['icon']
-            for entry in directory:
-                desktop_file_path = get_desktop_file_path(entry.attrib['source'])
-                if not desktop_file_path:
-                    continue
-                found = False
-                for app in self.all_application_list:
-                    if app['desktop_file_path'] == desktop_file_path:
-                        found = True
-                        break
-                if not found:
-                    continue
-                self.application_list_m.append( { 'desktop_file_path': desktop_file_path, 'category': name } )
-            if name == "办公":
-                if not self.hasOffice:
-                    continue
-            if name == "游戏":
-                if not self.hasGame:
-                    continue
-            if name == "安卓兼容":
-                if not self.hasAndroid:
-                    continue
-            self.category_list_m.append( { "name": name, "icon": icon, "tooltip": name, "filter": name } )
 
     def category_list(self):
         return self.category_list_m
 
     def application_list(self):
         return self.application_list_m
-
-    def autostart_list(self):
-        autostart_dirs = []
-        try:
-            autostart_dirs = [os.path.join(p, 'autostart') for p in os.environ['XDG_CONFIG_DIRS'].split(':')]
-            # home's autostart has the highest priority
-            autostart_dirs.insert(0, '%s/.config/autostart' % GLib.get_home_dir())
-            autostart_dirs = [ d for d in autostart_dirs if os.path.exists(d) ]
-        except KeyError as e:
-            print ('No environment variable called XDG_CONFIG_DIRS')
-
-        autostart_apps = []
-        autostart_desktop_filenames = []
-        for di in autostart_dirs:
-            for filename in os.listdir(di):
-                file_path = os.path.join(di, filename)
-                if filename in autostart_desktop_filenames:
-                    continue
-                autostart_desktop_filenames.append(filename)
-                try:
-                    app = Gio.DesktopAppInfo.new_from_filename(file_path)
-                    if app.get_show_in('MATE'):
-                        autostart_apps.append(app)
-                except TypeError as e:
-                    print ("error")
-
-        for app in autostart_apps:
-            # we have to use get_string here since false as a boolean may indicate the
-            # key does not exist in which condition the remove op will not be performed
-            if app.get_string('X-MATE-Autostart-enabled') == 'false':
-                autostart_apps.remove(app)
-            if app.get_string('Name') == "MATE Settings Daemon":
-                autostart_apps.remove(app)
-
-       # TODO: use translation
-        return [{'desktop_file_path': app.get_filename(), 'category': '启动'} for app in autostart_apps]
 
 
 class Menu:
@@ -387,7 +274,7 @@ class pluginclass( object ):
         self.addedHeight = 0
         self.ButtonHoverWidgetHistory = None
 
-        self.window = self.builder.get_object("window")
+        self.window = self.builder.get_object( "window" )
         self.expanderApp = self.builder.get_object("expanderApp")
         self.labelExpanderApp = self.builder.get_object("labelExpanderApp")
         self.expanderSystem = self.builder.get_object("expanderSystem")
@@ -538,12 +425,6 @@ class pluginclass( object ):
         self.favoritesBox.connect( "drag-data-received", self.ReceiveCallback )
         self.favoritesBox.drag_dest_set ( Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,  self.toButton, Gdk.DragAction.COPY )
 
-        self.AddFavBtn()
-
-        self.hovermenupopup = False
-
-        self.appHistoryList= self.buildAppHistoryList()
-
         self.categoriesBox = self.builder.get_object("categoriesbox")
         self.categoriesBox.set_spacing(2)
         self.applicationsBox = self.builder.get_object("applicationsBox")
@@ -595,24 +476,22 @@ class pluginclass( object ):
         self.bamfok = False
         GLib.timeout_add( 100, self.getBamfStatus )
 
-        self.updateHistoryBox()
-
         self.label_user = self.builder.get_object("label_user")
         user_name = GLib.get_user_name()
         self.label_user.set_text(user_name)
         self.label_user.set_name("myGtkLabel")
         #left-menu
         self.button_computer = self.builder.get_object( "button_computer" )
-        self.button_computer.set_label(_("Home"))
         self.button_computer.set_name("Button")
+        self.button_computer.set_label(_("Home"))
         self.change_icon(self.button_computer, ICON_PATH + "computer.png")
         self.button_computer.connect("button-press-event",self.on_computer_clicked)
         self.button_computer.connect("enter", self.button_computer_enter)
         self.button_computer.connect("leave", self.button_computer_leave)
 
         self.button_controlcenter = self.builder.get_object( "button_controlcenter" )
-        self.button_controlcenter.set_label(_("Settings"))
         self.button_controlcenter.set_name("Button")
+        self.button_controlcenter.set_label(_("Settings"))
         self.change_icon(self.button_controlcenter, ICON_PATH + "controlcenter.png")
         self.button_controlcenter.connect("button-press-event", self.on_controlcenter_clicked)
         self.button_controlcenter.connect("enter", self.button_controlcenter_enter)
@@ -630,11 +509,9 @@ class pluginclass( object ):
         self.rebuildLock = False
         self.activeFilter = (1, "", self.searchEntry)
         self.current_suggestion = None
-        self.categoryList = []
         self.applicationList = []
         self.uncategoriedList = []
         self.all_app_list = []
-        self.categorybutton_list = []
 
         self.all_application_list = []
         for mainitems in [ "ukui-applications.menu", "ukui-settings.menu" ]:
@@ -713,21 +590,10 @@ class pluginclass( object ):
         else:
             os.system("ukui-control-center &")
 
-    def on_button_user_clicked (self, widget, event):
-        self.ukuiMenuWin.hide()
-        if os.path.exists("/usr/bin/ukui-control-center"):
-            os.system("ukui-control-center -u &")
-        elif os.path.exists("/usr/bin/mate-about-me"):
-            os.system('mate-about-me &')
-
-    def on_button_showall_clicked(self, widget):
-        self.changeTab(1)
-
-    def on_button_back_clicked(self, widget):
-        self.changeTab(0)
-
     def ShowRecentFile(self, widget):
         widget.rightbox.hide()
+        if widget.appName not in APPLIST:
+            return
         RecentInfo = RecManagerInstance.get_items()
         #wps
         if widget.appName == _("WPS Writer"):
@@ -743,15 +609,15 @@ class pluginclass( object ):
                 if item.get_mime_type() in WPS_S:
                     widget.rightbox.show_all()
         #gtk app
-        if widget.appName == _("Pluma"):
+        if widget.appName == _("Pluma") or widget.appName == "文本编辑器":
             for item in RecentInfo:
                 if item.has_application("Pluma"):
                     widget.rightbox.show_all()
-        if widget.appName == _("Eye of MATE Image Viewer"):
+        if widget.appName == _("Eye of MATE Image Viewer") or widget.appName == "图像查看器":
             for item in RecentInfo:
                 if item.has_application("Eye of MATE Image Viewer"):
                     widget.rightbox.show_all()
-        if widget.appName == _("Atril Document Viewer"):
+        if widget.appName == _("Atril Document Viewer") or widget.appName == "文档查看器":
             for item in RecentInfo:
                 if item.has_application("Atril Document Viewer"):
                     widget.rightbox.show_all()
@@ -761,7 +627,7 @@ class pluginclass( object ):
             path = os.path.join(GLib.get_user_config_dir(), 'QtProject/QtCreator.ini')
             if os.path.exists(path):
                 cf.read(path)
-                recentFiles = cf.get("RecentFiles", "Files") 
+                recentFiles = cf.get("RecentFiles", "Files")
                 if recentFiles is not "" and recentFiles != "@Invalid()":
                     widget.rightbox.show_all()
         if widget.appName == _("Kylin Video"):
@@ -769,7 +635,7 @@ class pluginclass( object ):
             path = os.path.join(GLib.get_user_config_dir(), 'kylin-video/kylin-video.ini')
             if os.path.exists(path):
                 cf.read(path)
-                recentFiles = cf.get("history", "recents") 
+                recentFiles = cf.get("history", "recents")
                 if recentFiles is not "":
                     widget.rightbox.show_all()
 
@@ -800,11 +666,6 @@ class pluginclass( object ):
                     favButton.connect( "drag-data-get", self.onFavButtonDragReorderGet )
                     favButton.drag_source_set( Gdk.ModifierType.BUTTON1_MASK, self.toFav, Gdk.DragAction.COPY )
                     position += 1
-
-                    if self.showRecentFile:
-                        self.ShowRecentFile(favButton)
-                        favButton.connect( "enter", self.showHistory )
-                        favButton.connect( "leave", self.hideHistory )
 
             self.favoritesSave()
         except Exception as e:
@@ -888,6 +749,20 @@ class pluginclass( object ):
         self.favoritesSave()
         self.favoritesBox.resize( self.favoritesGetNumRows(), self.favCols )
 
+    def openApp(self, widget, FileData):
+        Data, FileName = FileData
+        uri, AppName, appname = Data
+        self.mateMenuWin.hide()
+
+        if appname == _("WPS Writer"):
+            os.system("wps &")
+        if appname == _("WPS Presentation"):
+            os.system("wpp &")
+        if appname == _("WPS Spreadsheets"):
+            os.system("et &")
+        if appname == _("Pluma") or appname == "文本编辑器":
+            os.system("pluma &")
+
     def callback(self, widget, FileData):
         Data, FileName = FileData
         uri, AppName, appname = Data
@@ -914,11 +789,11 @@ class pluginclass( object ):
             os.system("qtcreator %s &" % FileName)
         if appname == _("Kylin Video"):
             os.system("kylin-video %s &" % FileName)
-        if appname == _("Eye of MATE Image Viewer"):
+        if appname == _("Eye of MATE Image Viewer") or appname == "图像查看器":
             os.system("eom %s &" % FileName)
-        if appname == _("Atril Document Viewer"):
+        if appname == _("Atril Document Viewer") or appname == "文档查看器":
             os.system("atril %s &" % FileName)
-        if appname == _("Pluma"):
+        if appname == _("Pluma") or appname == "文本编辑器":
             os.system("pluma %s &" % FileName)
 
     def favoritesBuildLauncher(self, location):
@@ -935,6 +810,10 @@ class pluginclass( object ):
                 favButton.connect( "button-press-event", self.favPopup )
                 #favButton.set_tooltip_text( favButton.getTooltip() )
                 favButton.type = "location"
+                if self.showRecentFile:
+                    self.ShowRecentFile(favButton)
+                    favButton.connect( "enter", self.showHistory )
+                    favButton.connect( "leave", self.hideHistory )
                 return favButton
         except Exception as e:
             print ("s")
@@ -977,22 +856,36 @@ class pluginclass( object ):
                 mTree.set_name("myGtkLabel")
                 mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
                                  Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
-                launchMenuItem = Gtk.MenuItem(_("Open(_O)"))
-                launchMenuItem.set_use_underline(True)
+
+                launchMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Open(_O)"))
+                image = Gtk.Image.new_from_icon_name("gtk-execute", Gtk.IconSize.MENU)
+                launchMenuItem.set_image(image)
+
                 separator1 = Gtk.SeparatorMenuItem()
-                desktopMenuItem = Gtk.MenuItem(_("Add to desktop"))
-                desktopMenuItem.set_use_underline(True)
+
+                desktopMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Add to desktop(_A)"))
+                image = Gtk.Image.new_from_icon_name("gtk-add", Gtk.IconSize.MENU)
+                desktopMenuItem.set_image(image)
                 if addedDesktop:
                     desktopMenuItem.set_sensitive(False)
-                panelMenuItem = Gtk.MenuItem(_("Lock to panel(_L)"))
-                panelMenuItem.set_use_underline(True)
+
+                panelMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Lock to panel(_L)"))
+                #image = Gtk.Image.new_from_icon_name("gtk-lock", Gtk.IconSize.MENU)
+                #panelMenuItem.set_image(image)
+
                 separator3 = Gtk.SeparatorMenuItem()
-                removeFromFavMenuItem = Gtk.MenuItem(_("Unlock from startup menu"))
+
+                removeFromFavMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Unlock from startup menu(_U)"))
+                #image = Gtk.Image.new_from_icon_name("gtk-unlock", Gtk.IconSize.MENU)
+                #removeFromFavMenuItem.set_image(image)
                 if len(self.favorites) < 2:
                     removeFromFavMenuItem.set_sensitive(False)
+
                 separator4 = Gtk.SeparatorMenuItem()
-                propsMenuItem = Gtk.MenuItem(_("Property(_P)"))
-                propsMenuItem.set_use_underline(True)
+
+                propsMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Property(_P)"))
+                image = Gtk.Image.new_from_icon_name("gtk-properties", Gtk.IconSize.MENU)
+                propsMenuItem.set_image(image)
 
                 desktopMenuItem.connect("activate", self.add_to_desktop, widget)
                 panelMenuItem.connect("activate", self.add_to_panel, widget)
@@ -1041,9 +934,22 @@ class pluginclass( object ):
             print (detail)
         return realPath
 
+    def on_button_user_clicked (self, widget, event):
+        self.ukuiMenuWin.hide()
+        if os.path.exists("/usr/bin/ukui-control-center"):
+            os.system("ukui-control-center -u &")
+        elif os.path.exists("/usr/bin/mate-about-me"):
+            os.system('mate-about-me &')
+
     def changeimage(self, settings, key, args = None):
         usericonPath = get_user_icon()
-        pixbuf = Pixbuf.new_from_file(usericonPath)
+        try:
+            pixbuf = Pixbuf.new_from_file(usericonPath)
+        except Exception as e:
+            iconpath = "/usr/lib/ubuntu-mate/mate-menu/stock_person.png"
+            os.system("cp %s %s" % (iconpath, usericonPath))
+            pixbuf = Pixbuf.new_from_file(iconpath)
+            print (e)
         pixbuf = pixbuf.scale_simple(63, 63, 2)  #2 := BILINEAR
         self.image_user.set_from_pixbuf(pixbuf)
 
@@ -1057,22 +963,15 @@ class pluginclass( object ):
             mTree = Gtk.Menu()
             mTree.set_name("myGtkLabel")
 
-            shutdown = Gtk.MenuItem(_("Shutdown"))
-            reboot = Gtk.MenuItem(_("Reboot"))
+            shutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Power(_P)"))
+            reboot = Gtk.ImageMenuItem.new_with_mnemonic(_("Reboot(_R)"))
             separatorMenuItem = Gtk.SeparatorMenuItem()
             separatorMenuItem.set_visible(True)
-            logout = Gtk.MenuItem(_("Logout"))
-            changeuser = Gtk.MenuItem(_("Switch User"))
-            lock = Gtk.MenuItem(_("Lock Screen"))
+            logout = Gtk.ImageMenuItem.new_with_mnemonic(_("Logout(_O)"))
+            changeuser = Gtk.ImageMenuItem.new_with_mnemonic(_("Switch User(_S)"))
+            lock = Gtk.ImageMenuItem.new_with_mnemonic(_("Lock Screen(_L)"))
             mTree.append(lock)
-            arm = False
-            machine = platform.machine()
-            if machine == "aarch64":
-                arm = True
-            else:
-                arm = False
-            if not arm:
-                mTree.append(changeuser)
+            mTree.append(changeuser)
             mTree.append(logout)
             mTree.append(separatorMenuItem)
             mTree.append(reboot)
@@ -1082,7 +981,7 @@ class pluginclass( object ):
             changeuser.connect("activate", self.switchuser, widget)
             logout.connect("activate", self.logout, widget)
             reboot.connect("activate", self.reboot, widget)
-            shutdown.connect("activate", self.shutdown, widget)
+            shutdown.connect("activate", self.shutdown1, widget)
             self.ukuiMenuWin.stopHiding()
             mTree.connect("deactivate", self.set_state, widget)
             return mTree
@@ -1124,8 +1023,19 @@ class pluginclass( object ):
         self.ukuiMenuWin.hide()
         Gdk.flush()
 
+    def shutdown1(self, menu, widget):
+        session_bus = dbus.SessionBus()
+        obj = session_bus.get_object('org.gnome.SessionManager','/org/gnome/SessionManager')
+        interface = dbus.Interface(obj,'org.gnome.SessionManager')
+        interface.RequestShutdown()
+        self.ukuiMenuWin.hide()
+        Gdk.flush()
+
     def lock(self, menu, widget):
-        os.system( "ukui-screensaver-command -l" )
+        if os.path.exists("/usr/bin/ukui-screensaver-command"):
+            os.system("ukui-screensaver-command -l")
+        else:
+            os.system( "mate-screensaver-command -l" )
         self.ukuiMenuWin.hide()
         Gdk.flush()
 
@@ -1190,162 +1100,92 @@ class pluginclass( object ):
         self.menuChangedTimer = GLib.timeout_add( 100, self.updateBoxes, True )
 
     def updateBoxes(self, menu_has_changed):
-        #update fav app and history app.
-        self.appHistoryList= self.buildAppHistoryList()
+        self.categorybutton_list = []
+        self.menuHasChanged = menu_has_changed
+
+        self.loadMenuFiles()
+        self.all_application_list = self.build_application_list()
         self.RecentFileChanged()
 
         if self.rebuildLock:
             return
 
+        for child in self.categoriesBox.get_children():
+            if child == self.expanderApp or child == self.expanderSystem:
+                continue
+            self.categoriesBox.remove( child )
+
         self.rebuildLock = True
         self.menuChangedTimer = None
-        self.loadMenuFiles()
-
-        self.all_application_list = self.build_application_list()
-        if self.showCategoryMenu:
-            new_category_list = self.buildCategoryList()
-        else:
-            cat = Category(self.all_application_list)
-            new_category_list = cat.category_list()
-        added_category_list = []
-        removed_category_list = []
-
-        if not self.categoryList:
-            added_category_list = new_category_list
-        else:
-            for item in new_category_list:
-                found = False
-                for item2 in self.categoryList:
-                    if item2['name'] == item['name'] and \
-                       item2['icon'] == item['icon'] and \
-                       item2['tooltip'] == item['tooltip'] :
-                        found = True
-                        break
-                if not found:
-                    added_category_list.append(item)
-
-            for item in self.categoryList:
-                found = False
-                for item2 in new_category_list:
-                    if item2['name'] == item['name'] and \
-                       item2['icon'] == item['icon'] and \
-                       item2['tooltip'] == item['tooltip'] :
-                        found = True
-                        break
-                if not found:
-                    removed_category_list.append(item)
 
         category_icon_size = self.iconSize
+        sorted_category_list = []
+        self.list = self.buildCategoryList()
 
-        for item in removed_category_list:
+        for item in self.list:
             try:
-                button = item['button']
-                self.categoryList.remove(item)
-                button.destroy()
-                del item
+                if self.showCategoryMenu:
+                    item["filter"] = item["name"]
+                    item["button"] = CategoryButton( item["icon"], category_icon_size, [item["name"]], item["filter"])
+                else:
+                    if item["name"] == _("Graphics") or item["name"] == _("Internet") or item["name"] == _("Programming") or item["name"] == _("Sound & Video") or item["name"] == _("System Tools") or item["name"] == _("Universal Access") or item["name"] == _("Preferences") or item["name"] == _("Administration") or item["name"] == _("Other"):
+                        continue
+                    elif item["name"] == _("Accessories") or item["name"] == _("Office") or item["name"] == _("Games") or item["name"] == _("Android"):
+                        item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
+                    else:
+                        item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
+                item["button"].connect( "button-press-event", self.FilterAndClear, item["filter"] )
+                item["button"].connect( "focus-in-event", self.scrollItemIntoView )
+                item["button"].connect( "enter", self.showGoNext )
+                item["button"].connect( "leave", self.hideGoNext )
+                item["button"].show()
+                item["button"].set_name("ButtonApp")
+                self.categorybutton_list.append(item["button"])
+
+                sorted_category_list.append( ( item["name"], item["button"] ) )
             except Exception as e:
                 print (e)
 
-        if 1:
-            sorted_category_list = []
-            for item in self.categoryList:
-                try:
-                    self.categoriesBox.remove(item['button'])
-                    if self.showCategoryMenu:
-                        self.categoriesApp.remove(item['button'])
-                        self.categoriesSystem.remove(item['button'])
-                    if not self.showCategoryMenu:
-                        sorted_category_list.append( ( item['name'], item['button'] ) )
-                except Exception as e:
-                    print (e)
+        if not self.showCategoryMenu:
+            sorted_category_list.sort()
 
-            if self.showCategoryMenu:
-                self.list = self.buildCategoryList()
-            else:
-                self.list = added_category_list
+        for child in self.categoriesApp.get_children():
+            self.categoriesApp.remove( child )
+        for child in self.categoriesSystem.get_children():
+            self.categoriesSystem.remove( child )
 
-            for item in self.list:
-                try:
-                    if self.showCategoryMenu:
-                        item["filter"] = item["name"]
-                        item["button"] = CategoryButton( item["icon"], category_icon_size, [item["name"]], item["filter"])
-                    else:
-                        if item["name"] == "附件":
-                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Accessories")], item["filter"] )
-                        if item["name"] == "办公":
-                            item["filter"] = _("Office")
-                            if cat.hasOffice == False:
-                                continue;
-                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Office")], item["filter"] )
-                        if item["name"] == "启动":
-                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("StartUp")], item["filter"] )
-                        if item["name"] == "游戏":
-                            item["filter"] = _("Games")
-                            if cat.hasGame == False:
-                                continue;
-                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Games")], item["filter"] )
-                        if item["name"] == "安卓兼容":
-                            item["filter"] = _("Android")
-                            if cat.hasAndroid == False:
-                                continue;
-                            item["button"] = CategoryButton( item["icon"], category_icon_size, [_("Android")], item["filter"] )
-                    item["button"].set_name("ButtonApp")
-                    self.categorybutton_list.append(item["button"])
-                    item["button"].connect( "button-press-event", self.FilterAndClear, item["filter"] )
-                    item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
-                    item["button"].connect( "enter", self.showGoNext )
-                    item["button"].connect( "leave", self.hideGoNext )
-                    if not self.showCategoryMenu:
-                        if server:
-                            if item["name"] == "游戏" or item["name"] == "启动":
-                                continue;
-                        if serverx86:
-                            if item["name"] == "游戏" or item["name"] == "启动":
-                                continue;
-                        if item["name"] == "启动":
-                            continue;
-                    item["button"].show()
-
-                    self.categoryList.append( item )
-                    sorted_category_list.append( ( item["name"], item["button"] ) )
-                except Exception as e:
-                    print (e)
-
-            if not self.showCategoryMenu:
-                sorted_category_list.sort()
-
-            currentApp = False
-            currentSystem = False
-
-            for item in sorted_category_list:
-                try:
-                    if self.showCategoryMenu:
-                        self.categoriesBox.set_spacing(1)
-                        if item[0] == _("Applications"):
-                            self.labelExpanderApp.set_label(_("Applications"))
-                            currentApp = True
-                            currentSystem = False
-                            continue
-                        if item[0] == _("System"):
-                            self.labelExpanderSystem.set_label(_("System"))
-                            currentSystem = True
-                            currentApp = False
-                            continue
-                        if currentApp:
-                            self.categoriesApp.pack_start(item[1], False, False, 0)
-                        if currentSystem:
-                            self.categoriesSystem.pack_start(item[1], False, False, 0)
-                    else:
-                        self.expanderApp.hide()
-                        self.expanderSystem.hide()
-                        self.categoriesBox.set_spacing(2)
-                        self.categoriesBox.pack_start( item[1], False, False, 0 )
-                except Exception as e:
-                    print (e)
+        currentApp = False
+        currentSystem = False
+        for item in sorted_category_list:
+            try:
+                if self.showCategoryMenu:
+                    self.categoriesBox.set_spacing(1)
+                    if item[0] == _("Applications"):
+                        self.labelExpanderApp.set_label(_("Applications"))
+                        currentApp = True
+                        currentSystem = False
+                        continue
+                    if item[0] == _("System"):
+                        self.labelExpanderSystem.set_label(_("System"))
+                        currentSystem = True
+                        currentApp = False
+                        continue
+                    if currentApp:
+                        self.categoriesApp.pack_start(item[1], False, False, 0)
+                    if currentSystem:
+                        self.categoriesSystem.pack_start(item[1], False, False, 0)
+                else:
+                    self.expanderApp.hide()
+                    self.expanderSystem.hide()
+                    self.categoriesBox.set_spacing(2)
+                    self.categoriesBox.pack_start( item[1], False, False, 0 )
+            except Exception as e:
+                print (e)
 
         if self.showCategoryMenu:
             new_application_list = self.all_application_list
         else:
+            cat = Category(self.all_application_list)
             new_application_list = cat.application_list()
         added_application_list = []
         removed_application_list = []
@@ -1356,7 +1196,7 @@ class pluginclass( object ):
             for item in new_application_list:
                 found = False
                 for item2 in self.applicationList:
-                    if item['desktop_file_path'] == item2['desktop_file_path']:
+                    if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
                 if not found:
@@ -1366,7 +1206,7 @@ class pluginclass( object ):
             for item in self.applicationList:
                 found = False
                 for item2 in new_application_list:
-                    if item['desktop_file_path'] == item2['desktop_file_path']:
+                    if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
                 if not found:
@@ -1381,8 +1221,7 @@ class pluginclass( object ):
         sorted_application_list = []
         for child in self.applicationsBox.get_children():
             self.applicationsBox.remove( child )
-        #for item in self.applicationList:
-        #    sorted_application_list.append( ( item["button"].appName, item["button"] ) )
+
         for item in new_application_list:
             found = False
             for item1 in added_application_list:
@@ -1402,6 +1241,8 @@ class pluginclass( object ):
                 if button:
                     item["button"] = button
                     item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
+                    if item["button"].appNoDisplay == True:
+                        continue
                     sorted_application_list.append( ( item["button"].appName, item["button"] ) )
                     self.applicationList.append( item )
 
@@ -1424,11 +1265,11 @@ class pluginclass( object ):
         for item in self.all_application_list:
             found = False
             for item2 in self.applicationList:
-                if item['desktop_file_path'] == item2['desktop_file_path'] or os.path.basename(item['desktop_file_path']) == os.path.basename(item2['desktop_file_path']):
+                if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8') or os.path.basename(item['entry'].get_desktop_file_path().decode('utf-8')) == os.path.basename(item2['entry'].get_desktop_file_path().decode('utf-8')):
                     found = True
                     break
             if not found:
-                self.uncategorized_list.append(copy.deepcopy(item))
+                self.uncategorized_list.append(item)
 
         new_uncategoried_list = self.uncategorized_list
         added_uncategoried_list = []
@@ -1440,7 +1281,7 @@ class pluginclass( object ):
             for item in new_uncategoried_list:
                 found = False
                 for item2 in self.uncategoriedList:
-                    if item['desktop_file_path'] == item2['desktop_file_path']:
+                    if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
                 if not found:
@@ -1450,7 +1291,7 @@ class pluginclass( object ):
             for item in self.uncategoriedList:
                 found = False
                 for item2 in new_uncategoried_list:
-                    if item['desktop_file_path'] == item2['desktop_file_path']:
+                    if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
                 if not found:
@@ -1464,13 +1305,15 @@ class pluginclass( object ):
 
         sorted_uncategoried_list = []
         for item in self.uncategoriedList:
-            self.categoriesBox.remove( item["button"] )
             sorted_uncategoried_list.append( ( item["button"].appName, item["button"] ) )
+
         for item in added_uncategoried_list:
             button = self.build_application_launcher(item, menu_has_changed)
             if button:
                 item["button"] = button
                 item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
+                if item["button"].appNoDisplay == True:
+                    continue
                 sorted_uncategoried_list.append( ( item["button"].appName, item["button"] ) )
                 self.uncategoriedList.append( item )
 
@@ -1487,22 +1330,10 @@ class pluginclass( object ):
             else:
                 launcherNames.append(launcherName)
 
-        sorted_all_application_list = []
-        for item in self.all_application_list:
-            button = self.build_application_launcher(item, False)
-            if button:
-                item["button"] = button
-                item["button"].connect( "focus-in-event", self.scrollItemIntoView )                                    #feng
-                sorted_all_application_list.append( ( item['button'].appName, item['button'] ) )
-        if not self.showCategoryMenu:
-            sorted_all_application_list.sort()
-
-        self.all_app_list = sorted_all_application_list
-
         self.rebuildLock = False
 
     def build_application_launcher(self, application, menu_has_changed):
-        button = MenuApplicationLauncher( application['desktop_file_path'],
+        button = MenuApplicationLauncher( application['entry'].get_desktop_file_path().decode('utf-8'),
                                           self.iconSize, application["category"],
                                           True, 28,
                                           highlight = (True and menu_has_changed) )
@@ -1513,7 +1344,7 @@ class pluginclass( object ):
             button.set_tooltip_text( button.getTooltip() )
             button.connect( "clicked", lambda w: self.ukuiMenuWin.hide() )
             button.connect( "button-press-event", self.menuPopup )
-            button.desktop_file_path = application['desktop_file_path']
+            button.desktop_file_path = application['entry'].get_desktop_file_path().decode('utf-8')
             if button.appName == "Eclipse":
                 (a, b) = locale.getdefaultlocale()
                 if a == "zh_CN":
@@ -1533,7 +1364,7 @@ class pluginclass( object ):
         def find_applications_recursively(app_list, directory, catName):
             for item in directory.get_contents():
                 if item.get_type() == ukuimenu.TYPE_ENTRY:
-                    app_list.append( { 'desktop_file_path': item.get_desktop_file_path().decode('utf-8'),
+                    app_list.append( { 'entry': item,
                                        'category': entry.get_name().decode('utf-8') } )
                 elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
                     find_applications_recursively(app_list, item, catName)
@@ -1546,7 +1377,7 @@ class pluginclass( object ):
                         if item.get_type() == ukuimenu.TYPE_DIRECTORY:
                             find_applications_recursively(application_list, item, entry.get_name().decode('utf-8'))
                         elif item.get_type() == ukuimenu.TYPE_ENTRY:
-                            application_list.append({ 'desktop_file_path': item.get_desktop_file_path().decode('utf-8'),
+                            application_list.append({ 'entry': item,
                                                       'category': entry.get_name().decode('utf-8') })
         return application_list
 
@@ -1648,6 +1479,30 @@ class pluginclass( object ):
 
     def Filter(self, widget, category = None):
         self.filterTimer = None
+        sorted_all_application_list = []
+
+        if len(self.all_app_list) > 0:
+            if self.menuHasChanged:
+                for item in self.all_application_list:
+                    button = self.build_application_launcher(item, False)
+                    if button:
+                        item["button"] = button
+                        item["button"].connect( "focus-in-event", self.scrollItemIntoView )
+                        sorted_all_application_list.append( ( item['button'].appName, item['button'] ) )
+                if not self.showCategoryMenu:
+                    sorted_all_application_list.sort()
+                self.all_app_list = sorted_all_application_list
+        else:
+            for item in self.all_application_list:
+                button = self.build_application_launcher(item, False)
+                if button:
+                    item["button"] = button
+                    item["button"].connect( "focus-in-event", self.scrollItemIntoView )
+                    sorted_all_application_list.append( ( item['button'].appName, item['button'] ) )
+            if not self.showCategoryMenu:
+                sorted_all_application_list.sort()
+            self.all_app_list = sorted_all_application_list
+
 
         if  widget == self.searchEntry:
             searchText = self.searchEntry.get_text()
@@ -1706,12 +1561,18 @@ class pluginclass( object ):
                 self.expanderApp.hide()
                 self.expanderSystem.hide()
                 for i in self.categoriesBox.get_children():
-                    if i == self.expanderApp or self.expanderSystem:
+                    if i == self.expanderApp or i == self.expanderSystem:
                         continue
                     i.released()
                     i.set_relief( Gtk.ReliefStyle.NONE )
                 
         self.applicationsScrolledWindow.get_vadjustment().set_value( 0 )
+
+    def on_button_showall_clicked(self, widget):
+        self.changeTab(1)
+
+    def on_button_back_clicked(self, widget):
+        self.changeTab(0)
 
     def menuPopup(self, widget, event):
         button = MenuApplicationLauncher(widget.desktopFile, 32, "", True, highlight=(False))
@@ -1730,24 +1591,47 @@ class pluginclass( object ):
 
             mTree = Gtk.Menu()
             mTree.set_name("myGtkLabel")
-            launchMenuItem = Gtk.MenuItem(_("Open(_O)"))
-            launchMenuItem.set_use_underline(True)
+            launchMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Open(_O)"))
+            image = Gtk.Image.new_from_icon_name("gtk-execute", Gtk.IconSize.MENU)
+            launchMenuItem.set_image(image)
+
             separator1 = Gtk.SeparatorMenuItem()
-            desktopMenuItem = Gtk.MenuItem(_("Add to desktop"))
+
+            desktopMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Add to desktop(_A)"))
+            image = Gtk.Image.new_from_icon_name("gtk-add", Gtk.IconSize.MENU)
+            desktopMenuItem.set_image(image)
             if addedDesktop:
                 desktopMenuItem.set_sensitive(False)
-            panelMenuItem = Gtk.MenuItem(_("Lock to panel(_L)"))
-            panelMenuItem.set_use_underline(True)
+
+            panelMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Lock to panel(_L)"))
+            #image = Gtk.Image.new_from_icon_name("gtk-lock", Gtk.IconSize.MENU)
+            #panelMenuItem.set_image(image)
+
             separator2 = Gtk.SeparatorMenuItem()
-            favoriteMenuItem = Gtk.CheckMenuItem(_("Add to startup menu"))
+
+            favoriteMenuItem = Gtk.CheckMenuItem.new_with_mnemonic(_("Add to startup menu"))
+            #image = Gtk.Image.new_from_icon_name("gtk-lock", Gtk.IconSize.MENU)
+            #favoriteMenuItem.set_image(image)
+
             separator3 = Gtk.SeparatorMenuItem()
-            uninstallMenuItem = Gtk.MenuItem(_("Uninstall"))
-            deleteMenuItem = Gtk.MenuItem(_("Remove from list(_R)"))
-            deleteMenuItem.set_use_underline(True)
-            alldelete = Gtk.MenuItem(_("Remove all"))
+
+            uninstallMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Uninstall(_U)"))
+            image = Gtk.Image.new_from_icon_name("gtk-delete", Gtk.IconSize.MENU)
+            uninstallMenuItem.set_image(image)
+
+            deleteMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Remove from list(_R)"))
+            image = Gtk.Image.new_from_icon_name("gtk-remove", Gtk.IconSize.MENU)
+            deleteMenuItem.set_image(image)
+
+            alldelete = Gtk.ImageMenuItem(_("Remove all"))
+            #image = Gtk.Image.new_from_icon_name("gtk-lock", Gtk.IconSize.MENU)
+            #alldeleteMenuItem.set_image(image)
+
             separator4 = Gtk.SeparatorMenuItem()
-            propsMenuItem = Gtk.MenuItem(_("Property(_P)"))
-            propsMenuItem.set_use_underline(True)
+
+            propsMenuItem = Gtk.ImageMenuItem.new_with_mnemonic(_("Property(_P)"))
+            image = Gtk.Image.new_from_icon_name("gtk-properties", Gtk.IconSize.MENU)
+            propsMenuItem.set_image(image)
 
             mTree.append(launchMenuItem)
             mTree.append(separator1)
@@ -1938,8 +1822,14 @@ class pluginclass( object ):
         label_comment.set_text(_("Note:"))
         self.image_app = self.builder1.get_object("image2")
         icon = button.appIconName
-        self.image_app.set_from_icon_name(icon, Gtk.IconSize.DND)
-        self.image_app.set_pixel_size(60)
+        if os.path.isfile(icon):
+            pixbuf = Pixbuf.new_from_file(icon)
+            pixbuf = pixbuf.scale_simple(60, 60, 2)
+            self.image_app.set_from_pixbuf(pixbuf)
+        else:
+            self.image_app.set_from_icon_name(icon, Gtk.IconSize.DND)
+            self.image_app.set_pixel_size(60)
+
         self.button_close = self.builder1.get_object("button_close")
         self.button_close.connect("clicked", self.close_dia, dialog)
 
@@ -1951,9 +1841,13 @@ class pluginclass( object ):
         self.entry_command.set_text(button.appExec)
         self.entry_comment.set_text(button.appComment)
         if button.appName == "Eclipse":
-            self.entry_comment.set_text("Eclipse集成开发环境")
+            (a, b) = locale.getdefaultlocale()
+            if a == "zh_CN":
+                self.entry_comment.set_text("Eclipse集成开发环境")
         if button.appName == "Qt Creator":
-            self.entry_comment.set_text("Qt Creator集成开发环境")
+            (a, b) = locale.getdefaultlocale()
+            if a == "zh_CN":
+                self.entry_comment.set_text("Qt Creator集成开发环境")
 
         dialog.set_title(button.appName + _("Property"))
         dialog.show()
@@ -2061,7 +1955,7 @@ class pluginclass( object ):
             path = os.path.join(GLib.get_user_config_dir(), 'kylin-video/kylin-video.ini')
             if os.path.exists(path):
                 cf.read(path)
-                recentFiles = cf.get("history", "recents") 
+                recentFiles = cf.get("history", "recents")
                 if recentFiles.endswith(","):
                     recentFiles = recentFiles[:-1]
                 recentFiles = recentFiles.split(", ")
@@ -2086,7 +1980,7 @@ class pluginclass( object ):
             path = os.path.join(GLib.get_user_config_dir(), 'QtProject/QtCreator.ini')
             if os.path.exists(path):
                 cf.read(path)
-                recentFiles = cf.get("RecentFiles", "Files") 
+                recentFiles = cf.get("RecentFiles", "Files")
                 if recentFiles == "@Invalid()":
                     hasapp = False
                     return
@@ -2158,6 +2052,22 @@ class pluginclass( object ):
             md.destroy()
             self.onRecentFileRemove(menu, Data)
             return
+        dstFileName = GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP) + "/" + os.path.basename(FileName) 
+
+        if os.path.exists(dstFileName):
+            msg = _("\nThe file already exists, are you sure to cover it?\n\n")
+            md = Gtk.MessageDialog(None, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, msg)
+            response = md.run()
+            if response == Gtk.ResponseType.YES:
+                if " " in FileName:
+                    FileName = FileName.replace(" ", "\ ")
+                os.system("cp %s %s/" % (FileName, GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP)))
+            elif response == Gtk.ResponseType.NO:
+                pass
+            md.destroy()
+            return
+        if " " in FileName:
+            FileName = FileName.replace(" ", "\ ")
         os.system("cp %s %s/" % (FileName, GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP)))
 
     def propertyFile(self, menu, FileData):
@@ -2183,31 +2093,49 @@ class pluginclass( object ):
             mTree.set_name("myGtkLabel")
             mTree.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
                              Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
-            openRecentFile = Gtk.MenuItem(_("Open(_O)"))
-            openRecentFile.set_use_underline(True)
-            openDirRecentFile = Gtk.MenuItem(_("Open directory(_D)"))
-            openDirRecentFile.set_use_underline(True)
-            newDoc = Gtk.MenuItem(_("New(_N)"))
-            newDoc.set_use_underline(True)
-            copyRecentFile = Gtk.MenuItem(_("Copy to desktop(_C)"))
-            copyRecentFile.set_use_underline(True)
-            removeRecentFile = Gtk.MenuItem(_("Remove from list(_R)"))
-            removeRecentFile.set_use_underline(True)
-            propertyRecentFile = Gtk.MenuItem(_("Property(_P)"))
-            propertyRecentFile.set_use_underline(True)
+            openRecentFile = Gtk.ImageMenuItem.new_with_mnemonic(_("Open(_O)"))
+            image = Gtk.Image.new_from_icon_name("gtk-open", Gtk.IconSize.MENU)
+            openRecentFile.set_image(image)
+
+            openDirRecentFile = Gtk.ImageMenuItem.new_with_mnemonic(_("Open directory(_D)"))
+            image = Gtk.Image.new_from_icon_name("gtk-directory", Gtk.IconSize.MENU)
+            openDirRecentFile.set_image(image)
+
+            separator1 = Gtk.SeparatorMenuItem()
+
+            newDoc = Gtk.ImageMenuItem.new_with_mnemonic(_("New(_N)"))
+            image = Gtk.Image.new_from_icon_name("gtk-new", Gtk.IconSize.MENU)
+            newDoc.set_image(image)
+
+            copyRecentFile = Gtk.ImageMenuItem.new_with_mnemonic(_("Copy to desktop(_C)"))
+            image = Gtk.Image.new_from_icon_name("gtk-copy", Gtk.IconSize.MENU)
+            copyRecentFile.set_image(image)
+
+            removeRecentFile = Gtk.ImageMenuItem.new_with_mnemonic(_("Remove from list(_R)"))
+            image = Gtk.Image.new_from_icon_name("gtk-remove", Gtk.IconSize.MENU)
+            removeRecentFile.set_image(image)
+
+            separator2 = Gtk.SeparatorMenuItem()
+
+            propertyRecentFile = Gtk.ImageMenuItem.new_with_mnemonic(_("Property(_P)"))
+            image = Gtk.Image.new_from_icon_name("gtk-properties", Gtk.IconSize.MENU)
+            propertyRecentFile.set_image(image)
 
             openRecentFile.connect( "activate", self.callback, FileData )
             openDirRecentFile.connect( "activate", self.openDir, FileData )
+            newDoc.connect( "activate", self.openApp, FileData )
             copyRecentFile.connect( "activate", self.copyFile, FileData )
             removeRecentFile.connect( "activate", self.onRecentFileRemove, Data )
             propertyRecentFile.connect( "activate", self.propertyFile, FileData )
 
             mTree.append(openRecentFile)
             mTree.append(openDirRecentFile)
-            if appname ==  _("WPS Writer") or appname == _("WPS Presentation") or appname == _("WPS Spreadsheets") or appname == _("Pluma"):
+            mTree.append(separator1) 
+            if appname ==  _("WPS Writer") or appname == _("WPS Presentation") or appname == _("WPS Spreadsheets") or appname == _("Pluma") or appname == "文本编辑器":
                 mTree.append(newDoc)
             mTree.append(copyRecentFile)
             mTree.append(removeRecentFile)
+            mTree.append(separator2)
             mTree.append(propertyRecentFile)
 
             mTree.show_all()
@@ -2286,7 +2214,7 @@ class pluginclass( object ):
             path = os.path.join(GLib.get_user_config_dir(), 'kylin-video/kylin-video.ini')
             if os.path.exists(path):
                 cf.read(path)
-                recentFiles = cf.get("history", "recents") 
+                recentFiles = cf.get("history", "recents")
                 recentFiles = recentFiles.split(", ")
                 for recfile in recentFiles:
                     if recfile.endswith(","):
@@ -2416,6 +2344,7 @@ class pluginclass( object ):
         self.layout_applications_right.hide()
         self.content_holder.set_size_request(340, self.windowHeight)
         self.recentHide = None
+        self.ButtonHoverWidgetHistory = None
 
     def hideHistory( self, widget ):
         if self.showHis:
@@ -2456,6 +2385,8 @@ class pluginclass( object ):
         found = False
         try:
             viewName = Bamf.View.get_name(view)
+            if viewName == "ukui-menu.py":
+                return
             if viewName == "QQ International" or viewName == "TXMenuWindow":
                 appName = "qq国际版"
                 found = True
@@ -2492,7 +2423,7 @@ class pluginclass( object ):
             found = True
 
         if not found:
-            for appname in self.appHistoryList:
+            for appname in self.all_application_list:
                 if desktopPath:
                     button = MenuApplicationLauncher(desktopPath, 32, "", True, highlight=(False))
                     button.set_name("ButtonApp")
@@ -2537,7 +2468,6 @@ class pluginclass( object ):
     def updateHistoryBox( self, settings = None, key = None, args = None ):
         for child in self.recentAppBox:
             child.destroy()
-
         historyDisplayNum = ukuimenu_settings.get_int("recent-app-num")
         self.currentHisCount = 1
 
@@ -2546,12 +2476,15 @@ class pluginclass( object ):
             applicationsList = applicationsFile.readlines()
             applicationsFile.close()
             self.favAppList = applicationsList
-            f = open(GLib.get_home_dir() + "/.recentAppLog", 'r')
+            if os.path.exists(GLib.get_home_dir() + "/.recentAppLog"):
+                f = open(GLib.get_home_dir() + "/.recentAppLog", 'r')
+            else:
+                return
             lines = f.readlines()
             for line in lines:
                 word = line.strip().split(':')
                 found = False
-                for appname in self.appHistoryList:
+                for appname in self.all_application_list:
                     findDesktop = False
                     for tempdesktop in self.favAppList:
                         temp = tempdesktop.split(":")[1]
