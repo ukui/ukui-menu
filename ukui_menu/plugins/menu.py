@@ -40,6 +40,7 @@ import ctypes
 from ctypes import *
 from ukui_menu.easybuttons import *
 from ukui_menu.execute import Execute
+from ukui_menu.feedback import Feedback
 from pyinotify import WatchManager, Notifier, ProcessEvent, IN_DELETE_SELF, IN_CLOSE_WRITE, IN_MODIFY
 import dbus
 from configobj import ConfigObj
@@ -497,6 +498,11 @@ class pluginclass( object ):
         self.button_controlcenter.connect("enter", self.button_controlcenter_enter)
         self.button_controlcenter.connect("leave", self.button_controlcenter_leave)
 
+        self.button_feedback = self.builder.get_object("button_feedback")
+        self.button_feedback.set_name("Button")
+        self.button_feedback.set_label(_("Feedback"))
+        self.button_feedback.connect("button-press-event", self.on_feedback_clicked)
+
         self.label3 = self.builder.get_object("label3")
         self.label3.set_text(_("No items matched"))
 
@@ -589,6 +595,11 @@ class pluginclass( object ):
             os.system("mate-control-center &")
         else:
             os.system("ukui-control-center &")
+
+    def on_feedback_clicked(self, widget, event):
+        print("feedback_clicked")
+        feedback =  Feedback()
+        feedback.run()
 
     def ShowRecentFile(self, widget):
         widget.rightbox.hide()

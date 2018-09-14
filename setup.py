@@ -60,6 +60,7 @@ data_files = [
     ('{prefix}/share/ukui-menu'.format(prefix=sys.prefix), ['data/ukui-menu.glade',
                                                             'data/menu-property.glade',
                                                             'data/menueditor.ui',
+                                                            'data/feedback.ui',
                                                             'data/popup.xml',
                                                             'data/ukuimenu.css',
                                                             'data/applications.list',
