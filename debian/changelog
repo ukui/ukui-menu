@@ -1,12 +1,13 @@
-ukui-menu (1.1.5test) unstable; urgency=medium
+ukui-menu (1.1.5-1) unstable; urgency=medium
 
   * Use mate-terminal instead of gnome-terminal.
   * Port to python3.
   * Update for ukui-panel.
   * Add support for resize the menu icon.
   * Add right-click menu for recent files.
+  * Add feedback window.
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 03 Sep 2018 17:11:34 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 17 Sep 2018 16:11:00 +0800
 
 ukui-menu (1.0.2-2) unstable; urgency=medium
 

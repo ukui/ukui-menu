@@ -1,6 +1,23 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
+# Copyright (C) 2018,Tianjin KYLIN Information Technology Co., Ltd.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the
+# Free Software Foundation, Inc.,
+# 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+
 import os
 import smtplib
 from email.mime.text import MIMEText
@@ -30,7 +47,8 @@ class Send:
         self.sender = sender
         self.message = MIMEMultipart('altermative')
         contents = MIMEText(body, 'plain', 'utf-8')
-        self.message['From'] = formataddr(["youker", sender])
+        user = os.getenv('USER')
+        self.message['From'] = formataddr([user, sender])
         self.message['To'] = formataddr(["ubuntukylin", self.receivers[0]])
         self.message['Subject'] = fb_type
         if (os.path.isfile(attach_file)):
@@ -49,9 +67,11 @@ class Send:
             smtpObj = smtplib.SMTP('localhost')
             smtpObj.sendmail(self.sender, self.receivers, self.message.as_string())
             smtpObj.quit()
-            print("发送成功")
+            print("发送成功！")
+            return True
         except smtplib.SMTPException:
             print("Error: 无法发送邮件")
+            return False
 
 if __name__ == '__main__':
     send = Send()

@@ -27,6 +27,16 @@ Copyright: 2013, Ozcan Esen <ozcanesen@gmail.com>
            2016, Tianjin KYLIN Information Technology Co., Ltd.
 License: Expat
 
+Files: ukui_menu/feedback.py
+       ukui_menu/send.py
+Copyright: 2018, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: ukui_menu/systeminfo.py
+Copyright: 2006 - 2009 Canonical Ltd.
+           2018, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
 Files: debian/*
 Copyright:2016, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-2+

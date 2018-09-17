@@ -4,6 +4,7 @@
 	dh ${@} --with python3 --buildsystem=pybuild
 
 override_dh_auto_build:
+	intltool-extract --type=gettext/glade data/*.ui
 	cp po/ukui-menu.pot po/ukui-menu.pot.bak
 	python3 setup.py build --force
 

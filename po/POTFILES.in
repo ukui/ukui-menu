@@ -10,3 +10,5 @@ ukui_menu/filemonitor.py
 ukui_menu/keybinding.py
 ukui_menu/menueditor.py
 ukui_menu/pointerMonitor.py
+ukui_menu/feedback.py
+data/feedback.ui.h
