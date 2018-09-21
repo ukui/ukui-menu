@@ -25,6 +25,7 @@ class SystemInfo:
     _kernel_info = None
     _uname = None
     _distrorelease = None
+    _desktop_env = None
     _default_locale = None
     _arch = None
 
@@ -99,7 +100,13 @@ class SystemInfo:
         self._default_locale = locale.getdefaultlocale()
         return self._default_locale
 
+    def get_desktop_env(self):
+        if self._desktop_env:
+            return self._desktop_env
+        self._desktop_env = os.environ.get('DESKTOP_SESSION')
+        return self._desktop_env
+
 if __name__ == '__main__':
     systeminfo = SystemInfo()
-    print("%s; %s; %s; %s; %s" % (systeminfo.get_distrorelease(), systeminfo.get_os_info(), systeminfo.get_kernel_info(),
-                                  systeminfo.get_system_architecture(), systeminfo.get_default_locale()))
+    print("%s; %s; %s; %s; %s; %s" % (systeminfo.get_distrorelease(), systeminfo.get_os_info(), systeminfo.get_kernel_info(),
+                                      systeminfo.get_desktop_env(), systeminfo.get_system_architecture(), systeminfo.get_default_locale()))

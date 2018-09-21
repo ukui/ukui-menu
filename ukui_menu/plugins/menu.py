@@ -501,7 +501,11 @@ class pluginclass( object ):
         self.button_feedback = self.builder.get_object("button_feedback")
         self.button_feedback.set_name("Button")
         self.button_feedback.set_label(_("Feedback"))
+        self.change_icon(self.button_feedback, ICON_PATH + "feedback.png")
         self.button_feedback.connect("button-press-event", self.on_feedback_clicked)
+        self.button_feedback.connect("enter", self.button_feedback_enter)
+        self.button_feedback.connect("leave", self.button_feedback_leave)
+
 
         self.label3 = self.builder.get_object("label3")
         self.label3.set_text(_("No items matched"))
@@ -596,8 +600,11 @@ class pluginclass( object ):
         else:
             os.system("ukui-control-center &")
 
+    def button_feedback_enter(self, *args, **kargs):
+        self.change_icon(self.button_feedback, ICON_PATH + "feedback-active.png")
+    def button_feedback_leave(self, *args, **kargs):
+        self.change_icon(self.button_feedback, ICON_PATH + "feedback.png")
     def on_feedback_clicked(self, widget, event):
-        print("feedback_clicked")
         feedback =  Feedback()
         feedback.run()
 

@@ -28,7 +28,7 @@ Copyright: 2013, Ozcan Esen <ozcanesen@gmail.com>
 License: Expat
 
 Files: ukui_menu/feedback.py
-       ukui_menu/send.py
+       ukui_menu/post.py
 Copyright: 2018, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-2+
 

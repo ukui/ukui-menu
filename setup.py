@@ -82,6 +82,8 @@ data_files = [
                                                                   'data/icons/controlcenter.png',
                                                                   'data/icons/favapp-active.png',
                                                                   'data/icons/favapp.png',
+                                                                  'data/icons/feedback.png',
+                                                                  'data/icons/feedback-active.png',
                                                                   'data/icons/sep.png',
                                                                   'data/icons/shutdown.svg',
                                                                   'data/icons/so-close.png',

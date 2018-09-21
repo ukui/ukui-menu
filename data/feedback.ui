@@ -31,6 +31,10 @@
               <object class="GtkTextView" id="text_view">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_left">5</property>
+                <property name="margin_right">5</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">5</property>
                 <property name="hscroll_policy">natural</property>
                 <property name="wrap_mode">word</property>
               </object>
@@ -72,7 +76,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Description</property>
+            <property name="label" translatable="yes">&lt;span color="red"&gt;* &lt;/span&gt;Description</property>
+            <property name="use_markup">True</property>
             <property name="xalign">1</property>
           </object>
           <packing>
@@ -84,7 +89,8 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Email</property>
+            <property name="label" translatable="yes">&lt;span color="red"&gt;* &lt;/span&gt;Email</property>
+            <property name="use_markup">True</property>
             <property name="xalign">1</property>
           </object>
           <packing>
@@ -96,7 +102,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Attachment</property>
+            <property name="label" translatable="yes">Image</property>
             <property name="xalign">1</property>
           </object>
           <packing>
@@ -126,7 +132,8 @@
           <object class="GtkButtonBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="layout_style">start</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">spread</property>
             <child>
               <object class="GtkCheckButton" id="syslog_button">
                 <property name="label">syslog</property>
@@ -142,8 +149,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="kernlog_button">
-                <property name="label">kern.log</property>
+              <object class="GtkCheckButton" id="apportlog_button">
+                <property name="label">apport.log</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -218,11 +225,11 @@
           <object class="GtkComboBoxText" id="type_combo">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="active">0</property>
             <items>
               <item translatable="yes">System Bug</item>
-              <item translatable="yes">Asking for help</item>
               <item translatable="yes">Suggestion</item>
-              <item translatable="yes">Business</item>
+              <item translatable="yes">For Business</item>
               <item translatable="yes">Others</item>
             </items>
           </object>
@@ -245,16 +252,40 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">&lt;span color="red"&gt;* &lt;/span&gt;CAPTCHA</property>
+            <property name="use_markup">True</property>
+            <property name="xalign">1</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
+          </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkEntry" id="captcha_entry">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="placeholder_text" translatable="yes">Type the code</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">9</property>
+            <property name="width">2</property>
+          </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
+          <object class="GtkImage" id="captcha_image">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="stock">gtk-missing-image</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">9</property>
+          </packing>
         </child>
         <child>
           <placeholder/>
@@ -268,4 +299,5 @@
       </object>
     </child>
   </object>
+  <object class="GtkFileFilter" id="filefilter1"/>
 </interface>
