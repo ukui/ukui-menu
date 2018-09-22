@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-21 17:22+0800\n"
+"POT-Creation-Date: 2018-09-22 14:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -476,57 +476,65 @@ msgstr ""
 msgid "Images"
 msgstr "图片"
 
-#: ../ukui_menu/feedback.py:85
+#: ../ukui_menu/feedback.py:86
 msgid "DistroRelease"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:86
+#: ../ukui_menu/feedback.py:87
 msgid "DistroInfo"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:87
+#: ../ukui_menu/feedback.py:88
 msgid "Desktop"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:88
+#: ../ukui_menu/feedback.py:89
 msgid "Architecture"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:89
+#: ../ukui_menu/feedback.py:90
 msgid "Locale"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:94 ../data/feedback.ui.h:6
+#: ../ukui_menu/feedback.py:95 ../data/feedback.ui.h:6
 msgid "System Info"
 msgstr "系统信息"
 
-#: ../ukui_menu/feedback.py:128 ../data/feedback.ui.h:7
+#: ../ukui_menu/feedback.py:137 ../data/feedback.ui.h:8
 msgid "System Bug"
 msgstr "系统问题"
 
-#: ../ukui_menu/feedback.py:145
+#: ../ukui_menu/feedback.py:154
 msgid "Please input the description!"
 msgstr "请输入详细描述！"
 
-#: ../ukui_menu/feedback.py:156
+#: ../ukui_menu/feedback.py:165
 msgid "Invalid email address!"
 msgstr "错误的邮件格式！"
 
-#: ../ukui_menu/feedback.py:164
+#: ../ukui_menu/feedback.py:173
 msgid "Please input the email address!"
-msgstr ""
+msgstr "请输入邮箱地址！"
 
-#: ../ukui_menu/feedback.py:174
+#: ../ukui_menu/feedback.py:184
+msgid "Maximum upload file size is 1MB!"
+msgstr "最大上传文件大小为1MB！"
+
+#: ../ukui_menu/feedback.py:194
 msgid "Please input the verification code!"
 msgstr "请输入验证码！"
 
-#: ../ukui_menu/feedback.py:209
+#: ../ukui_menu/feedback.py:234
 msgid "Successful feedback! Thank you!"
 msgstr "反馈提交成功！感谢！"
 
-#: ../ukui_menu/feedback.py:216
+#: ../ukui_menu/feedback.py:241
 msgid "Incorrect CAPTCHA, please re-enter!"
 msgstr "错误的验证码，请重新输入！"
+
+#: ../ukui_menu/feedback.py:248
+msgid "Unknow error: "
+msgstr "未知错误："
 
 #: ../data/feedback.ui.h:1
 msgid "Type"
@@ -548,27 +556,31 @@ msgstr "图片"
 msgid "System Log"
 msgstr "系统日志"
 
-#: ../data/feedback.ui.h:8
+#: ../data/feedback.ui.h:7
+msgid "Please upload file less then 1Mb"
+msgstr "请上传小于1Mb的文件"
+
+#: ../data/feedback.ui.h:9
 msgid "Suggestion"
 msgstr "意见建议"
 
-#: ../data/feedback.ui.h:9
+#: ../data/feedback.ui.h:10
 msgid "For Business"
 msgstr "商务合作"
 
-#: ../data/feedback.ui.h:10
+#: ../data/feedback.ui.h:11
 msgid "Others"
 msgstr "其它"
 
-#: ../data/feedback.ui.h:11
+#: ../data/feedback.ui.h:12
 msgid "submit"
 msgstr "提交"
 
-#: ../data/feedback.ui.h:12
+#: ../data/feedback.ui.h:13
 msgid "<span color=\"red\">* </span>CAPTCHA"
 msgstr "<span color=\"red\">* </span>验证码"
 
-#: ../data/feedback.ui.h:13
+#: ../data/feedback.ui.h:14
 msgid "Type the code"
 msgstr "输入验证码"
 

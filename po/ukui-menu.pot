@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-21 17:22+0800\n"
+"POT-Creation-Date: 2018-09-22 14:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -461,56 +461,64 @@ msgstr ""
 msgid "Images"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:85
+#: ../ukui_menu/feedback.py:86
 msgid "DistroRelease"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:86
+#: ../ukui_menu/feedback.py:87
 msgid "DistroInfo"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:87
+#: ../ukui_menu/feedback.py:88
 msgid "Desktop"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:88
+#: ../ukui_menu/feedback.py:89
 msgid "Architecture"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:89
+#: ../ukui_menu/feedback.py:90
 msgid "Locale"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:94 ../data/feedback.ui.h:6
+#: ../ukui_menu/feedback.py:95 ../data/feedback.ui.h:6
 msgid "System Info"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:128 ../data/feedback.ui.h:7
+#: ../ukui_menu/feedback.py:137 ../data/feedback.ui.h:8
 msgid "System Bug"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:145
+#: ../ukui_menu/feedback.py:154
 msgid "Please input the description!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:156
+#: ../ukui_menu/feedback.py:165
 msgid "Invalid email address!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:164
+#: ../ukui_menu/feedback.py:173
 msgid "Please input the email address!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:174
+#: ../ukui_menu/feedback.py:184
+msgid "Maximum upload file size is 1MB!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:194
 msgid "Please input the verification code!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:209
+#: ../ukui_menu/feedback.py:234
 msgid "Successful feedback! Thank you!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:216
+#: ../ukui_menu/feedback.py:241
 msgid "Incorrect CAPTCHA, please re-enter!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:248
+msgid "Unknow error: "
 msgstr ""
 
 #: ../data/feedback.ui.h:1
@@ -533,26 +541,30 @@ msgstr ""
 msgid "System Log"
 msgstr ""
 
-#: ../data/feedback.ui.h:8
-msgid "Suggestion"
+#: ../data/feedback.ui.h:7
+msgid "Please upload file less then 1Mb"
 msgstr ""
 
 #: ../data/feedback.ui.h:9
-msgid "For Business"
+msgid "Suggestion"
 msgstr ""
 
 #: ../data/feedback.ui.h:10
-msgid "Others"
+msgid "For Business"
 msgstr ""
 
 #: ../data/feedback.ui.h:11
-msgid "submit"
+msgid "Others"
 msgstr ""
 
 #: ../data/feedback.ui.h:12
-msgid "<span color=\"red\">* </span>CAPTCHA"
+msgid "submit"
 msgstr ""
 
 #: ../data/feedback.ui.h:13
+msgid "<span color=\"red\">* </span>CAPTCHA"
+msgstr ""
+
+#: ../data/feedback.ui.h:14
 msgid "Type the code"
 msgstr ""

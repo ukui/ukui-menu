@@ -18,7 +18,7 @@
 # Free Software Foundation, Inc.,
 # 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 
-import os.path, sys, subprocess, os, re, tempfile, stat
+import os.path, sys, os, stat, re
 import gettext
 import requests
 import gi
@@ -122,7 +122,6 @@ class Feedback:
     def limit_size(self, filter_info, data):
         path = filter_info.filename
         file_size = os.path.getsize(path)
-        print ("%s %d\n" % (path, file_size))
         if file_size < 1000000:
             return True
         else:
@@ -178,6 +177,17 @@ class Feedback:
             dialog.destroy()
             return
 
+        filename = self.file_chooser.get_filename()
+        if filename:
+            if os.path.getsize(filename) > 1048576:
+               dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING,
+                   Gtk.ButtonsType.OK, _("Maximum upload file size is 1MB!"))
+               response = dialog.run()
+               if response == Gtk.ResponseType.OK:
+                   print("OK")
+               dialog.destroy()
+               return
+
         code = self.captcha_entry.get_text()
         if not code.strip():
            dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING,
@@ -188,7 +198,7 @@ class Feedback:
            dialog.destroy()
            return
 
-        body = '\r\n'.join((
+        body = '\n'.join((
             "%s" % SystemInfo().get_distrorelease(),
             "%s" % SystemInfo().get_os_info(),
             "%s" % SystemInfo().get_desktop_env(),
@@ -197,21 +207,26 @@ class Feedback:
             "%s" % text_view_str
         ))
         # TODO: Delete this once the web service support upload text file.
+        log = ''
         if self.syslog_button.get_active() and os.access(syslog_file, os.R_OK):
             lines = self.tail(syslog_file, 10)
-            body += '\n\nsyslog:\n'
-            body += lines
+            log += '\nsyslog:'
+            log += lines
         if self.apportlog_button.get_active() and os.access(apportlog_file, os.R_OK):
             lines = self.tail(apportlog_file, 5)
-            body += '\n\napport.log:\n'
-            body += lines
+            log += '\napport.log:'
+            log += lines
         if self.dpkglog_button.get_active() and os.access(dpkglog_file, os.R_OK):
             lines = self.tail(dpkglog_file, 5)
-            body += '\n\ndpkg.log:\n'
-            body += lines
+            log += '\ndpkg.log:'
+            log += lines
+
+        filter_chinese = re.compile(u'[\u4E00-\u9FA5]')
+        log = filter_chinese.sub(r' ', log)
+        body += log
+        print (body)
 
         fb_type = self.type_combo.get_active_text()
-        filename = self.file_chooser.get_filename()
         res = post_feedback(self.session, result_url, fb_type, email, body, filename, code)
         print (res)
         if res.find('成功') != -1:
@@ -263,13 +278,14 @@ class Feedback:
         iter = 0
         with open(filename) as f:
             if bufsize > fsize:
-                bufsize = fsize-1
+                bufsize = fsize
             data = []
             while True:
                 iter +=1
                 f.seek(fsize-bufsize*iter)
+                pos = f.tell()
                 data.extend(f.readlines())
-                if len(data) >= lines or f.tell() == 0:
+                if len(data) >= lines or pos == 0:
                     contents = ''.join(data[-lines:])
                     break
         return contents

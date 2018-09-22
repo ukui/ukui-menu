@@ -36,7 +36,7 @@
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
                 <property name="hscroll_policy">natural</property>
-                <property name="wrap_mode">word</property>
+                <property name="wrap_mode">word-char</property>
               </object>
             </child>
           </object>
@@ -212,6 +212,8 @@
           <object class="GtkFileChooserButton" id="file_chooser">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Please upload file less then 1Mb</property>
+            <property name="create_folders">False</property>
             <property name="show_hidden">True</property>
             <property name="title" translatable="yes"/>
           </object>
