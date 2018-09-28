@@ -797,6 +797,9 @@ class pluginclass( object ):
             return
         if " " in FileName:
             FileName = FileName.replace(" ", "\ ")
+        if "&" in FileName:
+            FileName = FileName.replace("&", "\&")
+
         if appname == _("WPS Writer"):
             os.system("wps %s &" % FileName)
         if appname == _("WPS Presentation"):
