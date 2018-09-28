@@ -2082,6 +2082,8 @@ class pluginclass( object ):
             if response == Gtk.ResponseType.YES:
                 if " " in FileName:
                     FileName = FileName.replace(" ", "\ ")
+                if "&" in FileName:
+                    FileName = FileName.replace("&", "\&")
                 os.system("cp %s %s/" % (FileName, GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP)))
             elif response == Gtk.ResponseType.NO:
                 pass
@@ -2089,6 +2091,8 @@ class pluginclass( object ):
             return
         if " " in FileName:
             FileName = FileName.replace(" ", "\ ")
+        if "&" in FileName:
+            FileName = FileName.replace("&", "\&")
         os.system("cp %s %s/" % (FileName, GLib.get_user_special_dir(GLib.USER_DIRECTORY_DESKTOP)))
 
     def propertyFile(self, menu, FileData):
@@ -2104,6 +2108,8 @@ class pluginclass( object ):
             return
         if " " in FileName:
             FileName = FileName.replace(" ", "\ ")
+        if "&" in FileName:
+            FileName = FileName.replace("&", "\&")
         os.system("peony -a %s &" % FileName)
 
     def recentFilePopup( self, widget, ev, FileData ):
