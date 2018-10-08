@@ -333,7 +333,7 @@ class MenuWin( object ):
     def changeIcon(self, settings, key, args = None):
         self.panel_size = self.settings_panel.get_int("size")
         self.pixbuf = GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.svg")
-        self.pixbuf = self.pixbuf.scale_simple(self.panel_size - 5, self.panel_size - 5, 2)
+        self.pixbuf = self.pixbuf.scale_simple(self.panel_size + 5, self.panel_size - 5, 2)
         self.button_icon.set_from_pixbuf(self.pixbuf)
         self.button_box.set_size_request(self.panel_size + 20, -1)
         Gdk.flush()
@@ -355,7 +355,7 @@ class MenuWin( object ):
             print (e)
 
         self.pixbuf = GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.svg")
-        self.pixbuf = self.pixbuf.scale_simple(self.panel_size - 5, self.panel_size - 5, 2)
+        self.pixbuf = self.pixbuf.scale_simple(self.panel_size + 5, self.panel_size - 5, 2)
         self.button_icon = Gtk.Image.new()
         self.button_icon.set_from_pixbuf(self.pixbuf)
         self.button_icon.set_tooltip_text(_("Start"))
