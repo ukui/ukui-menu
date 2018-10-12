@@ -1,0 +1,597 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-22 14:43+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../ukui-menu-editor:38
+msgid ""
+"\n"
+"Current menu mode is not category mode, please switch and try again!"
+msgstr ""
+"\n"
+"в настоящее время меню режим не категории режим, пожалуйста, переключиться и попробуйте еще раз!"
+
+#: ../lib/ukui-menu.py:60
+msgid "Menu"
+msgstr "меню"
+
+#: ../lib/ukui-menu.py:266 ../lib/ukui-menu.py:414
+msgid "Normal Menu"
+msgstr "обычное меню"
+
+#: ../lib/ukui-menu.py:268 ../lib/ukui-menu.py:416
+msgid "Category Menu"
+msgstr "категории меню"
+
+#. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
+#: ../lib/ukui-menu.py:270 ../ukui_menu/menueditor.py:891
+msgid "Edit Category Menu"
+msgstr "редактировать категории меню"
+
+#: ../lib/ukui-menu.py:361
+msgid "Start"
+msgstr "старт"
+
+#: ../lib/ukui-menu.py:394
+msgid "Startup Menu"
+msgstr "стартап меню"
+
+#: ../lib/ukui-menu.py:406
+msgid "Menu Property"
+msgstr "меню собственности"
+
+#: ../lib/ukui-menu.py:408
+msgid "Menu Type:"
+msgstr "типа меню:"
+
+#: ../lib/ukui-menu.py:409
+msgid "This is used to set up the menu type."
+msgstr "это используется для создания типа меню."
+
+#: ../lib/ukui-menu.py:411
+msgid "File History:"
+msgstr " файл истории:"
+
+#: ../lib/ukui-menu.py:412
+msgid "This is used to set up whether the file history is displayed."
+msgstr "это используется для создания файла отображается ли истории."
+
+#: ../lib/ukui-menu.py:432
+msgid "Recent file number:"
+msgstr "последние файл номер:"
+
+#: ../lib/ukui-menu.py:434
+msgid "Recent app number:"
+msgstr "последние приложения номер:"
+
+#: ../lib/ukui-menu.py:449
+msgid "Reset to default(_R)"
+msgstr "сбросить(_R)"
+
+#: ../lib/ukui-menu.py:456
+msgid "Close(_C)"
+msgstr "близко(_C)"
+
+#: ../lib/ukui-menu.py:613
+msgid "Reload plugins"
+msgstr "перезагрузка модулей"
+
+#: ../lib/ukui-menu.py:616 ../ukui_menu/plugins/menu.py:1870
+msgid "Property"
+msgstr "имущество"
+
+#. wps
+#: ../ukui_menu/plugins/menu.py:101 ../ukui_menu/plugins/menu.py:617
+#: ../ukui_menu/plugins/menu.py:775 ../ukui_menu/plugins/menu.py:800
+#: ../ukui_menu/plugins/menu.py:2152 ../ukui_menu/plugins/menu.py:2260
+msgid "WPS Writer"
+msgstr "WPS писатель"
+
+#: ../ukui_menu/plugins/menu.py:102 ../ukui_menu/plugins/menu.py:621
+#: ../ukui_menu/plugins/menu.py:777 ../ukui_menu/plugins/menu.py:802
+#: ../ukui_menu/plugins/menu.py:2152 ../ukui_menu/plugins/menu.py:2267
+msgid "WPS Presentation"
+msgstr "WPS презентация"
+
+#: ../ukui_menu/plugins/menu.py:103 ../ukui_menu/plugins/menu.py:625
+#: ../ukui_menu/plugins/menu.py:779 ../ukui_menu/plugins/menu.py:804
+#: ../ukui_menu/plugins/menu.py:2152 ../ukui_menu/plugins/menu.py:2274
+msgid "WPS Spreadsheets"
+msgstr "WPS таблицы"
+
+#. qt app
+#: ../ukui_menu/plugins/menu.py:104 ../ukui_menu/plugins/menu.py:643
+#: ../ukui_menu/plugins/menu.py:806 ../ukui_menu/plugins/menu.py:2244
+msgid "Qt Creator"
+msgstr ""
+
+#. qt app
+#: ../ukui_menu/plugins/menu.py:105 ../ukui_menu/plugins/menu.py:2229
+msgid "SMPlayer"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:106 ../ukui_menu/plugins/menu.py:651
+#: ../ukui_menu/plugins/menu.py:808 ../ukui_menu/plugins/menu.py:2231
+msgid "Kylin Video"
+msgstr "Kylin видео"
+
+#. gtk app
+#: ../ukui_menu/plugins/menu.py:107 ../ukui_menu/plugins/menu.py:634
+#: ../ukui_menu/plugins/menu.py:810 ../ukui_menu/plugins/menu.py:2282
+msgid "Eye of MATE Image Viewer"
+msgstr "MATE глаза просмотрщик"
+
+#: ../ukui_menu/plugins/menu.py:109 ../ukui_menu/plugins/menu.py:638
+#: ../ukui_menu/plugins/menu.py:812 ../ukui_menu/plugins/menu.py:2289
+msgid "Atril Document Viewer"
+msgstr "Atril программа для просмотра"
+
+#. gtk app
+#: ../ukui_menu/plugins/menu.py:111 ../ukui_menu/plugins/menu.py:630
+#: ../ukui_menu/plugins/menu.py:781 ../ukui_menu/plugins/menu.py:814
+#: ../ukui_menu/plugins/menu.py:2152 ../ukui_menu/plugins/menu.py:2296
+msgid "Pluma"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Graphics"
+msgstr "графики"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Internet"
+msgstr "интернет"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Programming"
+msgstr "программирование"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Sound & Video"
+msgstr "звук и видео"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "System Tools"
+msgstr "системы"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Universal Access"
+msgstr "всеобщего доступа"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Preferences"
+msgstr "предпочтения"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Administration"
+msgstr "администрация"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Other"
+msgstr "другие"
+
+#: ../ukui_menu/plugins/menu.py:216 ../ukui_menu/plugins/menu.py:1151
+msgid "Accessories"
+msgstr "аксессуары"
+
+#: ../ukui_menu/plugins/menu.py:216 ../ukui_menu/plugins/menu.py:1151
+msgid "Office"
+msgstr "управление"
+
+#: ../ukui_menu/plugins/menu.py:216 ../ukui_menu/plugins/menu.py:1151
+msgid "Games"
+msgstr "игры"
+
+#: ../ukui_menu/plugins/menu.py:216 ../ukui_menu/plugins/menu.py:1151
+#: ../ukui_menu/menueditor.py:1137
+msgid "Android"
+msgstr "Android"
+
+#: ../ukui_menu/plugins/menu.py:289
+msgid "Recent"
+msgstr "последние" 
+
+#: ../ukui_menu/plugins/menu.py:333 ../ukui_menu/plugins/menu.py:447
+msgid "All App"
+msgstr "все приложения"
+
+#: ../ukui_menu/plugins/menu.py:338 ../ukui_menu/plugins/menu.py:436
+msgid "Favorite"
+msgstr "любимой"
+
+#: ../ukui_menu/plugins/menu.py:383
+msgid "Power"
+msgstr "власти"
+
+#: ../ukui_menu/plugins/menu.py:458 ../ukui_menu/plugins/menu.py:845
+#: ../ukui_menu/plugins/menu.py:853 ../ukui_menu/plugins/menu.py:1527
+#: ../ukui_menu/plugins/menu.py:2385
+msgid "Search local program"
+msgstr "поиск местных"
+
+#: ../ukui_menu/plugins/menu.py:487
+msgid "Home"
+msgstr "компьютер"
+
+#: ../ukui_menu/plugins/menu.py:495
+msgid "Settings"
+msgstr "параметры"
+
+#: ../ukui_menu/plugins/menu.py:503 ../ukui_menu/feedback.py:58
+msgid "Feedback"
+msgstr "обратная связь"
+
+#: ../ukui_menu/plugins/menu.py:511
+msgid "No items matched"
+msgstr "элементы не совпадают"
+
+#: ../ukui_menu/plugins/menu.py:792 ../ukui_menu/plugins/menu.py:2054
+#: ../ukui_menu/plugins/menu.py:2067 ../ukui_menu/plugins/menu.py:2096
+msgid ""
+"\n"
+"File not exists, it was moved or deleted!\n"
+"\n"
+"It will be automatically removed from the history list!\n"
+msgstr ""
+"\n"
+"файл не существует, и он был переведен или исключить!\n"
+"\n"
+"он будет удален из истории список!\n"
+
+#: ../ukui_menu/plugins/menu.py:878 ../ukui_menu/plugins/menu.py:1612
+#: ../ukui_menu/plugins/menu.py:2114
+msgid "Open(_O)"
+msgstr "открыть(_O)"
+
+#: ../ukui_menu/plugins/menu.py:884 ../ukui_menu/plugins/menu.py:1618
+msgid "Add to desktop(_A)"
+msgstr "добавить на рабочий стол(_A)"
+
+#: ../ukui_menu/plugins/menu.py:890 ../ukui_menu/plugins/menu.py:1624
+msgid "Lock to panel(_L)"
+msgstr "блокировка панели(_L)"
+
+#: ../ukui_menu/plugins/menu.py:896
+msgid "Unlock from startup menu(_U)"
+msgstr "открой меню от запуска(_U)"
+
+#: ../ukui_menu/plugins/menu.py:904 ../ukui_menu/plugins/menu.py:1650
+#: ../ukui_menu/plugins/menu.py:2138
+msgid "Property(_P)"
+msgstr "имущество(_P)"
+
+#: ../ukui_menu/plugins/menu.py:984
+msgid "Power(_P)"
+msgstr "имущество(_P)"
+
+#: ../ukui_menu/plugins/menu.py:985
+msgid "Reboot(_R)"
+msgstr "перезагрузка(_R)"
+
+#: ../ukui_menu/plugins/menu.py:988
+msgid "Logout(_O)"
+msgstr "выход(_O)"
+
+#: ../ukui_menu/plugins/menu.py:989
+msgid "Switch User(_S)"
+msgstr "переход пользователей(_S)"
+
+#: ../ukui_menu/plugins/menu.py:990
+msgid "Lock Screen(_L)"
+msgstr "заблокировать экран(_L)"
+
+#: ../ukui_menu/plugins/menu.py:1181 ../ukui_menu/plugins/menu.py:1182
+#: ../ukui_menu/plugins/menu.py:1446 ../ukui_menu/plugins/menu.py:1451
+msgid "Applications"
+msgstr "заявления"
+
+#: ../ukui_menu/plugins/menu.py:1186 ../ukui_menu/plugins/menu.py:1187
+#: ../ukui_menu/plugins/menu.py:1448 ../ukui_menu/plugins/menu.py:1453
+msgid "System"
+msgstr "система"
+
+#: ../ukui_menu/plugins/menu.py:1630
+msgid "Add to startup menu"
+msgstr "добавить в меню запуска"
+
+#: ../ukui_menu/plugins/menu.py:1636
+msgid "Uninstall(_U)"
+msgstr "удалите(_U)"
+
+#: ../ukui_menu/plugins/menu.py:1640 ../ukui_menu/plugins/menu.py:2132
+msgid "Remove from list(_R)"
+msgstr "удалить из списка(_R)"
+
+#: ../ukui_menu/plugins/menu.py:1644
+msgid "Remove all"
+msgstr "удалить все"
+
+#: ../ukui_menu/plugins/menu.py:1834
+msgid "Type:"
+msgstr "типа:"
+
+#: ../ukui_menu/plugins/menu.py:1836
+msgid "Name:"
+msgstr "имя:"
+
+#: ../ukui_menu/plugins/menu.py:1838
+msgid "Command:"
+msgstr "командование:"
+
+#: ../ukui_menu/plugins/menu.py:1840
+msgid "Note:"
+msgstr "примечание:"
+
+#: ../ukui_menu/plugins/menu.py:1855
+msgid "Application"
+msgstr "применение"
+
+#: ../ukui_menu/plugins/menu.py:1857
+msgid "Application in Terminal"
+msgstr "применение в терминал"
+
+#: ../ukui_menu/plugins/menu.py:2076
+msgid ""
+"\n"
+"The file already exists, are you sure to cover it?\n"
+"\n"
+msgstr ""
+"\n"
+"файл уже существует, ты уверен, что на это?\n"
+"\n"
+
+#: ../ukui_menu/plugins/menu.py:2118
+msgid "Open directory(_D)"
+msgstr "открытый каталог(_D)"
+
+#: ../ukui_menu/plugins/menu.py:2124
+msgid "New(_N)"
+msgstr "новые(_N)"
+
+#: ../ukui_menu/plugins/menu.py:2128
+msgid "Copy to desktop(_C)"
+msgstr " копия на рабочий стол(_C)"
+
+#: ../ukui_menu/plugins/menu.py:2337
+#, python-format
+msgid "Recent(%s)"
+msgstr "последние(%s)"
+
+#: ../ukui_menu/plugins/menu.py:2434
+msgid "Chromium Browser"
+msgstr "Chromium Browser"
+
+#: ../ukui_menu/plugins/menu.py:2440
+msgid "Fcitx Config"
+msgstr "Fcitx Config"
+
+#: ../ukui_menu/easybuttons.py:406
+msgid "Comment:"
+msgstr "комментарий:"
+
+#: ../ukui_menu/keybinding.py:219
+msgid "Click to set a new accelerator key for opening and closing the menu.  "
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:220
+msgid "Press Escape or click again to cancel the operation.  "
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:221
+msgid "Press Backspace to clear the existing keybinding."
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:234
+msgid "Pick an accelerator"
+msgstr ""
+
+#: ../ukui_menu/keybinding.py:286
+msgid "<not set>"
+msgstr ""
+
+#: ../ukui_menu/menueditor.py:790
+#, python-format
+msgid ""
+"\n"
+"The current system is not selected [%s] software, can not display the "
+"classification!"
+msgstr ""
+"\n"
+"нынешняя система является не отдельным [%s] программное обеспечение, не может отображать классификации!"
+
+#: ../ukui_menu/menueditor.py:796
+#, python-format
+msgid ""
+"\n"
+"The current system is not installed [%s] software, can not display the "
+"classification!"
+msgstr ""
+"\n"
+"в нынешней системе не установлен [%s] программное обеспечение, не может отображать классификации!"
+
+#: ../ukui_menu/menueditor.py:892
+msgid "Restore the default menu layout"
+msgstr "восстановить по умолчанию меню"
+
+#: ../ukui_menu/menueditor.py:893
+msgid "Menus:"
+msgstr "меню:"
+
+#: ../ukui_menu/menueditor.py:894
+msgid "Items:"
+msgstr "пункты:"
+
+#: ../ukui_menu/menueditor.py:895
+msgid "Move Up"
+msgstr "вверх"
+
+#: ../ukui_menu/menueditor.py:896
+msgid "Move Down"
+msgstr "вниз"
+
+#: ../ukui_menu/menueditor.py:897
+msgid "Revert all menus to original settings?"
+msgstr "вернуть все меню на оригинальные декорации?"
+
+#: ../ukui_menu/menueditor.py:898
+msgid "Revert Changes?"
+msgstr "к изменениям?"
+
+#: ../ukui_menu/menueditor.py:1083
+msgid "Name"
+msgstr "имя"
+
+#: ../ukui_menu/menueditor.py:1099
+msgid "Show"
+msgstr "шоу"
+
+#: ../ukui_menu/menueditor.py:1107
+msgid "Item"
+msgstr "пункт"
+
+#: ../ukui_menu/menueditor.py:1138
+#, python-format
+msgid ""
+"\n"
+"[%s] is a system autostart service software, you should not show it in "
+"startup menu!"
+msgstr ""
+"\n"
+"[%s] это система автозапуска сервисного программного обеспечения, вам не следует показывать это в Startup меню!"
+
+#: ../ukui_menu/feedback.py:68
+msgid "Images"
+msgstr "изображения"
+
+#: ../ukui_menu/feedback.py:86
+msgid "DistroRelease"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:87
+msgid "DistroInfo"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:88
+msgid "Desktop"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:89
+msgid "Architecture"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:90
+msgid "Locale"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:95 ../data/feedback.ui.h:6
+msgid "System Info"
+msgstr "информация о системе"
+
+#: ../ukui_menu/feedback.py:137 ../data/feedback.ui.h:8
+msgid "System Bug"
+msgstr "система баг"
+
+#: ../ukui_menu/feedback.py:154
+msgid "Please input the description!"
+msgstr "пожалуйста, введите описания!"
+
+#: ../ukui_menu/feedback.py:165
+msgid "Invalid email address!"
+msgstr "неверный адрес электронной почты!"
+
+#: ../ukui_menu/feedback.py:173
+msgid "Please input the email address!"
+msgstr "пожалуйста, введите адрес электронной почты!"
+
+#: ../ukui_menu/feedback.py:184
+msgid "Maximum upload file size is 1MB!"
+msgstr "максимальная загрузка файлов размером 1 мб!"
+
+#: ../ukui_menu/feedback.py:194
+msgid "Please input the verification code!"
+msgstr "пожалуйста, введите код проверки подлинности!"
+
+#: ../ukui_menu/feedback.py:234
+msgid "Successful feedback! Thank you!"
+msgstr "успешные отзыв!спасибо!"
+
+#: ../ukui_menu/feedback.py:241
+msgid "Incorrect CAPTCHA, please re-enter!"
+msgstr "неправильно CAPTCHA, введите!"
+
+#: ../ukui_menu/feedback.py:248
+msgid "Unknow error: "
+msgstr "неизвестное ошибка:"
+
+#: ../data/feedback.ui.h:1
+msgid "Type"
+msgstr "типа"
+
+#: ../data/feedback.ui.h:2
+msgid "<span color=\"red\">* </span>Description"
+msgstr "<span color=\"red\">* </span>описание"
+
+#: ../data/feedback.ui.h:3
+msgid "<span color=\"red\">* </span>Email"
+msgstr "<span color=\"red\">* </span>адрес электронной почты"
+
+#: ../data/feedback.ui.h:4
+msgid "Image"
+msgstr "изображение"
+
+#: ../data/feedback.ui.h:5
+msgid "System Log"
+msgstr "для входа в систему"
+
+#: ../data/feedback.ui.h:7
+msgid "Please upload file less then 1Mb"
+msgstr "пожалуйста, загрузить файл менее 1 мб"
+
+#: ../data/feedback.ui.h:9
+msgid "Suggestion"
+msgstr "предложение"
+
+#: ../data/feedback.ui.h:10
+msgid "For Business"
+msgstr "для бизнеса"
+
+#: ../data/feedback.ui.h:11
+msgid "Others"
+msgstr "другие"
+
+#: ../data/feedback.ui.h:12
+msgid "submit"
+msgstr "представить"
+
+#: ../data/feedback.ui.h:13
+msgid "<span color=\"red\">* </span>CAPTCHA"
+msgstr "<span color=\"red\">* </span>CAPTCHA"
+
+#: ../data/feedback.ui.h:14
+msgid "Type the code"
+msgstr "введите код"
+
+#~ msgid "Description"
+#~ msgstr "详细描述"
+
+#~ msgid "Email"
+#~ msgstr "邮箱"
+
+#~ msgid "Attachment"
+#~ msgstr "附件"
+
+#~ msgid "Asking for help"
+#~ msgstr "寻求帮助"
