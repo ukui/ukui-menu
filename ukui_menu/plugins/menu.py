@@ -475,7 +475,7 @@ class pluginclass( object ):
         self.recentAppBox.set_spacing(3)
 
         self.bamfok = False
-        GLib.timeout_add( 100, self.getBamfStatus )
+        GLib.timeout_add( 15000, self.getBamfStatus )
 
         self.label_user = self.builder.get_object("label_user")
         user_name = GLib.get_user_name()
