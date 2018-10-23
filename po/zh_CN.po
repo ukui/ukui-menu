@@ -148,6 +148,10 @@ msgid "Pluma"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
+msgid "Education"
+msgstr "教育"
+
+#: ../ukui_menu/plugins/menu.py:214 ../ukui_menu/plugins/menu.py:1149
 msgid "Graphics"
 msgstr "图形"
 

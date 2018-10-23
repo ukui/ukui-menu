@@ -211,7 +211,7 @@ class Category(GObject.GObject):
         self.all_application_list = all_application_list
 
         for app in self.all_application_list:
-            if app['category'] == _("Graphics") or app['category'] == _("Internet") or app['category'] == _("Programming") or app['category'] == _("Sound & Video") or app['category'] == _("System Tools") or app['category'] == _("Universal Access") or app['category'] == _("Preferences") or app['category'] == _("Administration") or app['category'] == _("Other"):
+            if app['category'] == _("Education") or app['category'] == _("Graphics") or app['category'] == _("Internet") or app['category'] == _("Programming") or app['category'] == _("Sound & Video") or app['category'] == _("System Tools") or app['category'] == _("Universal Access") or app['category'] == _("Preferences") or app['category'] == _("Administration") or app['category'] == _("Other"):
                 continue
             elif app['category'] == _("Accessories") or app['category'] == _("Office") or app['category'] == _("Games") or app['category'] == _("Android"):
                 self.application_list_m.append(app)
@@ -1149,7 +1149,7 @@ class pluginclass( object ):
                     item["filter"] = item["name"]
                     item["button"] = CategoryButton( item["icon"], category_icon_size, [item["name"]], item["filter"])
                 else:
-                    if item["name"] == _("Graphics") or item["name"] == _("Internet") or item["name"] == _("Programming") or item["name"] == _("Sound & Video") or item["name"] == _("System Tools") or item["name"] == _("Universal Access") or item["name"] == _("Preferences") or item["name"] == _("Administration") or item["name"] == _("Other"):
+                    if item["name"] == _("Education") or item["name"] == _("Graphics") or item["name"] == _("Internet") or item["name"] == _("Programming") or item["name"] == _("Sound & Video") or item["name"] == _("System Tools") or item["name"] == _("Universal Access") or item["name"] == _("Preferences") or item["name"] == _("Administration") or item["name"] == _("Other"):
                         continue
                     elif item["name"] == _("Accessories") or item["name"] == _("Office") or item["name"] == _("Games") or item["name"] == _("Android"):
                         item["button"] = CategoryButton( "folder", category_icon_size, [item["name"]], item["name"] )
