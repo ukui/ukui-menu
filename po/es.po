@@ -21,7 +21,9 @@ msgstr ""
 msgid ""
 "\n"
 "Current menu mode is not category mode, please switch and try again!"
-msgstr "Menu actual modo no es la categoría modo, por favor cambiar y probar otra vez!"
+msgstr ""
+"\n"
+"Menu actual modo no es la categoría modo, por favor cambiar y probar otra vez!"
 
 #: ../lib/ukui-menu.py:60
 msgid "Menu"
@@ -50,8 +52,7 @@ msgstr "Menú de inicio"
 
 #: ../lib/ukui-menu.py:406
 msgid "Menu Property"
-msgstr "Propiedad de menú
-"
+msgstr "Propiedad de menú"
 
 #: ../lib/ukui-menu.py:408
 msgid "Menu Type:"
