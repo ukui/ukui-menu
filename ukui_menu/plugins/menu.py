@@ -293,7 +293,9 @@ class pluginclass( object ):
 
         self.layout_left = self.builder.get_object("layout_left")
         self.viewport1 = self.builder.get_object("viewport1")
+        self.viewport1.set_name("Viewport2")
         self.viewport2 = self.builder.get_object("viewport2")
+        self.viewport2.set_name("Viewport2")
         self.vp_right_container = self.builder.get_object("vp_right_container")
         self.vp_right_container.set_name("Viewport1")
 
@@ -358,22 +360,22 @@ class pluginclass( object ):
         self.image1 = self.builder.get_object("image1")
         iconfile = ICON_PATH + "sep.png"
         pixbuf = Pixbuf.new_from_file(iconfile)
-        pixbuf = pixbuf.scale_simple(210, 2, 2)  #2 := BILINEAR
+        pixbuf = pixbuf.scale_simple(210, 1, 2)  #2 := BILINEAR
         self.image1.set_from_pixbuf(pixbuf)
         self.image2 = self.builder.get_object("image2")
         iconfile = ICON_PATH + "sep.png"
         pixbuf = Pixbuf.new_from_file(iconfile)
-        pixbuf = pixbuf.scale_simple(210, 2, 2)  #2 := BILINEAR
+        pixbuf = pixbuf.scale_simple(210, 1, 2)  #2 := BILINEAR
         self.image2.set_from_pixbuf(pixbuf)
         self.image3 = self.builder.get_object("image3")
         iconfile = ICON_PATH + "sep.png"
         pixbuf = Pixbuf.new_from_file(iconfile)
-        pixbuf = pixbuf.scale_simple(80, 2, 2)  #2 := BILINEAR
+        pixbuf = pixbuf.scale_simple(80, 1, 2)  #2 := BILINEAR
         self.image3.set_from_pixbuf(pixbuf)
         self.image5 = self.builder.get_object("image5")
         iconfile = ICON_PATH + "sep.png"
         pixbuf = Pixbuf.new_from_file(iconfile)
-        pixbuf = pixbuf.scale_simple(210, 2, 2)  #2 := BILINEAR
+        pixbuf = pixbuf.scale_simple(210, 1, 2)  #2 := BILINEAR
         self.image5.set_from_pixbuf(pixbuf)
 
         self.button_shutdown = self.builder.get_object("button_shutdown")
@@ -475,7 +477,7 @@ class pluginclass( object ):
         self.recentAppBox.set_spacing(3)
 
         self.bamfok = False
-        GLib.timeout_add( 15000, self.getBamfStatus )
+        GLib.timeout_add( 100, self.getBamfStatus )
 
         self.label_user = self.builder.get_object("label_user")
         user_name = GLib.get_user_name()
