@@ -2,8 +2,6 @@
 @define-color border_color shade(@panel_normal_bg_color, 0.7);
 @define-color bg_color shade(@panel_normal_bg_color, 2.5);
 
-@define-color ukuimenu_color #3b9dc5;
-
 #EventBox {
 background-color: @menu_bg_color;
 font-size: 13px;
@@ -71,6 +69,16 @@ border-style: solid;
 border-radius: 0px;
 border-color: shade(@panel_normal_bg_color, 0.1);
 font-size: 13px;
+}
+#ButtonUser {
+padding: 0px 0px;
+background-color: @bg_color;
+background-image: none;
+border-color: @border_color;
+-gtk-icon-shadow: none;
+}
+#ButtonUser:hover {
+background-color: shade(@menu_bg_color, 0.8);
 }
 #Button {
 border: 1px solid transparent;
@@ -155,14 +163,12 @@ border-radius: 0px;
 border-width: 1px;
 background-image: none;
 background-color: @menu_bg_color;
-border-color: shade (@ukuimenu_color, 1.35);
 }
 #ButtonApp:disabled {
 color: @menu_font_color;
 text-shadow: none;
 border-width: 1px;
 background-color: @menu_bg_color;
-border-color: shade (@ukuimenu_color, 1.35);
 text-shadow: none;
 -gtk-icon-shadow: none;
 }
@@ -197,8 +203,6 @@ tooltip.background,
     border-style: solid;
     border-width: 1px;
     border-radius: 0px;
-    border-color: @border_color;
-    background-color: shade(@panel_normal_bg_color, 3.5);
     color: @menu_font_color;
     text-shadow: none;
 }
@@ -246,4 +250,12 @@ box-shadow: none;
 #ButtonClicked:hover {
 -gtk-icon-shadow: 1px 1px black;
 -gtk-icon-effect: highlight;
+}
+#myGtkLabel {
+background-color: @bg_color;
+color: @menu_font_color;
+opacity: 0.8;
+}
+menuitem:hover {
+background-color: @menu_bg_color;
 }

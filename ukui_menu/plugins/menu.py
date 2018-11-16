@@ -329,6 +329,7 @@ class pluginclass( object ):
         self.viewport16.set_name("Viewport1")
 
         self.button_user = self.builder.get_object("button_user")
+        self.button_user.set_name("ButtonUser")
         self.button_user.connect("button-press-event", self.on_button_user_clicked)
 
         self.button_showall = self.builder.get_object("button_showall")
@@ -482,7 +483,6 @@ class pluginclass( object ):
         self.label_user = self.builder.get_object("label_user")
         user_name = GLib.get_user_name()
         self.label_user.set_text(user_name)
-        self.label_user.set_name("myGtkLabel")
         #left-menu
         self.button_computer = self.builder.get_object( "button_computer" )
         self.button_computer.set_name("Button")
