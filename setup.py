@@ -68,6 +68,7 @@ data_files = [
     ),
     ('{prefix}/share/ukui-menu/plugins'.format(prefix=sys.prefix), ['data/plugins/ukuimenu.glade',
                                                                     'data/plugins/property.glade',
+                                                                    'data/plugins/shutdown.ui',
                                                                    ],
     ),
     ('{prefix}/share/ukui-menu/icons'.format(prefix=sys.prefix), ['data/icons/ukui-logo.svg',
@@ -90,9 +91,11 @@ data_files = [
                                                                   'data/icons/so.png',
                                                                   'data/icons/start.svg',
                                                                   'data/icons/stock_person.png',
+                                                                  'data/icons/timingshutdown.svg',
                                                                  ],
     ),
     ('{prefix}/lib/ukui-menu'.format(prefix=sys.prefix), glob('lib/*')),
+    ('/etc/xdg/autostart/', ['timing-shutdown.desktop',]),
 ]
 data_files.extend(datafilelist('{prefix}/share/locale'.format(prefix=sys.prefix), 'build/mo'))
 
@@ -115,6 +118,6 @@ setup(
     },
     data_files = data_files,
     install_requires = [ 'setuptools', ],
-    scripts = ['ukui-menu', 'ukui-menu-editor'],
+    scripts = ['ukui-menu', 'ukui-menu-editor', 'timing-shutdown'],
     cmdclass = cmdclass,
 )

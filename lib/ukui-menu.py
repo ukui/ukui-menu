@@ -87,23 +87,11 @@ class MainWindow( object ):
 
         self.borderwidth = 3
         self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
-#        defaultStyle = self.getDefaultStyle()
-#        color = defaultStyle.lookup_color('panel_normal_border_color')[1]
-#        if color == Gdk.Color(red=0, green=0, blue=0):
-#            self.window.modify_bg( Gtk.StateType.NORMAL, Gdk.color_parse( "#014276" ))
-#        else:
-#            self.window.modify_bg( Gtk.StateType.NORMAL, color )
         self.eventbox.set_name("EventBox")
 
         self.window.connect( "key-press-event", self.onKeyPress )
-        self.window.connect( "focus-in-event", self.onFocusIn )
         #设置window透明
         self.window.set_app_paintable(True)
-        #self.window.connect( "draw", self.onDrawEvent )
-        #self.window.connect( "screen-changed", self.onScreenChanged )
-        #self.paneholder.set_app_paintable(True)
-        #self.paneholder.connect( "draw", self.onDrawEvent )
-        #self.paneholder.connect( "screen-changed", self.onScreenChanged )
         self.onScreenChanged(None)
         self.loseFocusId = self.window.connect( "focus-out-event", self.onFocusOut )
         self.loseFocusBlocked = False
@@ -225,38 +213,16 @@ class MainWindow( object ):
 
         self.window.hide()
 
-    def onFocusIn( self, *args ):
-        if self.loseFocusBlocked:
-            self.window.handler_unblock( self.loseFocusId )
-            self.loseFocusBlocked = False
-
-        return False
-
     def onFocusOut( self, *args):
         if self.window.get_visible():
             self.hide()
-        return False
-
-    def onDrawEvent( self, *args ):
-        #cr = Gdk.cairo_create(self.window.get_window())
-        #cr.set_source_rgba(0, 0, 0, 0.7)
-        #cr.set_operator(cairo.OPERATOR_SOURCE)
-        #cr.paint()
-        #cr.destroy()
+        self.hide()
         return False
 
     def onScreenChanged( self, *args ):
         screen = self.window.get_screen()
         visual = screen.get_rgba_visual()
         self.window.set_visual(visual)
-        #screen = self.paneholder.get_screen()
-        #visual = screen.get_rgba_visual()
-        #self.paneholder.set_visual(visual)
-
-    def stopHiding( self ):
-        if not self.loseFocusBlocked:
-            self.window.handler_block( self.loseFocusId )
-            self.loseFocusBlocked = True
 
 class MenuWin( object ):
     def __init__( self, applet, iid ):

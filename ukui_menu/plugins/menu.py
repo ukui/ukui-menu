@@ -466,7 +466,6 @@ class pluginclass( object ):
         self.searchEntry.set_icon_from_pixbuf(1, pixbuf)
         self.searchEntry.set_icon_activatable(1, True)
         self.searchEntry.connect("changed", self.searchChanged)
-        self.searchEntry.connect("button-press-event", self.entryPopup)
         self.searchEntry.connect("focus-out-event", self.focusOut)
         self.searchEntry.connect("focus-in-event", self.focusIn)
         self.searchEntry.connect("icon-press", self.searchIconPressed)
@@ -841,10 +840,6 @@ class pluginclass( object ):
         except Exception as e:
             print ("s")
 
-    def entryPopup( self, widget, ev ):
-        if ev.button == 3:
-            self.ukuiMenuWin.stopHiding()
-
     def focusOut( self, widget, ev ):
         self.searchEntry.set_name("Entry")
         self.searchEntry.set_text(_("Search local program"))
@@ -932,7 +927,6 @@ class pluginclass( object ):
 
                 mTree.connect("deactivate", self.set_item_state, widget)
 
-                self.ukuiMenuWin.stopHiding()
                 widget.remove(widget.Align1)
                 widget.Align1.remove(widget.HBox1)
                 widget.viewport.show()
@@ -987,25 +981,30 @@ class pluginclass( object ):
             mTree.set_name("myGtkLabel")
 
             shutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Power(_P)"))
+            timingshutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Timing Shutdown(_T)"))
+            separatorMenuItem1 = Gtk.SeparatorMenuItem()
+            separatorMenuItem1.set_visible(True)
             reboot = Gtk.ImageMenuItem.new_with_mnemonic(_("Reboot(_R)"))
-            separatorMenuItem = Gtk.SeparatorMenuItem()
-            separatorMenuItem.set_visible(True)
+            separatorMenuItem2 = Gtk.SeparatorMenuItem()
+            separatorMenuItem2.set_visible(True)
             logout = Gtk.ImageMenuItem.new_with_mnemonic(_("Logout(_O)"))
             changeuser = Gtk.ImageMenuItem.new_with_mnemonic(_("Switch User(_S)"))
             lock = Gtk.ImageMenuItem.new_with_mnemonic(_("Lock Screen(_L)"))
             mTree.append(lock)
             mTree.append(changeuser)
             mTree.append(logout)
-            mTree.append(separatorMenuItem)
+            mTree.append(separatorMenuItem2)
             mTree.append(reboot)
+            mTree.append(separatorMenuItem1)
+            mTree.append(timingshutdown)
             mTree.append(shutdown)
             mTree.show_all()
             lock.connect("activate", self.lock, widget)
             changeuser.connect("activate", self.switchuser, widget)
             logout.connect("activate", self.logout, widget)
             reboot.connect("activate", self.reboot, widget)
+            timingshutdown.connect("activate", self.showtimingshutdown, widget)
             shutdown.connect("activate", self.shutdown1, widget)
-            self.ukuiMenuWin.stopHiding()
             mTree.connect("deactivate", self.set_state, widget)
             return mTree
 
@@ -1045,6 +1044,9 @@ class pluginclass( object ):
         os.system("ukui-session-save --shutdown-dialog &")
         self.ukuiMenuWin.hide()
         Gdk.flush()
+
+    def showtimingshutdown(self, menu, widget):
+        os.system("timing-shutdown &")
 
     def shutdown1(self, menu, widget):
         session_bus = dbus.SessionBus()
@@ -1696,7 +1698,6 @@ class pluginclass( object ):
             mTree.connect("deactivate", self.set_item_state, widget)
 
             widget.set_name("ButtonAppHover")
-            self.ukuiMenuWin.stopHiding()
             widget.remove(widget.Align1)
             widget.Align1.remove(widget.HBox1)
             widget.viewport.show()
@@ -1830,7 +1831,7 @@ class pluginclass( object ):
         self.builder1 = Gtk.Builder()
         self.builder1.add_from_file( os.path.join( '/', 'usr', 'share', 'ukui-menu',  'plugins', 'property.glade' ) )
         dialog = self.builder1.get_object("dialog1")
-        dialog.set_name("myGtkLabel")
+        #dialog.set_name("myGtkLabel")
         self.entry_type = self.builder1.get_object("entry_type")
         self.entry_name = self.builder1.get_object("entry_name")
         self.entry_command = self.builder1.get_object("entry_command")
@@ -2172,7 +2173,6 @@ class pluginclass( object ):
 
             mTree.connect("deactivate", lambda w: widget.set_name("ButtonApp"))
 
-            self.ukuiMenuWin.stopHiding()
             mTree.attach_to_widget(widget)
             mTree.popup(None, None, None, None, ev.button, ev.time)
 

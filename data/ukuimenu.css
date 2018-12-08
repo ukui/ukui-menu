@@ -1,47 +1,47 @@
 @define-color menu_bg_color @panel_normal_bg_color;
-@define-color border_color shade(@panel_normal_bg_color, 0.7);
-@define-color bg_color shade(@panel_normal_bg_color, 2.5);
+@define-color bg_color @startup_menu_color;
+@define-color border_color @bg_color;
 
 #EventBox {
 background-color: @menu_bg_color;
 font-size: 13px;
-color: @menu_font_color;
-opacity:0.8;
+color: #ffffff;
+opacity:0.9;
 }
 #ViewportNull {
 background-color: transparent;
 border-color: transparent;
 font-size: 13px;
-color: @menu_font_color;
-opacity:0.8;
+color: #ffffff;
+opacity:0.9;
 }
 #ViewportButton {
 background-color: @bg_color;
-color: @menu_font_color;
+color: #ffffff;
 border-width: 1px;
 border-style: solid;
 border-radius: 0px;
-border-left-color: @border_color;
+border-left-color: shade(@border_color, 1.2);
 border-right-color: @bg_color;
-border-top-color: @border_color;
-border-bottom-color: @border_color;
+border-top-color: shade(@border_color, 1.2);
+border-bottom-color: shade(@border_color, 1.2);
 font-size: 13px;
 }
 #Viewport {
 padding: 0px 0px;
-color: @menu_font_color;
+color: #ffffff;
 border-style: solid;
 border-radius: 0px;
-border-color: @border_color;
+border-color: shade(@border_color, 1.2);
 font-size: 13px;
 }
 #Viewport2 {
-border-color: @border_color;
+border-color: shade(@border_color, 1.2);
 }
 #Viewport1 {
 padding: 0px 0px;
 background-color: @bg_color;
-color: @menu_font_color;
+color: #ffffff;
 border-width: 0px;
 border-style: solid;
 border-radius: 0px;
@@ -51,15 +51,15 @@ font-size: 13px;
 padding: 0px 0px;
 border-radius: 0px;
 border-width: 1px;
-border-color: shade(@panel_normal_bg_color, 0.1);
-color: @menu_font_color;
+border-color: shade(@border_color, 1.2);
+color: red;
 font-size: 13px;
 }
 #ViewportPower {
 border-width: 1px;
 border-style: solid;
 border-radius: 0px;
-border-color: @border_color;
+border-color: shade(@border_color, 1.2);
 font-size: 13px;
 }
 #ViewportPowerEnter {
@@ -67,32 +67,31 @@ background-color: black;
 border-width: 1px;
 border-style: solid;
 border-radius: 0px;
-border-color: shade(@panel_normal_bg_color, 0.1);
+border-color: shade(@border_color, 1.2);
 font-size: 13px;
 }
 #ButtonUser {
 padding: 0px 0px;
 background-color: @bg_color;
 background-image: none;
-border-color: @border_color;
+border-color: shade(@border_color, 1.2);
 -gtk-icon-shadow: none;
 }
 #ButtonUser:hover {
-background-color: shade(@menu_bg_color, 0.8);
+background-color: shade(@bg_color, 1.4);
 }
 #Button {
 border: 1px solid transparent;
 border-radius: 0px;
 background-color: transparent;
-color: @menu_font_color;
+color: #ffffff;
 font-size: 13px;
 }
 #Button:hover {
-border-radius: 0px;
 border-width: 1px;
 background-image: none;
 background-color: @bg_color;
-border-color: @border_color;
+border-color: shade(@border_color, 1.2);
 text-shadow: none;
 -gtk-icon-shadow: none;
 }
@@ -105,12 +104,12 @@ border-image-source: none;
 min-width: 18px;
 padding: 0px 0px;
 background-color: @bg_color;
-color: @menu_font_color;
+color: #ffffff;
 border-width: 0px;
 font-size: 13px;
 }
 #ButtonPower:hover {
-background-color: shade(@panel_normal_bg_color, 0.8);
+background-color: shade(@bg_color, 1.4);
 background-image: none;
 border: 0px transparent;
 text-shadow: none;
@@ -126,14 +125,14 @@ padding: 2px 2px;
 border-radius: 0px;
 border-width: 1px;
 background-color: transparent;
-color: @menu_font_color;
+color: #ffffff;
 font-size: 13px;
 }
 #ButtonApp:hover {
 border-radius: 0px;
 background-image: none;
-background-color: @menu_bg_color;
-border-color: shade(@panel_normal_bg_color, 0.1);
+background-color: shade(@bg_color, 1.4);
+border-color: shade(@border_color, 1.5);
 border-width: 1px;
 border-image-source: none;
 text-shadow: none;
@@ -148,27 +147,27 @@ background-color: #daebfc;
 #ButtonAppHover {
 padding: 2px 2px;
 border-radius: 0px;
-border-style: solid;
-border-width: 1px;
-border-color: shade(@panel_normal_bg_color, 0.1);
-color: @menu_font_color;
 background-image: none;
-background-color: @panel_normal_bg_color;
+background-color: shade(@bg_color, 1.8);
+border-color: shade(@border_color, 1.8);
+border-width: 1px;
+border-image-source: none;
 font-size: 13px;
 text-shadow: none;
+color: #ffffff;
 -gtk-icon-shadow: none;
 }
 #ButtonApp:active {
 border-radius: 0px;
 border-width: 1px;
 background-image: none;
-background-color: @menu_bg_color;
+background-color: shade(@bg_color, 1.8);
 }
 #ButtonApp:disabled {
-color: @menu_font_color;
+color: #ffffff;
 text-shadow: none;
 border-width: 1px;
-background-color: @menu_bg_color;
+background-color: shade(@bg_color, 1.8);
 text-shadow: none;
 -gtk-icon-shadow: none;
 }
@@ -177,22 +176,20 @@ border-radius: 0px;
 border-width: 1px;
 background-image: none;
 border-image-source: none;
-background-color: @menu_bg_color;
+background-color: shade(@bg_color, 1.8);
 }
 #Entry {
 border-radius: 0px;
 padding: 0px 0px;
-background-color: @bg_color;
-border: 0px transparent;
+background-color: #ffffff;
 color: #999999; 
 font-size: 13px;
 }
 #EntryActive {
 border-radius: 0px;
 padding: 0px 0px;
-background-color: @bg_color;
-border: 0px transparent;
-color: @menu_font_color;
+background-color: #ffffff;
+color: #000000;
 font-size: 13px;
 }
 tooltip,
@@ -203,7 +200,7 @@ tooltip.background,
     border-style: solid;
     border-width: 1px;
     border-radius: 0px;
-    color: @menu_font_color;
+    color: #ffffff;
     text-shadow: none;
 }
 scrollbar {
@@ -221,7 +218,7 @@ scrollbar slider:hover {
       background-color: @bg_color; 
 }
 #Button label:disabled {
-    color: @menu_font_color;
+    color: #ffffff;
     text-shadow: none;
     box-shadow: none;
 }
@@ -237,13 +234,14 @@ box-shadow:none;
 #ButtonApplet:hover {
 -gtk-icon-shadow: 1px 1px black;
 -gtk-icon-effect: highlight;
+background-color: @bg_color;
 }
 #ButtonClicked {
 padding: 0px 0px 0px 0px;
 border: 0px transparent;
 border-radius: 0px;
 background-image: none;
-background-color: rgba(0, 0, 0, 0.2);
+background-color: @bg_color;
 box-shadow: none;
 -gtk-icon-shadow: none;
 }
@@ -253,9 +251,9 @@ box-shadow: none;
 }
 #myGtkLabel {
 background-color: @bg_color;
-color: @menu_font_color;
+color: #ffffff;
 opacity: 0.8;
 }
 menuitem:hover {
-background-color: @menu_bg_color;
+background-color: shade(@bg_color, 0.8);
 }

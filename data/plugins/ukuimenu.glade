@@ -705,7 +705,7 @@
                                                     </child>
                                                     <child type="label">
                                                       <object class="GtkLabel" id="labelExpanderApp">
-                                                        <property name="width_request">195</property>
+                                                        <property name="width_request">193</property>
                                                         <property name="height_request">0</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
@@ -744,7 +744,7 @@
                                                     </child>
                                                     <child type="label">
                                                       <object class="GtkLabel" id="labelExpanderSystem">
-                                                        <property name="width_request">195</property>
+                                                        <property name="width_request">193</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="hexpand">True</property>

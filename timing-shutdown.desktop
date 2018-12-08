@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Timing Shutdown
+Comment=Timing Shutdown
+Exec=/usr/bin/timing-shutdown -s
+Type=Application
+NoDisplay=true
+OnlyShowIn=MATE;UKUI;

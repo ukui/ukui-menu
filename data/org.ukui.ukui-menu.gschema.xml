@@ -41,5 +41,20 @@
       <summary>determine the numbers of recent applications showed</summary>
       <description>determine the numbers of recent applications showed</description>
     </key>
+    <key type="b" name="timing-shutdown">
+      <default>false</default>
+      <summary>determine if has set timing shutdown</summary>
+      <description>determine if has set timing shutdown</description>
+    </key>
+    <key type="s" name="shutdown-sequence">
+      <default>"1"</default>
+      <summary>determine the shutdown sequence</summary>
+      <description>determine the shutdown sequence</description>
+    </key>
+    <key type="s" name="shutdown-time">
+      <default>""</default>
+      <summary>determine the shutdown time</summary>
+      <description>determine the shutdown time</description>
+    </key>
   </schema>
 </schemalist>

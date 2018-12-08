@@ -1,6 +1,7 @@
 [encoding: UTF-8]
 ukui-menu-editor
 lib/ukui-menu.py
+lib/timing-shutdown.py
 ukui_menu/__init__.py
 ukui_menu/plugins/__init__.py
 ukui_menu/plugins/menu.py
@@ -12,3 +13,4 @@ ukui_menu/menueditor.py
 ukui_menu/pointerMonitor.py
 ukui_menu/feedback.py
 data/feedback.ui.h
+data/plugins/shutdown.ui.h

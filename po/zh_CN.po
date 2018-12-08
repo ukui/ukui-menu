@@ -25,85 +25,105 @@ msgstr ""
 "\n"
 "当前菜单模式不是分类模式，请切换后再试！"
 
-#: ../lib/ukui-menu.py:60
+#: ../lib/ukui-menu.py:61
 msgid "Menu"
 msgstr "菜单"
 
-#: ../lib/ukui-menu.py:266 ../lib/ukui-menu.py:414
+#: ../lib/ukui-menu.py:267 ../lib/ukui-menu.py:415
 msgid "Normal Menu"
 msgstr "常规菜单"
 
-#: ../lib/ukui-menu.py:268 ../lib/ukui-menu.py:416
+#: ../lib/ukui-menu.py:269 ../lib/ukui-menu.py:417
 msgid "Category Menu"
 msgstr "分类菜单"
 
 #. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
-#: ../lib/ukui-menu.py:270 ../ukui_menu/menueditor.py:891
+#: ../lib/ukui-menu.py:271 ../uui_menu/menueditor.py:891
 msgid "Edit Category Menu"
 msgstr "编辑分类菜单"
 
-#: ../lib/ukui-menu.py:361
+#: ../lib/ukui-menu.py:362
 msgid "Start"
 msgstr "开始"
 
-#: ../lib/ukui-menu.py:394
+#: ../lib/ukui-menu.py:395
 msgid "Startup Menu"
 msgstr "开始菜单"
 
-#: ../lib/ukui-menu.py:406
+#: ../lib/ukui-menu.py:407
 msgid "Menu Property"
 msgstr "菜单属性"
 
-#: ../lib/ukui-menu.py:408
+#: ../lib/ukui-menu.py:409
 msgid "Menu Type:"
 msgstr "菜单类型："
 
-#: ../lib/ukui-menu.py:409
+#: ../lib/ukui-menu.py:410
 msgid "This is used to set up the menu type."
 msgstr "该项用来设置菜单类型。"
 
-#: ../lib/ukui-menu.py:411
+#: ../lib/ukui-menu.py:412
 msgid "File History:"
 msgstr "文件历史："
 
-#: ../lib/ukui-menu.py:412
+#: ../lib/ukui-menu.py:413
 msgid "This is used to set up whether the file history is displayed."
 msgstr "该项用来设置是否显示文件历史记录。"
 
-#: ../lib/ukui-menu.py:432
+#: ../lib/ukui-menu.py:433
 msgid "Recent file number:"
 msgstr "历史文件个数："
 
-#: ../lib/ukui-menu.py:434
+#: ../lib/ukui-menu.py:435
 msgid "Recent app number:"
 msgstr "历史应用个数："
 
-#: ../lib/ukui-menu.py:449
+#: ../lib/ukui-menu.py:450
 msgid "Reset to default(_R)"
 msgstr "重置为默认值(_R)"
 
-#: ../lib/ukui-menu.py:456
+#: ../lib/ukui-menu.py:457
 msgid "Close(_C)"
 msgstr "关闭(_C)"
 
-#: ../lib/ukui-menu.py:613
+#: ../lib/ukui-menu.py:614
 msgid "Reload plugins"
 msgstr "重载插件"
 
-#: ../lib/ukui-menu.py:616 ../ukui_menu/plugins/menu.py:1870
+#: ../lib/ukui-menu.py:617 ../ukui_menu/plugins/menu.py:1884
 msgid "Property"
 msgstr "属性"
 
+#: ../lib/timing-shutdown.py:87
+msgid "Timing Shutdown"
+msgstr "定时关机"
+
+#: ../lib/timing-shutdown.py:166
+msgid "day"
+msgstr "天"
+
+#: ../lib/timing-shutdown.py:168
+msgid "days"
+msgstr "天"
+
+#: ../lib/timing-shutdown.py:175 ../data/plugins/shutdown.ui.h:7
+msgid "Time to Poweroff:  "
+msgstr "距离关机还有："
+
+#: ../lib/timing-shutdown.py:284
+msgid "Quit(_Q)"
+msgstr "退出"
+
 #. wps
-#: ../ukui_menu/plugins/menu.py:101 ../ukui_menu/plugins/menu.py:617
-#: ../ukui_menu/plugins/menu.py:775 ../ukui_menu/plugins/menu.py:800
-#: ../ukui_menu/plugins/menu.py:2152 ../ukui_menu/plugins/menu.py:2260
+#: ../ukui_menu/plugins/menu.py:101 ../ukui_menu/plugins/menu.py:619
+#: ../ukui_menu/plugins/menu.py:777 ../ukui_menu/plugins/menu.py:805
+#: ../ukui_menu/plugins/menu.py:2172 ../ukui_menu/plugins/menu.py:2280
 msgid "WPS Writer"
 msgstr "WPS 文字"
 
-#: ../ukui_menu/plugins/menu.py:102 ../ukui_menu/plugins/menu.py:621
-#: ../ukui_menu/plugins/menu.py:777 ../ukui_menu/plugins/menu.py:802
-#: ../ukui_menu/plugins/menu.py:2152 ../ukui_menu/plugins/menu.py:2267
+#: ../ukui_menu/plugins/menu.py:102 ../ukui_menu/plugins/menu.py:623
+#: ../ukui_menu/plugins/menu.py:779 ../ukui_menu/plugins/menu.py:807
+#: ../ukui_menu/plugins/menu.py:2172 ../ukui_menu/plugins/menu.py:2287
 msgid "WPS Presentation"
 msgstr "WPS 演示"
 
@@ -280,6 +300,10 @@ msgstr "属性(_P)"
 #: ../ukui_menu/plugins/menu.py:984
 msgid "Power(_P)"
 msgstr "关机(_P)"
+
+#: ../ukui_menu/plugins/menu.py:990
+msgid "Timing Shutdown(_T)"
+msgstr "定时关机"
 
 #: ../ukui_menu/plugins/menu.py:985
 msgid "Reboot(_R)"
@@ -588,14 +612,46 @@ msgstr "<span color=\"red\">* </span>验证码"
 msgid "Type the code"
 msgstr "输入验证码"
 
-#~ msgid "Description"
-#~ msgstr "详细描述"
+#: ../data/plugins/shutdown.ui.h:1
+msgid "Cancel"
+msgstr "取消"
 
-#~ msgid "Email"
-#~ msgstr "邮箱"
+#: ../data/plugins/shutdown.ui.h:2
+msgid "Set Up"
+msgstr "设置"
 
-#~ msgid "Attachment"
-#~ msgstr "附件"
+#: ../data/plugins/shutdown.ui.h:3
+msgid "Hour"
+msgstr "时"
 
-#~ msgid "Asking for help"
-#~ msgstr "寻求帮助"
+#: ../data/plugins/shutdown.ui.h:4
+msgid "Minute"
+msgstr "分"
+
+#: ../data/plugins/shutdown.ui.h:6
+msgid "Automatic shutdown setted"
+msgstr "已设置自动关机"
+
+#: ../data/plugins/shutdown.ui.h:8
+msgid "Shutdown Frequency:  "
+msgstr "关机频率："
+
+#: ../data/plugins/shutdown.ui.h:9
+msgid "Never"
+msgstr "从不"
+
+#: ../data/plugins/shutdown.ui.h:10
+msgid "Only this time Shutdown"
+msgstr "仅本次关机"
+
+#: ../data/plugins/shutdown.ui.h:11
+msgid "Every Day"
+msgstr "每天"
+
+#: ../data/plugins/shutdown.ui.h:12
+msgid "Monday to Friday"
+msgstr "周一到周五"
+
+#: ../data/plugins/shutdown.ui.h:13
+msgid "Saturday to Sunday"
+msgstr "周六到周日"
