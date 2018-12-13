@@ -66,6 +66,7 @@ class ShutdownDialog(object):
         builder.add_from_file( os.path.join( '/', 'usr', 'share', 'ukui-menu',  'plugins', 'shutdown.ui' ) )
         self.dialog = builder.get_object("dialog1")
         self.dialog.connect("delete-event", self.hide_dialog)
+        self.dialog.set_icon_from_file("/usr/share/ukui-menu/icons/timingshutdown.svg")
         self.label2 = builder.get_object("label2")
         self.label_time = builder.get_object("label_time")
         self.button_ok = builder.get_object("button_ok")
@@ -84,7 +85,7 @@ class ShutdownDialog(object):
         sequence = self.settings.get_string("shutdown-sequence")
         self.combobox.set_active_id(sequence)
 
-        self.dialog.set_title(_("Timing Shutdown"))
+        self.dialog.set_title(_("Set Timing Shutdown Time"))
         self.dialog.set_application(app)
 
         self.jobthread = JobThread()

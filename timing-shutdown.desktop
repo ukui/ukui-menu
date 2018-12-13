@@ -1,7 +1,8 @@
 [Desktop Entry]
-Name=Timing Shutdown
-Comment=Timing Shutdown
-Exec=/usr/bin/timing-shutdown -s
+Name=Set Timing Shutdown
+Comment=Set Timing Shutdown
+Comment[zh_CN]=设置定时关机
+Exec=/usr/lib/ukui-menu/timing-shutdown.py -s
 Type=Application
 NoDisplay=true
 OnlyShowIn=MATE;UKUI;

@@ -92,6 +92,8 @@ class MainWindow( object ):
         self.window.connect( "key-press-event", self.onKeyPress )
         #设置window透明
         self.window.set_app_paintable(True)
+        opacity = self.settings.get_double("opacity")
+        self.window.set_opacity(opacity)
         self.onScreenChanged(None)
         self.loseFocusId = self.window.connect( "focus-out-event", self.onFocusOut )
         self.loseFocusBlocked = False
@@ -246,6 +248,7 @@ class MenuWin( object ):
         self.settings = Gio.Settings.new("org.ukui.ukui-menu")
         self.settings.connect("changed::show-category-menu", self.changeMenuState)
         self.settings.connect("changed::permission-changed", self.changeMenuState)
+        self.settings.connect("changed::opacity", self.changeOpacity)
 
         self.state = self.settings.get_boolean("show-category-menu")
 
@@ -371,6 +374,8 @@ class MenuWin( object ):
         window.set_default_icon(GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.svg"))
 
         window.set_title(_("Menu Property"))
+        labelOpacity = builder.get_object("label_opacity")
+        labelOpacity.set_text(_("Transparency:"))
         labelMenu = builder.get_object("label1")
         labelMenu.set_text(_("Menu Type:"))
         labelMenu.set_tooltip_text(_("This is used to set up the menu type."))
@@ -412,6 +417,11 @@ class MenuWin( object ):
         recent_app_num = self.mainwin.settings.get_int("recent-app-num")
         self.recent_app_num_bt.set_value(recent_app_num)
 
+        self.opacity = builder.get_object("opacity")
+        self.opacity.connect("value-changed", self.opacity_changed)
+        opacity = self.mainwin.settings.get_double("opacity")
+        self.opacity.set_value(opacity)
+
         self.resetButton = builder.get_object("button2")
         self.resetButton.set_label(_("Reset to default(_R)"))
         self.resetButton.set_use_underline(True)
@@ -430,6 +440,7 @@ class MenuWin( object ):
         self.mainwin.settings.reset("show-recent-file")
         self.mainwin.settings.reset("recent-file-num")
         self.mainwin.settings.reset("recent-app-num")
+        self.mainwin.settings.reset("opacity")
         state = self.mainwin.settings.get_boolean("show-category-menu")
         if state:
             self.radioButton2.set_active(True)
@@ -442,10 +453,15 @@ class MenuWin( object ):
             self.switchButton.set_state(False)
         self.recent_file_num_bt.set_value(self.mainwin.settings.get_int("recent-file-num"))
         self.recent_app_num_bt.set_value(self.mainwin.settings.get_int("recent-app-num"))
+        self.opacity.set_value(self.mainwin.settings.get_double("opacity"))
 
     def value_file_changed( self, widget ):
         num = widget.get_value_as_int()
         self.mainwin.settings.set_int("recent-file-num", num)
+
+    def opacity_changed( self, widget ):
+        value = widget.get_value()
+        self.mainwin.settings.set_double("opacity", value)
 
     def value_app_changed( self, widget ):
         num = widget.get_value_as_int()
@@ -541,6 +557,10 @@ class MenuWin( object ):
 
         self.mainwin.RegenPlugins()
 
+    def changeOpacity(self, settings, key, args = None):
+        opacity = self.mainwin.settings.get_double("opacity")
+        self.mainwin.window.set_opacity(opacity)
+
     def LoadNormalMenu( self, *args, **kargs ):
         if self.mainwin is None:
             return
@@ -587,6 +607,8 @@ class MenuWin( object ):
 
         xml = os.path.join( self.data_path, "popup.xml" )
         self.applet.setup_menu_from_file(xml, action_group)
+        if self.mainwin.window.get_visible():
+            self.mainwin.window.hide()
 
 def applet_factory( applet, iid, data ):
     MenuWin( applet, iid )

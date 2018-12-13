@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-08 15:31+0800\n"
+"POT-Creation-Date: 2018-12-14 00:58+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,88 +27,92 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:233 ../lib/ukui-menu.py:381
+#: ../lib/ukui-menu.py:235 ../lib/ukui-menu.py:386
 msgid "Normal Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:235 ../lib/ukui-menu.py:383
+#: ../lib/ukui-menu.py:237 ../lib/ukui-menu.py:388
 msgid "Category Menu"
 msgstr ""
 
 #. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
-#: ../lib/ukui-menu.py:237 ../ukui_menu/menueditor.py:891
+#: ../lib/ukui-menu.py:239 ../ukui_menu/menueditor.py:891
 msgid "Edit Category Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:328
+#: ../lib/ukui-menu.py:331
 msgid "Start"
 msgstr ""
 
-#: ../lib/ukui-menu.py:361
+#: ../lib/ukui-menu.py:364
 msgid "Startup Menu"
 msgstr ""
 
-#: ../lib/ukui-menu.py:373
+#: ../lib/ukui-menu.py:376
 msgid "Menu Property"
 msgstr ""
 
-#: ../lib/ukui-menu.py:375
+#: ../lib/ukui-menu.py:378
+msgid "Transparency:"
+msgstr ""
+
+#: ../lib/ukui-menu.py:380
 msgid "Menu Type:"
 msgstr ""
 
-#: ../lib/ukui-menu.py:376
+#: ../lib/ukui-menu.py:381
 msgid "This is used to set up the menu type."
 msgstr ""
 
-#: ../lib/ukui-menu.py:378
+#: ../lib/ukui-menu.py:383
 msgid "File History:"
 msgstr ""
 
-#: ../lib/ukui-menu.py:379
+#: ../lib/ukui-menu.py:384
 msgid "This is used to set up whether the file history is displayed."
 msgstr ""
 
-#: ../lib/ukui-menu.py:399
+#: ../lib/ukui-menu.py:404
 msgid "Recent file number:"
 msgstr ""
 
-#: ../lib/ukui-menu.py:401
+#: ../lib/ukui-menu.py:406
 msgid "Recent app number:"
 msgstr ""
 
-#: ../lib/ukui-menu.py:416
+#: ../lib/ukui-menu.py:426
 msgid "Reset to default(_R)"
 msgstr ""
 
-#: ../lib/ukui-menu.py:423
+#: ../lib/ukui-menu.py:433
 msgid "Close(_C)"
 msgstr ""
 
-#: ../lib/ukui-menu.py:580
+#: ../lib/ukui-menu.py:600
 msgid "Reload plugins"
 msgstr ""
 
-#: ../lib/ukui-menu.py:583 ../ukui_menu/plugins/menu.py:1876
+#: ../lib/ukui-menu.py:603 ../ukui_menu/plugins/menu.py:1876
 msgid "Property"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:87
-msgid "Timing Shutdown"
+#: ../lib/timing-shutdown.py:88
+msgid "Set Timing Shutdown Time"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:166
+#: ../lib/timing-shutdown.py:167
 msgid "day"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:168
+#: ../lib/timing-shutdown.py:169
 msgid "days"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:175 ../data/plugins/shutdown.ui.h:7
+#: ../lib/timing-shutdown.py:176 ../data/plugins/shutdown.ui.h:7
 msgid "Time to Poweroff:  "
 msgstr ""
 
-#: ../lib/timing-shutdown.py:284
+#: ../lib/timing-shutdown.py:285
 msgid "Quit(_Q)"
 msgstr ""
 
@@ -622,25 +626,21 @@ msgid "Automatic shutdown setted"
 msgstr ""
 
 #: ../data/plugins/shutdown.ui.h:8
-msgid "Shutdown Frequency:  "
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:9
 msgid "Never"
 msgstr ""
 
-#: ../data/plugins/shutdown.ui.h:10
+#: ../data/plugins/shutdown.ui.h:9
 msgid "Only this time Shutdown"
 msgstr ""
 
-#: ../data/plugins/shutdown.ui.h:11
+#: ../data/plugins/shutdown.ui.h:10
 msgid "Every Day"
 msgstr ""
 
-#: ../data/plugins/shutdown.ui.h:12
+#: ../data/plugins/shutdown.ui.h:11
 msgid "Monday to Friday"
 msgstr ""
 
-#: ../data/plugins/shutdown.ui.h:13
+#: ../data/plugins/shutdown.ui.h:12
 msgid "Saturday to Sunday"
 msgstr ""

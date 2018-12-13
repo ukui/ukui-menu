@@ -118,6 +118,6 @@ setup(
     },
     data_files = data_files,
     install_requires = [ 'setuptools', ],
-    scripts = ['ukui-menu', 'ukui-menu-editor', 'timing-shutdown'],
+    scripts = ['ukui-menu', 'ukui-menu-editor'],
     cmdclass = cmdclass,
 )

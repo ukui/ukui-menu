@@ -1046,7 +1046,7 @@ class pluginclass( object ):
         Gdk.flush()
 
     def showtimingshutdown(self, menu, widget):
-        os.system("timing-shutdown &")
+        os.system("/usr/lib/ukui-menu/timing-shutdown.py &")
 
     def shutdown1(self, menu, widget):
         session_bus = dbus.SessionBus()

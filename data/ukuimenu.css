@@ -6,14 +6,12 @@
 background-color: @menu_bg_color;
 font-size: 13px;
 color: #ffffff;
-opacity:0.9;
 }
 #ViewportNull {
 background-color: transparent;
 border-color: transparent;
 font-size: 13px;
 color: #ffffff;
-opacity:0.9;
 }
 #ViewportButton {
 background-color: @bg_color;
@@ -255,5 +253,5 @@ color: #ffffff;
 opacity: 0.8;
 }
 menuitem:hover {
-background-color: shade(@bg_color, 0.8);
+background-color: shade(@bg_color, 1.8);
 }
