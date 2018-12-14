@@ -1088,7 +1088,7 @@ class pluginclass( object ):
     def updateHeight(self):
         self.layout_left.move(self.viewport_entry, 103, 465+self.addedHeight)
         self.layout_left.move(self.viewport18, 4, 465+self.addedHeight)
-        self.layout_left.move(self.viewport23, 75, 465+self.addedHeight)
+        self.layout_left.move(self.viewport23, 74, 465+self.addedHeight)
         self.viewport1.set_size_request(236, 455+self.addedHeight)
         self.vp_left_container.set_size_request(227, 450+self.addedHeight)
         self.viewport2.set_size_request(236, 455+self.addedHeight)

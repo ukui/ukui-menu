@@ -1052,7 +1052,7 @@
                 </child>
               </object>
               <packing>
-                <property name="x">74</property>
+                <property name="x">59</property>
                 <property name="y">467</property>
               </packing>
             </child>
@@ -1136,13 +1136,13 @@
             <child>
               <object class="GtkViewport" id="viewport_entry">
                 <property name="width_request">228</property>
-                <property name="height_request">24</property>
+                <property name="height_request">26</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkEntry" id="search_entry">
                     <property name="width_request">228</property>
-                    <property name="height_request">24</property>
+                    <property name="height_request">26</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_frame">False</property>
