@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-14 01:13+0800\n"
+"POT-Creation-Date: 2018-12-19 10:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,6 +114,20 @@ msgstr ""
 
 #: ../lib/timing-shutdown.py:285
 msgid "Quit(_Q)"
+msgstr ""
+
+#: ../lib/ukui-remove-application.py:79
+msgid ""
+"This application has been removed. Are you sure remove the menu form the "
+"startup menu?"
+msgstr ""
+
+#: ../lib/ukui-remove-application.py:89
+msgid "The following packages will be removed:"
+msgstr ""
+
+#: ../lib/ukui-remove-application.py:93
+msgid "Packages will be removed"
 msgstr ""
 
 #. wps

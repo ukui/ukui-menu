@@ -206,7 +206,7 @@ msgstr "Dernières"
 
 #: ../ukui_menu/plugins/menu.py:333 ../ukui_menu/plugins/menu.py:447
 msgid "All App"
-msgstr "Tous les app"
+msgstr "Tous App"
 
 #: ../ukui_menu/plugins/menu.py:338 ../ukui_menu/plugins/menu.py:436
 msgid "Favorite"

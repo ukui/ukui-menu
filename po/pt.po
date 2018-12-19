@@ -228,7 +228,7 @@ msgstr "Computador"
 
 #: ../ukui_menu/plugins/menu.py:495
 msgid "Settings"
-msgstr "A configuração"
+msgstr "Configuração"
 
 #: ../ukui_menu/plugins/menu.py:503 ../ukui_menu/feedback.py:58
 msgid "Feedback"

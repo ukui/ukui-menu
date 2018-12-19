@@ -210,7 +210,7 @@ msgstr "Recientes"
 
 #: ../ukui_menu/plugins/menu.py:333 ../ukui_menu/plugins/menu.py:447
 msgid "All App"
-msgstr "Todas las APP"
+msgstr "Todas App"
 
 #: ../ukui_menu/plugins/menu.py:338 ../ukui_menu/plugins/menu.py:436
 msgid "Favorite"
@@ -218,7 +218,7 @@ msgstr "Favorito"
 
 #: ../ukui_menu/plugins/menu.py:383
 msgid "Power"
-msgstr "Power"
+msgstr "Apagado"
 
 #: ../ukui_menu/plugins/menu.py:458 ../ukui_menu/plugins/menu.py:848
 #: ../ukui_menu/plugins/menu.py:856 ../ukui_menu/plugins/menu.py:1530
@@ -279,15 +279,15 @@ msgstr "Propiedad(_P)"
 
 #: ../ukui_menu/plugins/menu.py:987
 msgid "Power(_P)"
-msgstr "Power(_P)"
+msgstr "Apagado(_P)"
 
 #: ../ukui_menu/plugins/menu.py:988
 msgid "Reboot(_R)"
-msgstr "Reboot(_R)"
+msgstr "Reiniciar(_R)"
 
 #: ../ukui_menu/plugins/menu.py:991
 msgid "Logout(_O)"
-msgstr "Logout(_O)"
+msgstr "Paso a pérdidas y ganancias(_O)"
 
 #: ../ukui_menu/plugins/menu.py:992
 msgid "Switch User(_S)"

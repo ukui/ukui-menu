@@ -2,6 +2,7 @@
 ukui-menu-editor
 lib/ukui-menu.py
 lib/timing-shutdown.py
+lib/ukui-remove-application.py
 ukui_menu/__init__.py
 ukui_menu/plugins/__init__.py
 ukui_menu/plugins/menu.py

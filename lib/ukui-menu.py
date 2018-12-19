@@ -275,7 +275,7 @@ class MenuWin( object ):
         if self.keybinder == None:
             return
 
-        self.keybinder.set_focus_window( self.mainwin.window.get_window() )
+        #self.keybinder.set_focus_window( self.mainwin.window.get_window() )
         return False
 
     def onWindowUnmap( self, *args ):
@@ -283,7 +283,7 @@ class MenuWin( object ):
         if self.keybinder == None:
             return
         
-        self.keybinder.set_focus_window()
+        #self.keybinder.set_focus_window()
         return False
 
     def onRealize( self, *args):

@@ -118,6 +118,20 @@ msgstr "距离关机还有："
 msgid "Quit(_Q)"
 msgstr "退出"
 
+#: ../lib/ukui-remove-application.py:79
+msgid ""
+"This application has been removed. Are you sure remove the menu form the "
+"startup menu?"
+msgstr "该应用程序已经被卸载。您确定需要将该菜单项从开始菜单移除吗？"
+
+#: ../lib/ukui-remove-application.py:89
+msgid "The following packages will be removed:"
+msgstr "下列软件包将要被移除："
+
+#: ../lib/ukui-remove-application.py:93
+msgid "Packages will be removed"
+msgstr "移除的软件包"
+
 #. wps
 #: ../ukui_menu/plugins/menu.py:101 ../ukui_menu/plugins/menu.py:619
 #: ../ukui_menu/plugins/menu.py:777 ../ukui_menu/plugins/menu.py:805
