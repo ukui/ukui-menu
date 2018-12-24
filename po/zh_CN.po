@@ -56,7 +56,7 @@ msgstr "菜单属性"
 
 #: ../lib/ukui-menu.py:378
 msgid "Transparency:"
-msgstr "T透明度："
+msgstr "透明度："
 
 #: ../lib/ukui-menu.py:380
 msgid "Menu Type:"

@@ -477,7 +477,7 @@ class pluginclass( object ):
         self.recentAppBox.set_spacing(3)
 
         self.bamfok = False
-        GLib.timeout_add( 100, self.getBamfStatus )
+        GLib.timeout_add( 30000, self.getBamfStatus )
 
         self.label_user = self.builder.get_object("label_user")
         user_name = GLib.get_user_name()
@@ -528,6 +528,8 @@ class pluginclass( object ):
         for mainitems in [ "ukui-applications.menu", "ukui-settings.menu" ]:
             mymenu = Menu( mainitems )
             mymenu.tree.add_monitor( self.menuChanged, None )
+
+        self.lastActiveTab = 0
 
     def getBamfStatus(self):
         if self.bamfok:
@@ -2546,6 +2548,7 @@ class pluginclass( object ):
             f.close()
 
         except Exception as e:
+            f.close()
             print (e)
         
         Gdk.flush()
