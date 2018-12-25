@@ -871,6 +871,7 @@ class pluginclass( object ):
                 if (os.path.exists(GLib.get_home_dir() + "/.applet")):
                     f = open(GLib.get_home_dir() + "/.applet")
                     text = f.read()
+                    f.close()
 
                 mTree = Gtk.Menu()
                 mTree.set_name("myGtkLabel")
@@ -1223,6 +1224,8 @@ class pluginclass( object ):
             for item in new_application_list:
                 found = False
                 for item2 in self.applicationList:
+                    if item['entry'].get_desktop_file_path() is None or item2['entry'].get_desktop_file_path() is None:
+                        continue
                     if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
@@ -1233,6 +1236,8 @@ class pluginclass( object ):
             for item in self.applicationList:
                 found = False
                 for item2 in new_application_list:
+                    if item['entry'].get_desktop_file_path() is None or item2['entry'].get_desktop_file_path() is None:
+                        continue
                     if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
@@ -1292,6 +1297,8 @@ class pluginclass( object ):
         for item in self.all_application_list:
             found = False
             for item2 in self.applicationList:
+                if item['entry'].get_desktop_file_path() is None or item2['entry'].get_desktop_file_path() is None:
+                    continue
                 if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8') or os.path.basename(item['entry'].get_desktop_file_path().decode('utf-8')) == os.path.basename(item2['entry'].get_desktop_file_path().decode('utf-8')):
                     found = True
                     break
@@ -1308,6 +1315,8 @@ class pluginclass( object ):
             for item in new_uncategoried_list:
                 found = False
                 for item2 in self.uncategoriedList:
+                    if item['entry'].get_desktop_file_path() is None or item2['entry'].get_desktop_file_path() is None:
+                        continue
                     if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
@@ -1318,6 +1327,8 @@ class pluginclass( object ):
             for item in self.uncategoriedList:
                 found = False
                 for item2 in new_uncategoried_list:
+                    if item['entry'].get_desktop_file_path() is None or item2['entry'].get_desktop_file_path() is None:
+                        continue
                     if item['entry'].get_desktop_file_path().decode('utf-8') == item2['entry'].get_desktop_file_path().decode('utf-8'):
                         found = True
                         break
@@ -1360,6 +1371,8 @@ class pluginclass( object ):
         self.rebuildLock = False
 
     def build_application_launcher(self, application, menu_has_changed):
+        if application['entry'].get_desktop_file_path() is None:
+            return None
         button = MenuApplicationLauncher( application['entry'].get_desktop_file_path().decode('utf-8'),
                                           self.iconSize, application["category"],
                                           True, 28,
@@ -1391,6 +1404,8 @@ class pluginclass( object ):
         def find_applications_recursively(app_list, directory, catName):
             for item in directory.get_contents():
                 if item.get_type() == ukuimenu.TYPE_ENTRY:
+                    if entry.get_name() is None:
+                        continue
                     app_list.append( { 'entry': item,
                                        'category': entry.get_name().decode('utf-8') } )
                 elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
@@ -1402,8 +1417,12 @@ class pluginclass( object ):
                 if entry.get_type() == ukuimenu.TYPE_DIRECTORY and len(entry.get_contents()):
                     for item in entry.get_contents():
                         if item.get_type() == ukuimenu.TYPE_DIRECTORY:
+                            if entry.get_name() is None:
+                                continue
                             find_applications_recursively(application_list, item, entry.get_name().decode('utf-8'))
                         elif item.get_type() == ukuimenu.TYPE_ENTRY:
+                            if entry.get_name() is None:
+                                continue
                             application_list.append({ 'entry': item,
                                                       'category': entry.get_name().decode('utf-8') })
         return application_list
@@ -1415,32 +1434,6 @@ class pluginclass( object ):
             self.menuFiles.append( mymenu )
             mymenu.tree.add_monitor( self.menuChanged, None )
 
-    def buildAppHistoryList(self):
-        self.loadMenuFiles()
-        newApplicationsList = []
-
-        try:
-            def find_applications_recursively(app_list, directory, catName):
-                for item in directory.get_contents():
-                    if item.get_type() == ukuimenu.TYPE_ENTRY:
-                        app_list.append( { "entry": item, "category": catName } )
-                    elif item.get_type() == ukuimenu.TYPE_DIRECTORY:
-                        find_applications_recursively(app_list, item, catName)
-
-            for menu in self.menuFiles:
-                directory = menu.directory
-                for entry in directory.get_contents():
-                    if entry.get_type() == ukuimenu.TYPE_DIRECTORY and len(entry.get_contents()):
-                        for item in entry.get_contents():
-                            if item.get_type() == ukuimenu.TYPE_DIRECTORY:
-                                find_applications_recursively(newApplicationsList, item, entry.get_name().decode('utf-8'))
-                            elif item.get_type() == ukuimenu.TYPE_ENTRY:
-                                newApplicationsList.append( { "entry": item, "category": entry.get_name().decode('utf-8') } )
-            return newApplicationsList
-        except Exception as detail:
-            print (detail)
-            return None
-
     def buildCategoryList(self):
         newCategoryList = [ ]
 
@@ -1448,8 +1441,16 @@ class pluginclass( object ):
 
         for menu in self.menuFiles:
             if self.showCategoryMenu:
-                name = menu.tree.get_root_directory().get_name().decode('utf-8')
-                icon = menu.tree.get_root_directory().get_icon().decode('utf-8')
+                name = menu.tree.get_root_directory().get_name()
+                icon = menu.tree.get_root_directory().get_icon()
+                if name is None:
+                    continue
+                else:
+                    name = name.decode('utf-8')
+                if icon is None:
+                    icon = "folder"
+                else: 
+                    icon = icon.decode('utf-8')
                 if len(menu.directory.get_contents()):
                     newCategoryList.append( { "name": name, "icon": icon, "tooltip": name, "filter": name, "index": num } )
                     if name == _("Applications"):
@@ -1461,13 +1462,20 @@ class pluginclass( object ):
                         self.expanderApp.hide()
                     if name == _("System"):
                         self.expanderSystem.hide()
+
             for child in menu.directory.get_contents():
                 if child.get_type() == ukuimenu.TYPE_DIRECTORY:
-                    newCategoryList.append( { "name": child.get_name().decode('utf-8'), 
-                                              "icon": child.get_icon().decode('utf-8'), 
-                                              "tooltip": child.get_name().decode('utf-8'), 
-                                              "filter": child.get_name().decode('utf-8'), 
-                                              "index": num } )
+                    name = child.get_name()
+                    if name is None:
+                        continue
+                    else:
+                        name = name.decode('utf-8')
+                    icon = child.get_icon()
+                    if icon is None:
+                        icon = "folder"
+                    else:
+                        icon = icon.decode('utf-8')
+                    newCategoryList.append( { "name": name,  "icon": icon, "tooltip": name, "filter": name, "index": num } )
             num += 1
         return newCategoryList
 
@@ -1615,6 +1623,7 @@ class pluginclass( object ):
             if (os.path.exists(GLib.get_home_dir() + "/.applet")):
                     f = open(GLib.get_home_dir() + "/.applet")
                     text = f.read()
+                    f.close()
 
             mTree = Gtk.Menu()
             mTree.set_name("myGtkLabel")
@@ -1891,12 +1900,12 @@ class pluginclass( object ):
              if os.path.exists(GLib.get_home_dir() + "/.recentAppLog"):
                  f = open(GLib.get_home_dir() + "/.recentAppLog", 'r')
                  lines = f.readlines()
+                 f.close()
                  for line in lines:
                      word = line.strip().split(':')
                      if word[0] == delappname:
                          continue
                      recentApp[word[0]] = int(word[len(word) - 1])
-                 f.close()
                  f = open(GLib.get_home_dir() + "/.recentAppLog", 'w')
              else:
                  f = open(GLib.get_home_dir() + "/.recentAppLog", 'w')
@@ -2455,6 +2464,8 @@ class pluginclass( object ):
 
         if not found:
             for appname in self.all_application_list:
+                if appname["entry"].get_name() is None:
+                    continue
                 if desktopPath:
                     button = MenuApplicationLauncher(desktopPath, 32, "", True, highlight=(False))
                     button.set_name("ButtonApp")
@@ -2481,10 +2492,10 @@ class pluginclass( object ):
         if os.path.exists(GLib.get_home_dir() + "/.recentAppLog"):
             f = open(GLib.get_home_dir() + "/.recentAppLog", 'r')
             lines = f.readlines()
+            f.close()
             for line in lines:
                 word = line.strip().split(':')
                 recentApp[word[0]] = int(word[len(word) - 1])
-            f.close()
             f = open(GLib.get_home_dir() + "/.recentAppLog", 'w')
         else:
             f = open(GLib.get_home_dir() + "/.recentAppLog", 'w')
@@ -2512,10 +2523,13 @@ class pluginclass( object ):
             else:
                 return
             lines = f.readlines()
+            f.close()
             for line in lines:
                 word = line.strip().split(':')
                 found = False
                 for appname in self.all_application_list:
+                    if appname["entry"].get_desktop_file_path() is None:
+                        continue
                     findDesktop = False
                     for tempdesktop in self.favAppList:
                         temp = tempdesktop.split(":")[1]
@@ -2545,10 +2559,8 @@ class pluginclass( object ):
                         break
                     else:
                         self.currentHisCount += 1
-            f.close()
 
         except Exception as e:
-            f.close()
             print (e)
         
         Gdk.flush()
