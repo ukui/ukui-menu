@@ -6,223 +6,425 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ukui-menu\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-24 17:31+0800\n"
+"POT-Creation-Date: 2018-07-27 18:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Cihan Alkan <cihanalk@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: Turkish <LL@li.org>\n"
 "Language: Turkish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: utf-8\n"
 
-#: ../lib/ukui-menu.py:57
+
+#: ../ukui-menu-editor:38
+msgid ""
+"\n"
+"Current menu mode is not category mode, please switch and try again!"
+msgstr ""
+"\n" 
+"Geçerli menü modu kategori modu değil, lütfen değiştirin ve tekrar deneyin!"
+
+#: ../lib/ukui-menu.py:60
 msgid "Menu"
 msgstr "Menü"
 
-#: ../lib/ukui-menu.py:315
-#, fuzzy
+#: ../lib/ukui-menu.py:266 ../lib/ukui-menu.py:412
+msgid "Normal Menu"
+msgstr "Normal Menü"
+
+#: ../lib/ukui-menu.py:268 ../lib/ukui-menu.py:414
+msgid "Category Menu"
+msgstr "Kategori Menü"
+
+#. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
+#: ../lib/ukui-menu.py:270 ../ukui_menu/menueditor.py:891
+msgid "Edit Category Menu"
+msgstr "Kategori Menüyü Düzenle"
+
+#: ../lib/ukui-menu.py:359
 msgid "Start"
 msgstr "Başlat"
 
-#: ../lib/ukui-menu.py:345
-#, fuzzy
+#: ../lib/ukui-menu.py:392
 msgid "Startup Menu"
 msgstr "Başlangıç Menüsü"
 
-#: ../lib/ukui-menu.py:414
+#: ../lib/ukui-menu.py:404
+msgid "Menu Property"
+msgstr "Menü Özellikleri"
+
+#: ../lib/ukui-menu.py:406
+msgid "Menu Type:"
+msgstr "Menü Türü:"
+
+#: ../lib/ukui-menu.py:407
+msgid "This is used to set up the menu type."
+msgstr "Bu menü türünü kurmak için kullanılır."
+
+#: ../lib/ukui-menu.py:409
+msgid "File History:"
+msgstr "Dosya Geçmişi:"
+
+#: ../lib/ukui-menu.py:410
+msgid "This is used to set up whether the file history is displayed."
+msgstr "Bu, dosya geçmişinin görüntülenip görüntülenmeyeceğini ayarlamak için kullanılır."
+
+#: ../lib/ukui-menu.py:430
+msgid "Recent file number:"
+msgstr "Geçmiş dosya sayısı:"
+
+#: ../lib/ukui-menu.py:432
+msgid "Recent app number:"
+msgstr "Geçmiş uygulama sayısı:"
+
+#: ../lib/ukui-menu.py:447
+msgid "Reset to default(_R)"
+msgstr "Varsayılana dön"
+
+#: ../lib/ukui-menu.py:454
+msgid "Close(_C)"
+msgstr "Kapat"
+
+#: ../lib/ukui-menu.py:611
 msgid "Reload plugins"
 msgstr "Eklentileri yeniden yükle"
 
-#: ../lib/ukui-menu.py:417
-msgid "About"
-msgstr "Hakkında"
-
-#: ../ukui_menu/plugins/menu.py:199 ../ukui_menu/plugins/menu.py:1134
-#: ../ukui_menu/plugins/menu.py:1135
-msgid "Games"
-msgstr "Oyunlar"
-
-#: ../ukui_menu/plugins/menu.py:387 ../ukui_menu/plugins/menu.py:492
-msgid "All App"
-msgstr "Tüm Uyg."
-
-#: ../ukui_menu/plugins/menu.py:392 ../ukui_menu/plugins/menu.py:481
-msgid "Favorite"
-msgstr "Favoriler"
-
-#: ../ukui_menu/plugins/menu.py:422
-msgid "Power"
-msgstr "Kapat"
-
-#: ../ukui_menu/plugins/menu.py:503 ../ukui_menu/plugins/menu.py:802
-#: ../ukui_menu/plugins/menu.py:810 ../ukui_menu/plugins/menu.py:1424
-#: ../ukui_menu/plugins/menu.py:1850
-msgid "Search local program"
-msgstr "Program ara"
-
-#: ../ukui_menu/plugins/menu.py:533
-msgid "Home"
-msgstr "Ev"
-
-#: ../ukui_menu/plugins/menu.py:541
-msgid "Settings"
-msgstr "Ayarlar"
-
-#: ../ukui_menu/plugins/menu.py:549
-msgid "No items matched"
-msgstr "Eşleşen öğe yok"
-
-#: ../ukui_menu/plugins/menu.py:850 ../ukui_menu/plugins/menu.py:1507
-msgid "Open(_O)"
-msgstr "_Aç"
-
-#: ../ukui_menu/plugins/menu.py:853 ../ukui_menu/plugins/menu.py:1510
-msgid "Add to desktop"
-msgstr "Masaüstüne ekle"
-
-#: ../ukui_menu/plugins/menu.py:857 ../ukui_menu/plugins/menu.py:1513
-msgid "Lock to panel(_L)"
-msgstr "_Panele kilitle"
-
-#: ../ukui_menu/plugins/menu.py:860
-msgid "Unlock from startup menu"
-msgstr "Başlangıç menüsünden kilidi kaldır"
-
-#: ../ukui_menu/plugins/menu.py:864 ../ukui_menu/plugins/menu.py:1523
-msgid "Property(_P)"
-msgstr "_Özellik"
-
-#: ../ukui_menu/plugins/menu.py:926
-msgid "Shutdown"
-msgstr "Bilgisayarı Kapat"
-
-#: ../ukui_menu/plugins/menu.py:927
-msgid "Reboot"
-msgstr "Yeniden Başlat"
-
-#: ../ukui_menu/plugins/menu.py:930
-msgid "Logout"
-msgstr "Kullanıcı Çıkışı"
-
-#: ../ukui_menu/plugins/menu.py:931
-msgid "Switch User"
-msgstr "Kullanıcı Değiştir"
-
-#: ../ukui_menu/plugins/menu.py:932
-msgid "Lock Screen"
-msgstr "Ekranı Kilitle"
-
-#: ../ukui_menu/plugins/menu.py:1127
-msgid "Accessories"
-msgstr "Donatılar"
-
-#: ../ukui_menu/plugins/menu.py:1129 ../ukui_menu/plugins/menu.py:1130
-msgid "Office"
-msgstr "Ofis"
-
-#: ../ukui_menu/plugins/menu.py:1132
-msgid "StartUp"
-msgstr "Başlangıç"
-
-#: ../ukui_menu/plugins/menu.py:1380
-msgid "All"
-msgstr "Tümü"
-
-#: ../ukui_menu/plugins/menu.py:1380
-msgid "Show all applications"
-msgstr "Tüm uygulamaları göster"
-
-#: ../ukui_menu/plugins/menu.py:1516
-msgid "Add to startup menu"
-msgstr "Başlangıç menüsüne ekle"
-
-#: ../ukui_menu/plugins/menu.py:1518
-msgid "Uninstall"
-msgstr "Kaldır"
-
-#: ../ukui_menu/plugins/menu.py:1519
-msgid "Remove from list(_R)"
-msgstr "_Listeden çıkar"
-
-#: ../ukui_menu/plugins/menu.py:1521
-msgid "Remove all"
-msgstr "Tümünü çıkar"
-
-#: ../ukui_menu/plugins/menu.py:1718
-msgid "Type:"
-msgstr "Tür:"
-
-#: ../ukui_menu/plugins/menu.py:1720
-msgid "Name:"
-msgstr "İsim:"
-
-#: ../ukui_menu/plugins/menu.py:1722
-msgid "Command:"
-msgstr "Komut:"
-
-#: ../ukui_menu/plugins/menu.py:1724
-msgid "Note:"
-msgstr "Not:"
-
-#: ../ukui_menu/plugins/menu.py:1733
-msgid "Application"
-msgstr "Uygulama"
-
-#: ../ukui_menu/plugins/menu.py:1735
-msgid "Application in Terminal"
-msgstr "Terminal Uygulamaları"
-
-#: ../ukui_menu/plugins/menu.py:1744
+#: ../lib/ukui-menu.py:614 ../ukui_menu/plugins/menu.py:1959
 msgid "Property"
 msgstr "Özellik"
 
-#: ../ukui_menu/plugins/menu.py:1897
+#. wps
+#: ../ukui_menu/plugins/menu.py:125 ../ukui_menu/plugins/menu.py:732
+#: ../ukui_menu/plugins/menu.py:906 ../ukui_menu/plugins/menu.py:2208
+#: ../ukui_menu/plugins/menu.py:2315
+msgid "WPS Writer"
+msgstr "WPS Kelime İşlemci"
+
+#: ../ukui_menu/plugins/menu.py:126 ../ukui_menu/plugins/menu.py:736
+#: ../ukui_menu/plugins/menu.py:908 ../ukui_menu/plugins/menu.py:2208
+#: ../ukui_menu/plugins/menu.py:2322
+msgid "WPS Presentation"
+msgstr "WPS Sunum"
+
+#: ../ukui_menu/plugins/menu.py:127 ../ukui_menu/plugins/menu.py:740
+#: ../ukui_menu/plugins/menu.py:910 ../ukui_menu/plugins/menu.py:2208
+#: ../ukui_menu/plugins/menu.py:2329
+msgid "WPS Spreadsheets"
+msgstr "WPS Hesap Tablosu"
+
+#. qt app
+#: ../ukui_menu/plugins/menu.py:128 ../ukui_menu/plugins/menu.py:758
+#: ../ukui_menu/plugins/menu.py:912 ../ukui_menu/plugins/menu.py:2299
+msgid "Qt Creator"
+msgstr ""
+
+#. qt app
+#: ../ukui_menu/plugins/menu.py:129 ../ukui_menu/plugins/menu.py:2284
+msgid "SMPlayer"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:130 ../ukui_menu/plugins/menu.py:766
+#: ../ukui_menu/plugins/menu.py:914 ../ukui_menu/plugins/menu.py:2286
+msgid "Kylin Video"
+msgstr ""
+
+#. gtk app
+#: ../ukui_menu/plugins/menu.py:131 ../ukui_menu/plugins/menu.py:749
+#: ../ukui_menu/plugins/menu.py:916 ../ukui_menu/plugins/menu.py:2337
+msgid "Eye of MATE Image Viewer"
+msgstr "MATE'nin Gözü Resim Görüntüleyici"
+
+#: ../ukui_menu/plugins/menu.py:132 ../ukui_menu/plugins/menu.py:753
+#: ../ukui_menu/plugins/menu.py:918 ../ukui_menu/plugins/menu.py:2344
+msgid "Atril Document Viewer"
+msgstr "Atril Belge Görüntüleyici"
+
+#. gtk app
+#: ../ukui_menu/plugins/menu.py:133 ../ukui_menu/plugins/menu.py:745
+#: ../ukui_menu/plugins/menu.py:920 ../ukui_menu/plugins/menu.py:2208
+#: ../ukui_menu/plugins/menu.py:2351
+msgid "Pluma"
+msgstr "Metin Düzenleyici"
+
+#: ../ukui_menu/plugins/menu.py:248 ../ukui_menu/plugins/menu.py:1288
+#: ../ukui_menu/plugins/menu.py:1291
+msgid "Games"
+msgstr "Oyunlar"
+
+#: ../ukui_menu/plugins/menu.py:253 ../ukui_menu/plugins/menu.py:1293
+#: ../ukui_menu/plugins/menu.py:1296 ../ukui_menu/menueditor.py:1137
+msgid "Android"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:258 ../ukui_menu/plugins/menu.py:1281
+#: ../ukui_menu/plugins/menu.py:1284
+msgid "Office"
+msgstr "Ofis"
+
+#: ../ukui_menu/plugins/menu.py:400
+msgid "Recent"
+msgstr "Geçmiş"
+
+#: ../ukui_menu/plugins/menu.py:444 ../ukui_menu/plugins/menu.py:564
+msgid "All App"
+msgstr "Tüm Uyg."
+
+#: ../ukui_menu/plugins/menu.py:449 ../ukui_menu/plugins/menu.py:553
+msgid "Favorite"
+msgstr "Favoriler"
+
+#: ../ukui_menu/plugins/menu.py:494
+msgid "Power"
+msgstr "Kapat"
+
+#: ../ukui_menu/plugins/menu.py:575 ../ukui_menu/plugins/menu.py:947
+#: ../ukui_menu/plugins/menu.py:955 ../ukui_menu/plugins/menu.py:1655
+#: ../ukui_menu/plugins/menu.py:2439
+msgid "Search local program"
+msgstr "Program ara"
+
+#: ../ukui_menu/plugins/menu.py:605
+msgid "Home"
+msgstr "Ev"
+
+#: ../ukui_menu/plugins/menu.py:613
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: ../ukui_menu/plugins/menu.py:621
+msgid "No items matched"
+msgstr "Eşleşen öğe yok"
+
+#: ../ukui_menu/plugins/menu.py:898 ../ukui_menu/plugins/menu.py:2143
+#: ../ukui_menu/plugins/menu.py:2156 ../ukui_menu/plugins/menu.py:2169
+msgid ""
+"\n"
+"File not exists, it was moved or deleted!\n"
+"\n"
+"It will be automatically removed from the history list!\n"
+msgstr ""
+"\n"
+"Dosya mevcut değil, taşındı veya silinmiş!\n"
+"\n"
+"Bu, otomatik olarak geçmiş listesinden kaldırılacak!\n"
+
+#: ../ukui_menu/plugins/menu.py:979 ../ukui_menu/plugins/menu.py:1734
+#: ../ukui_menu/plugins/menu.py:2187
+msgid "Open(_O)"
+msgstr "_Aç"
+
+#: ../ukui_menu/plugins/menu.py:982 ../ukui_menu/plugins/menu.py:1737
+msgid "Add to desktop"
+msgstr "Masaüstüne ekle"
+
+#: ../ukui_menu/plugins/menu.py:986 ../ukui_menu/plugins/menu.py:1740
+msgid "Lock to panel(_L)"
+msgstr "_Panele kilitle"
+
+#: ../ukui_menu/plugins/menu.py:989
+msgid "Unlock from startup menu"
+msgstr "Başlangıç menüsünden kilidi kaldır"
+
+#: ../ukui_menu/plugins/menu.py:993 ../ukui_menu/plugins/menu.py:1750
+#: ../ukui_menu/plugins/menu.py:2197
+msgid "Property(_P)"
+msgstr "_Özellik"
+
+#: ../ukui_menu/plugins/menu.py:1059
+msgid "Shutdown"
+msgstr "Bilgisayarı Kapat"
+
+#: ../ukui_menu/plugins/menu.py:1060
+msgid "Reboot"
+msgstr "Yeniden Başlat"
+
+#: ../ukui_menu/plugins/menu.py:1063
+msgid "Logout"
+msgstr "Kullanıcı Çıkışı"
+
+#: ../ukui_menu/plugins/menu.py:1064
+msgid "Switch User"
+msgstr "Kullanıcı Değiştir"
+
+#: ../ukui_menu/plugins/menu.py:1065
+msgid "Lock Screen"
+msgstr "Ekranı Kilitle"
+
+#: ../ukui_menu/plugins/menu.py:1279
+msgid "Accessories"
+msgstr "Donatılar"
+
+#: ../ukui_menu/plugins/menu.py:1286
+msgid "StartUp"
+msgstr "Başlangıç"
+
+#: ../ukui_menu/plugins/menu.py:1329 ../ukui_menu/plugins/menu.py:1330
+#: ../ukui_menu/plugins/menu.py:1598 ../ukui_menu/plugins/menu.py:1603
+msgid "Applications"
+msgstr "Uygulamalar"
+
+#: ../ukui_menu/plugins/menu.py:1334 ../ukui_menu/plugins/menu.py:1335
+#: ../ukui_menu/plugins/menu.py:1600 ../ukui_menu/plugins/menu.py:1605
+msgid "System"
+msgstr "Sistem"
+
+#: ../ukui_menu/plugins/menu.py:1743
+msgid "Add to startup menu"
+msgstr "Başlangıç menüsüne ekle"
+
+#: ../ukui_menu/plugins/menu.py:1745
+msgid "Uninstall"
+msgstr "Kaldır"
+
+#: ../ukui_menu/plugins/menu.py:1746 ../ukui_menu/plugins/menu.py:2195
+msgid "Remove from list(_R)"
+msgstr "_Listeden çıkar"
+
+#: ../ukui_menu/plugins/menu.py:1748
+msgid "Remove all"
+msgstr "Tümünü çıkar"
+
+#: ../ukui_menu/plugins/menu.py:1933
+msgid "Type:"
+msgstr "Tür:"
+
+#: ../ukui_menu/plugins/menu.py:1935
+msgid "Name:"
+msgstr "İsim:"
+
+#: ../ukui_menu/plugins/menu.py:1937
+msgid "Command:"
+msgstr "Komut:"
+
+#: ../ukui_menu/plugins/menu.py:1939
+msgid "Note:"
+msgstr "Not:"
+
+#: ../ukui_menu/plugins/menu.py:1948
+msgid "Application"
+msgstr "Uygulama"
+
+#: ../ukui_menu/plugins/menu.py:1950
+msgid "Application in Terminal"
+msgstr "Terminal Uygulamaları"
+
+#: ../ukui_menu/plugins/menu.py:2189
+msgid "Open directory(_D)"
+msgstr "Klasör Aç"
+
+#: ../ukui_menu/plugins/menu.py:2191
+msgid "New(_N)"
+msgstr "Yeni"
+
+#: ../ukui_menu/plugins/menu.py:2193
+msgid "Copy to desktop(_C)"
+msgstr "Masaüstüne Kopyala"
+
+#: ../ukui_menu/plugins/menu.py:2392
+#, python-format
+msgid "Recent(%s)"
+msgstr "Geçmiş(%s)"
+
+#: ../ukui_menu/plugins/menu.py:2486
 msgid "Chromium Browser"
 msgstr "Chromium Tarayıcı"
 
-#: ../ukui_menu/plugins/menu.py:1903
+#: ../ukui_menu/plugins/menu.py:2492
 msgid "Fcitx Config"
 msgstr "Fcitx Yapılandırması"
 
-#: ../ukui_menu/easybuttons.py:416
-#, fuzzy
+#: ../ukui_menu/easybuttons.py:406
 msgid "Comment:"
 msgstr "Açıklama:"
 
-#: ../ukui_menu/keybinding.py:200
+#: ../ukui_menu/keybinding.py:219
 msgid "Click to set a new accelerator key for opening and closing the menu.  "
-msgstr "Menüyü açmak ve kapatmak için yeni bir hızlandırıcı anahtarı ayarlamak için tıklayın."
+msgstr "Menüyü açmak ve kapatmak için yeni bir hızlandırıcı tuşunu ayarlamak için tıklayın."
 
-#: ../ukui_menu/keybinding.py:201
+#: ../ukui_menu/keybinding.py:220
 msgid "Press Escape or click again to cancel the operation.  "
 msgstr "İşlemi iptal etmek için Escape tuşuna basın veya tekrar tıklayın."
 
-#: ../ukui_menu/keybinding.py:202
+#: ../ukui_menu/keybinding.py:221
 msgid "Press Backspace to clear the existing keybinding."
-msgstr "Varolan anahtar bağlamasını temizlemek için Geri tuşuna basın."
+msgstr "Mevcut tuş kilidini silmek için Geri tuşuna basın."
 
-#: ../ukui_menu/keybinding.py:215
+#: ../ukui_menu/keybinding.py:234
 msgid "Pick an accelerator"
-msgstr "Hızlandırıcı seçin"
+msgstr "Bir hızlandırıcı seç"
 
-#: ../ukui_menu/keybinding.py:267
+#: ../ukui_menu/keybinding.py:286
 msgid "<not set>"
 msgstr "<ayarlanmamış>"
 
-#~ msgid "Computer  "
-#~ msgstr "Bilgisayar"
+#: ../ukui_menu/menueditor.py:790
+#, python-format
+msgid ""
+"\n"
+"The current system is not selected [%s] software, can not display the "
+"classification!"
+msgstr ""
+"\n"
+"Mevcut sistem [%s] yazılımı seçilmemiş, sınıflandırmayı görüntüleyemiyor!"
 
-#~ msgid "CtrlCenter"
-#~ msgstr "CtrlCenter"
+#: ../ukui_menu/menueditor.py:796
+#, python-format
+msgid ""
+"\n"
+"The current system is not installed [%s] software, can not display the "
+"classification!"
+msgstr ""
+"\n"
+"Mevcut sistem [%s] yazılımı kurulmamış, sınıflandırmayı görüntüleyemiyor!"
 
-#~ msgid ""
-#~ "Couldn't save favorites. Check if you have write access to ~/.config/mate-"
-#~ "menu"
-#~ msgstr ""
-#~ "Couldn't save favorites. Check if you have write access to ~/.config/mate-"
-#~ "menu"
+#: ../ukui_menu/menueditor.py:892
+msgid "Restore the default menu layout"
+msgstr "Varsayılan menü düzenini geri yükle"
 
-#~ msgid "Install package '%s'"
-#~ msgstr "Install package '%s'"
+#: ../ukui_menu/menueditor.py:893
+msgid "Menus:"
+msgstr "Menüler:"
+
+#: ../ukui_menu/menueditor.py:894
+msgid "Items:"
+msgstr "Öğeler:"
+
+#: ../ukui_menu/menueditor.py:895
+msgid "Move Up"
+msgstr "Yukarı Al"
+
+#: ../ukui_menu/menueditor.py:896
+msgid "Move Down"
+msgstr "Aşağı Al"
+
+#: ../ukui_menu/menueditor.py:897
+msgid "Revert all menus to original settings?"
+msgstr "Tüm menüler orijinal ayarlara geri dönsün mü?"
+
+#: ../ukui_menu/menueditor.py:898
+msgid "Revert Changes?"
+msgstr "Değişiklikleri geri al?"
+
+#: ../ukui_menu/menueditor.py:1083
+msgid "Name"
+msgstr "İsim"
+
+#: ../ukui_menu/menueditor.py:1099
+msgid "Show"
+msgstr "Göster"
+
+#: ../ukui_menu/menueditor.py:1107
+msgid "Item"
+msgstr "Öğe"
+
+#: ../ukui_menu/menueditor.py:1138
+#, python-format
+msgid ""
+"\n"
+"[%s] is a system autostart service software, you should not show it in "
+"startup menu!"
+msgstr ""
+"\n"
+"[%s] bir sistem autostart servis yazılımıdır, başlangıç menüsünde göstermemelisiniz!"
