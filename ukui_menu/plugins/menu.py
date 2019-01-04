@@ -2255,6 +2255,8 @@ class pluginclass( object ):
             if os.path.exists(path):
                 cf.read(path)
                 recentFiles = cf.get("history", "recents")
+                if recentFiles == "@Invalid()":
+                    return
                 recentFiles = recentFiles.split(", ")
                 for recfile in recentFiles:
                     if recfile.endswith(","):

@@ -70,7 +70,7 @@ font-size: 13px;
 }
 #ButtonUser {
 padding: 0px 0px;
-background-color: @bg_color;
+background-color: transparent;
 border-width: 0px;
 background-image: none;
 border-color: shade(@border_color, 1.2);

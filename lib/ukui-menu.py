@@ -52,7 +52,7 @@ except Exception as e:
     sys.exit( 1 )
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
-GObject.threads_init()
+#GObject.threads_init()
 
 # i18n
 gettext.install("ukui-menu", "/usr/share/locale")
@@ -84,7 +84,11 @@ class MainWindow( object ):
         builder.connect_signals(self)
 
         self.borderwidth = 3
-        self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
+#        self.border.set_padding( self.borderwidth, self.borderwidth, self.borderwidth, self.borderwidth )
+        self.border.set_margin_start( self.borderwidth )
+        self.border.set_margin_end( self.borderwidth )
+        self.border.set_margin_top( self.borderwidth )
+        self.border.set_margin_bottom( self.borderwidth )
         self.eventbox.set_name("EventBox")
 
         self.window.connect( "key-press-event", self.onKeyPress )
@@ -104,7 +108,6 @@ class MainWindow( object ):
     def on_window1_destroy (self, widget, data = None):
         Gtk.main_quit()
         sys.exit(0)
-
 
     def PopulatePlugins( self ):
         PluginPane = Gtk.EventBox()
@@ -128,7 +131,9 @@ class MainWindow( object ):
         VBox1 = Gtk.Box( orientation=Gtk.Orientation.VERTICAL )
         VBox1.show()
         #Add plugin to Plugin Box under heading button
-        MyPlugin.content_holder.reparent( VBox1 )
+        #MyPlugin.content_holder.reparent( VBox1 )
+        MyPlugin.window.remove( MyPlugin.content_holder )
+        VBox1.add( MyPlugin.content_holder )
 
         #Add plugin to main window
         PaneLadder.pack_start( VBox1 , True, True, 0)
@@ -237,7 +242,7 @@ class MenuWin( object ):
         self.createPanelButton()
         self.applet.set_flags( UkuiPanelApplet.AppletFlags.EXPAND_MINOR )
         self.button.connect( "button-press-event", self.showMenu )
-        GLib.timeout_add(1000, self.InitMenu )
+        GLib.timeout_add(100, self.InitMenu )
 
     def InitMenu( self ):
         self.settings = Gio.Settings.new("org.ukui.ukui-menu")
@@ -289,8 +294,7 @@ class MenuWin( object ):
 
     def changeIcon(self, settings, key, args = None):
         self.panel_size = self.settings_panel.get_int("size")
-        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.svg")
-        self.pixbuf = self.pixbuf.scale_simple(self.panel_size + 5, self.panel_size - 5, 2)
+        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/ukui-menu/icons/start.svg", self.panel_size, self.panel_size)
         self.button_icon.set_from_pixbuf(self.pixbuf)
         self.button_box.set_size_request(self.panel_size + 20, -1)
         Gdk.flush()
@@ -299,7 +303,6 @@ class MenuWin( object ):
         self.settings_panel = Gio.Settings.new_with_path("org.ukui.panel.toplevel", "/org/ukui/panel/toplevels/bottom/")
         self.settings_panel.connect("changed::size", self.changeIcon)
         self.panel_size = self.settings_panel.get_int("size")
-
 
         style_provider = Gtk.CssProvider()
         try:
@@ -311,8 +314,7 @@ class MenuWin( object ):
         except Exception as e:
             print (e)
 
-        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file("/usr/share/ukui-menu/icons/start.svg")
-        self.pixbuf = self.pixbuf.scale_simple(self.panel_size + 5, self.panel_size - 5, 2)
+        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/ukui-menu/icons/start.svg", self.panel_size, self.panel_size)
         self.button_icon = Gtk.Image.new()
         self.button_icon.set_from_pixbuf(self.pixbuf)
         self.button_icon.set_tooltip_text(_("Start"))
@@ -322,13 +324,17 @@ class MenuWin( object ):
         self.button_box = Gtk.Box()
         self.button_box.set_size_request(self.panel_size + 20, -1)
         self.button_box.pack_start( self.button , True, True, 0)
-        self.button_icon.set_padding( 0, 0 )
+        #self.button_icon.set_padding( 0, 0 )
+        self.button_icon.set_margin_start( 0 )
+        self.button_icon.set_margin_end( 0 )
+        self.button_icon.set_margin_top( 0 )
+        self.button_icon.set_margin_bottom( 0 )
 
         self.button_box.set_homogeneous( False )
         self.button_box.show_all()
 
         self.applet.add( self.button_box )
-        self.applet.set_background_widget( self.applet )
+        #self.applet.set_background_widget( self.applet )
 
     def bind_hot_key( self ):
         try:
