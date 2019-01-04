@@ -66,7 +66,7 @@ class ShutdownDialog(object):
         builder.add_from_file( os.path.join( '/', 'usr', 'share', 'ukui-menu',  'plugins', 'shutdown.ui' ) )
         self.dialog = builder.get_object("dialog1")
         self.dialog.connect("delete-event", self.hide_dialog)
-        self.dialog.set_icon_from_file("/usr/share/ukui-menu/icons/timingshutdown.svg")
+        self.dialog.set_icon_name("timing-shutdown")
         self.label2 = builder.get_object("label2")
         self.label_time = builder.get_object("label_time")
         self.button_ok = builder.get_object("button_ok")
@@ -334,7 +334,7 @@ if __name__ == "__main__":
     locker = FLOCK(os.path.expanduser('~') + "/.shutdowndialog.lock")
     status = locker.lock()
     if status:
-        statusIcon = Gtk.StatusIcon.new_from_file ("/usr/share/ukui-menu/icons/timingshutdown.svg")
+        statusIcon = Gtk.StatusIcon.new_from_icon_name ("timing-shutdown")
         if len(sys.argv) > 1:
             app.connect("command-line", command_line, (statusIcon, sys.argv[1]))
         else:
