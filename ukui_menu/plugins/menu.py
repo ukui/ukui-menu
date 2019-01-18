@@ -41,7 +41,6 @@ from ctypes import *
 from ukui_menu.easybuttons import *
 from ukui_menu.execute import Execute
 from ukui_menu.feedback import Feedback
-from pyinotify import WatchManager, Notifier, ProcessEvent, IN_DELETE_SELF, IN_CLOSE_WRITE, IN_MODIFY
 import dbus
 from configobj import ConfigObj
 import _thread
@@ -128,43 +127,6 @@ WPS_S = ["application/wps-office.xlsx",
         "application/wps-office.ett",
         "application/wps-office.xlt"]
 
-class EventHandle(ProcessEvent):
-    def process_IN_DELETE_SELF(self, event):
-        time.sleep(0.2)
-        ifchangegsettings = ukuimenu_settings.get_boolean("recent-file-changed")
-        ukuimenu_settings.set_boolean("recent-file-changed", ~ifchangegsettings)
-    def process_IN_CLOSE_WRITE(self, event):
-        time.sleep(0.2)
-        ifchangegsettings = ukuimenu_settings.get_boolean("recent-file-changed")
-        ukuimenu_settings.set_boolean("recent-file-changed", ~ifchangegsettings)
-    def process_IN_MODIFY(self, event):
-        time.sleep(0.2)
-        ifchangegsettings = ukuimenu_settings.get_boolean("recent-file-changed")
-        ukuimenu_settings.set_boolean("recent-file-changed", ~ifchangegsettings)
-
-def FileMonitor(self):
-    wm = WatchManager()
-    mask = IN_DELETE_SELF | IN_CLOSE_WRITE | IN_MODIFY
-    notifier = Notifier(wm, EventHandle())
-    while True:
-        try:
-            notifier.process_events()
-            if os.path.exists(os.path.join(GLib.get_user_data_dir(), 'recently-used.xbel')):
-                ret = wm.add_watch(os.path.join(GLib.get_user_data_dir(), 'recently-used.xbel'), mask, rec = True)
-                if ret[os.path.join(GLib.get_user_data_dir(), 'recently-used.xbel')] == -1:
-                    os.system("/usr/bin/python3 /usr/lib/ukui-menu/ukui-menu.py")
-                    ifchangegsettings = ukuimenu_settings.get_boolean("permission-changed")
-                    ukuimenu_settings.set_boolean("permission-changed", ~ifchangegsettings)
-            if os.path.exists(os.path.join(GLib.get_user_config_dir(), 'kylin-video/kylin-video.ini')):
-                wm.add_watch(os.path.join(GLib.get_user_config_dir(), 'kylin-video/kylin-video.ini'), mask, rec = True)
-            if os.path.exists(os.path.join(GLib.get_user_config_dir(), 'QtProject/QtCreator.ini')):
-                wm.add_watch(os.path.join(GLib.get_user_config_dir(), 'QtProject/QtCreator.ini'), mask, rec = True)
-            if notifier.check_events():
-                notifier.read_events()
-        except KeyboardInterrupt:
-            notifier.stop()
-            break
-
 def get_user_item_path():
     item_dir = None
 
@@ -224,7 +186,6 @@ class Category(GObject.GObject):
     def application_list(self):
         return self.application_list_m
 
-
 class Menu:
     def __init__(self, MenuToLookup):
         self.tree = ukuimenu.lookup_tree(MenuToLookup)
@@ -267,10 +228,8 @@ class pluginclass( object ):
         #The Glade file for the plugin
         self.builder.add_from_file (os.path.join('/', 'usr', 'share', 'ukui-menu',  'plugins', 'ukuimenu.glade'))
         ukuimenu_settings.connect("changed::user-icon-changed", self.changeimage)
-        ukuimenu_settings.connect("changed::recent-file-changed", self.RecentFileChanged)
         ukuimenu_settings.connect("changed::show-recent-file", self.RecentFileChanged)
         ukuimenu_settings.connect("changed::recent-app-num", self.updateHistoryBox)
-        self.FileMonitorthread()
         self.windowHeight = 505
         self.addedHeight = 0
         self.ButtonHoverWidgetHistory = None
@@ -355,7 +314,7 @@ class pluginclass( object ):
             os.system("cp %s %s" % (iconpath, usericonPath))
             pixbuf = Pixbuf.new_from_file(iconpath)
             print (e)
-        pixbuf = pixbuf.scale_simple(63, 63, 2)  #2 := BILINEAR
+        pixbuf = pixbuf.scale_simple(69, 69, 2)  #2 := BILINEAR
         self.image_user.set_from_pixbuf(pixbuf)
 
         self.image1 = self.builder.get_object("image1")
@@ -939,9 +898,6 @@ class pluginclass( object ):
                 mTree.attach_to_widget(widget)
                 mTree.popup(None, None, None, None, ev.button, ev.time)
 
-    def FileMonitorthread(self):
-        _thread.start_new_thread(FileMonitor, (self, ))
-
     def get_realPath(self, path, configDir):
         realPath = GLib.get_home_dir() + path
         try:
@@ -970,8 +926,19 @@ class pluginclass( object ):
             os.system("cp %s %s" % (iconpath, usericonPath))
             pixbuf = Pixbuf.new_from_file(iconpath)
             print (e)
-        pixbuf = pixbuf.scale_simple(63, 63, 2)  #2 := BILINEAR
+        pixbuf = pixbuf.scale_simple(69, 69, 2)  #2 := BILINEAR
         self.image_user.set_from_pixbuf(pixbuf)
+
+    def updateRecentFile(self):
+        self.AddFavBtn()
+        self.updateHistoryBox()
+
+    def updateRecent(self):
+        self.showRecentFile = ukuimenu_settings.get_boolean("show-recent-file")
+        if not self.showRecentFile:
+            return
+
+        GLib.timeout_add( 100, self.updateRecentFile )
 
     def RecentFileChanged(self, settings = None, key = None, args = None):
         self.showRecentFile = ukuimenu_settings.get_boolean("show-recent-file")
@@ -1085,6 +1052,7 @@ class pluginclass( object ):
             self.addedHeight = screenHeight - 60 - 505
             self.windowHeight = screenHeight - 60
         self.content_holder.set_size_request(340, self.windowHeight)
+        self.updateRecent()
         self.updateHeight()
         Gdk.flush()
 
@@ -1621,9 +1589,9 @@ class pluginclass( object ):
         text = ""
         if event.button == 3:
             if (os.path.exists(GLib.get_home_dir() + "/.applet")):
-                    f = open(GLib.get_home_dir() + "/.applet")
-                    text = f.read()
-                    f.close()
+                f = open(GLib.get_home_dir() + "/.applet")
+                text = f.read()
+                f.close()
 
             mTree = Gtk.Menu()
             mTree.set_name("myGtkLabel")
@@ -2054,6 +2022,8 @@ class pluginclass( object ):
                 elif item.has_application(AppName):
                     hasapp = True
                     break
+
+        self.updateRecent()
 
         if hasapp:
             self.startsToShow(appname)
