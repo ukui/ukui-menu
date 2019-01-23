@@ -31,7 +31,6 @@ import subprocess
 import sys
 import traceback
 import signal
-import cairo
 
 gi.require_version("Gtk", "3.0")
 gi.require_version('UkuiPanelApplet', '4.0')
@@ -46,6 +45,7 @@ from ukui_menu.plugins.menu import pluginclass
 try:
     import xdg.Config
     import ukui_menu.keybinding as keybinding
+    import ukui_menu.pointerMonitor as pointerMonitor
     import ukui_menu.menueditor as menueditor
 except Exception as e:
     print (e)
@@ -67,7 +67,8 @@ from ukui_menu.execute import *
 class MainWindow( object ):
     """This is the main class for the application"""
 
-    def __init__( self, settings ):
+    def __init__( self, keybinder, settings ):
+        self.keybinder = keybinder
         self.settings = settings
 
         self.data_path = os.path.join( '/', 'usr', 'share', 'ukui-menu' )
@@ -92,12 +93,17 @@ class MainWindow( object ):
         self.eventbox.set_name("EventBox")
 
         self.window.connect( "key-press-event", self.onKeyPress )
+        self.window.connect( "focus-in-event", self.onFocusIn )
         #设置window透明
         self.window.set_app_paintable(True)
         opacity = self.settings.get_double("opacity")
         self.window.set_opacity(opacity)
         self.onScreenChanged(None)
-        self.window.connect( "focus-out-event", self.onFocusOut )
+        
+        
+        
+        self.loseFocusId = self.window.connect( "focus-out-event", self.onFocusOut )
+        self.loseFocusBlocked = False
 
         self.offset = 0
 
@@ -217,6 +223,13 @@ class MainWindow( object ):
 
         self.window.hide()
 
+    def onFocusIn( self, *args ):
+        if self.loseFocusBlocked:
+            self.window.handler_unblock( self.loseFocusId )
+            self.loseFocusBlocked = False
+
+        return False
+
     def onFocusOut( self, *args):
         self.hide()
         return False
@@ -225,6 +238,11 @@ class MainWindow( object ):
         screen = self.window.get_screen()
         visual = screen.get_rgba_visual()
         self.window.set_visual(visual)
+
+    def stopHiding( self ):
+        if not self.loseFocusBlocked:
+            self.window.handler_block( self.loseFocusId )
+            self.loseFocusBlocked = True
 
 class MenuWin( object ):
     def __init__( self, applet, iid ):
@@ -242,7 +260,7 @@ class MenuWin( object ):
         self.createPanelButton()
         self.applet.set_flags( UkuiPanelApplet.AppletFlags.EXPAND_MINOR )
         self.button.connect( "button-press-event", self.showMenu )
-        GLib.timeout_add(100, self.InitMenu )
+        GLib.timeout_add(500, self.InitMenu )
 
     def InitMenu( self ):
         self.settings = Gio.Settings.new("org.ukui.ukui-menu")
@@ -252,36 +270,44 @@ class MenuWin( object ):
 
         self.state = self.settings.get_boolean("show-category-menu")
 
-        GLib.timeout_add(30000, self.initKeybinder)
+        self.keybinder = keybinding.GlobalKeyBinding()
         self.hotkeyText = "Super_L"
-        self.mainwin = MainWindow( self.settings )
+        self.mainwin = MainWindow( self.keybinder, self.settings )
         self.mainwin.window.connect( "map-event", self.onWindowMap )
         self.mainwin.window.connect( "unmap-event", self.onWindowUnmap )
         self.mainwin.window.connect( "realize", self.onRealize )
         self.mainwin.window.connect( "size-allocate", lambda *args: self.positionMenu() )
         self.mainwin.window.connect( "focus-out-event", lambda *args: self.button.set_name("ButtonApplet") )
 
-        self.applet.set_can_focus(False)
-
-
-    def initKeybinder( self ):
-        self.keybinder = keybinding.GlobalKeyBinding()
         if self.keybinder is not None:
             self.bind_hot_key()
+        self.applet.set_can_focus(False)
+
+        self.pointerMonitor = pointerMonitor.PointerMonitor()
+        if self.pointerMonitor is not None:
+            self.pointerMonitor.connect("activate", self.onPointerOutside)
+        return False
 
     def onWindowMap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.SELECTED )
+        if self.keybinder == None:
+            return
 
-        #self.keybinder.set_focus_window( self.mainwin.window.get_window() )
+        self.keybinder.set_focus_window( self.mainwin.window.get_window() )
         return False
 
     def onWindowUnmap( self, *args ):
         self.applet.get_style_context().set_state( Gtk.StateFlags.NORMAL )
+        if self.keybinder == None:
+            return
         
-        #self.keybinder.set_focus_window()
+        self.keybinder.set_focus_window()
         return False
 
     def onRealize( self, *args):
+        self.pointerMonitor.addWindowToMonitor( self.mainwin.window.get_window() )
+        self.pointerMonitor.addWindowToMonitor( self.applet.get_window() )
+        self.pointerMonitor.start()
         return False
 
     def onPointerOutside(self, *args):

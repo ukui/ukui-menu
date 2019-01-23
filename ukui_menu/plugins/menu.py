@@ -425,6 +425,7 @@ class pluginclass( object ):
         self.searchEntry.set_icon_from_pixbuf(1, pixbuf)
         self.searchEntry.set_icon_activatable(1, True)
         self.searchEntry.connect("changed", self.searchChanged)
+        self.searchEntry.connect("button-press-event", self.entryPopup)
         self.searchEntry.connect("focus-out-event", self.focusOut)
         self.searchEntry.connect("focus-in-event", self.focusIn)
         self.searchEntry.connect("icon-press", self.searchIconPressed)
@@ -801,6 +802,10 @@ class pluginclass( object ):
         except Exception as e:
             print ("s")
 
+    def entryPopup( self, widget, ev ):
+        if ev.button == 3:
+            self.ukuiMenuWin.stopHiding()
+
     def focusOut( self, widget, ev ):
         self.searchEntry.set_name("Entry")
         self.searchEntry.set_text(_("Search local program"))
@@ -889,6 +894,7 @@ class pluginclass( object ):
 
                 mTree.connect("deactivate", self.set_item_state, widget)
 
+                self.ukuiMenuWin.stopHiding()
                 widget.remove(widget.Align1)
                 widget.Align1.remove(widget.HBox1)
                 widget.viewport.show()
@@ -975,6 +981,7 @@ class pluginclass( object ):
             reboot.connect("activate", self.reboot, widget)
             timingshutdown.connect("activate", self.showtimingshutdown, widget)
             shutdown.connect("activate", self.shutdown1, widget)
+            self.ukuiMenuWin.stopHiding()
             mTree.connect("deactivate", self.set_state, widget)
             return mTree
 
@@ -1677,6 +1684,7 @@ class pluginclass( object ):
             mTree.connect("deactivate", self.set_item_state, widget)
 
             widget.set_name("ButtonAppHover")
+            self.ukuiMenuWin.stopHiding()
             widget.remove(widget.Align1)
             widget.Align1.remove(widget.HBox1)
             widget.viewport.show()
@@ -2154,6 +2162,7 @@ class pluginclass( object ):
 
             mTree.connect("deactivate", lambda w: widget.set_name("ButtonApp"))
 
+            self.ukuiMenuWin.stopHiding()
             mTree.attach_to_widget(widget)
             mTree.popup(None, None, None, None, ev.button, ev.time)
 

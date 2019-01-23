@@ -91,7 +91,6 @@ data_files = [
                                                                   'data/icons/so.png',
                                                                   'data/icons/start.svg',
                                                                   'data/icons/stock_person.png',
-                                                                  'data/icons/timingshutdown.svg',
                                                                  ],
     ),
     ('{prefix}/lib/ukui-menu'.format(prefix=sys.prefix), glob('lib/*')),
