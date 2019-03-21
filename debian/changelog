@@ -1,3 +1,11 @@
+ukui-menu (1.1.10-1) experimental; urgency=medium
+
+  * Update the default icon of user face.
+  * Fix the error when show popup menu.
+  * Change the timing of update recent files.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 21 Mar 2019 17:29:11 +0800
+
 ukui-menu (1.1.9-1) unstable; urgency=medium
 
   * Add transparency effect.
