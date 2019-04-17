@@ -97,7 +97,6 @@ class ShutdownDialog(object):
 
     def shutdownChanged(self, settings, key, args = None):
         schedule.clear()
-        time.sleep(1)
         self.update_widget_state()
         os.system("ukui-session-save --shutdown-dialog &")
 
@@ -106,6 +105,7 @@ class ShutdownDialog(object):
             settings = Gio.Settings.new("org.ukui.ukui-menu")
             settings.connect("changed::timing-shutdown", self.shutdownChanged)
             settings.set_boolean("timing-shutdown", False)
+            time.sleep(1)
             settings.set_string("shutdown-sequence", "1")
             self.combobox.set_active_id("1")
         else:
@@ -172,6 +172,8 @@ class ShutdownDialog(object):
 
     def update_label(self, settime):
         time_str = self.compute_time(settime)
+        if time_str == None:
+            time_str = " "
         self.label_time.set_text(time_str)
         statusIcon.set_tooltip_text(_("Time to Poweroff:  ") + time_str)
 
