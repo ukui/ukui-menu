@@ -28,14 +28,13 @@ from gi.repository import Gtk, GLib
 from ukui_menu.systeminfo import SystemInfo
 from ukui_menu.post import *
 
-#sys.path.append("..")
-
 # i18n
 gettext.install("ukui-menu", "/usr/share/locale")
 
 have_display = os.environ.get('DISPLAY') or os.environ.get('WAYLAND_DISPLAY')
 
-url = 'https://www.ubuntukylin.com'
+remote_server = 'www.ubuntukylin.com'
+url = 'https://' + remote_server
 feedback_url = url + '/feedback'
 captcha_url = url + '/member/ajax.php?action=code'
 result_url = feedback_url + '/index.php?action=add&lang=cn'
@@ -49,11 +48,21 @@ class Feedback:
     def w(self, widget):
         return self.widgets.get_object(widget)
 
+    def __new__ (cls):
+        if  is_connected(remote_server):
+            return object.__new__(cls)
+        else:
+            dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK,
+                                       _("You're offline. Please connect to the internet!"))
+            response = dialog.run()
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+            return None
+
     def __init__(self):
         self.widgets = Gtk.Builder()
         self.widgets.set_translation_domain('ukui-menu')
         self.widgets.add_from_file('/usr/share/ukui-menu/feedback.ui')
-        #self.widgets.add_from_file('../data/feedback.ui')
         self.window = self.w('MainWin')
         self.window.set_title(_("Feedback"))
 
@@ -292,8 +301,11 @@ class Feedback:
 
 if __name__ == '__main__':
     if not have_display:
-        print('This program needs a running X session')
+        print ('This program needs a running X session')
     app = Feedback()
+    if not app:
+        print ('Error when creating class feedback')
+        exit()
     app.window.connect("destroy", Gtk.main_quit)
     app.run()
     Gtk.main()
