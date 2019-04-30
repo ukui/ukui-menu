@@ -247,11 +247,11 @@ msgid "Recent"
 msgstr "最近"
 
 #: ../ukui_menu/plugins/menu.py:333 ../ukui_menu/plugins/menu.py:447
-msgid "All App"
+msgid "All Apps"
 msgstr "所有程序"
 
 #: ../ukui_menu/plugins/menu.py:338 ../ukui_menu/plugins/menu.py:436
-msgid "Favorite"
+msgid "Favorites"
 msgstr "常用软件"
 
 #: ../ukui_menu/plugins/menu.py:383
@@ -316,7 +316,7 @@ msgid "Property(_P)"
 msgstr "属性(_P)"
 
 #: ../ukui_menu/plugins/menu.py:984
-msgid "Power(_P)"
+msgid "Power Off(_P)"
 msgstr "关机(_P)"
 
 #: ../ukui_menu/plugins/menu.py:990

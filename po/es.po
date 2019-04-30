@@ -209,11 +209,11 @@ msgid "Recent"
 msgstr "Recientes"
 
 #: ../ukui_menu/plugins/menu.py:333 ../ukui_menu/plugins/menu.py:447
-msgid "All App"
-msgstr "Todas App"
+msgid "All Apps"
+msgstr "Todas Apps"
 
 #: ../ukui_menu/plugins/menu.py:338 ../ukui_menu/plugins/menu.py:436
-msgid "Favorite"
+msgid "Favorites"
 msgstr "Favorito"
 
 #: ../ukui_menu/plugins/menu.py:383
@@ -278,7 +278,7 @@ msgid "Property(_P)"
 msgstr "Propiedad(_P)"
 
 #: ../ukui_menu/plugins/menu.py:987
-msgid "Power(_P)"
+msgid "Power Off(_P)"
 msgstr "Apagado(_P)"
 
 #: ../ukui_menu/plugins/menu.py:988

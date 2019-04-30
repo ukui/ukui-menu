@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-23 16:56+0800\n"
+"POT-Creation-Date: 2019-04-30 11:19+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,23 +96,23 @@ msgstr ""
 msgid "Property"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:88
-msgid "Set Timing Shutdown Time"
+#: ../lib/timed-shutdown.py:88
+msgid "Set Timed Shutdown Time"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:167
+#: ../lib/timed-shutdown.py:167
 msgid "day"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:169
+#: ../lib/timed-shutdown.py:169
 msgid "days"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:176 ../data/plugins/shutdown.ui.h:7
+#: ../lib/timed-shutdown.py:176 ../data/plugins/shutdown.ui.h:7
 msgid "Time to Poweroff:  "
 msgstr ""
 
-#: ../lib/timing-shutdown.py:285
+#: ../lib/timed-shutdown.py:285
 msgid "Quit(_Q)"
 msgstr ""
 
@@ -245,11 +245,11 @@ msgid "Recent"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:295 ../ukui_menu/plugins/menu.py:409
-msgid "All App"
+msgid "All Apps"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:300 ../ukui_menu/plugins/menu.py:398
-msgid "Favorite"
+msgid "Favorites"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:345
@@ -270,7 +270,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:464 ../ukui_menu/feedback.py:58
+#: ../ukui_menu/plugins/menu.py:464 ../ukui_menu/feedback.py:67
 msgid "Feedback"
 msgstr ""
 
@@ -310,11 +310,11 @@ msgid "Property(_P)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:959
-msgid "Power(_P)"
+msgid "Power Off(_P)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:960
-msgid "Timing Shutdown(_T)"
+msgid "Timed Shutdown(_T)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:963
@@ -503,67 +503,71 @@ msgid ""
 "startup menu!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:68
+#: ../ukui_menu/feedback.py:56
+msgid "You're offline. Please connect to the internet!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:77
 msgid "Images"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:86
+#: ../ukui_menu/feedback.py:95
 msgid "DistroRelease"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:87
+#: ../ukui_menu/feedback.py:96
 msgid "DistroInfo"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:88
+#: ../ukui_menu/feedback.py:97
 msgid "Desktop"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:89
+#: ../ukui_menu/feedback.py:98
 msgid "Architecture"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:90
+#: ../ukui_menu/feedback.py:99
 msgid "Locale"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:95 ../data/feedback.ui.h:6
+#: ../ukui_menu/feedback.py:104 ../data/feedback.ui.h:6
 msgid "System Info"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:137 ../data/feedback.ui.h:8
+#: ../ukui_menu/feedback.py:146 ../data/feedback.ui.h:8
 msgid "System Bug"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:154
+#: ../ukui_menu/feedback.py:163
 msgid "Please input the description!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:165
+#: ../ukui_menu/feedback.py:174
 msgid "Invalid email address!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:173
+#: ../ukui_menu/feedback.py:182
 msgid "Please input the email address!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:184
+#: ../ukui_menu/feedback.py:193
 msgid "Maximum upload file size is 1MB!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:194
+#: ../ukui_menu/feedback.py:203
 msgid "Please input the verification code!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:234
+#: ../ukui_menu/feedback.py:243
 msgid "Successful feedback! Thank you!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:241
+#: ../ukui_menu/feedback.py:250
 msgid "Incorrect CAPTCHA, please re-enter!"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:248
+#: ../ukui_menu/feedback.py:257
 msgid "Unknow error: "
 msgstr ""
 

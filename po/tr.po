@@ -168,11 +168,11 @@ msgid "Recent"
 msgstr "Geçmiş"
 
 #: ../ukui_menu/plugins/menu.py:444 ../ukui_menu/plugins/menu.py:564
-msgid "All App"
+msgid "All Apps"
 msgstr "Tüm Uyg."
 
 #: ../ukui_menu/plugins/menu.py:449 ../ukui_menu/plugins/menu.py:553
-msgid "Favorite"
+msgid "Favorites"
 msgstr "Favoriler"
 
 #: ../ukui_menu/plugins/menu.py:494

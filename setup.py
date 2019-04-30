@@ -94,7 +94,7 @@ data_files = [
                                                                  ],
     ),
     ('{prefix}/lib/ukui-menu'.format(prefix=sys.prefix), glob('lib/*')),
-    ('/etc/xdg/autostart/', ['timing-shutdown.desktop',]),
+    ('/etc/xdg/autostart/', ['timed-shutdown.desktop',]),
 ]
 data_files.extend(datafilelist('{prefix}/share/locale'.format(prefix=sys.prefix), 'build/mo'))
 

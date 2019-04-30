@@ -292,12 +292,12 @@ class pluginclass( object ):
         self.button_user.connect("button-press-event", self.on_button_user_clicked)
 
         self.button_showall = self.builder.get_object("button_showall")
-        self.button_showall.set_label(_("All App"))
+        self.button_showall.set_label(_("All Apps"))
         self.button_showall.set_name("ButtonApp")
         self.button_showall.connect("clicked", self.on_button_showall_clicked)
 
         self.button_back = self.builder.get_object("button_back")
-        self.button_back.set_label(_("Favorite"))
+        self.button_back.set_label(_("Favorites"))
         self.button_back.set_name("ButtonApp")
         self.button_back.connect("clicked", self.on_button_back_clicked)
 
@@ -395,7 +395,7 @@ class pluginclass( object ):
         self.applicationsScrolledWindow = self.builder.get_object( "applicationsScrolledWindow")
 
         self.favappbutton = self.builder.get_object("button_favapp")
-        self.favappbutton.set_label(_("Favorite"))
+        self.favappbutton.set_label(_("Favorites"))
         self.favappbutton.set_name("Button")
         self.change_icon(self.favappbutton, ICON_PATH + "favapp.png")
         self.favappbutton.connect("enter", self.favappbutton_enter)
@@ -406,7 +406,7 @@ class pluginclass( object ):
         self.viewportallapp = self.builder.get_object("viewportallapp")
 
         self.allappbutton = self.builder.get_object("button_allapp")
-        self.allappbutton.set_label(_("All App"))
+        self.allappbutton.set_label(_("All Apps"))
         self.allappbutton.set_name("Button")
         self.change_icon(self.allappbutton, ICON_PATH + "allapp.png")
         self.allappbutton.connect("enter", self.allappbutton_enter)
@@ -956,8 +956,8 @@ class pluginclass( object ):
             mTree = Gtk.Menu()
             mTree.set_name("myGtkLabel")
 
-            shutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Power(_P)"))
-            timingshutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Timing Shutdown(_T)"))
+            shutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Power Off(_P)"))
+            timedshutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Timed Shutdown(_T)"))
             separatorMenuItem1 = Gtk.SeparatorMenuItem()
             separatorMenuItem1.set_visible(True)
             reboot = Gtk.ImageMenuItem.new_with_mnemonic(_("Reboot(_R)"))
@@ -972,14 +972,14 @@ class pluginclass( object ):
             mTree.append(separatorMenuItem2)
             mTree.append(reboot)
             mTree.append(separatorMenuItem1)
-            mTree.append(timingshutdown)
+            mTree.append(timedshutdown)
             mTree.append(shutdown)
             mTree.show_all()
             lock.connect("activate", self.lock, widget)
             changeuser.connect("activate", self.switchuser, widget)
             logout.connect("activate", self.logout, widget)
             reboot.connect("activate", self.reboot, widget)
-            timingshutdown.connect("activate", self.showtimingshutdown, widget)
+            timedshutdown.connect("activate", self.showtimedshutdown, widget)
             shutdown.connect("activate", self.shutdown1, widget)
             self.ukuiMenuWin.stopHiding()
             mTree.connect("deactivate", self.set_state, widget)
@@ -1022,8 +1022,8 @@ class pluginclass( object ):
         self.ukuiMenuWin.hide()
         Gdk.flush()
 
-    def showtimingshutdown(self, menu, widget):
-        os.system("/usr/lib/ukui-menu/timing-shutdown.py &")
+    def showtimedshutdown(self, menu, widget):
+        os.system("/usr/lib/ukui-menu/timed-shutdown.py &")
 
     def shutdown1(self, menu, widget):
         session_bus = dbus.SessionBus()
