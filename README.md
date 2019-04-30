@@ -8,5 +8,5 @@ This is UKUI Menu, a fork of Mate Menu.
   * This menu originated in the Linux Mint distribution and has
     been ported to other distros that ship the UKUI Desktop
     Environment.
-    
-<img src="https://wiki.ubuntu.com/ZestyZapus/ReleaseNotes/UbuntuKylin?action=AttachFile&do=get&target=ukui-menu-en.png" width="50%" height="50%" />
+
+<img src="http://www.ubuntukylin.com/upload/201904/1555590367150918.jpg" width="50%" height="50%" />
