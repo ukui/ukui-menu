@@ -205,16 +205,16 @@ msgid "Recent"
 msgstr "Dernières"
 
 #: ../ukui_menu/plugins/menu.py:333 ../ukui_menu/plugins/menu.py:447
-msgid "All App"
-msgstr "Tous App"
+msgid "All Apps"
+msgstr "Tous Apps"
 
 #: ../ukui_menu/plugins/menu.py:338 ../ukui_menu/plugins/menu.py:436
-msgid "Favorite"
-msgstr "Favori"
+msgid "Favorites"
+msgstr "Les favoris "
 
 #: ../ukui_menu/plugins/menu.py:383
-msgid "Power"
-msgstr "Le pouvoir"
+msgid "Shutdown"
+msgstr "Arrêt"
 
 #: ../ukui_menu/plugins/menu.py:458 ../ukui_menu/plugins/menu.py:845
 #: ../ukui_menu/plugins/menu.py:853 ../ukui_menu/plugins/menu.py:1527
@@ -274,23 +274,27 @@ msgid "Property(_P)"
 msgstr "Biens immobiliers(_P)"
 
 #: ../ukui_menu/plugins/menu.py:984
-msgid "Power(_P)"
-msgstr "Le pouvoir(_P)"
+msgid "Shutdown (_P)"
+msgstr "Arrêt(_P)"
+
+#: ../ukui_menu/plugins/menu.py:960
+msgid "Countdown Shutdown (_T)"
+msgstr "Le compte à rebours(_T)"
 
 #: ../ukui_menu/plugins/menu.py:985
-msgid "Reboot(_R)"
+msgid "Reboot (_R)"
 msgstr "Redémarrage(_R)"
 
 #: ../ukui_menu/plugins/menu.py:988
-msgid "Logout(_O)"
+msgid "Logout (_O)"
 msgstr "Sortie(_O)"
 
 #: ../ukui_menu/plugins/menu.py:989
-msgid "Switch User(_S)"
-msgstr "Switch utilisateur(_S)"
+msgid "Switch Users (_S)"
+msgstr "Switch utilisateurs(_S)"
 
 #: ../ukui_menu/plugins/menu.py:990
-msgid "Lock Screen(_L)"
+msgid "Lock Screen (_L)"
 msgstr "Fermer l'écran(_L)"
 
 #: ../ukui_menu/plugins/menu.py:1181 ../ukui_menu/plugins/menu.py:1182

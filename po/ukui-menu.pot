@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-23 16:56+0800\n"
+"POT-Creation-Date: 2019-05-06 11:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,11 +108,11 @@ msgstr ""
 msgid "days"
 msgstr ""
 
-#: ../lib/timing-shutdown.py:176 ../data/plugins/shutdown.ui.h:7
+#: ../lib/timing-shutdown.py:178 ../data/plugins/shutdown.ui.h:7
 msgid "Time to Poweroff:  "
 msgstr ""
 
-#: ../lib/timing-shutdown.py:285
+#: ../lib/timing-shutdown.py:287
 msgid "Quit(_Q)"
 msgstr ""
 
@@ -245,15 +245,15 @@ msgid "Recent"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:295 ../ukui_menu/plugins/menu.py:409
-msgid "All App"
+msgid "All Apps"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:300 ../ukui_menu/plugins/menu.py:398
-msgid "Favorite"
+msgid "Favorites"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:345
-msgid "Power"
+msgid "Shutdown"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:420 ../ukui_menu/plugins/menu.py:811
@@ -310,27 +310,27 @@ msgid "Property(_P)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:959
-msgid "Power(_P)"
+msgid "Shutdown (_P)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:960
-msgid "Timing Shutdown(_T)"
+msgid "Countdown Shutdown (_T)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:963
-msgid "Reboot(_R)"
+msgid "Reboot (_R)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:966
-msgid "Logout(_O)"
+msgid "Logout (_O)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:967
-msgid "Switch User(_S)"
+msgid "Switch Users (_S)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:968
-msgid "Lock Screen(_L)"
+msgid "Lock Screen (_L)"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1166 ../ukui_menu/plugins/menu.py:1167

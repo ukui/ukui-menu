@@ -54,6 +54,10 @@ msgstr "Menú de inicio"
 msgid "Menu Property"
 msgstr "Propiedad de menú"
 
+#: ../lib/ukui-menu.py:397
+msgid "Transparency:"
+msgstr "Transparencia:"
+
 #: ../lib/ukui-menu.py:408
 msgid "Menu Type:"
 msgstr "Tipo de menu:"
@@ -93,6 +97,19 @@ msgstr "Reload plugins"
 #: ../lib/ukui-menu.py:616 ../ukui_menu/plugins/menu.py:1873
 msgid "Property"
 msgstr "Propiedad"
+
+#: ../lib/timing-shutdown.py:88
+msgid "Set Timing Shutdown Time"
+msgstr "Tiempo de tiempo de cierre"
+
+#: ../lib/timing-shutdown.py:167
+msgid "day"
+msgstr "dia"
+
+#: ../lib/timing-shutdown.py:169
+msgid "days"
+msgstr "dias"
+
 
 #. wps
 #: ../ukui_menu/plugins/menu.py:101 ../ukui_menu/plugins/menu.py:617
@@ -209,16 +226,16 @@ msgid "Recent"
 msgstr "Recientes"
 
 #: ../ukui_menu/plugins/menu.py:333 ../ukui_menu/plugins/menu.py:447
-msgid "All App"
-msgstr "Todas App"
+msgid "All Apps"
+msgstr "Todas Apps"
 
 #: ../ukui_menu/plugins/menu.py:338 ../ukui_menu/plugins/menu.py:436
-msgid "Favorite"
-msgstr "Favorito"
+msgid "Favorites"
+msgstr "Favoritos"
 
 #: ../ukui_menu/plugins/menu.py:383
-msgid "Power"
-msgstr "Apagado"
+msgid "Shutdown"
+msgstr "Shutdown"
 
 #: ../ukui_menu/plugins/menu.py:458 ../ukui_menu/plugins/menu.py:848
 #: ../ukui_menu/plugins/menu.py:856 ../ukui_menu/plugins/menu.py:1530
@@ -277,24 +294,28 @@ msgstr "Desbloquear desde el menu de inicio(_U)"
 msgid "Property(_P)"
 msgstr "Propiedad(_P)"
 
-#: ../ukui_menu/plugins/menu.py:987
-msgid "Power(_P)"
-msgstr "Apagado(_P)"
+#: ../ukui_menu/plugins/menu.py:959
+msgid "Shutdown (_P)"
+msgstr "Shutdown (_P)"
+
+#: ../ukui_menu/plugins/menu.py:960
+msgid "Countdown Shutdown (_T)"
+msgstr "Countdown Encerramento(_T)"
 
 #: ../ukui_menu/plugins/menu.py:988
-msgid "Reboot(_R)"
+msgid "Reboot (_R)"
 msgstr "Reiniciar(_R)"
 
 #: ../ukui_menu/plugins/menu.py:991
-msgid "Logout(_O)"
+msgid "Logout (_O)"
 msgstr "Paso a pérdidas y ganancias(_O)"
 
 #: ../ukui_menu/plugins/menu.py:992
-msgid "Switch User(_S)"
-msgstr "Cambiar de usuario(_S)"
+msgid "Switch Users (_S)"
+msgstr "Cambiar de usuarios(_S)"
 
 #: ../ukui_menu/plugins/menu.py:993
-msgid "Lock Screen(_L)"
+msgid "Lock Screen (_L)"
 msgstr "Pantalla de bloqueo(_L)"
 
 #: ../ukui_menu/plugins/menu.py:1184 ../ukui_menu/plugins/menu.py:1185
@@ -356,7 +377,6 @@ msgstr ""
 "\n"
 "El archivo ya existe, seguro para cubrirlo?\n"
 "\n"
-
 
 #: ../ukui_menu/plugins/menu.py:2127
 msgid "Open directory(_D)"
