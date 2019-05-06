@@ -206,7 +206,7 @@ msgstr "Recente"
 
 #: ../ukui_menu/plugins/menu.py:333 ../ukui_menu/plugins/menu.py:447
 msgid "All Apps"
-msgstr "Todos App"
+msgstr "Todos Apps"
 
 #: ../ukui_menu/plugins/menu.py:338 ../ukui_menu/plugins/menu.py:436
 msgid "Favorites"

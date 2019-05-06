@@ -167,11 +167,11 @@ msgid "Recent"
 msgstr "최근에 이용"
 
 #: ../ukui_menu/plugins/menu.py:451 ../ukui_menu/plugins/menu.py:571
-msgid "All App"
+msgid "All Apps"
 msgstr "모든 앱"
 
 #: ../ukui_menu/plugins/menu.py:456 ../ukui_menu/plugins/menu.py:560
-msgid "Favorite"
+msgid "Favorites"
 msgstr "즐겨찾기"
 
 #: ../ukui_menu/plugins/menu.py:501

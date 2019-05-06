@@ -19,7 +19,7 @@
 # 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 
 from gi.repository import GLib
-import os
+import os, socket
 
 def post_feedback(s, url, fb_type, email, description, filename, code):
     #print(s.cookies.get_dict())
@@ -62,3 +62,16 @@ def get_captcha_image(url, s):
 #    image = imgry.point(table, '1')
 #    captcha_auto = pytesseract.image_to_string(image)
     return icon_path
+
+def is_connected(hostname):
+    try:
+        # see if we can resolve the host name -- tells us if there is
+        # a DNS listening
+        host = socket.gethostbyname(hostname)
+        # connect to the host -- tells us if the host is actually
+        # reachable
+        s = socket.create_connection((host, 80), 2)
+        return True
+    except:
+        pass
+    return False

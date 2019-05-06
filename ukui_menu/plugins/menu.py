@@ -957,7 +957,7 @@ class pluginclass( object ):
             mTree.set_name("myGtkLabel")
 
             shutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Shutdown (_P)"))
-            timingshutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Countdown Shutdown (_T)"))
+            timedshutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("Countdown Shutdown (_T)"))
             separatorMenuItem1 = Gtk.SeparatorMenuItem()
             separatorMenuItem1.set_visible(True)
             reboot = Gtk.ImageMenuItem.new_with_mnemonic(_("Reboot (_R)"))
@@ -972,14 +972,14 @@ class pluginclass( object ):
             mTree.append(separatorMenuItem2)
             mTree.append(reboot)
             mTree.append(separatorMenuItem1)
-            mTree.append(timingshutdown)
+            mTree.append(timedshutdown)
             mTree.append(shutdown)
             mTree.show_all()
             lock.connect("activate", self.lock, widget)
             changeuser.connect("activate", self.switchuser, widget)
             logout.connect("activate", self.logout, widget)
             reboot.connect("activate", self.reboot, widget)
-            timingshutdown.connect("activate", self.showtimingshutdown, widget)
+            timedshutdown.connect("activate", self.showtimedshutdown, widget)
             shutdown.connect("activate", self.shutdown1, widget)
             self.ukuiMenuWin.stopHiding()
             mTree.connect("deactivate", self.set_state, widget)
@@ -1022,8 +1022,8 @@ class pluginclass( object ):
         self.ukuiMenuWin.hide()
         Gdk.flush()
 
-    def showtimingshutdown(self, menu, widget):
-        os.system("/usr/lib/ukui-menu/timing-shutdown.py &")
+    def showtimedshutdown(self, menu, widget):
+        os.system("/usr/lib/ukui-menu/timed-shutdown.py &")
 
     def shutdown1(self, menu, widget):
         session_bus = dbus.SessionBus()
