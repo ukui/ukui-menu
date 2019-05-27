@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkImage" id="image_allapp">
@@ -54,6 +54,9 @@
   </object>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkEventBox" id="eventbox">
         <property name="can_focus">False</property>
@@ -112,7 +115,6 @@
                 <child>
                   <object class="GtkButton" id="button_computer">
                     <property name="label" translatable="yes">我的电脑</property>
-                    <property name="width_request">96</property>
                     <property name="height_request">37</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -136,7 +138,6 @@
                 <child>
                   <object class="GtkButton" id="button_controlcenter">
                     <property name="label" translatable="yes">控制面板</property>
-                    <property name="width_request">96</property>
                     <property name="height_request">37</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -160,7 +161,6 @@
                 <child>
                   <object class="GtkButton" id="button_feedback">
                     <property name="label" translatable="yes">问题反馈</property>
-                    <property name="width_request">96</property>
                     <property name="height_request">37</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -231,6 +231,9 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="homogeneous">True</property>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
                                                 <child>
                                                   <placeholder/>
                                                 </child>
@@ -1083,7 +1086,6 @@
                     <child>
                       <object class="GtkButton" id="button_favapp">
                         <property name="label" translatable="yes">常用软件</property>
-                        <property name="width_request">96</property>
                         <property name="height_request">37</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -1116,7 +1118,6 @@
                     <child>
                       <object class="GtkButton" id="button_allapp">
                         <property name="label" translatable="yes">所有软件</property>
-                        <property name="width_request">96</property>
                         <property name="height_request">37</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1163,9 +1164,6 @@
           </object>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
