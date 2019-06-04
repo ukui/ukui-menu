@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-27 18:55+0300\n"
+"POT-Creation-Date: 2019-05-06 12:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Cihan Alkan <cihanalk@gmail.com>\n"
 "Language-Team: Turkish <LL@li.org>\n"
@@ -17,188 +17,275 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: utf-8\n"
 
-
 #: ../ukui-menu-editor:38
 msgid ""
 "\n"
 "Current menu mode is not category mode, please switch and try again!"
 msgstr ""
-"\n" 
+"\n"
 "Geçerli menü modu kategori modu değil, lütfen değiştirin ve tekrar deneyin!"
 
 #: ../lib/ukui-menu.py:60
 msgid "Menu"
 msgstr "Menü"
 
-#: ../lib/ukui-menu.py:266 ../lib/ukui-menu.py:412
+#: ../lib/ukui-menu.py:253 ../lib/ukui-menu.py:405
 msgid "Normal Menu"
 msgstr "Normal Menü"
 
-#: ../lib/ukui-menu.py:268 ../lib/ukui-menu.py:414
+#: ../lib/ukui-menu.py:255 ../lib/ukui-menu.py:407
 msgid "Category Menu"
 msgstr "Kategori Menü"
 
 #. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
-#: ../lib/ukui-menu.py:270 ../ukui_menu/menueditor.py:891
+#: ../lib/ukui-menu.py:257 ../ukui_menu/menueditor.py:891
 msgid "Edit Category Menu"
 msgstr "Kategori Menüyü Düzenle"
 
-#: ../lib/ukui-menu.py:359
+#: ../lib/ukui-menu.py:346
 msgid "Start"
 msgstr "Başlat"
 
-#: ../lib/ukui-menu.py:392
+#: ../lib/ukui-menu.py:383
 msgid "Startup Menu"
 msgstr "Başlangıç Menüsü"
 
-#: ../lib/ukui-menu.py:404
+#: ../lib/ukui-menu.py:395
 msgid "Menu Property"
 msgstr "Menü Özellikleri"
 
-#: ../lib/ukui-menu.py:406
+#: ../lib/ukui-menu.py:397
+msgid "Transparency:"
+msgstr ""
+
+#: ../lib/ukui-menu.py:399
 msgid "Menu Type:"
 msgstr "Menü Türü:"
 
-#: ../lib/ukui-menu.py:407
+#: ../lib/ukui-menu.py:400
 msgid "This is used to set up the menu type."
 msgstr "Bu menü türünü kurmak için kullanılır."
 
-#: ../lib/ukui-menu.py:409
+#: ../lib/ukui-menu.py:402
 msgid "File History:"
 msgstr "Dosya Geçmişi:"
 
-#: ../lib/ukui-menu.py:410
+#: ../lib/ukui-menu.py:403
 msgid "This is used to set up whether the file history is displayed."
-msgstr "Bu, dosya geçmişinin görüntülenip görüntülenmeyeceğini ayarlamak için kullanılır."
+msgstr ""
+"Bu, dosya geçmişinin görüntülenip görüntülenmeyeceğini ayarlamak için "
+"kullanılır."
 
-#: ../lib/ukui-menu.py:430
+#: ../lib/ukui-menu.py:423
 msgid "Recent file number:"
 msgstr "Geçmiş dosya sayısı:"
 
-#: ../lib/ukui-menu.py:432
+#: ../lib/ukui-menu.py:425
 msgid "Recent app number:"
 msgstr "Geçmiş uygulama sayısı:"
 
-#: ../lib/ukui-menu.py:447
+#: ../lib/ukui-menu.py:445
 msgid "Reset to default(_R)"
 msgstr "Varsayılana dön"
 
-#: ../lib/ukui-menu.py:454
+#: ../lib/ukui-menu.py:452
 msgid "Close(_C)"
 msgstr "Kapat"
 
-#: ../lib/ukui-menu.py:611
+#: ../lib/ukui-menu.py:619
 msgid "Reload plugins"
 msgstr "Eklentileri yeniden yükle"
 
-#: ../lib/ukui-menu.py:614 ../ukui_menu/plugins/menu.py:1959
+#: ../lib/ukui-menu.py:622 ../ukui_menu/plugins/menu.py:1863
 msgid "Property"
 msgstr "Özellik"
 
+#: ../lib/timed-shutdown.py:88
+msgid "Set Timed Shutdown Time"
+msgstr ""
+
+#: ../lib/timed-shutdown.py:167
+msgid "day"
+msgstr ""
+
+#: ../lib/timed-shutdown.py:169
+msgid "days"
+msgstr ""
+
+#: ../lib/timed-shutdown.py:178 ../data/plugins/shutdown.ui.h:7
+msgid "Time to Poweroff:  "
+msgstr ""
+
+#: ../lib/timed-shutdown.py:287
+msgid "Quit(_Q)"
+msgstr ""
+
+#: ../lib/ukui-remove-application.py:79
+msgid ""
+"This application has been removed. Are you sure remove the menu form the "
+"startup menu?"
+msgstr ""
+
+#: ../lib/ukui-remove-application.py:89
+msgid "The following packages will be removed:"
+msgstr ""
+
+#: ../lib/ukui-remove-application.py:93
+msgid "Packages will be removed"
+msgstr ""
+
 #. wps
-#: ../ukui_menu/plugins/menu.py:125 ../ukui_menu/plugins/menu.py:732
-#: ../ukui_menu/plugins/menu.py:906 ../ukui_menu/plugins/menu.py:2208
-#: ../ukui_menu/plugins/menu.py:2315
+#: ../ukui_menu/plugins/menu.py:100 ../ukui_menu/plugins/menu.py:580
+#: ../ukui_menu/plugins/menu.py:738 ../ukui_menu/plugins/menu.py:766
+#: ../ukui_menu/plugins/menu.py:2153 ../ukui_menu/plugins/menu.py:2263
 msgid "WPS Writer"
 msgstr "WPS Kelime İşlemci"
 
-#: ../ukui_menu/plugins/menu.py:126 ../ukui_menu/plugins/menu.py:736
-#: ../ukui_menu/plugins/menu.py:908 ../ukui_menu/plugins/menu.py:2208
-#: ../ukui_menu/plugins/menu.py:2322
+#: ../ukui_menu/plugins/menu.py:101 ../ukui_menu/plugins/menu.py:584
+#: ../ukui_menu/plugins/menu.py:740 ../ukui_menu/plugins/menu.py:768
+#: ../ukui_menu/plugins/menu.py:2153 ../ukui_menu/plugins/menu.py:2270
 msgid "WPS Presentation"
 msgstr "WPS Sunum"
 
-#: ../ukui_menu/plugins/menu.py:127 ../ukui_menu/plugins/menu.py:740
-#: ../ukui_menu/plugins/menu.py:910 ../ukui_menu/plugins/menu.py:2208
-#: ../ukui_menu/plugins/menu.py:2329
+#: ../ukui_menu/plugins/menu.py:102 ../ukui_menu/plugins/menu.py:588
+#: ../ukui_menu/plugins/menu.py:742 ../ukui_menu/plugins/menu.py:770
+#: ../ukui_menu/plugins/menu.py:2153 ../ukui_menu/plugins/menu.py:2277
 msgid "WPS Spreadsheets"
 msgstr "WPS Hesap Tablosu"
 
 #. qt app
-#: ../ukui_menu/plugins/menu.py:128 ../ukui_menu/plugins/menu.py:758
-#: ../ukui_menu/plugins/menu.py:912 ../ukui_menu/plugins/menu.py:2299
+#: ../ukui_menu/plugins/menu.py:103 ../ukui_menu/plugins/menu.py:606
+#: ../ukui_menu/plugins/menu.py:772 ../ukui_menu/plugins/menu.py:2247
 msgid "Qt Creator"
 msgstr ""
 
 #. qt app
-#: ../ukui_menu/plugins/menu.py:129 ../ukui_menu/plugins/menu.py:2284
+#: ../ukui_menu/plugins/menu.py:104 ../ukui_menu/plugins/menu.py:2230
 msgid "SMPlayer"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:130 ../ukui_menu/plugins/menu.py:766
-#: ../ukui_menu/plugins/menu.py:914 ../ukui_menu/plugins/menu.py:2286
+#: ../ukui_menu/plugins/menu.py:105 ../ukui_menu/plugins/menu.py:614
+#: ../ukui_menu/plugins/menu.py:774 ../ukui_menu/plugins/menu.py:2232
 msgid "Kylin Video"
 msgstr ""
 
 #. gtk app
-#: ../ukui_menu/plugins/menu.py:131 ../ukui_menu/plugins/menu.py:749
-#: ../ukui_menu/plugins/menu.py:916 ../ukui_menu/plugins/menu.py:2337
+#: ../ukui_menu/plugins/menu.py:106 ../ukui_menu/plugins/menu.py:597
+#: ../ukui_menu/plugins/menu.py:776 ../ukui_menu/plugins/menu.py:2285
 msgid "Eye of MATE Image Viewer"
 msgstr "MATE'nin Gözü Resim Görüntüleyici"
 
-#: ../ukui_menu/plugins/menu.py:132 ../ukui_menu/plugins/menu.py:753
-#: ../ukui_menu/plugins/menu.py:918 ../ukui_menu/plugins/menu.py:2344
+#: ../ukui_menu/plugins/menu.py:108 ../ukui_menu/plugins/menu.py:601
+#: ../ukui_menu/plugins/menu.py:778 ../ukui_menu/plugins/menu.py:2292
 msgid "Atril Document Viewer"
 msgstr "Atril Belge Görüntüleyici"
 
 #. gtk app
-#: ../ukui_menu/plugins/menu.py:133 ../ukui_menu/plugins/menu.py:745
-#: ../ukui_menu/plugins/menu.py:920 ../ukui_menu/plugins/menu.py:2208
-#: ../ukui_menu/plugins/menu.py:2351
+#: ../ukui_menu/plugins/menu.py:110 ../ukui_menu/plugins/menu.py:593
+#: ../ukui_menu/plugins/menu.py:744 ../ukui_menu/plugins/menu.py:780
+#: ../ukui_menu/plugins/menu.py:2153 ../ukui_menu/plugins/menu.py:2299
 msgid "Pluma"
 msgstr "Metin Düzenleyici"
 
-#: ../ukui_menu/plugins/menu.py:248 ../ukui_menu/plugins/menu.py:1288
-#: ../ukui_menu/plugins/menu.py:1291
-msgid "Games"
-msgstr "Oyunlar"
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+#, fuzzy
+msgid "Education"
+msgstr "Uygulama"
 
-#: ../ukui_menu/plugins/menu.py:253 ../ukui_menu/plugins/menu.py:1293
-#: ../ukui_menu/plugins/menu.py:1296 ../ukui_menu/menueditor.py:1137
-msgid "Android"
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+msgid "Graphics"
 msgstr ""
 
-#: ../ukui_menu/plugins/menu.py:258 ../ukui_menu/plugins/menu.py:1281
-#: ../ukui_menu/plugins/menu.py:1284
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+msgid "Internet"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+msgid "Programming"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+msgid "Sound & Video"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+#, fuzzy
+msgid "System Tools"
+msgstr "Sistem"
+
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+msgid "Universal Access"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+msgid "Preferences"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+msgid "Administration"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
+msgid "Other"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
+msgid "Accessories"
+msgstr "Donatılar"
+
+#: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
 msgid "Office"
 msgstr "Ofis"
 
-#: ../ukui_menu/plugins/menu.py:400
+#: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
+msgid "Games"
+msgstr "Oyunlar"
+
+#: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
+#: ../ukui_menu/menueditor.py:1137
+msgid "Android"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:248
 msgid "Recent"
 msgstr "Geçmiş"
 
-#: ../ukui_menu/plugins/menu.py:444 ../ukui_menu/plugins/menu.py:564
+#: ../ukui_menu/plugins/menu.py:295 ../ukui_menu/plugins/menu.py:409
 msgid "All Apps"
 msgstr "Tüm Uyg."
 
-#: ../ukui_menu/plugins/menu.py:449 ../ukui_menu/plugins/menu.py:553
+#: ../ukui_menu/plugins/menu.py:300 ../ukui_menu/plugins/menu.py:398
 msgid "Favorites"
 msgstr "Favoriler"
 
-#: ../ukui_menu/plugins/menu.py:494
-msgid "Power"
-msgstr "Kapat"
+#: ../ukui_menu/plugins/menu.py:345
+msgid "Shutdown"
+msgstr "Bilgisayarı Kapat"
 
-#: ../ukui_menu/plugins/menu.py:575 ../ukui_menu/plugins/menu.py:947
-#: ../ukui_menu/plugins/menu.py:955 ../ukui_menu/plugins/menu.py:1655
-#: ../ukui_menu/plugins/menu.py:2439
+#: ../ukui_menu/plugins/menu.py:420 ../ukui_menu/plugins/menu.py:811
+#: ../ukui_menu/plugins/menu.py:819 ../ukui_menu/plugins/menu.py:1519
+#: ../ukui_menu/plugins/menu.py:2388
 msgid "Search local program"
 msgstr "Program ara"
 
-#: ../ukui_menu/plugins/menu.py:605
+#: ../ukui_menu/plugins/menu.py:448
 msgid "Home"
 msgstr "Ev"
 
-#: ../ukui_menu/plugins/menu.py:613
+#: ../ukui_menu/plugins/menu.py:456
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: ../ukui_menu/plugins/menu.py:621
+#: ../ukui_menu/plugins/menu.py:464 ../ukui_menu/feedback.py:67
+msgid "Feedback"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:472
 msgid "No items matched"
 msgstr "Eşleşen öğe yok"
 
-#: ../ukui_menu/plugins/menu.py:898 ../ukui_menu/plugins/menu.py:2143
-#: ../ukui_menu/plugins/menu.py:2156 ../ukui_menu/plugins/menu.py:2169
+#: ../ukui_menu/plugins/menu.py:755 ../ukui_menu/plugins/menu.py:2049
+#: ../ukui_menu/plugins/menu.py:2062 ../ukui_menu/plugins/menu.py:2095
 msgid ""
 "\n"
 "File not exists, it was moved or deleted!\n"
@@ -210,128 +297,139 @@ msgstr ""
 "\n"
 "Bu, otomatik olarak geçmiş listesinden kaldırılacak!\n"
 
-#: ../ukui_menu/plugins/menu.py:979 ../ukui_menu/plugins/menu.py:1734
-#: ../ukui_menu/plugins/menu.py:2187
+#: ../ukui_menu/plugins/menu.py:845 ../ukui_menu/plugins/menu.py:1605
+#: ../ukui_menu/plugins/menu.py:2115
 msgid "Open(_O)"
 msgstr "_Aç"
 
-#: ../ukui_menu/plugins/menu.py:982 ../ukui_menu/plugins/menu.py:1737
-msgid "Add to desktop"
+#: ../ukui_menu/plugins/menu.py:851 ../ukui_menu/plugins/menu.py:1611
+#, fuzzy
+msgid "Add to desktop(_A)"
 msgstr "Masaüstüne ekle"
 
-#: ../ukui_menu/plugins/menu.py:986 ../ukui_menu/plugins/menu.py:1740
+#: ../ukui_menu/plugins/menu.py:857 ../ukui_menu/plugins/menu.py:1617
 msgid "Lock to panel(_L)"
 msgstr "_Panele kilitle"
 
-#: ../ukui_menu/plugins/menu.py:989
-msgid "Unlock from startup menu"
+#: ../ukui_menu/plugins/menu.py:863
+#, fuzzy
+msgid "Unlock from startup menu(_U)"
 msgstr "Başlangıç menüsünden kilidi kaldır"
 
-#: ../ukui_menu/plugins/menu.py:993 ../ukui_menu/plugins/menu.py:1750
-#: ../ukui_menu/plugins/menu.py:2197
+#: ../ukui_menu/plugins/menu.py:871 ../ukui_menu/plugins/menu.py:1643
+#: ../ukui_menu/plugins/menu.py:2139
 msgid "Property(_P)"
 msgstr "_Özellik"
 
-#: ../ukui_menu/plugins/menu.py:1059
-msgid "Shutdown"
+#: ../ukui_menu/plugins/menu.py:959
+#, fuzzy
+msgid "Shutdown (_P)"
 msgstr "Bilgisayarı Kapat"
 
-#: ../ukui_menu/plugins/menu.py:1060
-msgid "Reboot"
+#: ../ukui_menu/plugins/menu.py:960
+msgid "Countdown Shutdown (_T)"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:963
+#, fuzzy
+msgid "Reboot (_R)"
 msgstr "Yeniden Başlat"
 
-#: ../ukui_menu/plugins/menu.py:1063
-msgid "Logout"
+#: ../ukui_menu/plugins/menu.py:966
+#, fuzzy
+msgid "Logout (_O)"
 msgstr "Kullanıcı Çıkışı"
 
-#: ../ukui_menu/plugins/menu.py:1064
-msgid "Switch User"
+#: ../ukui_menu/plugins/menu.py:967
+#, fuzzy
+msgid "Switch Users (_S)"
 msgstr "Kullanıcı Değiştir"
 
-#: ../ukui_menu/plugins/menu.py:1065
-msgid "Lock Screen"
+#: ../ukui_menu/plugins/menu.py:968
+#, fuzzy
+msgid "Lock Screen (_L)"
 msgstr "Ekranı Kilitle"
 
-#: ../ukui_menu/plugins/menu.py:1279
-msgid "Accessories"
-msgstr "Donatılar"
-
-#: ../ukui_menu/plugins/menu.py:1286
-msgid "StartUp"
-msgstr "Başlangıç"
-
-#: ../ukui_menu/plugins/menu.py:1329 ../ukui_menu/plugins/menu.py:1330
-#: ../ukui_menu/plugins/menu.py:1598 ../ukui_menu/plugins/menu.py:1603
+#: ../ukui_menu/plugins/menu.py:1166 ../ukui_menu/plugins/menu.py:1167
+#: ../ukui_menu/plugins/menu.py:1431 ../ukui_menu/plugins/menu.py:1436
 msgid "Applications"
 msgstr "Uygulamalar"
 
-#: ../ukui_menu/plugins/menu.py:1334 ../ukui_menu/plugins/menu.py:1335
-#: ../ukui_menu/plugins/menu.py:1600 ../ukui_menu/plugins/menu.py:1605
+#: ../ukui_menu/plugins/menu.py:1171 ../ukui_menu/plugins/menu.py:1172
+#: ../ukui_menu/plugins/menu.py:1433 ../ukui_menu/plugins/menu.py:1438
 msgid "System"
 msgstr "Sistem"
 
-#: ../ukui_menu/plugins/menu.py:1743
+#: ../ukui_menu/plugins/menu.py:1623
 msgid "Add to startup menu"
 msgstr "Başlangıç menüsüne ekle"
 
-#: ../ukui_menu/plugins/menu.py:1745
-msgid "Uninstall"
+#: ../ukui_menu/plugins/menu.py:1629
+#, fuzzy
+msgid "Uninstall(_U)"
 msgstr "Kaldır"
 
-#: ../ukui_menu/plugins/menu.py:1746 ../ukui_menu/plugins/menu.py:2195
+#: ../ukui_menu/plugins/menu.py:1633 ../ukui_menu/plugins/menu.py:2133
 msgid "Remove from list(_R)"
 msgstr "_Listeden çıkar"
 
-#: ../ukui_menu/plugins/menu.py:1748
+#: ../ukui_menu/plugins/menu.py:1637
 msgid "Remove all"
 msgstr "Tümünü çıkar"
 
-#: ../ukui_menu/plugins/menu.py:1933
+#: ../ukui_menu/plugins/menu.py:1827
 msgid "Type:"
 msgstr "Tür:"
 
-#: ../ukui_menu/plugins/menu.py:1935
+#: ../ukui_menu/plugins/menu.py:1829
 msgid "Name:"
 msgstr "İsim:"
 
-#: ../ukui_menu/plugins/menu.py:1937
+#: ../ukui_menu/plugins/menu.py:1831
 msgid "Command:"
 msgstr "Komut:"
 
-#: ../ukui_menu/plugins/menu.py:1939
+#: ../ukui_menu/plugins/menu.py:1833
 msgid "Note:"
 msgstr "Not:"
 
-#: ../ukui_menu/plugins/menu.py:1948
+#: ../ukui_menu/plugins/menu.py:1848
 msgid "Application"
 msgstr "Uygulama"
 
-#: ../ukui_menu/plugins/menu.py:1950
+#: ../ukui_menu/plugins/menu.py:1850
 msgid "Application in Terminal"
 msgstr "Terminal Uygulamaları"
 
-#: ../ukui_menu/plugins/menu.py:2189
+#: ../ukui_menu/plugins/menu.py:2071
+msgid ""
+"\n"
+"The file already exists, are you sure to cover it?\n"
+"\n"
+msgstr ""
+
+#: ../ukui_menu/plugins/menu.py:2119
 msgid "Open directory(_D)"
 msgstr "Klasör Aç"
 
-#: ../ukui_menu/plugins/menu.py:2191
+#: ../ukui_menu/plugins/menu.py:2125
 msgid "New(_N)"
 msgstr "Yeni"
 
-#: ../ukui_menu/plugins/menu.py:2193
+#: ../ukui_menu/plugins/menu.py:2129
 msgid "Copy to desktop(_C)"
 msgstr "Masaüstüne Kopyala"
 
-#: ../ukui_menu/plugins/menu.py:2392
+#: ../ukui_menu/plugins/menu.py:2340
 #, python-format
 msgid "Recent(%s)"
 msgstr "Geçmiş(%s)"
 
-#: ../ukui_menu/plugins/menu.py:2486
+#: ../ukui_menu/plugins/menu.py:2437
 msgid "Chromium Browser"
 msgstr "Chromium Tarayıcı"
 
-#: ../ukui_menu/plugins/menu.py:2492
+#: ../ukui_menu/plugins/menu.py:2443
 msgid "Fcitx Config"
 msgstr "Fcitx Yapılandırması"
 
@@ -341,7 +439,9 @@ msgstr "Açıklama:"
 
 #: ../ukui_menu/keybinding.py:219
 msgid "Click to set a new accelerator key for opening and closing the menu.  "
-msgstr "Menüyü açmak ve kapatmak için yeni bir hızlandırıcı tuşunu ayarlamak için tıklayın."
+msgstr ""
+"Menüyü açmak ve kapatmak için yeni bir hızlandırıcı tuşunu ayarlamak için "
+"tıklayın."
 
 #: ../ukui_menu/keybinding.py:220
 msgid "Press Escape or click again to cancel the operation.  "
@@ -427,4 +527,175 @@ msgid ""
 "startup menu!"
 msgstr ""
 "\n"
-"[%s] bir sistem autostart servis yazılımıdır, başlangıç menüsünde göstermemelisiniz!"
+"[%s] bir sistem autostart servis yazılımıdır, başlangıç menüsünde "
+"göstermemelisiniz!"
+
+#: ../ukui_menu/feedback.py:56
+msgid "You're offline. Please connect to the internet!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:77
+msgid "Images"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:95
+msgid "DistroRelease"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:96
+msgid "DistroInfo"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:97
+msgid "Desktop"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:98
+msgid "Architecture"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:99
+msgid "Locale"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:104 ../data/feedback.ui.h:6
+#, fuzzy
+msgid "System Info"
+msgstr "Sistem"
+
+#: ../ukui_menu/feedback.py:146 ../data/feedback.ui.h:8
+#, fuzzy
+msgid "System Bug"
+msgstr "Sistem"
+
+#: ../ukui_menu/feedback.py:163
+msgid "Please input the description!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:174
+msgid "Invalid email address!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:182
+msgid "Please input the email address!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:193
+msgid "Maximum upload file size is 1MB!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:203
+msgid "Please input the verification code!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:243
+msgid "Successful feedback! Thank you!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:250
+msgid "Incorrect CAPTCHA, please re-enter!"
+msgstr ""
+
+#: ../ukui_menu/feedback.py:257
+msgid "Unknow error: "
+msgstr ""
+
+#: ../data/feedback.ui.h:1
+#, fuzzy
+msgid "Type"
+msgstr "Tür:"
+
+#: ../data/feedback.ui.h:2
+msgid "<span color=\"red\">* </span>Description"
+msgstr ""
+
+#: ../data/feedback.ui.h:3
+msgid "<span color=\"red\">* </span>Email"
+msgstr ""
+
+#: ../data/feedback.ui.h:4
+msgid "Image"
+msgstr ""
+
+#: ../data/feedback.ui.h:5
+#, fuzzy
+msgid "System Log"
+msgstr "Sistem"
+
+#: ../data/feedback.ui.h:7
+msgid "Please upload file less then 1Mb"
+msgstr ""
+
+#: ../data/feedback.ui.h:9
+msgid "Suggestion"
+msgstr ""
+
+#: ../data/feedback.ui.h:10
+msgid "For Business"
+msgstr ""
+
+#: ../data/feedback.ui.h:11
+msgid "Others"
+msgstr ""
+
+#: ../data/feedback.ui.h:12
+msgid "submit"
+msgstr ""
+
+#: ../data/feedback.ui.h:13
+msgid "<span color=\"red\">* </span>CAPTCHA"
+msgstr ""
+
+#: ../data/feedback.ui.h:14
+msgid "Type the code"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:1
+msgid "Cancel"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:2
+msgid "Set Up"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:3
+msgid "Hour"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:4
+msgid "Minute"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:5
+msgid ":"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:6
+msgid "Automatic shutdown setted"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:8
+msgid "Never"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:9
+msgid "Only this time Shutdown"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:10
+msgid "Every Day"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:11
+msgid "Monday to Friday"
+msgstr ""
+
+#: ../data/plugins/shutdown.ui.h:12
+msgid "Saturday to Sunday"
+msgstr ""
+
+#~ msgid "Power"
+#~ msgstr "Kapat"
+
+#~ msgid "StartUp"
+#~ msgstr "Başlangıç"
