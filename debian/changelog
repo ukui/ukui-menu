@@ -1,9 +1,10 @@
 ukui-menu (1.1.11-1) unstable; urgency=medium
 
+  * Upload to unstable.
   * Add network detection for feedback.
   * Update some labels.
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 30 Apr 2019 11:05:48 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 04 Jun 2019 16:59:33 +0800
 
 ukui-menu (1.1.10-1) experimental; urgency=medium
 
