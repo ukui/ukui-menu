@@ -56,7 +56,7 @@ msgstr "Menü Özellikleri"
 
 #: ../lib/ukui-menu.py:397
 msgid "Transparency:"
-msgstr ""
+msgstr "Saydamlık:"
 
 #: ../lib/ukui-menu.py:399
 msgid "Menu Type:"
@@ -102,37 +102,37 @@ msgstr "Özellik"
 
 #: ../lib/timed-shutdown.py:88
 msgid "Set Timed Shutdown Time"
-msgstr ""
+msgstr "Zamanlanmış Kapatma Zamanını Ayarla"
 
 #: ../lib/timed-shutdown.py:167
 msgid "day"
-msgstr ""
+msgstr "gün"
 
 #: ../lib/timed-shutdown.py:169
 msgid "days"
-msgstr ""
+msgstr "gün"
 
 #: ../lib/timed-shutdown.py:178 ../data/plugins/shutdown.ui.h:7
 msgid "Time to Poweroff:  "
-msgstr ""
+msgstr "Kapatma zamanı:  "
 
 #: ../lib/timed-shutdown.py:287
 msgid "Quit(_Q)"
-msgstr ""
+msgstr "Çıkış (_Q)"
 
 #: ../lib/ukui-remove-application.py:79
 msgid ""
 "This application has been removed. Are you sure remove the menu form the "
 "startup menu?"
-msgstr ""
+msgstr "Bu uygulama kaldırıldı. Başlangıç menüsünden menüyü kaldırdığınızdan emin misiniz?"
 
 #: ../lib/ukui-remove-application.py:89
 msgid "The following packages will be removed:"
-msgstr ""
+msgstr "Aşağıdaki paketler kaldırılacak:"
 
 #: ../lib/ukui-remove-application.py:93
 msgid "Packages will be removed"
-msgstr ""
+msgstr "Paketler kaldırılacak"
 
 #. wps
 #: ../ukui_menu/plugins/menu.py:100 ../ukui_menu/plugins/menu.py:580
@@ -194,40 +194,40 @@ msgstr "Uygulama"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Graphics"
-msgstr ""
+msgstr "Grafik"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Internet"
-msgstr ""
+msgstr "Ağ"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Programming"
-msgstr ""
+msgstr "Programlama"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Sound & Video"
-msgstr ""
+msgstr "Ses & Video"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 #, fuzzy
 msgid "System Tools"
-msgstr "Sistem"
+msgstr "Sistem Araçları"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Universal Access"
-msgstr ""
+msgstr "Evrensel Erişim"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Preferences"
-msgstr ""
+msgstr "Özellikler"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Administration"
-msgstr ""
+msgstr "Yönetici"
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Other"
-msgstr ""
+msgstr "Diğer"
 
 #: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
 msgid "Accessories"
@@ -244,7 +244,7 @@ msgstr "Oyunlar"
 #: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
 #: ../ukui_menu/menueditor.py:1137
 msgid "Android"
-msgstr ""
+msgstr "Android"
 
 #: ../ukui_menu/plugins/menu.py:248
 msgid "Recent"
@@ -278,7 +278,7 @@ msgstr "Ayarlar"
 
 #: ../ukui_menu/plugins/menu.py:464 ../ukui_menu/feedback.py:67
 msgid "Feedback"
-msgstr ""
+msgstr "Geri bildirim"
 
 #: ../ukui_menu/plugins/menu.py:472
 msgid "No items matched"
@@ -328,7 +328,7 @@ msgstr "Bilgisayarı Kapat"
 
 #: ../ukui_menu/plugins/menu.py:960
 msgid "Countdown Shutdown (_T)"
-msgstr ""
+msgstr "Geri Sayımlı Kapat (_T)"
 
 #: ../ukui_menu/plugins/menu.py:963
 #, fuzzy
@@ -407,6 +407,9 @@ msgid ""
 "The file already exists, are you sure to cover it?\n"
 "\n"
 msgstr ""
+"\n"
+"Dosya zaten var, onu kapatacağınızdan emin misiniz?\n"
+"\n"
 
 #: ../ukui_menu/plugins/menu.py:2119
 msgid "Open directory(_D)"
@@ -532,36 +535,36 @@ msgstr ""
 
 #: ../ukui_menu/feedback.py:56
 msgid "You're offline. Please connect to the internet!"
-msgstr ""
+msgstr "Çevrimdışısınız. Lütfen internete bağlanın!"
 
 #: ../ukui_menu/feedback.py:77
 msgid "Images"
-msgstr ""
+msgstr "Resimler"
 
 #: ../ukui_menu/feedback.py:95
 msgid "DistroRelease"
-msgstr ""
+msgstr "Dağıtım Sürümü"
 
 #: ../ukui_menu/feedback.py:96
 msgid "DistroInfo"
-msgstr ""
+msgstr "Dağıtım Bilgisi"
 
 #: ../ukui_menu/feedback.py:97
 msgid "Desktop"
-msgstr ""
+msgstr "Masaüstü"
 
 #: ../ukui_menu/feedback.py:98
 msgid "Architecture"
-msgstr ""
+msgstr "Mimari"
 
 #: ../ukui_menu/feedback.py:99
 msgid "Locale"
-msgstr ""
+msgstr "Yerel"
 
 #: ../ukui_menu/feedback.py:104 ../data/feedback.ui.h:6
 #, fuzzy
 msgid "System Info"
-msgstr "Sistem"
+msgstr "Sistem Bilgisi"
 
 #: ../ukui_menu/feedback.py:146 ../data/feedback.ui.h:8
 #, fuzzy
@@ -570,35 +573,35 @@ msgstr "Sistem"
 
 #: ../ukui_menu/feedback.py:163
 msgid "Please input the description!"
-msgstr ""
+msgstr "Lütfen açıklamayı giriniz!"
 
 #: ../ukui_menu/feedback.py:174
 msgid "Invalid email address!"
-msgstr ""
+msgstr "Geçersiz e-posta adresi!"
 
 #: ../ukui_menu/feedback.py:182
 msgid "Please input the email address!"
-msgstr ""
+msgstr "Lütfen e-posta adresini giriniz!"
 
 #: ../ukui_menu/feedback.py:193
 msgid "Maximum upload file size is 1MB!"
-msgstr ""
+msgstr "Maksimum yükleme dosya boyutu 1 MB!"
 
 #: ../ukui_menu/feedback.py:203
 msgid "Please input the verification code!"
-msgstr ""
+msgstr "Lütfen doğrulama kodunu giriniz!"
 
 #: ../ukui_menu/feedback.py:243
 msgid "Successful feedback! Thank you!"
-msgstr ""
+msgstr "Başarılı geri bildirim! Teşekkür ederim!"
 
 #: ../ukui_menu/feedback.py:250
 msgid "Incorrect CAPTCHA, please re-enter!"
-msgstr ""
+msgstr "Yanlış CAPTCHA, lütfen tekrar girin!"
 
 #: ../ukui_menu/feedback.py:257
 msgid "Unknow error: "
-msgstr ""
+msgstr "Bilinmeyen hata:"
 
 #: ../data/feedback.ui.h:1
 #, fuzzy
@@ -607,15 +610,15 @@ msgstr "Tür:"
 
 #: ../data/feedback.ui.h:2
 msgid "<span color=\"red\">* </span>Description"
-msgstr ""
+msgstr "<span color=\"red\">* </span>Açıklama"
 
 #: ../data/feedback.ui.h:3
 msgid "<span color=\"red\">* </span>Email"
-msgstr ""
+msgstr "<span color=\"red\">* </span>E-Posta"
 
 #: ../data/feedback.ui.h:4
 msgid "Image"
-msgstr ""
+msgstr "Resim"
 
 #: ../data/feedback.ui.h:5
 #, fuzzy
@@ -624,75 +627,75 @@ msgstr "Sistem"
 
 #: ../data/feedback.ui.h:7
 msgid "Please upload file less then 1Mb"
-msgstr ""
+msgstr "Lütfen 1 MB'den daha küçük dosya yükleyin"
 
 #: ../data/feedback.ui.h:9
 msgid "Suggestion"
-msgstr ""
+msgstr "Öneri"
 
 #: ../data/feedback.ui.h:10
 msgid "For Business"
-msgstr ""
+msgstr "İş için"
 
 #: ../data/feedback.ui.h:11
 msgid "Others"
-msgstr ""
+msgstr "Diğer"
 
 #: ../data/feedback.ui.h:12
 msgid "submit"
-msgstr ""
+msgstr "Gönder"
 
 #: ../data/feedback.ui.h:13
 msgid "<span color=\"red\">* </span>CAPTCHA"
-msgstr ""
+msgstr "<span color=\"red\">* </span>CAPTCHA"
 
 #: ../data/feedback.ui.h:14
 msgid "Type the code"
-msgstr ""
+msgstr "Kodu yazın"
 
 #: ../data/plugins/shutdown.ui.h:1
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: ../data/plugins/shutdown.ui.h:2
 msgid "Set Up"
-msgstr ""
+msgstr "Ayarla"
 
 #: ../data/plugins/shutdown.ui.h:3
 msgid "Hour"
-msgstr ""
+msgstr "Saat"
 
 #: ../data/plugins/shutdown.ui.h:4
 msgid "Minute"
-msgstr ""
+msgstr "Dakika"
 
 #: ../data/plugins/shutdown.ui.h:5
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: ../data/plugins/shutdown.ui.h:6
 msgid "Automatic shutdown setted"
-msgstr ""
+msgstr "Otomatik kapanma ayarlandı"
 
 #: ../data/plugins/shutdown.ui.h:8
 msgid "Never"
-msgstr ""
+msgstr "Asla"
 
 #: ../data/plugins/shutdown.ui.h:9
 msgid "Only this time Shutdown"
-msgstr ""
+msgstr "Sadece bu oturumu kapat"
 
 #: ../data/plugins/shutdown.ui.h:10
 msgid "Every Day"
-msgstr ""
+msgstr "Her Gün"
 
 #: ../data/plugins/shutdown.ui.h:11
 msgid "Monday to Friday"
-msgstr ""
+msgstr "Haftaiçi"
 
 #: ../data/plugins/shutdown.ui.h:12
 msgid "Saturday to Sunday"
-msgstr ""
+msgstr "Haftasonu"
 
 #~ msgid "Power"
 #~ msgstr "Kapat"
