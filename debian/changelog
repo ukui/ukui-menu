@@ -1,3 +1,9 @@
+ukui-menu (1.1.12-1) unstable; urgency=medium
+
+  * Remove the duplicated timed-shutdown.py file.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 19 Aug 2019 14:57:14 +0800
+
 ukui-menu (1.1.11-1) unstable; urgency=medium
 
   * Upload to unstable.
