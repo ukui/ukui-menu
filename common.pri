@@ -1,0 +1,2 @@
+PROJECT_LIBDIR = $$PWD/lib
+PROJECT_BINDIR = $$PWD/bin
