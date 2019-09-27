@@ -254,8 +254,8 @@ class MenuWin( object ):
         self.actionNormal.connect("activate", self.LoadNormalMenu)
         self.actionCategory = Gtk.Action(name="UkuiCategoryMenu", label=_("Category Menu"), tooltip=None, stock_id="gtk-about")
         self.actionCategory.connect("activate", self.LoadCategoryMenu)
-        self.editCategory = Gtk.Action(name="EditCategoryMenu", label=_("Edit Category Menu"), tooltip=None, stock_id="gtk-edit")
-        self.editCategory.connect("activate", self.EditCategoryMenu)
+        #self.editCategory = Gtk.Action(name="EditCategoryMenu", label=_("Edit Category Menu"), tooltip=None, stock_id="gtk-edit")
+        #self.editCategory.connect("activate", self.EditCategoryMenu)
 
         self.createPanelButton()
         self.applet.set_flags( UkuiPanelApplet.AppletFlags.EXPAND_MINOR )
@@ -595,8 +595,8 @@ class MenuWin( object ):
         self.mainwin.settings.set_boolean("show-category-menu", True)
         self.state = True
 
-    def EditCategoryMenu( self, *args, **kargs ):
-        os.system("ukui-menu-editor &")
+#    def EditCategoryMenu( self, *args, **kargs ):
+#        os.system("ukui-menu-editor &")
 
     # this callback is to create a context menu
     def create_menu(self):
@@ -606,16 +606,16 @@ class MenuWin( object ):
         action_group = Gtk.ActionGroup(name="context-menu")
         action_group.add_action(self.actionNormal)
         action_group.add_action(self.actionCategory)
-        action_group.add_action(self.editCategory)
+        #action_group.add_action(self.editCategory)
         state = self.settings.get_boolean("show-category-menu")
         if state:
             self.actionNormal.set_visible(True)
             self.actionCategory.set_visible(False)
-            self.editCategory.set_visible(True)
+            #self.editCategory.set_visible(True)
         else:
             self.actionNormal.set_visible(False)
             self.actionCategory.set_visible(True)
-            self.editCategory.set_visible(False)
+            #self.editCategory.set_visible(False)
         action = Gtk.Action(name="UkuiMenuReload", label=_("Reload plugins"), tooltip=None, stock_id="gtk-refresh")
         action.connect("activate", self.mainwin.RegenPlugins)
         action_group.add_action(action)
