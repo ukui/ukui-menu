@@ -13,6 +13,7 @@
 #include <QScrollBar>
 #include <QPixmap>
 #include <QTextEdit>
+#include <QHeaderView>
 #include "kylin-start-menu-interface.h"
 #include "src/UtilityFunction/toolbutton.h"
 
