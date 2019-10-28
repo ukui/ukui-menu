@@ -10,6 +10,13 @@
 #include <QPainter>
 #include <QWidgetAction>
 #include <QLabel>
+#include <QSettings>
+#include <QDir>
+#include <QFileInfo>
+#include <QDBusInterface>
+#include <QProcess>
+#include "src/AttributeDialog/attributedialog.h"
+#include "src/color.h"
 
 class RightClickMenu: public QObject
 {
@@ -17,11 +24,36 @@ class RightClickMenu: public QObject
 public:
     RightClickMenu();
     virtual ~RightClickMenu();
-    void show_appbtn_menu();
-    void show_shutdown_menu();
+    int show_commonuse_appbtn_menu(QString appname);
+    int show_appbtn_menu(QString appname);
+    int show_shutdown_menu();
     void show_other_menu();
 
 private:
+    QString appname;
+    int action_number;//记录执行的action编号
+    QSettings* setting=nullptr;
+
+    QMenu* cuappbtnmenu;
+    QWidgetAction* CuFix2CommonUseAction;
+    QWidget* CuFix2CommonUseWid;
+    QWidgetAction* CuUnfixed4CommonUseAction;
+    QWidget* CuUnfixed4CommonUseWid;
+    QWidgetAction* CuFix2TaskBarAction;
+    QWidget* CuFix2TaskBarWid;
+    QWidgetAction* CuUnfixed4TaskBarAction;
+    QWidget* CuUnfixed4TaskBarWid;
+    QWidgetAction* CuAdd2DesktopAction;
+    QWidget* CuAdd2DesktopWid;
+    QWidgetAction* CuDeleteAction;
+    QWidget* CuDeleteWid;
+    QWidgetAction* CuDeleteAllAction;
+    QWidget* CuDeleteAllWid;
+    QWidgetAction* CuUninstallAction;
+    QWidget* CuUninstallWid;
+    QWidgetAction* CuAttributeAction;
+    QWidget* CuAttributeWid;
+
     QMenu* appbtnmenu;
     QWidgetAction* Fix2CommonUseAction;
     QWidget* Fix2CommonUseWid;
@@ -41,6 +73,8 @@ private:
     QMenu* shutdownmenu;
     QWidgetAction* LockScreenAction;
     QWidget* LockScreenWid;
+    QWidgetAction* SwitchUserAction;
+    QWidget* SwitchUserWid;
     QWidgetAction* LogOutAction;
     QWidget* LogOutWid;
     QWidgetAction* RebootAction;
@@ -56,13 +90,19 @@ private:
     QWidgetAction* OtherListAction;
     QWidget* OtherListWid;
 
+    AttributeDialog* attrDialog;
+
 protected:
+    void add_commonuse_appbtn_action();
     void add_appbtn_action();
     void add_shutdown_action();
     void add_other_action();
     void init_widget_action(QWidget* wid, QString iconstr, QString textstr);
 
 private slots:
+    void cudeleteaction_trigger_slot();
+    void cudeleteallaction_trigger_slot();
+
     void fix2commonuseaction_trigger_slot();
     void unfixed4commonuseaction_trigger_slot();
     void fix2taskbaraction_trigger_slot();
@@ -72,12 +112,15 @@ private slots:
     void attributeaction_trigger_slot();
 
     void lockscreenaction_trigger_slot();
+    void switchuseraction_trigger_slot();
     void logoutaction_trigger_slot();
     void rebootaction_trigger_slot();
     void shutdownaction_trigger_slot();
 
     void otherlistaction_trigger_slot();
 
+signals:
+    void send_attribute_value(QString appname);
 };
 
 #endif // RIGHTCLICKMENU_H

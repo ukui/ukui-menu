@@ -149,3 +149,72 @@ void FunctionButtonWidget::functionbtn_clicked_slot()
     QString btnname=label->text();
     emit send_functionbtn_signal(btnname);
 }
+
+/**
+ * 接收FunctionWidget界面分类按钮列表
+ */
+void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
+{
+    for(int i=0;i<6;i++)
+    {
+        QLayoutItem* item=mainLayout->itemAt(i);
+        QWidget* wid=item->widget();
+        for(int j=0;j<2;j++)
+        {
+            QLayoutItem* btnitem=wid->layout()->itemAt(j);
+            QWidget* btnwid=btnitem->widget();
+            QToolButton* btn=static_cast<QToolButton*>(btnwid);
+            QLayoutItem* labelitem=btn->layout()->itemAt(1);
+            QWidget* labelwid=labelitem->widget();
+            QLabel* label=static_cast<QLabel*>(labelwid);
+            QString str=label->text();
+            if(list.indexOf(str)==-1)
+            {
+                label->setStyleSheet("QLabel{background:transparent;color:#4Dffffff;font-size:14px;}");
+                btn->setEnabled(false);
+                QLayoutItem* labelitem=btn->layout()->itemAt(0);
+                QWidget* labelwid=labelitem->widget();
+                QLabel* label=static_cast<QLabel*>(labelwid);
+                if(i*2+j==0)
+                    change_label_icon(label,":/data/img/mainviewwidget/recent-disabled.svg");
+                if(i*2+j==1)
+                    change_label_icon(label,":/data/img/mainviewwidget/net-disabled.svg");
+                if(i*2+j==2)
+                    change_label_icon(label,":/data/img/mainviewwidget/social-disabled.svg");
+                if(i*2+j==3)
+                    change_label_icon(label,":/data/img/mainviewwidget/video-disabled.svg");
+                if(i*2+j==4)
+                    change_label_icon(label,":/data/img/mainviewwidget/develop-disabled.svg");
+                if(i*2+j==5)
+                    change_label_icon(label,":/data/img/mainviewwidget/img-disabled.svg");
+                if(i*2+j==6)
+                    change_label_icon(label,":/data/img/mainviewwidget/game-disabled.svg");
+                if(i*2+j==7)
+                    change_label_icon(label,":/data/img/mainviewwidget/office-disabled.svg");
+                if(i*2+j==8)
+                    change_label_icon(label,":/data/img/mainviewwidget/reading-disabled.svg");
+                if(i*2+j==9)
+                    change_label_icon(label,":/data/img/mainviewwidget/system-disabled.svg");
+                if(i*2+j==10)
+                    change_label_icon(label,":/data/img/mainviewwidget/develop-disabled.svg");
+            }
+
+            if(i*2+j==10)break;
+        }
+    }
+}
+
+/**
+ * 更改QLabel图片
+ */
+void FunctionButtonWidget::change_label_icon(QLabel *label, QString iconstr)
+{
+    QSvgRenderer* svg=new QSvgRenderer(label);
+    svg->load(iconstr);
+    QPixmap* pixmap=new QPixmap(19,19);
+    pixmap->fill(Qt::transparent);
+    QPainter p(pixmap);
+    svg->render(&p);
+    label->setPixmap(*pixmap);
+
+}

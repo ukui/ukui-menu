@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
 {
 //    QApplication app(argc, argv);
     QtSingleApplication app("ukui-start-menu",argc,argv);
+    app.setQuitOnLastWindowClosed(false);
     if(app.isRunning())
     {
         app.sendMessage("raise_window_noop");

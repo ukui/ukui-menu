@@ -14,12 +14,12 @@ MainWindow::MainWindow(QWidget *parent) :
     sidebarwid->set_sidebarbtn_state(1);
 //    mainviewwid->load_classification_widget(1);
 
-    pAnimation=new QPropertyAnimation(this,"geometry");
-    pAnimation->setDuration(80);
-    pAnimation->setStartValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390,532));
-    pAnimation->setEndValue(QApplication::desktop()->availableGeometry());
-    pAnimation->setEasingCurve(QEasingCurve::Linear);
-    connect(pAnimation,SIGNAL(finished()),this,SLOT(animation_finished_slot()));
+//    pAnimation=new QPropertyAnimation(this,"geometry");
+//    pAnimation->setDuration(30);
+//    pAnimation->setStartValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390,532));
+//    pAnimation->setEndValue(QApplication::desktop()->availableGeometry());
+//    pAnimation->setEasingCurve(QEasingCurve::Linear);
+//    connect(pAnimation,SIGNAL(finished()),this,SLOT(animation_finished_slot()));
 
 }
 
@@ -61,15 +61,17 @@ void MainWindow::init_mainwindow()
     connect(sidebarwid,SIGNAL(send_letterbtn_signal()), mainviewwid, SLOT(load_letter_widget()));
     connect(sidebarwid, SIGNAL(send_functionbtn_signal()), mainviewwid, SLOT(load_function_widget()));
 
-    connect(sidebarwid,SIGNAL(send_fullscreen_commonusebtn_signal()),
-            mainviewwid,SLOT(load_fullcommonuse_widget()));
-    connect(sidebarwid,SIGNAL(send_fullscreen_letterbtn_signal()),
-            mainviewwid,SLOT(load_fullletter_widget()));
-    connect(sidebarwid, SIGNAL(send_fullscreen_functionbtn_signal()),
-            mainviewwid, SLOT(load_fullfunction_widget()));
+//    connect(sidebarwid,SIGNAL(send_fullscreen_commonusebtn_signal()),
+//            mainviewwid,SLOT(load_fullcommonuse_widget()));
+//    connect(sidebarwid,SIGNAL(send_fullscreen_letterbtn_signal()),
+//            mainviewwid,SLOT(load_fullletter_widget()));
+//    connect(sidebarwid, SIGNAL(send_fullscreen_functionbtn_signal()),
+//            mainviewwid, SLOT(load_fullfunction_widget()));
 
-    connect(mainviewwid,SIGNAL(send_fullscreenbtn_signal(int)),this,SLOT(show_fullscreen_widget(int)));
-    connect(mainviewwid, SIGNAL(send_defaultbtn_signal(int)),this,SLOT(show_default_widget(int)));
+    connect(mainviewwid,SIGNAL(send_fullscreenbtn_signal()),this,SLOT(show_fullscreen_widget()));
+    connect(mainviewwid, SIGNAL(send_defaultbtn_signal()),this,SLOT(show_default_widget()));
+    connect(mainviewwid,SIGNAL(send_hide_mainwindow_signal()),this,SLOT(recv_hide_mainwindow_slot()));
+    connect(sidebarwid,SIGNAL(send_hide_mainwindow_signal()),this,SLOT(recv_hide_mainwindow_slot()));
 }
 
 /**
@@ -107,58 +109,70 @@ void MainWindow::paintEvent(QPaintEvent *)
 /**
  * 显示全屏窗口
  */
-void MainWindow::show_fullscreen_widget(int arg)
+void MainWindow::show_fullscreen_widget()
 {
-//    this->showMaximized();
-    is_full=true;
-    classification_widget=arg;
-    sidebarwid->setVisible(false);
-    mainviewwid->setVisible(false);
-    char widgetcolor[100];
-    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    mainwidget->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
-    pAnimation->start();
+////    this->showMaximized();
+//    is_full=true;
+//    classification_widget=arg;
+//    sidebarwid->setVisible(false);
+//    mainviewwid->setVisible(false);
+//    char widgetcolor[100];
+//    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
+//    mainwidget->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
+//    pAnimation->start();
+
+    this->setContentsMargins(0,0,0,0);
+    this->setGeometry(QApplication::desktop()->availableGeometry());
+    sidebarwid->load_max_sidebar();
+    mainviewwid->load_max_mainview();
+    mainviewwid->load_full_classification_widget();
 }
 
 /**
  * 显示默认窗口
  */
-void MainWindow::show_default_widget(int arg)
+void MainWindow::show_default_widget()
 {
-//    this->showNormal();
-    is_full=false;
-    classification_widget=arg;
-    sidebarwid->setVisible(false);
-    mainviewwid->setVisible(false);
-    char widgetcolor[100];
-    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    mainwidget->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
-    pAnimation->start();
+////    this->showNormal();
+//    is_full=false;
+//    classification_widget=arg;
+//    sidebarwid->setVisible(false);
+//    mainviewwid->setVisible(false);
+//    char widgetcolor[100];
+//    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
+//    mainwidget->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
+//    pAnimation->start();
+
+    this->setContentsMargins(1,21,21,1);
+    this->setGeometry(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
+    sidebarwid->load_min_sidebar();
+    mainviewwid->load_min_mainview();
+    mainviewwid->load_classification_widget();
 }
 
-void MainWindow::animation_finished_slot()
-{
-    if(is_full)
-    {
-        this->setContentsMargins(0,0,0,0);
-        sidebarwid->load_max_sidebar();
-        mainviewwid->load_max_mainview();
-        mainviewwid->load_full_classification_widget(classification_widget);
-        pAnimation->setStartValue(QApplication::desktop()->availableGeometry());
-        pAnimation->setEndValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
-    }
-    else{
-        this->setContentsMargins(1,21,21,1);
-        sidebarwid->load_min_sidebar();
-        mainviewwid->load_min_mainview();
-        mainviewwid->load_classification_widget(classification_widget);
-        pAnimation->setStartValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
-        pAnimation->setEndValue(QApplication::desktop()->availableGeometry());
-    }
-    mainwidget->setStyleSheet("background:transparent;");
-    sidebarwid->setVisible(true);
-    mainviewwid->setVisible(true);
-}
+//void MainWindow::animation_finished_slot()
+//{
+//    if(is_full)
+//    {
+//        this->setContentsMargins(0,0,0,0);
+//        sidebarwid->load_max_sidebar();
+//        mainviewwid->load_max_mainview();
+//        mainviewwid->load_full_classification_widget(classification_widget);
+//        pAnimation->setStartValue(QApplication::desktop()->availableGeometry());
+//        pAnimation->setEndValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
+//    }
+//    else{
+//        this->setContentsMargins(1,21,21,1);
+//        sidebarwid->load_min_sidebar();
+//        mainviewwid->load_min_mainview();
+//        mainviewwid->load_classification_widget(classification_widget);
+//        pAnimation->setStartValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
+//        pAnimation->setEndValue(QApplication::desktop()->availableGeometry());
+//    }
+//    mainwidget->setStyleSheet("background:transparent;");
+//    sidebarwid->setVisible(true);
+//    mainviewwid->setVisible(true);
+//}
 
 /**
  * 鼠标点击窗口外部事件
@@ -169,8 +183,16 @@ bool MainWindow::event ( QEvent * event )
    {
         if(QApplication::activeWindow() != this)
         {
-//             this->hide();
+             this->hide();
         }
    }
    return QWidget::event(event);
+}
+
+/**
+ * 隐藏窗口
+ */
+void MainWindow::recv_hide_mainwindow_slot()
+{
+    this->hide();
 }

@@ -8,6 +8,9 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QScrollBar>
+#include <QPushButton>
+#include "kylin-start-menu-interface.h"
+#include "searchappthread.h"
 
 namespace Ui {
 class SearchResultWidget;
@@ -26,7 +29,9 @@ private:
 
     QHBoxLayout* mainLayout=nullptr;
     QTableWidget* searchResultTableWid=nullptr;
+    SearchAppThread* searchappthread=nullptr;
     QStringList searchResultList;
+//    QStringList appnameList;
 
 protected:
     void init_widget();
@@ -35,6 +40,10 @@ protected:
 
 private slots:
     void recv_search_keyword(QString arg);//接收MainViewWidget界面搜索框的搜索关键字
+    void recv_search_result(QStringList list);
+
+signals:
+    void send_search_keyword(QString arg);//向SearchAppThread发送搜索关键字
 };
 
 #endif // SEARCHRESULTWIDGET_H

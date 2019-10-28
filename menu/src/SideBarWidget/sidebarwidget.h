@@ -98,10 +98,10 @@ signals:
     void send_commonusebtn_signal();//发送常用分类按钮信号
     void send_letterbtn_signal();//发送字母分类按钮信号
     void send_functionbtn_signal();//发送功能分类按钮信号
-
     void send_fullscreen_commonusebtn_signal();//发送常用分类按钮信号
     void send_fullscreen_letterbtn_signal();//发送字母分类按钮信号
     void send_fullscreen_functionbtn_signal();//发送功能分类按钮信号
+    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
 
 };
 

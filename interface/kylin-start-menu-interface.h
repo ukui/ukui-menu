@@ -19,7 +19,8 @@ public:
      * @param desktopfp 为应用.desktop文件所在路径
      * @return 返回应用名称
      */
-    static QString get_app_name(QString desktopfp);
+    static QString get_app_name(QString desktopfp);//获取应用名
+    static QString get_app_english_name(QString desktopfp);//获取英语英文名
     static QString get_app_icon(QString desktopfp);//获取应用图像
     static QString get_app_categories(QString desktopfp);//获取应用分类
     static QString get_app_exec(QString desktopfp);//获取应用命令
@@ -29,10 +30,13 @@ public:
     static QStringList get_desktop_file_path();//获取系统deskyop文件路径
 
     static QString get_desktop_path_by_app_name(QString appname);//根据应用名获取deskyop文件路径
+    static QString get_desktop_path_by_app_english_name(QString appname);//根据应用英文名获取deskyop文件路径
 
     static QStringList sort_app_name();//应用排序
 
     static QString get_app_name_pinyin(QString appname);//获取应用名拼音
+
+    static QStringList get_app_diff_first_letter_pos();
 
     //功能分类
     static QStringList get_recent_app_list();

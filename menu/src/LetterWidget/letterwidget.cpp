@@ -35,15 +35,19 @@ void LetterWidget::init_widget()
     char widgetcolor[100];
     sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
     this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
-    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,462);
+//    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+//    this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+//    this->setFixedSize(330,462);
+//    this->resize(330,462);
+//    this->setMinimumSize(330,462);
 
     mainLayout=new  QHBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     applistWid=new QWidget(this);
     applistWid->setStyleSheet("border:0px;background: transparent;");
-    applistWid->setFixedSize(this->width(),this->height());
+    applistWid->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+//    applistWid->setMinimumSize(this->width(),this->height());
     mainLayout->addWidget(applistWid);
     this->setLayout(mainLayout);
 
@@ -59,11 +63,13 @@ void LetterWidget::init_applist_widget()
     QHBoxLayout* layout=new QHBoxLayout(applistWid);
     layout->setContentsMargins(2,0,2,0);
     apptablewid=new QTableWidget(applistWid);
-    apptablewid->setFixedSize(applistWid->width()-4,applistWid->height());
+//    apptablewid->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+//    apptablewid->setMinimumSize(applistWid->width()-4,applistWid->height());
     layout->addWidget(apptablewid);
     applistWid->setLayout(layout);
     init_app_tablewidget();
     fill_app_tablewidget();
+    load_min_wid();
 
 }
 
@@ -86,17 +92,18 @@ void LetterWidget::init_app_tablewidget()
     apptablewid->setSelectionMode(QAbstractItemView::NoSelection);
     apptablewid->setShowGrid(false);
     apptablewid->setStyleSheet("QTableWidget{border:0px;background:transparent;}");
+    apptablewid->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     apptablewid->verticalScrollBar()->setStyleSheet(
                 "QScrollBar{width:12px;padding-top:15px;padding-bottom:15px;background-color:#283138;}"
                 "QScrollBar::handle{background-color:#414e59; width:12px;}"
                 "QScrollBar::handle:hover{background-color:#697883; }"
                 "QScrollBar::handle:pressed{background-color:#8897a3;}"
-                "QScrollBar::sub-line{background-color:#283138;height:15px;width:12px;border-image:url(:/data/img/mainviewwidget/滑动条-向上箭头.svg);subcontrol-position:top;}"
+                "QScrollBar::sub-line{background-color:#283138;height:15px;width:12px;image:url(:/data/img/mainviewwidget/uparrow.svg);subcontrol-position:top;}"
                 "QScrollBar::sub-line:hover{background-color:#697883;}"
-                "QScrollBar::sub-line:pressed{background-color:#8897a3;border-image:url(:/data/img/mainviewwidget/滑动条-向上箭头-点击.svg);}"
-                "QScrollBar::add-line{background-color:#283138;height:15px;width:12px;border-image:url(:/data/img/mainviewwidget/滑动条-向下箭头.svg);subcontrol-position:bottom;}"
+                "QScrollBar::sub-line:pressed{background-color:#8897a3;image:url(:/data/img/mainviewwidget/uparrow-pressed.svg);}"
+                "QScrollBar::add-line{background-color:#283138;height:15px;width:12px;image:url(:/data/img/mainviewwidget/downarrow.svg);subcontrol-position:bottom;}"
                 "QScrollBar::add-line:hover{background-color:#697883;}"
-                "QScrollBar::add-line:pressed{background-color:#8897a3;border-image:url(:/data/img/mainviewwidget/滑动条-向下箭头-点击.svg);}"
+                "QScrollBar::add-line:pressed{background-color:#8897a3;image:url(:/data/img/mainviewwidget/downarrow-pressed.svg);}"
                 );
 
 }
@@ -106,54 +113,31 @@ void LetterWidget::init_app_tablewidget()
  */
 void LetterWidget::fill_app_tablewidget()
 {
-    QStringList applist=KylinStartMenuInterface::sort_app_name();
-    apptablewid->setRowCount(applist.count());
-    for(int i=0;i<applist.count();i++)
-    {
-        char btncolor[300];
-        sprintf(btncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
-                QPushButton:hover{background-color:%s;}\
-                QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-        QPushButton* btn=new QPushButton;
-        btn->setFixedSize(apptablewid->width()-14,42);
-        btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-        QHBoxLayout* layout=new QHBoxLayout(btn);
-        layout->setContentsMargins(15,0,0,0);
-        layout->setSpacing(15);
+    char btnstyle[300];
+    sprintf(btnstyle,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
+            QPushButton:hover{background-color:%s;}\
+            QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
 
-        QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(applist.at(i)));
-        QIcon::setThemeName("ukui-icon-theme");
-        QIcon icon=QIcon::fromTheme(iconstr);
-        QLabel* labelicon=new QLabel(btn);
-        labelicon->setFixedSize(32,32);
-        QPixmap pixmapicon(icon.pixmap(QSize(32,32)));
-        labelicon->setPixmap(pixmapicon);
-        labelicon->setStyleSheet("QLabel{background:transparent;}");
-        QLabel* labeltext=new QLabel(btn);
-        labeltext->setText(applist.at(i));
-        labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
-        layout->addWidget(labelicon);
-        layout->addWidget(labeltext);
-        btn->setLayout(layout);
-        btn->setFocusPolicy(Qt::NoFocus);
-
-//        QWidget* btn=new QWidget;
-//        btn->setStyleSheet("background:transparent;");
+//    QStringList applist=KylinStartMenuInterface::sort_app_name();
+//    apptablewid->setRowCount(applist.count());
+//    for(int i=0;i<applist.count();i++)
+//    {
+//        QPushButton* btn=new QPushButton;
 //        btn->setFixedSize(apptablewid->width()-14,42);
-//        QHBoxLayout* layout=new QHBoxLayout;
+//        btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+//        QHBoxLayout* layout=new QHBoxLayout(btn);
 //        layout->setContentsMargins(15,0,0,0);
 //        layout->setSpacing(15);
 
-//        KylinStartMenuInterface menu;
-//        QString iconstr=menu.get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(applist.at(i)));
+//        QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(applist.at(i)));
 //        QIcon::setThemeName("ukui-icon-theme");
 //        QIcon icon=QIcon::fromTheme(iconstr);
-//        QLabel* labelicon=new QLabel;
+//        QLabel* labelicon=new QLabel(btn);
 //        labelicon->setFixedSize(32,32);
 //        QPixmap pixmapicon(icon.pixmap(QSize(32,32)));
 //        labelicon->setPixmap(pixmapicon);
 //        labelicon->setStyleSheet("QLabel{background:transparent;}");
-//        QLabel* labeltext=new QLabel;
+//        QLabel* labeltext=new QLabel(btn);
 //        labeltext->setText(applist.at(i));
 //        labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
 //        layout->addWidget(labelicon);
@@ -161,29 +145,209 @@ void LetterWidget::fill_app_tablewidget()
 //        btn->setLayout(layout);
 //        btn->setFocusPolicy(Qt::NoFocus);
 
-//        QPushButton* btn=new QPushButton;
-//        btn->setFixedSize(apptablewid->width()-14,42);
-//        btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-//        QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(applist.at(i)));
+//        apptablewid->setCellWidget(i,0,btn);
 
-//        QIcon::setThemeName("ukui-icon-theme");
-//        QIcon icon=QIcon::fromTheme(iconstr);
-//        btn->setIcon(icon);
-//        btn->setIconSize(QSize(32,32));
-//        btn->setText(applist.at(i));
-//        btn->setFocusPolicy(Qt::NoFocus);
+//        connect(btn,SIGNAL(clicked()),this,SLOT(exec_app_name()));
+////        connect(apptablewid,SIGNAL(cellClicked(int,int)),this,SLOT(exec_app_name(int,int)));
+//        btn->setContextMenuPolicy(Qt::CustomContextMenu);
+//        connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
+//                SLOT(right_click_slot()));
+//    }
 
-        apptablewid->setCellWidget(i,0,btn);
+//    insert_letter_btn();
 
-        connect(btn,SIGNAL(clicked()),this,SLOT(exec_app_name()));
-//        connect(apptablewid,SIGNAL(cellClicked(int,int)),this,SLOT(exec_app_name(int,int)));
-        btn->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),
-                SLOT(right_click_slot()));
+
+//    QStringList letterlist;
+//    letterlist.clear();
+//    for(int i=0;i<26;i++)
+//    {
+//        char letter=static_cast<char>(65+i);
+//        letterlist.append(QString(QChar(letter)));
+//    }
+//    letterlist.append("&");
+//    letterlist.append("#");
+
+    letterposlist=KylinStartMenuInterface::get_app_diff_first_letter_pos();
+    appsortlist=KylinStartMenuInterface::sort_app_name();
+    for(int i=0;i<letterposlist.count();i++)
+    {
+//        QStringList applist=KylinStartMenuInterface::get_app_diff_first_letter_pos();
+        QString startstr=letterposlist.at(i);
+        int start=startstr.toInt();
+        int end;
+        if(i==letterposlist.count()-1)
+            end=appsortlist.count()-1;
+        else{
+            QString endstr=letterposlist.at(i+1);
+            end=endstr.toInt();
+        }
+
+        QStringList applist=get_alphabetic_classification_applist(start,end);
+        if(!applist.isEmpty())
+        {
+            QString lettersrt=KylinStartMenuInterface::get_app_name_pinyin(applist.at(0));
+            QChar letter=lettersrt.at(0);
+            if(letter<48 || (letter>57 && letter<65) || letter>90)
+                letter='&';
+            else if(letter>=48 && letter<=57)
+                letter='#';
+            else letter=lettersrt.at(0);
+            apptablewid->insertRow(apptablewid->rowCount());//用于插入字母分类按钮
+            apptablewid->insertRow(apptablewid->rowCount());//用于插入应用按钮界面
+            letterbtnlist.append(QString(letter));//存储分类字符
+            letterbtnrowlist.append(QString::number(apptablewid->rowCount()-2));//存储分类字符所在行
+            applistnum.append(QString::number(applist.count()));
+
+            QPushButton* letterbtn=new QPushButton;
+            letterbtn->setStyleSheet(btnstyle);
+//            letterbtn->setFixedSize(apptablewid->width()-14,20);
+            letterbtn->setFocusPolicy(Qt::NoFocus);
+            QHBoxLayout* letterlayout=new QHBoxLayout(letterbtn);
+            letterlayout->setContentsMargins(15,0,0,0);
+            letterlayout->setSpacing(6);
+            QFrame* line=new QFrame(letterbtn);
+            line->setFrameShape(QFrame::HLine);
+//            line->setFixedSize(letterbtn->width()-41,1);
+            line->setStyleSheet("background-color:#626c6e");
+            QLabel* letterlabel=new QLabel(letterbtn);
+            letterlabel->setFixedSize(20,20);
+            letterlabel->setAlignment(Qt::AlignCenter);
+            letterlabel->setStyleSheet("color:#ffffff;font-size:14px;");
+            letterlabel->setText(QString(letter));
+            letterlayout->addWidget(line);
+            letterlayout->addWidget(letterlabel);
+            letterbtn->setLayout(letterlayout);
+//            apptablewid->setRowHeight(apptablewid->rowCount()-2,20);
+            apptablewid->setCellWidget(apptablewid->rowCount()-2,0,letterbtn);
+            connect(letterbtn, SIGNAL(clicked()), this,SLOT(app_classificationbtn_clicked_slot()));
+
+            QFlowLayout* flowlayout=new QFlowLayout(0,0,0);
+            QWidget* wid=new QWidget;
+//            wid->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+            wid->setLayout(flowlayout);
+//            apptablewid->setRowHeight(apptablewid->rowCount()-1,applist.count()*42);
+//            wid->resize(apptablewid->width()-14,applist.count()*42);
+            apptablewid->setCellWidget(apptablewid->rowCount()-1,0,wid);
+            for(int i=0;i<applist.count();i++)
+            {
+                QPushButton* btn=new QPushButton;
+//                btn->setFixedSize(apptablewid->width()-14,42);
+                btn->setFixedSize(330-4-14,42);
+                btn->setStyleSheet(QString::fromLocal8Bit(btnstyle));
+                QHBoxLayout* layout=new QHBoxLayout(btn);
+                layout->setContentsMargins(15,0,0,0);
+                layout->setSpacing(15);
+
+                QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(applist.at(i)));
+                QIcon::setThemeName("ukui-icon-theme");
+                QIcon icon=QIcon::fromTheme(iconstr);
+                QLabel* labelicon=new QLabel(btn);
+                labelicon->setFixedSize(32,32);
+                QPixmap pixmapicon(icon.pixmap(QSize(32,32)));
+                labelicon->setPixmap(pixmapicon);
+                labelicon->setStyleSheet("QLabel{background:transparent;}");
+                QLabel* labeltext=new QLabel(btn);
+                labeltext->setText(applist.at(i));
+                labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+                layout->addWidget(labelicon);
+                layout->addWidget(labeltext);
+                btn->setLayout(layout);
+                btn->setFocusPolicy(Qt::NoFocus);
+                flowlayout->addWidget(btn);
+
+                connect(btn,SIGNAL(clicked()),this,SLOT(exec_app_name()));
+                btn->setContextMenuPolicy(Qt::CustomContextMenu);
+                connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
+                        SLOT(right_click_slot()));
+
+            }
+        }
+    }
+}
+
+QStringList LetterWidget::get_alphabetic_classification_applist(int start, int end)
+{
+    QStringList applist;
+    applist.clear();
+    for(int i=start;i<end;i++)
+    {
+        applist.append(appsortlist.at(i));
+    }
+    return applist;
+}
+
+void LetterWidget::load_min_wid()
+{
+    this->setGeometry(QRect(60,QApplication::desktop()->availableGeometry().height()-462,
+                                 330,462));
+    applistWid->setFixedSize(this->width(),this->height());
+    applistWid->layout()->setContentsMargins(2,0,2,0);
+    apptablewid->setFixedSize(applistWid->width()-4,applistWid->height());
+    int row=0;
+    while(row<apptablewid->rowCount()/2)
+    {
+        //分类按钮
+        QWidget* letterbtnwid=apptablewid->cellWidget(row*2,0);
+        QPushButton* letterbtn=qobject_cast<QPushButton*>(letterbtnwid);
+        letterbtn->setFixedSize(apptablewid->width()-14,20);
+        letterbtn->layout()->setContentsMargins(15,0,0,0);
+        letterbtn->layout()->setSpacing(6);
+        apptablewid->setRowHeight(row*2,20);
+        QLayoutItem* item=letterbtn->layout()->itemAt(0);
+        QWidget* linewid=item->widget();
+        QFrame* line=qobject_cast<QFrame*>(linewid);
+        line->setFixedSize(letterbtn->width()-41,1);
+        //应用按钮界面
+        QWidget* wid=apptablewid->cellWidget(row*2+1,0);
+        QString numstr=applistnum.at(row);
+        int num=numstr.toInt();
+        wid->setFixedSize(apptablewid->width()-14,num*42);
+        apptablewid->setRowHeight(row*2+1,num*42);
+        row++;
+
+    }
+}
+
+void LetterWidget::load_max_wid()
+{
+    this->setGeometry(QRect(160,
+                            70,
+                            QApplication::desktop()->availableGeometry().width()-160,
+                            QApplication::desktop()->availableGeometry().height()-70));
+
+    applistWid->setFixedSize(this->width(),this->height());
+    applistWid->layout()->setContentsMargins(30,0,2,0);
+    apptablewid->setFixedSize(applistWid->width()-32-12,applistWid->height());
+    int row=0;
+    while(row<apptablewid->rowCount()/2)
+    {
+        //分类按钮
+        QWidget* letterbtnwid=apptablewid->cellWidget(row*2,0);
+        QPushButton* letterbtn=qobject_cast<QPushButton*>(letterbtnwid);
+        letterbtn->setFixedSize(apptablewid->width()-32,20);
+        letterbtn->layout()->setContentsMargins(0,0,0,0);
+        letterbtn->layout()->setSpacing(12);
+        apptablewid->setRowHeight(row*2,20);
+        QLayoutItem* item=letterbtn->layout()->itemAt(0);
+        QWidget* linewid=item->widget();
+        QFrame* line=qobject_cast<QFrame*>(linewid);
+        line->setFixedSize(letterbtn->width()-26,1);
+        //应用按钮界面
+        int dividend=apptablewid->width()/312;
+        QWidget* wid=apptablewid->cellWidget(row*2+1,0);
+        QString numstr=applistnum.at(row);
+        int num=numstr.toInt();
+        if(num%dividend>0)
+            num=num/dividend+1;
+        else num=num/dividend;
+        wid->setFixedSize(apptablewid->width()-14,num*42);
+        apptablewid->setRowHeight(row*2+1,num*42);
+        row++;
+
     }
 
-    insert_letter_btn();
 }
+
 
 /**
  * 加载右键菜单
@@ -199,98 +363,16 @@ void LetterWidget::right_click_slot()
             QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
 
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
+    QLayoutItem* item=btn->layout()->itemAt(1);
+    QWidget* wid=item->widget();
+    QLabel* label=qobject_cast<QLabel*>(wid);
+    QString appname=label->text();
     btn->setStyleSheet(style);
     menu=new RightClickMenu;
-    menu->show_appbtn_menu();
+    int ret=menu->show_appbtn_menu(appname);
+    if(ret==1 || ret==2)
+        emit send_update_applist_signal();
     btn->setStyleSheet(btnstyle);
-}
-
-/**
- * 插入字母按钮
- */
-void LetterWidget::insert_letter_btn()
-{
-    letterbtnlist.clear();
-    letterbtnrowlist.clear();
-    char btnstyle[300];
-    sprintf(btnstyle,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;}\
-            QPushButton:hover{background-color:%s;}\
-            QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-
-    int index=0;
-    int row;
-    while(index<apptablewid->rowCount())
-    {
-        QWidget* wid=apptablewid->cellWidget(index,0);
-        QPushButton* btn=qobject_cast<QPushButton*>(wid);
-        QLayoutItem* item=btn->layout()->itemAt(1);
-        QWidget* labelWid=item->widget();
-        QLabel* label=qobject_cast<QLabel*>(labelWid);
-        QString indexstr=label->text();
-        QString indexpinyin=KylinStartMenuInterface::get_app_name_pinyin(indexstr);
-        QChar indexch=indexpinyin.at(0);
-
-        if(indexch<65 || indexch>90)
-        {
-            indexch='&';
-
-        }
-        letterbtnlist.append(QString(indexch));
-        letterbtnrowlist.append(QString::number(index));
-
-        QPushButton* letterbtn=new QPushButton;
-        letterbtn->setStyleSheet(btnstyle);
-        letterbtn->setFixedSize(apptablewid->width()-14,20);
-        letterbtn->setFocusPolicy(Qt::NoFocus);
-        QHBoxLayout* letterlayout=new QHBoxLayout(letterbtn);
-        letterlayout->setContentsMargins(15,0,0,0);
-        letterlayout->setSpacing(6);
-        QFrame* line=new QFrame(letterbtn);
-        line->setFrameShape(QFrame::HLine);
-        line->setFixedSize(letterbtn->width()-41,1);
-        line->setStyleSheet("background-color:#626c6e");
-        QLabel* letterlabel=new QLabel(letterbtn);
-        letterlabel->setFixedSize(20,20);
-        letterlabel->setAlignment(Qt::AlignCenter);
-        letterlabel->setStyleSheet("color:#ffffff;font-size:14px;");
-        letterlabel->setText(QString(indexch));
-        letterlayout->addWidget(line);
-        letterlayout->addWidget(letterlabel);
-        letterbtn->setLayout(letterlayout);
-
-        apptablewid->insertRow(index);
-        apptablewid->setRowHeight(index,20);
-        apptablewid->setCellWidget(index,0,letterbtn);
-        connect(letterbtn, SIGNAL(clicked()), this,SLOT(app_classificationbtn_clicked_slot()));
-
-
-        if(indexch>=65 && indexch<=90)
-        {
-            for(row=index+1;row<apptablewid->rowCount();row++)
-            {
-                QWidget* wid=apptablewid->cellWidget(row,0);
-                QPushButton* btn=qobject_cast<QPushButton*>(wid);
-//                QString appnamestr=btn->text();
-                QLayoutItem* item=btn->layout()->itemAt(1);
-                QWidget* labelwid=item->widget();
-                QLabel* label=qobject_cast<QLabel*>(labelwid);
-                QString appnamestr=label->text();
-                QString appnamepinyin=KylinStartMenuInterface::get_app_name_pinyin(appnamestr);
-                QChar appnamech=appnamepinyin.at(0);
-                if(indexch!=appnamech)
-                {
-                    index=row;
-                    break;
-                }
-
-            }
-        }
-        else {
-            break;
-        }
-        if(row==apptablewid->rowCount())
-            break;
-    }
 }
 
 /**
@@ -298,7 +380,7 @@ void LetterWidget::insert_letter_btn()
  */
 void LetterWidget::exec_app_name()
 {
-
+    emit send_hide_mainwindow_signal();
         QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
 //        QModelIndex index=apptablewid->indexAt(btn->pos());
 //    QWidget* btn=apptablewid->cellWidget(row,col);
@@ -324,17 +406,27 @@ void LetterWidget::exec_app_name()
 }
 
 /**
+ * 更新应用列表
+ */
+void LetterWidget::update_app_tablewidget()
+{
+    apptablewid->setRowCount(0);
+    fill_app_tablewidget();
+
+}
+
+/**
  * 应用列表字母分类按钮槽函数
  */
 void LetterWidget::app_classificationbtn_clicked_slot()
 {
     //加载LetterBUttonWidget界面
     letterbtnwid=new LetterButtonWidget(this);
+    connect(this,SIGNAL(send_letterbtn_list(QStringList)),letterbtnwid,SLOT(recv_letterbtn_list(QStringList)));
+    emit send_letterbtn_list(letterbtnlist);
     mainLayout->removeWidget(applistWid);
     applistWid->setParent(nullptr);
     mainLayout->addWidget(letterbtnwid);
-    emit send_letterwid_state(1,"");
-
     connect(letterbtnwid, SIGNAL(send_letterbtn_signal(QString)),this,SLOT(recv_letterbtn_signal(QString)));
 }
 
@@ -360,58 +452,4 @@ void LetterWidget::recv_letterbtn_signal(QString btnname)
         apptablewid->verticalScrollBar()->setValue(row);
 
     }
-    emit send_letterwid_state(0,btnname);
-}
-
-/**
- * 设置字母分类界面状态
- */
-void LetterWidget::set_letterwidge_state(int state, QString btnname)
-{
-    if(state==1)
-    {
-        QLayoutItem *child;
-        if((child = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=child->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        if(letterbtnwid!=nullptr)
-        {
-            delete letterbtnwid;
-            letterbtnwid=nullptr;
-        }
-        letterbtnwid=new LetterButtonWidget(this);
-        connect(letterbtnwid, SIGNAL(send_letterbtn_signal(QString)),this,SLOT(recv_letterbtn_signal(QString)));
-        mainLayout->addWidget(letterbtnwid);
-    }
-    else{
-        QLayoutItem *child;
-        if((child = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=child->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        if(letterbtnwid!=nullptr)
-        {
-            delete letterbtnwid;
-            letterbtnwid=nullptr;
-        }
-        mainLayout->addWidget(applistWid);
-
-        //此处需实现将字母为btnname的应用列表移动到applistWid界面最顶端
-        int num=letterbtnlist.indexOf(QString(QChar(btnname.at(0))));
-        if(num!=-1)
-        {
-            int row=letterbtnrowlist.at(num).toInt();
-            apptablewid->verticalScrollBar()->setValue(row);
-        }
-    }
-
 }

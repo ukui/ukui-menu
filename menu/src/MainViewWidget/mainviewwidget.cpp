@@ -17,11 +17,8 @@ MainViewWidget::~MainViewWidget()
 {
     delete ui;
     delete commonusewid;
-    delete fullcommonusewid;
     delete letterwid;
-    delete fullletterwid;
     delete functionwid;
-    delete fullfunctionwid;
     delete searchResultWid;
     delete fullsearchresultwid;
 }
@@ -47,16 +44,20 @@ void MainViewWidget::init_widget()
     this->setFocusPolicy(Qt::StrongFocus);
 
     commonusewid=new CommonUseWidget;
-    fullcommonusewid=new FullCommonUseWidget;
-
     letterwid=new LetterWidget;
     functionwid=new FunctionWidget;
-    fullletterwid=new FullLetterWidget;
-    fullfunctionwid=new FullFunctionWidget;
-    connect(letterwid,SIGNAL(send_letterwid_state(int,QString)),this,SLOT(recv_letterwid_state(int,QString)));
-    connect(functionwid,SIGNAL(send_functionwid_state(int,QString)),this,SLOT(recv_functionwid_state(int,QString)));
-    connect(fullletterwid,SIGNAL(send_fullletterwid_state(int,QString)),this,SLOT(recv_letterwid_state(int,QString)));
-    connect(fullfunctionwid,SIGNAL(send_fullfunctionwid_state(int,QString)),this,SLOT(recv_functionwid_state(int,QString)));
+
+    connect(letterwid,SIGNAL(send_update_applist_signal()),commonusewid,SLOT(update_tablewid_slot()));
+    connect(functionwid,SIGNAL(send_update_applist_signal()),commonusewid,SLOT(update_tablewid_slot()));
+
+    fileWatcher=new QFileSystemWatcher(this);
+    fileWatcher->addPath("/usr/share/applications");
+//    connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),letterwid,SLOT(update_app_tablewidget()));
+//    connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),functionwid,SLOT(update_app_tablewidget()));
+
+    connect(commonusewid,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
+    connect(letterwid,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
+    connect(functionwid,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
 
     add_top_control();
     load_min_mainview();
@@ -118,6 +119,8 @@ void MainViewWidget::add_query_lineedit()
     queryLayout->addWidget(querybtn);
     queryLayout->addWidget(querylineEdit);
     queryWidget->setLayout(queryLayout);
+
+    querylineEdit->setEnabled(false);
 
     querylineEdit->setFocusPolicy(Qt::ClickFocus);
     querylineEdit->installEventFilter(this);
@@ -301,25 +304,6 @@ void MainViewWidget::set_min_btn()
 }
 
 /**
- * 接收默认或全屏字母排序界面状态信号
- */
-void MainViewWidget::recv_letterwid_state(int arg,QString btnname)
-{
-    this->letterwid_state=arg;
-    this->letterbtnname=btnname;
-}
-
-/**
- * 接收默认与全屏功能分类界面状态信号
- */
-void MainViewWidget::recv_functionwid_state(int arg,QString btnname)
-{
-    this->functionwid_state=arg;
-    this->functionbtnname=btnname;
-
-}
-
-/**
  * 加载常用分类界面
  */
 void MainViewWidget::load_commonuse_widget()
@@ -346,7 +330,6 @@ void MainViewWidget::load_letter_widget()
 {
     if(letterbtnname.isEmpty())
         letterbtnname="A";
-    letterwid->set_letterwidge_state(letterwid_state,letterbtnname);
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -368,7 +351,6 @@ void MainViewWidget::load_function_widget()
 {
     if(functionbtnname.isEmpty())
         functionbtnname="最近添加";
-    functionwid->set_functionwidge_state(functionwid_state,functionbtnname);
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -383,76 +365,12 @@ void MainViewWidget::load_function_widget()
     widgetState=3;
 }
 
-
-/**
- * 加载全屏常用分类界面
- */
-void MainViewWidget::load_fullcommonuse_widget()
-{
-    QLayoutItem *child;
-    if((child = mainLayout->takeAt(1)) != nullptr) {
-        QWidget* childwid=child->widget();
-        if(childwid!=nullptr)
-        {
-            mainLayout->removeWidget(childwid);
-            childwid->setParent(nullptr);
-        }
-
-    }
-    mainLayout->addWidget(fullcommonusewid);
-    widgetState=1;
-
-}
-
-/**
- * 加载全屏字母分类界面
- */
-void MainViewWidget::load_fullletter_widget()
-{
-    if(letterbtnname.isEmpty())
-        letterbtnname="A";
-    fullletterwid->set_fullletterwidge_state(letterwid_state,letterbtnname);
-    QLayoutItem *child;
-    if((child = mainLayout->takeAt(1)) != nullptr) {
-        QWidget* childwid=child->widget();
-        if(childwid!=nullptr)
-        {
-            mainLayout->removeWidget(childwid);
-            childwid->setParent(nullptr);
-        }
-    }
-    mainLayout->addWidget(fullletterwid);
-    widgetState=2;
-}
-
-/**
- * 加载全屏功能分类界面
- */
-void MainViewWidget::load_fullfunction_widget()
-{
-    if(functionbtnname.isEmpty())
-        functionbtnname="最近添加";
-    fullfunctionwid->set_fullfunctionwidge_state(functionwid_state,functionbtnname);
-    QLayoutItem *child;
-    if((child = mainLayout->takeAt(1)) != nullptr) {
-        QWidget* childwid=child->widget();
-        if(childwid!=nullptr)
-        {
-            mainLayout->removeWidget(childwid);
-            childwid->setParent(nullptr);
-        }
-
-    }
-    mainLayout->addWidget(fullfunctionwid);
-    widgetState=3;
-}
-
 /**
  * 全屏按钮槽函数
  */
 void MainViewWidget::fullscreen_btn_slot()
 {
-    emit send_fullscreenbtn_signal(widgetState);
+    emit send_fullscreenbtn_signal();
 }
 
 /**
@@ -460,32 +378,26 @@ void MainViewWidget::fullscreen_btn_slot()
  */
 void MainViewWidget::default_btn_slot()
 {
-    emit send_defaultbtn_signal(widgetState);
+    emit send_defaultbtn_signal();
 }
 
 /**
  * 设置主界面从全屏回到默认状态时应加载的分类窗口
  */
-void MainViewWidget::load_classification_widget(int arg)
+void MainViewWidget::load_classification_widget()
 {
-    if(arg==1)
-        load_commonuse_widget();
-    else if(arg==2)
-        load_letter_widget();
-    else if(arg==3)
-        load_function_widget();
+        commonusewid->load_min_wid();
+        letterwid->load_min_wid();
+        functionwid->load_min_wid();
 }
 
 /**
  * 主界面全屏时应加载的分类窗口
  */
-void MainViewWidget::load_full_classification_widget(int arg)
+void MainViewWidget::load_full_classification_widget()
 {
-    if(arg==1)
-        load_fullcommonuse_widget();
-    else if(arg==2)
-        load_fullletter_widget();
-    else if(arg==3)
-        load_fullfunction_widget();
+        commonusewid->load_max_wid();
+        letterwid->load_max_wid();
+        functionwid->load_max_wid();
 }
 

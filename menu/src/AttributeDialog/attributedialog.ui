@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FullLetterWidget</class>
- <widget class="QWidget" name="FullLetterWidget">
+ <class>AttributeDialog</class>
+ <widget class="QDialog" name="AttributeDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Dialog</string>
   </property>
  </widget>
  <resources/>

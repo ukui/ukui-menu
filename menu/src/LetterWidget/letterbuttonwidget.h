@@ -28,7 +28,6 @@ private:
     QSpacerItem* horizontalSpacer=nullptr;
     QSpacerItem* verticalSpacer=nullptr;
 
-
 protected:
     void init_widget();
     void add_letterbtn_control();//添加字母分类按钮
@@ -42,6 +41,7 @@ signals:
 
 private slots:
     void letterbtn_clicked_slot();//字母分类按钮槽函数
+    void recv_letterbtn_list(QStringList list);//接收LetterWidget字母按钮列表
 };
 
 #endif // LETTERBUTTONWIDGET_H

@@ -1,9 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>data/img/mainviewwidget/滑动条-向上箭头-点击.svg</file>
-        <file>data/img/mainviewwidget/滑动条-向上箭头.svg</file>
-        <file>data/img/mainviewwidget/滑动条-向下箭头-点击.svg</file>
-        <file>data/img/mainviewwidget/滑动条-向下箭头.svg</file>
         <file>data/qss/kylin-start-menu.qss</file>
         <file>data/img/sidebarwidget/commonuse.svg</file>
         <file>data/img/sidebarwidget/computer.svg</file>
@@ -19,7 +15,6 @@
         <file>data/img/mainviewwidget/game.svg</file>
         <file>data/img/mainviewwidget/img.svg</file>
         <file>data/img/mainviewwidget/leftarrow.svg</file>
-        <file>data/img/mainviewwidget/music.svg</file>
         <file>data/img/mainviewwidget/net.svg</file>
         <file>data/img/mainviewwidget/office.svg</file>
         <file>data/img/mainviewwidget/other.svg</file>
@@ -31,7 +26,6 @@
         <file>data/img/mainviewwidget/video.svg</file>
         <file>data/img/mainviewwidget/game-gray.svg</file>
         <file>data/img/mainviewwidget/img-gray.svg</file>
-        <file>data/img/mainviewwidget/music-gray.svg</file>
         <file>data/img/mainviewwidget/net-gray.svg</file>
         <file>data/img/mainviewwidget/office-gray.svg</file>
         <file>data/img/mainviewwidget/other-gray.svg</file>
@@ -54,5 +48,24 @@
         <file>data/img/sidebarwidget/unfixed.svg</file>
         <file>data/img/mainviewwidget/develop.svg</file>
         <file>data/img/mainviewwidget/develop-gray.svg</file>
+        <file>data/img/mainviewwidget/develop-disabled.svg</file>
+        <file>data/img/mainviewwidget/reading-disabled.svg</file>
+        <file>data/img/mainviewwidget/social-disabled.svg</file>
+        <file>data/img/mainviewwidget/game-disabled.svg</file>
+        <file>data/img/mainviewwidget/img-disabled.svg</file>
+        <file>data/img/mainviewwidget/net-disabled.svg</file>
+        <file>data/img/mainviewwidget/office-disabled.svg</file>
+        <file>data/img/mainviewwidget/other-disabled.svg</file>
+        <file>data/img/mainviewwidget/recent-disabled.svg</file>
+        <file>data/img/mainviewwidget/system-disabled.svg</file>
+        <file>data/img/mainviewwidget/video-disabled.svg</file>
+        <file>data/img/mainviewwidget/lock.svg</file>
+        <file>data/img/mainviewwidget/downarrow-pressed.svg</file>
+        <file>data/img/mainviewwidget/downarrow.svg</file>
+        <file>data/img/mainviewwidget/uparrow-pressed.svg</file>
+        <file>data/img/mainviewwidget/uparrow.svg</file>
+        <file>data/img/attributedialog/close-black.svg</file>
+        <file>data/img/attributedialog/close-white.svg</file>
+        <file>data/img/attributedialog/min-black.svg</file>
     </qresource>
 </RCC>

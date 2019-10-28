@@ -47,15 +47,15 @@ void SideBarWidget::add_sidebar_btn()
     sprintf(userwidcolor,"border:0px;background-color:%s;",SIDEBARWIDGETCOLOR);
     userwid->setStyleSheet(QString::fromLocal8Bit(userwidcolor));
     commonusebtn=new QPushButton(this);
-    commonusebtn->setFocusPolicy(Qt::NoFocus);
+//    commonusebtn->setFocusPolicy(Qt::NoFocus);
 //    commonusebtn->installEventFilter(this);
     set_btn_style(commonusebtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"));
     letterbtn=new QPushButton(this);
-    letterbtn->setFocusPolicy(Qt::NoFocus);
+//    letterbtn->setFocusPolicy(Qt::NoFocus);
 //    letterbtn->installEventFilter(this);
     set_btn_style(letterbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/letter.svg"));
     functionbtn=new QPushButton(this);
-    functionbtn->setFocusPolicy(Qt::NoFocus);
+//    functionbtn->setFocusPolicy(Qt::NoFocus);
 //    functionbtn->installEventFilter(this);
     set_btn_style(functionbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/function.svg"));
     computerbtn=new QPushButton(this);
@@ -68,13 +68,13 @@ void SideBarWidget::add_sidebar_btn()
     connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));
     connect(functionbtn,SIGNAL(clicked()),this,SLOT(functionbtn_clicked_slot()));
 
-    commonusebtnname=new QLabel(commonusebtn);
+    commonusebtnname=new QLabel;
     commonusebtnname->setText(tr("常用软件"));
     commonusebtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
     commonusebtnname->adjustSize();
     commonusebtn->layout()->addWidget(commonusebtnname);
 
-    letterbtnname=new QLabel(letterbtn);
+    letterbtnname=new QLabel;
     letterbtnname->setText(tr("字母排序"));
     letterbtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
     letterbtnname->adjustSize();
@@ -169,6 +169,7 @@ void SideBarWidget::set_btn_style(QPushButton *btn, QString btnicon)
     labelicon->setFixedSize(pixmap->size());
     btnlayout->addWidget(labelicon);
     btn->setLayout(btnlayout);
+    btn->setFocusPolicy(Qt::NoFocus);
 
 }
 
@@ -211,7 +212,9 @@ void SideBarWidget::init_usericon_widget()
 void SideBarWidget::shutdownbtn_right_click_slot()
 {
     shutdownmenu=new RightClickMenu;
-    shutdownmenu->show_shutdown_menu();
+    int ret=shutdownmenu->show_shutdown_menu();
+    if(ret>=10 && ret<=14)
+        emit send_hide_mainwindow_signal();
 }
 
 void SideBarWidget::add_right_click_menu(QPushButton *btn)
@@ -314,13 +317,6 @@ void SideBarWidget::load_max_sidebar()
             QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
     usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
-    set_max_sidebar_btn(commonusebtn);
-    set_max_sidebar_btn(letterbtn);
-    set_max_sidebar_btn(functionbtn);
-    set_max_sidebar_btn(computerbtn);
-    set_max_sidebar_btn(controlbtn);
-    set_max_sidebar_btn(shutdownbtn);
-
     spaceWid->setFixedSize(this->width(),this->height()-userwid->height()-6*commonusebtn->height());
 
     commonusebtn->layout()->addWidget(commonusebtnname);
@@ -332,6 +328,12 @@ void SideBarWidget::load_max_sidebar()
     shutdownbtn->layout()->addWidget(shutdownbtnname);
 //    shutdownbtn->layout()->addWidget(labelarrow);
 
+    set_max_sidebar_btn(commonusebtn);
+    set_max_sidebar_btn(letterbtn);
+    set_max_sidebar_btn(functionbtn);
+    set_max_sidebar_btn(computerbtn);
+    set_max_sidebar_btn(controlbtn);
+    set_max_sidebar_btn(shutdownbtn);
 
 //    disconnect(commonusebtn, SIGNAL(clicked()), this, SIGNAL(send_commonusebtn_signal()));
 //    disconnect(letterbtn,SIGNAL(clicked()), this, SIGNAL(send_letterbtn_signal()));
@@ -348,7 +350,12 @@ void SideBarWidget::load_max_sidebar()
 void SideBarWidget::set_max_sidebar_btn(QPushButton *btn)
 {
     btn->setFixedSize(160,48);
-    btn->layout()->setContentsMargins(25,0,btn->width()-40-labelicon->width()-letterbtnname->width(),0);
+    QLayoutItem* item=btn->layout()->itemAt(1);
+    QWidget* wid=item->widget();
+    QLabel* label=qobject_cast<QLabel*>(wid);
+    int len=label->text().length();
+//    btn->layout()->setContentsMargins(25,0,btn->width()-40-labelicon->width()-letterbtnname->width(),0);
+    btn->layout()->setContentsMargins(25,0,btn->width()-40-labelicon->width()-len*14,0);
     btn->layout()->setSpacing(15);
 }
 
@@ -447,9 +454,9 @@ void SideBarWidget::commonusebtn_clicked_slot()
     letterbtn->setStyleSheet(style);
     functionbtn->setStyleSheet(style);
 
-    if(is_fullscreen)
-        emit send_fullscreen_commonusebtn_signal();
-    else emit send_commonusebtn_signal();
+//    if(is_fullscreen)
+//        emit send_fullscreen_commonusebtn_signal();
+    emit send_commonusebtn_signal();
 
 }
 
@@ -466,9 +473,9 @@ void SideBarWidget::letterbtn_clicked_slot()
     commonusebtn->setStyleSheet(style);
     functionbtn->setStyleSheet(style);
 
-    if(is_fullscreen)
-        emit send_fullscreen_letterbtn_signal();
-    else emit send_letterbtn_signal();
+//    if(is_fullscreen)
+//        emit send_fullscreen_letterbtn_signal();
+    emit send_letterbtn_signal();
 
 }
 
@@ -485,9 +492,9 @@ void SideBarWidget::functionbtn_clicked_slot()
     commonusebtn->setStyleSheet(style);
     letterbtn->setStyleSheet(style);
 
-    if(is_fullscreen)
-        emit send_fullscreen_functionbtn_signal();
-    else emit send_functionbtn_signal();
+//    if(is_fullscreen)
+//        emit send_fullscreen_functionbtn_signal();
+    emit send_functionbtn_signal();
 }
 
 /**

@@ -54,6 +54,7 @@ void FullSearchResultWidget::init_search_result_table()
     searchResultTableWid->setEditTriggers(QAbstractItemView::NoEditTriggers);
     searchResultTableWid->setShowGrid(false);
     searchResultTableWid->setStyleSheet("QTableWidget{border:0px;background:transparent;}");
+    searchResultTableWid->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     searchResultTableWid->verticalScrollBar()->setStyleSheet(
                                             "QScrollBar{width:12px;padding-top:15px;padding-bottom:15px;background-color:#283138;}"
                                             "QScrollBar::handle{background-color:#414e59; width:12px;}"

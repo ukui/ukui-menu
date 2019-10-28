@@ -29,14 +29,14 @@ void FunctionWidget::init_widget()
     char widgetcolor[100];
     sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
     this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
-    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,462);
+//    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+//    this->setFixedSize(330,462);
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     applistWid=new QWidget(this);
     applistWid->setStyleSheet("border:0px;background: transparent;");
-    applistWid->setFixedSize(this->width(),this->height());
+//    applistWid->setFixedSize(this->width(),this->height());
     mainLayout->addWidget(applistWid);
     this->setLayout(mainLayout);
 
@@ -52,11 +52,12 @@ void FunctionWidget::init_applist_widget()
     QHBoxLayout* layout=new QHBoxLayout(applistWid);
     layout->setContentsMargins(2,0,2,0);
     apptablewid=new QTableWidget(applistWid);
-    apptablewid->setFixedSize(applistWid->width()-4,applistWid->height());
+//    apptablewid->setFixedSize(applistWid->width()-4,applistWid->height());
     layout->addWidget(apptablewid);
     applistWid->setLayout(layout);
     init_app_tablewidget();
     fill_app_tablewidget();
+    load_min_wid();
 
 }
 
@@ -79,17 +80,18 @@ void FunctionWidget::init_app_tablewidget()
     apptablewid->setSelectionMode(QAbstractItemView::NoSelection);
     apptablewid->setShowGrid(false);
     apptablewid->setStyleSheet("QTableWidget{border:0px;background:transparent;}");
+    apptablewid->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     apptablewid->verticalScrollBar()->setStyleSheet(
                 "QScrollBar{width:12px;padding-top:15px;padding-bottom:15px;background-color:#283138;}"
                 "QScrollBar::handle{background-color:#414e59; width:12px;}"
                 "QScrollBar::handle:hover{background-color:#697883; }"
                 "QScrollBar::handle:pressed{background-color:#8897a3;}"
-                "QScrollBar::sub-line{background-color:#283138;height:15px;width:12px;border-image:url(:/data/img/mainviewwidget/滑动条-向上箭头.svg);subcontrol-position:top;}"
+                "QScrollBar::sub-line{background-color:#283138;height:15px;width:12px;border-image:url(:/data/img/mainviewwidget/uparrow.svg);subcontrol-position:top;}"
                 "QScrollBar::sub-line:hover{background-color:#697883;}"
-                "QScrollBar::sub-line:pressed{background-color:#8897a3;border-image:url(:/data/img/mainviewwidget/滑动条-向上箭头-点击.svg);}"
-                "QScrollBar::add-line{background-color:#283138;height:15px;width:12px;border-image:url(:/data/img/mainviewwidget/滑动条-向下箭头.svg);subcontrol-position:bottom;}"
+                "QScrollBar::sub-line:pressed{background-color:#8897a3;border-image:url(:/data/img/mainviewwidget/uparrow-pressed.svg);}"
+                "QScrollBar::add-line{background-color:#283138;height:15px;width:12px;border-image:url(:/data/img/mainviewwidget/downarrow.svg);subcontrol-position:bottom;}"
                 "QScrollBar::add-line:hover{background-color:#697883;}"
-                "QScrollBar::add-line:pressed{background-color:#8897a3;border-image:url(:/data/img/mainviewwidget/滑动条-向下箭头-点击.svg);}"
+                "QScrollBar::add-line:pressed{background-color:#8897a3;border-image:url(:/data/img/mainviewwidget/downarrow-pressed.svg);}"
                 );
 
 }
@@ -180,14 +182,14 @@ void FunctionWidget::insert_classification_btn(QString btnname)
 
     QPushButton* classificationbtn=new QPushButton;
     classificationbtn->setStyleSheet(btncolor);
-    classificationbtn->setFixedSize(apptablewid->width()-14,20);
+//    classificationbtn->setFixedSize(apptablewid->width()-14,20);
     classificationbtn->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* classificationlayout=new QHBoxLayout(classificationbtn);
     classificationlayout->setContentsMargins(15,0,0,0);
     classificationlayout->setSpacing(6);
     QFrame* line=new QFrame(classificationbtn);
     line->setFrameShape(QFrame::HLine);
-    line->setFixedSize(classificationbtn->width()-77,1);
+//    line->setFixedSize(classificationbtn->width()-77,1);
     line->setStyleSheet("background-color:#626c6e");
     QLabel* classificationlabel=new QLabel(classificationbtn);
     classificationlabel->setFixedSize(56,20);
@@ -199,7 +201,7 @@ void FunctionWidget::insert_classification_btn(QString btnname)
     classificationbtn->setLayout(classificationlayout);
 
     apptablewid->insertRow(apptablewid->rowCount());
-    apptablewid->setRowHeight(apptablewid->rowCount()-1,20);
+//    apptablewid->setRowHeight(apptablewid->rowCount()-1,20);
     apptablewid->setCellWidget(apptablewid->rowCount()-1,0,classificationbtn);
 
     classificationbtnlist.append(btnname);
@@ -216,23 +218,17 @@ void FunctionWidget::insert_app_list(QStringList appnamelist)
             QPushButton:hover{background-color:%s;}\
             QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
 
+    apptablewid->insertRow(apptablewid->rowCount());
+    applistnum.append(QString::number(appnamelist.count()));
+    QFlowLayout* flowlayout=new QFlowLayout(0,0,0);
+    QWidget* wid=new QWidget;
+    wid->setLayout(flowlayout);
+    apptablewid->setCellWidget(apptablewid->rowCount()-1,0,wid);
     for(int i=0;i<appnamelist.count();i++)
     {
-        apptablewid->insertRow(apptablewid->rowCount());
-//        QPushButton* btn=new QPushButton;
-//        btn->setFixedSize(apptablewid->width()-14,42);
-//        btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-//        QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(appnamelist.at(i)));
-
-//        QIcon::setThemeName("ukui-icon-theme");
-//        QIcon icon=QIcon::fromTheme(iconstr);
-//        btn->setIcon(icon);
-//        btn->setIconSize(QSize(32,32));
-//        btn->setText(appnamelist.at(i));
-//        btn->setFocusPolicy(Qt::NoFocus);
-
+//        apptablewid->insertRow(apptablewid->rowCount());
         QPushButton* btn=new QPushButton;
-        btn->setFixedSize(apptablewid->width()-14,42);
+        btn->setFixedSize(330-14,42);
         btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
         QHBoxLayout* layout=new QHBoxLayout(btn);
         layout->setContentsMargins(15,0,0,0);
@@ -253,13 +249,86 @@ void FunctionWidget::insert_app_list(QStringList appnamelist)
         layout->addWidget(labeltext);
         btn->setLayout(layout);
         btn->setFocusPolicy(Qt::NoFocus);
+        flowlayout->addWidget(btn);
 
-        apptablewid->setCellWidget(apptablewid->rowCount()-1,0,btn);
+//        apptablewid->setCellWidget(apptablewid->rowCount()-1,0,btn);
 
         connect(btn,SIGNAL(clicked()),this,SLOT(exec_app_name()));
         btn->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),
+        connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
                 SLOT(right_click_slot()));
+    }
+
+}
+
+void FunctionWidget::load_min_wid()
+{
+    this->setGeometry(QRect(60,QApplication::desktop()->availableGeometry().height()-462,
+                                 330,462));
+    applistWid->setFixedSize(this->width(),this->height());
+    applistWid->layout()->setContentsMargins(2,0,2,0);
+    apptablewid->setFixedSize(applistWid->width()-4,applistWid->height());
+    int row=0;
+    while(row<apptablewid->rowCount()/2)
+    {
+        //分类按钮界面
+        QWidget* classificationbtnwid=apptablewid->cellWidget(row*2,0);
+        QPushButton* classificationbtn=qobject_cast<QPushButton*>(classificationbtnwid);
+        classificationbtn->setFixedSize(apptablewid->width()-14,20);
+        classificationbtn->layout()->setContentsMargins(15,0,0,0);
+        classificationbtn->layout()->setSpacing(6);
+        apptablewid->setRowHeight(row*2,20);
+        QLayoutItem* item=classificationbtn->layout()->itemAt(0);
+        QWidget* linewid=item->widget();
+        QFrame* line=qobject_cast<QFrame*>(linewid);
+        line->setFixedSize(classificationbtn->width()-77,1);
+        //应用按钮界面
+        QWidget* wid=apptablewid->cellWidget(row*2+1,0);
+        QString numstr=applistnum.at(row);
+        int num=numstr.toInt();
+        wid->setFixedSize(apptablewid->width()-14,num*42);
+        apptablewid->setRowHeight(row*2+1,num*42);
+        row++;
+
+    }
+}
+
+void FunctionWidget::load_max_wid()
+{
+    this->setGeometry(QRect(160,
+                            70,
+                            QApplication::desktop()->availableGeometry().width()-160,
+                            QApplication::desktop()->availableGeometry().height()-70));
+
+    applistWid->setFixedSize(this->width(),this->height());
+    applistWid->layout()->setContentsMargins(30,0,2,0);
+    apptablewid->setFixedSize(applistWid->width()-32-12,applistWid->height());
+    int row=0;
+    while(row<apptablewid->rowCount()/2)
+    {
+        //分类按钮
+        QWidget* classificationbtnlayoutwid=apptablewid->cellWidget(row*2,0);
+        QPushButton* classificationbtn=qobject_cast<QPushButton*>(classificationbtnlayoutwid);
+        classificationbtn->setFixedSize(apptablewid->width()-32,20);
+        classificationbtn->layout()->setContentsMargins(0,0,0,0);
+        classificationbtn->layout()->setSpacing(12);
+        apptablewid->setRowHeight(row*2,20);
+        QLayoutItem* item=classificationbtn->layout()->itemAt(0);
+        QWidget* linewid=item->widget();
+        QFrame* line=qobject_cast<QFrame*>(linewid);
+        line->setFixedSize(classificationbtn->width()-62,1);
+        //应用按钮界面
+        int dividend=apptablewid->width()/312;
+        QWidget* wid=apptablewid->cellWidget(row*2+1,0);
+        QString numstr=applistnum.at(row);
+        int num=numstr.toInt();
+        if(num%dividend>0)
+            num=num/dividend+1;
+        else num=num/dividend;
+        wid->setFixedSize(apptablewid->width()-14,num*42);
+        apptablewid->setRowHeight(row*2+1,num*42);
+        row++;
+
     }
 
 }
@@ -278,9 +347,15 @@ void FunctionWidget::right_click_slot()
             QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
 
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
+    QLayoutItem* item=btn->layout()->itemAt(1);
+    QWidget* wid=item->widget();
+    QLabel* label=qobject_cast<QLabel*>(wid);
+    QString appname=label->text();
     btn->setStyleSheet(style);
     menu=new RightClickMenu;
-    menu->show_appbtn_menu();
+    int ret=menu->show_appbtn_menu(appname);
+    if(ret==1 || ret==2)
+        emit send_update_applist_signal();
     btn->setStyleSheet(btnstyle);
 }
 
@@ -289,6 +364,7 @@ void FunctionWidget::right_click_slot()
  */
 void FunctionWidget::exec_app_name()
 {
+    emit send_hide_mainwindow_signal();
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
     QLayoutItem* item=btn->layout()->itemAt(1);
     QWidget* wid=item->widget();
@@ -308,7 +384,15 @@ void FunctionWidget::exec_app_name()
     process->startDetached(execpath);
 }
 
+/**
+ * 更新应用列表
+ */
+void FunctionWidget::update_app_tablewidget()
+{
+    apptablewid->setRowCount(0);
+    fill_app_tablewidget();
 
+}
 
 /**
  * 应用列表功能分类按钮槽函数
@@ -317,10 +401,11 @@ void FunctionWidget::app_classificationbtn_clicked_slot()
 {
     //加载FunctionButtonWidget界面
     functionbtnwid=new FunctionButtonWidget(this);
+    connect(this,SIGNAL(send_classificationbtn_list(QStringList)),functionbtnwid,SLOT(recv_classificationbtn_list(QStringList)));
+    emit send_classificationbtn_list(classificationbtnlist);
     mainLayout->removeWidget(applistWid);
     applistWid->setParent(nullptr);
     mainLayout->addWidget(functionbtnwid);
-    emit send_functionwid_state(1,"");
 
     connect(functionbtnwid, SIGNAL(send_functionbtn_signal(QString)),this,SLOT(recv_functionbtn_signal(QString)));
 }
@@ -348,61 +433,4 @@ void FunctionWidget::recv_functionbtn_signal(QString btnname)
         apptablewid->verticalScrollBar()->setValue(row);
     }
 
-    emit send_functionwid_state(0,btnname);
-}
-
-/**
- * 设置功能分类界面状态
- */
-void FunctionWidget::set_functionwidge_state(int state, QString btnname)
-{
-    if(state==1)
-    {
-        QLayoutItem *child;
-        if((child = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=child->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        if(functionbtnwid!=nullptr)
-        {
-
-            delete functionbtnwid;
-            functionbtnwid=nullptr;
-        }
-        functionbtnwid=new FunctionButtonWidget(this);
-        connect(functionbtnwid, SIGNAL(send_functionbtn_signal(QString)),this,SLOT(recv_functionbtn_signal(QString)));
-
-        mainLayout->addWidget(functionbtnwid);
-
-    }
-    else{
-        QLayoutItem *child;
-        if((child = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=child->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        if(functionbtnwid!=nullptr)
-        {
-
-            delete functionbtnwid;
-            functionbtnwid=nullptr;
-        }
-        mainLayout->addWidget(applistWid);
-
-        //此处需实现将功能为btnname的应用列表移动到applistWid界面最顶端
-        int index=classificationbtnlist.indexOf(btnname);
-        if(index!=-1)
-        {
-            int row=classificationbtnrowlist.at(index).toInt();
-            apptablewid->verticalScrollBar()->setValue(row);
-        }
-    }
 }

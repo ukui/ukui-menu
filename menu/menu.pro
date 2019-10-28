@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui svg
+QT       += core gui svg dbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,14 +26,13 @@ SOURCES += main.cpp \
     src/CommonUseWidget/commonusewidget.cpp \
     src/FunctionWidget/functionbuttonwidget.cpp \
     src/LetterWidget/letterbuttonwidget.cpp \
-    src/CommonUseWidget/fullcommonusewidget.cpp \
-    src/FunctionWidget/fullfunctionbuttonwidget.cpp \
-    src/FunctionWidget/fullfunctionwidget.cpp \
-    src/LetterWidget/fullletterbuttonwidget.cpp \
-    src/LetterWidget/fullletterwidget.cpp \
     src/SearchResultWidget/searchresultwidget.cpp \
     src/SearchResultWidget/fullsearchresultwidget.cpp \
-    src/RightClickMenu/rightclickmenu.cpp
+    src/RightClickMenu/rightclickmenu.cpp \
+    src/SearchResultWidget/searchappthread.cpp \
+    src/AttributeDialog/attributedialog.cpp \
+    src/UtilityFunction/toolbutton.cpp \
+    src/UtilityFunction/qflowlayout.cpp
 
 HEADERS  += \
     src/MainWindow/mainwindow.h \
@@ -44,15 +43,14 @@ HEADERS  += \
     src/CommonUseWidget/commonusewidget.h \
     src/FunctionWidget/functionbuttonwidget.h \
     src/LetterWidget/letterbuttonwidget.h \
-    src/CommonUseWidget/fullcommonusewidget.h \
-    src/FunctionWidget/fullfunctionbuttonwidget.h \
-    src/FunctionWidget/fullfunctionwidget.h \
-    src/LetterWidget/fullletterbuttonwidget.h \
-    src/LetterWidget/fullletterwidget.h \
     src/SearchResultWidget/searchresultwidget.h \
     src/SearchResultWidget/fullsearchresultwidget.h \
     src/color.h \
-    src/RightClickMenu/rightclickmenu.h
+    src/RightClickMenu/rightclickmenu.h \
+    src/SearchResultWidget/searchappthread.h \
+    src/AttributeDialog/attributedialog.h \
+    src/UtilityFunction/toolbutton.h \
+    src/UtilityFunction/qflowlayout.h
 
 FORMS    += \
     src/MainWindow/mainwindow.ui \
@@ -63,13 +61,9 @@ FORMS    += \
     src/CommonUseWidget/commonusewidget.ui \
     src/FunctionWidget/functionbuttonwidget.ui \
     src/LetterWidget/letterbuttonwidget.ui \
-    src/CommonUseWidget/fullcommonusewidget.ui \
-    src/FunctionWidget/fullfunctionbuttonwidget.ui \
-    src/FunctionWidget/fullfunctionwidget.ui \
-    src/LetterWidget/fullletterbuttonwidget.ui \
-    src/LetterWidget/fullletterwidget.ui \
     src/SearchResultWidget/searchresultwidget.ui \
-    src/SearchResultWidget/fullsearchresultwidget.ui
+    src/SearchResultWidget/fullsearchresultwidget.ui \
+    src/AttributeDialog/attributedialog.ui
 
 RESOURCES += \
     res.qrc

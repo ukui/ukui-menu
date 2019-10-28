@@ -13,26 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>97</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="focusPolicy">
-    <enum>Qt::NoFocus</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(65, 78, 89);
-color: rgb(255, 255, 255);</string>
-   </property>
-   <property name="text">
-    <string>常用</string>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections/>

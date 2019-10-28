@@ -144,6 +144,21 @@ QString KylinStartMenuInterface::get_app_name(QString desktopfp)
     return namestr;
 }
 
+//获取英应用英文名
+QString KylinStartMenuInterface::get_app_english_name(QString desktopfp)
+{
+    GError** error=nullptr;
+    GKeyFileFlags flags=G_KEY_FILE_NONE;
+    GKeyFile* keyfile=g_key_file_new ();
+
+    QByteArray fpbyte=desktopfp.toLocal8Bit();
+    char* filepath=fpbyte.data();
+    g_key_file_load_from_file(keyfile,filepath,flags,error);
+    char* name=g_key_file_get_string(keyfile,"Desktop Entry","Name", nullptr);
+    QString namestr=QString::fromLocal8Bit(name);
+    return namestr;
+}
+
 //获取应用分类
 QString KylinStartMenuInterface::get_app_categories(QString desktopfp)
 {
@@ -237,6 +252,23 @@ QString KylinStartMenuInterface::get_desktop_path_by_app_name(QString appname)
     return desktopfilepath;
 }
 
+//根据应用英文名获取desktop文件路径
+QString KylinStartMenuInterface::get_desktop_path_by_app_english_name(QString appname)
+{
+    int i=0;
+    QString desktopfilepath;
+    QStringList desktopfpList=get_desktop_file_path();
+    for(i=0;i<desktopfpList.count();i++)
+    {
+        QString name=get_app_english_name(desktopfpList.at(i));
+        if(QString::compare(name,appname)==0)
+        {
+            desktopfilepath=desktopfpList.at(i);
+        }
+    }
+    return desktopfilepath;
+}
+
 //应用排序
 QStringList KylinStartMenuInterface::sort_app_name()
 {
@@ -250,19 +282,30 @@ QStringList KylinStartMenuInterface::sort_app_name()
     }
 
     //从appnameList中将应用名首字符为非字母的移除
-    QStringList otherappname;
+    QStringList otherappname;//不是26个字母开头
+    QStringList numberappname;//以数字开头
     otherappname.clear();
+    numberappname.clear();
     for(int i=0;i<appnameList.count();i++)
     {
         QString appname=ChineseLetterHelper::GetPinyins(appnameList.at(i));
         QChar c=appname.at(0);
-        if( c<65 || c>90 )
+        if( c<48 || (c>57 && c<65) || c>90 )
         {
             otherappname.append(appnameList.at(i));
             appnameList.removeAt(i);
             i--;
 
         }
+
+        if(c>=48 && c<=57)
+        {
+            numberappname.append(appnameList.at(i));
+            appnameList.removeAt(i);
+            i--;
+        }
+
+
     }
 
 
@@ -362,8 +405,75 @@ QStringList KylinStartMenuInterface::sort_app_name()
         appnameList.append(otherappname.at(i));
     }
 
+    for(int i=0;i<numberappname.count();i++)
+    {
+        appnameList.append(numberappname.at(i));
+    }
+
 //    qDebug()<<appnameList.count();
     return appnameList;
+}
+
+QStringList KylinStartMenuInterface::get_app_diff_first_letter_pos()
+{
+    QStringList letterposlist;
+    letterposlist.clear();
+    QStringList appsortlist=sort_app_name();
+//    for(int i=0;i<appsortlist.count();i++)
+//    {
+//        QString apppy=get_app_name_pinyin(appsortlist.at(i));
+//        QChar ch=apppy.at(0);
+//        if(letter=='&')
+//        {
+//            if(ch<48 || (ch>57 && ch<65) || ch>90)//非数字非英文字符
+//                applist.append(appsortlist.at(i));
+
+//        }
+//        else if(letter=='#')
+//        {
+//            if(ch>=48 && ch<=57)//数字字符
+//                applist.append(appsortlist.at(i));
+//        }
+//        else{
+//            if(ch==letter)
+//                applist.append(appsortlist.at(i));
+//        }
+
+//    }
+
+    QString letterstr=appsortlist.at(0);
+    QChar letter=letterstr.at(0);
+    letterposlist.append(QString::number(0));
+    for(int i=0;i<appsortlist.count();i++)
+    {
+        QString apppy=get_app_name_pinyin(appsortlist.at(i));
+        QChar ch=apppy.at(0);
+        if(ch<48 || (ch>57 && ch<65) || ch>90)//非数字非英文字符
+        {
+            if(letter!='&')
+            {
+                letter='&';
+                letterposlist.append(QString::number(i));
+            }
+            else continue;
+
+        }
+        else if(ch>=48 && ch<=57)//数字字符
+        {
+            letter='#';
+            letterposlist.append(QString::number(i));
+            break;
+        }
+        else{
+            if(ch!=letter)
+            {
+                letter=ch;
+                letterposlist.append(QString::number(i));
+            }
+            else continue;
+        }
+    }
+    return letterposlist;
 }
 
 //获取应用拼音

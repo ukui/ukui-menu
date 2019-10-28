@@ -36,9 +36,9 @@ private:
     MainViewWidget* mainviewwid=nullptr;
 
     //动画
-    QPropertyAnimation* pAnimation=nullptr;
-    bool is_full=false;//是否全屏
-    int classification_widget;
+//    QPropertyAnimation* pAnimation=nullptr;
+//    bool is_full=false;//是否全屏
+//    int classification_widget;
 
 protected:
     void init_mainwindow();
@@ -52,14 +52,18 @@ private slots:
      * @显示全屏窗口
      * @param arg分类窗口编号
      */
-    void show_fullscreen_widget(int arg);
+    void show_fullscreen_widget();
     /**
      * @显示默认(还原)窗口
      * @param arg分类窗口编号
      */
-    void show_default_widget(int arg);
+    void show_default_widget();
+    void recv_hide_mainwindow_slot();//接收隐藏主窗口信号
 
-    void animation_finished_slot();
+
+//    void animation_finished_slot();
+
+
 };
 
 #endif // MAINWINDOW_H
