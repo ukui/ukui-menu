@@ -29,12 +29,14 @@ public:
 private:
     Ui::FunctionWidget *ui;
 
+    bool is_fullscreen=false;
+    bool is_functionbtnwid=false;
+    FunctionButtonWidget* functionbtnwid=nullptr;
     //主界面
-    QHBoxLayout* mainLayout=nullptr;
+    QVBoxLayout* mainLayout=nullptr;
 
     //应用列表界面
     QWidget* applistWid=nullptr;
-    FunctionButtonWidget* functionbtnwid=nullptr;
 
     QTableWidget* apptablewid;//应用列表
 
@@ -44,6 +46,18 @@ private:
 
     RightClickMenu* menu;//右键菜单
 
+    //图标列表界面
+    QStringList iconlist;
+    QStringList iconlightlist;
+    QStringList functionnamelist;
+    QWidget* iconlistWid=nullptr;
+    QHBoxLayout* iconlistLayout=nullptr;
+    QTableWidget* iconlisttableWid=nullptr;
+    QToolButton* leftbtn=nullptr;
+    QToolButton* rightbtn=nullptr;
+    QSpacerItem* iconlistleftSpacer=nullptr;
+    QSpacerItem* iconlistrightSpacer=nullptr;
+
 protected:
     void init_widget();
     void init_applist_widget();//初始化应用列表界面
@@ -52,16 +66,27 @@ protected:
     void insert_classification_btn(QString btnname);//插入分类按钮
     void insert_app_list(QStringList appnamelist);//插入应用列表
 
+    void init_iconlist_widget();//初始化图标列表界面
+    void init_iconlist_table();//初始化图标列表界面数据表格iconlisttableWid
+
+    void create_app_btn(QPushButton* btn,QString desktopfn);//创建应用按钮
+    void insert_classification_btn(QString btnname,int row);//插入分类按钮
+    void insert_appbtn_wid(QWidget* wid, QPushButton* btn,QString desktopfn,int row);//插入应用按钮界面
+
 private slots:
     void app_classificationbtn_clicked_slot();//应用列表功能分类按钮槽函数
     void recv_functionbtn_signal(QString btnname);//接收FunctionButtonWidget界面按钮信号
     void exec_app_name();//执行应用程序
     void right_click_slot();//加载右键菜单
-    void update_app_tablewidget();//更新应用列表
+    void update_app_tablewidget(QString name,int arg);//更新应用列表
+
+    void leftbtn_clicked_slot();//向左按钮槽函数
+    void rightbtn_clicked_slot();//向右按钮槽函数
+    void iconlistitem_selected_slot();//图标列表数据项被选定槽函数
 
 signals:
     void send_classificationbtn_list(QStringList list);//向FunctionButtonWidget界面发送分类按钮列表
-    void send_update_applist_signal();//向CommonUseWidget发送更新应用列表信号
+    void send_update_applist_signal(QString appname);//向CommonUseWidget发送更新应用列表信号
     void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
 
 

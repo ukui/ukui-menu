@@ -22,15 +22,16 @@ void LetterButtonWidget::init_widget()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
-    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,532-70);
+//    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+//    this->setFixedSize(330,532-70);
 
     mainLayout=new QVBoxLayout(this);
-    mainLayout->setContentsMargins(15,0,6,0);
-    mainLayout->setSpacing(5);
+//    mainLayout->setContentsMargins(15,0,6,0);
+//    mainLayout->setSpacing(5);
     this->setLayout(mainLayout);
 
     add_letterbtn_control();
+//    load_min_wid();
     QSpacerItem* verticalSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     mainLayout->addItem(verticalSpacer);
 
@@ -56,13 +57,13 @@ void LetterButtonWidget::add_letterbtn_control()
         wid->setStyleSheet("QWidget{border:0px;background:transparent;}");
         QHBoxLayout* layout=new QHBoxLayout(wid);
         layout->setContentsMargins(0,0,0,0);
-        layout->setSpacing(5);
+//        layout->setSpacing(5);
         wid->setLayout(layout);
 
         for(int j=0;j<5;j++)
         {
             QToolButton* btn=new QToolButton(wid);
-            btn->setFixedSize(55,48);
+//            btn->setFixedSize(55,48);
             char btncolor[400];
             sprintf(btncolor,"QToolButton{background:transparent;;color:#ffffff;font-size:20px;padding-left:0px;}\
                     QToolButton:hover{background-color:%s;color:#ffffff;font-size:20px;}\
@@ -115,6 +116,54 @@ void LetterButtonWidget::recv_letterbtn_list(QStringList list)
 
             if(i*5+j==27)break;
 
+        }
+    }
+}
+
+void LetterButtonWidget::load_min_wid()
+{
+    this->setGeometry(QRect(60,QApplication::desktop()->availableGeometry().height()-462,
+                                 330,462));
+    mainLayout->setContentsMargins(15,0,6,0);
+    mainLayout->setSpacing(5);
+    for(int i=0;i<6;i++)
+    {
+        QLayoutItem* item=mainLayout->itemAt(i);
+        QWidget* wid=item->widget();
+        QLayout* layout=wid->layout();
+        layout->setSpacing(5);
+        for(int j=0;j<5;j++)
+        {
+            QLayoutItem* item=layout->itemAt(j);
+            QWidget* wid=item->widget();
+            QToolButton* btn=qobject_cast<QToolButton*>(wid);
+            btn->setFixedSize(55,48);
+            if(i*5+j==27)break;
+        }
+    }
+}
+
+void LetterButtonWidget::load_max_wid()
+{
+    this->setGeometry(QRect(160,
+                              70,
+                              QApplication::desktop()->availableGeometry().width()-160,
+                              QApplication::desktop()->availableGeometry().height()-70));
+    mainLayout->setContentsMargins((this->width()-5*80-4*40)/2,70,(this->width()-5*80-4*40)/2,0);
+    mainLayout->setSpacing(20);
+    for(int i=0;i<6;i++)
+    {
+        QLayoutItem* item=mainLayout->itemAt(i);
+        QWidget* wid=item->widget();
+        QLayout* layout=wid->layout();
+        layout->setSpacing(40);
+        for(int j=0;j<5;j++)
+        {
+            QLayoutItem* item=layout->itemAt(j);
+            QWidget* wid=item->widget();
+            QToolButton* btn=qobject_cast<QToolButton*>(wid);
+            btn->setFixedSize(80,50);
+            if(i*5+j==27)break;
         }
     }
 }

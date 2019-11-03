@@ -23,12 +23,12 @@ void FunctionButtonWidget::init_widget()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
-    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,532-70);
+//    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+//    this->setFixedSize(330,532-70);
 
     mainLayout=new QVBoxLayout(this);
-    mainLayout->setContentsMargins(15,0,6,0);
-    mainLayout->setSpacing(5);
+//    mainLayout->setContentsMargins(15,0,6,0);
+//    mainLayout->setSpacing(5);
     this->setLayout(mainLayout);
 
     QToolButton* recentbtn=new QToolButton;
@@ -61,8 +61,8 @@ void FunctionButtonWidget::init_widget()
     add_functionbtn_control(readingbtn,systembtn);
 
     QWidget* wid=new QWidget(this);
-    wid->setStyleSheet("QWidget{border:0px;}");
-    wid->setFixedSize(295,48);
+    wid->setStyleSheet("QWidget{border:0px;background:transparent;}");
+//    wid->setFixedSize(295,48);
     QHBoxLayout* layout=new QHBoxLayout(wid);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(5);
@@ -85,8 +85,8 @@ void FunctionButtonWidget::add_functionbtn_control(QToolButton* firstbtn, QToolB
     QWidget* wid=new QWidget(this);
     firstbtn->setParent(wid);
     secondbtn->setParent(wid);
-    wid->setStyleSheet("QWidget{border:0px;}");
-    wid->setFixedSize(295,48);
+    wid->setStyleSheet("QWidget{border:0px;background:transparent;}");
+//    wid->setFixedSize(295,48);
     QHBoxLayout* layout=new QHBoxLayout(wid);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(5);
@@ -105,7 +105,7 @@ void FunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString btnic
     sprintf(btncolor,"QToolButton{background:transparent;border:0px;}\
             QToolButton:hover{background-color:%s;}\
             QToolButton:pressed{background-color:%s;}",MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-    btn->setFixedSize(145,48);
+//    btn->setFixedSize(145,48);
     btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
     QHBoxLayout* btnlayout=new QHBoxLayout(btn);
 
@@ -132,8 +132,8 @@ void FunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString btnic
     btnlayout->addWidget(labeltext);
     btn->setLayout(btnlayout);
 
-    btnlayout->setContentsMargins(10,0,btn->width()-10*2-labelicon->width()-labeltext->width(),0);
-    btnlayout->setSpacing(10);
+//    btnlayout->setContentsMargins(10,0,btn->width()-10*2-labelicon->width()-labeltext->width(),0);
+//    btnlayout->setSpacing(10);
 
     connect(btn, SIGNAL(clicked()), this, SLOT(functionbtn_clicked_slot()));
 }
@@ -155,6 +155,7 @@ void FunctionButtonWidget::functionbtn_clicked_slot()
  */
 void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
 {
+    classificationbtnlist=list;
     for(int i=0;i<6;i++)
     {
         QLayoutItem* item=mainLayout->itemAt(i);
@@ -216,5 +217,84 @@ void FunctionButtonWidget::change_label_icon(QLabel *label, QString iconstr)
     QPainter p(pixmap);
     svg->render(&p);
     label->setPixmap(*pixmap);
+
+}
+
+void FunctionButtonWidget::load_min_wid()
+{
+    this->setGeometry(QRect(60,QApplication::desktop()->availableGeometry().height()-462,
+                                 330,462));
+    mainLayout->setContentsMargins(15,0,6,0);
+    mainLayout->setSpacing(5);
+    for(int i=0;i<6;i++)
+    {
+        QLayoutItem* item=mainLayout->itemAt(i);
+        QWidget* wid=item->widget();
+        wid->setFixedSize(295,48);
+        QLayout* layout=wid->layout();
+        layout->setSpacing(5);
+        for(int j=0;j<2;j++)
+        {
+            QLayoutItem* item=layout->itemAt(j);
+            QWidget* wid=item->widget();
+            QToolButton* btn=qobject_cast<QToolButton*>(wid);
+            btn->setFixedSize(145,48);
+            QLayoutItem* iconitem=btn->layout()->itemAt(0);
+            QWidget* labeliconwid=iconitem->widget();
+            QLabel* labelicon=qobject_cast<QLabel*>(labeliconwid);
+            QLayoutItem* textitem=btn->layout()->itemAt(1);
+            QWidget* labeltextwid=textitem->widget();
+            QLabel* labeltext=qobject_cast<QLabel*>(labeltextwid);
+            QString str=labeltext->text();
+            if(classificationbtnlist.indexOf(str)==-1)
+                labeltext->setStyleSheet("QLabel{background:transparent;color:#4Dffffff;font-size:14px;}");
+            else labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+
+            btn->layout()->setContentsMargins(10,0,btn->width()-10*2-labelicon->width()-labeltext->width(),0);
+            btn->layout()->setSpacing(10);
+            if(i*2+j==10)break;
+        }
+    }
+
+
+}
+
+void FunctionButtonWidget::load_max_wid()
+{
+    this->setGeometry(QRect(160,
+                              70,
+                              QApplication::desktop()->availableGeometry().width()-160,
+                              QApplication::desktop()->availableGeometry().height()-70));
+    mainLayout->setContentsMargins((this->width()-360)/2,70,(this->width()-360)/2,0);
+    mainLayout->setSpacing(20);
+    for(int i=0;i<6;i++)
+    {
+        QLayoutItem* item=mainLayout->itemAt(i);
+        QWidget* wid=item->widget();
+        wid->setFixedSize(360,50);
+        QLayout* layout=wid->layout();
+        layout->setSpacing(40);
+        for(int j=0;j<2;j++)
+        {
+            QLayoutItem* item=layout->itemAt(j);
+            QWidget* wid=item->widget();
+            QToolButton* btn=qobject_cast<QToolButton*>(wid);
+            btn->setFixedSize(160,50);
+            QLayoutItem* iconitem=btn->layout()->itemAt(0);
+            QWidget* labeliconwid=iconitem->widget();
+            QLabel* labelicon=qobject_cast<QLabel*>(labeliconwid);
+            QLayoutItem* textitem=btn->layout()->itemAt(1);
+            QWidget* labeltextwid=textitem->widget();
+            QLabel* labeltext=qobject_cast<QLabel*>(labeltextwid);
+            QString str=labeltext->text();
+            if(classificationbtnlist.indexOf(str)==-1)
+                labeltext->setStyleSheet("QLabel{background:transparent;color:#4Dffffff;font-size:16px;}");
+            else labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:16px;}");
+
+            btn->layout()->setContentsMargins(20,0,btn->width()-30-10-labelicon->width()-labeltext->width(),0);
+            btn->layout()->setSpacing(10);
+            if(i*2+j==10)break;
+        }
+    }
 
 }

@@ -21,6 +21,9 @@ public:
     explicit LetterButtonWidget(QWidget *parent = nullptr);
     ~LetterButtonWidget();
 
+    void load_min_wid();
+    void load_max_wid();
+
 private:
     Ui::LetterButtonWidget *ui;
 

@@ -11,11 +11,13 @@
 #include <QKeyEvent>
 #include <QScrollBar>
 #include <QFileSystemWatcher>
+#include <QSettings>
 #include "src/CommonUseWidget/commonusewidget.h"
 #include "src/LetterWidget/letterwidget.h"
 #include "src/FunctionWidget/functionwidget.h"
 #include "src/SearchResultWidget/fullsearchresultwidget.h"
 #include "src/SearchResultWidget/searchresultwidget.h"
+#include "kylin-start-menu-interface.h"
 
 namespace Ui {
 class MainViewWidget;
@@ -41,6 +43,8 @@ public:
 
 private:
     Ui::MainViewWidget *ui;
+
+    QSettings* setting;
 
     QVBoxLayout* mainLayout=nullptr;
     QWidget* topWidget=nullptr;
@@ -105,6 +109,7 @@ private slots:
     void default_btn_slot();//默认态按钮槽函数
 
     void search_app_slot(QString arg);//搜索程序和文件槽函数
+    void directoryChangedSlot();//desktop文件目录改变信号槽
 
 signals:
     /**
@@ -120,6 +125,7 @@ signals:
     void send_defaultbtn_signal();
     void send_search_keyword(QString arg);//发送搜索框的搜索关键字
     void send_hide_mainwindow_signal();//向MainWindow发送隐藏主窗口信号
+    void directoryChangedSignal(QString name,int arg);//desktop文件目录改变信号
 
 };
 

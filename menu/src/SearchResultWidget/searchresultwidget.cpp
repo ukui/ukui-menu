@@ -122,7 +122,7 @@ void SearchResultWidget::fill_search_result_table()
             layout->setContentsMargins(15,0,0,0);
             layout->setSpacing(15);
             QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(searchResultList.at(i)));
-            QIcon::setThemeName("ukui-icon-theme");
+//            QIcon::setThemeName("ukui-icon-theme");
             QIcon icon=QIcon::fromTheme(iconstr);
             QLabel* labelicon=new QLabel(btn);
             labelicon->setFixedSize(32,32);

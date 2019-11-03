@@ -1,17 +1,35 @@
-Source: ukui-start-menu
+Source: ukui-menu
 Section: utils
 Priority: optional
 Maintainer: liuhao <liuhao@kylinos.cn>
 Build-Depends: debhelper (>=9),
                qtbase5-dev,
-               libqt5svg5-dev
+               libqt5svg5-dev,
+               libglib2.0-dev (>= 2.36)
 Standards-Version: 3.9.6
 Homepage: https://github.com/ukui/ukui-start-menu
 Vcs-Git: https://github.com/ukui/ukui-start-menu
 Vcs-Browser: https://github.com/ukui/ukui-start-menu
 
-Package: ukui-start-menu
+Package: ukui-menu
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         libukui-menu0 (= ${binary:Version})
+Description: UKUI start menu
+ <insert long description, indented with spaces>
+
+Package: libukui-menu-dev
+Architecture: any
+Section: libdevel
+Depends: ${shlibs:Depends}, 
+         ${misc:Depends},
+         libukui-menu0 (= ${binary:Version})
+Description: UKUI menu interfaces
+ <insert long description, indented with spaces>
+
+Package: libukui-menu0
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: ukui start menu
+Description: UKUI menu libraries
  <insert long description, indented with spaces>

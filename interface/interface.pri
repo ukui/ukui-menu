@@ -1,7 +1,7 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 TEMPLATE += fakelib
-LIBINTERFACE_NAME = $$qtLibraryTarget(interface)
+LIBINTERFACE_NAME = $$qtLibraryTarget(ukui-menu)
 TEMPLATE -= fakelib
 include(../common.pri)
 !interface-buildlib{

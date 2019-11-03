@@ -50,6 +50,11 @@ void CommonUseWidget::init_widget()
 
 void CommonUseWidget::ViewOpenedSlot(QDBusMessage msg)
 {
+    char btncolor[300];
+    sprintf(btncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
+            QPushButton:hover{background-color:%s;}\
+            QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
+
     QString path=msg.arguments().at(0).value<QString>();
     QString type=msg.arguments().at(1).value<QString>();
     if(QString::compare(type,"application")==0)
@@ -64,23 +69,77 @@ void CommonUseWidget::ViewOpenedSlot(QDBusMessage msg)
         if(!deskfp.isEmpty())
         {
 //            setting->setIniCodec("UTF8");
-            setting->beginGroup("application");
+            setting->beginGroup("activeApps");
             QString appname=KylinStartMenuInterface::get_app_name(deskfp);
             if(!setting->contains(appname))
             {
                 setting->setValue(appname,1);
+                setting->sync();
             }
-            else{
+            else if(setting->value(appname).toInt()==1)
+            {
                 setting->setValue(appname,2);
+                setting->sync();
+                QWidget* wid=apptablewid->cellWidget(0,0);
+//                int count=wid->layout()->count();
+//                int index=0;
+//                for(index=0;index<count;index++)
+//                {
+//                    QLayoutItem* item=wid->layout()->itemAt(index);
+//                    QWidget* wid=item->widget();
+//                    QPushButton* btn=qobject_cast<QPushButton*>(wid);
+//                    QLayoutItem* btnitem=btn->layout()->itemAt(1);
+//                    QWidget* labelwid=btnitem->widget();
+//                    QLabel* label=qobject_cast<QLabel*>(labelwid);
+//                    QString name=label->text();
+//                    if(QString::compare(name,appname)==0)
+//                        break;
+//                }
+//                if(index==count)
+//                {
+                    QPushButton* btn=new QPushButton;
+                    btn->setFixedSize(330-4-14,42);
+                    btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+                    QHBoxLayout* layout=new QHBoxLayout(btn);
+                    layout->setContentsMargins(15,0,0,0);
+                    layout->setSpacing(15);
+                    QString iconstr=KylinStartMenuInterface::get_app_icon(deskfp);
+                    QIcon icon=QIcon::fromTheme(iconstr);
+                    QLabel* labelicon=new QLabel(btn);
+                    labelicon->setFixedSize(32,32);
+                    QPixmap pixmapicon(icon.pixmap(QSize(32,32)));
+                    labelicon->setPixmap(pixmapicon);
+                    labelicon->setStyleSheet("QLabel{background:transparent;}");
+                    QLabel* labeltext=new QLabel(btn);
+                    labeltext->setText(appname);
+                    labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+                    labeltext->adjustSize();
+                    layout->addWidget(labelicon);
+                    layout->addWidget(labeltext);
+                    flowlayout->addWidget(btn);
+                    if(!is_fullscreen)
+                    {
+                        int num=wid->layout()->count();
+                        wid->setFixedSize(apptablewid->width()-14,num*42);
+                        apptablewid->setRowHeight(0,num*42);
+                    }
+                    else{
+                        int dividend=apptablewid->width()/312;
+                        int num=wid->layout()->count();
+                        if(num%dividend>0)
+                            num=num/dividend+1;
+                        else num=num/dividend;
+                        QWidget* wid=apptablewid->cellWidget(0,0);
+                        wid->setFixedSize(apptablewid->width()-14,num*42);
+                        apptablewid->setRowHeight(0,num*42);
+                    }
+//                }
             }
             setting->endGroup();
 
-            update_tablewid_slot();
         }
 
     }
-
-    setting->sync();
 
 //    fill_app_tablewidget();
 }
@@ -149,7 +208,7 @@ void CommonUseWidget::fill_app_tablewidget()
 
     QStringList keys;
     keys.clear();
-    setting->beginGroup("application");
+    setting->beginGroup("activeApps");
     keys=setting->childKeys();
     applist.clear();
     for(int i=0;i<keys.count();i++)
@@ -176,7 +235,7 @@ void CommonUseWidget::fill_app_tablewidget()
         layout->setSpacing(15);
 
         QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(applist.at(i)));
-        QIcon::setThemeName("ukui-icon-theme");
+//        QIcon::setThemeName("ukui-icon-theme");
         QIcon icon=QIcon::fromTheme(iconstr);
         QLabel* labelicon=new QLabel(btn);
         labelicon->setFixedSize(32,32);
@@ -223,11 +282,12 @@ void CommonUseWidget::fill_app_tablewidget()
 
 void CommonUseWidget::load_min_wid()
 {
+    is_fullscreen=false;
     this->setGeometry(QRect(60,QApplication::desktop()->availableGeometry().height()-462,
                                  330,462));
     applistWid->setFixedSize(this->width(),this->height());
     apptablewid->setFixedSize(applistWid->width()-4,applistWid->height());
-    int num=applist.count();
+    int num=flowlayout->count();
     QWidget* wid=apptablewid->cellWidget(0,0);
     wid->setFixedSize(apptablewid->width()-14,num*42);
     apptablewid->setRowHeight(0,num*42);
@@ -235,6 +295,7 @@ void CommonUseWidget::load_min_wid()
 
 void CommonUseWidget::load_max_wid()
 {
+    is_fullscreen=true;
     this->setGeometry(QRect(160,
                               70,
                               QApplication::desktop()->availableGeometry().width()-160,
@@ -242,10 +303,11 @@ void CommonUseWidget::load_max_wid()
 
     applistWid->setFixedSize(this->width(),this->height());
     apptablewid->setFixedSize(applistWid->width()-32-12,applistWid->height());
-    int num=applist.count();
-    if(num%3>0)
-        num=num/3+1;
-    else num=num/3;
+    int num=flowlayout->count();
+    int dividend=apptablewid->width()/312;
+    if(num%dividend>0)
+        num=num/dividend+1;
+    else num=num/dividend;
     QWidget* wid=apptablewid->cellWidget(0,0);
     wid->setFixedSize(apptablewid->width()-14,num*42);
     apptablewid->setRowHeight(0,num*42);
@@ -256,30 +318,20 @@ void CommonUseWidget::load_max_wid()
  */
 void CommonUseWidget::right_click_slot()
 {
-    char style[200];
-    sprintf(style,"QPushButton{background-color:%s;border:0px;color:#ffffff;font-size:14px;padding-left:15px;text-align: left center;}", MAINVIEWBTNHOVER);
-
-    char btnstyle[300];
-    sprintf(btnstyle,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:15px;text-align: left center;}\
-            QPushButton:hover{background-color:%s;}\
-            QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
     QLayoutItem* item=btn->layout()->itemAt(1);
     QWidget* wid=item->widget();
     QLabel* label=qobject_cast<QLabel*>(wid);
     QString appname=label->text();
-    btn->setStyleSheet(style);
 
     menu=new RightClickMenu;
     int ret=menu->show_commonuse_appbtn_menu(appname);
     if(ret==1)
     {
         btn->layout()->setContentsMargins(15,0,12,0);
-
         QSvgRenderer* svgRender=new QSvgRenderer(btn);
         svgRender->load(QString(":/data/img/mainviewwidget/lock.svg"));
-        QPixmap* pixmap=new QPixmap(12,12);
+        QPixmap* pixmap=new QPixmap(14,14);
         pixmap->fill(Qt::transparent);
         QPainter p(pixmap);
         svgRender->render(&p);
@@ -305,16 +357,38 @@ void CommonUseWidget::right_click_slot()
 //        apptablewid->removeCellWidget(index.row(),0);
 //        apptablewid->removeRow(index.row());
         flowlayout->removeWidget(btn);
-        btn->setParent(NULL);
+        btn->setParent(nullptr);
+        delete btn;
 
     }
     if(ret==9)
     {
-        update_tablewid_slot();
-
+        setting->beginGroup("activeApps");
+        int index=0;
+        for(index=flowlayout->count()-1;index>=0;index--)
+        {
+            QLayoutItem* item=flowlayout->itemAt(index);
+            QWidget* wid=item->widget();
+            QPushButton* btn=qobject_cast<QPushButton*>(wid);
+            QLayoutItem* btnitem=btn->layout()->itemAt(1);
+            QWidget* labelwid=btnitem->widget();
+            QLabel* label=qobject_cast<QLabel*>(labelwid);
+            QString name=label->text();
+//            QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(name);
+//            QFileInfo fileinfo(desktopfp);
+//            QString desktopfn=fileinfo.fileName();
+            if(setting->value(name).toInt()>0)
+             {
+                flowlayout->removeWidget(btn);
+                btn->setParent(nullptr);
+                delete btn;
+                setting->remove(name);
+                setting->sync();
+//                index--;
+            }
+        }
+        setting->endGroup();
     }
-
-    btn->setStyleSheet(btnstyle);  
 }
 
 /**
@@ -345,9 +419,115 @@ void CommonUseWidget::exec_app_name()
 /**
  * 更新应用列表槽函数
  */
-void CommonUseWidget::update_tablewid_slot()
+void CommonUseWidget::update_tablewid_slot(QString appname)
 {
-//    fill_app_tablewidget();
+    setting->beginGroup("activeApps");
+    int count=flowlayout->count();
+    int index=0;
+    for(index=0;index<count;index++)
+    {
+        QLayoutItem* item=flowlayout->itemAt(index);
+        QWidget* wid=item->widget();
+        QPushButton* btn=qobject_cast<QPushButton*>(wid);
+        QLayoutItem* btnitem=btn->layout()->itemAt(1);
+        QWidget* labelwid=btnitem->widget();
+        QLabel* label=qobject_cast<QLabel*>(labelwid);
+        QString name=label->text();
+        if(QString::compare(appname,name)==0)
+        {
+            if(setting->value(appname).toInt()==0)
+            {
+                btn->layout()->setContentsMargins(15,0,12,0);
+                QSvgRenderer* svgRender=new QSvgRenderer(btn);
+                svgRender->load(QString(":/data/img/mainviewwidget/lock.svg"));
+                QPixmap* pixmap=new QPixmap(14,14);
+                pixmap->fill(Qt::transparent);
+                QPainter p(pixmap);
+                svgRender->render(&p);
+                QLabel* lock=new QLabel;
+                lock->setPixmap(*pixmap);
+                lock->setAlignment(Qt::AlignCenter);
+                lock->setStyleSheet("QLabel{background:transparent;}");
+                lock->setFixedSize(pixmap->size());
+                btn->layout()->addWidget(lock);
+            }
+            else{
+                btn->layout()->setContentsMargins(15,0,0,0);
+                QLayoutItem* item=btn->layout()->itemAt(2);
+                QWidget* wid=item->widget();
+                btn->layout()->removeWidget(wid);
+                wid->setParent(nullptr);
+                delete wid;
+            }
+            break;
+        }
 
+    }
+    if(index==count)
+    {
+        char btncolor[300];
+        sprintf(btncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
+                QPushButton:hover{background-color:%s;}\
+                QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
+        QPushButton* btn=new QPushButton;
+        btn->setFixedSize(330-4-14,42);
+        btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+        QHBoxLayout* layout=new QHBoxLayout(btn);
+        layout->setContentsMargins(15,0,12,0);
+        layout->setSpacing(15);
+        QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(appname));
+        QIcon icon=QIcon::fromTheme(iconstr);
+        QLabel* labelicon=new QLabel(btn);
+        labelicon->setFixedSize(32,32);
+        QPixmap pixmapicon(icon.pixmap(QSize(32,32)));
+        labelicon->setPixmap(pixmapicon);
+        labelicon->setStyleSheet("QLabel{background:transparent;}");
+        QLabel* labeltext=new QLabel(btn);
+        labeltext->setText(appname);
+        labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+        labeltext->adjustSize();
+        layout->addWidget(labelicon);
+        layout->addWidget(labeltext);
+        QSvgRenderer* svgRender=new QSvgRenderer(btn);
+        svgRender->load(QString(":/data/img/mainviewwidget/lock.svg"));
+        QPixmap* pixmap=new QPixmap(14,14);
+        pixmap->fill(Qt::transparent);
+        QPainter p(pixmap);
+        svgRender->render(&p);
+        QLabel* lock=new QLabel;
+        lock->setPixmap(*pixmap);
+        lock->setAlignment(Qt::AlignCenter);
+        lock->setStyleSheet("QLabel{background:transparent;}");
+        lock->setFixedSize(pixmap->size());
+        layout->addWidget(lock);
+        btn->setLayout(layout);
+        btn->setFocusPolicy(Qt::NoFocus);
+        flowlayout->addWidget(btn);
 
+        connect(btn,SIGNAL(clicked()),this,SLOT(exec_app_name()));
+        btn->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
+                SLOT(right_click_slot()));
+        if(!is_fullscreen)
+        {
+            int num=wid->layout()->count();
+            wid->setFixedSize(apptablewid->width()-14,num*42);
+            apptablewid->setRowHeight(0,num*42);
+        }
+        else{
+            int dividend=apptablewid->width()/312;
+            int num=wid->layout()->count();
+            if(num%dividend>0)
+                num=num/dividend+1;
+            else num=num/dividend;
+            QWidget* wid=apptablewid->cellWidget(0,0);
+            wid->setFixedSize(apptablewid->width()-14,num*42);
+            apptablewid->setRowHeight(0,num*42);
+        }
+
+        setting->setValue(appname,0);
+        setting->sync();
+
+    }
+    setting->endGroup();
 }

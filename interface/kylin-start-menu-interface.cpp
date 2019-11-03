@@ -771,6 +771,11 @@ QStringList KylinStartMenuInterface::get_office_app_list()
     return office;
 }
 
+QStringList KylinStartMenuInterface::get_education_app_list()
+{
+
+}
+
 //获取系统管理应用列表
 QStringList KylinStartMenuInterface::get_systemadmin_app_list()
 {

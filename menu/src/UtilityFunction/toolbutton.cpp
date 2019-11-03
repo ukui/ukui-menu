@@ -49,7 +49,6 @@ void ToolButton::mousePressEvent(QMouseEvent *event)
         this->setStyleSheet(QString::fromLocal8Bit(style));
     pixmap=new QPixmap(piconstr);
     label->setPixmap(*pixmap);
-    emit clicked();
 }
 
 void ToolButton::mouseReleaseEvent(QMouseEvent *event)
@@ -62,6 +61,7 @@ void ToolButton::mouseReleaseEvent(QMouseEvent *event)
         this->setStyleSheet(QString::fromLocal8Bit(style));
     pixmap=new QPixmap(piconstr);
     label->setPixmap(*pixmap);
+    emit clicked();
 }
 
 

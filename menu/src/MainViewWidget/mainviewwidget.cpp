@@ -47,13 +47,14 @@ void MainViewWidget::init_widget()
     letterwid=new LetterWidget;
     functionwid=new FunctionWidget;
 
-    connect(letterwid,SIGNAL(send_update_applist_signal()),commonusewid,SLOT(update_tablewid_slot()));
-    connect(functionwid,SIGNAL(send_update_applist_signal()),commonusewid,SLOT(update_tablewid_slot()));
+    connect(letterwid,SIGNAL(send_update_applist_signal(QString)),commonusewid,SLOT(update_tablewid_slot(QString)));
+    connect(functionwid,SIGNAL(send_update_applist_signal(QString)),commonusewid,SLOT(update_tablewid_slot(QString)));
 
     fileWatcher=new QFileSystemWatcher(this);
     fileWatcher->addPath("/usr/share/applications");
-//    connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),letterwid,SLOT(update_app_tablewidget()));
-//    connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),functionwid,SLOT(update_app_tablewidget()));
+    connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),this,SLOT(directoryChangedSlot()));
+    connect(this,SIGNAL(directoryChangedSignal(QString,int)),letterwid,SLOT(update_app_tablewidget(QString,int)));
+    connect(this,SIGNAL(directoryChangedSignal(QString,int)),functionwid,SLOT(update_app_tablewidget(QString,int)));
 
     connect(commonusewid,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
     connect(letterwid,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
@@ -61,6 +62,24 @@ void MainViewWidget::init_widget()
 
     add_top_control();
     load_min_mainview();
+
+    QString path=QDir::homePath()+"/.config/ukui-start-menu/ukui-start-menu.ini";
+    setting=new QSettings(path,QSettings::IniFormat);
+    QStringList grouplist=setting->childGroups();
+    if(grouplist.indexOf("apps")==-1)
+    {
+        setting->beginGroup("apps");
+        QStringList dflist=KylinStartMenuInterface::get_desktop_file_path();
+        for(int i=0;i<dflist.count();i++)
+        {
+            QFileInfo fileinfo(dflist.at(i));
+            QString desktopfile=fileinfo.fileName();
+            QString appname=KylinStartMenuInterface::get_app_name(dflist.at(i));
+            setting->setValue(desktopfile,appname);
+            setting->sync();
+        }
+        setting->endGroup();
+    }
 }
 
 /**
@@ -72,7 +91,7 @@ void MainViewWidget::add_top_control()
     topLayout->setSpacing(0);
 
     minmaxWidget=new QWidget(topWidget);
-    minmaxWidget->setStyleSheet("QWidget{background:transparent;}");
+    minmaxWidget->setStyleSheet("QWidget{background:transparent;border:0px;}");
     minmaxLayout=new QHBoxLayout(minmaxWidget);
     minmaxbtn=new QToolButton(minmaxWidget);
     minmaxbtn->setShortcut(QKeySequence::InsertParagraphSeparator);
@@ -83,7 +102,7 @@ void MainViewWidget::add_top_control()
     minmaxWidget->setLayout(minmaxLayout);
 
     queryWidget=new QWidget(topWidget);
-    queryWidget->setStyleSheet("QWidget{background-color:rgb(136,151,163,20%);}");
+    queryWidget->setStyleSheet("QWidget{background-color:rgb(136,151,163,20%);border:0px;}");
 
     topLayout->addWidget(minmaxWidget);
     topLayout->addWidget(queryWidget);
@@ -399,5 +418,56 @@ void MainViewWidget::load_full_classification_widget()
         commonusewid->load_max_wid();
         letterwid->load_max_wid();
         functionwid->load_max_wid();
+}
+
+/**
+ * desktop文件目录改变信号槽
+ */
+void MainViewWidget::directoryChangedSlot()
+{
+        QStringList desktopfpList=KylinStartMenuInterface::get_desktop_file_path();
+        QStringList desktopfnList;
+        for(int i=0;i<desktopfpList.count();i++)
+        {
+    //        QString appname=KylinStartMenuInterface::get_app_name(desktopList.at(i));
+    //        appnameList.append(appname);
+            QFileInfo fileinfo(desktopfpList.at(i));
+            QString desktopfn=fileinfo.fileName();
+            desktopfnList.append(desktopfn);
+        }
+        QString path=QDir::homePath()+"/.config/ukui-start-menu/ukui-start-menu.ini";
+        setting=new QSettings(path,QSettings::IniFormat);
+        setting->beginGroup("apps");
+        QStringList keyList=setting->childKeys();
+        if(desktopfnList.count()>keyList.count())
+        {
+            for(int i=0;i<desktopfnList.count();i++)//有新的应用安装
+            {
+                if(keyList.indexOf(desktopfnList.at(i))==-1)
+                {
+                    QString appname=KylinStartMenuInterface::get_app_name(QString("/usr/share/applications/"+desktopfnList.at(i)));
+                    setting->setValue(desktopfnList.at(i),appname);
+                    setting->sync();
+                    emit directoryChangedSignal(desktopfnList.at(i),0);
+                    break;
+                }
+            }
+        }
+        if(desktopfnList.count()<keyList.count())//有软件被卸载
+        {
+            for(int i=0;i<keyList.count();i++)
+            {
+                if(desktopfnList.indexOf(keyList.at(i))==-1)
+                {
+                    QString appname=setting->value(keyList.at(i)).toString();
+                    emit directoryChangedSignal(appname,-1);
+                    setting->remove(keyList.at(i));
+                    setting->sync();
+                    break;
+                }
+            }
+        }
+        setting->endGroup();
+
 }
 

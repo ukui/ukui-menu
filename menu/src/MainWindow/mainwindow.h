@@ -37,7 +37,7 @@ private:
 
     //动画
 //    QPropertyAnimation* pAnimation=nullptr;
-//    bool is_full=false;//是否全屏
+    bool is_fullscreen=false;//是否全屏
 //    int classification_widget;
 
 protected:

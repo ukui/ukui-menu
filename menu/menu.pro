@@ -11,11 +11,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 include(../interface/interface.pri)
 include(src/QtSingleApplication/qtsingleapplication.pri)
 
-TARGET = ukui-start-menu
+TARGET = ukui-menu
 TEMPLATE = app
 
 DESTDIR = $$PROJECT_BINDIR
-unix:QMAKE_RPATHDIR+=$$PROJECT_LIBDIR
+QMAKE_RPATHDIR+=$$PROJECT_LIBDIR
 
 SOURCES += main.cpp \
     src/MainWindow/mainwindow.cpp \

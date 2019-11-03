@@ -55,7 +55,7 @@ void MainWindow::init_mainwindow()
     mainlayout->setContentsMargins(0,0,0,0);
     mainlayout->setSpacing(0);
     centralWidget()->setLayout(mainlayout);
-    mainwidget->setStyleSheet("background:transparent;");
+    mainwidget->setStyleSheet("background:transparent;border:0px;");
 
     connect(sidebarwid, SIGNAL(send_commonusebtn_signal()), mainviewwid, SLOT(load_commonuse_widget()));
     connect(sidebarwid,SIGNAL(send_letterbtn_signal()), mainviewwid, SLOT(load_letter_widget()));
@@ -79,30 +79,33 @@ void MainWindow::init_mainwindow()
  */
 void MainWindow::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);
-    //加边框
-    QPainterPath path;
-    path.setFillRule(Qt::WindingFill);
-    path.addRect(0, 20, this->width()-20, this->height()-20);
-    char bordercolor[20];
-    sprintf(bordercolor,"%s", BORDERCOLOR);
-    painter.setPen(QColor(QString::fromLocal8Bit(bordercolor)));
-    painter.drawPath(path);
-
-    //加阴影
-    char shadowcolor[20];
-    sprintf(shadowcolor,"%s", SHADOWCOLOR);
-    QColor color(QString::fromLocal8Bit(shadowcolor));
-//    for(int i=0; i<10; i++)
-    for(int i=-1; i>=-10; i--)
+    if(!is_fullscreen)
     {
+        QPainter painter(this);
+        //加边框
         QPainterPath path;
         path.setFillRule(Qt::WindingFill);
-//        path.addRect(-i, 20-i, this->width()-(10-i)*2, this->height()-(10-i)*2);
-        path.addRect(i, 20+i, this->width()-(10+i)*2, this->height()-(10+i)*2);
-        color.setAlpha(static_cast<int>(150 - qSqrt(-i-1)*50));
-        painter.setPen(color);
+        path.addRect(0, 20, this->width()-20, this->height()-20);
+        char bordercolor[20];
+        sprintf(bordercolor,"%s", BORDERCOLOR);
+        painter.setPen(QColor(QString::fromLocal8Bit(bordercolor)));
         painter.drawPath(path);
+
+        //加阴影
+        char shadowcolor[20];
+        sprintf(shadowcolor,"%s", SHADOWCOLOR);
+        QColor color(QString::fromLocal8Bit(shadowcolor));
+    //    for(int i=0; i<10; i++)
+        for(int i=-1; i>=-10; i--)
+        {
+            QPainterPath path;
+            path.setFillRule(Qt::WindingFill);
+    //        path.addRect(-i, 20-i, this->width()-(10-i)*2, this->height()-(10-i)*2);
+            path.addRect(i, 20+i, this->width()-(10+i)*2, this->height()-(10+i)*2);
+            color.setAlpha(static_cast<int>(150 - qSqrt(-i-1)*50));
+            painter.setPen(color);
+            painter.drawPath(path);
+        }
     }
 }
 
@@ -112,7 +115,8 @@ void MainWindow::paintEvent(QPaintEvent *)
 void MainWindow::show_fullscreen_widget()
 {
 ////    this->showMaximized();
-//    is_full=true;
+    is_fullscreen=true;
+    repaint();
 //    classification_widget=arg;
 //    sidebarwid->setVisible(false);
 //    mainviewwid->setVisible(false);
@@ -134,7 +138,8 @@ void MainWindow::show_fullscreen_widget()
 void MainWindow::show_default_widget()
 {
 ////    this->showNormal();
-//    is_full=false;
+    is_fullscreen=false;
+    repaint();
 //    classification_widget=arg;
 //    sidebarwid->setVisible(false);
 //    mainviewwid->setVisible(false);

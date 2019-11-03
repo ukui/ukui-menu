@@ -21,12 +21,17 @@ public:
     explicit FunctionButtonWidget(QWidget *parent = nullptr);
     ~FunctionButtonWidget();
 
+    void load_min_wid();
+    void load_max_wid();
+
 private:
     Ui::FunctionButtonWidget *ui;
 
     QVBoxLayout* mainLayout=nullptr;
     QSpacerItem* horizontalSpacer=nullptr;
     QSpacerItem* verticalSpacer=nullptr;
+
+    QStringList classificationbtnlist;//存放分类按钮信息
 
 
 protected:

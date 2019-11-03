@@ -4,9 +4,6 @@
 #include <QLayout>
 #include <QRect>
 #include <QStyle>
-#include <QLayout>
-#include <QRect>
-#include <QStyle>
 
 class QFlowLayout : public QLayout
 

@@ -37,6 +37,7 @@ private:
     QSettings *setting=nullptr;
 
     QHBoxLayout* mainLayout=nullptr;
+    bool is_fullscreen=false;
 
     //应用列表界面
     QWidget* applistWid=nullptr;
@@ -61,7 +62,7 @@ private slots:
     void ViewOpenedSlot(QDBusMessage msg);
     void exec_app_name();//执行应用程序
     void right_click_slot();//加载右键菜单
-    void update_tablewid_slot();//更新应用列表槽函数
+    void update_tablewid_slot(QString appname);//更新应用列表槽函数
 
 signals:
     void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号

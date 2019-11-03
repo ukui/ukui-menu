@@ -67,6 +67,9 @@ void SideBarWidget::add_sidebar_btn()
     connect(commonusebtn,SIGNAL(clicked()),this,SLOT(commonusebtn_clicked_slot()));
     connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));
     connect(functionbtn,SIGNAL(clicked()),this,SLOT(functionbtn_clicked_slot()));
+    connect(computerbtn,SIGNAL(clicked()),this,SLOT(computerbtn_click_slot()));
+    connect(controlbtn,SIGNAL(clicked()),this,SLOT(controlbtn_click_slot()));
+    connect(shutdownbtn,SIGNAL(clicked()),this,SLOT(shutdownbtn_click_slot()));
 
     commonusebtnname=new QLabel;
     commonusebtnname->setText(tr("常用软件"));
@@ -495,6 +498,45 @@ void SideBarWidget::functionbtn_clicked_slot()
 //    if(is_fullscreen)
 //        emit send_fullscreen_functionbtn_signal();
     emit send_functionbtn_signal();
+}
+
+void SideBarWidget::computerbtn_click_slot()
+{
+    emit send_hide_mainwindow_signal();
+    QString execpath=KylinStartMenuInterface::get_app_exec(QString("/usr/share/applications/peony-computer.desktop"));
+    //移除启动参数%u或者%U
+    for(int i=0;i<execpath.length();i++)
+    {
+        if(execpath.at(i)=='%')
+        {
+            execpath.remove(i,2);
+        }
+    }
+    QProcess *process=new QProcess(this);
+    process->startDetached(execpath);
+}
+
+void SideBarWidget::controlbtn_click_slot()
+{
+    emit send_hide_mainwindow_signal();
+    QString execpath=KylinStartMenuInterface::get_app_exec(QString("/usr/share/applications/ukui-control-center.desktop"));
+    //移除启动参数%u或者%U
+    for(int i=0;i<execpath.length();i++)
+    {
+        if(execpath.at(i)=='%')
+        {
+            execpath.remove(i,2);
+        }
+    }
+    QProcess *process=new QProcess(this);
+    process->startDetached(execpath);
+
+}
+
+void SideBarWidget::shutdownbtn_click_slot()
+{
+    emit send_hide_mainwindow_signal();
+    system("ukui-session-save --shutdown-dialog &");
 }
 
 /**

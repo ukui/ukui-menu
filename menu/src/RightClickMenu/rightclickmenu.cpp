@@ -104,7 +104,7 @@ RightClickMenu::~RightClickMenu()
 //常用应用按钮右键菜单
 void RightClickMenu::add_commonuse_appbtn_action()
 {
-    setting->beginGroup("application");
+    setting->beginGroup("activeApps");
     if(!setting->contains(appname) || setting->value(appname).toInt()>0)
     {
         init_widget_action(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg","固定到“常用软件”");
@@ -196,7 +196,7 @@ void RightClickMenu::add_commonuse_appbtn_action()
 void RightClickMenu::add_appbtn_action()
 {
 
-    setting->beginGroup("application");
+    setting->beginGroup("activeApps");
     if(!setting->contains(appname) || setting->value(appname).toInt()>0)
     {
         init_widget_action(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg","固定到“常用软件”");
@@ -365,7 +365,7 @@ void RightClickMenu::init_widget_action(QWidget *wid, QString iconstr, QString t
 void RightClickMenu::fix2commonuseaction_trigger_slot()
 {
     action_number=1;
-    setting->beginGroup("application");
+    setting->beginGroup("activeApps");
     setting->setValue(appname,0);
     setting->sync();
     setting->endGroup();
@@ -375,7 +375,7 @@ void RightClickMenu::fix2commonuseaction_trigger_slot()
 void RightClickMenu::unfixed4commonuseaction_trigger_slot()
 {
     action_number=2;
-    setting->beginGroup("application");
+    setting->beginGroup("activeApps");
     setting->setValue(appname,2);
     setting->sync();
     setting->endGroup();
@@ -412,7 +412,7 @@ void RightClickMenu::attributeaction_trigger_slot()
 void RightClickMenu::cudeleteaction_trigger_slot()
 {
     action_number=8;
-    setting->beginGroup("application");
+    setting->beginGroup("activeApps");
     setting->remove(appname);
     setting->sync();
     setting->endGroup();
@@ -421,16 +421,16 @@ void RightClickMenu::cudeleteaction_trigger_slot()
 void RightClickMenu::cudeleteallaction_trigger_slot()
 {
     action_number=9;
-    setting->beginGroup("application");
-    QStringList keys=setting->childKeys();
-    for(int i=0;i<keys.count();i++)
-    {
-        if(setting->value(keys.at(i)).toInt()>0)
-        {
-            setting->remove(keys.at(i));
-        }
-    }
-    setting->endGroup();
+//    setting->beginGroup("activeApps");
+//    QStringList keys=setting->childKeys();
+//    for(int i=0;i<keys.count();i++)
+//    {
+//        if(setting->value(keys.at(i)).toInt()>0)
+//        {
+//            setting->remove(keys.at(i));
+//        }
+//    }
+//    setting->endGroup();
 
 }
 
