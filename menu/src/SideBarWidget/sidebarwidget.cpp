@@ -217,7 +217,10 @@ void SideBarWidget::shutdownbtn_right_click_slot()
     shutdownmenu=new RightClickMenu;
     int ret=shutdownmenu->show_shutdown_menu();
     if(ret>=10 && ret<=14)
+    {
         emit send_hide_mainwindow_signal();
+        system("ukui-session-tools");
+    }
 }
 
 void SideBarWidget::add_right_click_menu(QPushButton *btn)
@@ -536,7 +539,7 @@ void SideBarWidget::controlbtn_click_slot()
 void SideBarWidget::shutdownbtn_click_slot()
 {
     emit send_hide_mainwindow_signal();
-    system("ukui-session-save --shutdown-dialog &");
+    system("ukui-session-tools");
 }
 
 /**
