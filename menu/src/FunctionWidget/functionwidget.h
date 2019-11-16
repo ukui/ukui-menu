@@ -5,11 +5,12 @@
 #include <QHBoxLayout>
 #include <QTableWidget>
 #include <QHeaderView>
-#include <QScrollBar>
 #include <QPushButton>
+#include "src/UtilityFunction/scrollarea.h"
 #include "functionbuttonwidget.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/qflowlayout.h"
+#include "src/UtilityFunction/pushbutton.h"
 
 namespace Ui {
 class FunctionWidget;
@@ -38,13 +39,14 @@ private:
     //应用列表界面
     QWidget* applistWid=nullptr;
 
-    QTableWidget* apptablewid;//应用列表
+    ScrollArea* scrollarea=nullptr;
+    QWidget* scrollareawid=nullptr;
+    QVBoxLayout* scrollareawidLayout=nullptr;
 
     QStringList classificationbtnlist;//存放分类按钮
     QStringList classificationbtnrowlist;//存放分类按钮所在行
-    QStringList applistnum;//存放每个分类字母的应用个数
 
-    RightClickMenu* menu;//右键菜单
+    RightClickMenu* menu=nullptr;//右键菜单
 
     //图标列表界面
     QStringList iconlist;
@@ -61,24 +63,21 @@ private:
 protected:
     void init_widget();
     void init_applist_widget();//初始化应用列表界面
-    void init_app_tablewidget();//初始化应用列表
-    void fill_app_tablewidget();//填充应用列表
+    void fill_app_list();//填充应用列表
     void insert_classification_btn(QString btnname);//插入分类按钮
     void insert_app_list(QStringList appnamelist);//插入应用列表
 
     void init_iconlist_widget();//初始化图标列表界面
     void init_iconlist_table();//初始化图标列表界面数据表格iconlisttableWid
 
-    void create_app_btn(QPushButton* btn,QString desktopfn);//创建应用按钮
-    void insert_classification_btn(QString btnname,int row);//插入分类按钮
-    void insert_appbtn_wid(QWidget* wid, QPushButton* btn,QString desktopfn,int row);//插入应用按钮界面
+    void add_app(QString classify,QString desktopfn,int num);//添加应用
+    void insert_classification_btn(QString classify,int pos);//插入分类按钮
+    void insert_appbtn_wid(QString desktopfn,int row);//插入应用按钮界面
 
 private slots:
     void app_classificationbtn_clicked_slot();//应用列表功能分类按钮槽函数
     void recv_functionbtn_signal(QString btnname);//接收FunctionButtonWidget界面按钮信号
-    void exec_app_name();//执行应用程序
-    void right_click_slot();//加载右键菜单
-    void update_app_tablewidget(QString name,int arg);//更新应用列表
+    void update_app_list(QString name,int arg);//更新应用列表
 
     void leftbtn_clicked_slot();//向左按钮槽函数
     void rightbtn_clicked_slot();//向右按钮槽函数

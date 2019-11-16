@@ -47,14 +47,16 @@ void MainViewWidget::init_widget()
     letterwid=new LetterWidget;
     functionwid=new FunctionWidget;
 
-    connect(letterwid,SIGNAL(send_update_applist_signal(QString)),commonusewid,SLOT(update_tablewid_slot(QString)));
-    connect(functionwid,SIGNAL(send_update_applist_signal(QString)),commonusewid,SLOT(update_tablewid_slot(QString)));
+    connect(letterwid,SIGNAL(send_update_applist_signal(QString)),commonusewid,SLOT(update_app_list(QString)));
+    connect(functionwid,SIGNAL(send_update_applist_signal(QString)),commonusewid,SLOT(update_app_list(QString)));
 
     fileWatcher=new QFileSystemWatcher(this);
     fileWatcher->addPath("/usr/share/applications");
     connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),this,SLOT(directoryChangedSlot()));
-    connect(this,SIGNAL(directoryChangedSignal(QString,int)),letterwid,SLOT(update_app_tablewidget(QString,int)));
-    connect(this,SIGNAL(directoryChangedSignal(QString,int)),functionwid,SLOT(update_app_tablewidget(QString,int)));
+    connect(this,SIGNAL(directoryChangedSignal(QString,int)),letterwid,SLOT(update_app_list(QString,int)));
+    connect(this,SIGNAL(directoryChangedSignal(QString,int)),functionwid,SLOT(update_app_list(QString,int)));
+    connect(this,SIGNAL(directoryChangedSignal(QString,int)),commonusewid,SLOT(update_app_list(QString,int)));
+
 
     connect(commonusewid,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
     connect(letterwid,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
@@ -448,7 +450,7 @@ void MainViewWidget::directoryChangedSlot()
                     QString appname=KylinStartMenuInterface::get_app_name(QString("/usr/share/applications/"+desktopfnList.at(i)));
                     setting->setValue(desktopfnList.at(i),appname);
                     setting->sync();
-                    emit directoryChangedSignal(desktopfnList.at(i),0);
+                    emit directoryChangedSignal(desktopfnList.at(i),0);//发送desktop文件名
                     break;
                 }
             }
@@ -460,7 +462,7 @@ void MainViewWidget::directoryChangedSlot()
                 if(desktopfnList.indexOf(keyList.at(i))==-1)
                 {
                     QString appname=setting->value(keyList.at(i)).toString();
-                    emit directoryChangedSignal(appname,-1);
+                    emit directoryChangedSignal(appname,-1);//发送应用名
                     setting->remove(keyList.at(i));
                     setting->sync();
                     break;

@@ -13,9 +13,11 @@
 #include <QSvgRenderer>
 #include <QHeaderView>
 #include <QDesktopWidget>
+#include "src/UtilityFunction/scrollarea.h"
 #include "kylin-start-menu-interface.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/qflowlayout.h"
+#include "src/UtilityFunction/pushbutton.h"
 
 namespace Ui {
 class CommonUseWidget;
@@ -42,27 +44,28 @@ private:
     //应用列表界面
     QWidget* applistWid=nullptr;
 
-    QTableWidget* apptablewid=nullptr;//应用列表
+    ScrollArea* scrollarea;
+    QWidget* scrollareawid;
+    QFlowLayout* flowlayout;
+
     RightClickMenu* menu=nullptr;
     QStringList applist;
 
     QWidget* wid;
-    QFlowLayout* flowlayout;
 
 protected:
     void init_widget();
 
     void init_applist_widget();//初始化应用列表界面
 
-    void init_app_tablewidget();//初始化应用列表
-    void fill_app_tablewidget();//填充应用列表
+    void fill_app_list();//填充应用列表
 
 
 private slots:
     void ViewOpenedSlot(QDBusMessage msg);
-    void exec_app_name();//执行应用程序
-    void right_click_slot();//加载右键菜单
-    void update_tablewid_slot(QString appname);//更新应用列表槽函数
+    void update_app_list(QString appname);//字母排序与功能分类模块固定或取消固定到常用软件时更新应用列表
+    void recv_right_click_slot(int ret);//接收右键菜单返回值槽函数
+    void update_app_list(QString name,int arg);//有软件卸载时更新应用列表
 
 signals:
     void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号

@@ -51,6 +51,10 @@ void KylinStartMenuInterface::recursive_search_file(const QString& _filePath)
 //获取系统deskyop文件路径
 QStringList KylinStartMenuInterface::get_desktop_file_path()
 {
+    GError** error=nullptr;
+    GKeyFileFlags flags=G_KEY_FILE_NONE;
+    GKeyFile* keyfile=g_key_file_new ();
+
     filePathList.clear();
     recursive_search_file("/usr/share/applications/");
 
@@ -71,6 +75,31 @@ QStringList KylinStartMenuInterface::get_desktop_file_path()
             i--;
             continue;
         }
+
+        QFileInfo fileinfo(filePathList.at(i));
+        QString file_suffix=fileinfo.suffix();
+        if(QString::compare(file_suffix,"desktop")!=0)
+        {
+            filePathList.removeAt(i);
+            i--;
+            continue;
+        }
+
+        QByteArray fpbyte=filePathList.at(i).toLocal8Bit();
+        char* filepath=fpbyte.data();
+        g_key_file_load_from_file(keyfile,filepath,flags,error);
+        char* ret=g_key_file_get_locale_string(keyfile,"Desktop Entry","OnlyShowIn", nullptr, nullptr);
+        if(ret!=nullptr)
+        {
+            QString str=QString::fromLocal8Bit(ret);
+            if(QString::compare(str, "LXQt;")==0 || QString::compare(str, "KDE;")==0)
+            {
+                filePathList.removeAll(filePathList.at(i));
+                i--;
+                continue;
+            }
+        }
+
     }
 
     filePathList.removeAll("/usr/share/applications/peony-folder-handler.desktop");
@@ -109,6 +138,25 @@ QStringList KylinStartMenuInterface::get_desktop_file_path()
     filePathList.removeAll("/usr/share/applications/nm-applet.desktop");
     filePathList.removeAll("/usr/share/applications/peony-home.desktop");
     filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
+    filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
+    filePathList.removeAll("/usr/share/applications/pavucontrol-qt.desktop");
+    filePathList.removeAll("/usr/share/applications/ukui-volume-control.desktop");
+    filePathList.removeAll("/usr/share/applications/lximage-qt-screenshot.desktop");
+    filePathList.removeAll("/usr/share/applications/lximage-qt.desktop");
+    filePathList.removeAll("/usr/share/applications/appurl.desktop");
+    filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
+    filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
+    filePathList.removeAll("/usr/share/applications/fcitx-ui-sogou-qimpanel.desktop");
+    filePathList.removeAll("/usr/share/applications/fcitx.desktop");
+    filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
+    filePathList.removeAll("/usr/share/applications/fcitx-qimpanel-configtool.desktop");
+    filePathList.removeAll("/usr/share/applications/peony-computer.desktop");
+    filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
+    filePathList.removeAll("/usr/share/applications/xscreensaver-properties.desktop");
+    filePathList.removeAll("/usr/share/applications/info.desktop");
+    filePathList.removeAll("/usr/share/applications/mate-about.desktop");
+    filePathList.removeAll("/usr/share/applications/pcmanfm-qt.desktop");
+    filePathList.removeAll("/usr/share/applications/qlipper.desktop");
 
     return filePathList;
 }
@@ -771,9 +819,13 @@ QStringList KylinStartMenuInterface::get_office_app_list()
     return office;
 }
 
+//阅读翻译
 QStringList KylinStartMenuInterface::get_education_app_list()
 {
-
+    QStringList educationlist;
+    educationlist.clear();
+    educationlist=get_specified_category_app_list("Education");
+    return educationlist;
 }
 
 //获取系统管理应用列表

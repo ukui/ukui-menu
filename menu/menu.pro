@@ -32,7 +32,9 @@ SOURCES += main.cpp \
     src/SearchResultWidget/searchappthread.cpp \
     src/AttributeDialog/attributedialog.cpp \
     src/UtilityFunction/toolbutton.cpp \
-    src/UtilityFunction/qflowlayout.cpp
+    src/UtilityFunction/qflowlayout.cpp \
+    src/UtilityFunction/scrollarea.cpp \
+    src/UtilityFunction/pushbutton.cpp
 
 HEADERS  += \
     src/MainWindow/mainwindow.h \
@@ -50,7 +52,9 @@ HEADERS  += \
     src/SearchResultWidget/searchappthread.h \
     src/AttributeDialog/attributedialog.h \
     src/UtilityFunction/toolbutton.h \
-    src/UtilityFunction/qflowlayout.h
+    src/UtilityFunction/qflowlayout.h \
+    src/UtilityFunction/scrollarea.h \
+    src/UtilityFunction/pushbutton.h
 
 FORMS    += \
     src/MainWindow/mainwindow.ui \

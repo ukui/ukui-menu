@@ -35,7 +35,6 @@ void CommonUseWidget::init_widget()
     mainLayout->setSpacing(0);
     applistWid=new QWidget(this);
     applistWid->setStyleSheet("border:0px;background: transparent;");
-//    applistWid->setFixedSize(this->width(),this->height());
     mainLayout->addWidget(applistWid);
     this->setLayout(mainLayout);
 
@@ -48,13 +47,28 @@ void CommonUseWidget::init_widget()
     init_applist_widget();
 }
 
+/**
+ * 初始化应用列表界面
+ */
+void CommonUseWidget::init_applist_widget()
+{
+    QHBoxLayout* layout=new QHBoxLayout(applistWid);
+    layout->setContentsMargins(2,0,2,0);
+    applistWid->setLayout(layout);
+    scrollarea=new ScrollArea;
+    scrollareawid=new QWidget;
+    scrollarea->setWidget(scrollareawid);
+    scrollarea->setWidgetResizable(true);
+    flowlayout=new QFlowLayout(0,0,0);
+    scrollareawid->setLayout(flowlayout);
+    layout->addWidget(scrollarea);
+    fill_app_list();
+    load_min_wid();
+
+}
+
 void CommonUseWidget::ViewOpenedSlot(QDBusMessage msg)
 {
-    char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
-            QPushButton:hover{background-color:%s;}\
-            QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-
     QString path=msg.arguments().at(0).value<QString>();
     QString type=msg.arguments().at(1).value<QString>();
     if(QString::compare(type,"application")==0)
@@ -80,132 +94,40 @@ void CommonUseWidget::ViewOpenedSlot(QDBusMessage msg)
             {
                 setting->setValue(appname,2);
                 setting->sync();
-                QWidget* wid=apptablewid->cellWidget(0,0);
-//                int count=wid->layout()->count();
-//                int index=0;
-//                for(index=0;index<count;index++)
-//                {
-//                    QLayoutItem* item=wid->layout()->itemAt(index);
-//                    QWidget* wid=item->widget();
-//                    QPushButton* btn=qobject_cast<QPushButton*>(wid);
-//                    QLayoutItem* btnitem=btn->layout()->itemAt(1);
-//                    QWidget* labelwid=btnitem->widget();
-//                    QLabel* label=qobject_cast<QLabel*>(labelwid);
-//                    QString name=label->text();
-//                    if(QString::compare(name,appname)==0)
-//                        break;
-//                }
-//                if(index==count)
-//                {
-                    QPushButton* btn=new QPushButton;
-                    btn->setFixedSize(330-4-14,42);
-                    btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-                    QHBoxLayout* layout=new QHBoxLayout(btn);
-                    layout->setContentsMargins(15,0,0,0);
-                    layout->setSpacing(15);
-                    QString iconstr=KylinStartMenuInterface::get_app_icon(deskfp);
-                    QIcon icon=QIcon::fromTheme(iconstr);
-                    QLabel* labelicon=new QLabel(btn);
-                    labelicon->setFixedSize(32,32);
-                    QPixmap pixmapicon(icon.pixmap(QSize(32,32)));
-                    labelicon->setPixmap(pixmapicon);
-                    labelicon->setStyleSheet("QLabel{background:transparent;}");
-                    QLabel* labeltext=new QLabel(btn);
-                    labeltext->setText(appname);
-                    labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
-                    labeltext->adjustSize();
-                    layout->addWidget(labelicon);
-                    layout->addWidget(labeltext);
-                    flowlayout->addWidget(btn);
-                    if(!is_fullscreen)
-                    {
-                        int num=wid->layout()->count();
-                        wid->setFixedSize(apptablewid->width()-14,num*42);
-                        apptablewid->setRowHeight(0,num*42);
-                    }
-                    else{
-                        int dividend=apptablewid->width()/312;
-                        int num=wid->layout()->count();
-                        if(num%dividend>0)
-                            num=num/dividend+1;
-                        else num=num/dividend;
-                        QWidget* wid=apptablewid->cellWidget(0,0);
-                        wid->setFixedSize(apptablewid->width()-14,num*42);
-                        apptablewid->setRowHeight(0,num*42);
-                    }
-//                }
+                PushButton* btn=new PushButton(appname,1,0);
+                flowlayout->addWidget(btn);
+                flowlayout->update();
+                connect(btn,SIGNAL(clicked()),
+                        this,SIGNAL(send_hide_mainwindow_signal()));
+                connect(btn,SIGNAL(send_right_click_signal(int)),
+                        this,SLOT(recv_right_click_slot(int)));
+
+                if(!is_fullscreen)
+                {
+                    int num=flowlayout->count();
+                    scrollareawid->setFixedSize(scrollarea->width()-14,num*42);
+                }
+                else{
+                    int dividend=scrollarea->width()/312;
+                    int num=flowlayout->count();
+                    if(num%dividend>0)
+                        num=num/dividend+1;
+                    else num=num/dividend;
+                    scrollareawid->setFixedSize(scrollarea->width()-14,num*42);
+                }
             }
             setting->endGroup();
 
         }
 
     }
-
-//    fill_app_tablewidget();
-}
-
-/**
- * 初始化应用列表界面
- */
-void CommonUseWidget::init_applist_widget()
-{
-    QHBoxLayout* layout=new QHBoxLayout(applistWid);
-    layout->setContentsMargins(2,0,2,0);
-    apptablewid=new QTableWidget(applistWid);
-//    apptablewid->setFixedSize(applistWid->width()-4,applistWid->height());
-    layout->addWidget(apptablewid);
-    applistWid->setLayout(layout);
-    init_app_tablewidget();
-    fill_app_tablewidget();
-    load_min_wid();
-
-}
-
-/**
- * 初始化应用列表
- */
-void CommonUseWidget::init_app_tablewidget()
-{
-    QStringList header;
-    header.append("");
-    apptablewid->setHorizontalHeaderLabels(header);
-    apptablewid->setColumnCount(1);
-    apptablewid->verticalHeader()->setDefaultSectionSize(42);
-    apptablewid->verticalHeader()->setHidden(true);
-    apptablewid->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    apptablewid->setFocusPolicy(Qt::NoFocus);
-    apptablewid->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    apptablewid->horizontalHeader()->setFixedHeight(0);
-    apptablewid->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    apptablewid->setSelectionMode(QAbstractItemView::NoSelection);
-    apptablewid->setShowGrid(false);
-    apptablewid->setStyleSheet("QTableWidget{border:0px;background:transparent;}");
-    apptablewid->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
-    apptablewid->verticalScrollBar()->setStyleSheet(
-                "QScrollBar{width:12px;padding-top:15px;padding-bottom:15px;background-color:#283138;}"
-                "QScrollBar::handle{background-color:#414e59; width:12px;}"
-                "QScrollBar::handle:hover{background-color:#697883; }"
-                "QScrollBar::handle:pressed{background-color:#8897a3;}"
-                "QScrollBar::sub-line{background-color:#283138;height:15px;width:12px;border-image:url(:/data/img/mainviewwidget/uparrow.svg);subcontrol-position:top;}"
-                "QScrollBar::sub-line:hover{background-color:#697883;}"
-                "QScrollBar::sub-line:pressed{background-color:#8897a3;border-image:url(:/data/img/mainviewwidget/uparrow-pressed.svg);}"
-                "QScrollBar::add-line{background-color:#283138;height:15px;width:12px;border-image:url(:/data/img/mainviewwidget/downarrow.svg);subcontrol-position:bottom;}"
-                "QScrollBar::add-line:hover{background-color:#697883;}"
-                "QScrollBar::add-line:pressed{background-color:#8897a3;border-image:url(:/data/img/mainviewwidget/downarrow-pressed.svg);}"
-                );
-
 }
 
 /**
  * 填充应用列表
  */
-void CommonUseWidget::fill_app_tablewidget()
+void CommonUseWidget::fill_app_list()
 {
-    char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
-            QPushButton:hover{background-color:%s;}\
-            QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-
     QStringList keys;
     keys.clear();
     setting->beginGroup("activeApps");
@@ -218,65 +140,16 @@ void CommonUseWidget::fill_app_tablewidget()
             applist.append(keys.at(i));
     }
 
-    apptablewid->setRowCount(0);
-//    apptablewid->setRowCount(applist.count());
-    apptablewid->setRowCount(1);
-    flowlayout=new QFlowLayout(0,0,0);
-    wid=new QWidget;
-    wid->setLayout(flowlayout);
-    apptablewid->setCellWidget(0,0,wid);
     for(int i=0;i<applist.count();i++)
     {
-        QPushButton* btn=new QPushButton;
-        btn->setFixedSize(330-4-14,42);
-        btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-        QHBoxLayout* layout=new QHBoxLayout(btn);
-        layout->setContentsMargins(15,0,0,0);
-        layout->setSpacing(15);
-
-        QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(applist.at(i)));
-//        QIcon::setThemeName("ukui-icon-theme");
-        QIcon icon=QIcon::fromTheme(iconstr);
-        QLabel* labelicon=new QLabel(btn);
-        labelicon->setFixedSize(32,32);
-        QPixmap pixmapicon(icon.pixmap(QSize(32,32)));
-        labelicon->setPixmap(pixmapicon);
-        labelicon->setStyleSheet("QLabel{background:transparent;}");
-        QLabel* labeltext=new QLabel(btn);
-        labeltext->setText(applist.at(i));
-        labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
-        labeltext->adjustSize();
-        layout->addWidget(labelicon);
-        layout->addWidget(labeltext);
-
-        if(setting->value(applist.at(i)).toInt()==0)
-        {
-            layout->setContentsMargins(15,0,12,0);
-            QSvgRenderer* svgRender=new QSvgRenderer(btn);
-            svgRender->load(QString(":/data/img/mainviewwidget/lock.svg"));
-            QPixmap* pixmap=new QPixmap(14,14);
-            pixmap->fill(Qt::transparent);
-            QPainter p(pixmap);
-            svgRender->render(&p);
-            QLabel* lock=new QLabel;
-            lock->setPixmap(*pixmap);
-            lock->setAlignment(Qt::AlignCenter);
-            lock->setStyleSheet("QLabel{background:transparent;}");
-            lock->setFixedSize(pixmap->size());
-            layout->addWidget(lock);
-
-        }
-        btn->setLayout(layout);
-        btn->setFocusPolicy(Qt::NoFocus);
-
-//        apptablewid->setCellWidget(i,0,btn);
+        PushButton* btn=new PushButton(applist.at(i),1,0);
         flowlayout->addWidget(btn);
-
-        connect(btn,SIGNAL(clicked()),this,SLOT(exec_app_name()));
-        btn->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
-                SLOT(right_click_slot()));
+        connect(btn,SIGNAL(clicked()),
+                this,SIGNAL(send_hide_mainwindow_signal()));
+        connect(btn,SIGNAL(send_right_click_signal(int)),
+                this,SLOT(recv_right_click_slot(int)));
     }
+    flowlayout->update();
     setting->endGroup();
 }
 
@@ -286,11 +159,9 @@ void CommonUseWidget::load_min_wid()
     this->setGeometry(QRect(60,QApplication::desktop()->availableGeometry().height()-462,
                                  330,462));
     applistWid->setFixedSize(this->width(),this->height());
-    apptablewid->setFixedSize(applistWid->width()-4,applistWid->height());
+    scrollarea->setFixedSize(applistWid->width()-4,applistWid->height());
     int num=flowlayout->count();
-    QWidget* wid=apptablewid->cellWidget(0,0);
-    wid->setFixedSize(apptablewid->width()-14,num*42);
-    apptablewid->setRowHeight(0,num*42);
+    scrollareawid->setFixedSize(scrollarea->width()-14,num*42);
 }
 
 void CommonUseWidget::load_max_wid()
@@ -302,30 +173,22 @@ void CommonUseWidget::load_max_wid()
                               QApplication::desktop()->availableGeometry().height()-70));
 
     applistWid->setFixedSize(this->width(),this->height());
-    apptablewid->setFixedSize(applistWid->width()-32-12,applistWid->height());
+    scrollarea->setFixedSize(applistWid->width()-32-12,applistWid->height());
     int num=flowlayout->count();
-    int dividend=apptablewid->width()/312;
+    int dividend=scrollarea->width()/312;
     if(num%dividend>0)
         num=num/dividend+1;
     else num=num/dividend;
-    QWidget* wid=apptablewid->cellWidget(0,0);
-    wid->setFixedSize(apptablewid->width()-14,num*42);
-    apptablewid->setRowHeight(0,num*42);
+    scrollareawid->setFixedSize(scrollarea->width()-14,num*42);
 }
 
-/**
- * 加载右键菜单
- */
-void CommonUseWidget::right_click_slot()
+void CommonUseWidget::recv_right_click_slot(int ret)
 {
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
-    QLayoutItem* item=btn->layout()->itemAt(1);
-    QWidget* wid=item->widget();
-    QLabel* label=qobject_cast<QLabel*>(wid);
-    QString appname=label->text();
-
-    menu=new RightClickMenu;
-    int ret=menu->show_commonuse_appbtn_menu(appname);
+    QLayoutItem* btnitem=btn->layout()->itemAt(1);
+    QWidget* labelwid=btnitem->widget();
+    QLabel* label=qobject_cast<QLabel*>(labelwid);
+    QString name=label->text();
     if(ret==1)
     {
         btn->layout()->setContentsMargins(15,0,12,0);
@@ -353,20 +216,23 @@ void CommonUseWidget::right_click_slot()
     }
     if(ret==8)
     {
-//        QModelIndex index=apptablewid->indexAt(btn->pos());
-//        apptablewid->removeCellWidget(index.row(),0);
-//        apptablewid->removeRow(index.row());
+        setting->beginGroup("activeApps");
+        setting->remove(name);
+        setting->sync();
+        setting->endGroup();
         flowlayout->removeWidget(btn);
         btn->setParent(nullptr);
         delete btn;
+        flowlayout->update();
 
     }
     if(ret==9)
     {
         setting->beginGroup("activeApps");
         int index=0;
-        for(index=flowlayout->count()-1;index>=0;index--)
+        while(index<flowlayout->count())
         {
+//            qDebug()<<index;
             QLayoutItem* item=flowlayout->itemAt(index);
             QWidget* wid=item->widget();
             QPushButton* btn=qobject_cast<QPushButton*>(wid);
@@ -374,9 +240,6 @@ void CommonUseWidget::right_click_slot()
             QWidget* labelwid=btnitem->widget();
             QLabel* label=qobject_cast<QLabel*>(labelwid);
             QString name=label->text();
-//            QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(name);
-//            QFileInfo fileinfo(desktopfp);
-//            QString desktopfn=fileinfo.fileName();
             if(setting->value(name).toInt()>0)
              {
                 flowlayout->removeWidget(btn);
@@ -384,42 +247,37 @@ void CommonUseWidget::right_click_slot()
                 delete btn;
                 setting->remove(name);
                 setting->sync();
-//                index--;
+                index--;
             }
+            index++;
         }
         setting->endGroup();
+        flowlayout->update();
     }
-}
 
-/**
- * 执行应用程序
- */
-void CommonUseWidget::exec_app_name()
-{
-    emit send_hide_mainwindow_signal();
-    QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
-    QLayoutItem* item=btn->layout()->itemAt(1);
-    QWidget* wid=item->widget();
-    QLabel* label=qobject_cast<QLabel*>(wid);
-    QString appname=label->text();
-    QString execpath=KylinStartMenuInterface::get_app_exec(KylinStartMenuInterface::get_desktop_path_by_app_name(appname));
-    //    qDebug()<<execpath;
-    //移除启动参数%u或者%U
-    for(int i=0;i<execpath.length();i++)
+    if(ret==8 || ret==9)
     {
-        if(execpath.at(i)=='%')
+        if(is_fullscreen)
         {
-            execpath.remove(i,2);
+            int num=flowlayout->count();
+            int dividend=scrollarea->width()/312;
+            if(num%dividend>0)
+                num=num/dividend+1;
+            else num=num/dividend;
+            scrollareawid->setFixedSize(scrollarea->width()-14,num*42);
+        }
+        else
+        {
+            int num=flowlayout->count();
+            scrollareawid->setFixedSize(scrollarea->width()-14,num*42);
         }
     }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
 }
 
 /**
- * 更新应用列表槽函数
+ * 字母排序与功能分类模块固定或取消固定到常用软件时更新应用列表
  */
-void CommonUseWidget::update_tablewid_slot(QString appname)
+void CommonUseWidget::update_app_list(QString appname)
 {
     setting->beginGroup("activeApps");
     int count=flowlayout->count();
@@ -433,9 +291,9 @@ void CommonUseWidget::update_tablewid_slot(QString appname)
         QWidget* labelwid=btnitem->widget();
         QLabel* label=qobject_cast<QLabel*>(labelwid);
         QString name=label->text();
-        if(QString::compare(appname,name)==0)
+        if(QString::compare(appname,name)==0)//应用在常用列表中
         {
-            if(setting->value(appname).toInt()==0)
+            if(setting->value(appname).toInt()==0)//固定
             {
                 btn->layout()->setContentsMargins(15,0,12,0);
                 QSvgRenderer* svgRender=new QSvgRenderer(btn);
@@ -451,7 +309,7 @@ void CommonUseWidget::update_tablewid_slot(QString appname)
                 lock->setFixedSize(pixmap->size());
                 btn->layout()->addWidget(lock);
             }
-            else{
+            else{//取消固定
                 btn->layout()->setContentsMargins(15,0,0,0);
                 QLayoutItem* item=btn->layout()->itemAt(2);
                 QWidget* wid=item->widget();
@@ -463,71 +321,69 @@ void CommonUseWidget::update_tablewid_slot(QString appname)
         }
 
     }
-    if(index==count)
+    if(index==count)//应用不在常用列表里面
     {
-        char btncolor[300];
-        sprintf(btncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
-                QPushButton:hover{background-color:%s;}\
-                QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-        QPushButton* btn=new QPushButton;
-        btn->setFixedSize(330-4-14,42);
-        btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-        QHBoxLayout* layout=new QHBoxLayout(btn);
-        layout->setContentsMargins(15,0,12,0);
-        layout->setSpacing(15);
-        QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(appname));
-        QIcon icon=QIcon::fromTheme(iconstr);
-        QLabel* labelicon=new QLabel(btn);
-        labelicon->setFixedSize(32,32);
-        QPixmap pixmapicon(icon.pixmap(QSize(32,32)));
-        labelicon->setPixmap(pixmapicon);
-        labelicon->setStyleSheet("QLabel{background:transparent;}");
-        QLabel* labeltext=new QLabel(btn);
-        labeltext->setText(appname);
-        labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
-        labeltext->adjustSize();
-        layout->addWidget(labelicon);
-        layout->addWidget(labeltext);
-        QSvgRenderer* svgRender=new QSvgRenderer(btn);
-        svgRender->load(QString(":/data/img/mainviewwidget/lock.svg"));
-        QPixmap* pixmap=new QPixmap(14,14);
-        pixmap->fill(Qt::transparent);
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        QLabel* lock=new QLabel;
-        lock->setPixmap(*pixmap);
-        lock->setAlignment(Qt::AlignCenter);
-        lock->setStyleSheet("QLabel{background:transparent;}");
-        lock->setFixedSize(pixmap->size());
-        layout->addWidget(lock);
-        btn->setLayout(layout);
-        btn->setFocusPolicy(Qt::NoFocus);
+        PushButton* btn=new PushButton(appname,1,0);
         flowlayout->addWidget(btn);
-
-        connect(btn,SIGNAL(clicked()),this,SLOT(exec_app_name()));
-        btn->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
-                SLOT(right_click_slot()));
-        if(!is_fullscreen)
+        connect(btn,SIGNAL(send_right_click_signal(int)),
+                this,SLOT(recv_right_click_slot(int)));
+        if(is_fullscreen)
         {
-            int num=wid->layout()->count();
-            wid->setFixedSize(apptablewid->width()-14,num*42);
-            apptablewid->setRowHeight(0,num*42);
-        }
-        else{
-            int dividend=apptablewid->width()/312;
-            int num=wid->layout()->count();
+            int num=flowlayout->count();
+            int dividend=scrollarea->width()/312;
             if(num%dividend>0)
                 num=num/dividend+1;
             else num=num/dividend;
-            QWidget* wid=apptablewid->cellWidget(0,0);
-            wid->setFixedSize(apptablewid->width()-14,num*42);
-            apptablewid->setRowHeight(0,num*42);
+            scrollareawid->setFixedSize(scrollarea->width()-14,num*42);
+        }
+        else
+        {
+            int num=flowlayout->count();
+            scrollareawid->setFixedSize(scrollarea->width()-14,num*42);
         }
 
         setting->setValue(appname,0);
         setting->sync();
+    }
+    flowlayout->update();
+    setting->endGroup();
+}
 
+/**
+ * 有软件卸载时更新应用列表
+ */
+void CommonUseWidget::update_app_list(QString name,int arg)
+{
+    setting->beginGroup("activeApps");
+    if(arg==-1)
+    {
+        if(setting->value(name)==0 || setting->value(name)==2)
+        {
+            for(int index=0;index<flowlayout->count();index++)
+            {
+                QLayoutItem* item=flowlayout->itemAt(index);
+                QWidget* wid=item->widget();
+                QPushButton* btn=qobject_cast<QPushButton*>(wid);
+                QLayoutItem* btnitem=btn->layout()->itemAt(1);
+                QWidget* labelwid=btnitem->widget();
+                QLabel* label=qobject_cast<QLabel*>(labelwid);
+                QString appname=label->text();
+                if(QString::compare(appname,name)==0)//应用在常用列表中
+                {
+                    flowlayout->removeWidget(btn);
+                    btn->setParent(nullptr);
+                    delete btn;
+                    flowlayout->update();
+                    break;
+                }
+            }
+            setting->remove(name);
+            setting->sync();
+        }
+        if(setting->value(name)==1){
+            setting->remove(name);
+            setting->sync();
+        }
     }
     setting->endGroup();
 }

@@ -113,6 +113,9 @@ void LetterButtonWidget::recv_letterbtn_list(QStringList list)
             QString letter=btn->text();
             if(list.indexOf(QString(QChar(letter.at(0))))==-1)
                 btn->setEnabled(false);
+            else{
+                btn->setEnabled(true);
+            }
 
             if(i*5+j==27)break;
 
