@@ -17,7 +17,7 @@ TEMPLATE = app
 DESTDIR = $$PROJECT_BINDIR
 QMAKE_RPATHDIR+=$$PROJECT_LIBDIR
 
-SOURCES += main.cpp \
+SOURCES += \
     src/MainWindow/mainwindow.cpp \
     src/SideBarWidget/sidebarwidget.cpp \
     src/MainViewWidget/mainviewwidget.cpp \
@@ -34,7 +34,10 @@ SOURCES += main.cpp \
     src/UtilityFunction/toolbutton.cpp \
     src/UtilityFunction/qflowlayout.cpp \
     src/UtilityFunction/scrollarea.cpp \
-    src/UtilityFunction/pushbutton.cpp
+    src/UtilityFunction/pushbutton.cpp \
+    src/UtilityFunction/classifybutton.cpp \
+    src/UtilityFunction/classifyscrollarea.cpp \
+    main.cpp
 
 HEADERS  += \
     src/MainWindow/mainwindow.h \
@@ -54,7 +57,9 @@ HEADERS  += \
     src/UtilityFunction/toolbutton.h \
     src/UtilityFunction/qflowlayout.h \
     src/UtilityFunction/scrollarea.h \
-    src/UtilityFunction/pushbutton.h
+    src/UtilityFunction/pushbutton.h \
+    src/UtilityFunction/classifybutton.h \
+    src/UtilityFunction/classifyscrollarea.h
 
 FORMS    += \
     src/MainWindow/mainwindow.ui \

@@ -14,6 +14,7 @@
 #include <QPixmap>
 #include <QTextEdit>
 #include <QHeaderView>
+#include "src/color.h"
 #include "kylin-start-menu-interface.h"
 #include "src/UtilityFunction/toolbutton.h"
 

@@ -42,10 +42,10 @@ void AttributeDialog::init_widget()
     titlebarLabel->adjustSize();
 //    minbtn=new ToolButton(QString(":/data/img/attributedialog/min-black.svg"),QString(":/data/img/attributedialog/min-black.svg"),
 //                          QString("#1a000000"),QString("#33000000"));
-    closebtn=new ToolButton(QString(":/data/img/attributedialog/close-black.svg"),QString(":/data/img/attributedialog/close-white.svg"),
-                            QString("#d42320"),QString("#ac4844"));
+    closebtn=new ToolButton(45,30,QString(":/data/img/attributedialog/close-black.svg"),QString(":/data/img/attributedialog/close-white.svg"),
+                            ATTRIBUTEDIALOGHOVER,ATTRIBUTEDIALOGPRESSED,3);
 //    minbtn->setFixedSize(45,30);
-    closebtn->setFixedSize(45,30);
+//    closebtn->setFixedSize(45,30);
 //    connect(minbtn,SIGNAL(clicked()),this,SLOT(showMinimized()));
     connect(closebtn,SIGNAL(clicked()),this,SLOT(close()));
 

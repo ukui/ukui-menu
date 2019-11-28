@@ -1,6 +1,12 @@
 #ifndef KYLINSTARTMENUINTERFACE_H
 #define KYLINSTARTMENUINTERFACE_H
 #include <QtCore>
+#include <sys/types.h>
+#include <unistd.h>
+#include <QDBusInterface>
+#include <QDBusConnection>
+#include <QDBusReply>
+#include <QDBusObjectPath>
 
 class KylinStartMenuInterface
 {
@@ -50,6 +56,11 @@ public:
     static QStringList get_education_app_list();
     static QStringList get_systemadmin_app_list();
     static QStringList get_other_app_list();
+
+    //获取用户图像
+    static QString get_user_icon();
+    //获取用户姓名
+    static QString get_user_name();
 
 
 };

@@ -121,15 +121,26 @@ void RightClickMenu::add_commonuse_appbtn_action()
         connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixed4commonuseaction_trigger_slot()));
     }
 
-    init_widget_action(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg","固定到任务栏");
-    CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
-    cuappbtnmenu->addAction(CuFix2TaskBarAction);
-    connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+    QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(appname);
+    QDBusInterface iface("com.kylin.security.controller.filectrl",
+                         "/",
+                         "com.kylin.security.controller.filectrl",
+                         QDBusConnection::sessionBus());
 
-    init_widget_action(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg","从任务栏取消固定");
-    CuUnfixed4TaskBarAction->setDefaultWidget(CuUnfixed4TaskBarWid);
-//    cuappbtnmenu->addAction(CuUnfixed4TaskBarAction);
-    connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+    QDBusReply<QVariant> ret=iface.call("CheckIfExist",desktopfp);
+    if(!ret.value().toBool())
+    {
+        init_widget_action(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg","固定到任务栏");
+        CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
+        cuappbtnmenu->addAction(CuFix2TaskBarAction);
+        connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+    }
+    else {
+        init_widget_action(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg","从任务栏取消固定");
+        CuUnfixed4TaskBarAction->setDefaultWidget(CuUnfixed4TaskBarWid);
+        cuappbtnmenu->addAction(CuUnfixed4TaskBarAction);
+        connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+    }
 
     init_widget_action(CuAdd2DesktopWid,"","添加到桌面快捷方式");
     CuAdd2DesktopAction->setDefaultWidget(CuAdd2DesktopWid);
@@ -384,11 +395,24 @@ void RightClickMenu::unfixed4commonuseaction_trigger_slot()
 
 void RightClickMenu::fix2taskbaraction_trigger_slot()
 {
+    QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(appname);
+    QDBusInterface iface("com.kylin.security.controller.filectrl",
+                         "/",
+                         "com.kylin.security.controller.filectrl",
+                         QDBusConnection::sessionBus());
+    QDBusReply<QVariant> ret=iface.call("AddToTaskbar",desktopfp);
+//    qDebug()<<desktopfp<<ret.value().toBool();
     action_number=3;
 }
 
 void RightClickMenu::unfixed4taskbaraction_trigger_slot()
 {
+    QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(appname);
+    QDBusInterface iface("com.kylin.security.controller.filectrl",
+                         "/",
+                         "com.kylin.security.controller.filectrl",
+                         QDBusConnection::sessionBus());
+    QDBusReply<QVariant> ret=iface.call("RemoveFromTaskbar",desktopfp);
     action_number=4;
 }
 

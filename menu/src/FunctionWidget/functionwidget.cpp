@@ -661,7 +661,14 @@ void FunctionWidget::recv_functionbtn_signal(QString btnname)
     {
         mainLayout->addWidget(iconlistWid);
         int col=functionnamelist.indexOf(btnname);
-        iconlisttableWid->selectColumn(col);
+//        iconlisttableWid->selectColumn(col);
+
+        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(col);
+        QWidget* wid=item->widget();
+        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+        btn->click();
+
+
     }
     else{
         //此处需实现将功能为btnname的应用列表移动到applistWid界面最顶端
@@ -684,109 +691,58 @@ void FunctionWidget::init_iconlist_widget()
 
     iconlistLayout=new QHBoxLayout(iconlistWid);
     iconlistLayout->setContentsMargins(0,0,0,0);
+    iconlistLayout->setSpacing(20);
     iconlistWid->setLayout(iconlistLayout);
 
-    char btncolor[300];
-    sprintf(btncolor,"QToolButton{background: transparent;border:0px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;}\
-            QToolButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-    leftbtn=new QToolButton(iconlistWid);
-    leftbtn->setFixedSize(40,30);
-    QSvgRenderer* leftsvgRender = new QSvgRenderer(leftbtn);
-    leftsvgRender->load(QString(":/data/img/mainviewwidget/leftarrow.svg"));
-    QPixmap* leftpixmap = new QPixmap(19,19);
-    leftpixmap->fill(Qt::transparent);//设置背景透明
-    QPainter leftp(leftpixmap);
-    leftsvgRender->render(&leftp);
-    leftbtn->setIcon(QIcon(*leftpixmap));
-    leftbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+    leftbtn=new ToolButton(40,30,":/data/img/mainviewwidget/leftarrow.svg",":/data/img/mainviewwidget/leftarrow-hover.svg",
+                           MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,2);
+    iconlistscrollarea=new ClassifyScrollArea();
+    iconlistscrollarea->setFixedSize(11*40+10*20,30);
+    iconlistscrollareaWid=new QWidget;
+    iconlistscrollareawidLayout=new QHBoxLayout;
+    iconlistscrollareawidLayout->setContentsMargins(0,0,0,0);
+    iconlistscrollareawidLayout->setSpacing(20);
+    iconlistscrollareaWid->setLayout(iconlistscrollareawidLayout);
+    iconlistscrollarea->setWidget(iconlistscrollareaWid);
 
-    iconlisttableWid=new QTableWidget(iconlistWid);
-
-    rightbtn=new QToolButton(iconlistWid);
+    rightbtn=new ToolButton(40,30,":/data/img/mainviewwidget/rightarrow.svg",":/data/img/mainviewwidget/rightarrow-hover.svg",
+                            MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,2);
     rightbtn->setFixedSize(40,30);
-    QSvgRenderer* rightsvgRender = new QSvgRenderer(rightbtn);
-    rightsvgRender->load(QString(":/data/img/mainviewwidget/rightarrow.svg"));
-    QPixmap* rightpixmap = new QPixmap(19,19);
-    rightpixmap->fill(Qt::transparent);//设置背景透明
-    QPainter rightp(rightpixmap);
-    rightsvgRender->render(&rightp);
-    rightbtn->setIcon(QIcon(*rightpixmap));
-    rightbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
     iconlistLayout->addItem(iconlistleftSpacer);
     iconlistLayout->addWidget(leftbtn);
-    iconlistLayout->addWidget(iconlisttableWid);
+    iconlistLayout->addWidget(iconlistscrollarea);
     iconlistLayout->addWidget(rightbtn);
     iconlistLayout->addItem(iconlistrightSpacer);
-    init_iconlist_table();
+    init_iconlist_scrollarea();
 
-    QWidget* wid=iconlisttableWid->cellWidget(0,0);
-    QLabel* label=qobject_cast<QLabel*>(wid);
-    iconlisttableWid->selectColumn(0);
-    QPixmap pixmap(iconlightlist.at(0));
-    label->setPixmap(pixmap);
+    QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(0);
+    QWidget* wid=item->widget();
+    QToolButton* btn=qobject_cast<QToolButton*>(wid);
+    btn->setChecked(true);
 
     connect(leftbtn, SIGNAL(clicked()), this, SLOT(leftbtn_clicked_slot()));
     connect(rightbtn, SIGNAL(clicked()), this, SLOT(rightbtn_clicked_slot()));
-    connect(iconlisttableWid,SIGNAL(itemSelectionChanged()),this,SLOT(iconlistitem_selected_slot()));
 
 }
 
 /**
- * 初始化图标列表界面数据表格iconlisttableWid
+ * 初始化图标列表
  */
-void FunctionWidget::init_iconlist_table()
+void FunctionWidget::init_iconlist_scrollarea()
 {
-    iconlisttableWid->setFocusPolicy(Qt::NoFocus);
-//    iconlisttableWid->setFixedSize(11*40+11*20,30);
-    iconlisttableWid->setFixedSize(11*40,30);
-    iconlisttableWid->setColumnCount(11);
-    iconlisttableWid->setRowCount(1);
-    iconlisttableWid->horizontalHeader()->setFixedHeight(0);
-    iconlisttableWid->verticalHeader()->setDefaultSectionSize(30);
-    iconlisttableWid->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    iconlisttableWid->setSelectionMode(QAbstractItemView::SingleSelection);
-    iconlisttableWid->setSelectionBehavior(QAbstractItemView::SelectColumns);
-    iconlisttableWid->setShowGrid(false);
-    iconlisttableWid->setStyleSheet("QTableWidget{border:0px;background: transparent;}"
-                                    "QTableWidget::Item{background: transparent;}\
-                                     QTableWidget::Item:selected{background-color:rgba(14,19,22,92%);}");
-//    iconlisttableWid->setStyleSheet("QTableWidget{border:0px;background: transparent;}"
-//                                    "QTableWidget::Item{background: transparent;padding-left:10px;}\
-//                                     QTableWidget::Item:selected{background-color:rgba(14,19,22,92%);}");
-    QStringList header;
     for(int i=0;i<11;i++)
     {
-        header.append("");
-//        iconlisttableWid->setColumnWidth(i,60);
-        iconlisttableWid->setColumnWidth(i,40);
-
+//        ClassifyButton* iconbtn=new ClassifyButton("",1,iconlist.at(i));
+        ToolButton* iconbtn=new ToolButton(40,30,iconlist.at(i),iconlightlist.at(i),MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,2);
+        iconlistscrollareawidLayout->addWidget(iconbtn);
+        iconbtn->setCheckable(true);
+        iconbtn->setChecked(false);
+        connect(iconbtn,SIGNAL(clicked()),this,SLOT(iconbtn_clicked_slot()));
+        connect(iconbtn,SIGNAL(toggled(bool)),this,SLOT(iconbtn_checked_slot(bool)));
     }
-    iconlisttableWid->setHorizontalHeaderLabels(header);
-    iconlisttableWid->verticalHeader()->setHidden(true);
-    iconlisttableWid->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    for(int i=0;i<11;i++)
-    {
-        QLabel* label=new QLabel;
-        label->setFixedSize(40,30);
-        char labelcolor[300];
-        sprintf(labelcolor,"QLabel{background: transparent;}\
-                QLabel:hover{background-color:%s;}\
-                QLabel:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-        label->setStyleSheet(QString::fromLocal8Bit(labelcolor));
-//        QPixmap pixmap(iconlist.at(i));
-        QSvgRenderer* svgRender = new QSvgRenderer(label);
-        svgRender->load(iconlist.at(i));
-        QPixmap* pixmap = new QPixmap(19,19);
-        pixmap->fill(Qt::transparent);//设置背景透明
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        label->setPixmap(*pixmap);
-        label->setAlignment(Qt::AlignCenter);
-        iconlisttableWid->setCellWidget(0,i,label);
-    }
+    iconlistscrollarea->widget()->adjustSize();
 
 }
 
@@ -795,9 +751,27 @@ void FunctionWidget::init_iconlist_table()
  */
 void FunctionWidget::leftbtn_clicked_slot()
 {
-    int col=iconlisttableWid->currentColumn();
-    if(col>0)
-        iconlisttableWid->selectColumn(col-1);
+    if(btnPos>0)
+    {
+        btnPos--;
+        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(btnPos);
+        QWidget* wid=item->widget();
+        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+        btn->click();
+        if((btn->pos().x()+iconlistscrollarea->widget()->pos().x()) <= 0)
+        {   if(btnPos>0)
+            {
+                int val=iconlistscrollarea->horizontalScrollBar()->value();
+                iconlistscrollarea->horizontalScrollBar()->setValue(val-40);
+            }
+            else{
+//                qDebug()<<iconlistscrollarea->horizontalScrollBar()->minimum();
+                iconlistscrollarea->horizontalScrollBar()->setValue(iconlistscrollarea->horizontalScrollBar()->minimum());
+            }
+
+        }
+
+    }
 }
 
 /**
@@ -805,64 +779,66 @@ void FunctionWidget::leftbtn_clicked_slot()
  */
 void FunctionWidget::rightbtn_clicked_slot()
 {
-    int col=iconlisttableWid->currentColumn();
-    if(col<27)
-        iconlisttableWid->selectColumn(col+1);
+    if(btnPos<iconlistscrollarea->widget()->layout()->count()-1)
+    {
+        btnPos++;
+        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(btnPos);
+        QWidget* wid=item->widget();
+        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+        btn->click();
+//        qDebug()<<"---"<<btn->pos().x();
+//        qDebug()<<"---111---"<<letterlistscrollarea->widget()->pos().x();
+
+        if((btn->pos().x()+iconlistscrollarea->widget()->pos().x()) >= iconlistscrollarea->width())
+        {   if(btnPos<iconlistscrollarea->widget()->layout()->count()-1)
+            {
+                int val=iconlistscrollarea->horizontalScrollBar()->value();
+                iconlistscrollarea->horizontalScrollBar()->setValue(val+40);
+            }
+            else{
+//                qDebug()<<scrollarea->horizontalScrollBar()->maximum();
+                iconlistscrollarea->horizontalScrollBar()->setValue(iconlistscrollarea->horizontalScrollBar()->maximum());
+            }
+
+        }
+    }
 }
 
 /**
- * 图标列表数据项被选定槽函数
+ * 图标列表按钮被点击槽函数
  */
-void FunctionWidget::iconlistitem_selected_slot()
+void FunctionWidget::iconbtn_clicked_slot()
 {
-    int col=iconlisttableWid->currentColumn();
-    QWidget* wid=iconlisttableWid->cellWidget(0,col);
-    QLabel* label=qobject_cast<QLabel*>(wid);
-//    QPixmap pixmap(iconlightlist.at(col));
-    QSvgRenderer* svgRender = new QSvgRenderer(label);
-    svgRender->load(iconlightlist.at(col));
-    QPixmap* pixmap = new QPixmap(19,19);
-    pixmap->fill(Qt::transparent);//设置背景透明
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    label->setPixmap(*pixmap);
-    label->setAlignment(Qt::AlignCenter);
+    QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(beforebtnPos);
+    QWidget* wid=item->widget();
+    QToolButton* beforebtn=qobject_cast<QToolButton*>(wid);
+    beforebtn->setChecked(false);
 
-    for(int i=0;i<col;i++)
+    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
+    btnPos=iconlistscrollarea->widget()->layout()->indexOf(btn);
+    int num=classificationbtnlist.indexOf(functionnamelist.at(btnPos));
+    beforebtnPos=btnPos;
+    btn->setChecked(true);
+    if(num!=-1)
     {
-        QWidget* wid=iconlisttableWid->cellWidget(0,i);
-        QLabel* label=qobject_cast<QLabel*>(wid);
-//        QPixmap pixmap(iconlist.at(i));
-        QSvgRenderer* svgRender = new QSvgRenderer(label);
-        svgRender->load(iconlist.at(i));
-        QPixmap* pixmap = new QPixmap(19,19);
-        pixmap->fill(Qt::transparent);//设置背景透明
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        label->setPixmap(*pixmap);
-        label->setAlignment(Qt::AlignCenter);
-    }
-    for(int i=col+1;i<11;i++)
-    {
-        QWidget* wid=iconlisttableWid->cellWidget(0,i);
-        QLabel* label=qobject_cast<QLabel*>(wid);
-//        QPixmap pixmap(iconlist.at(i));
-        QSvgRenderer* svgRender = new QSvgRenderer(label);
-        svgRender->load(iconlist.at(i));
-        QPixmap* pixmap = new QPixmap(19,19);
-        pixmap->fill(Qt::transparent);//设置背景透明
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        label->setPixmap(*pixmap);
-        label->setAlignment(Qt::AlignCenter);
-    }
-
-    //此处需实现将被选定的功能图标所包含的应用列表移动到applistWid界面最顶端
-    int index=classificationbtnlist.indexOf(functionnamelist.at(col));
-    if(index!=-1)
-    {
-        int pos=classificationbtnrowlist.at(index).toInt();
+        int pos=classificationbtnrowlist.at(num).toInt();
         scrollarea->verticalScrollBar()->setSliderPosition(pos);
     }
 
+}
+
+void FunctionWidget::iconbtn_checked_slot(bool check)
+{
+    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
+    int pos=iconlistscrollarea->widget()->layout()->indexOf(btn);
+    QSvgRenderer* svgRender = new QSvgRenderer;
+    if(check)
+        svgRender->load(iconlightlist.at(pos));
+    else
+        svgRender->load(iconlist.at(pos));
+    QPixmap* pixmap = new QPixmap(19,19);
+    pixmap->fill(Qt::transparent);
+    QPainter p(pixmap);
+    svgRender->render(&p);
+    btn->setIcon(*pixmap);
 }

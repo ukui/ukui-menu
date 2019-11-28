@@ -554,7 +554,11 @@ void LetterWidget::recv_letterbtn_signal(QString btnname)
             char* bn=btnnamearr.data();
             col=static_cast<int>(*bn)-65;
         }
-        letterlisttableWid->selectColumn(col);
+
+        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(col);
+        QWidget* wid=item->widget();
+        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+        btn->click();
     }
     else{
         //此处需实现将字母为btnname的应用列表移动到applistWid界面最顶端
@@ -579,120 +583,62 @@ void LetterWidget::init_letterlist_widget()
 
     letterlistLayout=new QHBoxLayout(letterlistWid);
     letterlistLayout->setContentsMargins(0,0,0,0);
-    //    letterlistLayout->setSpacing(5);
+    letterlistLayout->setSpacing(10);
     letterlistWid->setLayout(letterlistLayout);
 
-    char btncolor[300];
-    sprintf(btncolor,"QToolButton{background: transparent;border:0px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;}\
-            QToolButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-    QSvgRenderer* leftsvg=new QSvgRenderer(letterlistWid);
-    leftsvg->load(QString(":/data/img/mainviewwidget/leftarrow.svg"));
-    QPixmap* leftpixmap=new QPixmap(19,19);
-    leftpixmap->fill(Qt::transparent);
-    QPainter leftp(leftpixmap);
-    leftsvg->render(&leftp);
-    leftbtn=new QToolButton(letterlistWid);
-    leftbtn->setFixedSize(30,25);
-    leftbtn->setIcon(QIcon(*leftpixmap));
-    leftbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-
-    QSvgRenderer* rightsvg=new QSvgRenderer(letterlistWid);
-    rightsvg->load(QString(":/data/img/mainviewwidget/rightarrow.svg"));
-    QPixmap* rightpixmap=new QPixmap(19,19);
-    rightpixmap->fill(Qt::transparent);
-    QPainter rightp(rightpixmap);
-    rightsvg->render(&rightp);
-    letterlisttableWid=new QTableWidget(letterlistWid);
-    rightbtn=new QToolButton(letterlistWid);
-    rightbtn->setFixedSize(30,25);
-    rightbtn->setIcon(QIcon(*rightpixmap));
-    rightbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+    leftbtn=new ToolButton(40,30,":/data/img/mainviewwidget/leftarrow.svg",":/data/img/mainviewwidget/leftarrow-hover.svg",
+                           MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,1);
+    letterlistscrollarea=new ClassifyScrollArea();
+    letterlistscrollarea->setFixedSize(28*30+27*10,25);
+    letterlistscrollareaWid=new QWidget;
+    letterlistscrollareawidLayout=new QHBoxLayout;
+    letterlistscrollareawidLayout->setContentsMargins(0,0,0,0);
+    letterlistscrollareawidLayout->setSpacing(10);
+    letterlistscrollareaWid->setLayout(letterlistscrollareawidLayout);
+    letterlistscrollarea->setWidget(letterlistscrollareaWid);
+    rightbtn=new ToolButton(40,30,":/data/img/mainviewwidget/rightarrow.svg",":/data/img/mainviewwidget/rightarrow-hover.svg",
+                            MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,1);
 
     letterlistLayout->addItem(letterlistleftSpacer);
     letterlistLayout->addWidget(leftbtn);
-    letterlistLayout->addWidget(letterlisttableWid);
+    letterlistLayout->addWidget(letterlistscrollarea);
     letterlistLayout->addWidget(rightbtn);
     letterlistLayout->addItem(letterlistrightSpacer);
-    init_letterlist_table();
+    init_letterlist_scrollarea();
 
-    letterlisttableWid->selectColumn(0);
-    QWidget* wid=letterlisttableWid->cellWidget(0,0);
-    QLabel* label=qobject_cast<QLabel*>(wid);
-    QFont ft;
-    ft.setWeight(81);
-    label->setFont(ft);
-    label->setStyleSheet("color:#ffffff;font-size:14px;");
+    QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(0);
+    QWidget* wid=item->widget();
+    QToolButton* btn=qobject_cast<QToolButton*>(wid);
+    btn->setChecked(true);
 
     connect(leftbtn, SIGNAL(clicked()), this, SLOT(leftbtn_clicked_slot()));
     connect(rightbtn, SIGNAL(clicked()), this, SLOT(rightbtn_clicked_slot()));
-    connect(letterlisttableWid,SIGNAL(itemSelectionChanged()),this,SLOT(letterlistitem_selected_slot()));
 
 }
 
 /**
- * 初始化字母列表界面数据表格letterlisttableWid
+ * 初始化字母列表
  */
-void LetterWidget::init_letterlist_table()
+void LetterWidget::init_letterlist_scrollarea()
 {
-    letterlisttableWid->setFocusPolicy(Qt::NoFocus);
-    //    letterlisttableWid->setFixedSize(28*30+28*10,25);
-    letterlisttableWid->setFixedSize(840,25);//Qt5.12中QTableWidget列宽至少为40
-    letterlisttableWid->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    letterlisttableWid->setColumnCount(28);
-    letterlisttableWid->setRowCount(1);
-    letterlisttableWid->horizontalHeader()->setFixedHeight(0);
-    letterlisttableWid->verticalHeader()->setDefaultSectionSize(25);
-    letterlisttableWid->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    letterlisttableWid->setSelectionMode(QAbstractItemView::SingleSelection);
-    letterlisttableWid->setSelectionBehavior(QAbstractItemView::SelectColumns);
-    letterlisttableWid->setShowGrid(false);
-    letterlisttableWid->setStyleSheet("QTableWidget{border:0px;background: transparent;}"
-                                      "QTableWidget::Item{background: transparent;}\
-                                      QTableWidget::Item:selected{background-color:rgba(14,19,22,92%);}");
-                                      //    letterlisttableWid->setStyleSheet("QTableWidget{border:0px;background: transparent;}"
-                                      //                                    "QTableWidget::Item{background: transparent;padding-left:5px;}\
-                                      //                                     QTableWidget::Item:selected{background-color:rgba(14,19,22,76%);}");
-
-    QStringList header;
     for(int i=0;i<28;i++)
     {
-        header.append("");
-        letterlisttableWid->setColumnWidth(i,30);
+        QString letterstr;
+        if(i==26)
+            letterstr="&&";
+        else if (i==27) {
+            letterstr='#';
+        }
+        else {
+            letterstr=QString(QChar(static_cast<char>(i+65)));
+        }
+        ClassifyButton* letterbtn=new ClassifyButton(letterstr,0,"");
+        letterlistscrollareawidLayout->addWidget(letterbtn);
+        connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));
 
     }
-    letterlisttableWid->setHorizontalHeaderLabels(header);
-    letterlisttableWid->verticalHeader()->setHidden(true);
-    letterlisttableWid->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    letterlistscrollarea->widget()->adjustSize();
 
-
-    QStringList letterlist;
-    letterlist.clear();
-    for(int i=0;i<26;i++)
-    {
-        char letter=static_cast<char>(65+i);
-        letterlist.append(QString(QChar(letter)));
-    }
-    letterlist.append("&");
-    letterlist.append("#");
-
-    for(int i=0;i<28;i++)
-    {
-        QLabel* label=new QLabel;
-        label->setFixedSize(30,25);
-        QFont ft;
-        ft.setWeight(50);
-        label->setFont(ft);
-        char labelcolor[300];
-        sprintf(labelcolor,"QLabel{background: transparent;color:#8b8b8b;font-size:14px;}\
-                QLabel:hover{background-color:%s;color:#ffffff;font-size:14px;}\
-                QLabel:pressed{background-color:%s;color:#8b8b8b;font-size:14px;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-        label->setStyleSheet(QString::fromLocal8Bit(labelcolor));
-        label->setAlignment(Qt::AlignCenter);
-        label->setText(letterlist.at(i));
-        letterlisttableWid->setCellWidget(0,i,label);
-
-    }
 }
 
 /**
@@ -700,9 +646,32 @@ void LetterWidget::init_letterlist_table()
  */
 void LetterWidget::leftbtn_clicked_slot()
 {
-    int col=letterlisttableWid->currentColumn();
-    if(col>0)
-        letterlisttableWid->selectColumn(col-1);
+    if(btnPos>0)
+    {
+        QLayoutItem* afteritem=letterlistscrollarea->widget()->layout()->itemAt(btnPos--);
+        QWidget* afterwid=afteritem->widget();
+        QToolButton* afterbtn=qobject_cast<QToolButton*>(afterwid);
+        afterbtn->setChecked(false);
+        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
+        QWidget* wid=item->widget();
+        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+        btn->click();
+//        btn->checkStateSet();
+//        int pos=btnPosList.at(btnPos).toInt();
+        if((btn->pos().x()+letterlistscrollarea->widget()->pos().x()) <= 0)
+        {   if(btnPos>0)
+            {
+                int val=letterlistscrollarea->horizontalScrollBar()->value();
+                letterlistscrollarea->horizontalScrollBar()->setValue(val-40);
+            }
+            else{
+//                qDebug()<<letterlistscrollarea->horizontalScrollBar()->minimum();
+                letterlistscrollarea->horizontalScrollBar()->setValue(letterlistscrollarea->horizontalScrollBar()->minimum());
+            }
+
+        }
+
+    }
 }
 
 /**
@@ -710,62 +679,55 @@ void LetterWidget::leftbtn_clicked_slot()
  */
 void LetterWidget::rightbtn_clicked_slot()
 {
-    int col=letterlisttableWid->currentColumn();
-    if(col<27)
-        letterlisttableWid->selectColumn(col+1);
+    if(btnPos<letterlistscrollarea->widget()->layout()->count()-1)
+    {
+        QLayoutItem* beforeitem=letterlistscrollarea->widget()->layout()->itemAt(btnPos++);
+        QWidget* beforewid=beforeitem->widget();
+        QToolButton* beforebtn=qobject_cast<QToolButton*>(beforewid);
+        beforebtn->setChecked(false);
+        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
+        QWidget* wid=item->widget();
+        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+        btn->click();
+//        qDebug()<<"---"<<btn->pos().x();
+//        qDebug()<<"---111---"<<letterlistscrollarea->widget()->pos().x();
+
+        if((btn->pos().x()+letterlistscrollarea->widget()->pos().x()) >= letterlistscrollarea->width())
+        {   if(btnPos<letterlistscrollarea->widget()->layout()->count()-1)
+            {
+                int val=letterlistscrollarea->horizontalScrollBar()->value();
+                letterlistscrollarea->horizontalScrollBar()->setValue(val+40);
+            }
+            else{
+//                qDebug()<<scrollarea->horizontalScrollBar()->maximum();
+                letterlistscrollarea->horizontalScrollBar()->setValue(letterlistscrollarea->horizontalScrollBar()->maximum());
+            }
+
+        }
+
+//        qDebug()<<scrollarea->horizontalScrollBar()->value();
+
+    }
+
 }
 
 /**
- * 字母列表数据项被选定槽函数
+ * 字母列表按钮被点击槽函数
  */
-void LetterWidget::letterlistitem_selected_slot()
+void LetterWidget::letterbtn_clicked_slot()
 {
-    int col=letterlisttableWid->currentColumn();
-    QWidget* wid=letterlisttableWid->cellWidget(0,col);
-    QLabel* label=qobject_cast<QLabel*>(wid);
-    label->setStyleSheet("color:#ffffff;font-size:14px;");
-    QFont ft;
-    ft.setWeight(81);
-    label->setFont(ft);
-
-    char labelcolor[300];
-    sprintf(labelcolor,"QLabel{background: transparent;color:#8b8b8b;font-size:14px;}\
-            QLabel:hover{background-color:%s;color:#ffffff;font-size:14px;}\
-            QLabel:pressed{background-color:%s;color:#8b8b8b;font-size:14px;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-
-    for(int i=0;i<col;i++)
-    {
-        QWidget* wid=letterlisttableWid->cellWidget(0,i);
-        QLabel* label=qobject_cast<QLabel*>(wid);
-        QFont ft;
-        ft.setWeight(50);
-        label->setFont(ft);
-        label->setStyleSheet(QString::fromLocal8Bit(labelcolor));
-    }
-    for(int i=col+1;i<28;i++)
-    {
-        QWidget* wid=letterlisttableWid->cellWidget(0,i);
-        QLabel* label=qobject_cast<QLabel*>(wid);
-        QFont ft;
-        ft.setWeight(50);
-        label->setFont(ft);
-        label->setStyleSheet(QString::fromLocal8Bit(labelcolor));
-    }
-
-    QString arg;
-    if(col==26)
-    {
-        arg="&&";
-    }
-    else arg=label->text();
-
-    //此处需实现将被选定的字母包含的应用列表移动到applistWid界面最顶端
-    QString letterstr=label->text();
+    QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
+    QWidget* wid=item->widget();
+    QToolButton* beforebtn=qobject_cast<QToolButton*>(wid);
+    beforebtn->setChecked(false);
+    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
+    btnPos=letterlistscrollarea->widget()->layout()->indexOf(btn);
+    btn->setChecked(true);
+    QString letterstr=btn->text().at(0);
     int num=letterbtnlist.indexOf(letterstr);
     if(num!=-1)
     {
         int pos=letterbtnrowlist.at(num).toInt();
         scrollarea->verticalScrollBar()->setSliderPosition(pos);
     }
-
 }

@@ -88,7 +88,7 @@ void PushButton::init_app_btn()
                 layout->setContentsMargins(15,0,12,0);
                 QSvgRenderer* svgRender=new QSvgRenderer(this);
                 svgRender->load(QString(":/data/img/mainviewwidget/lock.svg"));
-                QPixmap* pixmap=new QPixmap(14,14);
+                QPixmap* pixmap=new QPixmap(16,16);
                 pixmap->fill(Qt::transparent);
                 QPainter p(pixmap);
                 svgRender->render(&p);
@@ -133,20 +133,11 @@ void PushButton::exec_app_name()
 
 void PushButton::right_click_slot()
 {
-//    char style[200];
-//    sprintf(style,"QPushButton{background-color:%s;border:0px;color:#ffffff;font-size:14px;padding-left:15px;text-align: left center;}", MAINVIEWBTNHOVER);
-
-//    char btnstyle[300];
-//    sprintf(btnstyle,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:15px;text-align: left center;}\
-//            QPushButton:hover{background-color:%s;}\
-//            QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
     QLayoutItem* item=btn->layout()->itemAt(1);
     QWidget* wid=item->widget();
     QLabel* label=qobject_cast<QLabel*>(wid);
     QString appname=label->text();
-//    btn->setStyleSheet(style);
     menu=new RightClickMenu;
     if(module==0)
     {

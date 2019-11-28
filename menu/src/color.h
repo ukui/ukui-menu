@@ -10,4 +10,7 @@
 #define BORDERCOLOR "#1affffff" //边框
 #define SHADOWCOLOR "#80000000" //阴影
 
+#define ATTRIBUTEDIALOGHOVER "#d42320" //属性窗口按钮悬浮
+#define ATTRIBUTEDIALOGPRESSED "#ac4844" //属性窗口按钮点击
+
 #endif // COLOR_H

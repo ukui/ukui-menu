@@ -195,7 +195,8 @@ void SideBarWidget::init_usericon_widget()
     usernamelayout=new QHBoxLayout(usernamewid);
     usernamelayout->setContentsMargins(0,0,0,0);
     usernamelabel=new QLabel(usernamewid);
-    usernamelabel->setText("UKylin");
+    QString username=KylinStartMenuInterface::get_user_name();
+    usernamelabel->setText(username);
     usernamelabel->adjustSize();
     usernamelabel->setFixedSize(160,18);
     usernamelabel->setStyleSheet("background:transparent;color:#ffffff;font-size:18px;");
@@ -207,6 +208,40 @@ void SideBarWidget::init_usericon_widget()
     userLayout->addWidget(usericonwid);
     userLayout->addWidget(usernamewid);
     userwid->setLayout(userLayout);
+
+    connect(usericonbtn,SIGNAL(clicked()),this,SLOT(usericonbtn_click_slot()));
+    qint64 uid=static_cast<qint64>(getuid());
+    QDBusInterface iface("org.freedesktop.Accounts",
+                         "/org/freedesktop/Accounts",
+                         "org.freedesktop.Accounts",
+                         QDBusConnection::systemBus());
+    QDBusReply<QDBusObjectPath> objPath=iface.call("FindUserById",uid);
+//    qDebug()<<objPath.value().path();
+    QDBusConnection::sessionBus().connect("org.freedesktop.Accounts",objPath.value().path(),"org.freedesktop.Accounts.User",
+                                         QString("Changed"),this,SLOT(userAccountsChangedSlot()));
+
+}
+
+//监听用户账户如图像发生变化
+void SideBarWidget::userAccountsChangedSlot()
+{
+    qDebug()<<"---322--";
+    QString usericon=KylinStartMenuInterface::get_user_icon();
+    QFile file(usericon);
+    if(!file.exists())
+    {
+        if(!is_fullscreen)
+        {
+            usericon=QString(":/data/img/sidebarwidget/usericon.png");
+            usericonbtn->setIconSize(QSize(36,36));
+        }
+        else
+        {
+            usericon=QString(":/data/img/sidebarwidget/fullusericon.png");
+            usericonbtn->setIconSize(QSize(50,50));
+        }
+    }
+    usericonbtn->setIcon(QIcon(usericon));
 }
 
 /**
@@ -251,13 +286,21 @@ void SideBarWidget::load_min_sidebar()
     userwid->setFixedSize(60,75);
     userLayout->setContentsMargins(0,15,0,24);
     usericonwid->setFixedSize(60,36);
-    QPixmap pixmap(QString(":/data/img/sidebarwidget/usericon.png"));
-    usericonbtn->setFixedSize(pixmap.size());
-    char btncolor[300];
-    sprintf(btncolor,"QToolButton{background:transparent;border:0px;image:url(:/data/img/sidebarwidget/usericon.png)}\
-            QToolButton:hover{background-color:%s;}\
-            QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
-    usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+    usericonbtn->setFixedSize(36,36);
+    QString usericon=KylinStartMenuInterface::get_user_icon();
+    QFile file(usericon);
+    if(!file.exists())
+        usericon=QString(":/data/img/sidebarwidget/usericon.png");
+    usericonbtn->setIcon(QIcon(usericon));
+    usericonbtn->setIconSize(QSize(36,36));
+
+//    QPixmap pixmap(QString(":/data/img/sidebarwidget/usericon.png"));
+//    usericonbtn->setFixedSize(pixmap.size());
+//    char btncolor[300];
+//    sprintf(btncolor,"QToolButton{background:transparent;border:0px;image:url(:/data/img/sidebarwidget/usericon.png)}\
+//            QToolButton:hover{background-color:%s;}\
+//            QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
+//    usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
     set_min_sidebar_btn(commonusebtn);
     set_min_sidebar_btn(letterbtn);
@@ -315,13 +358,20 @@ void SideBarWidget::load_max_sidebar()
     userLayout->setContentsMargins(0,45,0,72);
     userLayout->setSpacing(15);
     usericonwid->setFixedSize(160,50);
-    QPixmap pixmap(QString(":/data/img/sidebarwidget/fullusericon.png"));
-    usericonbtn->setFixedSize(pixmap.size());
-    char btncolor[300];
-    sprintf(btncolor,"QToolButton{background:transparent;border:0px;image:url(:/data/img/sidebarwidget/fullusericon.png)}\
-            QToolButton:hover{background-color:%s;}\
-            QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
-    usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+    usericonbtn->setFixedSize(50,50);
+    QString usericon=KylinStartMenuInterface::get_user_icon();
+    QFile file(usericon);
+    if(!file.exists())
+        usericon=QString(":/data/img/sidebarwidget/fullusericon.png");
+    usericonbtn->setIcon(QIcon(usericon));
+    usericonbtn->setIconSize(QSize(50,50));
+//    QPixmap pixmap(QString(":/data/img/sidebarwidget/fullusericon.png"));
+//    usericonbtn->setFixedSize(pixmap.size());
+//    char btncolor[300];
+//    sprintf(btncolor,"QToolButton{background:transparent;border:0px;image:url(:/data/img/sidebarwidget/fullusericon.png)}\
+//            QToolButton:hover{background-color:%s;}\
+//            QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
+//    usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
     spaceWid->setFixedSize(this->width(),this->height()-userwid->height()-6*commonusebtn->height());
 
@@ -445,6 +495,13 @@ void SideBarWidget::set_max_sidebar_btn(QPushButton *btn)
 
 //    }
 //}
+
+void SideBarWidget::usericonbtn_click_slot()
+{
+    emit send_hide_mainwindow_signal();
+    QProcess *process=new QProcess(this);
+    process->startDetached("ukui-control-center -u");
+}
 
 void SideBarWidget::commonusebtn_clicked_slot()
 {

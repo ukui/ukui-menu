@@ -11,6 +11,9 @@
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/qflowlayout.h"
 #include "src/UtilityFunction/pushbutton.h"
+#include "src/UtilityFunction/classifyscrollarea.h"
+#include "src/UtilityFunction/classifybutton.h"
+#include "src/UtilityFunction/toolbutton.h"
 
 namespace Ui {
 class FunctionWidget;
@@ -55,10 +58,16 @@ private:
     QWidget* iconlistWid=nullptr;
     QHBoxLayout* iconlistLayout=nullptr;
     QTableWidget* iconlisttableWid=nullptr;
-    QToolButton* leftbtn=nullptr;
-    QToolButton* rightbtn=nullptr;
+    ToolButton* leftbtn=nullptr;
+    ToolButton* rightbtn=nullptr;
     QSpacerItem* iconlistleftSpacer=nullptr;
     QSpacerItem* iconlistrightSpacer=nullptr;
+
+    ClassifyScrollArea* iconlistscrollarea=nullptr;
+    QWidget* iconlistscrollareaWid=nullptr;
+    QHBoxLayout* iconlistscrollareawidLayout=nullptr;
+    int btnPos=0;
+    int beforebtnPos=0;
 
 protected:
     void init_widget();
@@ -68,7 +77,7 @@ protected:
     void insert_app_list(QStringList appnamelist);//插入应用列表
 
     void init_iconlist_widget();//初始化图标列表界面
-    void init_iconlist_table();//初始化图标列表界面数据表格iconlisttableWid
+    void init_iconlist_scrollarea();//初始化图标列表
 
     void add_app(QString classify,QString desktopfn,int num);//添加应用
     void insert_classification_btn(QString classify,int pos);//插入分类按钮
@@ -81,7 +90,8 @@ private slots:
 
     void leftbtn_clicked_slot();//向左按钮槽函数
     void rightbtn_clicked_slot();//向右按钮槽函数
-    void iconlistitem_selected_slot();//图标列表数据项被选定槽函数
+    void iconbtn_clicked_slot();//图标列表按钮被点击槽函数
+    void iconbtn_checked_slot(bool check);//图标列表按钮check状态改变
 
 signals:
     void send_classificationbtn_list(QStringList list);//向FunctionButtonWidget界面发送分类按钮列表

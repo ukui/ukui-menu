@@ -194,7 +194,7 @@ void CommonUseWidget::recv_right_click_slot(int ret)
         btn->layout()->setContentsMargins(15,0,12,0);
         QSvgRenderer* svgRender=new QSvgRenderer(btn);
         svgRender->load(QString(":/data/img/mainviewwidget/lock.svg"));
-        QPixmap* pixmap=new QPixmap(14,14);
+        QPixmap* pixmap=new QPixmap(16,16);
         pixmap->fill(Qt::transparent);
         QPainter p(pixmap);
         svgRender->render(&p);
@@ -298,7 +298,7 @@ void CommonUseWidget::update_app_list(QString appname)
                 btn->layout()->setContentsMargins(15,0,12,0);
                 QSvgRenderer* svgRender=new QSvgRenderer(btn);
                 svgRender->load(QString(":/data/img/mainviewwidget/lock.svg"));
-                QPixmap* pixmap=new QPixmap(14,14);
+                QPixmap* pixmap=new QPixmap(16,16);
                 pixmap->fill(Qt::transparent);
                 QPainter p(pixmap);
                 svgRender->render(&p);

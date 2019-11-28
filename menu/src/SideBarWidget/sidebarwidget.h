@@ -97,6 +97,8 @@ private slots:
     void shutdownbtn_click_slot();
     void computerbtn_click_slot();
     void controlbtn_click_slot();
+    void usericonbtn_click_slot();
+    void userAccountsChangedSlot();//监听用户账户如图像发生变化
 
 signals:
     void send_commonusebtn_signal();//发送常用分类按钮信号

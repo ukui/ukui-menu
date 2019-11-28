@@ -10,6 +10,9 @@
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/qflowlayout.h"
 #include "src/UtilityFunction/pushbutton.h"
+#include "src/UtilityFunction/classifybutton.h"
+#include "src/UtilityFunction/classifyscrollarea.h"
+#include "src/UtilityFunction/toolbutton.h"
 
 namespace Ui {
 class LetterWidget;
@@ -51,10 +54,15 @@ private:
     QWidget* letterlistWid=nullptr;
     QHBoxLayout* letterlistLayout=nullptr;
     QTableWidget* letterlisttableWid=nullptr;
-    QToolButton* leftbtn=nullptr;
-    QToolButton* rightbtn=nullptr;
+    ToolButton* leftbtn=nullptr;
+    ToolButton* rightbtn=nullptr;
     QSpacerItem* letterlistleftSpacer=nullptr;
     QSpacerItem* letterlistrightSpacer=nullptr;
+
+    ClassifyScrollArea* letterlistscrollarea=nullptr;
+    QWidget* letterlistscrollareaWid=nullptr;
+    QHBoxLayout* letterlistscrollareawidLayout=nullptr;
+    int btnPos=0;
 
 protected:
     void init_widget();
@@ -63,7 +71,7 @@ protected:
     QStringList get_alphabetic_classification_applist(int start,int end);//获取属于同一类分类字符应用列表
 
     void init_letterlist_widget();//初始化字母列表界面
-    void init_letterlist_table();//初始化字母列表界面数据表格letterlisttableWid
+    void init_letterlist_scrollarea();//初始化字母列表
 
     void insert_letter_btn(QString letter,int pos);//插入字母按钮
     void insert_appbtn_wid(QString desktopfn,int pos);//插入应用按钮界面
@@ -75,7 +83,7 @@ private slots:
 
     void leftbtn_clicked_slot();//向左按钮槽函数
     void rightbtn_clicked_slot();//向右按钮槽函数
-    void letterlistitem_selected_slot();//字母列表数据项被选定槽函数
+    void letterbtn_clicked_slot();//字母列表按钮被点击槽函数
 
 signals:
     void send_letterbtn_list(QStringList list);//向LetterButtonWidget发送字母按钮列表
