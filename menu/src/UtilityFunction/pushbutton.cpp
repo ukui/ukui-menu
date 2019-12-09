@@ -5,9 +5,17 @@ PushButton::PushButton(QString name, int classify, int module)
     this->name=name;
     this->classify=classify;
     this->module=module;
-    QString path=QDir::homePath()+"/.config/ukui-start-menu/ukui-start-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
+
+    pUkuiMenuInterface=new UkuiMenuInterface;
+
     init_app_btn();
+}
+
+PushButton::~PushButton()
+{
+    delete pUkuiMenuInterface;
 }
 
 void PushButton::init_app_btn()
@@ -19,6 +27,10 @@ void PushButton::init_app_btn()
 
     if(classify==0)
     {
+//          this->setText(name);
+//          this->setStyleSheet(btnstyle);
+//          this->setFocusPolicy(Qt::NoFocus);
+
         if(module==1)
         {
             this->setStyleSheet(btnstyle);
@@ -34,9 +46,11 @@ void PushButton::init_app_btn()
             letterlabel->setAlignment(Qt::AlignCenter);
             letterlabel->setStyleSheet("color:#ffffff;font-size:14px;");
             letterlabel->setText(name);
-            letterlayout->addWidget(line);
+
             letterlayout->addWidget(letterlabel);
+            letterlayout->addWidget(line);
             this->setLayout(letterlayout);
+
         }
         else {
             this->setStyleSheet(btnstyle);
@@ -52,9 +66,11 @@ void PushButton::init_app_btn()
             classificationlabel->setAlignment(Qt::AlignCenter);
             classificationlabel->setStyleSheet("color:#ffffff;font-size:14px;");
             classificationlabel->setText(name);
-            classificationlayout->addWidget(line);
+
             classificationlayout->addWidget(classificationlabel);
+            classificationlayout->addWidget(line);
             this->setLayout(classificationlayout);
+
         }
     }
     else
@@ -67,7 +83,7 @@ void PushButton::init_app_btn()
         this->setLayout(layout);
         this->setFocusPolicy(Qt::NoFocus);
 
-        QString iconstr=KylinStartMenuInterface::get_app_icon(KylinStartMenuInterface::get_desktop_path_by_app_name(name));
+        QString iconstr=pUkuiMenuInterface->get_app_icon(pUkuiMenuInterface->get_desktop_path_by_app_name(name));
         QIcon icon=QIcon::fromTheme(iconstr);
         QLabel* labelicon=new QLabel(this);
         labelicon->setFixedSize(32,32);
@@ -118,7 +134,7 @@ void PushButton::exec_app_name()
     QWidget* wid=child->widget();
     QLabel* appnamelabel=qobject_cast<QLabel*>(wid);
     QString appname=appnamelabel->text();
-    QString execpath=KylinStartMenuInterface::get_app_exec(KylinStartMenuInterface::get_desktop_path_by_app_name(appname));
+    QString execpath=pUkuiMenuInterface->get_app_exec(pUkuiMenuInterface->get_desktop_path_by_app_name(appname));
     //移除启动参数%u或者%U
     for(int i=0;i<execpath.length();i++)
     {

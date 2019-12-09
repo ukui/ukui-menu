@@ -1,34 +1,34 @@
-#include "functionbuttonwidget.h"
-#include "ui_functionbuttonwidget.h"
+#include "fullfunctionbuttonwidget.h"
+#include "ui_fullfunctionbuttonwidget.h"
 #include "src/color.h"
 #include <QSvgRenderer>
 #include <QPainter>
-#include <QDebug>
 
-FunctionButtonWidget::FunctionButtonWidget(QWidget *parent) :
+FullFunctionButtonWidget::FullFunctionButtonWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::FunctionButtonWidget)
+    ui(new Ui::FullFunctionButtonWidget)
 {
     ui->setupUi(this);
     init_widget();
 }
 
-FunctionButtonWidget::~FunctionButtonWidget()
+FullFunctionButtonWidget::~FullFunctionButtonWidget()
 {
     delete ui;
 }
 
-void FunctionButtonWidget::init_widget()
+void FullFunctionButtonWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
+    this->setStyleSheet("border:0px;background:transparent");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,532-70);
+    this->setFixedSize(QApplication::desktop()->availableGeometry().width()-160,
+                       QApplication::desktop()->availableGeometry().height()-70);
 
     mainLayout=new QVBoxLayout(this);
-    mainLayout->setContentsMargins(15,0,6,0);
-    mainLayout->setSpacing(5);
+    mainLayout->setContentsMargins((this->width()-360)/2,70,(this->width()-360)/2,0);
+    mainLayout->setSpacing(20);
     this->setLayout(mainLayout);
 
     QToolButton* recentbtn=new QToolButton;
@@ -62,12 +62,12 @@ void FunctionButtonWidget::init_widget()
 
     QWidget* wid=new QWidget(this);
     wid->setStyleSheet("QWidget{border:0px;}");
-    wid->setFixedSize(295,48);
+    wid->setFixedSize(360,50);
     QHBoxLayout* layout=new QHBoxLayout(wid);
     layout->setContentsMargins(0,0,0,0);
-    layout->setSpacing(5);
-    otherbtn->setParent(wid);
+    layout->setSpacing(40);
     layout->addWidget(otherbtn);
+    otherbtn->setParent(wid);
     horizontalSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     layout->addItem(horizontalSpacer);
     wid->setLayout(layout);
@@ -80,16 +80,16 @@ void FunctionButtonWidget::init_widget()
 /**
  * 添加功能分类按钮
  */
-void FunctionButtonWidget::add_functionbtn_control(QToolButton* firstbtn, QToolButton* secondbtn)
+void FullFunctionButtonWidget::add_functionbtn_control(QToolButton* firstbtn, QToolButton* secondbtn)
 {
     QWidget* wid=new QWidget(this);
     firstbtn->setParent(wid);
     secondbtn->setParent(wid);
     wid->setStyleSheet("QWidget{border:0px;}");
-    wid->setFixedSize(295,48);
+    wid->setFixedSize(360,50);
     QHBoxLayout* layout=new QHBoxLayout(wid);
     layout->setContentsMargins(0,0,0,0);
-    layout->setSpacing(5);
+    layout->setSpacing(40);
     layout->addWidget(firstbtn);
     layout->addWidget(secondbtn);
     wid->setLayout(layout);
@@ -97,15 +97,15 @@ void FunctionButtonWidget::add_functionbtn_control(QToolButton* firstbtn, QToolB
 }
 
 /**
- * 设置功能分类按钮样式
+ * 设置按钮样式
  */
-void FunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString btnicon, QString btnname)
+void FullFunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString btnicon, QString btnname)
 {
     char btncolor[300];
     sprintf(btncolor,"QToolButton{background:transparent;border:0px;}\
             QToolButton:hover{background-color:%s;}\
             QToolButton:pressed{background-color:%s;}",MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-    btn->setFixedSize(145,48);
+    btn->setFixedSize(160,50);
     btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
     QHBoxLayout* btnlayout=new QHBoxLayout(btn);
 
@@ -127,12 +127,12 @@ void FunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString btnic
     QByteArray btnnamebyte=btnname.toLocal8Bit();
     char* name=btnnamebyte.data();
     labeltext->setText(tr(name));
-    labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+    labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:16px;}");
     labeltext->adjustSize();
     btnlayout->addWidget(labeltext);
     btn->setLayout(btnlayout);
 
-    btnlayout->setContentsMargins(10,0,btn->width()-10*2-labelicon->width()-labeltext->width(),0);
+    btnlayout->setContentsMargins(20,0,btn->width()-30-10-labelicon->width()-labeltext->width(),0);
     btnlayout->setSpacing(10);
 
     connect(btn, SIGNAL(clicked()), this, SLOT(functionbtn_clicked_slot()));
@@ -141,7 +141,7 @@ void FunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString btnic
 /**
  * 功能分类按钮槽函数
  */
-void FunctionButtonWidget::functionbtn_clicked_slot()
+void FullFunctionButtonWidget::functionbtn_clicked_slot()
 {
     QToolButton* btn=dynamic_cast<QToolButton *>(QObject::sender());
     QWidget* wid=btn->layout()->itemAt(1)->widget();
@@ -151,9 +151,9 @@ void FunctionButtonWidget::functionbtn_clicked_slot()
 }
 
 /**
- * 接收FunctionWidget界面分类按钮列表
+ * 接收FullFunctionWidget界面分类按钮列表
  */
-void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
+void FullFunctionButtonWidget::recv_classificationbtn_list(QStringList list)
 {
     for(int i=0;i<6;i++)
     {
@@ -207,7 +207,7 @@ void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
 /**
  * 更改QLabel图片
  */
-void FunctionButtonWidget::change_label_icon(QLabel *label, QString iconstr)
+void FullFunctionButtonWidget::change_label_icon(QLabel *label, QString iconstr)
 {
     QSvgRenderer* svg=new QSvgRenderer(label);
     svg->load(iconstr);

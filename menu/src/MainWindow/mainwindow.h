@@ -7,6 +7,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QtMath>
+#include <ukuimenuinterface.h>
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
 
@@ -25,6 +26,8 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+
     //主窗口样式
     QWidget* mainwidget=nullptr;
     QHBoxLayout* mainlayout=nullptr;
@@ -37,7 +40,7 @@ private:
 
     //动画
 //    QPropertyAnimation* pAnimation=nullptr;
-    bool is_fullscreen=false;//是否全屏
+//    bool is_full=false;//是否全屏
 //    int classification_widget;
 
 protected:
@@ -52,12 +55,12 @@ private slots:
      * @显示全屏窗口
      * @param arg分类窗口编号
      */
-    void show_fullscreen_widget();
+    void show_fullscreen_widget(int arg);
     /**
      * @显示默认(还原)窗口
      * @param arg分类窗口编号
      */
-    void show_default_widget();
+    void show_default_widget(int arg);
     void recv_hide_mainwindow_slot();//接收隐藏主窗口信号
 
 

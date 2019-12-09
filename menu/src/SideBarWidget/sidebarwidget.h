@@ -9,7 +9,6 @@
 #include <QMouseEvent>
 #include "src/MainViewWidget/mainviewwidget.h"
 #include "src/RightClickMenu/rightclickmenu.h"
-#include "kylin-start-menu-interface.h"
 
 
 namespace Ui {
@@ -94,11 +93,6 @@ private slots:
 
     void shutdownbtn_right_click_slot();//加载关机按钮右键菜单
     void otherbtn_right_click_slot();//记载右键菜单
-    void shutdownbtn_click_slot();
-    void computerbtn_click_slot();
-    void controlbtn_click_slot();
-    void usericonbtn_click_slot();
-    void userAccountsChangedSlot();//监听用户账户如图像发生变化
 
 signals:
     void send_commonusebtn_signal();//发送常用分类按钮信号

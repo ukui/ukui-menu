@@ -3,7 +3,7 @@
 #include <QtSingleApplication>
 #include <QDesktopWidget>
 #include <QFile>
-#include "kylin-start-menu-interface.h"
+#include "ukuimenuinterface.h"
 
 int main(int argc, char *argv[])
 {
@@ -24,8 +24,6 @@ int main(int argc, char *argv[])
     app.setActivationWindow(&w);
 //    w.move(0,a.desktop()->height()-w.height());
     w.setGeometry(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390,532));
-
-//    qDebug()<<KylinStartMenuInterface::get_desktop_path_by_app_name("个人");
 
     w.show();
     w.raise();

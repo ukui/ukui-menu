@@ -1,4 +1,4 @@
-#include "kylin-start-menu-interface.h"
+#include "ukuimenuinterface.h"
 #include <glib.h>
 #include <QDir>
 #include <QDebug>
@@ -7,16 +7,22 @@
 #include <QStringList>
 #include "chineseletterhelper.h"
 
-QStringList KylinStartMenuInterface::filePathList;
-
-KylinStartMenuInterface::KylinStartMenuInterface()
+UkuiMenuInterface::UkuiMenuInterface()
 {
+}
 
+UkuiMenuInterface::~UkuiMenuInterface()
+{
+    delete[] pAppInfo;
 }
 
 //文件递归查询
-void KylinStartMenuInterface::recursive_search_file(const QString& _filePath)
+void UkuiMenuInterface::recursive_search_file(const QString& _filePath)
 {
+    GError** error=nullptr;
+    GKeyFileFlags flags=G_KEY_FILE_NONE;
+    GKeyFile* keyfile=g_key_file_new ();
+
     QDir dir(_filePath);
     if (!dir.exists()) {
         return;
@@ -25,6 +31,7 @@ void KylinStartMenuInterface::recursive_search_file(const QString& _filePath)
     dir.setFilter(QDir::Dirs|QDir::Files|QDir::NoDotAndDotDot);
     dir.setSorting(QDir::DirsFirst);
     QFileInfoList list = dir.entryInfoList();
+    list.removeAll(QFileInfo("/usr/share/applications/screensavers"));
     if(list.size()< 1 ) {
         return;
     }
@@ -39,68 +46,66 @@ void KylinStartMenuInterface::recursive_search_file(const QString& _filePath)
             recursive_search_file(fileInfo.filePath());
         }
         else{
-            QString filePath=fileInfo.filePath();
-            filePathList.append(filePath);
+            //过滤后缀不是.desktop的文件
+            QString filePathStr=fileInfo.filePath();
+            QFileInfo fileinfo(filePathStr);
+            QString file_suffix=fileinfo.suffix();
+            if(QString::compare(file_suffix,"desktop")!=0)
+            {
+                i++;
+                continue;
+            }
+            QByteArray fpbyte=filePathStr.toLocal8Bit();
+            char* filepath=fpbyte.data();
+            g_key_file_load_from_file(keyfile,filepath,flags,error);
+            //过滤LXQt、KDE
+            char* ret=g_key_file_get_locale_string(keyfile,"Desktop Entry","OnlyShowIn", nullptr, nullptr);
+            if(ret!=nullptr)
+            {
+                QString str=QString::fromLocal8Bit(ret);
+                if(QString::compare(str, "LXQt;")==0 || QString::compare(str, "KDE;")==0)
+                {
+                    i++;
+                    continue;
+                }
+            }
+            //过滤中英文名为空的情况
+            QLocale cn;
+            QString language=cn.languageToString(cn.language());
+            if(QString::compare(language,"Chinese")==0)
+            {
+                char* nameCh=g_key_file_get_string(keyfile,"Desktop Entry","Name[zh_CN]", nullptr);
+                char* nameEn=g_key_file_get_string(keyfile,"Desktop Entry","Name", nullptr);
+                if(QString::fromLocal8Bit(nameCh).isEmpty() && QString::fromLocal8Bit(nameEn).isEmpty())
+                {
+                    i++;
+                    continue;
+                }
+            }
+            else {
+                char* name=g_key_file_get_string(keyfile,"Desktop Entry","Name", nullptr);
+                if(QString::fromLocal8Bit(name).isEmpty())
+                {
+                    i++;
+                    continue;
+                }
+            }
+
+            filePathList.append(filePathStr);
         }
         i++;
 
     } while(i < list.size());
 
+    g_key_file_free(keyfile);
+
 }
 
 //获取系统deskyop文件路径
-QStringList KylinStartMenuInterface::get_desktop_file_path()
+QStringList UkuiMenuInterface::get_desktop_file_path()
 {
-    GError** error=nullptr;
-    GKeyFileFlags flags=G_KEY_FILE_NONE;
-    GKeyFile* keyfile=g_key_file_new ();
-
     filePathList.clear();
     recursive_search_file("/usr/share/applications/");
-
-    for(int i=0;i<filePathList.count();i++)
-    {
-        QString category=get_app_categories(filePathList.at(i));
-        if(QString::compare(category,"Screensaver;")==0)
-        {
-            filePathList.removeAt(i);
-            i--;
-            continue;
-        }
-
-        QString appname=get_app_name(filePathList.at(i));
-        if(appname.isEmpty())
-        {
-            filePathList.removeAt(i);
-            i--;
-            continue;
-        }
-
-        QFileInfo fileinfo(filePathList.at(i));
-        QString file_suffix=fileinfo.suffix();
-        if(QString::compare(file_suffix,"desktop")!=0)
-        {
-            filePathList.removeAt(i);
-            i--;
-            continue;
-        }
-
-        QByteArray fpbyte=filePathList.at(i).toLocal8Bit();
-        char* filepath=fpbyte.data();
-        g_key_file_load_from_file(keyfile,filepath,flags,error);
-        char* ret=g_key_file_get_locale_string(keyfile,"Desktop Entry","OnlyShowIn", nullptr, nullptr);
-        if(ret!=nullptr)
-        {
-            QString str=QString::fromLocal8Bit(ret);
-            if(QString::compare(str, "LXQt;")==0 || QString::compare(str, "KDE;")==0)
-            {
-                filePathList.removeAll(filePathList.at(i));
-                i--;
-                continue;
-            }
-        }
-
-    }
 
     filePathList.removeAll("/usr/share/applications/peony-folder-handler.desktop");
     filePathList.removeAll("/usr/share/applications/peony.desktop");
@@ -161,8 +166,50 @@ QStringList KylinStartMenuInterface::get_desktop_file_path()
     return filePathList;
 }
 
+AppInfo* UkuiMenuInterface::pAppInfo=nullptr;
+
+AppInfo *UkuiMenuInterface::create_appinfo_object()
+{
+    QVector<QStringList> vector;
+    vector.append(QStringList()<<"Network");//1网络
+    vector.append(QStringList()<<"Messaging");//2社交
+    vector.append(QStringList()<<"Audio"<<"Video");//3影音
+    vector.append(QStringList()<<"Development");//4开发
+    vector.append(QStringList()<<"Graphics");//5图像
+    vector.append(QStringList()<<"Game");//6游戏
+    vector.append(QStringList()<<"Office"<<"Calculator"<<"Spreadsheet"<<"Presentation"<<"WordProcessor");//7办公
+    vector.append(QStringList()<<"Education");//8教育
+    vector.append(QStringList()<<"System"<<"Settings"<<"Security");//9系统
+
+    QStringList desktopfpList=get_desktop_file_path();
+    AppInfo* pAppInfo=new AppInfo[desktopfpList.count()+1];
+    for(int i=0;i<desktopfpList.count();i++)
+    {
+        pAppInfo[i].desktopfp=desktopfpList.at(i);
+        pAppInfo[i].icon=get_app_icon(desktopfpList.at(i));
+        pAppInfo[i].name=get_app_name(desktopfpList.at(i));
+        pAppInfo[i].exec=get_app_exec(desktopfpList.at(i));
+        pAppInfo[i].comment=get_app_comment(desktopfpList.at(i));
+        bool is_owned=false;//有对应分类
+        for(int j=0;j<vector.size();j++)
+        {
+            if(matching_app_categories(desktopfpList.at(i),vector.at(j)))
+            {
+                is_owned=true;
+                pAppInfo[i].categories.append(QString::number(j+1));
+            }
+        }
+        if(!is_owned)//该应用无对应分类
+            pAppInfo[i].categories.append(QString::number(10));
+    }
+
+    pAppInfo[desktopfpList.count()].desktopfp="";//结束判断条件
+
+    return pAppInfo;
+}
+
 //获取应用名称
-QString KylinStartMenuInterface::get_app_name(QString desktopfp)
+QString UkuiMenuInterface::get_app_name(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -193,7 +240,7 @@ QString KylinStartMenuInterface::get_app_name(QString desktopfp)
 }
 
 //获取英应用英文名
-QString KylinStartMenuInterface::get_app_english_name(QString desktopfp)
+QString UkuiMenuInterface::get_app_english_name(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -208,7 +255,7 @@ QString KylinStartMenuInterface::get_app_english_name(QString desktopfp)
 }
 
 //获取应用分类
-QString KylinStartMenuInterface::get_app_categories(QString desktopfp)
+QString UkuiMenuInterface::get_app_categories(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -223,8 +270,8 @@ QString KylinStartMenuInterface::get_app_categories(QString desktopfp)
 }
 
 //获取应用图标
-QString KylinStartMenuInterface::get_app_icon(QString desktopfp)
-{
+QString UkuiMenuInterface::get_app_icon(QString desktopfp)
+{   
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
     GKeyFile* keyfile=g_key_file_new ();
@@ -238,7 +285,7 @@ QString KylinStartMenuInterface::get_app_icon(QString desktopfp)
 }
 
 //获取应用命令
-QString KylinStartMenuInterface::get_app_exec(QString desktopfp)
+QString UkuiMenuInterface::get_app_exec(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -253,7 +300,7 @@ QString KylinStartMenuInterface::get_app_exec(QString desktopfp)
 }
 
 //获取应用注释
-QString KylinStartMenuInterface::get_app_comment(QString desktopfp)
+QString UkuiMenuInterface::get_app_comment(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -269,7 +316,7 @@ QString KylinStartMenuInterface::get_app_comment(QString desktopfp)
 }
 
 //获取应用类型
-QString KylinStartMenuInterface::get_app_type(QString desktopfp)
+QString UkuiMenuInterface::get_app_type(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -284,24 +331,37 @@ QString KylinStartMenuInterface::get_app_type(QString desktopfp)
 }
 
 //根据应用名获取deskyop文件路径
-QString KylinStartMenuInterface::get_desktop_path_by_app_name(QString appname)
+QString UkuiMenuInterface::get_desktop_path_by_app_name(QString appname)
 {
-    int i=0;
-    QString desktopfilepath;
-    QStringList desktopfpList=get_desktop_file_path();
-    for(i=0;i<desktopfpList.count();i++)
+
+    AppInfo* pAppinfo=this->pAppInfo;
+    while(!pAppinfo->desktopfp.isEmpty())
     {
-        QString name=get_app_name(desktopfpList.at(i));
-        if(QString::compare(name,appname)==0)
+        if(QString::compare(pAppinfo->name,appname)==0)
         {
-            desktopfilepath=desktopfpList.at(i);
+            return pAppinfo->desktopfp;
+            break;
         }
+
+        pAppinfo++;
     }
-    return desktopfilepath;
+
+//    int i=0;
+//    QString desktopfilepath;
+//    QStringList desktopfpList=get_desktop_file_path();
+//    for(i=0;i<desktopfpList.count();i++)
+//    {
+//        QString name=get_app_name(desktopfpList.at(i));
+//        if(QString::compare(name,appname)==0)
+//        {
+//            desktopfilepath=desktopfpList.at(i);
+//        }
+//    }
+//    return desktopfilepath;
 }
 
 //根据应用英文名获取desktop文件路径
-QString KylinStartMenuInterface::get_desktop_path_by_app_english_name(QString appname)
+QString UkuiMenuInterface::get_desktop_path_by_app_english_name(QString appname)
 {
     int i=0;
     QString desktopfilepath;
@@ -317,8 +377,249 @@ QString KylinStartMenuInterface::get_desktop_path_by_app_english_name(QString ap
     return desktopfilepath;
 }
 
+QVector<QStringList> UkuiMenuInterface::get_alphabetic_classification()
+{
+    if(pAppInfo==nullptr)
+        qDebug()<<"---111---";
+//        pAppInfo=create_appinfo_object();
+
+    QVector<QStringList> data;
+//    QStringList desktopfpList=get_desktop_file_path();
+    QStringList appnameList;
+    appnameList.clear();
+    QStringList list[27];
+//    for(int i=0;i<desktopfpList.count();i++)
+    AppInfo* pAppInfo=UkuiMenuInterface::pAppInfo;
+    while(!pAppInfo->desktopfp.isEmpty())
+    {
+//        QString appname=get_app_name(desktopfpList.at(i));
+        QString appname=pAppInfo->name;
+        QString appnamepy=ChineseLetterHelper::GetPinyins(appname);
+        char c=appnamepy.at(0).toLatin1();
+        switch (c) {
+        case 'A':
+            list[0].append(appname);
+            break;
+        case 'B':
+            list[1].append(appname);
+            break;
+        case 'C':
+            list[2].append(appname);
+            break;
+        case 'D':
+            list[3].append(appname);
+            break;
+        case 'E':
+            list[4].append(appname);
+            break;
+        case 'F':
+            list[5].append(appname);
+            break;
+        case 'G':
+            list[6].append(appname);
+            break;
+        case 'H':
+            list[7].append(appname);
+            break;
+        case 'I':
+            list[8].append(appname);
+            break;
+        case 'J':
+            list[9].append(appname);
+            break;
+        case 'K':
+            list[10].append(appname);
+            break;
+        case 'L':
+            list[11].append(appname);
+            break;
+        case 'M':
+            list[12].append(appname);
+            break;
+        case 'N':
+            list[13].append(appname);
+            break;
+        case 'O':
+            list[14].append(appname);
+            break;
+        case 'P':
+            list[15].append(appname);
+            break;
+        case 'Q':
+            list[16].append(appname);
+            break;
+        case 'R':
+            list[17].append(appname);
+            break;
+        case 'S':
+            list[18].append(appname);
+            break;
+        case 'T':
+            list[19].append(appname);
+            break;
+        case 'U':
+            list[20].append(appname);
+            break;
+        case 'V':
+            list[21].append(appname);
+            break;
+        case 'W':
+            list[22].append(appname);
+            break;
+        case 'X':
+            list[23].append(appname);
+            break;
+        case 'Y':
+            list[24].append(appname);
+            break;
+        case 'Z':
+            list[25].append(appname);
+            break;
+        default:
+            list[26].append(appname);
+            break;
+        }
+
+        pAppInfo++;
+    }
+
+    QLocale local;
+    QString language=local.languageToString(local.language());
+    if(QString::compare(language,"Chinese")==0)
+        local=QLocale(QLocale::Chinese);
+    else
+        local=QLocale(QLocale::English);
+    QCollator collator(local);
+
+    for(int i=0;i<26;i++)
+    {
+        std::sort(list[i].begin(),list[i].end(),collator);
+        data.append(list[i]);
+    }
+
+    QStringList otherList;
+    QStringList numberList;
+    for(int i=0;i<list[26].count();i++)
+    {
+//        QString appname=get_app_name(list[26].at(i));
+        QChar c=list[26].at(i).at(0);
+        if(c<48 || (c>57 && c<65) || c>90)
+            otherList.append(list[26].at(i));
+        else
+            numberList.append(list[26].at(i));
+    }
+    std::sort(otherList.begin(),otherList.end(),collator);
+    std::sort(numberList.begin(),numberList.end(),collator);
+    data.append(otherList);
+    data.append(numberList);
+
+    return data;
+}
+
+QVector<QStringList> UkuiMenuInterface::get_functional_classification()
+{
+//    if(this->pAppInfo==nullptr)
+//        this->pAppInfo=create_appinfo_object();
+
+//    QVector<QStringList> vector;
+//    vector.append(QStringList()<<"Network");//网络
+//    vector.append(QStringList()<<"Messaging");//社交
+//    vector.append(QStringList()<<"Audio"<<"Video");//影音
+//    vector.append(QStringList()<<"Development");//开发
+//    vector.append(QStringList()<<"Graphics");//图像
+//    vector.append(QStringList()<<"Game");//游戏
+//    vector.append(QStringList()<<"Office"<<"Calculator"<<"Spreadsheet"<<"Presentation"<<"WordProcessor");//办公
+//    vector.append(QStringList()<<"Education");//教育
+//    vector.append(QStringList()<<"System"<<"Settings"<<"Security");//系统
+
+//    QStringList desktopfpList=get_desktop_file_path();
+//    QStringList appnameList;
+//    appnameList.clear();
+    QStringList list[11];
+
+    AppInfo* pAppInfo=UkuiMenuInterface::pAppInfo;
+    while(!pAppInfo->desktopfp.isEmpty())
+    {
+        QStringList categories=pAppInfo->categories;
+        for(int i=0;i<categories.count();i++)
+        {
+            int category=categories.at(i).toInt();
+            switch (category) {
+            case 1:
+                list[1].append(pAppInfo->name);
+                break;
+            case 2:
+                list[3].append(pAppInfo->name);
+                break;
+            case 3:
+                list[3].append(pAppInfo->name);
+                break;
+            case 4:
+                list[4].append(pAppInfo->name);
+                break;
+            case 5:
+                list[5].append(pAppInfo->name);
+                break;
+            case 6:
+                list[6].append(pAppInfo->name);
+                break;
+            case 7:
+                list[7].append(pAppInfo->name);
+                break;
+            case 8:
+                list[8].append(pAppInfo->name);
+                break;
+            case 9:
+                list[9].append(pAppInfo->name);
+                break;
+            case 10:
+                list[10].append(pAppInfo->name);
+                break;
+            default:
+                break;
+            }
+        }
+        pAppInfo++;
+    }
+
+    QStringList recentList=get_recent_app_list();//最近添加
+    for(int i=0;i<10;i++)
+        list[0].append(recentList.at(i));
+
+    QVector<QStringList> data;
+
+    QLocale local;
+    QString language=local.languageToString(local.language());
+    if(QString::compare(language,"Chinese")==0)
+        local=QLocale(QLocale::Chinese);
+    else
+        local=QLocale(QLocale::English);
+    QCollator collator(local);
+    for(int i=0;i<11;i++)
+    {
+        std::sort(list[i].begin(),list[i].end(),collator);
+        data.append(list[i]);
+    }
+
+    return data;
+
+}
+
+bool UkuiMenuInterface::matching_app_categories(QString desktopfp, QStringList categorylist)
+{
+    QString category=get_app_categories(desktopfp);
+    int index;
+    for(index=0;index<categorylist.count();index++)
+    {
+        if(category.contains(categorylist.at(index),Qt::CaseInsensitive))
+            return true;
+    }
+    if(index==categorylist.count())
+        return false;
+}
+
 //应用排序
-QStringList KylinStartMenuInterface::sort_app_name()
+QStringList UkuiMenuInterface::sort_app_name()
 {
     QStringList desktopfpList=get_desktop_file_path();
     QStringList appnameList;
@@ -462,7 +763,7 @@ QStringList KylinStartMenuInterface::sort_app_name()
     return appnameList;
 }
 
-QStringList KylinStartMenuInterface::get_app_diff_first_letter_pos()
+QStringList UkuiMenuInterface::get_app_diff_first_letter_pos()
 {
     QStringList letterposlist;
     letterposlist.clear();
@@ -525,13 +826,13 @@ QStringList KylinStartMenuInterface::get_app_diff_first_letter_pos()
 }
 
 //获取应用拼音
-QString KylinStartMenuInterface::get_app_name_pinyin(QString appname)
+QString UkuiMenuInterface::get_app_name_pinyin(QString appname)
 {
     return ChineseLetterHelper::GetPinyins(appname);
 }
 
 //获取指定类型应用列表
-QStringList KylinStartMenuInterface::get_specified_category_app_list(QString categorystr)
+QStringList UkuiMenuInterface::get_specified_category_app_list(QString categorystr)
 {
     QByteArray categorybyte=categorystr.toLocal8Bit();
     char* category=categorybyte.data();
@@ -565,7 +866,7 @@ QStringList KylinStartMenuInterface::get_specified_category_app_list(QString cat
 
 }
 
-QStringList KylinStartMenuInterface::get_recent_app_list()
+QStringList UkuiMenuInterface::get_recent_app_list()
 {
     QStringList appnamelist;
     appnamelist.clear();
@@ -672,6 +973,7 @@ QStringList KylinStartMenuInterface::get_recent_app_list()
                             break;
                         QString appname=get_app_name(desktopstr);
                         appnamelist.append(appname);
+//                        appnamelist.append(desktopstr);
                         break;
                     }
                 }
@@ -688,7 +990,7 @@ QStringList KylinStartMenuInterface::get_recent_app_list()
 }
 
 //获取网络应用列表
-QStringList KylinStartMenuInterface::get_network_app_list()
+QStringList UkuiMenuInterface::get_network_app_list()
 {
     QStringList networklist;
     networklist.clear();
@@ -699,7 +1001,7 @@ QStringList KylinStartMenuInterface::get_network_app_list()
 }
 
 //获取社交沟通应用列表
-QStringList KylinStartMenuInterface::get_social_app_list()
+QStringList UkuiMenuInterface::get_social_app_list()
 {
     QStringList sociallist;
     sociallist.clear();
@@ -710,7 +1012,7 @@ QStringList KylinStartMenuInterface::get_social_app_list()
 }
 
 //获取影音播放应用列表
-QStringList KylinStartMenuInterface::get_av_app_list()
+QStringList UkuiMenuInterface::get_av_app_list()
 {
     QStringList avlist;
     QStringList avlist_1;
@@ -735,7 +1037,7 @@ QStringList KylinStartMenuInterface::get_av_app_list()
 }
 
 //获取开发编程应用列表
-QStringList KylinStartMenuInterface::get_develop_app_list()
+QStringList UkuiMenuInterface::get_develop_app_list()
 {
     QStringList videolist;
     videolist.clear();
@@ -745,7 +1047,7 @@ QStringList KylinStartMenuInterface::get_develop_app_list()
 }
 
 //获取图形图像应用列表
-QStringList KylinStartMenuInterface::get_graphics_app_list()
+QStringList UkuiMenuInterface::get_graphics_app_list()
 {
     QStringList graphiclist;
     graphiclist.clear();
@@ -755,7 +1057,7 @@ QStringList KylinStartMenuInterface::get_graphics_app_list()
 }
 
 //获取游戏娱乐应用列表
-QStringList KylinStartMenuInterface::get_game_app_list()
+QStringList UkuiMenuInterface::get_game_app_list()
 {
     QStringList gamelist;
     gamelist.clear();
@@ -765,7 +1067,7 @@ QStringList KylinStartMenuInterface::get_game_app_list()
 }
 
 //获取办公学习应用列表
-QStringList KylinStartMenuInterface::get_office_app_list()
+QStringList UkuiMenuInterface::get_office_app_list()
 {
     QStringList office=get_specified_category_app_list("Office");
     QStringList calculator=get_specified_category_app_list("Calculator");
@@ -820,7 +1122,7 @@ QStringList KylinStartMenuInterface::get_office_app_list()
 }
 
 //阅读翻译
-QStringList KylinStartMenuInterface::get_education_app_list()
+QStringList UkuiMenuInterface::get_education_app_list()
 {
     QStringList educationlist;
     educationlist.clear();
@@ -829,7 +1131,7 @@ QStringList KylinStartMenuInterface::get_education_app_list()
 }
 
 //获取系统管理应用列表
-QStringList KylinStartMenuInterface::get_systemadmin_app_list()
+QStringList UkuiMenuInterface::get_systemadmin_app_list()
 {
     QStringList systemlist=get_specified_category_app_list("System");
     QStringList settingslist=get_specified_category_app_list("Settings");
@@ -869,7 +1171,7 @@ QStringList KylinStartMenuInterface::get_systemadmin_app_list()
 }
 
 //获取其他应用列表
-QStringList KylinStartMenuInterface::get_other_app_list()
+QStringList UkuiMenuInterface::get_other_app_list()
 {
     QStringList otherlist;
     otherlist.clear();
@@ -906,7 +1208,7 @@ QStringList KylinStartMenuInterface::get_other_app_list()
 }
 
 //移除重复项
-void KylinStartMenuInterface::remove_repetition_appname(QStringList &list, QStringList complist)
+void UkuiMenuInterface::remove_repetition_appname(QStringList &list, QStringList complist)
 {
     for(int i=0;i<complist.count();i++)
         for(int j=0;j<list.count();j++)
@@ -920,7 +1222,7 @@ void KylinStartMenuInterface::remove_repetition_appname(QStringList &list, QStri
 }
 
 //获取用户图像
-QString KylinStartMenuInterface::get_user_icon()
+QString UkuiMenuInterface::get_user_icon()
 {
     qint64 uid=static_cast<qint64>(getuid());
     QDBusInterface iface("org.freedesktop.Accounts",
@@ -938,7 +1240,7 @@ QString KylinStartMenuInterface::get_user_icon()
     return iconstr;
 }
 
-QString KylinStartMenuInterface::get_user_name()
+QString UkuiMenuInterface::get_user_name()
 {
     qint64 uid=static_cast<qint64>(getuid());
 //    QString name=QDir::homePath();

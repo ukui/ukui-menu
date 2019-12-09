@@ -12,12 +12,10 @@
 #include <QProcess>
 #include <QSvgRenderer>
 #include <QHeaderView>
-#include <QDesktopWidget>
-#include "src/UtilityFunction/scrollarea.h"
-#include "kylin-start-menu-interface.h"
+#include <ukuimenuinterface.h>
 #include "src/RightClickMenu/rightclickmenu.h"
-#include "src/UtilityFunction/qflowlayout.h"
-#include "src/UtilityFunction/pushbutton.h"
+#include "src/UtilityFunction/listview.h"
+#include "src/UtilityFunction/itemdelegate.h"
 
 namespace Ui {
 class CommonUseWidget;
@@ -31,44 +29,35 @@ public:
     explicit CommonUseWidget(QWidget *parent = nullptr);
     ~CommonUseWidget();
 
-    void load_min_wid();
-    void load_max_wid();
-
 private:
     Ui::CommonUseWidget *ui;
     QSettings *setting=nullptr;
 
     QHBoxLayout* mainLayout=nullptr;
-    bool is_fullscreen=false;
 
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
     //应用列表界面
     QWidget* applistWid=nullptr;
 
-    ScrollArea* scrollarea;
-    QWidget* scrollareawid;
-    QFlowLayout* flowlayout;
+    ListView* listview=nullptr;
+    ItemDelegate* m_delegate=nullptr;
+    QVector<QStringList> data;
 
     RightClickMenu* menu=nullptr;
-    QStringList applist;
-
-    QWidget* wid;
 
 protected:
     void init_widget();
-
     void init_applist_widget();//初始化应用列表界面
-
-    void fill_app_list();//填充应用列表
+    void fill_app_tablewidget();//填充应用列表
 
 
 private slots:
-    void ViewOpenedSlot(QDBusMessage msg);
-    void update_app_list(QString appname);//字母排序与功能分类模块固定或取消固定到常用软件时更新应用列表
-    void recv_right_click_slot(int ret);//接收右键菜单返回值槽函数
-    void update_app_list(QString name,int arg);//有软件卸载时更新应用列表
+    void update_listview_slot();//更新应用列表槽函数
+    void exec_app_name(QStringList arg);//执行应用程序
 
 signals:
     void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
+    void send_update_applist_signal();//向FullCommonUseWidget发送更新应用列表信号
 };
 
 #endif // COMMONUSEWIDGET_H

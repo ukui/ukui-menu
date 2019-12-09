@@ -1,7 +1,7 @@
 #ifndef SEARCHAPPTHREAD_H
 #define SEARCHAPPTHREAD_H
 #include <QThread>
-#include "kylin-start-menu-interface.h"
+#include <ukuimenuinterface.h>
 #include <QObject>
 
 class SearchAppThread : public QThread
@@ -9,12 +9,15 @@ class SearchAppThread : public QThread
     Q_OBJECT
 public:
     SearchAppThread();
+    ~SearchAppThread();
     void run();
 
 private:
     QString keyword;
+    QStringList appnamepyList;
     QStringList appnameList;
     QStringList searchResultList;
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
 private slots:
     void recv_search_keyword(QString arg);

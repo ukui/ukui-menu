@@ -67,9 +67,6 @@ void SideBarWidget::add_sidebar_btn()
     connect(commonusebtn,SIGNAL(clicked()),this,SLOT(commonusebtn_clicked_slot()));
     connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));
     connect(functionbtn,SIGNAL(clicked()),this,SLOT(functionbtn_clicked_slot()));
-    connect(computerbtn,SIGNAL(clicked()),this,SLOT(computerbtn_click_slot()));
-    connect(controlbtn,SIGNAL(clicked()),this,SLOT(controlbtn_click_slot()));
-    connect(shutdownbtn,SIGNAL(clicked()),this,SLOT(shutdownbtn_click_slot()));
 
     commonusebtnname=new QLabel;
     commonusebtnname->setText(tr("常用软件"));
@@ -195,8 +192,7 @@ void SideBarWidget::init_usericon_widget()
     usernamelayout=new QHBoxLayout(usernamewid);
     usernamelayout->setContentsMargins(0,0,0,0);
     usernamelabel=new QLabel(usernamewid);
-    QString username=KylinStartMenuInterface::get_user_name();
-    usernamelabel->setText(username);
+    usernamelabel->setText("UKylin");
     usernamelabel->adjustSize();
     usernamelabel->setFixedSize(160,18);
     usernamelabel->setStyleSheet("background:transparent;color:#ffffff;font-size:18px;");
@@ -208,40 +204,6 @@ void SideBarWidget::init_usericon_widget()
     userLayout->addWidget(usericonwid);
     userLayout->addWidget(usernamewid);
     userwid->setLayout(userLayout);
-
-    connect(usericonbtn,SIGNAL(clicked()),this,SLOT(usericonbtn_click_slot()));
-    qint64 uid=static_cast<qint64>(getuid());
-    QDBusInterface iface("org.freedesktop.Accounts",
-                         "/org/freedesktop/Accounts",
-                         "org.freedesktop.Accounts",
-                         QDBusConnection::systemBus());
-    QDBusReply<QDBusObjectPath> objPath=iface.call("FindUserById",uid);
-//    qDebug()<<objPath.value().path();
-    QDBusConnection::sessionBus().connect("org.freedesktop.Accounts",objPath.value().path(),"org.freedesktop.Accounts.User",
-                                         QString("Changed"),this,SLOT(userAccountsChangedSlot()));
-
-}
-
-//监听用户账户如图像发生变化
-void SideBarWidget::userAccountsChangedSlot()
-{
-    qDebug()<<"---322--";
-    QString usericon=KylinStartMenuInterface::get_user_icon();
-    QFile file(usericon);
-    if(!file.exists())
-    {
-        if(!is_fullscreen)
-        {
-            usericon=QString(":/data/img/sidebarwidget/usericon.png");
-            usericonbtn->setIconSize(QSize(36,36));
-        }
-        else
-        {
-            usericon=QString(":/data/img/sidebarwidget/fullusericon.png");
-            usericonbtn->setIconSize(QSize(50,50));
-        }
-    }
-    usericonbtn->setIcon(QIcon(usericon));
 }
 
 /**
@@ -252,10 +214,7 @@ void SideBarWidget::shutdownbtn_right_click_slot()
     shutdownmenu=new RightClickMenu;
     int ret=shutdownmenu->show_shutdown_menu();
     if(ret>=10 && ret<=14)
-    {
         emit send_hide_mainwindow_signal();
-        system("ukui-session-tools");
-    }
 }
 
 void SideBarWidget::add_right_click_menu(QPushButton *btn)
@@ -286,21 +245,13 @@ void SideBarWidget::load_min_sidebar()
     userwid->setFixedSize(60,75);
     userLayout->setContentsMargins(0,15,0,24);
     usericonwid->setFixedSize(60,36);
-    usericonbtn->setFixedSize(36,36);
-    QString usericon=KylinStartMenuInterface::get_user_icon();
-    QFile file(usericon);
-    if(!file.exists())
-        usericon=QString(":/data/img/sidebarwidget/usericon.png");
-    usericonbtn->setIcon(QIcon(usericon));
-    usericonbtn->setIconSize(QSize(36,36));
-
-//    QPixmap pixmap(QString(":/data/img/sidebarwidget/usericon.png"));
-//    usericonbtn->setFixedSize(pixmap.size());
-//    char btncolor[300];
-//    sprintf(btncolor,"QToolButton{background:transparent;border:0px;image:url(:/data/img/sidebarwidget/usericon.png)}\
-//            QToolButton:hover{background-color:%s;}\
-//            QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
-//    usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+    QPixmap pixmap(QString(":/data/img/sidebarwidget/usericon.png"));
+    usericonbtn->setFixedSize(pixmap.size());
+    char btncolor[300];
+    sprintf(btncolor,"QToolButton{background:transparent;border:0px;image:url(:/data/img/sidebarwidget/usericon.png)}\
+            QToolButton:hover{background-color:%s;}\
+            QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
+    usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
     set_min_sidebar_btn(commonusebtn);
     set_min_sidebar_btn(letterbtn);
@@ -358,20 +309,13 @@ void SideBarWidget::load_max_sidebar()
     userLayout->setContentsMargins(0,45,0,72);
     userLayout->setSpacing(15);
     usericonwid->setFixedSize(160,50);
-    usericonbtn->setFixedSize(50,50);
-    QString usericon=KylinStartMenuInterface::get_user_icon();
-    QFile file(usericon);
-    if(!file.exists())
-        usericon=QString(":/data/img/sidebarwidget/fullusericon.png");
-    usericonbtn->setIcon(QIcon(usericon));
-    usericonbtn->setIconSize(QSize(50,50));
-//    QPixmap pixmap(QString(":/data/img/sidebarwidget/fullusericon.png"));
-//    usericonbtn->setFixedSize(pixmap.size());
-//    char btncolor[300];
-//    sprintf(btncolor,"QToolButton{background:transparent;border:0px;image:url(:/data/img/sidebarwidget/fullusericon.png)}\
-//            QToolButton:hover{background-color:%s;}\
-//            QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
-//    usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+    QPixmap pixmap(QString(":/data/img/sidebarwidget/fullusericon.png"));
+    usericonbtn->setFixedSize(pixmap.size());
+    char btncolor[300];
+    sprintf(btncolor,"QToolButton{background:transparent;border:0px;image:url(:/data/img/sidebarwidget/fullusericon.png)}\
+            QToolButton:hover{background-color:%s;}\
+            QToolButton:pressed{background-color:%s;}",SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
+    usericonbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
     spaceWid->setFixedSize(this->width(),this->height()-userwid->height()-6*commonusebtn->height());
 
@@ -496,13 +440,6 @@ void SideBarWidget::set_max_sidebar_btn(QPushButton *btn)
 //    }
 //}
 
-void SideBarWidget::usericonbtn_click_slot()
-{
-    emit send_hide_mainwindow_signal();
-    QProcess *process=new QProcess(this);
-    process->startDetached("ukui-control-center -u");
-}
-
 void SideBarWidget::commonusebtn_clicked_slot()
 {
     char style[300];
@@ -517,9 +454,9 @@ void SideBarWidget::commonusebtn_clicked_slot()
     letterbtn->setStyleSheet(style);
     functionbtn->setStyleSheet(style);
 
-//    if(is_fullscreen)
-//        emit send_fullscreen_commonusebtn_signal();
-    emit send_commonusebtn_signal();
+    if(is_fullscreen)
+        emit send_fullscreen_commonusebtn_signal();
+    else emit send_commonusebtn_signal();
 
 }
 
@@ -536,9 +473,9 @@ void SideBarWidget::letterbtn_clicked_slot()
     commonusebtn->setStyleSheet(style);
     functionbtn->setStyleSheet(style);
 
-//    if(is_fullscreen)
-//        emit send_fullscreen_letterbtn_signal();
-    emit send_letterbtn_signal();
+    if(is_fullscreen)
+        emit send_fullscreen_letterbtn_signal();
+    else emit send_letterbtn_signal();
 
 }
 
@@ -555,48 +492,9 @@ void SideBarWidget::functionbtn_clicked_slot()
     commonusebtn->setStyleSheet(style);
     letterbtn->setStyleSheet(style);
 
-//    if(is_fullscreen)
-//        emit send_fullscreen_functionbtn_signal();
-    emit send_functionbtn_signal();
-}
-
-void SideBarWidget::computerbtn_click_slot()
-{
-    emit send_hide_mainwindow_signal();
-    QString execpath=KylinStartMenuInterface::get_app_exec(QString("/usr/share/applications/peony-computer.desktop"));
-    //移除启动参数%u或者%U
-    for(int i=0;i<execpath.length();i++)
-    {
-        if(execpath.at(i)=='%')
-        {
-            execpath.remove(i,2);
-        }
-    }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
-}
-
-void SideBarWidget::controlbtn_click_slot()
-{
-    emit send_hide_mainwindow_signal();
-    QString execpath=KylinStartMenuInterface::get_app_exec(QString("/usr/share/applications/ukui-control-center.desktop"));
-    //移除启动参数%u或者%U
-    for(int i=0;i<execpath.length();i++)
-    {
-        if(execpath.at(i)=='%')
-        {
-            execpath.remove(i,2);
-        }
-    }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
-
-}
-
-void SideBarWidget::shutdownbtn_click_slot()
-{
-    emit send_hide_mainwindow_signal();
-    system("ukui-session-tools");
+    if(is_fullscreen)
+        emit send_fullscreen_functionbtn_signal();
+    else emit send_functionbtn_signal();
 }
 
 /**

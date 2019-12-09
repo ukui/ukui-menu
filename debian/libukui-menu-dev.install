@@ -1,2 +1,2 @@
 lib/libukui-menu.so usr/lib/
-interface/kylin-start-menu-interface.h usr/include/
+interface/ukuimenuinterface.h usr/include/

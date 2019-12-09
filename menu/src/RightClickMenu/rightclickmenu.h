@@ -15,6 +15,7 @@
 #include <QFileInfo>
 #include <QDBusInterface>
 #include <QProcess>
+#include <ukuimenuinterface.h>
 #include "src/AttributeDialog/attributedialog.h"
 #include "src/color.h"
 
@@ -91,6 +92,8 @@ private:
     QWidget* OtherListWid;
 
     AttributeDialog* attrDialog;
+
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
 protected:
     void add_commonuse_appbtn_action();

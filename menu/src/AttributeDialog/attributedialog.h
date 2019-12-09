@@ -13,10 +13,9 @@
 #include <QScrollBar>
 #include <QPixmap>
 #include <QTextEdit>
-#include <QHeaderView>
-#include "src/color.h"
-#include "kylin-start-menu-interface.h"
+#include <ukuimenuinterface.h>
 #include "src/UtilityFunction/toolbutton.h"
+#include "src/color.h"
 
 namespace Ui {
 class AttributeDialog;
@@ -32,6 +31,8 @@ public:
 
 private:
     Ui::AttributeDialog *ui;
+
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     QVBoxLayout* mainLayout=nullptr;
     QWidget* titlebarWid=nullptr;

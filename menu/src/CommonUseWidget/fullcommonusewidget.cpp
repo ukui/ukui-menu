@@ -1,27 +1,24 @@
-#include "commonusewidget.h"
-#include "ui_commonusewidget.h"
+#include "fullcommonusewidget.h"
+#include "ui_fullcommonusewidget.h"
+#include <QDesktopWidget>
 #include "src/color.h"
-#include <QDBusInterface>
-#include <QDBusReply>
-#include <QDir>
 #include <QDebug>
 
-CommonUseWidget::CommonUseWidget(QWidget *parent) :
+FullCommonUseWidget::FullCommonUseWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::CommonUseWidget)
+    ui(new Ui::FullCommonUseWidget)
 {
     ui->setupUi(this);
     init_widget();
-
 }
 
-CommonUseWidget::~CommonUseWidget()
+FullCommonUseWidget::~FullCommonUseWidget()
 {
     delete ui;
     delete pUkuiMenuInterface;
 }
 
-void CommonUseWidget::init_widget()
+void FullCommonUseWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -29,11 +26,10 @@ void CommonUseWidget::init_widget()
     sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
     this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,462);
+    this->setFixedSize(QApplication::desktop()->availableGeometry().width()-160,
+                       QApplication::desktop()->availableGeometry().height()-70);
 
-    mainLayout=new  QHBoxLayout(this);
-    mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(0);
+    mainLayout=new QVBoxLayout(this);
     applistWid=new QWidget(this);
     applistWid->setStyleSheet("border:0px;background: transparent;");
     applistWid->setFixedSize(this->width(),this->height());
@@ -49,28 +45,22 @@ void CommonUseWidget::init_widget()
     fill_app_tablewidget();
 }
 
-/**
- * 初始化应用列表界面
- */
-void CommonUseWidget::init_applist_widget()
+void FullCommonUseWidget::init_applist_widget()
 {
     QHBoxLayout* layout=new QHBoxLayout(applistWid);
-    layout->setContentsMargins(2,0,2,0);
-    listview=new ListView(this,applistWid->width()-4,applistWid->height(),0);
+    layout->setContentsMargins(30,0,2,0);
+    listview=new FullListView(this,applistWid->width()-32-12,applistWid->height(),0);
     layout->addWidget(listview);
     applistWid->setLayout(layout);
-    connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(exec_app_name(QStringList)));
+    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
     connect(listview,SIGNAL(send_update_applist_signal()),this,SIGNAL(send_update_applist_signal()));
 
 }
 
-/**
- * 填充应用列表
- */
-void CommonUseWidget::fill_app_tablewidget()
+void FullCommonUseWidget::fill_app_tablewidget()
 {
-    char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
+    char pushbtncolor[300];
+    sprintf(pushbtncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
             QPushButton:hover{background-color:%s;}\
             QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
 
@@ -91,10 +81,10 @@ void CommonUseWidget::fill_app_tablewidget()
     for(int i=0;i<applist.count();i++)
     {
         QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(applist.at(i));
-        data.append(QStringList()<<desktopfp<<"1");
+        data.append(desktopfp);
     }
 
-    m_delegate= new ItemDelegate(this,0);
+    m_delegate= new FullItemDelegate(this,0);
     listview->setItemDelegate(m_delegate);
     listview->addData(data);
     setting->endGroup();
@@ -103,10 +93,10 @@ void CommonUseWidget::fill_app_tablewidget()
 /**
  * 执行应用程序
  */
-void CommonUseWidget::exec_app_name(QStringList arg)
+void FullCommonUseWidget::exec_app_name(QString appname)
 {
     emit send_hide_mainwindow_signal();
-    QString execpath=pUkuiMenuInterface->get_app_exec(arg.at(0));
+    QString execpath=pUkuiMenuInterface->get_app_exec(pUkuiMenuInterface->get_desktop_path_by_app_name(appname));
     //    qDebug()<<execpath;
     //移除启动参数%u或者%U
     for(int i=0;i<execpath.length();i++)
@@ -120,11 +110,10 @@ void CommonUseWidget::exec_app_name(QStringList arg)
     process->startDetached(execpath);
 }
 
-
 /**
- * 更新应用列表槽函数
+ * 更新应用列表
  */
-void CommonUseWidget::update_listview_slot()
+void FullCommonUseWidget::update_listview_slot()
 {
     QStringList keys;
     keys.clear();
@@ -143,10 +132,9 @@ void CommonUseWidget::update_listview_slot()
     for(int i=0;i<applist.count();i++)
     {
         QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(applist.at(i));
-        data.append(QStringList()<<desktopfp<<"1");
+        data.append(desktopfp);
     }
 
     listview->updateData(data);
     setting->endGroup();
-
 }

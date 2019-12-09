@@ -9,11 +9,11 @@ include(../common.pri)
 }else{
     SOURCES += \
         chineseletterhelper.cpp \
-        kylin-start-menu-interface.cpp
+        ukuimenuinterface.cpp
 
     HEADERS += \
         chineseletterhelper.h \
-        kylin-start-menu-interface.h
+        ukuimenuinterface.h
 
     PKGCONFIG+=glib-2.0
     CONFIG += no_keywords link_pkgconfig

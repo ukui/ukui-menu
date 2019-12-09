@@ -3,7 +3,7 @@
 
 RightClickMenu::RightClickMenu()
 {
-    QString path=QDir::homePath()+"/.config/ukui-start-menu/ukui-start-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
     attrDialog=new AttributeDialog;
@@ -62,6 +62,8 @@ RightClickMenu::RightClickMenu()
     AttributeAction=new QWidgetAction(appbtnmenu);
     AttributeWid=new QWidget();
 
+    pUkuiMenuInterface=new UkuiMenuInterface;
+
     add_shutdown_action();
     add_other_action();
 }
@@ -99,12 +101,14 @@ RightClickMenu::~RightClickMenu()
     delete OtherUnfix2TaskBarWid;
     delete OtherListWid;
 
+    delete pUkuiMenuInterface;
+
 }
 
 //常用应用按钮右键菜单
 void RightClickMenu::add_commonuse_appbtn_action()
 {
-    setting->beginGroup("activeApps");
+    setting->beginGroup("application");
     if(!setting->contains(appname) || setting->value(appname).toInt()>0)
     {
         init_widget_action(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg","固定到“常用软件”");
@@ -121,7 +125,7 @@ void RightClickMenu::add_commonuse_appbtn_action()
         connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixed4commonuseaction_trigger_slot()));
     }
 
-    QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(appname);
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
     QDBusInterface iface("com.kylin.security.controller.filectrl",
                          "/",
                          "com.kylin.security.controller.filectrl",
@@ -207,7 +211,7 @@ void RightClickMenu::add_commonuse_appbtn_action()
 void RightClickMenu::add_appbtn_action()
 {
 
-    setting->beginGroup("activeApps");
+    setting->beginGroup("application");
     if(!setting->contains(appname) || setting->value(appname).toInt()>0)
     {
         init_widget_action(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg","固定到“常用软件”");
@@ -225,15 +229,27 @@ void RightClickMenu::add_appbtn_action()
     }
     setting->endGroup();
 
-    init_widget_action(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg","固定到任务栏");
-    Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
-    appbtnmenu->addAction(Fix2TaskBarAction);
-    connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+    QDBusInterface iface("com.kylin.security.controller.filectrl",
+                         "/",
+                         "com.kylin.security.controller.filectrl",
+                         QDBusConnection::sessionBus());
 
-    init_widget_action(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg","从任务栏取消固定");
-    Unfixed4TaskBarAction->setDefaultWidget(Unfixed4TaskBarWid);
-//    appbtnmenu->addAction(Unfixed4TaskBarAction);
-    connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+    QDBusReply<QVariant> ret=iface.call("CheckIfExist",desktopfp);
+    if(!ret.value().toBool())
+    {
+        init_widget_action(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg","固定到任务栏");
+        Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
+        appbtnmenu->addAction(Fix2TaskBarAction);
+        connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+
+    }
+    else{
+        init_widget_action(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg","从任务栏取消固定");
+        Unfixed4TaskBarAction->setDefaultWidget(Unfixed4TaskBarWid);
+        appbtnmenu->addAction(Unfixed4TaskBarAction);
+        connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+    }
 
     init_widget_action(Add2DesktopWid,"","添加到桌面快捷方式");
     Add2DesktopAction->setDefaultWidget(Add2DesktopWid);
@@ -376,7 +392,7 @@ void RightClickMenu::init_widget_action(QWidget *wid, QString iconstr, QString t
 void RightClickMenu::fix2commonuseaction_trigger_slot()
 {
     action_number=1;
-    setting->beginGroup("activeApps");
+    setting->beginGroup("application");
     setting->setValue(appname,0);
     setting->sync();
     setting->endGroup();
@@ -386,7 +402,7 @@ void RightClickMenu::fix2commonuseaction_trigger_slot()
 void RightClickMenu::unfixed4commonuseaction_trigger_slot()
 {
     action_number=2;
-    setting->beginGroup("activeApps");
+    setting->beginGroup("application");
     setting->setValue(appname,2);
     setting->sync();
     setting->endGroup();
@@ -395,19 +411,19 @@ void RightClickMenu::unfixed4commonuseaction_trigger_slot()
 
 void RightClickMenu::fix2taskbaraction_trigger_slot()
 {
-    QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(appname);
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
     QDBusInterface iface("com.kylin.security.controller.filectrl",
                          "/",
                          "com.kylin.security.controller.filectrl",
                          QDBusConnection::sessionBus());
     QDBusReply<QVariant> ret=iface.call("AddToTaskbar",desktopfp);
-//    qDebug()<<desktopfp<<ret.value().toBool();
+    //    qDebug()<<desktopfp<<ret.value().toBool();
     action_number=3;
 }
 
 void RightClickMenu::unfixed4taskbaraction_trigger_slot()
 {
-    QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(appname);
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
     QDBusInterface iface("com.kylin.security.controller.filectrl",
                          "/",
                          "com.kylin.security.controller.filectrl",
@@ -436,7 +452,7 @@ void RightClickMenu::attributeaction_trigger_slot()
 void RightClickMenu::cudeleteaction_trigger_slot()
 {
     action_number=8;
-    setting->beginGroup("activeApps");
+    setting->beginGroup("application");
     setting->remove(appname);
     setting->sync();
     setting->endGroup();
@@ -445,65 +461,66 @@ void RightClickMenu::cudeleteaction_trigger_slot()
 void RightClickMenu::cudeleteallaction_trigger_slot()
 {
     action_number=9;
-//    setting->beginGroup("activeApps");
-//    QStringList keys=setting->childKeys();
-//    for(int i=0;i<keys.count();i++)
-//    {
-//        if(setting->value(keys.at(i)).toInt()>0)
-//        {
-//            setting->remove(keys.at(i));
-//        }
-//    }
-//    setting->endGroup();
+    setting->beginGroup("application");
+    QStringList keys=setting->childKeys();
+    for(int i=0;i<keys.count();i++)
+    {
+        if(setting->value(keys.at(i)).toInt()==2)
+        {
+            setting->remove(keys.at(i));
+        }
+    }
+    setting->sync();
+    setting->endGroup();
 
 }
 
 void RightClickMenu::lockscreenaction_trigger_slot()
 {
     action_number=10;
-//    if(QFileInfo::exists(QString("/usr/bin/ukui-screensaver-command")))
-//        system("ukui-screensaver-command -l");
-//    else {
-//        system( "mate-screensaver-command -l" );
-//    }
+    if(QFileInfo::exists(QString("/usr/bin/ukui-screensaver-command")))
+        system("ukui-screensaver-command -l");
+    else {
+        system( "mate-screensaver-command -l" );
+    }
 }
 
 void RightClickMenu::switchuseraction_trigger_slot()
 {
     action_number=11;
-//    char buffer[100];
-//    FILE* fp;
-//    fp=popen("echo $XDG_SEAT_PATH","r");
-//    fgets(buffer,sizeof(buffer),fp);
-//    int i=0;
-//    while(*(buffer+i)!='\n')
-//        i++;
-//    *(buffer+i)='\0';
-//    QString obj_path=QString::fromLocal8Bit(buffer);
-//    fclose(fp);
-//    QDBusInterface iface("org.freedesktop.DisplayManager",obj_path,
-//                         "org.freedesktop.DisplayManager.Seat",QDBusConnection::systemBus());
-//    iface.call("SwitchToGreeter");
+    char buffer[100];
+    FILE* fp;
+    fp=popen("echo $XDG_SEAT_PATH","r");
+    fgets(buffer,sizeof(buffer),fp);
+    int i=0;
+    while(*(buffer+i)!='\n')
+        i++;
+    *(buffer+i)='\0';
+    QString obj_path=QString::fromLocal8Bit(buffer);
+    fclose(fp);
+    QDBusInterface iface("org.freedesktop.DisplayManager",obj_path,
+                         "org.freedesktop.DisplayManager.Seat",QDBusConnection::systemBus());
+    iface.call("SwitchToGreeter");
 }
 
 void RightClickMenu::logoutaction_trigger_slot()
 {
     action_number=12;
-//    system("ukui-session-save --logout-dialog &");
+    system("ukui-session-save --logout-dialog &");
 }
 
 void RightClickMenu::rebootaction_trigger_slot()
 {
     action_number=13;
-//    QDBusInterface iface("org.gnome.SessionManager","/org/gnome/SessionManager",
-//                         "org.gnome.SessionManager",QDBusConnection::sessionBus());
-//    iface.call("RequestReboot");
+    QDBusInterface iface("org.gnome.SessionManager","/org/gnome/SessionManager",
+                         "org.gnome.SessionManager",QDBusConnection::sessionBus());
+    iface.call("RequestReboot");
 }
 
 void RightClickMenu::shutdownaction_trigger_slot()
 {
     action_number=14;
-//    system("ukui-session-save --shutdown-dialog &");
+    system("ukui-session-save --shutdown-dialog &");
 }
 
 void RightClickMenu::otherlistaction_trigger_slot()

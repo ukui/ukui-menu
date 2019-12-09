@@ -4,15 +4,10 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QTableWidget>
-#include <QScrollBar>
-#include "src/UtilityFunction/scrollarea.h"
+#include <ukuimenuinterface.h>
 #include "letterbuttonwidget.h"
-#include "src/RightClickMenu/rightclickmenu.h"
-#include "src/UtilityFunction/qflowlayout.h"
-#include "src/UtilityFunction/pushbutton.h"
-#include "src/UtilityFunction/classifybutton.h"
-#include "src/UtilityFunction/classifyscrollarea.h"
-#include "src/UtilityFunction/toolbutton.h"
+#include "src/UtilityFunction/listview.h"
+#include "src/UtilityFunction/itemdelegate.h"
 
 namespace Ui {
 class LetterWidget;
@@ -26,69 +21,57 @@ public:
      explicit LetterWidget(QWidget *parent=nullptr);
     ~LetterWidget();
 
-     void load_min_wid();
-     void load_max_wid();
+    /**
+      * 设置字母排序界面状态
+      * @param state为0时字母排序界面加载应用列表，为1时加载纯字母按钮界面LetterButtonWidget
+      * @param btnname存放有具体的字母
+      */
+     void set_letterwidge_state(int state,QString btnname);
 
 private:
     Ui::LetterWidget *ui;
 
-    bool is_fullscreen=false;
-    bool is_letterbtnwid=false;
-    LetterButtonWidget* letterbtnwid=nullptr;
-    QVBoxLayout* mainLayout=nullptr;
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
-    //应用列表界面
-    QWidget* applistWid=nullptr;
+    QHBoxLayout* mainLayout=nullptr;
 
-    ScrollArea* scrollarea=nullptr;
-    QWidget* scrollareawid=nullptr;
-    QVBoxLayout* scrollareawidLayout=nullptr;
+    QWidget* applistWid=nullptr;//应用列表界面
+    LetterButtonWidget* letterbtnwid=nullptr;//分类按钮界面
+
+    ListView* applistview=nullptr;
+    QVector<QStringList> data;
+    ItemDelegate* m_delegate=nullptr;
+
     QStringList letterbtnlist;//存放字母按钮
     QStringList letterbtnrowlist;//存放字母按钮所在行
     QStringList letterposlist;//存放分类字符位置列表
     QStringList appsortlist;//存放应用排序列表
 
-    RightClickMenu* menu=nullptr;//右键菜单
-
-    //字母列表界面
-    QWidget* letterlistWid=nullptr;
-    QHBoxLayout* letterlistLayout=nullptr;
-    QTableWidget* letterlisttableWid=nullptr;
-    ToolButton* leftbtn=nullptr;
-    ToolButton* rightbtn=nullptr;
-    QSpacerItem* letterlistleftSpacer=nullptr;
-    QSpacerItem* letterlistrightSpacer=nullptr;
-
-    ClassifyScrollArea* letterlistscrollarea=nullptr;
-    QWidget* letterlistscrollareaWid=nullptr;
-    QHBoxLayout* letterlistscrollareawidLayout=nullptr;
-    int btnPos=0;
-
 protected:
     void init_widget();
     void init_applist_widget();//初始化应用列表界面
-    void fill_app_list();//填充应用列表
-    QStringList get_alphabetic_classification_applist(int start,int end);//获取属于同一类分类字符应用列表
-
-    void init_letterlist_widget();//初始化字母列表界面
-    void init_letterlist_scrollarea();//初始化字母列表
-
-    void insert_letter_btn(QString letter,int pos);//插入字母按钮
-    void insert_appbtn_wid(QString desktopfn,int pos);//插入应用按钮界面
+    void fill_app_listview();//填充应用列表
 
 private slots:
     void app_classificationbtn_clicked_slot();//应用列表字母分类按钮槽函数
     void recv_letterbtn_signal(QString btnname);//接收LetterButtonWidget界面按钮信号
-    void update_app_list(QString name,int arg);//更新应用列表
+    void exec_app_name(QString exec);//执行应用程序
+    void update_app_listview(QString desktopfn,QString appname,int arg);//更新应用列表
 
-    void leftbtn_clicked_slot();//向左按钮槽函数
-    void rightbtn_clicked_slot();//向右按钮槽函数
-    void letterbtn_clicked_slot();//字母列表按钮被点击槽函数
+    void recvItemClickedSlot(QStringList arg);
+
 
 signals:
+    /**
+     * 向MainViewWidget发送字母排序界面状态信号
+     * @param state为0时，btnname为具体的字母，为1时，btnname为空
+     */
+    void send_letterwid_state(int state,QString btnname);
     void send_letterbtn_list(QStringList list);//向LetterButtonWidget发送字母按钮列表
-    void send_update_applist_signal(QString appname);//向CommonUseWidget发送更新应用列表信号
+    void send_update_applist_signal();//向常用软件模块发送更新应用列表信号
     void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
+
+
 };
 
 #endif // LETTERWIDGET_H

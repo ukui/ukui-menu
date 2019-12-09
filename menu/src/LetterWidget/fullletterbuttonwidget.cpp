@@ -1,33 +1,33 @@
-#include "letterbuttonwidget.h"
-#include "ui_letterbuttonwidget.h"
-#include "src/color.h"
-#include "letterwidget.h"
+#include "fullletterbuttonwidget.h"
+#include "ui_fullletterbuttonwidget.h"
 #include <QDebug>
+#include "src/color.h"
 
-LetterButtonWidget::LetterButtonWidget(QWidget *parent) :
+FullLetterButtonWidget::FullLetterButtonWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::LetterButtonWidget)
+    ui(new Ui::FullLetterButtonWidget)
 {
     ui->setupUi(this);
     init_widget();
 }
 
-LetterButtonWidget::~LetterButtonWidget()
+FullLetterButtonWidget::~FullLetterButtonWidget()
 {
     delete ui;
 }
 
-void LetterButtonWidget::init_widget()
+void FullLetterButtonWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
+    this->setStyleSheet("border:0px;background:transparent");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,532-70);
+    this->setFixedSize(QApplication::desktop()->availableGeometry().width()-160,
+                       QApplication::desktop()->availableGeometry().height()-70);
 
     mainLayout=new QVBoxLayout(this);
-    mainLayout->setContentsMargins(15,0,6,0);
-    mainLayout->setSpacing(5);
+    mainLayout->setContentsMargins((this->width()-5*80-4*40)/2,70,(this->width()-5*80-4*40)/2,0);
+    mainLayout->setSpacing(20);
     this->setLayout(mainLayout);
 
     add_letterbtn_control();
@@ -36,11 +36,12 @@ void LetterButtonWidget::init_widget()
 
 }
 
-//添加字母分类按钮
-void LetterButtonWidget::add_letterbtn_control()
+/**
+ * 添加字母分类按钮
+ */
+void FullLetterButtonWidget::add_letterbtn_control()
 {
     QStringList letterlist;
-
     letterlist.clear();
     for(int i=0;i<26;i++)
     {
@@ -56,23 +57,25 @@ void LetterButtonWidget::add_letterbtn_control()
         wid->setStyleSheet("QWidget{border:0px;background:transparent;}");
         QHBoxLayout* layout=new QHBoxLayout(wid);
         layout->setContentsMargins(0,0,0,0);
-        layout->setSpacing(5);
+        layout->setSpacing(40);
         wid->setLayout(layout);
 
         for(int j=0;j<5;j++)
         {
             QToolButton* btn=new QToolButton(wid);
-            btn->setFixedSize(55,48);
+            btn->setFixedSize(80,50);
+            QFont ft;
+            ft.setWeight(57);
+            btn->setFont(ft);
             char btncolor[400];
-            sprintf(btncolor,"QToolButton{background:transparent;;color:#ffffff;font-size:20px;padding-left:0px;}\
+            sprintf(btncolor,"QToolButton{background:transparent;color:#ffffff;font-size:20px;padding-left:0px;}\
                     QToolButton:hover{background-color:%s;color:#ffffff;font-size:20px;}\
                     QToolButton:pressed{background-color:%s;color:#8b8b8b;font-size:20px;}\
-                    QToolButton:disabled{color:#33ffffff;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
+                    QToolButton:disabled{color:#33ffffff;}",MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
             btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
             btn->setText(letterlist.at(i*5+j));
             layout->addWidget(btn);
-
             connect(btn, SIGNAL(clicked()), this, SLOT(letterbtn_clicked_slot()));
             if(i*5+j==27)break;
 
@@ -87,7 +90,7 @@ void LetterButtonWidget::add_letterbtn_control()
 /**
  * 字母分类按钮槽函数
  */
-void LetterButtonWidget::letterbtn_clicked_slot()
+void FullLetterButtonWidget::letterbtn_clicked_slot()
 {
     QToolButton* btn=dynamic_cast<QToolButton *>(QObject::sender());
     QString btnname=btn->text();
@@ -97,7 +100,7 @@ void LetterButtonWidget::letterbtn_clicked_slot()
 /**
  * 接收LetterWidget字母按钮列表
  */
-void LetterButtonWidget::recv_letterbtn_list(QStringList list)
+void FullLetterButtonWidget::recv_letterbtn_list(QStringList list)
 {
     for(int i=0;i<6;i++)
     {

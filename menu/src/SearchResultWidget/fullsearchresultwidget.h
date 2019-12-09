@@ -8,6 +8,9 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QScrollBar>
+#include <ukuimenuinterface.h>
+#include "src/UtilityFunction/fullitemdelegate.h"
+#include "src/UtilityFunction/fulllistview.h"
 
 namespace Ui {
 class FullSearchResultWidget;
@@ -20,22 +23,27 @@ class FullSearchResultWidget : public QWidget
 public:
     explicit FullSearchResultWidget(QWidget *parent = nullptr);
     ~FullSearchResultWidget();
+    void update_app_listview(QStringList desktopfplist);
 
 private:
     Ui::FullSearchResultWidget *ui;
 
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+
     QHBoxLayout* mainLayout=nullptr;
-    QTableWidget* searchResultTableWid=nullptr;
-    QStringList searchResultList;
+    FullListView* listview=nullptr;
+    FullItemDelegate* itemdelegate=nullptr;
+    QStringList data;
 
 protected:
     void init_widget();
-    void init_search_result_table();//初始化搜索结果列表
-    void fill_search_result_table();//填充程序搜索结果列表
 
 private slots:
-    void recv_search_keyword(QString arg);//接收MainViewWidget界面搜索框的搜索关键字
+    void exec_app_name(QString appname);//执行应用程序
 
+signals:
+    void send_update_applist_signal();//向CommonUseWidget发送更新应用列表信号
+    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
 
 };
 

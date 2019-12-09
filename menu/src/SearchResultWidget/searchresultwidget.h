@@ -9,8 +9,10 @@
 #include <QToolButton>
 #include <QScrollBar>
 #include <QPushButton>
-#include "kylin-start-menu-interface.h"
-#include "searchappthread.h"
+#include <ukuimenuinterface.h>
+//#include "searchappthread.h"
+#include "src/UtilityFunction/listview.h"
+#include "src/UtilityFunction/itemdelegate.h"
 
 namespace Ui {
 class SearchResultWidget;
@@ -23,27 +25,27 @@ class SearchResultWidget : public QWidget
 public:
     explicit SearchResultWidget(QWidget *parent = nullptr);
     ~SearchResultWidget();
+    void update_app_listview(QStringList desktopfplist);
 
 private:
     Ui::SearchResultWidget *ui;
 
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+
     QHBoxLayout* mainLayout=nullptr;
-    QTableWidget* searchResultTableWid=nullptr;
-    SearchAppThread* searchappthread=nullptr;
-    QStringList searchResultList;
-//    QStringList appnameList;
+    ListView* listview=nullptr;
+    ItemDelegate* itemdelegate=nullptr;
+    QVector<QStringList> data;
 
 protected:
     void init_widget();
-    void init_search_result_table();//初始化搜索结果列表
-    void fill_search_result_table();//填充程序搜索结果列表
 
 private slots:
-    void recv_search_keyword(QString arg);//接收MainViewWidget界面搜索框的搜索关键字
-    void recv_search_result(QStringList list);
+    void exec_app_name(QStringList arg);//执行应用程序
 
 signals:
-    void send_search_keyword(QString arg);//向SearchAppThread发送搜索关键字
+    void send_update_applist_signal();//向常用软件模块发送更新应用列表信号
+    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
 };
 
 #endif // SEARCHRESULTWIDGET_H

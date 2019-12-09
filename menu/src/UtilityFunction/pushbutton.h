@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QSettings>
-#include "kylin-start-menu-interface.h"
+#include <ukuimenuinterface.h>
 #include "src/color.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 
@@ -18,6 +18,7 @@ public:
      * @param module为0时为常用模块，1为字母模块、2为功能模块
      */
     PushButton(QString name,int classify, int module);
+    ~PushButton();
 
 private:
     QString name;
@@ -25,6 +26,7 @@ private:
     int module;
     RightClickMenu* menu=nullptr;//右键菜单
     QSettings *setting=nullptr;
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
 protected:
     void init_app_btn();

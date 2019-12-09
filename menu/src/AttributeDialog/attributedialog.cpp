@@ -15,6 +15,7 @@ AttributeDialog::AttributeDialog(QWidget *parent) :
 AttributeDialog::~AttributeDialog()
 {
     delete ui;
+    delete pUkuiMenuInterface;
 }
 
 void AttributeDialog::init_widget()
@@ -45,7 +46,7 @@ void AttributeDialog::init_widget()
     closebtn=new ToolButton(45,30,QString(":/data/img/attributedialog/close-black.svg"),QString(":/data/img/attributedialog/close-white.svg"),
                             ATTRIBUTEDIALOGHOVER,ATTRIBUTEDIALOGPRESSED,3);
 //    minbtn->setFixedSize(45,30);
-//    closebtn->setFixedSize(45,30);
+    closebtn->setFixedSize(45,30);
 //    connect(minbtn,SIGNAL(clicked()),this,SLOT(showMinimized()));
     connect(closebtn,SIGNAL(clicked()),this,SLOT(close()));
 
@@ -157,6 +158,8 @@ void AttributeDialog::init_widget()
     mainLayout->addWidget(downWid);
     mainLayout->addWidget(closeWid);
 
+    pUkuiMenuInterface=new UkuiMenuInterface;
+
 }
 
 void AttributeDialog::set_controls_style(QTextEdit *edit, QTextEdit *valueEdit, QString str, int height)
@@ -181,20 +184,20 @@ void AttributeDialog::set_controls_style(QTextEdit *edit, QTextEdit *valueEdit, 
 
 void AttributeDialog::recv_attribute_value(QString appname)
 {
-    QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(appname);
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
     appnameLabel->setText(appname);
     appnameLabel->adjustSize();
 //    titlebarwidLayout->setContentsMargins((titlebarWid->width()-appnameLabel->width()-titlebarLabel->width())/2,0,0,0);
     leftSpacer->changeSize((titlebarWid->width()-appnameLabel->width()-titlebarLabel->width())/2,20,QSizePolicy::Fixed,QSizePolicy::Fixed);
-    QString iconstr=KylinStartMenuInterface::get_app_icon(desktopfp);
-//    QIcon::setThemeName("ukui-icon-theme");
+    QString iconstr=pUkuiMenuInterface->get_app_icon(desktopfp);
+    QIcon::setThemeName("ukui-icon-theme");
     QIcon icon=QIcon::fromTheme(iconstr);
     QPixmap pixmapicon(icon.pixmap(QSize(48,48)));
     labelIcon->setPixmap(pixmapicon);
     this->labelappName->setText(appname);
-    QString type=KylinStartMenuInterface::get_app_type(desktopfp);
-    QString exec=KylinStartMenuInterface::get_app_exec(desktopfp);
-    QString comment=KylinStartMenuInterface::get_app_comment(desktopfp);
+    QString type=pUkuiMenuInterface->get_app_type(desktopfp);
+    QString exec=pUkuiMenuInterface->get_app_exec(desktopfp);
+    QString comment=pUkuiMenuInterface->get_app_comment(desktopfp);
     typevalueEdit->setText(type);
     execvalueEdit->setText(exec);
     commentvalueEdit->setText(comment);
