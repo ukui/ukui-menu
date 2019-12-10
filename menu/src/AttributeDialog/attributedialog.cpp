@@ -190,7 +190,6 @@ void AttributeDialog::recv_attribute_value(QString appname)
 //    titlebarwidLayout->setContentsMargins((titlebarWid->width()-appnameLabel->width()-titlebarLabel->width())/2,0,0,0);
     leftSpacer->changeSize((titlebarWid->width()-appnameLabel->width()-titlebarLabel->width())/2,20,QSizePolicy::Fixed,QSizePolicy::Fixed);
     QString iconstr=pUkuiMenuInterface->get_app_icon(desktopfp);
-    QIcon::setThemeName("ukui-icon-theme");
     QIcon icon=QIcon::fromTheme(iconstr);
     QPixmap pixmapicon(icon.pixmap(QSize(48,48)));
     labelIcon->setPixmap(pixmapicon);

@@ -333,18 +333,20 @@ QString UkuiMenuInterface::get_app_type(QString desktopfp)
 //根据应用名获取deskyop文件路径
 QString UkuiMenuInterface::get_desktop_path_by_app_name(QString appname)
 {
-
-    AppInfo* pAppinfo=this->pAppInfo;
-    while(!pAppinfo->desktopfp.isEmpty())
+    QString desktopfp;
+    AppInfo* pAppInfo=UkuiMenuInterface::pAppInfo;
+    while(!pAppInfo->desktopfp.isEmpty())
     {
-        if(QString::compare(pAppinfo->name,appname)==0)
+        if(QString::compare(pAppInfo->name,appname)==0)
         {
-            return pAppinfo->desktopfp;
+            desktopfp=pAppInfo->desktopfp;
             break;
         }
 
-        pAppinfo++;
+        pAppInfo++;
     }
+
+    return desktopfp;
 
 //    int i=0;
 //    QString desktopfilepath;

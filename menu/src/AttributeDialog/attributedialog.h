@@ -14,6 +14,7 @@
 #include <QPixmap>
 #include <QTextEdit>
 #include <ukuimenuinterface.h>
+#include <QHeaderView>
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/color.h"
 
