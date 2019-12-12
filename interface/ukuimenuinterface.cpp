@@ -13,7 +13,7 @@ UkuiMenuInterface::UkuiMenuInterface()
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
-    delete[] pAppInfo;
+//    delete[] pAppInfo;
 }
 
 //文件递归查询
@@ -166,10 +166,12 @@ QStringList UkuiMenuInterface::get_desktop_file_path()
     return filePathList;
 }
 
-AppInfo* UkuiMenuInterface::pAppInfo=nullptr;
+QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
 
-AppInfo *UkuiMenuInterface::create_appinfo_object()
+//创建应用信息容器
+QVector<QStringList> UkuiMenuInterface::create_appinfo_vector()
 {
+    QVector<QStringList> appInfoVector;
     QVector<QStringList> vector;
     vector.append(QStringList()<<"Network");//1网络
     vector.append(QStringList()<<"Messaging");//2社交
@@ -182,30 +184,33 @@ AppInfo *UkuiMenuInterface::create_appinfo_object()
     vector.append(QStringList()<<"System"<<"Settings"<<"Security");//9系统
 
     QStringList desktopfpList=get_desktop_file_path();
-    AppInfo* pAppInfo=new AppInfo[desktopfpList.count()+1];
+
     for(int i=0;i<desktopfpList.count();i++)
     {
-        pAppInfo[i].desktopfp=desktopfpList.at(i);
-        pAppInfo[i].icon=get_app_icon(desktopfpList.at(i));
-        pAppInfo[i].name=get_app_name(desktopfpList.at(i));
-        pAppInfo[i].exec=get_app_exec(desktopfpList.at(i));
-        pAppInfo[i].comment=get_app_comment(desktopfpList.at(i));
-        bool is_owned=false;//有对应分类
+        QStringList appInfoList;
+        QString desktopfp=desktopfpList.at(i);
+        QString icon=get_app_icon(desktopfpList.at(i));
+        QString name=get_app_name(desktopfpList.at(i));
+        QString exec=get_app_exec(desktopfpList.at(i));
+        QString comment=get_app_comment(desktopfpList.at(i));
+
+        appInfoList<<desktopfp<<icon<<name<<exec<<comment;
+        bool is_owned=false;
         for(int j=0;j<vector.size();j++)
         {
-            if(matching_app_categories(desktopfpList.at(i),vector.at(j)))
+            if(matching_app_categories(desktopfpList.at(i),vector.at(j)))//有对应分类
             {
                 is_owned=true;
-                pAppInfo[i].categories.append(QString::number(j+1));
+                appInfoList.append(QString::number(j+1));
             }
         }
         if(!is_owned)//该应用无对应分类
-            pAppInfo[i].categories.append(QString::number(10));
+            appInfoList.append(QString::number(10));
+
+        appInfoVector.append(appInfoList);
     }
 
-    pAppInfo[desktopfpList.count()].desktopfp="";//结束判断条件
-
-    return pAppInfo;
+    return appInfoVector;
 }
 
 //获取应用名称
@@ -334,32 +339,19 @@ QString UkuiMenuInterface::get_app_type(QString desktopfp)
 QString UkuiMenuInterface::get_desktop_path_by_app_name(QString appname)
 {
     QString desktopfp;
-    AppInfo* pAppInfo=UkuiMenuInterface::pAppInfo;
-    while(!pAppInfo->desktopfp.isEmpty())
+    int index=0;
+    while(index<appInfoVector.size())
     {
-        if(QString::compare(pAppInfo->name,appname)==0)
+        if(QString::compare(appInfoVector.at(index).at(2),appname)==0)
         {
-            desktopfp=pAppInfo->desktopfp;
+            desktopfp=appInfoVector.at(index).at(0);
             break;
         }
 
-        pAppInfo++;
+        index++;
     }
 
     return desktopfp;
-
-//    int i=0;
-//    QString desktopfilepath;
-//    QStringList desktopfpList=get_desktop_file_path();
-//    for(i=0;i<desktopfpList.count();i++)
-//    {
-//        QString name=get_app_name(desktopfpList.at(i));
-//        if(QString::compare(name,appname)==0)
-//        {
-//            desktopfilepath=desktopfpList.at(i);
-//        }
-//    }
-//    return desktopfilepath;
 }
 
 //根据应用英文名获取desktop文件路径
@@ -381,21 +373,14 @@ QString UkuiMenuInterface::get_desktop_path_by_app_english_name(QString appname)
 
 QVector<QStringList> UkuiMenuInterface::get_alphabetic_classification()
 {
-    if(pAppInfo==nullptr)
-        qDebug()<<"---111---";
-//        pAppInfo=create_appinfo_object();
-
     QVector<QStringList> data;
-//    QStringList desktopfpList=get_desktop_file_path();
     QStringList appnameList;
     appnameList.clear();
     QStringList list[27];
-//    for(int i=0;i<desktopfpList.count();i++)
-    AppInfo* pAppInfo=UkuiMenuInterface::pAppInfo;
-    while(!pAppInfo->desktopfp.isEmpty())
+    int index=0;
+    while(index<appInfoVector.size())
     {
-//        QString appname=get_app_name(desktopfpList.at(i));
-        QString appname=pAppInfo->name;
+        QString appname=appInfoVector.at(index).at(2);
         QString appnamepy=ChineseLetterHelper::GetPinyins(appname);
         char c=appnamepy.at(0).toLatin1();
         switch (c) {
@@ -482,7 +467,7 @@ QVector<QStringList> UkuiMenuInterface::get_alphabetic_classification()
             break;
         }
 
-        pAppInfo++;
+        index++;
     }
 
     QLocale local;
@@ -503,7 +488,6 @@ QVector<QStringList> UkuiMenuInterface::get_alphabetic_classification()
     QStringList numberList;
     for(int i=0;i<list[26].count();i++)
     {
-//        QString appname=get_app_name(list[26].at(i));
         QChar c=list[26].at(i).at(0);
         if(c<48 || (c>57 && c<65) || c>90)
             otherList.append(list[26].at(i));
@@ -520,68 +504,50 @@ QVector<QStringList> UkuiMenuInterface::get_alphabetic_classification()
 
 QVector<QStringList> UkuiMenuInterface::get_functional_classification()
 {
-//    if(this->pAppInfo==nullptr)
-//        this->pAppInfo=create_appinfo_object();
-
-//    QVector<QStringList> vector;
-//    vector.append(QStringList()<<"Network");//网络
-//    vector.append(QStringList()<<"Messaging");//社交
-//    vector.append(QStringList()<<"Audio"<<"Video");//影音
-//    vector.append(QStringList()<<"Development");//开发
-//    vector.append(QStringList()<<"Graphics");//图像
-//    vector.append(QStringList()<<"Game");//游戏
-//    vector.append(QStringList()<<"Office"<<"Calculator"<<"Spreadsheet"<<"Presentation"<<"WordProcessor");//办公
-//    vector.append(QStringList()<<"Education");//教育
-//    vector.append(QStringList()<<"System"<<"Settings"<<"Security");//系统
-
-//    QStringList desktopfpList=get_desktop_file_path();
-//    QStringList appnameList;
-//    appnameList.clear();
     QStringList list[11];
-
-    AppInfo* pAppInfo=UkuiMenuInterface::pAppInfo;
-    while(!pAppInfo->desktopfp.isEmpty())
+    int index=0;
+    while(index<appInfoVector.size())
     {
-        QStringList categories=pAppInfo->categories;
-        for(int i=0;i<categories.count();i++)
+        int count=appInfoVector.at(index).size()-5;
+        for(int i=0;i<count;i++)
         {
-            int category=categories.at(i).toInt();
+            int category=appInfoVector.at(index).at(5+i).toInt();
             switch (category) {
             case 1:
-                list[1].append(pAppInfo->name);
+                list[1].append(appInfoVector.at(index).at(2));
                 break;
             case 2:
-                list[3].append(pAppInfo->name);
+                list[3].append(appInfoVector.at(index).at(2));
                 break;
             case 3:
-                list[3].append(pAppInfo->name);
+                list[3].append(appInfoVector.at(index).at(2));
                 break;
             case 4:
-                list[4].append(pAppInfo->name);
+                list[4].append(appInfoVector.at(index).at(2));
                 break;
             case 5:
-                list[5].append(pAppInfo->name);
+                list[5].append(appInfoVector.at(index).at(2));
                 break;
             case 6:
-                list[6].append(pAppInfo->name);
+                list[6].append(appInfoVector.at(index).at(2));
                 break;
             case 7:
-                list[7].append(pAppInfo->name);
+                list[7].append(appInfoVector.at(index).at(2));
                 break;
             case 8:
-                list[8].append(pAppInfo->name);
+                list[8].append(appInfoVector.at(index).at(2));
                 break;
             case 9:
-                list[9].append(pAppInfo->name);
+                list[9].append(appInfoVector.at(index).at(2));
                 break;
             case 10:
-                list[10].append(pAppInfo->name);
+                list[10].append(appInfoVector.at(index).at(2));
                 break;
             default:
                 break;
             }
         }
-        pAppInfo++;
+        index++;
     }
 
     QStringList recentList=get_recent_app_list();//最近添加

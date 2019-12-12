@@ -18,6 +18,7 @@ SideBarWidget::~SideBarWidget()
     delete ui;
     delete shutdownmenu;
     delete [] othermenu;
+    delete pUkuiMenuInterface;
 }
 
 /**
@@ -29,6 +30,7 @@ void SideBarWidget::init_widget()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->setFocusPolicy(Qt::NoFocus);
+    pUkuiMenuInterface=new UkuiMenuInterface;
 
     add_sidebar_btn();
     load_min_sidebar();
@@ -67,6 +69,9 @@ void SideBarWidget::add_sidebar_btn()
     connect(commonusebtn,SIGNAL(clicked()),this,SLOT(commonusebtn_clicked_slot()));
     connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));
     connect(functionbtn,SIGNAL(clicked()),this,SLOT(functionbtn_clicked_slot()));
+    connect(computerbtn,SIGNAL(clicked()),this,SLOT(computerbtn_clicked_slot()));
+    connect(controlbtn,SIGNAL(clicked()),this,SLOT(controlbtn_clicked_slot()));
+    connect(shutdownbtn,SIGNAL(clicked()),this,SLOT(shutdownbtn_clicked_slot()));
 
     commonusebtnname=new QLabel;
     commonusebtnname->setText(tr("常用软件"));
@@ -214,7 +219,29 @@ void SideBarWidget::shutdownbtn_right_click_slot()
     shutdownmenu=new RightClickMenu;
     int ret=shutdownmenu->show_shutdown_menu();
     if(ret>=10 && ret<=14)
+    {
         emit send_hide_mainwindow_signal();
+        QProcess *process=new QProcess(this);
+        switch (ret) {
+        case 10:
+            process->startDetached(QString("ukui-screensaver-command -l"));
+            break;
+        case 11:
+            process->startDetached(QString("ukui-session-tools --switchuser"));
+            break;
+        case 12:
+            process->startDetached(QString("ukui-session-tools --logout"));
+            break;
+        case 13:
+            process->startDetached(QString("ukui-session-tools --reboot"));
+            break;
+        case 14:
+            process->startDetached(QString("ukui-session-tools --shutdown"));
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 void SideBarWidget::add_right_click_menu(QPushButton *btn)
@@ -495,6 +522,45 @@ void SideBarWidget::functionbtn_clicked_slot()
     if(is_fullscreen)
         emit send_fullscreen_functionbtn_signal();
     else emit send_functionbtn_signal();
+}
+
+void SideBarWidget::computerbtn_clicked_slot()
+{
+    emit send_hide_mainwindow_signal();
+    QString execpath=pUkuiMenuInterface->get_app_exec(QString("/usr/share/applications/peony-computer.desktop"));
+    //移除启动参数%u或者%U
+    for(int i=0;i<execpath.length();i++)
+    {
+        if(execpath.at(i)=='%')
+        {
+            execpath.remove(i,2);
+        }
+    }
+    QProcess *process=new QProcess(this);
+    process->startDetached(execpath);
+}
+
+void SideBarWidget::controlbtn_clicked_slot()
+{
+    emit send_hide_mainwindow_signal();
+    QString execpath=pUkuiMenuInterface->get_app_exec(QString("/usr/share/applications/ukui-control-center.desktop"));
+    //移除启动参数%u或者%U
+    for(int i=0;i<execpath.length();i++)
+    {
+        if(execpath.at(i)=='%')
+        {
+            execpath.remove(i,2);
+        }
+    }
+    QProcess *process=new QProcess(this);
+    process->startDetached(execpath);
+
+}
+
+void SideBarWidget::shutdownbtn_clicked_slot()
+{
+    emit send_hide_mainwindow_signal();
+    system("ukui-session-tools --shutdown");
 }
 
 /**

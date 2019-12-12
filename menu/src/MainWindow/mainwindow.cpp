@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     pUkuiMenuInterface=new UkuiMenuInterface;
-    UkuiMenuInterface::pAppInfo=pUkuiMenuInterface->create_appinfo_object();
+    UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
     init_mainwindow();
     sidebarwid->set_sidebarbtn_state(1);
 

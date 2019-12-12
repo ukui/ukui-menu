@@ -7,20 +7,8 @@
 #include <QDBusConnection>
 #include <QDBusReply>
 #include <QDBusObjectPath>
-//#include "appinfo.h"
 
-class AppInfo
-{
-public:
-    QString desktopfp;
-    QString icon;
-    QString name;
-    QStringList categories;
-    QString exec;
-    QString comment;
-};
-
-class UkuiMenuInterface : public AppInfo
+class UkuiMenuInterface
 {
 private:
     QStringList filePathList;
@@ -33,9 +21,8 @@ protected:
 public:
     UkuiMenuInterface();
     ~UkuiMenuInterface();
-    AppInfo* create_appinfo_object();//创建AppInfo对象
-    static AppInfo* pAppInfo;
-
+    QVector<QStringList> create_appinfo_vector();//创建应用信息容器
+    static QVector<QStringList> appInfoVector;
 
     /**
      * 获取系统应用名称

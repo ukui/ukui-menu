@@ -7,6 +7,7 @@
 #include <QSpacerItem>
 #include <QLabel>
 #include <QMouseEvent>
+#include <ukuimenuinterface.h>
 #include "src/MainViewWidget/mainviewwidget.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 
@@ -35,6 +36,7 @@ public:
 
 private:
     Ui::SideBarWidget *ui;
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     QVBoxLayout* mainlayout=nullptr;
     QWidget* userwid=nullptr;
@@ -90,6 +92,9 @@ private slots:
     void commonusebtn_clicked_slot();
     void letterbtn_clicked_slot();
     void functionbtn_clicked_slot();
+    void computerbtn_clicked_slot();
+    void controlbtn_clicked_slot();
+    void shutdownbtn_clicked_slot();
 
     void shutdownbtn_right_click_slot();//加载关机按钮右键菜单
     void otherbtn_right_click_slot();//记载右键菜单

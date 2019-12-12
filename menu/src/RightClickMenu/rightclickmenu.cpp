@@ -478,49 +478,26 @@ void RightClickMenu::cudeleteallaction_trigger_slot()
 void RightClickMenu::lockscreenaction_trigger_slot()
 {
     action_number=10;
-    if(QFileInfo::exists(QString("/usr/bin/ukui-screensaver-command")))
-        system("ukui-screensaver-command -l");
-    else {
-        system( "mate-screensaver-command -l" );
-    }
 }
 
 void RightClickMenu::switchuseraction_trigger_slot()
 {
     action_number=11;
-    char buffer[100];
-    FILE* fp;
-    fp=popen("echo $XDG_SEAT_PATH","r");
-    fgets(buffer,sizeof(buffer),fp);
-    int i=0;
-    while(*(buffer+i)!='\n')
-        i++;
-    *(buffer+i)='\0';
-    QString obj_path=QString::fromLocal8Bit(buffer);
-    fclose(fp);
-    QDBusInterface iface("org.freedesktop.DisplayManager",obj_path,
-                         "org.freedesktop.DisplayManager.Seat",QDBusConnection::systemBus());
-    iface.call("SwitchToGreeter");
 }
 
 void RightClickMenu::logoutaction_trigger_slot()
 {
     action_number=12;
-    system("ukui-session-save --logout-dialog &");
 }
 
 void RightClickMenu::rebootaction_trigger_slot()
 {
     action_number=13;
-    QDBusInterface iface("org.gnome.SessionManager","/org/gnome/SessionManager",
-                         "org.gnome.SessionManager",QDBusConnection::sessionBus());
-    iface.call("RequestReboot");
 }
 
 void RightClickMenu::shutdownaction_trigger_slot()
 {
     action_number=14;
-    system("ukui-session-save --shutdown-dialog &");
 }
 
 void RightClickMenu::otherlistaction_trigger_slot()

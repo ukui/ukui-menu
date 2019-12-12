@@ -14,10 +14,9 @@ public:
 
 private:
     QString keyword;
-    QStringList appnamepyList;
-    QStringList appnameList;
     QStringList searchResultList;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    QVector<QStringList> appInfoVector;
 
 private slots:
     void recv_search_keyword(QString arg);
