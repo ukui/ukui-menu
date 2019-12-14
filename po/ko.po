@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ukui-menu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-06 12:12+0800\n"
+"POT-Creation-Date: 2019-12-14 11:59+0800\n"
 "PO-Revision-Date: 2018-03-18 02:37+0900\n"
 "Last-Translator: Moordev <kjm890215@hanmail.net>\n"
 "Language-Team: \n"
@@ -36,11 +36,6 @@ msgstr "일반 메뉴"
 #: ../lib/ukui-menu.py:255 ../lib/ukui-menu.py:407
 msgid "Category Menu"
 msgstr "카테고리 메뉴"
-
-#. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
-#: ../lib/ukui-menu.py:257 ../ukui_menu/menueditor.py:891
-msgid "Edit Category Menu"
-msgstr "카테고리 메뉴 수정"
 
 #: ../lib/ukui-menu.py:346
 msgid "Start"
@@ -90,6 +85,7 @@ msgstr "기본값으로 되돌리기(_R)"
 msgid "Close(_C)"
 msgstr "닫기(_C)"
 
+#. self.editCategory.set_visible(False)
 #: ../lib/ukui-menu.py:619
 msgid "Reload plugins"
 msgstr "플러그인 다시 불러오기"
@@ -110,7 +106,7 @@ msgstr ""
 msgid "days"
 msgstr ""
 
-#: ../lib/timed-shutdown.py:178 ../data/plugins/shutdown.ui.h:7
+#: ../lib/timed-shutdown.py:178
 msgid "Time to Poweroff:  "
 msgstr ""
 
@@ -436,23 +432,23 @@ msgstr "Fcitx 설정"
 msgid "Comment:"
 msgstr "명령:"
 
-#: ../ukui_menu/keybinding.py:219
+#: ../ukui_menu/keybinding.py:224
 msgid "Click to set a new accelerator key for opening and closing the menu.  "
 msgstr "메뉴를 열거나 닫을 때 사용할 새 단축키를 설정하려면 클릭하십시오."
 
-#: ../ukui_menu/keybinding.py:220
+#: ../ukui_menu/keybinding.py:225
 msgid "Press Escape or click again to cancel the operation.  "
 msgstr "작업을 취소하려면 Esc 키를 누르거나 다시 클릭하십시오."
 
-#: ../ukui_menu/keybinding.py:221
+#: ../ukui_menu/keybinding.py:226
 msgid "Press Backspace to clear the existing keybinding."
 msgstr "Backspace 키를 눌러 기존 키 바인딩을 지웁니다."
 
-#: ../ukui_menu/keybinding.py:234
+#: ../ukui_menu/keybinding.py:239
 msgid "Pick an accelerator"
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:286
+#: ../ukui_menu/keybinding.py:291
 msgid "<not set>"
 msgstr "<설정 안 됨>"
 
@@ -477,6 +473,11 @@ msgstr ""
 "\n"
 "지금 이 시스템에는 설치되어 있지 않습니다 [% s] 프로그램 분류를 할 수 없습니"
 "다!"
+
+#. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
+#: ../ukui_menu/menueditor.py:891
+msgid "Edit Category Menu"
+msgstr "카테고리 메뉴 수정"
 
 #: ../ukui_menu/menueditor.py:892
 msgid "Restore the default menu layout"
@@ -556,12 +557,12 @@ msgstr ""
 msgid "Locale"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:104 ../data/feedback.ui.h:6
+#: ../ukui_menu/feedback.py:104
 #, fuzzy
 msgid "System Info"
 msgstr "시스템"
 
-#: ../ukui_menu/feedback.py:146 ../data/feedback.ui.h:8
+#: ../ukui_menu/feedback.py:146
 #, fuzzy
 msgid "System Bug"
 msgstr "시스템"
@@ -598,99 +599,13 @@ msgstr ""
 msgid "Unknow error: "
 msgstr ""
 
-#: ../data/feedback.ui.h:1
 #, fuzzy
-msgid "Type"
-msgstr "유형:"
+#~ msgid "Type"
+#~ msgstr "유형:"
 
-#: ../data/feedback.ui.h:2
-msgid "<span color=\"red\">* </span>Description"
-msgstr ""
-
-#: ../data/feedback.ui.h:3
-msgid "<span color=\"red\">* </span>Email"
-msgstr ""
-
-#: ../data/feedback.ui.h:4
-msgid "Image"
-msgstr ""
-
-#: ../data/feedback.ui.h:5
 #, fuzzy
-msgid "System Log"
-msgstr "시스템"
-
-#: ../data/feedback.ui.h:7
-msgid "Please upload file less then 1Mb"
-msgstr ""
-
-#: ../data/feedback.ui.h:9
-msgid "Suggestion"
-msgstr ""
-
-#: ../data/feedback.ui.h:10
-msgid "For Business"
-msgstr ""
-
-#: ../data/feedback.ui.h:11
-msgid "Others"
-msgstr ""
-
-#: ../data/feedback.ui.h:12
-msgid "submit"
-msgstr ""
-
-#: ../data/feedback.ui.h:13
-msgid "<span color=\"red\">* </span>CAPTCHA"
-msgstr ""
-
-#: ../data/feedback.ui.h:14
-msgid "Type the code"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:1
-msgid "Cancel"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:2
-msgid "Set Up"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:3
-msgid "Hour"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:4
-msgid "Minute"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:5
-msgid ":"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:6
-msgid "Automatic shutdown setted"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:8
-msgid "Never"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:9
-msgid "Only this time Shutdown"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:10
-msgid "Every Day"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:11
-msgid "Monday to Friday"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:12
-msgid "Saturday to Sunday"
-msgstr ""
+#~ msgid "System Log"
+#~ msgstr "시스템"
 
 #, fuzzy
 #~ msgid "Power"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-06 12:12+0800\n"
+"POT-Creation-Date: 2019-12-14 11:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Cihan Alkan <cihanalk@gmail.com>\n"
 "Language-Team: Turkish <LL@li.org>\n"
@@ -36,11 +36,6 @@ msgstr "Normal Menü"
 #: ../lib/ukui-menu.py:255 ../lib/ukui-menu.py:407
 msgid "Category Menu"
 msgstr "Kategori Menü"
-
-#. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
-#: ../lib/ukui-menu.py:257 ../ukui_menu/menueditor.py:891
-msgid "Edit Category Menu"
-msgstr "Kategori Menüyü Düzenle"
 
 #: ../lib/ukui-menu.py:346
 msgid "Start"
@@ -92,6 +87,7 @@ msgstr "Varsayılana dön"
 msgid "Close(_C)"
 msgstr "Kapat"
 
+#. self.editCategory.set_visible(False)
 #: ../lib/ukui-menu.py:619
 msgid "Reload plugins"
 msgstr "Eklentileri yeniden yükle"
@@ -112,7 +108,7 @@ msgstr "gün"
 msgid "days"
 msgstr "gün"
 
-#: ../lib/timed-shutdown.py:178 ../data/plugins/shutdown.ui.h:7
+#: ../lib/timed-shutdown.py:178
 msgid "Time to Poweroff:  "
 msgstr "Kapatma zamanı:  "
 
@@ -124,7 +120,9 @@ msgstr "Çıkış (_Q)"
 msgid ""
 "This application has been removed. Are you sure remove the menu form the "
 "startup menu?"
-msgstr "Bu uygulama kaldırıldı. Başlangıç menüsünden menüyü kaldırdığınızdan emin misiniz?"
+msgstr ""
+"Bu uygulama kaldırıldı. Başlangıç menüsünden menüyü kaldırdığınızdan emin "
+"misiniz?"
 
 #: ../lib/ukui-remove-application.py:89
 msgid "The following packages will be removed:"
@@ -440,25 +438,25 @@ msgstr "Fcitx Yapılandırması"
 msgid "Comment:"
 msgstr "Açıklama:"
 
-#: ../ukui_menu/keybinding.py:219
+#: ../ukui_menu/keybinding.py:224
 msgid "Click to set a new accelerator key for opening and closing the menu.  "
 msgstr ""
 "Menüyü açmak ve kapatmak için yeni bir hızlandırıcı tuşunu ayarlamak için "
 "tıklayın."
 
-#: ../ukui_menu/keybinding.py:220
+#: ../ukui_menu/keybinding.py:225
 msgid "Press Escape or click again to cancel the operation.  "
 msgstr "İşlemi iptal etmek için Escape tuşuna basın veya tekrar tıklayın."
 
-#: ../ukui_menu/keybinding.py:221
+#: ../ukui_menu/keybinding.py:226
 msgid "Press Backspace to clear the existing keybinding."
 msgstr "Mevcut tuş kilidini silmek için Geri tuşuna basın."
 
-#: ../ukui_menu/keybinding.py:234
+#: ../ukui_menu/keybinding.py:239
 msgid "Pick an accelerator"
 msgstr "Bir hızlandırıcı seç"
 
-#: ../ukui_menu/keybinding.py:286
+#: ../ukui_menu/keybinding.py:291
 msgid "<not set>"
 msgstr "<ayarlanmamış>"
 
@@ -481,6 +479,11 @@ msgid ""
 msgstr ""
 "\n"
 "Mevcut sistem [%s] yazılımı kurulmamış, sınıflandırmayı görüntüleyemiyor!"
+
+#. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
+#: ../ukui_menu/menueditor.py:891
+msgid "Edit Category Menu"
+msgstr "Kategori Menüyü Düzenle"
 
 #: ../ukui_menu/menueditor.py:892
 msgid "Restore the default menu layout"
@@ -561,12 +564,12 @@ msgstr "Mimari"
 msgid "Locale"
 msgstr "Yerel"
 
-#: ../ukui_menu/feedback.py:104 ../data/feedback.ui.h:6
+#: ../ukui_menu/feedback.py:104
 #, fuzzy
 msgid "System Info"
 msgstr "Sistem Bilgisi"
 
-#: ../ukui_menu/feedback.py:146 ../data/feedback.ui.h:8
+#: ../ukui_menu/feedback.py:146
 #, fuzzy
 msgid "System Bug"
 msgstr "Sistem"
@@ -603,99 +606,76 @@ msgstr "Yanlış CAPTCHA, lütfen tekrar girin!"
 msgid "Unknow error: "
 msgstr "Bilinmeyen hata:"
 
-#: ../data/feedback.ui.h:1
 #, fuzzy
-msgid "Type"
-msgstr "Tür:"
+#~ msgid "Type"
+#~ msgstr "Tür:"
 
-#: ../data/feedback.ui.h:2
-msgid "<span color=\"red\">* </span>Description"
-msgstr "<span color=\"red\">* </span>Açıklama"
+#~ msgid "<span color=\"red\">* </span>Description"
+#~ msgstr "<span color=\"red\">* </span>Açıklama"
 
-#: ../data/feedback.ui.h:3
-msgid "<span color=\"red\">* </span>Email"
-msgstr "<span color=\"red\">* </span>E-Posta"
+#~ msgid "<span color=\"red\">* </span>Email"
+#~ msgstr "<span color=\"red\">* </span>E-Posta"
 
-#: ../data/feedback.ui.h:4
-msgid "Image"
-msgstr "Resim"
+#~ msgid "Image"
+#~ msgstr "Resim"
 
-#: ../data/feedback.ui.h:5
 #, fuzzy
-msgid "System Log"
-msgstr "Sistem"
+#~ msgid "System Log"
+#~ msgstr "Sistem"
 
-#: ../data/feedback.ui.h:7
-msgid "Please upload file less then 1Mb"
-msgstr "Lütfen 1 MB'den daha küçük dosya yükleyin"
+#~ msgid "Please upload file less then 1Mb"
+#~ msgstr "Lütfen 1 MB'den daha küçük dosya yükleyin"
 
-#: ../data/feedback.ui.h:9
-msgid "Suggestion"
-msgstr "Öneri"
+#~ msgid "Suggestion"
+#~ msgstr "Öneri"
 
-#: ../data/feedback.ui.h:10
-msgid "For Business"
-msgstr "İş için"
+#~ msgid "For Business"
+#~ msgstr "İş için"
 
-#: ../data/feedback.ui.h:11
-msgid "Others"
-msgstr "Diğer"
+#~ msgid "Others"
+#~ msgstr "Diğer"
 
-#: ../data/feedback.ui.h:12
-msgid "submit"
-msgstr "Gönder"
+#~ msgid "submit"
+#~ msgstr "Gönder"
 
-#: ../data/feedback.ui.h:13
-msgid "<span color=\"red\">* </span>CAPTCHA"
-msgstr "<span color=\"red\">* </span>CAPTCHA"
+#~ msgid "<span color=\"red\">* </span>CAPTCHA"
+#~ msgstr "<span color=\"red\">* </span>CAPTCHA"
 
-#: ../data/feedback.ui.h:14
-msgid "Type the code"
-msgstr "Kodu yazın"
+#~ msgid "Type the code"
+#~ msgstr "Kodu yazın"
 
-#: ../data/plugins/shutdown.ui.h:1
-msgid "Cancel"
-msgstr "İptal"
+#~ msgid "Cancel"
+#~ msgstr "İptal"
 
-#: ../data/plugins/shutdown.ui.h:2
-msgid "Set Up"
-msgstr "Ayarla"
+#~ msgid "Set Up"
+#~ msgstr "Ayarla"
 
-#: ../data/plugins/shutdown.ui.h:3
-msgid "Hour"
-msgstr "Saat"
+#~ msgid "Hour"
+#~ msgstr "Saat"
 
-#: ../data/plugins/shutdown.ui.h:4
-msgid "Minute"
-msgstr "Dakika"
+#~ msgid "Minute"
+#~ msgstr "Dakika"
 
-#: ../data/plugins/shutdown.ui.h:5
-msgid ":"
-msgstr ":"
+#~ msgid ":"
+#~ msgstr ":"
 
-#: ../data/plugins/shutdown.ui.h:6
-msgid "Automatic shutdown setted"
-msgstr "Otomatik kapanma ayarlandı"
+#~ msgid "Automatic shutdown setted"
+#~ msgstr "Otomatik kapanma ayarlandı"
 
-#: ../data/plugins/shutdown.ui.h:8
-msgid "Never"
-msgstr "Asla"
+#~ msgid "Never"
+#~ msgstr "Asla"
 
-#: ../data/plugins/shutdown.ui.h:9
-msgid "Only this time Shutdown"
-msgstr "Sadece bu oturumu kapat"
+#~ msgid "Only this time Shutdown"
+#~ msgstr "Sadece bu oturumu kapat"
 
-#: ../data/plugins/shutdown.ui.h:10
-msgid "Every Day"
-msgstr "Her Gün"
+#~ msgid "Every Day"
+#~ msgstr "Her Gün"
 
-#: ../data/plugins/shutdown.ui.h:11
-msgid "Monday to Friday"
-msgstr "Haftaiçi"
+#~ msgid "Monday to Friday"
+#~ msgstr "Haftaiçi"
 
-#: ../data/plugins/shutdown.ui.h:12
-msgid "Saturday to Sunday"
-msgstr "Haftasonu"
+#~ msgid "Saturday to Sunday"
+#~ msgstr "Haftasonu"
 
 #~ msgid "Power"
 #~ msgstr "Kapat"

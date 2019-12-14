@@ -13,5 +13,5 @@ ukui_menu/keybinding.py
 ukui_menu/menueditor.py
 ukui_menu/pointerMonitor.py
 ukui_menu/feedback.py
-data/feedback.ui.h
-data/plugins/shutdown.ui.h
+data/feedback.ui
+data/plugins/shutdown.ui

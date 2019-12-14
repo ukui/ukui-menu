@@ -1,20 +1,19 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Tibetan translations for PACKAGE package.
+# Copyright (C) 2019 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# feng <jianfengli@ubuntukylin.com>, 2019.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-14 11:59+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2019-12-14 12:00+0800\n"
+"Last-Translator: handsome_feng <jianfengli@ubuntukylin.com>\n"
+"Language-Team: Tibetan\n"
+"Language: bo\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../ukui-menu-editor:38
@@ -22,32 +21,30 @@ msgid ""
 "\n"
 "Current menu mode is not category mode, please switch and try again!"
 msgstr ""
-"\n"
-"Modo de menu actual não é Categoria mode, por favor mude e tente de novo!"
 
 #: ../lib/ukui-menu.py:60
 msgid "Menu"
-msgstr "Menu"
+msgstr ""
 
 #: ../lib/ukui-menu.py:253 ../lib/ukui-menu.py:405
 msgid "Normal Menu"
-msgstr "O Menu Normal"
+msgstr ""
 
 #: ../lib/ukui-menu.py:255 ../lib/ukui-menu.py:407
 msgid "Category Menu"
-msgstr "O Menu Categoria"
+msgstr ""
 
 #: ../lib/ukui-menu.py:346
 msgid "Start"
-msgstr "Começar"
+msgstr ""
 
 #: ../lib/ukui-menu.py:383
 msgid "Startup Menu"
-msgstr "Startup menu"
+msgstr ""
 
 #: ../lib/ukui-menu.py:395
 msgid "Menu Property"
-msgstr "Menu de Propriedade"
+msgstr ""
 
 #: ../lib/ukui-menu.py:397
 msgid "Transparency:"
@@ -55,44 +52,44 @@ msgstr ""
 
 #: ../lib/ukui-menu.py:399
 msgid "Menu Type:"
-msgstr "Tipo de menu:"
+msgstr ""
 
 #: ../lib/ukui-menu.py:400
 msgid "This is used to set up the menu type."
-msgstr "Isto é usado para configurar o menu Tipo."
+msgstr ""
 
 #: ../lib/ukui-menu.py:402
 msgid "File History:"
-msgstr "Arquivo de história:"
+msgstr ""
 
 #: ../lib/ukui-menu.py:403
 msgid "This is used to set up whether the file history is displayed."
-msgstr "Isto é usado para definir se o arquivo histórico é exibido."
+msgstr ""
 
 #: ../lib/ukui-menu.py:423
 msgid "Recent file number:"
-msgstr "Recente número do processo:"
+msgstr ""
 
 #: ../lib/ukui-menu.py:425
 msgid "Recent app number:"
-msgstr "Recente número do pedido:"
+msgstr ""
 
 #: ../lib/ukui-menu.py:445
 msgid "Reset to default(_R)"
-msgstr "Repor a predefinição(_R)"
+msgstr ""
 
 #: ../lib/ukui-menu.py:452
 msgid "Close(_C)"
-msgstr "Perto(_C)"
+msgstr ""
 
 #. self.editCategory.set_visible(False)
 #: ../lib/ukui-menu.py:619
 msgid "Reload plugins"
-msgstr "Recarregar OS plugins"
+msgstr ""
 
 #: ../lib/ukui-menu.py:622 ../ukui_menu/plugins/menu.py:1863
 msgid "Property"
-msgstr "Propriedade"
+msgstr ""
 
 #: ../lib/timed-shutdown.py:88
 msgid "Set Timed Shutdown Time"
@@ -133,19 +130,19 @@ msgstr ""
 #: ../ukui_menu/plugins/menu.py:738 ../ukui_menu/plugins/menu.py:766
 #: ../ukui_menu/plugins/menu.py:2153 ../ukui_menu/plugins/menu.py:2263
 msgid "WPS Writer"
-msgstr "WPS Escritor"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:101 ../ukui_menu/plugins/menu.py:584
 #: ../ukui_menu/plugins/menu.py:740 ../ukui_menu/plugins/menu.py:768
 #: ../ukui_menu/plugins/menu.py:2153 ../ukui_menu/plugins/menu.py:2270
 msgid "WPS Presentation"
-msgstr "WPS Apresentação"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:102 ../ukui_menu/plugins/menu.py:588
 #: ../ukui_menu/plugins/menu.py:742 ../ukui_menu/plugins/menu.py:770
 #: ../ukui_menu/plugins/menu.py:2153 ../ukui_menu/plugins/menu.py:2277
 msgid "WPS Spreadsheets"
-msgstr "WPS Spreadsheets"
+msgstr ""
 
 #. qt app
 #: ../ukui_menu/plugins/menu.py:103 ../ukui_menu/plugins/menu.py:606
@@ -161,18 +158,18 @@ msgstr ""
 #: ../ukui_menu/plugins/menu.py:105 ../ukui_menu/plugins/menu.py:614
 #: ../ukui_menu/plugins/menu.py:774 ../ukui_menu/plugins/menu.py:2232
 msgid "Kylin Video"
-msgstr "Kylin Video"
+msgstr ""
 
 #. gtk app
 #: ../ukui_menu/plugins/menu.py:106 ../ukui_menu/plugins/menu.py:597
 #: ../ukui_menu/plugins/menu.py:776 ../ukui_menu/plugins/menu.py:2285
 msgid "Eye of MATE Image Viewer"
-msgstr "MATE Visualizador de Imagens"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:108 ../ukui_menu/plugins/menu.py:601
 #: ../ukui_menu/plugins/menu.py:778 ../ukui_menu/plugins/menu.py:2292
 msgid "Atril Document Viewer"
-msgstr "Atril Visualizador de Documentos"
+msgstr ""
 
 #. gtk app
 #: ../ukui_menu/plugins/menu.py:110 ../ukui_menu/plugins/menu.py:593
@@ -182,100 +179,99 @@ msgid "Pluma"
 msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
-#, fuzzy
 msgid "Education"
-msgstr "Aplicação"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Graphics"
-msgstr "Gráficos"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Internet"
-msgstr "Internet"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Programming"
-msgstr "A programação"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Sound & Video"
-msgstr "Som & Video"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "System Tools"
-msgstr "Ferramentas de sistema"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Universal Access"
-msgstr "Acesso universal"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Preferences"
-msgstr "Preferências"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Administration"
-msgstr "A administração"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:176 ../ukui_menu/plugins/menu.py:1134
 msgid "Other"
-msgstr "Outros"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
 msgid "Accessories"
-msgstr "Acessórios"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
 msgid "Office"
-msgstr "Escritório"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
 msgid "Games"
-msgstr "Jogos"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:178 ../ukui_menu/plugins/menu.py:1136
 #: ../ukui_menu/menueditor.py:1137
 msgid "Android"
-msgstr "Android"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:248
 msgid "Recent"
-msgstr "Recente"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:295 ../ukui_menu/plugins/menu.py:409
 msgid "All Apps"
-msgstr "Todos Apps"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:300 ../ukui_menu/plugins/menu.py:398
 msgid "Favorites"
-msgstr "Favoritos"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:345
 msgid "Shutdown"
-msgstr "Shutdown"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:420 ../ukui_menu/plugins/menu.py:811
 #: ../ukui_menu/plugins/menu.py:819 ../ukui_menu/plugins/menu.py:1519
 #: ../ukui_menu/plugins/menu.py:2388
 msgid "Search local program"
-msgstr "O programa Busca local"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:448
 msgid "Home"
-msgstr "Computador"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:456
 msgid "Settings"
-msgstr "Configuração"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:464 ../ukui_menu/feedback.py:67
 msgid "Feedback"
-msgstr "Feedback"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:472
 msgid "No items matched"
-msgstr "SEM itens."
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:755 ../ukui_menu/plugins/menu.py:2049
 #: ../ukui_menu/plugins/menu.py:2062 ../ukui_menu/plugins/menu.py:2095
@@ -285,107 +281,102 @@ msgid ""
 "\n"
 "It will be automatically removed from the history list!\n"
 msgstr ""
-"\n"
-"O ficheiro não existe, FOI movido ou removido!\n"
-"\n"
-"Ele será automaticamente retirado Da lista de histórico!\n"
 
 #: ../ukui_menu/plugins/menu.py:845 ../ukui_menu/plugins/menu.py:1605
 #: ../ukui_menu/plugins/menu.py:2115
 msgid "Open(_O)"
-msgstr "Open(_O)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:851 ../ukui_menu/plugins/menu.py:1611
 msgid "Add to desktop(_A)"
-msgstr "Adicionar Ao ecrã(_A)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:857 ../ukui_menu/plugins/menu.py:1617
 msgid "Lock to panel(_L)"
-msgstr "Fechadura para painel(_L)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:863
 msgid "Unlock from startup menu(_U)"
-msgstr "Unlock de Startup menu(_U)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:871 ../ukui_menu/plugins/menu.py:1643
 #: ../ukui_menu/plugins/menu.py:2139
 msgid "Property(_P)"
-msgstr "Propriedade(_P)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:959
 msgid "Shutdown (_P)"
-msgstr "Shutdown(_P)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:960
-#, fuzzy
 msgid "Countdown Shutdown (_T)"
-msgstr "Shutdown(_P)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:963
 msgid "Reboot (_R)"
-msgstr "Reboot(_R)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:966
 msgid "Logout (_O)"
-msgstr "Logout(_O)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:967
 msgid "Switch Users (_S)"
-msgstr "Mudar de utilizador(_S)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:968
 msgid "Lock Screen (_L)"
-msgstr "Lock Screen(_L)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1166 ../ukui_menu/plugins/menu.py:1167
 #: ../ukui_menu/plugins/menu.py:1431 ../ukui_menu/plugins/menu.py:1436
 msgid "Applications"
-msgstr "Aplicações"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1171 ../ukui_menu/plugins/menu.py:1172
 #: ../ukui_menu/plugins/menu.py:1433 ../ukui_menu/plugins/menu.py:1438
 msgid "System"
-msgstr "Sistema"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1623
 msgid "Add to startup menu"
-msgstr "Adicionar Ao menu de arranque"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1629
 msgid "Uninstall(_U)"
-msgstr "Desinstalar(_U)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1633 ../ukui_menu/plugins/menu.py:2133
 msgid "Remove from list(_R)"
-msgstr "Remover Da lista(_R)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1637
 msgid "Remove all"
-msgstr "Remover todos"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1827
 msgid "Type:"
-msgstr "Tipo:"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1829
 msgid "Name:"
-msgstr "Nome:"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1831
 msgid "Command:"
-msgstr "O Comando"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1833
 msgid "Note:"
-msgstr "Nota:"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1848
 msgid "Application"
-msgstr "Aplicação"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:1850
 msgid "Application in Terminal"
-msgstr "Aplicação de terminal"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:2071
 msgid ""
@@ -393,38 +384,35 @@ msgid ""
 "The file already exists, are you sure to cover it?\n"
 "\n"
 msgstr ""
-"\n"
-"O ficheiro já existe, TEM certeza que a cobrir?\n"
-"\n"
 
 #: ../ukui_menu/plugins/menu.py:2119
 msgid "Open directory(_D)"
-msgstr "Open Directory(_D)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:2125
 msgid "New(_N)"
-msgstr "Nova(_N)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:2129
 msgid "Copy to desktop(_C)"
-msgstr "Copiar para a Área de trabalho(_C)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:2340
 #, python-format
 msgid "Recent(%s)"
-msgstr "Recente(%s)"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:2437
 msgid "Chromium Browser"
-msgstr "Chromium Browser"
+msgstr ""
 
 #: ../ukui_menu/plugins/menu.py:2443
 msgid "Fcitx Config"
-msgstr "Fcitx Config"
+msgstr ""
 
 #: ../ukui_menu/easybuttons.py:406
 msgid "Comment:"
-msgstr "Comentário:"
+msgstr ""
 
 #: ../ukui_menu/keybinding.py:224
 msgid "Click to set a new accelerator key for opening and closing the menu.  "
@@ -453,9 +441,6 @@ msgid ""
 "The current system is not selected [%s] software, can not display the "
 "classification!"
 msgstr ""
-"\n"
-"O sistema actual não está seleccionada [%s], O software não Pode Exibir a "
-"classificação!"
 
 #: ../ukui_menu/menueditor.py:796
 #, python-format
@@ -464,54 +449,51 @@ msgid ""
 "The current system is not installed [%s] software, can not display the "
 "classification!"
 msgstr ""
-"\n"
-"O sistema actual não está instalado o [%s], O software não Pode Exibir a "
-"classificação!"
 
 #. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
 #: ../ukui_menu/menueditor.py:891
 msgid "Edit Category Menu"
-msgstr "Editar o menu Categoria"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:892
 msgid "Restore the default menu layout"
-msgstr "Restaurar o padrão DOS menus"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:893
 msgid "Menus:"
-msgstr "Menus:"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:894
 msgid "Items:"
-msgstr "Itens:"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:895
 msgid "Move Up"
-msgstr "Mover Até"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:896
 msgid "Move Down"
-msgstr "Mover Para baixo"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:897
 msgid "Revert all menus to original settings?"
-msgstr "Reverter todos OS menus de configuração original?"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:898
 msgid "Revert Changes?"
-msgstr "Reverter as alterações?"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:1083
 msgid "Name"
-msgstr "Nome"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:1099
 msgid "Show"
-msgstr "Show"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:1107
 msgid "Item"
-msgstr "Item"
+msgstr ""
 
 #: ../ukui_menu/menueditor.py:1138
 #, python-format
@@ -520,9 +502,6 @@ msgid ""
 "[%s] is a system autostart service software, you should not show it in "
 "startup menu!"
 msgstr ""
-"\n"
-"[%s] é um sistema auto - start service software, você não deve mostrar no "
-"menu de arranque!"
 
 #: ../ukui_menu/feedback.py:56
 msgid "You're offline. Please connect to the internet!"
@@ -530,7 +509,7 @@ msgstr ""
 
 #: ../ukui_menu/feedback.py:77
 msgid "Images"
-msgstr "Imagens"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:95
 msgid "DistroRelease"
@@ -554,88 +533,40 @@ msgstr ""
 
 #: ../ukui_menu/feedback.py:104
 msgid "System Info"
-msgstr "Sistema de info"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:146
 msgid "System Bug"
-msgstr "Sistema de bug"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:163
 msgid "Please input the description!"
-msgstr "Por favor, insira a descrição!"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:174
 msgid "Invalid email address!"
-msgstr "Endereço de e-mail inválido!"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:182
 msgid "Please input the email address!"
-msgstr "Por favor, insira o endereço de e-mail!"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:193
 msgid "Maximum upload file size is 1MB!"
-msgstr "Maximum upload file size é 1MB!"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:203
 msgid "Please input the verification code!"
-msgstr "Por favor, insira o código de verificação!"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:243
 msgid "Successful feedback! Thank you!"
-msgstr "BOM feedback!Obrigado!"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:250
 msgid "Incorrect CAPTCHA, please re-enter!"
-msgstr "Incorrect captcha, por favor introduza!"
+msgstr ""
 
 #: ../ukui_menu/feedback.py:257
 msgid "Unknow error: "
-msgstr "Unknow error:"
-
-#~ msgid "Type"
-#~ msgstr "Tipo"
-
-#~ msgid "<span color=\"red\">* </span>Description"
-#~ msgstr "<span color=\"red\">* </span>Descrição"
-
-#~ msgid "<span color=\"red\">* </span>Email"
-#~ msgstr "<span color=\"red\">* </span>E-mail"
-
-#~ msgid "Image"
-#~ msgstr "Imagen"
-
-#~ msgid "System Log"
-#~ msgstr "Log do sistema"
-
-#~ msgid "Please upload file less then 1Mb"
-#~ msgstr "Por favor, envie o arquivo Menos de 1MB"
-
-#~ msgid "Suggestion"
-#~ msgstr "Sugestão"
-
-#~ msgid "For Business"
-#~ msgstr "Para o negócio"
-
-#~ msgid "Others"
-#~ msgstr "Outros"
-
-#~ msgid "submit"
-#~ msgstr "Apresentar"
-
-#~ msgid "<span color=\"red\">* </span>CAPTCHA"
-#~ msgstr "<span color=\"red\">* </span>Captcha"
-
-#~ msgid "Type the code"
-#~ msgstr "Digite o código de"
-
-#~ msgid "Description"
-#~ msgstr "详细描述"
-
-#~ msgid "Email"
-#~ msgstr "邮箱"
-
-#~ msgid "Attachment"
-#~ msgstr "附件"
-
-#~ msgid "Asking for help"
-#~ msgstr "寻求帮助"
+msgstr ""

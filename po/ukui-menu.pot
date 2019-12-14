@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-06 12:12+0800\n"
+"POT-Creation-Date: 2019-12-14 11:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,11 +33,6 @@ msgstr ""
 
 #: ../lib/ukui-menu.py:255 ../lib/ukui-menu.py:407
 msgid "Category Menu"
-msgstr ""
-
-#. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
-#: ../lib/ukui-menu.py:257 ../ukui_menu/menueditor.py:891
-msgid "Edit Category Menu"
 msgstr ""
 
 #: ../lib/ukui-menu.py:346
@@ -88,6 +83,7 @@ msgstr ""
 msgid "Close(_C)"
 msgstr ""
 
+#. self.editCategory.set_visible(False)
 #: ../lib/ukui-menu.py:619
 msgid "Reload plugins"
 msgstr ""
@@ -108,7 +104,7 @@ msgstr ""
 msgid "days"
 msgstr ""
 
-#: ../lib/timed-shutdown.py:178 ../data/plugins/shutdown.ui.h:7
+#: ../lib/timed-shutdown.py:178
 msgid "Time to Poweroff:  "
 msgstr ""
 
@@ -419,23 +415,23 @@ msgstr ""
 msgid "Comment:"
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:219
+#: ../ukui_menu/keybinding.py:224
 msgid "Click to set a new accelerator key for opening and closing the menu.  "
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:220
+#: ../ukui_menu/keybinding.py:225
 msgid "Press Escape or click again to cancel the operation.  "
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:221
+#: ../ukui_menu/keybinding.py:226
 msgid "Press Backspace to clear the existing keybinding."
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:234
+#: ../ukui_menu/keybinding.py:239
 msgid "Pick an accelerator"
 msgstr ""
 
-#: ../ukui_menu/keybinding.py:286
+#: ../ukui_menu/keybinding.py:291
 msgid "<not set>"
 msgstr ""
 
@@ -453,6 +449,11 @@ msgid ""
 "\n"
 "The current system is not installed [%s] software, can not display the "
 "classification!"
+msgstr ""
+
+#. self.tree.get_object('edit_revert_to_original').set_label(_("Revert to Original"))
+#: ../ukui_menu/menueditor.py:891
+msgid "Edit Category Menu"
 msgstr ""
 
 #: ../ukui_menu/menueditor.py:892
@@ -531,11 +532,11 @@ msgstr ""
 msgid "Locale"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:104 ../data/feedback.ui.h:6
+#: ../ukui_menu/feedback.py:104
 msgid "System Info"
 msgstr ""
 
-#: ../ukui_menu/feedback.py:146 ../data/feedback.ui.h:8
+#: ../ukui_menu/feedback.py:146
 msgid "System Bug"
 msgstr ""
 
@@ -569,96 +570,4 @@ msgstr ""
 
 #: ../ukui_menu/feedback.py:257
 msgid "Unknow error: "
-msgstr ""
-
-#: ../data/feedback.ui.h:1
-msgid "Type"
-msgstr ""
-
-#: ../data/feedback.ui.h:2
-msgid "<span color=\"red\">* </span>Description"
-msgstr ""
-
-#: ../data/feedback.ui.h:3
-msgid "<span color=\"red\">* </span>Email"
-msgstr ""
-
-#: ../data/feedback.ui.h:4
-msgid "Image"
-msgstr ""
-
-#: ../data/feedback.ui.h:5
-msgid "System Log"
-msgstr ""
-
-#: ../data/feedback.ui.h:7
-msgid "Please upload file less then 1Mb"
-msgstr ""
-
-#: ../data/feedback.ui.h:9
-msgid "Suggestion"
-msgstr ""
-
-#: ../data/feedback.ui.h:10
-msgid "For Business"
-msgstr ""
-
-#: ../data/feedback.ui.h:11
-msgid "Others"
-msgstr ""
-
-#: ../data/feedback.ui.h:12
-msgid "submit"
-msgstr ""
-
-#: ../data/feedback.ui.h:13
-msgid "<span color=\"red\">* </span>CAPTCHA"
-msgstr ""
-
-#: ../data/feedback.ui.h:14
-msgid "Type the code"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:1
-msgid "Cancel"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:2
-msgid "Set Up"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:3
-msgid "Hour"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:4
-msgid "Minute"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:5
-msgid ":"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:6
-msgid "Automatic shutdown setted"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:8
-msgid "Never"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:9
-msgid "Only this time Shutdown"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:10
-msgid "Every Day"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:11
-msgid "Monday to Friday"
-msgstr ""
-
-#: ../data/plugins/shutdown.ui.h:12
-msgid "Saturday to Sunday"
 msgstr ""
