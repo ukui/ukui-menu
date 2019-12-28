@@ -1,35 +1,46 @@
 Source: ukui-menu
-Section: utils
+Section: x11
 Priority: optional
-Maintainer: liuhao <liuhao@kylinos.cn>
-Build-Depends: debhelper (>=9),
+Maintainer: Kylin Team <team+kylin@tracker.debian.org>
+Uploaders: liuhao <liuhao@kylinos.cn>
+Build-Depends: debhelper (>=12),
                qtbase5-dev,
                libqt5svg5-dev,
                libglib2.0-dev (>= 2.36)
-Standards-Version: 3.9.6
-Homepage: https://github.com/ukui/ukui-start-menu
-Vcs-Git: https://github.com/ukui/ukui-start-menu
-Vcs-Browser: https://github.com/ukui/ukui-start-menu
+Standards-Version: 4.4.0
+Homepage: https://github.com/explorer-cs/ukui-start-menu
+Vcs-Git: https://github.com/explorer-cs/ukui-start-menu
+Vcs-Browser: https://github.com/explorer-cs/ukui-start-menu
 
 Package: ukui-menu
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         libukui-menu0 (= ${binary:Version})
-Description: UKUI start menu
- <insert long description, indented with spaces>
+         libukui-menu1 (= ${binary:Version})
+Description: Advanced ukui menu
+ UKUI menu provides start menu development library and advanced
+ graphical user interface.
+ .
+ The package contains executable file.
 
 Package: libukui-menu-dev
 Architecture: any
 Section: libdevel
-Depends: ${shlibs:Depends}, 
+Depends: ${shlibs:Depends},
          ${misc:Depends},
-         libukui-menu0 (= ${binary:Version})
-Description: UKUI menu interfaces
- <insert long description, indented with spaces>
+         libukui-menu1 (= ${binary:Version})
+Description: UKUI menu interface
+ UKUI menu provides start menu development library and advanced
+ graphical user interface.
+ .
+ The package contains development files for ukui menu.
 
-Package: libukui-menu0
+Package: libukui-menu1
 Architecture: any
+Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: UKUI menu libraries
- <insert long description, indented with spaces>
+Description: UKUI menu library
+ UKUI menu provides start menu development library and advanced
+ graphical user interface.
+ .
+ The package contains ukui menu library.

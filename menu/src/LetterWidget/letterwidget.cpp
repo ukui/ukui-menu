@@ -32,21 +32,14 @@ void LetterWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    char widgetcolor[100];
-    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
+    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,462);
+    this->setFixedSize(320,500);
 
-    mainLayout=new  QHBoxLayout(this);
-    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout=new QHBoxLayout(this);
+    mainLayout->setContentsMargins(2,0,2,0);
     mainLayout->setSpacing(0);
-    applistWid=new QWidget(this);
-    applistWid->setStyleSheet("border:0px;background: transparent;");
-    applistWid->setFixedSize(this->width(),this->height());
-    mainLayout->addWidget(applistWid);
     this->setLayout(mainLayout);
-
     pUkuiMenuInterface=new UkuiMenuInterface;
 
     init_applist_widget();
@@ -58,15 +51,11 @@ void LetterWidget::init_widget()
  */
 void LetterWidget::init_applist_widget()
 {
-    QHBoxLayout* layout=new QHBoxLayout();
-    layout->setContentsMargins(2,0,2,0);
-    applistWid->setLayout(layout);
-    applistview=new ListView(this,applistWid->width()-4,applistWid->height(),1);
-    layout->addWidget(applistview);
+    applistview=new ListView(this,this->width()-4,this->height(),1);
+    mainLayout->addWidget(applistview);
     fill_app_listview();
     connect(applistview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(recvItemClickedSlot(QStringList)));
     connect(applistview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
-
 }
 
 
@@ -102,46 +91,6 @@ void LetterWidget::fill_app_listview()
         }
     }
 
-//    letterposlist.clear();
-//    appsortlist.clear();
-//    data.clear();
-//    letterposlist=KylinStartMenuInterface::get_app_diff_first_letter_pos();
-//    appsortlist=KylinStartMenuInterface::sort_app_name();
-//    int row=0;
-//    for(int i=0;i<letterposlist.count();i++)
-//    {
-//        QString startstr=letterposlist.at(i);
-//        int start=startstr.toInt();
-//        int end;
-//        if(i==letterposlist.count()-1)
-//            end=appsortlist.count()-1;
-//        else{
-//            QString endstr=letterposlist.at(i+1);
-//            end=endstr.toInt();
-//        }
-
-//        QStringList applist=get_alphabetic_classification_applist(start,end);
-//        if(!applist.isEmpty())
-//        {
-//            QString lettersrt=KylinStartMenuInterface::get_app_name_pinyin(applist.at(0));
-//            QChar letter=lettersrt.at(0);
-//            if(letter<48 || (letter>57 && letter<65) || letter>90)
-//                letter='&';
-//            else if(letter>=48 && letter<=57)
-//                letter='#';
-//            else letter=lettersrt.at(0);
-//            data.append(QStringList()<<QString(letter)<<"0");
-//            letterbtnlist.append(QString(letter));//存储分类字符
-//            letterbtnrowlist.append(QString::number(row));//存储分类字符所在行
-//            for(int i=0;i<applist.count();i++)
-//            {
-//                QString desktopfp=KylinStartMenuInterface::get_desktop_path_by_app_name(applist.at(i));
-//                data.append(QStringList()<<desktopfp<<"1");
-//            }
-//            row+=(applist.count()+1);
-
-//        }
-//    }
     m_delegate= new ItemDelegate(this,1);
     applistview->setItemDelegate(m_delegate);
     applistview->addData(data);
@@ -181,11 +130,8 @@ void LetterWidget::exec_app_name(QString exec)
 /**
  * 更新应用列表
  */
-void LetterWidget::update_app_listview(QString desktopfn, QString appname, int arg)
+void LetterWidget::update_app_listview()
 {
-    Q_UNUSED(desktopfn);
-    Q_UNUSED(appname);
-    Q_UNUSED(arg);
     int row=0;
     data.clear();
     letterbtnlist.clear();
@@ -227,10 +173,9 @@ void LetterWidget::app_classificationbtn_clicked_slot()
     letterbtnwid=new LetterButtonWidget(this);
     connect(this,SIGNAL(send_letterbtn_list(QStringList)),letterbtnwid,SLOT(recv_letterbtn_list(QStringList)));
     emit send_letterbtn_list(letterbtnlist);
-    mainLayout->removeWidget(applistWid);
-    applistWid->setParent(nullptr);
+    mainLayout->removeWidget(applistview);
+    applistview->setParent(nullptr);
     mainLayout->addWidget(letterbtnwid);
-    emit send_letterwid_state(1,"");
 
     connect(letterbtnwid, SIGNAL(send_letterbtn_signal(QString)),this,SLOT(recv_letterbtn_signal(QString)));
 }
@@ -247,7 +192,7 @@ void LetterWidget::recv_letterbtn_signal(QString btnname)
         delete letterbtnwid;
         letterbtnwid=nullptr;
     }
-    mainLayout->addWidget(applistWid);
+    mainLayout->addWidget(applistview);
 
     //此处需实现将字母为btnname的应用列表移动到applistWid界面最顶端
     int num=letterbtnlist.indexOf(QString(QChar(btnname.at(0))));
@@ -257,60 +202,17 @@ void LetterWidget::recv_letterbtn_signal(QString btnname)
         applistview->verticalScrollBar()->setValue(row);
 
     }
-    emit send_letterwid_state(0,btnname);
 }
 
-/**
- * 设置字母分类界面状态
- */
-void LetterWidget::set_letterwidge_state(int state, QString btnname)
+void LetterWidget::widget_make_zero()
 {
-    if(state==1)
+    if(letterbtnwid!=nullptr)
     {
-        QLayoutItem *child;
-        if((child = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=child->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        if(letterbtnwid!=nullptr)
-        {
-            delete letterbtnwid;
-            letterbtnwid=nullptr;
-        }
-        letterbtnwid=new LetterButtonWidget(this);
-        connect(letterbtnwid, SIGNAL(send_letterbtn_signal(QString)),this,SLOT(recv_letterbtn_signal(QString)));
-        connect(this,SIGNAL(send_letterbtn_list(QStringList)),letterbtnwid,SLOT(recv_letterbtn_list(QStringList)));
-        emit send_letterbtn_list(letterbtnlist);
-        mainLayout->addWidget(letterbtnwid);
+        mainLayout->removeWidget(letterbtnwid);
+        letterbtnwid->setParent(nullptr);
+        delete letterbtnwid;
+        letterbtnwid=nullptr;
+        mainLayout->addWidget(applistview);
     }
-    else{
-        QLayoutItem *child;
-        if((child = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=child->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        if(letterbtnwid!=nullptr)
-        {
-            delete letterbtnwid;
-            letterbtnwid=nullptr;
-        }
-        mainLayout->addWidget(applistWid);
-
-        //此处需实现将字母为btnname的应用列表移动到applistWid界面最顶端
-        int num=letterbtnlist.indexOf(QString(QChar(btnname.at(0))));
-        if(num!=-1)
-        {
-            int row=letterbtnrowlist.at(num).toInt();
-            applistview->verticalScrollBar()->setValue(row);
-        }
-    }
-
+    applistview->verticalScrollBar()->setValue(0);
 }

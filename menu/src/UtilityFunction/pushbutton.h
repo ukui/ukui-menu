@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #ifndef PUSHBUTTON_H
 #define PUSHBUTTON_H
 #include <QPushButton>
@@ -17,28 +35,16 @@ public:
      * @param classify为0时为分类按钮、1为应用按钮
      * @param module为0时为常用模块，1为字母模块、2为功能模块
      */
-    PushButton(QString name,int classify, int module);
+    PushButton(QString name,int width,int height);
     ~PushButton();
 
 private:
     QString name;
-    int classify;
-    int module;
-    RightClickMenu* menu=nullptr;//右键菜单
-    QSettings *setting=nullptr;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    int width;
+    int height;
 
 protected:
     void init_app_btn();
-
-private slots:
-    void exec_app_name();//执行应用程序
-    void right_click_slot();//加载右键菜单
-
-signals:
-    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
-    void send_right_click_signal(int ret);//向CommonUseWidget发送邮件菜单返回值信号
-    void send_update_applist_signal(QString appname);//向LetterWidget或者FunctionWidget发送更新应用列表信号
 
 };
 

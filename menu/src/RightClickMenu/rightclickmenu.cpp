@@ -6,9 +6,6 @@ RightClickMenu::RightClickMenu()
     QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
-    attrDialog=new AttributeDialog;
-    connect(this,SIGNAL(send_attribute_value(QString)),attrDialog,SLOT(recv_attribute_value(QString)));
-
     //其它按钮右键菜单项
     othermenu=new QMenu();
     othermenu->setLayoutDirection(Qt::LeftToRight);
@@ -126,13 +123,13 @@ void RightClickMenu::add_commonuse_appbtn_action()
     }
 
     QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
-    QDBusInterface iface("com.kylin.security.controller.filectrl",
+    QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
-                         "com.kylin.security.controller.filectrl",
+                         "com.ukui.panel.desktop",
                          QDBusConnection::sessionBus());
 
-    QDBusReply<QVariant> ret=iface.call("CheckIfExist",desktopfp);
-    if(!ret.value().toBool())
+    QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
+    if(!ret)
     {
         init_widget_action(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg","固定到任务栏");
         CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
@@ -230,13 +227,13 @@ void RightClickMenu::add_appbtn_action()
     setting->endGroup();
 
     QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
-    QDBusInterface iface("com.kylin.security.controller.filectrl",
+    QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
-                         "com.kylin.security.controller.filectrl",
+                         "com.ukui.panel.desktop",
                          QDBusConnection::sessionBus());
 
-    QDBusReply<QVariant> ret=iface.call("CheckIfExist",desktopfp);
-    if(!ret.value().toBool())
+    QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
+    if(!ret)
     {
         init_widget_action(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg","固定到任务栏");
         Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
@@ -412,9 +409,9 @@ void RightClickMenu::unfixed4commonuseaction_trigger_slot()
 void RightClickMenu::fix2taskbaraction_trigger_slot()
 {
     QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
-    QDBusInterface iface("com.kylin.security.controller.filectrl",
+    QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
-                         "com.kylin.security.controller.filectrl",
+                         "com.ukui.panel.desktop",
                          QDBusConnection::sessionBus());
     QDBusReply<QVariant> ret=iface.call("AddToTaskbar",desktopfp);
     //    qDebug()<<desktopfp<<ret.value().toBool();
@@ -424,9 +421,9 @@ void RightClickMenu::fix2taskbaraction_trigger_slot()
 void RightClickMenu::unfixed4taskbaraction_trigger_slot()
 {
     QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
-    QDBusInterface iface("com.kylin.security.controller.filectrl",
+    QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
-                         "com.kylin.security.controller.filectrl",
+                         "com.ukui.panel.desktop",
                          QDBusConnection::sessionBus());
     QDBusReply<QVariant> ret=iface.call("RemoveFromTaskbar",desktopfp);
     action_number=4;
@@ -445,8 +442,11 @@ void RightClickMenu::uninstallaction_trigger_slot()
 void RightClickMenu::attributeaction_trigger_slot()
 {
     action_number=7;
-    emit send_attribute_value(appname);
-    attrDialog->show();
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+    char command[100];
+    sprintf(command,"ukui-menu-attr %s",desktopfp.toLocal8Bit().data());
+    QProcess* proc=new QProcess(this);
+    proc->startDetached(command);
 }
 
 void RightClickMenu::cudeleteaction_trigger_slot()

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #ifndef LETTERWIDGET_H
 #define LETTERWIDGET_H
 
@@ -20,13 +38,7 @@ class LetterWidget : public QWidget
 public:
      explicit LetterWidget(QWidget *parent=nullptr);
     ~LetterWidget();
-
-    /**
-      * 设置字母排序界面状态
-      * @param state为0时字母排序界面加载应用列表，为1时加载纯字母按钮界面LetterButtonWidget
-      * @param btnname存放有具体的字母
-      */
-     void set_letterwidge_state(int state,QString btnname);
+    void widget_make_zero();//MainWindow隐藏时，此界面恢复至初始状态
 
 private:
     Ui::LetterWidget *ui;
@@ -35,7 +47,6 @@ private:
 
     QHBoxLayout* mainLayout=nullptr;
 
-    QWidget* applistWid=nullptr;//应用列表界面
     LetterButtonWidget* letterbtnwid=nullptr;//分类按钮界面
 
     ListView* applistview=nullptr;
@@ -56,17 +67,12 @@ private slots:
     void app_classificationbtn_clicked_slot();//应用列表字母分类按钮槽函数
     void recv_letterbtn_signal(QString btnname);//接收LetterButtonWidget界面按钮信号
     void exec_app_name(QString exec);//执行应用程序
-    void update_app_listview(QString desktopfn,QString appname,int arg);//更新应用列表
+    void update_app_listview();//更新应用列表
 
     void recvItemClickedSlot(QStringList arg);
 
 
 signals:
-    /**
-     * 向MainViewWidget发送字母排序界面状态信号
-     * @param state为0时，btnname为具体的字母，为1时，btnname为空
-     */
-    void send_letterwid_state(int state,QString btnname);
     void send_letterbtn_list(QStringList list);//向LetterButtonWidget发送字母按钮列表
     void send_update_applist_signal();//向常用软件模块发送更新应用列表信号
     void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号

@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>data/qss/kylin-start-menu.qss</file>
         <file>data/img/sidebarwidget/commonuse.svg</file>
         <file>data/img/sidebarwidget/computer.svg</file>
         <file>data/img/sidebarwidget/control.svg</file>
@@ -64,8 +63,6 @@
         <file>data/img/mainviewwidget/downarrow.svg</file>
         <file>data/img/mainviewwidget/uparrow-pressed.svg</file>
         <file>data/img/mainviewwidget/uparrow.svg</file>
-        <file>data/img/attributedialog/close-black.svg</file>
-        <file>data/img/attributedialog/close-white.svg</file>
-        <file>data/img/attributedialog/min-black.svg</file>
+        <file>data/qss/ukui-menu.qss</file>
     </qresource>
 </RCC>

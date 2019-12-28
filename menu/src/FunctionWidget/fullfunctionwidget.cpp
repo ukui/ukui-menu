@@ -26,24 +26,32 @@ void FullFunctionWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    char widgetcolor[100];
-    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
+    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(QApplication::desktop()->availableGeometry().width()-160,
-                       QApplication::desktop()->availableGeometry().height()-70);
+    applistWid=new QWidget(this);
+    iconlistWid=new QWidget(this);
+    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+    {
+        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-265,
+                           QApplication::desktop()->availableGeometry().height()-87);
+        applistWid->setFixedSize(this->width()-263,this->height());
+        iconlistWid->setFixedSize(263,this->height());
+    }
+    else
+    {
+        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-286,
+                       QApplication::desktop()->availableGeometry().height()-105);
+        applistWid->setFixedSize(this->width()-287,this->height());
+        iconlistWid->setFixedSize(287,this->height());
+    }
 
-    mainLayout=new QVBoxLayout(this);
+    mainLayout=new QHBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    applistWid=new QWidget(this);
     applistWid->setStyleSheet("border:0px;background:transparent;");
-    applistWid->setFixedSize(this->width(),this->height()-70);
-    iconlistWid=new QWidget(this);
     iconlistWid->setStyleSheet("border:0px;background:transparent");
-    iconlistWid->setFixedSize(this->width(),70);
-    mainLayout->addWidget(applistWid);
     mainLayout->addWidget(iconlistWid);
+    mainLayout->addWidget(applistWid);
     this->setLayout(mainLayout);
 
     pUkuiMenuInterface=new UkuiMenuInterface;
@@ -97,17 +105,17 @@ void FullFunctionWidget::init_widget()
     iconlightlist.append(otherlightstr);
 
     functionnamelist.clear();
-    functionnamelist.append("最近添加");
-    functionnamelist.append("网络应用");
-    functionnamelist.append("社交沟通");
-    functionnamelist.append("影音播放");
-    functionnamelist.append("开发编程");
-    functionnamelist.append("图形图像");
-    functionnamelist.append("游戏娱乐");
-    functionnamelist.append("办公学习");
-    functionnamelist.append("阅读翻译");
-    functionnamelist.append("系统管理");
-    functionnamelist.append("其他应用");
+    functionnamelist.append("最近");
+    functionnamelist.append("网络");
+    functionnamelist.append("社交");
+    functionnamelist.append("影音");
+    functionnamelist.append("开发");
+    functionnamelist.append("图像");
+    functionnamelist.append("游戏");
+    functionnamelist.append("办公");
+    functionnamelist.append("教育");
+    functionnamelist.append("系统");
+    functionnamelist.append("其它");
 
     init_applist_widget();
     init_iconlist_widget();
@@ -119,12 +127,12 @@ void FullFunctionWidget::init_widget()
 void FullFunctionWidget::init_applist_widget()
 {
     QHBoxLayout* layout=new QHBoxLayout(applistWid);
-    layout->setContentsMargins(30,0,2,0);
+    layout->setContentsMargins(0,0,0,0);
     applistWid->setLayout(layout);
 
     scrollarea=new ScrollArea;
     scrollareawid=new QWidget;
-    scrollarea->setFixedSize(applistWid->width()-32-12,applistWid->height());
+    scrollarea->setFixedSize(applistWid->width(),applistWid->height());
     scrollarea->setWidget(scrollareawid);
     scrollarea->setWidgetResizable(true);
     scrollareawidLayout=new QVBoxLayout;
@@ -132,13 +140,13 @@ void FullFunctionWidget::init_applist_widget()
     scrollareawidLayout->setSpacing(0);
     scrollareawid->setLayout(scrollareawidLayout);
     layout->addWidget(scrollarea);
-    fill_app_tablewidget();
+    fill_app_list();
 }
 
 /**
  * 填充应用列表
  */
-void FullFunctionWidget::fill_app_tablewidget()
+void FullFunctionWidget::fill_app_list()
 {
     classificationbtnlist.clear();
     classificationbtnrowlist.clear();
@@ -148,56 +156,56 @@ void FullFunctionWidget::fill_app_tablewidget()
     QStringList recentlist=vector.at(0);
     if(!recentlist.isEmpty())
     {
-        insert_classification_btn("最近添加");
+        insert_classification_btn("最近");
         insert_app_list(recentlist);
     }
 
     QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
-        insert_classification_btn("网络应用");
+        insert_classification_btn("网络");
         insert_app_list(netlist);
     }
     QStringList sociallist=vector.at(2);
     if(!sociallist.isEmpty())
     {
-        insert_classification_btn("社交沟通");
+        insert_classification_btn("社交");
         insert_app_list(sociallist);
     }
     QStringList avlist=vector.at(3);
     if(!avlist.isEmpty())
     {
-        insert_classification_btn("影音播放");
+        insert_classification_btn("影音");
         insert_app_list(avlist);
     }
     QStringList developlist=vector.at(4);
     if(!developlist.isEmpty())
     {
-        insert_classification_btn("开发编程");
+        insert_classification_btn("开发");
         insert_app_list(developlist);
     }
     QStringList graphicslist=vector.at(5);
     if(!graphicslist.isEmpty())
     {
-        insert_classification_btn("图形图像");
+        insert_classification_btn("图像");
         insert_app_list(graphicslist);
     }
     QStringList gamelist=vector.at(6);
     if(!gamelist.isEmpty())
     {
-        insert_classification_btn("游戏娱乐");
+        insert_classification_btn("游戏");
         insert_app_list(gamelist);
     }
     QStringList officelist=vector.at(7);
     if(!officelist.isEmpty())
     {
-        insert_classification_btn("办公学习");
+        insert_classification_btn("办公");
         insert_app_list(officelist);
     }
     QStringList educationlist=vector.at(8);
     if(!educationlist.isEmpty())
     {
-        insert_classification_btn("阅读翻译");
+        insert_classification_btn("教育");
 
         insert_app_list(educationlist);
     }
@@ -205,35 +213,31 @@ void FullFunctionWidget::fill_app_tablewidget()
     QStringList systemadminlist=vector.at(9);
     if(!systemadminlist.isEmpty())
     {
-        insert_classification_btn("系统管理");
+        insert_classification_btn("系统");
         insert_app_list(systemadminlist);
     }
     QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
-        insert_classification_btn("其他应用");
+        insert_classification_btn("其它");
         insert_app_list(otherlist);
     }
 
-//    scrollarea->widget()->adjustSize();
     resize_scrollarea_controls();
 }
 
 void FullFunctionWidget::insert_classification_btn(QString btnname)
 {
-
-    PushButton* classificationbtn=new PushButton(btnname,0,2);
-    classificationbtn->setFixedSize(scrollarea->width()-32,20);
+    PushButton* classificationbtn=new PushButton(btnname,scrollarea->width()-12,20);
+    classificationbtn->setFixedSize(scrollarea->width()-12,20);
     scrollareawidLayout->addWidget(classificationbtn);
     classificationbtnlist.append(btnname);
-//    classificationbtnrowlist.append(QString::number(pos));
-    connect(classificationbtn, SIGNAL(clicked()), this,SLOT(app_classificationbtn_clicked_slot()));
 
 }
 
 void FullFunctionWidget::insert_app_list(QStringList appnamelist)
 {
-    FullListView* listview=new FullListView(this,applistWid->width(),100,2);
+    FullListView* listview=new FullListView(this,2);
     scrollareawidLayout->addWidget(listview);
     data.clear();
     for(int i=0;i<appnamelist.count();i++)
@@ -241,26 +245,11 @@ void FullFunctionWidget::insert_app_list(QStringList appnamelist)
 
         QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appnamelist.at(i));
         data.append(desktopfp);
-
-//        data.append(appnamelist.at(i));
-
     }
 
-    FullItemDelegate* itemdelegate=new FullItemDelegate(this,2);
-    listview->setItemDelegate(itemdelegate);
     listview->addData(data);
-//    listview->adjustSize();
-//    int dividend=scrollarea->width()/120;
-//    int rowcount=0;
-//    if(appnamelist.count()%dividend>0)
-//        rowcount=appnamelist.count()/dividend+1;
-//    else rowcount=appnamelist.count()/dividend;
-//    QModelIndex index=listview->model()->index(rowcount-1,0);
-//    QRect rect=listview->visualRect(index);
-//    listview->setFixedSize(scrollarea->width()-32,rect.y()+rect.height()+20*rowcount);
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
     connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
-//    pos+=(20+listview->height());
 }
 
 /**
@@ -286,171 +275,55 @@ void FullFunctionWidget::exec_app_name(QString appname)
 /**
  * 更新应用列表
  */
-void FullFunctionWidget::update_app_listview(QString desktopfn, QString appname, int arg)
+void FullFunctionWidget::update_app_listview()
 {
-    //放到最近添加模块
-    QLayoutItem* item=scrollareawidLayout->itemAt(1);
-    QWidget* wid=item->widget();
-    FullListView* listview=qobject_cast<FullListView*>(wid);
-    if(arg==0)//添加到最近模块
+    //刷新应用列表界面
+    for(int index=scrollareawidLayout->count()-1;index>=0;index--)
     {
-        listview->insertRow(QString("/usr/share/applications/"+desktopfn));
-
-    }
-    else {//从最近模块删除
-        listview->removeRow(QString("/usr/share/applications/"+desktopfn));
-    }
-
-    if(arg==0)//有新软件安装
-    {
-//        QString appname=pUkuiMenuInterface->get_app_name(QString("/usr/share/applications/"+desktopfn));
-        QStringList networkapplist=pUkuiMenuInterface->get_network_app_list();
-        QStringList socilaapplist=pUkuiMenuInterface->get_social_app_list();
-        QStringList avapplist=pUkuiMenuInterface->get_av_app_list();
-        QStringList devapplist=pUkuiMenuInterface->get_develop_app_list();
-        QStringList graphicsapplist=pUkuiMenuInterface->get_graphics_app_list();
-        QStringList gameapplist=pUkuiMenuInterface->get_game_app_list();
-        QStringList officeapplist=pUkuiMenuInterface->get_office_app_list();
-        QStringList educationapplist=pUkuiMenuInterface->get_education_app_list();
-        QStringList systemadminlist=pUkuiMenuInterface->get_systemadmin_app_list();
-        QStringList otherapplist=pUkuiMenuInterface->get_other_app_list();
-        if(networkapplist.contains(appname))
-        {
-            int num=networkapplist.count();
-            add_app("网络应用",desktopfn,num);
-        }
-        if(socilaapplist.contains(appname))
-        {
-            int num=socilaapplist.count();
-            add_app("社交沟通",desktopfn,num);
-        }
-        if(avapplist.contains(appname))
-        {
-            int num=avapplist.count();
-            add_app("影音播放",desktopfn,num);
-        }
-        if(devapplist.contains(appname))
-        {
-            int num=devapplist.count();
-            add_app("开发编程",desktopfn,num);
-        }
-        if(graphicsapplist.contains(appname))
-        {
-            int num=graphicsapplist.count();
-            add_app("图形图像",desktopfn,num);
-        }
-        if(gameapplist.contains(appname))
-        {
-            int num=gameapplist.count();
-            add_app("游戏娱乐",desktopfn,num);
-        }
-        if(officeapplist.contains(appname))
-        {
-            int num=officeapplist.count();
-            add_app("办公学习",desktopfn,num);
-        }
-        if(educationapplist.contains(appname))
-        {
-            int num=educationapplist.count();
-            add_app("阅读翻译",desktopfn,num);
-        }
-        if(systemadminlist.contains(appname))
-        {
-            int num=systemadminlist.count();
-            add_app("系统管理",desktopfn,num);
-        }
-        if(otherapplist.contains(appname))
-        {
-            int num=otherapplist.count();
-            add_app("其他应用",desktopfn,num);
-        }
-    }
-    else{//有软件被卸载
-        int pos=0;
-        while(pos<scrollareawidLayout->count()/2)
-        {
-            QLayoutItem* item=scrollareawidLayout->itemAt(2*pos+1);
+            QLayoutItem* item=scrollareawidLayout->takeAt(index);
             QWidget* wid=item->widget();
-            FullListView* listview=qobject_cast<FullListView*>(wid);
-            listview->removeRow("/usr/share/applications/"+desktopfn);
-
-            if(listview->model()->rowCount()==0)//该分类只有一个应用，卸载后，listview列表个数为零
-            {
-                QLayoutItem* classifybtnitem=scrollareawidLayout->itemAt(2*pos);
-                QWidget* classifybtnwid=classifybtnitem->widget();
-                QPushButton* classifybtn=qobject_cast<QPushButton*>(classifybtnwid);
-                QLayoutItem* labelitem=classifybtn->layout()->itemAt(1);
-                QWidget* labelwid=labelitem->widget();
-                QLabel* label=qobject_cast<QLabel*>(labelwid);
-                QString classify=label->text();
-                for(int i=1;i>=0;i--)//删除listview和对应的分类按钮
-                {
-                    QLayoutItem* item=scrollareawidLayout->itemAt(2*pos+i);
-                    QWidget* wid=item->widget();
-                    scrollareawidLayout->removeWidget(wid);
-                    wid->setParent(nullptr);
-                    delete wid;
-                }
-
-                classificationbtnlist.removeAll(classify);
-            }
-            else {
-               pos++;
-            }
-        }
+            scrollareawidLayout->removeWidget(wid);
+            wid->setParent(nullptr);
+            delete wid;
     }
 
-    resize_scrollarea_controls();
-}
+    fill_app_list();
 
-void FullFunctionWidget::add_app(QString classify, QString desktopfn, int num)
-{
-    //在functionnamelist中查找当前classify或者其上一个是否存在
-    int index=functionnamelist.indexOf(classify);
-    int pos=0;
-    for(pos=index;pos>0;pos--)
+    //刷新图标列表界面
+    foreach (QAbstractButton* button, buttonList){
+        pBtnGroup->removeButton(button);
+    }
+    buttonList.clear();
+    for(int index=iconlistscrollareawidLayout->count()-2;index>0;index--)
     {
-        if(classificationbtnlist.indexOf(functionnamelist.at(pos))!=-1)
-            break;
-    }
-    if(pos==index)//说明functionnamelist存在classify
-        pos=classificationbtnlist.indexOf(classify);
-    if(num==1)//只有一个新增的应用
-    {
-        QString classifyname=classify;
-        insert_classification_btn(classifyname,2*(pos+1));
-        insert_app_listview(desktopfn,2*(pos+1)+1);
-    }
-    else {
-        QLayoutItem* item=scrollareawidLayout->itemAt(2*pos+1);
+        QLayoutItem* item=iconlistscrollareawidLayout->takeAt(index);
         QWidget* wid=item->widget();
-        FullListView* listview=qobject_cast<FullListView*>(wid);
-        listview->insertRow("/usr/share/applications/"+desktopfn);
+        iconlistscrollareawidLayout->removeWidget(wid);
+        wid->setParent(nullptr);
+        delete wid;
     }
-}
+    for(int i=0;i<classificationbtnlist.size();i++)
+    {
+        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
+                                                                   106,
+                                                                   48,
+                                                                   iconlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
+                                                                   iconlightlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
+                                                                   ClassifyBtnHoverBackground,
+                                                                   ClassifyBtnHoverBackground,
+                                                                   2,
+                                                                   classificationbtnlist.at(i));
+        buttonList.append(iconbtn);
+        iconlistscrollareawidLayout->insertWidget(i+1,iconbtn);
+        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
+    }
 
-void FullFunctionWidget::insert_classification_btn(QString classify, int pos)
-{
-    PushButton* classificationbtn=new PushButton(classify,0,2);
-    classificationbtnlist.insert(pos/2,classify);
-    scrollareawidLayout->insertWidget(pos,classificationbtn);
-    scrollareawidLayout->update();
-
-    connect(classificationbtn, SIGNAL(clicked()), this,SLOT(app_classificationbtn_clicked_slot()));
-}
-
-void FullFunctionWidget::insert_app_listview(QString desktopfn, int pos)
-{
-    FullListView* listview=new FullListView(this,applistWid->width(),100,1);
-    data.clear();
-    data.append("/usr/share/applications/"+desktopfn);
-    FullItemDelegate* itemdelegate=new FullItemDelegate(this,1);
-    listview->setItemDelegate(itemdelegate);
-    listview->addData(data);
-    listview->adjustSize();
-    scrollareawidLayout->insertWidget(pos,listview);
-    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
+    int id=0;
+    foreach (QAbstractButton* btn, buttonList) {
+        pBtnGroup->addButton(btn,id++);
+    }
+    iconlistscrollarea->widget()->adjustSize();
+    pBtnGroup->button(0)->click();
 }
 
 /**
@@ -464,18 +337,21 @@ void FullFunctionWidget::resize_scrollarea_controls()
     while(row<scrollareawidLayout->count()/2)
     {
         //分类按钮
-        QLayoutItem* classificationbtnwidItem=scrollareawidLayout->itemAt(row*2);
-        QWidget* classificationbtnwid=classificationbtnwidItem->widget();
-        QPushButton* classificationbtn=qobject_cast<QPushButton*>(classificationbtnwid);
-        classificationbtn->setFixedSize(scrollarea->width()-32,20);
+//        QLayoutItem* classificationbtnwidItem=scrollareawidLayout->itemAt(row*2);
+//        QWidget* classificationbtnwid=classificationbtnwidItem->widget();
+//        QPushButton* classificationbtn=qobject_cast<QPushButton*>(classificationbtnwid);
+//        classificationbtn->setFixedSize(scrollarea->width()-32,20);
         //应用界面
         QLayoutItem* widItem=scrollareawidLayout->itemAt(row*2+1);
         QWidget* wid=widItem->widget();
         FullListView* listview=qobject_cast<FullListView*>(wid);
         listview->adjustSize();
-        int dividend=scrollarea->width()/120;
+        int dividend=0;
+        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+            dividend=(scrollarea->width()-12)/159;
+        else
+            dividend=(scrollarea->width()-12)/200;
         int rowcount=0;
-//        qDebug()<<dividend<<listview->model()->rowCount();
         if(listview->model()->rowCount()%dividend>0)
         {
             rowcount=listview->model()->rowCount()/dividend+1;
@@ -485,9 +361,11 @@ void FullFunctionWidget::resize_scrollarea_controls()
             rowcount=listview->model()->rowCount()/dividend;
 
         }
-        QModelIndex index=listview->model()->index(rowcount-1,0);
-        QRect rect=listview->visualRect(index);
-        listview->setFixedSize(scrollarea->width()-32,rect.y()+rect.height()+20);
+
+        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+            listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
+        else
+            listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
         if(row<scrollareawidLayout->count()/2-1)
         {
             pos+=(20+listview->height());
@@ -499,164 +377,29 @@ void FullFunctionWidget::resize_scrollarea_controls()
 }
 
 /**
- * 全屏应用列表功能分类按钮槽函数
- */
-void FullFunctionWidget::app_classificationbtn_clicked_slot()
-{
-    //加载FullFunctionButtonWidget界面
-    fullfunbtnwid=new FullFunctionButtonWidget(this);
-    connect(this,SIGNAL(send_classificationbtn_list(QStringList)),fullfunbtnwid,SLOT(recv_classificationbtn_list(QStringList)));
-    emit send_classificationbtn_list(classificationbtnlist);
-    mainLayout->removeWidget(applistWid);
-    applistWid->setParent(nullptr);
-    mainLayout->removeWidget(iconlistWid);
-    iconlistWid->setParent(nullptr);
-    mainLayout->addWidget(fullfunbtnwid);
-    emit send_fullfunctionwid_state(1,"");
-
-    connect(fullfunbtnwid, SIGNAL(send_functionbtn_signal(QString)),this,SLOT(recv_functionbtn_signal(QString)));
-}
-
-/**
- * 接收FullFunctionButtonWidget界面按钮信号
- */
-void FullFunctionWidget::recv_functionbtn_signal(QString btnname)
-{
-    mainLayout->removeWidget(fullfunbtnwid);
-    fullfunbtnwid->setParent(nullptr);
-    if(fullfunbtnwid!=nullptr)
-    {
-        delete fullfunbtnwid;
-        fullfunbtnwid=nullptr;
-    }
-    mainLayout->addWidget(applistWid);
-    mainLayout->addWidget(iconlistWid);
-
-    int col=functionnamelist.indexOf(btnname);
-    QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(col);
-    QWidget* wid=item->widget();
-    QToolButton* btn=qobject_cast<QToolButton*>(wid);
-    btn->click();
-
-    emit send_fullfunctionwid_state(0,btnname);
-}
-
-/**
- * 设置全屏功能分类界面状态
- */
-void FullFunctionWidget::set_fullfunctionwidge_state(int state, QString btnname)
-{
-    if(state==1)
-    {
-        QLayoutItem *firstchild;
-        if((firstchild = mainLayout->itemAt(1)) != nullptr) {
-            QWidget* childwid=firstchild->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        QLayoutItem *secondchild;
-        if((secondchild = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=secondchild->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-
-        if(fullfunbtnwid!=nullptr)
-        {
-            delete fullfunbtnwid;
-            fullfunbtnwid=nullptr;
-        }
-        fullfunbtnwid=new FullFunctionButtonWidget(this);
-        connect(this,SIGNAL(send_classificationbtn_list(QStringList)),fullfunbtnwid,SLOT(recv_classificationbtn_list(QStringList)));
-        emit send_classificationbtn_list(classificationbtnlist);
-        connect(fullfunbtnwid, SIGNAL(send_functionbtn_signal(QString)),this,SLOT(recv_functionbtn_signal(QString)));
-        mainLayout->addWidget(fullfunbtnwid);
-    }
-    else{
-        QLayoutItem *firstchild;
-        if((firstchild = mainLayout->itemAt(1)) != nullptr) {
-            QWidget* childwid=firstchild->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        QLayoutItem *secondchild;
-        if((secondchild = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=secondchild->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-
-        if(fullfunbtnwid!=nullptr)
-        {
-            delete fullfunbtnwid;
-            fullfunbtnwid=nullptr;
-        }
-        mainLayout->addWidget(applistWid);
-        mainLayout->addWidget(iconlistWid);
-
-        int col=functionnamelist.indexOf(btnname);
-        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(col);
-        QWidget* wid=item->widget();
-        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-        btn->click();
-    }
-}
-
-
-/**
  * 初始化图标列表界面
  */
 void FullFunctionWidget::init_iconlist_widget()
 {
-    iconlistleftSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
-    iconlistrightSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
-
     iconlistLayout=new QHBoxLayout(iconlistWid);
-    iconlistLayout->setContentsMargins(0,0,0,0);
-    iconlistLayout->setSpacing(20);
+    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+        iconlistLayout->setContentsMargins(21,0,136,0);
+    else
+        iconlistLayout->setContentsMargins(21,0,160,0);
+    iconlistLayout->setSpacing(0);
     iconlistWid->setLayout(iconlistLayout);
 
-    leftbtn=new ToolButton(40,30,":/data/img/mainviewwidget/leftarrow.svg",":/data/img/mainviewwidget/leftarrow-hover.svg",
-                           MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,2);
     iconlistscrollarea=new ClassifyScrollArea();
-    iconlistscrollarea->setFixedSize(11*40+10*20,30);
+    iconlistscrollarea->setFixedSize(108,iconlistWid->height());
     iconlistscrollareaWid=new QWidget;
-    iconlistscrollareawidLayout=new QHBoxLayout;
+    iconlistscrollareawidLayout=new QVBoxLayout;
     iconlistscrollareawidLayout->setContentsMargins(0,0,0,0);
-    iconlistscrollareawidLayout->setSpacing(20);
+    iconlistscrollareawidLayout->setSpacing(12);
     iconlistscrollareaWid->setLayout(iconlistscrollareawidLayout);
     iconlistscrollarea->setWidget(iconlistscrollareaWid);
-
-    rightbtn=new ToolButton(40,30,":/data/img/mainviewwidget/rightarrow.svg",":/data/img/mainviewwidget/rightarrow-hover.svg",
-                            MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,2);
-    rightbtn->setFixedSize(40,30);
-
-    iconlistLayout->addItem(iconlistleftSpacer);
-    iconlistLayout->addWidget(leftbtn);
     iconlistLayout->addWidget(iconlistscrollarea);
-    iconlistLayout->addWidget(rightbtn);
-    iconlistLayout->addItem(iconlistrightSpacer);
+    pBtnGroup=new QButtonGroup(iconlistscrollareaWid);
     init_iconlist_scrollarea();
-
-    QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(0);
-    QWidget* wid=item->widget();
-    QToolButton* btn=qobject_cast<QToolButton*>(wid);
-    btn->setChecked(true);
-
-    connect(leftbtn, SIGNAL(clicked()), this, SLOT(leftbtn_clicked_slot()));
-    connect(rightbtn, SIGNAL(clicked()), this, SLOT(rightbtn_clicked_slot()));
 }
 
 /**
@@ -664,116 +407,198 @@ void FullFunctionWidget::init_iconlist_widget()
  */
 void FullFunctionWidget::init_iconlist_scrollarea()
 {
-    for(int i=0;i<11;i++)
+    pIconListTopSpacer=new QSpacerItem(40,20,QSizePolicy::Fixed,QSizePolicy::Expanding);
+    pIconListBottomSpacer=new QSpacerItem(40,20,QSizePolicy::Fixed,QSizePolicy::Expanding);
+
+    iconlistscrollareawidLayout->addItem(pIconListTopSpacer);
+    for(int i=0;i<classificationbtnlist.size();i++)
     {
-//        ClassifyButton* iconbtn=new ClassifyButton("",1,iconlist.at(i));
-        ToolButton* iconbtn=new ToolButton(40,30,iconlist.at(i),iconlightlist.at(i),MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,2);
+        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
+                                                                   106,
+                                                                   48,
+                                                                   iconlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
+                                                                   iconlightlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
+                                                                   ClassifyBtnHoverBackground,
+                                                                   ClassifyBtnHoverBackground,
+                                                                   2,
+                                                                   classificationbtnlist.at(i));
+        buttonList.append(iconbtn);
         iconlistscrollareawidLayout->addWidget(iconbtn);
-        iconbtn->setCheckable(true);
-        iconbtn->setChecked(false);
-        connect(iconbtn,SIGNAL(clicked()),this,SLOT(iconbtn_clicked_slot()));
-        connect(iconbtn,SIGNAL(toggled(bool)),this,SLOT(iconbtn_checked_slot(bool)));
+        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
+//        connect(iconbtn,SIGNAL(clicked(bool)),this,SLOT(iconbtn_clicked_slot()));
+//        connect(iconbtn,SIGNAL(toggled(bool)),this,SLOT(iconbtn_checked_slot(bool)));
     }
+    iconlistscrollareawidLayout->addItem(pIconListBottomSpacer);
 
+    int id=0;
+    foreach (QAbstractButton* btn, buttonList) {
+        pBtnGroup->addButton(btn,id++);
+    }
+    connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btngroup_clicked_slot(QAbstractButton*)));
     iconlistscrollarea->widget()->adjustSize();
+    pBtnGroup->button(0)->click();
+
 }
 
-/**
- * 向左按钮槽函数
- */
-void FullFunctionWidget::leftbtn_clicked_slot()
+void FullFunctionWidget::btngroup_clicked_slot(QAbstractButton *btn)
 {
-    if(btnPos>0)
-    {
-        btnPos--;
-        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(btnPos);
-        QWidget* wid=item->widget();
-        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-        btn->click();
-        if((btn->pos().x()+iconlistscrollarea->widget()->pos().x()) <= 0)
-        {   if(btnPos>0)
+    foreach (QAbstractButton* button, buttonList) {
+
+        FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
+        QLayoutItem* iconitem=fcbutton->layout()->itemAt(0);
+        QLabel* iconlabel=qobject_cast<QLabel*>(iconitem->widget());
+        QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
+        QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
+
+        if(pBtnGroup->id(btn)==buttonList.indexOf(button))
+        {
+            int num=classificationbtnlist.indexOf(textlabel->text());
+            if(num!=-1)
             {
-                int val=iconlistscrollarea->horizontalScrollBar()->value();
-                iconlistscrollarea->horizontalScrollBar()->setValue(val-40);
+                int pos=classificationbtnrowlist.at(num).toInt();
+                scrollarea->verticalScrollBar()->setSliderPosition(pos);
             }
-            else{
-//                qDebug()<<iconlistscrollarea->horizontalScrollBar()->minimum();
-                iconlistscrollarea->horizontalScrollBar()->setValue(iconlistscrollarea->horizontalScrollBar()->minimum());
-            }
+
+            QSvgRenderer* svgRender = new QSvgRenderer;
+            svgRender->load(iconlightlist.at(functionnamelist.indexOf(textlabel->text())));
+            QPixmap* pixmap = new QPixmap(19,19);
+            pixmap->fill(Qt::transparent);
+            QPainter p(pixmap);
+            svgRender->render(&p);
+//            button->setIcon(*pixmap);
+//            FunctionClassifyButton* toolBtn=qobject_cast<FunctionClassifyButton*>(button);
+//            QLayoutItem* item=toolBtn->layout()->itemAt(0);
+//            QLabel* iconlabel=qobject_cast<QLabel*>(item->widget());
+            iconlabel->setPixmap(*pixmap);
+            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);font-size:14px;");
+            fcbutton->is_pressed=true;
+//            toolBtn->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255);font-size:14px;");
 
         }
-
-    }
-}
-
-/**
- * 向右按钮槽函数
- */
-void FullFunctionWidget::rightbtn_clicked_slot()
-{
-    if(btnPos<iconlistscrollarea->widget()->layout()->count()-1)
-    {
-        btnPos++;
-        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(btnPos);
-        QWidget* wid=item->widget();
-        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-        btn->click();
-//        qDebug()<<"---"<<btn->pos().x();
-//        qDebug()<<"---111---"<<letterlistscrollarea->widget()->pos().x();
-
-        if((btn->pos().x()+iconlistscrollarea->widget()->pos().x()) >= iconlistscrollarea->width())
-        {   if(btnPos<iconlistscrollarea->widget()->layout()->count()-1)
-            {
-                int val=iconlistscrollarea->horizontalScrollBar()->value();
-                iconlistscrollarea->horizontalScrollBar()->setValue(val+40);
-            }
-            else{
-//                qDebug()<<scrollarea->horizontalScrollBar()->maximum();
-                iconlistscrollarea->horizontalScrollBar()->setValue(iconlistscrollarea->horizontalScrollBar()->maximum());
-            }
-
+        else{
+            QSvgRenderer* svgRender = new QSvgRenderer;
+            svgRender->load(iconlist.at(functionnamelist.indexOf(textlabel->text())));
+            QPixmap* pixmap = new QPixmap(19,19);
+            pixmap->fill(Qt::transparent);
+            QPainter p(pixmap);
+            svgRender->render(&p);
+//            button->setIcon(*pixmap);
+//            FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
+//            QLayoutItem* item=fcbutton->layout()->itemAt(0);
+//            QLabel* iconlabel=qobject_cast<QLabel*>(item->widget());
+            iconlabel->setPixmap(*pixmap);
+            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);font-size:14px;");
+            fcbutton->is_pressed=false;
+//            fcbutton->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255,50%);font-size:14px;");
         }
     }
 }
 
-/**
- * 图标列表数据项被点击槽函数
- */
-void FullFunctionWidget::iconbtn_clicked_slot()
+void FullFunctionWidget::widget_make_zero()
 {
-    QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(beforebtnPos);
-    QWidget* wid=item->widget();
-    QToolButton* beforebtn=qobject_cast<QToolButton*>(wid);
-    beforebtn->setChecked(false);
-
-    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
-    btnPos=iconlistscrollarea->widget()->layout()->indexOf(btn);
-    beforebtnPos=btnPos;
-    //此处需实现将被选定的功能图标所包含的应用列表移动到applistWid界面最顶端
-    int num=classificationbtnlist.indexOf(functionnamelist.at(btnPos));
-    btn->setChecked(true);
-    if(num!=-1)
-    {
-        int pos=classificationbtnrowlist.at(num).toInt();
-        scrollarea->verticalScrollBar()->setSliderPosition(pos);
+    foreach (QAbstractButton* button, buttonList) {
+        int num=classificationbtnlist.indexOf(functionnamelist.at(buttonList.indexOf(button)));
+        if(num!=-1)
+        {
+            pBtnGroup->button(num)->click();
+            break;
+        }
     }
-
-    emit send_fullfunctionwid_state(0,functionnamelist.at(btnPos));
-
 }
 
-void FullFunctionWidget::iconbtn_checked_slot(bool check)
-{
-    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
-    int pos=iconlistscrollarea->widget()->layout()->indexOf(btn);
-    QSvgRenderer* svgRender = new QSvgRenderer;
-    if(check)
-        svgRender->load(iconlightlist.at(pos));
-    else
-        svgRender->load(iconlist.at(pos));
-    QPixmap* pixmap = new QPixmap(19,19);
-    pixmap->fill(Qt::transparent);
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    btn->setIcon(*pixmap);
-}
+///**
+// * 向左按钮槽函数
+// */
+//void FullFunctionWidget::leftbtn_clicked_slot()
+//{
+//    if(btnPos>0)
+//    {
+//        btnPos--;
+//        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(btnPos);
+//        QWidget* wid=item->widget();
+//        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+//        btn->click();
+//        if((btn->pos().x()+iconlistscrollarea->widget()->pos().x()) <= 0)
+//        {   if(btnPos>0)
+//            {
+//                int val=iconlistscrollarea->horizontalScrollBar()->value();
+//                iconlistscrollarea->horizontalScrollBar()->setValue(val-40);
+//            }
+//            else{
+////                qDebug()<<iconlistscrollarea->horizontalScrollBar()->minimum();
+//                iconlistscrollarea->horizontalScrollBar()->setValue(iconlistscrollarea->horizontalScrollBar()->minimum());
+//            }
+
+//        }
+
+//    }
+//}
+
+///**
+// * 向右按钮槽函数
+// */
+//void FullFunctionWidget::rightbtn_clicked_slot()
+//{
+//    if(btnPos<iconlistscrollarea->widget()->layout()->count()-1)
+//    {
+//        btnPos++;
+//        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(btnPos);
+//        QWidget* wid=item->widget();
+//        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+//        btn->click();
+////        qDebug()<<"---"<<btn->pos().x();
+////        qDebug()<<"---111---"<<letterlistscrollarea->widget()->pos().x();
+
+//        if((btn->pos().x()+iconlistscrollarea->widget()->pos().x()) >= iconlistscrollarea->width())
+//        {   if(btnPos<iconlistscrollarea->widget()->layout()->count()-1)
+//            {
+//                int val=iconlistscrollarea->horizontalScrollBar()->value();
+//                iconlistscrollarea->horizontalScrollBar()->setValue(val+40);
+//            }
+//            else{
+////                qDebug()<<scrollarea->horizontalScrollBar()->maximum();
+//                iconlistscrollarea->horizontalScrollBar()->setValue(iconlistscrollarea->horizontalScrollBar()->maximum());
+//            }
+
+//        }
+//    }
+//}
+
+///**
+// * 图标列表数据项被点击槽函数
+// */
+//void FullFunctionWidget::iconbtn_clicked_slot()
+//{
+//    QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(beforebtnPos);
+//    QWidget* wid=item->widget();
+//    QToolButton* beforebtn=qobject_cast<QToolButton*>(wid);
+//    beforebtn->setChecked(false);
+
+//    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
+//    btnPos=iconlistscrollarea->widget()->layout()->indexOf(btn);
+//    beforebtnPos=btnPos;
+//    //此处需实现将被选定的功能图标所包含的应用列表移动到applistWid界面最顶端
+//    int num=classificationbtnlist.indexOf(functionnamelist.at(btnPos-1));
+//    btn->setChecked(true);
+//    if(num!=-1)
+//    {
+//        int pos=classificationbtnrowlist.at(num).toInt();
+//        scrollarea->verticalScrollBar()->setSliderPosition(pos);
+//    }
+//}
+
+//void FullFunctionWidget::iconbtn_checked_slot(bool check)
+//{
+//    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
+//    int pos=iconlistscrollarea->widget()->layout()->indexOf(btn);
+//    QSvgRenderer* svgRender = new QSvgRenderer;
+//    if(check)
+//        svgRender->load(iconlightlist.at(pos-1));
+//    else
+//        svgRender->load(iconlist.at(pos-1));
+//    QPixmap* pixmap = new QPixmap(19,19);
+//    pixmap->fill(Qt::transparent);
+//    QPainter p(pixmap);
+//    svgRender->render(&p);
+//    btn->setIcon(*pixmap);
+//}

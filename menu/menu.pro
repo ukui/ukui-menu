@@ -29,26 +29,23 @@ SOURCES += main.cpp \
     src/FunctionWidget/functionbuttonwidget.cpp \
     src/LetterWidget/letterbuttonwidget.cpp \
     src/CommonUseWidget/fullcommonusewidget.cpp \
-    src/FunctionWidget/fullfunctionbuttonwidget.cpp \
     src/FunctionWidget/fullfunctionwidget.cpp \
-    src/LetterWidget/fullletterbuttonwidget.cpp \
     src/LetterWidget/fullletterwidget.cpp \
     src/SearchResultWidget/searchresultwidget.cpp \
     src/SearchResultWidget/fullsearchresultwidget.cpp \
     src/RightClickMenu/rightclickmenu.cpp \
     src/SearchResultWidget/searchappthread.cpp \
-    src/AttributeDialog/attributedialog.cpp \
     src/UtilityFunction/toolbutton.cpp \
     src/UtilityFunction/itemdelegate.cpp \
     src/UtilityFunction/listview.cpp \
     src/UtilityFunction/fulllistview.cpp \
-    src/UtilityFunction/pushbutton.cpp \
     src/UtilityFunction/scrollarea.cpp \
-    src/UtilityFunction/classifybutton.cpp \
     src/UtilityFunction/classifyscrollarea.cpp \
     src/UtilityFunction/fullitemdelegate.cpp \
     src/UtilityFunction/listmodel.cpp \
-    src/UtilityFunction/fulllistmodel.cpp
+    src/UtilityFunction/fulllistmodel.cpp \
+    src/UtilityFunction/functionclassifybutton.cpp \
+    src/UtilityFunction/pushbutton.cpp
 
 HEADERS  += \
     src/MainWindow/mainwindow.h \
@@ -60,27 +57,24 @@ HEADERS  += \
     src/FunctionWidget/functionbuttonwidget.h \
     src/LetterWidget/letterbuttonwidget.h \
     src/CommonUseWidget/fullcommonusewidget.h \
-    src/FunctionWidget/fullfunctionbuttonwidget.h \
     src/FunctionWidget/fullfunctionwidget.h \
-    src/LetterWidget/fullletterbuttonwidget.h \
     src/LetterWidget/fullletterwidget.h \
     src/SearchResultWidget/searchresultwidget.h \
     src/SearchResultWidget/fullsearchresultwidget.h \
     src/color.h \
     src/RightClickMenu/rightclickmenu.h \
     src/SearchResultWidget/searchappthread.h \
-    src/AttributeDialog/attributedialog.h \
     src/UtilityFunction/toolbutton.h \
     src/UtilityFunction/itemdelegate.h \
     src/UtilityFunction/listview.h \
     src/UtilityFunction/fulllistview.h \
-    src/UtilityFunction/pushbutton.h \
     src/UtilityFunction/scrollarea.h \
-    src/UtilityFunction/classifybutton.h \
     src/UtilityFunction/classifyscrollarea.h \
     src/UtilityFunction/fullitemdelegate.h \
     src/UtilityFunction/listmodel.h \
-    src/UtilityFunction/fulllistmodel.h
+    src/UtilityFunction/fulllistmodel.h \
+    src/UtilityFunction/functionclassifybutton.h \
+    src/UtilityFunction/pushbutton.h
 
 FORMS    += \
     src/MainWindow/mainwindow.ui \
@@ -97,8 +91,7 @@ FORMS    += \
     src/LetterWidget/fullletterbuttonwidget.ui \
     src/LetterWidget/fullletterwidget.ui \
     src/SearchResultWidget/searchresultwidget.ui \
-    src/SearchResultWidget/fullsearchresultwidget.ui \
-    src/AttributeDialog/attributedialog.ui
+    src/SearchResultWidget/fullsearchresultwidget.ui
 
 RESOURCES += \
     res.qrc

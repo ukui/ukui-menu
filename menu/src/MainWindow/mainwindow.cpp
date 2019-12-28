@@ -13,28 +13,37 @@ MainWindow::MainWindow(QWidget *parent) :
     pUkuiMenuInterface=new UkuiMenuInterface;
     UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
     init_mainwindow();
-    sidebarwid->set_sidebarbtn_state(1);
 
-//    mainviewwid->load_classification_widget(1);
+    pEnterAnimation=new QPropertyAnimation;
+    pEnterAnimation->setTargetObject(this);
+    pEnterAnimation->setPropertyName("size");
+    pEnterAnimation->setDuration(500);
+    pEnterAnimation->setStartValue(QSize(390,532));
+    pEnterAnimation->setEndValue(QSize(490,532));
+    pEnterAnimation->setEasingCurve(QEasingCurve::Linear);
 
-//    pAnimation=new QPropertyAnimation(this,"geometry");
-//    pAnimation->setDuration(30);
-//    pAnimation->setStartValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390,532));
-//    pAnimation->setEndValue(QApplication::desktop()->availableGeometry());
-//    pAnimation->setEasingCurve(QEasingCurve::Linear);
-//    connect(pAnimation,SIGNAL(finished()),this,SLOT(animation_finished_slot()));
-
+    pLeaveAnimation=new QPropertyAnimation;
+    pLeaveAnimation->setTargetObject(this);
+    pLeaveAnimation->setPropertyName("size");
+    pLeaveAnimation->setDuration(500);
+    pLeaveAnimation->setStartValue(QSize(490,532));
+    pLeaveAnimation->setEndValue(QSize(390,532));
+    pLeaveAnimation->setEasingCurve(QEasingCurve::Linear);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete pUkuiMenuInterface;
 }
 
 void MainWindow::init_mainwindow()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::SplashScreen);
 //    this->setStyleSheet("background-color:rgba(14,19,22,92%);");
+//    char style[100];
+//    sprintf(style, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
+//    this->setStyleSheet(QString::fromLocal8Bit(style));
 //    this->setWindowOpacity(0.95);//设置总体透明度
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
@@ -44,8 +53,10 @@ void MainWindow::init_mainwindow()
     ui->menuBar->hide();
     ui->statusBar->hide();
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-    this->setMinimumSize(390,532);
-    this->setContentsMargins(0,0,0,0);
+//    this->setMinimumSize(390+20+2,532+20+2);
+//    this->setContentsMargins(1,21,21,1);
+    this->setMinimumSize(376+10,590+10);
+    this->setContentsMargins(0,10,10,0);
 
     mainwidget=new QWidget(this);
     sidebarwid=new SideBarWidget(this);
@@ -53,13 +64,22 @@ void MainWindow::init_mainwindow()
 
     this->setCentralWidget(mainwidget);
     mainlayout=new QHBoxLayout;
-    mainlayout->addWidget(sidebarwid);
+
     mainlayout->addWidget(mainviewwid);
+
+    line=new QFrame(this);
+    line->setFrameShape(QFrame::VLine);
+    line->setStyleSheet("background-color:rgba(75,77,79)");
+    line->setFixedSize(1,this->height());
+    mainlayout->addWidget(line);
+
+    mainlayout->addWidget(sidebarwid);
     mainlayout->setContentsMargins(0,0,0,0);
     mainlayout->setSpacing(0);
     centralWidget()->setLayout(mainlayout);
     mainwidget->setStyleSheet("background:transparent;");
 
+//    connect(sidebarwid,SIGNAL(send_hover_signal(bool)),this,SLOT(recv_hover_signal_slot(bool)));
     connect(sidebarwid, SIGNAL(send_commonusebtn_signal()), mainviewwid, SLOT(load_commonuse_widget()));
     connect(sidebarwid,SIGNAL(send_letterbtn_signal()), mainviewwid, SLOT(load_letter_widget()));
     connect(sidebarwid, SIGNAL(send_functionbtn_signal()), mainviewwid, SLOT(load_function_widget()));
@@ -71,8 +91,10 @@ void MainWindow::init_mainwindow()
     connect(sidebarwid, SIGNAL(send_fullscreen_functionbtn_signal()),
             mainviewwid, SLOT(load_fullfunction_widget()));
 
-    connect(mainviewwid,SIGNAL(send_fullscreenbtn_signal(int)),this,SLOT(show_fullscreen_widget(int)));
-    connect(mainviewwid, SIGNAL(send_defaultbtn_signal(int)),this,SLOT(show_default_widget(int)));
+    connect(mainviewwid,SIGNAL(send_querylineEdit_focusin_signal()),sidebarwid,SLOT(recv_querylineEdit_focusin_slot()));
+
+    connect(sidebarwid,SIGNAL(send_fullscreenbtn_signal()),this,SLOT(show_fullscreen_widget()));
+    connect(sidebarwid, SIGNAL(send_defaultbtn_signal()),this,SLOT(show_default_widget()));
     connect(mainviewwid,SIGNAL(send_hide_mainwindow_signal()),this,SLOT(recv_hide_mainwindow_slot()));
     connect(sidebarwid,SIGNAL(send_hide_mainwindow_signal()),this,SLOT(recv_hide_mainwindow_slot()));
 }
@@ -82,37 +104,73 @@ void MainWindow::init_mainwindow()
  */
 void MainWindow::paintEvent(QPaintEvent *)
 {
-//    QPainter painter(this);
-//    //加边框
-//    QPainterPath path;
-//    path.setFillRule(Qt::WindingFill);
-//    path.addRect(0, 20, this->width()-20, this->height()-20);
-//    char bordercolor[20];
-//    sprintf(bordercolor,"%s", BORDERCOLOR);
-//    painter.setPen(QColor(QString::fromLocal8Bit(bordercolor)));
-//    painter.drawPath(path);
+    if(!is_fullscreen)
+    {
+        QPainter painter(this);
+        const qreal radius =6;
 
-//    //加阴影
-//    char shadowcolor[20];
-//    sprintf(shadowcolor,"%s", SHADOWCOLOR);
-//    QColor color(QString::fromLocal8Bit(shadowcolor));
-////    for(int i=0; i<10; i++)
-//    for(int i=-1; i>=-10; i--)
-//    {
-//        QPainterPath path;
-//        path.setFillRule(Qt::WindingFill);
-////        path.addRect(-i, 20-i, this->width()-(10-i)*2, this->height()-(10-i)*2);
-//        path.addRect(i, 20+i, this->width()-(10+i)*2, this->height()-(10+i)*2);
-//        color.setAlpha(static_cast<int>(150 - qSqrt(-i-1)*50));
-//        painter.setPen(color);
-//        painter.drawPath(path);
-//    }
+        QRectF rect1;
+        rect1.setX(0);
+        rect1.setY(9);
+        rect1.setWidth( this->rect().width()-9);
+        rect1.setHeight(this->rect().height()-9);
+
+        //加边框
+        QPainterPath path1;
+        path1.setFillRule(Qt::WindingFill);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        path1.moveTo(rect1.topRight() - QPointF(radius, 0));
+        path1.lineTo(rect1.topLeft());
+        path1.lineTo(rect1.bottomLeft());
+        path1.lineTo(rect1.bottomRight());
+        path1.lineTo(rect1.topRight() + QPointF(0, radius));
+        path1.quadTo(rect1.topRight(), rect1.topRight() + QPointF(-radius, -0));
+        painter.setPen(QPen(QColor("#0F0F0F"),2));
+        painter.setOpacity(0.9);
+        painter.setBrush(Qt::NoBrush);
+        painter.drawPath(path1);
+
+//        QRectF rect;
+    //    rect.setX(this->rect().x());
+    //    rect.setY(this->rect().y());
+    //    rect.setWidth( this->rect().width());
+    //    rect.setHeight(this->rect().height());
+
+        //加阴影
+    //    QPainterPath path;
+    //    path.setFillRule(Qt::WindingFill);
+    //    char shadowcolor[20];
+    //    sprintf(shadowcolor,"%s", SHADOWCOLOR);
+    //    QColor color(QString::fromLocal8Bit(shadowcolor));
+    //    for(int i=0; i<9; i++)
+    //    {
+    //        rect.setX(0);
+    //        rect.setY((9-i));
+    //        rect.setWidth( this->rect().width()-(9-i));
+    //        rect.setHeight(this->rect().height()-(9-i));
+
+    //        path.setFillRule(Qt::WindingFill);
+    //        path.moveTo(rect.topRight() - QPointF(radius, 0));
+    //        path.lineTo(rect.topLeft());
+    //        path.lineTo(rect.bottomLeft());
+    //        path.lineTo(rect.bottomRight());
+    //        path.lineTo(rect.topRight() + QPointF(0, radius));
+    //        path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
+    //        color.setAlpha(static_cast<int>(150 - qSqrt(i)*50));
+    ////        color.setAlphaF(1.0*(20-i)/70);
+
+    //        painter.setPen(QPen(color));
+    //        painter.setBrush(Qt::NoBrush);
+    //        painter.drawPath(path);
+    //    }
+    }
 }
 
 /**
  * 显示全屏窗口
  */
-void MainWindow::show_fullscreen_widget(int arg)
+void MainWindow::show_fullscreen_widget()
 {
 ////    this->showMaximized();
 //    is_full=true;
@@ -124,17 +182,22 @@ void MainWindow::show_fullscreen_widget(int arg)
 //    mainwidget->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
 //    pAnimation->start();
 
-//    this->setContentsMargins(0,0,0,0);
+    is_fullscreen=true;
+    this->setContentsMargins(0,0,0,0);
     this->setGeometry(QApplication::desktop()->availableGeometry());
     sidebarwid->load_max_sidebar();
     mainviewwid->load_max_mainview();
-    mainviewwid->load_full_classification_widget(arg);
+    //移除分割线
+    mainlayout->removeWidget(line);
+    line->setParent(nullptr);
+    this->repaint();
+//    mainviewwid->load_full_classification_widget(widgetState);
 }
 
 /**
  * 显示默认窗口
  */
-void MainWindow::show_default_widget(int arg)
+void MainWindow::show_default_widget()
 {
 ////    this->showNormal();
 //    is_full=false;
@@ -146,36 +209,17 @@ void MainWindow::show_default_widget(int arg)
 //    mainwidget->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
 //    pAnimation->start();
 
-//    this->setContentsMargins(1,21,21,1);
-    this->setGeometry(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390,532));
+    is_fullscreen=false;
+    this->setContentsMargins(0,10,10,0);
+//    this->setGeometry(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
+    this->setGeometry(QRect(0,QApplication::desktop()->availableGeometry().height()-590-10,376+10,590+10));
     sidebarwid->load_min_sidebar();
     mainviewwid->load_min_mainview();
-    mainviewwid->load_classification_widget(arg);
+    //插入分割线
+    mainlayout->insertWidget(1,line);
+    this->repaint();
+//    mainviewwid->load_classification_widget(widgetState);
 }
-
-//void MainWindow::animation_finished_slot()
-//{
-//    if(is_full)
-//    {
-//        this->setContentsMargins(0,0,0,0);
-//        sidebarwid->load_max_sidebar();
-//        mainviewwid->load_max_mainview();
-//        mainviewwid->load_full_classification_widget(classification_widget);
-//        pAnimation->setStartValue(QApplication::desktop()->availableGeometry());
-//        pAnimation->setEndValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
-//    }
-//    else{
-//        this->setContentsMargins(1,21,21,1);
-//        sidebarwid->load_min_sidebar();
-//        mainviewwid->load_min_mainview();
-//        mainviewwid->load_classification_widget(classification_widget);
-//        pAnimation->setStartValue(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
-//        pAnimation->setEndValue(QApplication::desktop()->availableGeometry());
-//    }
-//    mainwidget->setStyleSheet("background:transparent;");
-//    sidebarwid->setVisible(true);
-//    mainviewwid->setVisible(true);
-//}
 
 /**
  * 鼠标点击窗口外部事件
@@ -186,7 +230,11 @@ bool MainWindow::event ( QEvent * event )
    {
         if(QApplication::activeWindow() != this)
         {
-             this->hide();
+            this->hide();
+//            qDebug()<<qApp->applicationState();
+//            this->setWindowState(this->windowState() & Qt::WindowMinimized);
+            mainviewwid->widget_make_zero();
+            sidebarwid->widget_make_zero();
         }
    }
    return QWidget::event(event);
@@ -198,4 +246,16 @@ bool MainWindow::event ( QEvent * event )
 void MainWindow::recv_hide_mainwindow_slot()
 {
     this->hide();
+    mainviewwid->widget_make_zero();
+    sidebarwid->widget_make_zero();
+    qDebug()<<"---"<<qApp->applicationState();
+}
+
+void MainWindow::recv_hover_signal_slot(bool is_hover)
+{
+    if(is_hover)
+        pEnterAnimation->start();
+    else
+        pLeaveAnimation->start();
+
 }

@@ -21,25 +21,27 @@ void FullListModel::setData(QStringList data)
 
 void FullListModel::updateData(QStringList data)
 {
-    int width=QApplication::desktop()->availableGeometry().width()-160-32-12;
-    int columncount=width/120;
-    QStringList max=(m_data.size() > data.size())? m_data:data;
-    int row=0;
-    int column=0;
-    if(max.size()%columncount>0)
-    {
-        column=(max.size()/columncount+1)*columncount-m_data.size();
-        row=max.size()/columncount+1;
-    }
-    else
-    {
-        column=columncount;
-        row=max.size()/columncount+1;
-    }
+//    int width=QApplication::desktop()->availableGeometry().width()-160-32-12;
+//    int columncount=width/120;
+//    QStringList max=(m_data.size() > data.size())? m_data:data;
+//    int row=0;
+//    int column=0;
+//    if(max.size()%columncount>0)
+//    {
+//        column=(max.size()/columncount+1)*columncount-m_data.size();
+//        row=max.size()/columncount+1;
+//    }
+//    else
+//    {
+//        column=columncount;
+//        row=max.size()/columncount+1;
+//    }
+
+
 
     m_data.clear();
     m_data=data;
-    emit dataChanged(createIndex(0,0), createIndex(row,column));
+//    emit dataChanged(createIndex(0,0), createIndex(4,5));
 
 }
 
@@ -96,7 +98,10 @@ QVariant FullListModel::data(const QModelIndex &index, int role) const
     }
     case Qt::SizeHintRole:
     {
-        return QSize(100,100);
+        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+            return QSize(127,127);
+        else
+            return QSize(160,160);
 
     }
     default:

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #ifndef FUNCTIONWIDGET_H
 #define FUNCTIONWIDGET_H
 
@@ -24,13 +42,7 @@ class FunctionWidget : public QWidget
 public:
     explicit FunctionWidget(QWidget *parent=nullptr);
     ~FunctionWidget();
-
-    /**
-     * 设置功能分类界面状态
-     * @param state为0时功能分类界面加载应用列表，为1时加载纯功能分类按钮界面FunctionButtonWidget
-     * @param btnname存放有具体的功能分类名称
-     */
-    void set_functionwidge_state(int state,QString btnname);
+    void widget_make_zero();//MainWindow隐藏时，此界面恢复至初始状态
 
 private:
     Ui::FunctionWidget *ui;
@@ -39,9 +51,6 @@ private:
 
     //主界面
     QHBoxLayout* mainLayout=nullptr;
-
-
-    QWidget* applistWid=nullptr;//应用列表界面
     FunctionButtonWidget* functionbtnwid=nullptr;//分类列表界面
 
     ListView* applistview=nullptr;
@@ -65,16 +74,11 @@ private slots:
     void app_classificationbtn_clicked_slot();//应用列表功能分类按钮槽函数
     void recv_functionbtn_signal(QString btnname);//接收FunctionButtonWidget界面按钮信号
     void exec_app_name(QString exec);//执行应用程序
-    void update_app_listview(QString desktopfn,QString appname,int arg);//更新应用列表
+    void update_app_listview();//更新应用列表
 
     void recvItemClickedSlot(QStringList arg);
 
 signals:
-    /**
-     * 向MainViewWidget发送功能分类界面状态
-     * 当state为0时，btnname为具体的功能分类名称，当state为1时，btnname为空
-     */
-    void send_functionwid_state(int state,QString btnname);
     void send_classificationbtn_list(QStringList list);//向FunctionButtonWidget界面发送分类按钮列表
     void send_update_applist_signal();//向常用软件模块发送更新应用列表信号
     void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号

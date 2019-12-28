@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #ifndef UKUIMENUINTERFACE_H
 #define UKUIMENUINTERFACE_H
 #include <QtCore>
@@ -7,22 +25,24 @@
 #include <QDBusConnection>
 #include <QDBusReply>
 #include <QDBusObjectPath>
+#include <QSettings>
 
 class UkuiMenuInterface
 {
 private:
     QStringList filePathList;
+    QSettings* setting=nullptr;
 
 protected:
     void recursive_search_file(const QString& _filePath);//遍历/usr/share/applications/文件夹
     QStringList get_specified_category_app_list(QString categorystr);//获取指定类型应用列表
-    void remove_repetition_appname(QStringList &list,QStringList cmplist);//移除重复应用名
 
 public:
     UkuiMenuInterface();
     ~UkuiMenuInterface();
     QVector<QStringList> create_appinfo_vector();//创建应用信息容器
     static QVector<QStringList> appInfoVector;
+    static QVector<QString> desktopfpVector;
 
     /**
      * 获取系统应用名称
@@ -48,21 +68,6 @@ public:
     bool matching_app_categories(QString desktopfp,QStringList categorylist);//匹配应用Categories
 
     QString get_app_name_pinyin(QString appname);//获取应用名拼音
-
-    QStringList get_app_diff_first_letter_pos();
-
-    //功能分类
-    QStringList get_recent_app_list();
-    QStringList get_network_app_list();
-    QStringList get_social_app_list();
-    QStringList get_av_app_list();
-    QStringList get_develop_app_list();
-    QStringList get_graphics_app_list();
-    QStringList get_game_app_list();
-    QStringList get_office_app_list();
-    QStringList get_education_app_list();
-    QStringList get_systemadmin_app_list();
-    QStringList get_other_app_list();
 
     //获取用户图像
     QString get_user_icon();

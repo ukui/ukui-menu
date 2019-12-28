@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #ifndef FULLCOMMONUSEWIDGET_H
 #define FULLCOMMONUSEWIDGET_H
 
@@ -14,7 +32,6 @@
 #include <QHeaderView>
 #include <ukuimenuinterface.h>
 #include "src/RightClickMenu/rightclickmenu.h"
-#include "src/UtilityFunction/fullitemdelegate.h"
 #include "src/UtilityFunction/fulllistview.h"
 
 namespace Ui {
@@ -28,6 +45,7 @@ class FullCommonUseWidget : public QWidget
 public:
     explicit FullCommonUseWidget(QWidget *parent = nullptr);
     ~FullCommonUseWidget();
+    void widget_make_zero();//MainWindow隐藏时，此界面恢复至初始状态
 
 private:
     Ui::FullCommonUseWidget *ui;
@@ -38,12 +56,7 @@ private:
     //主界面
     QVBoxLayout* mainLayout=nullptr;
 
-    //应用列表界面
-    QWidget* applistWid=nullptr;
-    QTableWidget* apptablewid=nullptr;//应用列表
-
     FullListView* listview=nullptr;
-    FullItemDelegate* m_delegate=nullptr;
     QStringList data;
 
     QFileSystemWatcher* fileWatcher=nullptr;//监控文件夹状态

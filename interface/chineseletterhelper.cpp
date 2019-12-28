@@ -82,7 +82,7 @@ QString ChineseLetterHelper::GetFirstLetter(const QString &src)
         }
         else
         {
-            qDebug() << "unknown word";
+//            qDebug() << "unknown word";
         }
 
         char c = Convert(wchr);

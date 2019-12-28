@@ -23,23 +23,23 @@ ListView::~ListView()
 void ListView::init_widget()
 {
     this->setFixedSize(w,h);
-//    char style[400];
-//    sprintf(style,"QListView{border:0px;}\
-//            QListView:Item{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;}\
-//            QListView:Item:hover{background-color:%s;}\
-//            QListView:Item:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
+    char style[400];
+    sprintf(style,"QListView{border:0px;}\
+            QListView:Item{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;}\
+            QListView:Item:hover{background:transparent;}\
+            QListView:Item:pressed{background:transparent;}");
 
-    this->verticalScrollBar()->setStyleSheet("QScrollBar{width:12px;padding-top:0px;padding-bottom:0px;background-color:#283138;border-radius:6px;}"
-                                             "QScrollBar::handle{background-color:#414e59; width:12px;border-radius:6px;}"
-                                             "QScrollBar::handle:hover{background-color:#697883;border-radius:6px;}"
-                                             "QScrollBar::handle:pressed{background-color:#8897a3;border-radius:6px;}"
+    this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background-color:#283138;border-radius:6px;}"
+                                             "QScrollBar::handle{background-color:rgba(255,255,255,0.25); width:3px;border-radius:1.5px;}"
+                                             "QScrollBar::handle:hover{background-color:#697883;border-radius:1.5px;}"
+                                             "QScrollBar::handle:pressed{background-color:#8897a3;border-radius:1.5px;}"
                                              "QScrollBar::sub-line{background-color:transparent;height:0px;width:0px;}"
                                              "QScrollBar::add-line{background-color:transparent;height:0px;width:0px;}"
                                              );
-    this->setStyleSheet("background:transparent;border:0px;");
-    this->setSelectionMode(QAbstractItemView::NoSelection);
+    this->setStyleSheet(style);
+    this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setIconSize(QSize(32,32));
+    this->setIconSize(QSize(28,28));
     this->setViewMode(QListView::ListMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
@@ -85,56 +85,62 @@ void ListView::onClicked(QModelIndex index)
 
 void ListView::rightClickedSlot()
 {
-    menu=new RightClickMenu;
-    QModelIndex index=this->currentIndex();
-    QVariant var=model->data(index, Qt::DisplayRole);
-    QStringList strlist=var.value<QStringList>();
-    if(module>0)
+    if(!this->selectionModel()->selectedIndexes().isEmpty())
     {
-        if(strlist.at(1).toInt()==1)
+        menu=new RightClickMenu;
+        QModelIndex index=this->currentIndex();
+        QVariant var=model->data(index, Qt::DisplayRole);
+        QStringList strlist=var.value<QStringList>();
+        if(module>0)
         {
+            if(strlist.at(1).toInt()==1)
+            {
+                QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
+                int ret=menu->show_appbtn_menu(appname);
+                if(ret==1 || ret==2)
+                    emit sendFixedOrUnfixedSignal();
+            }
+        }
+        else{
             QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
-            int ret=menu->show_appbtn_menu(appname);
+            int ret=menu->show_commonuse_appbtn_menu(appname);
             if(ret==1 || ret==2)
-                emit sendFixedOrUnfixedSignal();
-
-        }
-    }
-    else{
-        QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
-        int ret=menu->show_commonuse_appbtn_menu(appname);
-        if(ret==1 || ret==2)
-        {
-            this->setCurrentIndex(index);
-        }
-        if(ret==8 || ret==9)
-        {
-            QStringList keys;
-            keys.clear();
-            setting->beginGroup("application");
-            keys=setting->childKeys();
-            QStringList applist;
-            applist.clear();
-            for(int i=0;i<keys.count();i++)
             {
-                int val=setting->value(keys.at(i)).toInt();
-                if(val==2 || val==0)
-                    applist.append(keys.at(i));
+                this->setCurrentIndex(index);
             }
 
-            data.clear();
-            for(int i=0;i<applist.count();i++)
+            if(ret==8 || ret==9)
             {
-                QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(applist.at(i));
-                data.append(QStringList()<<desktopfp<<"1");
+                QStringList keys;
+                keys.clear();
+                setting->beginGroup("application");
+                keys=setting->childKeys();
+                QStringList applist;
+                applist.clear();
+                for(int i=0;i<keys.count();i++)
+                {
+                    int val=setting->value(keys.at(i)).toInt();
+                    if(val==2 || val==0)
+                        applist.append(keys.at(i));
+                }
+
+                data.clear();
+                for(int i=0;i<applist.count();i++)
+                {
+                    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(applist.at(i));
+                    data.append(QStringList()<<desktopfp<<"1");
+                }
+
+                this->updateData(data);
+                setting->endGroup();
+
+                emit send_update_applist_signal();
             }
-
-            this->updateData(data);
-            setting->endGroup();
-
-            emit send_update_applist_signal();
         }
+
+        this->selectionModel()->clear();
     }
+
 }
 
 void ListView::enterEvent(QEvent *e)

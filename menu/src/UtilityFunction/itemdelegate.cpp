@@ -18,36 +18,6 @@ ItemDelegate::~ItemDelegate()
 
 void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-//    QStyleOptionButton* button=m_btn.value(index);
-//    if(!button)
-//    {
-//        auto opt = option;
-////        QStyleOptionViewItem myOption = option;
-//         initStyleOption(&opt,index);
-//        opt.displayAlignment = Qt::AlignLeft | Qt::AlignVCenter;
-//        opt.decorationAlignment = Qt::AlignLeft;
-//        button = new QStyleOptionButton();
-//        button->rect = opt.rect;
-////        button->direction=Qt::LayoutDirection::LeftToRight;
-//        QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
-//        QString str=strlist.at(1);
-//        if(str.toInt()==0)
-//            button->text=strlist.at(0);
-//        else{
-////            QString iconstr=pUkuiMenuInterface->get_app_icon(strlist.at(0));
-//            QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
-////            QIcon icon=QIcon::fromTheme(iconstr);
-//            QIcon icon=index.model()->data(index,Qt::DisplayRole).value<QIcon>();
-//            button->icon=icon;
-//            button->iconSize=QSize(32,32);
-//            button->text=appname;
-//            button->direction=Qt::LeftToRight;
-//            button->palette.setColor(QPalette::Button, Qt::transparent);
-//        }
-
-
-//    }
-
     if(index.isValid())
     {
         painter->save();
@@ -60,7 +30,10 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
         QFont font;
 //            font.setFamily("Microsoft YaHei");
-        font.setPixelSize(14);
+        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+            font.setPixelSize(12);
+        else
+            font.setPixelSize(14);
         painter->setFont(font);
 
         QIcon icon=index.model()->data(index,Qt::DecorationRole).value<QIcon>();
@@ -68,12 +41,32 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 //        if(!icon.isNull())
 //            painter->fillRect(QRect(rect.x(),rect.y(),40,40),QColor(Qt::blue));//图片加背景
 
+        if(option.state & QStyle::State_MouseOver)
+        {
+            if(strlist.at(1).toInt()==1)
+            {
+                painter->setPen(QPen(Qt::NoPen));
+                painter->setBrush(QColor(AppBtnHover));
+                painter->setOpacity(0.4);
+                painter->drawRect(rect);
+            }
+            else
+            {
+                painter->setPen(QPen(Qt::NoPen));
+                painter->setBrush(QColor(AppBtnHover));
+                painter->setOpacity(0.4);
+                painter->drawRect(rect);
+            }
+
+        }
+        painter->setOpacity(1);
+
         if(module>0)
         {
             if(strlist.at(1).toInt()==1)
             {
                 QRect iconRect=QRect(rect.left()+15,rect.y()+(rect.height()-32)/2,32,32);
-                painter->drawImage(iconRect,icon.pixmap(icon.actualSize(QSize(32, 32))).toImage());
+                icon.paint(painter,iconRect);
                 painter->setPen(QPen(Qt::white));
                 QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
                 painter->drawText(QRect(iconRect.right()+15,rect.y(),
@@ -86,25 +79,25 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 QRect textRect=QRect(rect.x()+15,rect.y()+(rect.height()-14)/2,strlist.at(0).size()*14,14);
                 painter->drawText(textRect,Qt::AlignVCenter,strlist.at(0));
                 painter->setRenderHint(QPainter::Antialiasing, true);
-                painter->setPen(QColor("#626c6e"));
-                painter->drawLine(QPoint(textRect.right()+6,rect.y()+rect.height()/2),
-                                  QPoint(rect.width()-2,rect.y()+rect.height()/2));
+                painter->setPen(QPen(QColor("#FFFFFF"),1));
+                painter->setOpacity(0.06);
+                painter->drawLine(QPoint(5,rect.bottom()),QPoint(rect.right(),rect.bottom()));
             }
 
         }
         else
         {
             setting->beginGroup("application");
-            QRect iconRect=QRect(rect.left()+15,rect.y()+(rect.height()-32)/2,32,32);
-            painter->drawImage(iconRect,icon.pixmap(icon.actualSize(QSize(32, 32))).toImage());
+            QRect iconRect=QRect(rect.left()+15,rect.y()+(rect.height()-28)/2,28,28);
+            icon.paint(painter,iconRect);
 
             QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
             if(setting->value(appname).toInt()==0)
             {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
-                painter->drawImage(QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16),
-                                   icon.pixmap(icon.actualSize(QSize(16, 16))).toImage());
+                icon.paint(painter,QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16));
             }
+            painter->setOpacity(1);
             painter->setPen(QPen(Qt::white));
             painter->drawText(QRect(iconRect.right()+15,rect.y(),
                                     rect.width()-62,rect.height()),Qt::AlignVCenter,appname);

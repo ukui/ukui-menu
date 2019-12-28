@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #ifndef ATTRIBUTEDIALOG_H
 #define ATTRIBUTEDIALOG_H
 
@@ -15,8 +33,8 @@
 #include <QTextEdit>
 #include <ukuimenuinterface.h>
 #include <QHeaderView>
-#include "src/UtilityFunction/toolbutton.h"
-#include "src/color.h"
+#include "toolbutton.h"
+#include "color.h"
 
 namespace Ui {
 class AttributeDialog;
@@ -27,8 +45,9 @@ class AttributeDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AttributeDialog(QWidget *parent = 0);
+    explicit AttributeDialog(QWidget *parent = nullptr);
     ~AttributeDialog();
+    void set_attribute_value(QString desktopfp);
 
 private:
     Ui::AttributeDialog *ui;
@@ -44,12 +63,7 @@ private:
     QHBoxLayout* titlebarwidLayout=nullptr;
     QLabel* appnameLabel=nullptr;
     QLabel* titlebarLabel=nullptr;
-//    ToolButton* minbtn=nullptr;
-//    QHBoxLayout* minbtnLayout;
-//    QLabel* minbtnLabel;
     ToolButton* closebtn=nullptr;
-//    QHBoxLayout* closebtnLayout;
-//    QLabel* closebtnLabel;
     QSpacerItem* leftSpacer=nullptr;
     QSpacerItem* rightSpacer=nullptr;
     //分割线上部控件
@@ -59,12 +73,6 @@ private:
     //分割线下部控件
     QVBoxLayout* downwidLayout;
     QTableWidget* tableWid;
-//    QLabel* typeLabel=nullptr;
-//    QLabel* execLabel=nullptr;
-//    QLabel* commentLabel=nullptr;
-//    QLabel* typevalueLabel=nullptr;
-//    QLineEdit* execvalueEdit=nullptr;
-//    QLabel* commentvalueLabel=nullptr;
 
     QTextEdit* typeEdit=nullptr;
     QTextEdit* execEdit=nullptr;
@@ -72,37 +80,6 @@ private:
     QTextEdit* typevalueEdit=nullptr;
     QTextEdit* execvalueEdit=nullptr;
     QTextEdit* commentvalueEdit=nullptr;
-
-//    QWidget* leftWid;
-//    QVBoxLayout* leftwidLayout;
-//    QLabel* typeLabel=nullptr;
-//    QLabel* execLabel=nullptr;
-//    QLabel* commentLabel=nullptr;
-
-//    QWidget* rightWid;
-//    QVBoxLayout* rightwidLayout;
-//    QLabel* typevalueLabel=nullptr;
-//    QLabel* execvalueLabel=nullptr;
-//    QLabel* commentvalueLabel=nullptr;
-
-//    QWidget* typeWid=nullptr;
-//    QHBoxLayout* typewidLayout=nullptr;
-//    QLabel* typeLabel=nullptr;
-//    QLabel* typevalueLabel=nullptr;
-//    QWidget* execWid=nullptr;
-//    QHBoxLayout* execwidLayout=nullptr;
-//    QLabel* execLabel=nullptr;
-//    QLabel* execvalueLabel=nullptr;
-//    QWidget* commentWid=nullptr;
-//    QHBoxLayout* commentwidLayout=nullptr;
-//    QWidget* commentlabelWid;
-//    QVBoxLayout* commentlabelwidLayout;
-//    QLabel* commentLabel=nullptr;
-//    QWidget* commentvaluelabelWid;
-//    QVBoxLayout* commentvaluelabelwidLayout;
-//    QTextEdit* commentvalueLabel=nullptr;
-
-//    QSpacerItem* verticalSpacer;
 
     //关闭按钮
     QWidget* closeWid;
@@ -113,9 +90,6 @@ private:
 protected:
     void init_widget();
     void set_controls_style(QTextEdit* edit,QTextEdit* valueEdit,QString str,int height);
-
-private slots:
-    void recv_attribute_value(QString appname);
 };
 
 #endif // ATTRIBUTEDIALOG_H

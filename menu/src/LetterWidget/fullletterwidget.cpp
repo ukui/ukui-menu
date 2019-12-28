@@ -24,24 +24,33 @@ void FullLetterWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    char widgetcolor[100];
-    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
+    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(QApplication::desktop()->availableGeometry().width()-160,
-                       QApplication::desktop()->availableGeometry().height()-70);
 
-    mainLayout=new QVBoxLayout(this);
+    applistWid=new QWidget(this);
+    letterlistWid=new QWidget(this);
+    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+    {
+        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-265,
+                           QApplication::desktop()->availableGeometry().height()-87);
+        applistWid->setFixedSize(this->width()-263,this->height());
+        letterlistWid->setFixedSize(263,this->height());
+    }
+    else
+    {
+        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-286,
+                       QApplication::desktop()->availableGeometry().height()-105);
+        applistWid->setFixedSize(this->width()-287,this->height());
+        letterlistWid->setFixedSize(287,this->height());
+    }
+
+    mainLayout=new QHBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    applistWid=new QWidget(this);
     applistWid->setStyleSheet("border:0px;background: transparent;");
-    applistWid->setFixedSize(this->width(),this->height()-70);
-    letterlistWid=new QWidget(this);
     letterlistWid->setStyleSheet("border:0px;background: transparent;");
-    letterlistWid->setFixedSize(this->width(),70);
-    mainLayout->addWidget(applistWid);
     mainLayout->addWidget(letterlistWid);
+    mainLayout->addWidget(applistWid);
     this->setLayout(mainLayout);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
@@ -55,13 +64,13 @@ void FullLetterWidget::init_widget()
 void FullLetterWidget::init_applist_widget()
 {
     QHBoxLayout* layout=new QHBoxLayout(applistWid);
-    layout->setContentsMargins(30,0,2,0);
+    layout->setContentsMargins(0,0,0,0);
     applistWid->setLayout(layout);
 
     scrollarea=new ScrollArea;
     scrollareawid=new QWidget;
     scrollarea->setWidget(scrollareawid);
-    scrollarea->setFixedSize(applistWid->width()-32-12,applistWid->height());
+    scrollarea->setFixedSize(applistWid->width(),applistWid->height());
     scrollarea->setWidgetResizable(true);
     scrollareawidLayout=new QVBoxLayout;
     scrollareawidLayout->setContentsMargins(0,0,0,0);
@@ -78,6 +87,9 @@ void FullLetterWidget::init_applist_widget()
  */
 void FullLetterWidget::fill_app_list()
 {
+    letterbtnlist.clear();
+    letterbtnrowlist.clear();
+
     QVector<QStringList> vector=pUkuiMenuInterface->get_alphabetic_classification();
     for(int i=0;i<vector.size();i++)
     {
@@ -93,13 +105,12 @@ void FullLetterWidget::fill_app_list()
                 letterstr="#";
             letterbtnlist.append(letterstr);//存储分类字符
             //插入字母分类按钮
-            PushButton* letterbtn=new PushButton(letterstr,0,1);
-            letterbtn->setFixedSize(scrollarea->width()-32,20);
+            PushButton* letterbtn=new PushButton(letterstr,scrollarea->width()-12,20);
+//            letterbtn->setFixedSize(scrollarea->width(),20);
             scrollareawidLayout->addWidget(letterbtn);
-            connect(letterbtn, SIGNAL(clicked()), this,SLOT(app_classificationbtn_clicked_slot()));
 
             //插入应用列表
-            FullListView* listview=new FullListView(this,applistWid->width(),100,1);
+            FullListView* listview=new FullListView(this,1);
             scrollareawidLayout->addWidget(listview);
             data.clear();
             for(int i=0;i<appList.count();i++)
@@ -108,13 +119,10 @@ void FullLetterWidget::fill_app_list()
                 data.append(desktopfp);
 
             }
-            FullItemDelegate* itemdelegate=new FullItemDelegate(this,1);
-            listview->setItemDelegate(itemdelegate);
             listview->addData(data);
 
             connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
             connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
-
         }
     }
 
@@ -145,159 +153,61 @@ void FullLetterWidget::exec_app_name(QString appname)
 /**
  * 更新应用列表
  */
-void FullLetterWidget::update_app_listview(QString desktopfn, QString appname, int arg)
+void FullLetterWidget::update_app_listview()
 {
-    if(arg==0)//有新软件安装
+    //刷新应用列表界面
+    for(int index=scrollareawidLayout->count()-1;index>=0;index--)
     {
-        qDebug()<<"---有新软件安装---";
-//        QString appname=pUkuiMenuInterface->get_app_name(QString("/usr/share/applications/"+desktopfn));
-        QString lettersrt=pUkuiMenuInterface->get_app_name_pinyin(appname);
-        QChar letter=lettersrt.at(0);
-        if(letter<48 || (letter>57 && letter<65) || letter>90)
-        {
-            letter='&';
-        }
-        else if(letter>=48 && letter<=57)
-        {
-            letter='#';
-        }
-        else letter=lettersrt.at(0);
-        if(letterbtnlist.indexOf(QString(letter))==-1)//该软件没有对应分类
-        {
-            int index=0;
-            for(index=0;index<letterbtnlist.count();index++)
-            {
-                QString indexstr=letterbtnlist.at(index);
-                QChar indexch=indexstr.at(0);
-                if(letter=='&')
-                {
-                    if(indexch>=65 && indexch<=90)
-                        continue;
-                    else
-                        break;
-                }
-                else if(letter=='#')
-                    break;
-                else{
-                    if(indexch=='&' || indexch=='#')
-                        break;
-                    else{
-                        if(indexch>letter)
-                            break;
-                    }
-
-                }
-            }
-
-            int pos=0;
-            if(letter!='#')
-            {
-                if(index==letterbtnlist.count())
-                {
-                    pos=scrollareawidLayout->count();
-
-                }
-                else{
-                    pos=index*2;
-                }
-            }
-            else{
-                index=letterbtnlist.count();
-                pos=scrollareawidLayout->count();
-            }
-            letterbtnlist.insert(index,QString(letter));
-            insert_letter_btn(QString(letter),pos);
-            insert_app_listview(desktopfn,pos+1);
-
-        }
-        else{//该软件有对应分类
-            QStringList desktopfplist;
-            QStringList appsortlist=pUkuiMenuInterface->sort_app_name();
-            for(int i=0;i<appsortlist.count();i++)
-            {
-                QString indexstr=pUkuiMenuInterface->get_app_name_pinyin(appsortlist.at(i));
-                QChar indexch=indexstr.at(0);
-                if(letter=='&')
-                {
-                    if(indexch<48 || (indexch>57 && indexch<65) || indexch>90)
-                    {
-
-                        desktopfplist.append(pUkuiMenuInterface->get_desktop_path_by_app_name(appsortlist.at(i)));
-                    }
-                    if(indexch>=48 && indexch<=57)
-                        break;
-                }
-                else if(letter=='#')
-                {
-                    if(indexch>=48 && indexch<=57)
-                        desktopfplist.append(pUkuiMenuInterface->get_desktop_path_by_app_name(appsortlist.at(i)));
-                }
-                else{
-                    if(indexch==letter)
-                        desktopfplist.append(pUkuiMenuInterface->get_desktop_path_by_app_name(appsortlist.at(i)));
-                    if(indexch>letter || indexch<65 || indexch>90)
-                        break;
-                }
-            }
-            int pos=letterbtnlist.indexOf(QString(letter));
-            QLayoutItem* item=scrollareawidLayout->itemAt(2*pos+1);
+            QLayoutItem* item=scrollareawidLayout->takeAt(index);
             QWidget* wid=item->widget();
-            FullListView* listview=qobject_cast<FullListView*>(wid);
-            listview->updateData(desktopfplist);
-        }
+            scrollareawidLayout->removeWidget(wid);
+            wid->setParent(nullptr);
+            delete wid;
     }
-    else{//有软件被卸载
-        qDebug()<<"---有软件被卸载---";
-        QString letterstr=pUkuiMenuInterface->get_app_name_pinyin(appname);
-        QChar letter=letterstr.at(0);
-        if(letter<48 || (letter>57 && letter<65) || letter>90)
-            letter='&';
-        else if(letter>=48 && letter<=57)
-            letter='#';
-        else letter=letterstr.at(0);
-        int pos=letterbtnlist.indexOf(QString(letter));
-        QLayoutItem* item=scrollareawidLayout->itemAt(2*pos+1);
+
+    fill_app_list();
+
+    //刷新字母列表界面
+    foreach (QAbstractButton* button, buttonList) {
+        pBtnGroup->removeButton(button);
+    }
+    buttonList.clear();
+
+    for(int index=letterlistscrollareawidLayout->count()-1;index>=0;index--)
+    {
+        QLayoutItem* item=letterlistscrollareawidLayout->takeAt(index);
         QWidget* wid=item->widget();
-        FullListView* listview=qobject_cast<FullListView*>(wid);
-        listview->removeRow("/usr/share/applications/"+desktopfn);
-        if(listview->model()->rowCount()==0)//该分类只有一个应用，卸载后，listview列表个数为零
-        {
-            for(int i=1;i>=0;i--)//删除listview和对应的分类按钮
-            {
-                QLayoutItem* item=scrollareawidLayout->itemAt(2*pos+i);
-                QWidget* wid=item->widget();
-                scrollareawidLayout->removeWidget(wid);
-                wid->setParent(nullptr);
-                delete wid;
-            }
+        letterlistscrollareawidLayout->removeWidget(wid);
+        wid->setParent(nullptr);
+        delete wid;
+    }
+    char btnstyle[500];
+    sprintf(btnstyle,"QToolButton{background:transparent;color:#8b8b8b;font-size:14px;padding-left:0px;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;font-size:14px;}\
+            QToolButton:pressed{background-color:%s;color:#8b8b8b;font-size:14px;}\
+            QToolButton:checked{background:transparent;color:#ffffff;font-size:14px;}",
+            ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
 
-            letterbtnlist.removeAll(letter);
-        }
+    QStringList letterbtnlist=this->letterbtnlist;
+    if(letterbtnlist.contains("&"))
+        letterbtnlist.replace(letterbtnlist.indexOf("&"),"&&");
+    for(int i=0;i<letterbtnlist.size();i++)
+    {
+        QToolButton* letterbtn=new QToolButton;
+        letterbtn->setText(letterbtnlist.at(i));
+        letterbtn->setStyleSheet(btnstyle);
+        letterbtn->setFixedSize(48,48);
+        letterbtn->setCheckable(true);
+        buttonList.append(letterbtn);
+        letterlistscrollareawidLayout->addWidget(letterbtn);
+    }
+    int id=0;
+    foreach (QAbstractButton* btn, buttonList) {
+        pBtnGroup->addButton(btn,id++);
     }
 
-    resize_scrollarea_controls();
-}
-
-void FullLetterWidget::insert_letter_btn(QString letter, int pos)
-{
-
-    PushButton* letterbtn=new PushButton(QString(letter),0,1);
-    scrollareawidLayout->insertWidget(pos,letterbtn);
-    connect(letterbtn, SIGNAL(clicked()), this,SLOT(app_classificationbtn_clicked_slot()));
-}
-
-void FullLetterWidget::insert_app_listview(QString desktopfn, int pos)
-{
-    FullListView* listview=new FullListView(this,applistWid->width(),100,1);
-    data.clear();
-    data.append("/usr/share/applications/"+desktopfn);
-    FullItemDelegate* itemdelegate=new FullItemDelegate(this,1);
-    listview->setItemDelegate(itemdelegate);
-    listview->addData(data);
-    listview->adjustSize();
-    scrollareawidLayout->insertWidget(pos,listview);
-    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
+    letterlistscrollarea->widget()->adjustSize();
+    pBtnGroup->button(0)->click();
 }
 
 /**
@@ -311,16 +221,21 @@ void FullLetterWidget::resize_scrollarea_controls()
     while(row<scrollareawidLayout->count()/2)
     {
         //分类按钮
-        QLayoutItem* letterbtnwidItem=scrollareawidLayout->itemAt(row*2);
-        QWidget* letterbtnwid=letterbtnwidItem->widget();
-        QPushButton* letterbtn=qobject_cast<QPushButton*>(letterbtnwid);
-        letterbtn->setFixedSize(scrollarea->width()-32,20);
+//        QLayoutItem* letterbtnwidItem=scrollareawidLayout->itemAt(row*2);
+//        QWidget* letterbtnwid=letterbtnwidItem->widget();
+//        QPushButton* letterbtn=qobject_cast<QPushButton*>(letterbtnwid);
+//        letterbtn->setFixedSize(scrollarea->width()-32,20);
         //应用界面
         QLayoutItem* widItem=scrollareawidLayout->itemAt(row*2+1);
         QWidget* wid=widItem->widget();
         FullListView* listview=qobject_cast<FullListView*>(wid);
         listview->adjustSize();
-        int dividend=scrollarea->width()/120;
+        int dividend=0;
+        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+            dividend=(scrollarea->width()-12)/159;
+        else
+            dividend=(scrollarea->width()-12)/200;
+
         int rowcount=0;
         if(listview->model()->rowCount()%dividend>0)
         {
@@ -331,9 +246,11 @@ void FullLetterWidget::resize_scrollarea_controls()
             rowcount=listview->model()->rowCount()/dividend;
 
         }
-        QModelIndex index=listview->model()->index(rowcount-1,0);
-        QRect rect=listview->visualRect(index);
-        listview->setFixedSize(scrollarea->width()-32,rect.y()+rect.height()+20);
+
+        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+            listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
+        else
+            listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
         if(row<scrollareawidLayout->count()/2-1)
         {
             pos+=(20+listview->height());
@@ -345,142 +262,6 @@ void FullLetterWidget::resize_scrollarea_controls()
 }
 
 /**
- * 应用列表字母分类按钮槽函数
- */
-void FullLetterWidget::app_classificationbtn_clicked_slot()
-{
-    //加载FullLetterButtonWidget界面
-    fullletterbtnwid=new FullLetterButtonWidget(this);
-    connect(this,SIGNAL(send_letterbtn_list(QStringList)),fullletterbtnwid,SLOT(recv_letterbtn_list(QStringList)));
-    emit send_letterbtn_list(letterbtnlist);
-    mainLayout->removeWidget(applistWid);
-    applistWid->setParent(nullptr);
-    mainLayout->removeWidget(letterlistWid);
-    letterlistWid->setParent(nullptr);
-    mainLayout->addWidget(fullletterbtnwid);
-    emit send_fullletterwid_state(1,"");
-
-    connect(fullletterbtnwid, SIGNAL(send_letterbtn_signal(QString)),this,SLOT(recv_letterbtn_signal(QString)));
-}
-
-/**
- * 接收FullLetterButtonWidget界面按钮信号
- */
-void FullLetterWidget::recv_letterbtn_signal(QString btnname)
-{
-    mainLayout->removeWidget(fullletterbtnwid);
-    fullletterbtnwid->setParent(nullptr);
-    if(fullletterbtnwid!=nullptr)
-    {
-        delete fullletterbtnwid;
-        fullletterbtnwid=nullptr;
-    }
-    mainLayout->addWidget(applistWid);
-    mainLayout->addWidget(letterlistWid);
-
-    int col=0;
-    if(QString::compare(btnname,"&&")==0)
-        col=26;
-    else if(QString::compare(btnname,"#")==0)
-        col=27;
-    else{
-        QByteArray btnnamearr=btnname.toLocal8Bit();
-        char* bn=btnnamearr.data();
-        col=static_cast<int>(*bn)-65;
-    }
-    QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(col);
-    QWidget* wid=item->widget();
-    QToolButton* btn=qobject_cast<QToolButton*>(wid);
-    btn->click();
-
-    emit send_fullletterwid_state(0,btnname);
-}
-
-/**
- * 设置全屏字母分类界面状态
- */
-void FullLetterWidget::set_fullletterwidge_state(int state, QString btnname)
-{
-    if(state==1)
-    {
-        QLayoutItem *firstchild;
-        if((firstchild = mainLayout->itemAt(1)) != nullptr) {
-            QWidget* childwid=firstchild->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        QLayoutItem *secondchild;
-        if((secondchild = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=secondchild->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-
-        if(fullletterbtnwid!=nullptr)
-        {
-            delete fullletterbtnwid;
-            fullletterbtnwid=nullptr;
-        }
-        fullletterbtnwid=new FullLetterButtonWidget(this);
-        connect(this,SIGNAL(send_letterbtn_list(QStringList)),fullletterbtnwid,SLOT(recv_letterbtn_list(QStringList)));
-        emit send_letterbtn_list(letterbtnlist);
-        connect(fullletterbtnwid, SIGNAL(send_letterbtn_signal(QString)),this,SLOT(recv_letterbtn_signal(QString)));
-        mainLayout->addWidget(fullletterbtnwid);
-
-    }
-    else{
-        QLayoutItem *firstchild;
-        if((firstchild = mainLayout->itemAt(1)) != nullptr) {
-            QWidget* childwid=firstchild->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-        QLayoutItem *secondchild;
-        if((secondchild = mainLayout->itemAt(0)) != nullptr) {
-            QWidget* childwid=secondchild->widget();
-            if(childwid!=nullptr)
-            {
-                mainLayout->removeWidget(childwid);
-                childwid->setParent(nullptr);
-            }
-        }
-
-        if(fullletterbtnwid!=nullptr)
-        {
-            delete fullletterbtnwid;
-            fullletterbtnwid=nullptr;
-        }
-        mainLayout->addWidget(applistWid);
-        mainLayout->addWidget(letterlistWid);
-
-        int col=0;
-        if(QString::compare(btnname,"&&")==0)
-            col=26;
-        else if(QString::compare(btnname,"#")==0)
-            col=27;
-        else{
-            QByteArray btnnamearr=btnname.toLocal8Bit();
-            char* bn=btnnamearr.data();
-            col=static_cast<int>(*bn)-65;
-        }
-        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(col);
-        QWidget* wid=item->widget();
-        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-        btn->click();
-
-    }
-}
-
-/**
  * 初始化字母列表界面
  */
 void FullLetterWidget::init_letterlist_widget()
@@ -489,38 +270,27 @@ void FullLetterWidget::init_letterlist_widget()
     letterlistrightSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
 
     letterlistLayout=new QHBoxLayout(letterlistWid);
-    letterlistLayout->setContentsMargins(0,0,0,0);
-    letterlistLayout->setSpacing(10);
+    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+        letterlistLayout->setContentsMargins(50,0,165,0);
+    else
+        letterlistLayout->setContentsMargins(50,0,189,0);
+    letterlistLayout->setSpacing(0);
     letterlistWid->setLayout(letterlistLayout);
 
-    leftbtn=new ToolButton(40,30,":/data/img/mainviewwidget/leftarrow.svg",":/data/img/mainviewwidget/leftarrow-hover.svg",
-                           MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,1);
     letterlistscrollarea=new ClassifyScrollArea();
-    letterlistscrollarea->setFixedSize(28*30+27*10,25);
+//    letterlistscrollarea->setFixedSize(25,28*30+27*10);
+    letterlistscrollarea->setFixedSize(48,letterlistWid->height());
     letterlistscrollareaWid=new QWidget;
-    letterlistscrollareawidLayout=new QHBoxLayout;
+    letterlistscrollareawidLayout=new QVBoxLayout;
     letterlistscrollareawidLayout->setContentsMargins(0,0,0,0);
-    letterlistscrollareawidLayout->setSpacing(10);
+    letterlistscrollareawidLayout->setSpacing(12);
     letterlistscrollareaWid->setLayout(letterlistscrollareawidLayout);
     letterlistscrollarea->setWidget(letterlistscrollareaWid);
-    rightbtn=new ToolButton(40,30,":/data/img/mainviewwidget/rightarrow.svg",":/data/img/mainviewwidget/rightarrow-hover.svg",
-                            MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED,1);
+    letterlistscrollarea->setWidgetResizable(true);
 
-    letterlistLayout->addItem(letterlistleftSpacer);
-    letterlistLayout->addWidget(leftbtn);
     letterlistLayout->addWidget(letterlistscrollarea);
-    letterlistLayout->addWidget(rightbtn);
-    letterlistLayout->addItem(letterlistrightSpacer);
+    pBtnGroup=new QButtonGroup(letterlistscrollareaWid);
     init_letterlist_scrollarea();
-
-    QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(0);
-    QWidget* wid=item->widget();
-    QToolButton* btn=qobject_cast<QToolButton*>(wid);
-    btn->setChecked(true);
-
-    connect(leftbtn, SIGNAL(clicked()), this, SLOT(leftbtn_clicked_slot()));
-    connect(rightbtn, SIGNAL(clicked()), this, SLOT(rightbtn_clicked_slot()));
-
 }
 
 /**
@@ -528,114 +298,160 @@ void FullLetterWidget::init_letterlist_widget()
  */
 void FullLetterWidget::init_letterlist_scrollarea()
 {
-    for(int i=0;i<28;i++)
+    char btnstyle[500];
+    sprintf(btnstyle,"QToolButton{background:transparent;color:#8b8b8b;font-size:14px;padding-left:0px;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;font-size:14px;}\
+            QToolButton:pressed{background-color:%s;color:#8b8b8b;font-size:14px;}\
+            QToolButton:checked{background:transparent;color:#ffffff;font-size:14px;}",
+            ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
+
+    QStringList letterbtnlist=this->letterbtnlist;
+    if(letterbtnlist.contains("&"))
+        letterbtnlist.replace(letterbtnlist.indexOf("&"),"&&");
+    for(int i=0;i<letterbtnlist.size();i++)
     {
-        QString letterstr;
-        if(i==26)
-            letterstr="&&";
-        else if (i==27) {
-            letterstr='#';
-        }
-        else {
-            letterstr=QString(QChar(static_cast<char>(i+65)));
-        }
-        ClassifyButton* letterbtn=new ClassifyButton(letterstr,0,"");
+        QToolButton* letterbtn=new QToolButton;
+        letterbtn->setText(letterbtnlist.at(i));
+        letterbtn->setStyleSheet(btnstyle);
+        letterbtn->setFixedSize(48,48);
+        letterbtn->setCheckable(true);
+        buttonList.append(letterbtn);
         letterlistscrollareawidLayout->addWidget(letterbtn);
-        connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));
-
+//        connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));
     }
+    int id=0;
+    foreach (QAbstractButton* btn, buttonList) {
+        pBtnGroup->addButton(btn,id++);
+    }
+
+    connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btngroup_clicked_slot(QAbstractButton*)));
     letterlistscrollarea->widget()->adjustSize();
+    pBtnGroup->button(0)->click();
 }
 
-/**
- * 向左按钮槽函数
- */
-void FullLetterWidget::leftbtn_clicked_slot()
+void FullLetterWidget::btngroup_clicked_slot(QAbstractButton *btn)
 {
-    if(btnPos>0)
-    {
-        QLayoutItem* afteritem=letterlistscrollarea->widget()->layout()->itemAt(btnPos--);
-        QWidget* afterwid=afteritem->widget();
-        QToolButton* afterbtn=qobject_cast<QToolButton*>(afterwid);
-        afterbtn->setChecked(false);
-        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
-        QWidget* wid=item->widget();
-        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-        btn->click();
-//        btn->checkStateSet();
-//        int pos=btnPosList.at(btnPos).toInt();
-        if((btn->pos().x()+letterlistscrollarea->widget()->pos().x()) <= 0)
-        {   if(btnPos>0)
+    foreach (QAbstractButton* button, buttonList) {
+        if(pBtnGroup->id(btn)==buttonList.indexOf(button))
+        {
+            button->setChecked(true);
+            //此处需实现将被选定的字母包含的应用列表移动到applistWid界面最顶端
+            QString letterstr=button->text().at(0);
+            int num=letterbtnlist.indexOf(letterstr);
+            if(num!=-1)
             {
-                int val=letterlistscrollarea->horizontalScrollBar()->value();
-                letterlistscrollarea->horizontalScrollBar()->setValue(val-40);
+                int pos=letterbtnrowlist.at(num).toInt();
+                scrollarea->verticalScrollBar()->setSliderPosition(pos);
             }
-            else{
-//                qDebug()<<letterlistscrollarea->horizontalScrollBar()->minimum();
-                letterlistscrollarea->horizontalScrollBar()->setValue(letterlistscrollarea->horizontalScrollBar()->minimum());
-            }
-
         }
-
+        else{
+            button->setChecked(false);
+        }
     }
 }
 
-/**
- * 向右按钮槽函数
- */
-void FullLetterWidget::rightbtn_clicked_slot()
+void FullLetterWidget::widget_make_zero()
 {
-    if(btnPos<letterlistscrollarea->widget()->layout()->count()-1)
-    {
-        QLayoutItem* beforeitem=letterlistscrollarea->widget()->layout()->itemAt(btnPos++);
-        QWidget* beforewid=beforeitem->widget();
-        QToolButton* beforebtn=qobject_cast<QToolButton*>(beforewid);
-        beforebtn->setChecked(false);
-        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
-        QWidget* wid=item->widget();
-        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-        btn->click();
-//        qDebug()<<"---"<<btn->pos().x();
-//        qDebug()<<"---111---"<<letterlistscrollarea->widget()->pos().x();
-
-        if((btn->pos().x()+letterlistscrollarea->widget()->pos().x()) >= letterlistscrollarea->width())
-        {   if(btnPos<letterlistscrollarea->widget()->layout()->count()-1)
-            {
-                int val=letterlistscrollarea->horizontalScrollBar()->value();
-                letterlistscrollarea->horizontalScrollBar()->setValue(val+40);
-            }
-            else{
-//                qDebug()<<scrollarea->horizontalScrollBar()->maximum();
-                letterlistscrollarea->horizontalScrollBar()->setValue(letterlistscrollarea->horizontalScrollBar()->maximum());
-            }
-
+    foreach (QAbstractButton* button, buttonList) {
+        QString letterstr=button->text().at(0);
+        int num=letterbtnlist.indexOf(letterstr);
+        if(num!=-1)
+        {
+            pBtnGroup->button(num)->click();
+            break;
         }
-
-//        qDebug()<<scrollarea->horizontalScrollBar()->value();
-
     }
 }
+
+///**
+// * 向左按钮槽函数
+// */
+//void FullLetterWidget::leftbtn_clicked_slot()
+//{
+//    if(btnPos>0)
+//    {
+//        QLayoutItem* afteritem=letterlistscrollarea->widget()->layout()->itemAt(btnPos--);
+//        QWidget* afterwid=afteritem->widget();
+//        QToolButton* afterbtn=qobject_cast<QToolButton*>(afterwid);
+//        afterbtn->setChecked(false);
+//        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
+//        QWidget* wid=item->widget();
+//        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+//        btn->click();
+////        btn->checkStateSet();
+////        int pos=btnPosList.at(btnPos).toInt();
+//        if((btn->pos().x()+letterlistscrollarea->widget()->pos().x()) <= 0)
+//        {   if(btnPos>0)
+//            {
+//                int val=letterlistscrollarea->horizontalScrollBar()->value();
+//                letterlistscrollarea->horizontalScrollBar()->setValue(val-40);
+//            }
+//            else{
+////                qDebug()<<letterlistscrollarea->horizontalScrollBar()->minimum();
+//                letterlistscrollarea->horizontalScrollBar()->setValue(letterlistscrollarea->horizontalScrollBar()->minimum());
+//            }
+
+//        }
+
+//    }
+//}
+
+///**
+// * 向右按钮槽函数
+// */
+//void FullLetterWidget::rightbtn_clicked_slot()
+//{
+//    if(btnPos<letterlistscrollarea->widget()->layout()->count()-1)
+//    {
+//        QLayoutItem* beforeitem=letterlistscrollarea->widget()->layout()->itemAt(btnPos++);
+//        QWidget* beforewid=beforeitem->widget();
+//        QToolButton* beforebtn=qobject_cast<QToolButton*>(beforewid);
+//        beforebtn->setChecked(false);
+//        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
+//        QWidget* wid=item->widget();
+//        QToolButton* btn=qobject_cast<QToolButton*>(wid);
+//        btn->click();
+////        qDebug()<<"---"<<btn->pos().x();
+////        qDebug()<<"---111---"<<letterlistscrollarea->widget()->pos().x();
+
+//        if((btn->pos().x()+letterlistscrollarea->widget()->pos().x()) >= letterlistscrollarea->width())
+//        {   if(btnPos<letterlistscrollarea->widget()->layout()->count()-1)
+//            {
+//                int val=letterlistscrollarea->horizontalScrollBar()->value();
+//                letterlistscrollarea->horizontalScrollBar()->setValue(val+40);
+//            }
+//            else{
+////                qDebug()<<scrollarea->horizontalScrollBar()->maximum();
+//                letterlistscrollarea->horizontalScrollBar()->setValue(letterlistscrollarea->horizontalScrollBar()->maximum());
+//            }
+
+//        }
+
+////        qDebug()<<scrollarea->horizontalScrollBar()->value();
+
+//    }
+//}
 
 /**
  * 字母列表数据项被选定槽函数
  */
-void FullLetterWidget::letterbtn_clicked_slot()
-{
-    QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
-    QWidget* wid=item->widget();
-    QToolButton* beforebtn=qobject_cast<QToolButton*>(wid);
-    beforebtn->setChecked(false);
-    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
-    btnPos=letterlistscrollarea->widget()->layout()->indexOf(btn);
-    btn->setChecked(true);
-    QString letterstr=btn->text().at(0);
-    //此处需实现将被选定的字母包含的应用列表移动到applistWid界面最顶端
-    int num=letterbtnlist.indexOf(letterstr);
-    if(num!=-1)
-    {
-        int pos=letterbtnrowlist.at(num).toInt();
-        scrollarea->verticalScrollBar()->setSliderPosition(pos);
-    }
-    emit send_fullletterwid_state(0,letterstr);
+//void FullLetterWidget::letterbtn_clicked_slot()
+//{
+//    QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
+//    QWidget* wid=item->widget();
+//    QToolButton* beforebtn=qobject_cast<QToolButton*>(wid);
+//    beforebtn->setChecked(false);
+//    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
+//    btnPos=letterlistscrollarea->widget()->layout()->indexOf(btn);
+//    btn->setChecked(true);
+//    QString letterstr=btn->text().at(0);
+//    //此处需实现将被选定的字母包含的应用列表移动到applistWid界面最顶端
+//    int num=letterbtnlist.indexOf(letterstr);
+//    if(num!=-1)
+//    {
+//        int pos=letterbtnrowlist.at(num).toInt();
+//        scrollarea->verticalScrollBar()->setSliderPosition(pos);
+//    }
+////    emit send_fullletterwid_state(0,letterstr);
 
-}
+//}

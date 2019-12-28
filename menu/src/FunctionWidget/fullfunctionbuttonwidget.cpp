@@ -104,7 +104,7 @@ void FullFunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString b
     char btncolor[300];
     sprintf(btncolor,"QToolButton{background:transparent;border:0px;}\
             QToolButton:hover{background-color:%s;}\
-            QToolButton:pressed{background-color:%s;}",MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
+            QToolButton:pressed{background-color:%s;}",ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
     btn->setFixedSize(160,50);
     btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
     QHBoxLayout* btnlayout=new QHBoxLayout(btn);

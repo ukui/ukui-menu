@@ -10,20 +10,6 @@ SearchResultWidget::SearchResultWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     init_widget();
-
-//    QStringList deskfpList=KylinStartMenuInterface::get_desktop_file_path();
-//    QString deskfp;
-//    foreach (deskfp, deskfpList) {
-//        QString appname=KylinStartMenuInterface::get_app_english_name(deskfp);
-//        appnameList.append(appname);
-//    }
-
-//    searchappthread=new SearchAppThread;
-//    connect(this,SIGNAL(send_search_keyword(QString)),
-//            searchappthread,SLOT(recv_search_keyword(QString)));
-//    connect(searchappthread,SIGNAL(send_search_result(QStringList)),
-//            this,SLOT(recv_search_result(QStringList)));
-//    searchappthread->start();
 }
 
 SearchResultWidget::~SearchResultWidget()
@@ -36,11 +22,9 @@ void SearchResultWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    char widgetcolor[100];
-    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
+    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,462);
+    this->setFixedSize(320,500);
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->setContentsMargins(2,0,2,0);
@@ -55,7 +39,6 @@ void SearchResultWidget::init_widget()
 
     connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(exec_app_name(QStringList)));
     connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
-
 }
 
 /**

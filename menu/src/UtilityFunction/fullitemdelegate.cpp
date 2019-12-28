@@ -24,8 +24,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         QRectF rect;
         rect.setX(option.rect.x());
         rect.setY(option.rect.y());
-        rect.setWidth( option.rect.width()-1);
-        rect.setHeight(option.rect.height()-1);
+        rect.setWidth( option.rect.width());
+        rect.setHeight(option.rect.height());
 
         //QPainterPath画圆角矩形
         const qreal radius = 7;
@@ -58,21 +58,38 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //            painter->drawPath(path);
 //        }
 
-//        if(option.state & QStyle::State_MouseOver)
-//        {
-//            painter->setPen(QPen(Qt::NoPen));
-//            painter->setBrush(QColor(MAINVIEWBTNHOVER));
-//            painter->drawPath(path);
-//        }
+        painter->setRenderHint(QPainter::Antialiasing);
+        if(option.state & QStyle::State_MouseOver)
+        {
+            painter->setPen(QPen(Qt::NoPen));
+            painter->setBrush(QColor(AppBtnHover));
+            painter->setOpacity(0.4);
+            painter->drawPath(path);
 
+//            painter->setOpacity(1);
+//            painter->setPen(QPen(QColor("#4877F2"),2));
+//            painter->setBrush(Qt::NoBrush);
+//            painter->drawPath(path);
+        }
+
+        painter->setOpacity(1);
         QIcon icon=index.data(Qt::DecorationRole).value<QIcon>();
         QString appname=index.data(Qt::DisplayRole).value<QString>();
 
         QFont font;
-        font.setPixelSize(14);
+        QRect iconRect;
+        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+        {
+            font.setPixelSize(12);
+            iconRect=QRect(rect.x()+32,rect.y()+15,64,64);
+        }
+        else
+        {
+            font.setPixelSize(14);
+            iconRect=QRect(rect.x()+40,rect.y()+20,80,80);
+        }
         painter->setFont(font);
-        QRect iconRect=QRect(rect.x()+(rect.width()-50)/2,rect.y()+10,50,50);
-        painter->drawImage(iconRect,icon.pixmap(icon.actualSize(QSize(32, 32))).toImage());
+        icon.paint(painter,iconRect);
         if(module==0)
         {
             setting->beginGroup("application");
@@ -87,8 +104,17 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         }
 
         painter->setPen(QPen(Qt::white));
-        painter->drawText(QRect(rect.x(),iconRect.bottom()+10,
-                                rect.width(),rect.height()-iconRect.height()-10-10),Qt::TextWordWrap |Qt::AlignCenter,appname);
+        QRect textRect;
+        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+        {
+            textRect=QRect(rect.x(),iconRect.bottom()+14,
+                           rect.width(),rect.height()-iconRect.height()-14-22);
+        }
+        else{
+            textRect=QRect(rect.x(),iconRect.bottom()+22,
+                           rect.width(),rect.height()-iconRect.height()-22-27);
+        }
+        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignCenter,appname);
 
         painter->restore();
 

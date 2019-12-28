@@ -25,19 +25,13 @@ void CommonUseWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    char widgetcolor[100];
-    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
+    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,462);
+    this->setFixedSize(320,500);
 
     mainLayout=new  QHBoxLayout(this);
-    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setContentsMargins(2,0,2,0);
     mainLayout->setSpacing(0);
-    applistWid=new QWidget(this);
-    applistWid->setStyleSheet("border:0px;background: transparent;");
-    applistWid->setFixedSize(this->width(),this->height());
-    mainLayout->addWidget(applistWid);
     this->setLayout(mainLayout);
 
     pUkuiMenuInterface=new UkuiMenuInterface;
@@ -54,11 +48,8 @@ void CommonUseWidget::init_widget()
  */
 void CommonUseWidget::init_applist_widget()
 {
-    QHBoxLayout* layout=new QHBoxLayout(applistWid);
-    layout->setContentsMargins(2,0,2,0);
-    listview=new ListView(this,applistWid->width()-4,applistWid->height(),0);
-    layout->addWidget(listview);
-    applistWid->setLayout(layout);
+    listview=new ListView(this,this->width()-4,this->height(),0);
+    mainLayout->addWidget(listview);
     connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(exec_app_name(QStringList)));
     connect(listview,SIGNAL(send_update_applist_signal()),this,SIGNAL(send_update_applist_signal()));
 
@@ -69,11 +60,6 @@ void CommonUseWidget::init_applist_widget()
  */
 void CommonUseWidget::fill_app_tablewidget()
 {
-    char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
-            QPushButton:hover{background-color:%s;}\
-            QPushButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-
     QStringList keys;
     keys.clear();
     setting->beginGroup("application");
@@ -149,4 +135,9 @@ void CommonUseWidget::update_listview_slot()
     listview->updateData(data);
     setting->endGroup();
 
+}
+
+void CommonUseWidget::widget_make_zero()
+{
+    listview->verticalScrollBar()->setSliderPosition(0);
 }

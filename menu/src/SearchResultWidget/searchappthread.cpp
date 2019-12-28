@@ -4,7 +4,6 @@ SearchAppThread::SearchAppThread()
 {
     pUkuiMenuInterface=new UkuiMenuInterface;
     appInfoVector=UkuiMenuInterface::appInfoVector;
-
 }
 
 SearchAppThread::~SearchAppThread()
@@ -37,5 +36,4 @@ void SearchAppThread::recv_search_keyword(QString arg)
 {
     this->keyword.clear();
     this->keyword=arg;
-//    qDebug()<<this->keyword;
 }

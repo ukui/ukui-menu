@@ -8,7 +8,6 @@ AttributeDialog::AttributeDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint|Qt::Dialog);
-//    this->setAttribute(Qt::WA_DeleteOnClose);
     init_widget();
 }
 
@@ -43,8 +42,8 @@ void AttributeDialog::init_widget()
     titlebarLabel->adjustSize();
 //    minbtn=new ToolButton(QString(":/data/img/attributedialog/min-black.svg"),QString(":/data/img/attributedialog/min-black.svg"),
 //                          QString("#1a000000"),QString("#33000000"));
-    closebtn=new ToolButton(45,30,QString(":/data/img/attributedialog/close-black.svg"),QString(":/data/img/attributedialog/close-white.svg"),
-                            ATTRIBUTEDIALOGHOVER,ATTRIBUTEDIALOGPRESSED,3);
+    closebtn=new ToolButton(45,30,QString(":/close-black.svg"),QString(":/close-white.svg"),
+                            AttributeDialogHover,AttributeDialogPressed,3,"");
 //    minbtn->setFixedSize(45,30);
     closebtn->setFixedSize(45,30);
 //    connect(minbtn,SIGNAL(clicked()),this,SLOT(showMinimized()));
@@ -97,9 +96,6 @@ void AttributeDialog::init_widget()
     tableWid->setHorizontalHeaderLabels(header);
     tableWid->setRowCount(3);
     tableWid->setColumnCount(2);
-//    tableWid->verticalHeader()->setDefaultSectionSize(tableWid->height()/3);
-//    tableWid->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-//    qDebug()<<tableWid->height()<<tableWid->height()/3<<tableWid->verticalHeader()->defaultSectionSize();
     tableWid->setRowHeight(0,32);
     tableWid->setRowHeight(1,32);
     tableWid->setRowHeight(2,tableWid->height()-64);
@@ -115,13 +111,19 @@ void AttributeDialog::init_widget()
     tableWid->setShowGrid(false);
     tableWid->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     tableWid->setStyleSheet("QTableWidget{border:0px;background:transparent;}"
-                            "QTableWidget:Item{color:#000000;font-size:12px;}");
+                            "QTableWidget:Item{color:#000000;font-size:12px;border:0px;}");
     typeEdit=new QTextEdit;
     execEdit=new QTextEdit;
     commentEdit=new QTextEdit;
     typevalueEdit=new QTextEdit;
     execvalueEdit=new  QTextEdit;
     commentvalueEdit=new QTextEdit;
+    typeEdit->setStyleSheet("border:0px;background:transparent;");
+    execEdit->setStyleSheet("border:0px;background:transparent;");
+    commentEdit->setStyleSheet("border:0px;background:transparent;");
+    typevalueEdit->setStyleSheet("border:0px;background:transparent;");
+    execvalueEdit->setStyleSheet("border:0px;background:transparent;");
+    commentvalueEdit->setStyleSheet("border:0px;background:transparent;");
     set_controls_style(typeEdit,typevalueEdit,"类型",32);
     set_controls_style(execEdit,execvalueEdit,"命令",32);
     set_controls_style(commentEdit,commentvalueEdit,"备注",tableWid->height()-64);
@@ -182,12 +184,13 @@ void AttributeDialog::set_controls_style(QTextEdit *edit, QTextEdit *valueEdit, 
 
 }
 
-void AttributeDialog::recv_attribute_value(QString appname)
+void AttributeDialog::set_attribute_value(QString desktopfp)
 {
-    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+//    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+//    qDebug()<<desktopfp;
+    QString appname=pUkuiMenuInterface->get_app_name(desktopfp);
     appnameLabel->setText(appname);
     appnameLabel->adjustSize();
-//    titlebarwidLayout->setContentsMargins((titlebarWid->width()-appnameLabel->width()-titlebarLabel->width())/2,0,0,0);
     leftSpacer->changeSize((titlebarWid->width()-appnameLabel->width()-titlebarLabel->width())/2,20,QSizePolicy::Fixed,QSizePolicy::Fixed);
     QString iconstr=pUkuiMenuInterface->get_app_icon(desktopfp);
     QIcon icon=QIcon::fromTheme(iconstr);
@@ -200,16 +203,4 @@ void AttributeDialog::recv_attribute_value(QString appname)
     typevalueEdit->setText(type);
     execvalueEdit->setText(exec);
     commentvalueEdit->setText(comment);
-//    typevalueEdit->setAlignment(Qt::AlignTop);
-//    execvalueEdit->setAlignment(Qt::AlignTop);
-//    commentvalueEdit->setAlignment(Qt::AlignTop);
-//    typevalueLabel->setWordWrap(true);
-//    typevalueEdit->adjustSize();
-//    typevalueEdit->setAlignment(Qt::AlignTop);
-//    execvalueLabel->setWordWrap(true);
-//    execvalueLabel->adjustSize();
-//    commentvalueLabel->setWordWrap(true);
-//    commentvalueLabel->adjustSize();
-//    commentvalueLabel->setAlignment(Qt::AlignTop);
-
 }

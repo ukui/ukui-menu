@@ -167,10 +167,12 @@ QStringList UkuiMenuInterface::get_desktop_file_path()
 }
 
 QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
+QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
 
 //创建应用信息容器
 QVector<QStringList> UkuiMenuInterface::create_appinfo_vector()
 {
+    desktopfpVector.clear();
     QVector<QStringList> appInfoVector;
     QVector<QStringList> vector;
     vector.append(QStringList()<<"Network");//1网络
@@ -193,6 +195,8 @@ QVector<QStringList> UkuiMenuInterface::create_appinfo_vector()
         QString name=get_app_name(desktopfpList.at(i));
         QString exec=get_app_exec(desktopfpList.at(i));
         QString comment=get_app_comment(desktopfpList.at(i));
+
+        desktopfpVector.append(desktopfp);
 
         appInfoList<<desktopfp<<icon<<name<<exec<<comment;
         bool is_owned=false;
@@ -550,9 +554,16 @@ QVector<QStringList> UkuiMenuInterface::get_functional_classification()
         index++;
     }
 
-    QStringList recentList=get_recent_app_list();//最近添加
-    for(int i=0;i<10;i++)
-        list[0].append(recentList.at(i));
+//    QStringList recentList=get_recent_app_list();//最近添加
+//    for(int i=0;i<10;i++)
+//        list[0].append(recentList.at(i));
+
+    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
+    setting=new QSettings(path,QSettings::IniFormat);
+    setting->beginGroup("recentapp");
+    QStringList keys=setting->childKeys();
+    list[0].append(keys);
+    setting->endGroup();
 
     QVector<QStringList> data;
 
@@ -584,6 +595,8 @@ bool UkuiMenuInterface::matching_app_categories(QString desktopfp, QStringList c
     }
     if(index==categorylist.count())
         return false;
+
+    return false;
 }
 
 //应用排序
@@ -731,68 +744,6 @@ QStringList UkuiMenuInterface::sort_app_name()
     return appnameList;
 }
 
-QStringList UkuiMenuInterface::get_app_diff_first_letter_pos()
-{
-    QStringList letterposlist;
-    letterposlist.clear();
-    QStringList appsortlist=sort_app_name();
-//    for(int i=0;i<appsortlist.count();i++)
-//    {
-//        QString apppy=get_app_name_pinyin(appsortlist.at(i));
-//        QChar ch=apppy.at(0);
-//        if(letter=='&')
-//        {
-//            if(ch<48 || (ch>57 && ch<65) || ch>90)//非数字非英文字符
-//                applist.append(appsortlist.at(i));
-
-//        }
-//        else if(letter=='#')
-//        {
-//            if(ch>=48 && ch<=57)//数字字符
-//                applist.append(appsortlist.at(i));
-//        }
-//        else{
-//            if(ch==letter)
-//                applist.append(appsortlist.at(i));
-//        }
-
-//    }
-
-    QString letterstr=appsortlist.at(0);
-    QChar letter=letterstr.at(0);
-    letterposlist.append(QString::number(0));
-    for(int i=0;i<appsortlist.count();i++)
-    {
-        QString apppy=get_app_name_pinyin(appsortlist.at(i));
-        QChar ch=apppy.at(0);
-        if(ch<48 || (ch>57 && ch<65) || ch>90)//非数字非英文字符
-        {
-            if(letter!='&')
-            {
-                letter='&';
-                letterposlist.append(QString::number(i));
-            }
-            else continue;
-
-        }
-        else if(ch>=48 && ch<=57)//数字字符
-        {
-            letter='#';
-            letterposlist.append(QString::number(i));
-            break;
-        }
-        else{
-            if(ch!=letter)
-            {
-                letter=ch;
-                letterposlist.append(QString::number(i));
-            }
-            else continue;
-        }
-    }
-    return letterposlist;
-}
-
 //获取应用拼音
 QString UkuiMenuInterface::get_app_name_pinyin(QString appname)
 {
@@ -822,7 +773,7 @@ QStringList UkuiMenuInterface::get_specified_category_app_list(QString categorys
                 {
                     QString appname=get_app_name(desktopfpList.at(index));
                     if(QString::compare(appname,"访问提示")==0)
-                        qDebug()<<desktopfpList.at(index);
+//                        qDebug()<<desktopfpList.at(index);
                     appnameList.append(appname);
                     break;
                 }
@@ -832,361 +783,6 @@ QStringList UkuiMenuInterface::get_specified_category_app_list(QString categorys
     }
     return appnameList;
 
-}
-
-QStringList UkuiMenuInterface::get_recent_app_list()
-{
-    QStringList appnamelist;
-    appnamelist.clear();
-    system("ls -lt /usr/share/applications | awk '{print $9'} > /tmp/ukui-start-menu.txt");
-    FILE* fp;
-    QString pathstr="/tmp/ukui-start-menu.txt";
-    QByteArray pathbyte=pathstr.toLocal8Bit();
-    char* path=pathbyte.data();
-    fp=fopen(path,"r");
-    if(fp!=nullptr)
-    {
-        while(!feof(fp))
-        {
-            char strline[1024];
-            fgets(strline,1024,fp);
-            char* desktopname=strline;
-            int len=static_cast<int>(strlen(desktopname));
-            if(len>8)
-            {
-                for(int i=0;i<len;i++)
-                {
-                    if(strncmp((desktopname+i),".desktop",8)==0)
-                    {
-                        for(int j=0;j<len;j++)
-                        {
-                            if(*(desktopname+j)=='\n')
-                            {
-                                *(desktopname+j)='\0';
-                                break;
-                            }
-                        }
-                        QString desktopstr="/usr/share/applications/"+QString::fromLocal8Bit(desktopname);
-                        if(QString::compare(desktopstr,"/usr/share/applications/peony-folder-handler.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/peony.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/gnome-software-local-file.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/org.gnome.Software.Editor.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/apport-gtk.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/software-properties-livepatch.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/snap-handle-link.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/python3.7.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/rhythmbox-device.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/smplayer_enqueue.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/python2.7.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/mate-color-select.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/shotwell-viewer.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/burner-nautilus.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/gnome-system-monitor-kde.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/hplj1020.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/ukui-network-scheme.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/ukui-panel.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/unity-activity-log-manager-panel.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/blueman-adapters.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/fcitx-config-gtk3.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/im-config.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/fcitx-skin-installer.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/gcr-prompter.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/gcr-viewer.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/geoclue-demo-agent.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/gnome-disk-image-mounter.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/gnome-disk-image-writer.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/libreoffice-xsltfilter.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/peony-autorun-software.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/remmina-file.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/remmina-gnome.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/ukwm.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/nm-applet.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/peony-home.desktop")==0)
-                            break;
-                        if(QString::compare(desktopstr,"/usr/share/applications/mate-user-guide.desktop")==0)
-                            break;
-                        QString appname=get_app_name(desktopstr);
-                        appnamelist.append(appname);
-//                        appnamelist.append(desktopstr);
-                        break;
-                    }
-                }
-            }
-            else{
-                continue;
-            }
-
-        }
-    }
-
-    return appnamelist;
-
-}
-
-//获取网络应用列表
-QStringList UkuiMenuInterface::get_network_app_list()
-{
-    QStringList networklist;
-    networklist.clear();
-//    networklist=get_specified_category_app_list("Network");
-    networklist=get_specified_category_app_list("Network");
-//    qDebug()<<networklist.count();
-    return networklist;
-}
-
-//获取社交沟通应用列表
-QStringList UkuiMenuInterface::get_social_app_list()
-{
-    QStringList sociallist;
-    sociallist.clear();
-    sociallist=get_specified_category_app_list("Messaging");
-//    qDebug()<<sociallist.count();
-    return sociallist;
-
-}
-
-//获取影音播放应用列表
-QStringList UkuiMenuInterface::get_av_app_list()
-{
-    QStringList avlist;
-    QStringList avlist_1;
-    avlist.clear();
-    avlist_1.clear();
-    avlist=get_specified_category_app_list("Audio");
-    avlist_1=get_specified_category_app_list("Video");
-    int j;
-    for(int i=0;i<avlist_1.count();i++)
-    {
-        for(j=0;j<avlist.count();j++)
-        {
-            QString avstr_1=avlist_1.at(i);
-            QString avstr=avlist.at(j);
-            if(QString::compare(avstr,avstr_1)==0)
-                break;
-        }
-        if(j==avlist.count())
-            avlist.append(avlist_1.at(i));
-    }
-    return avlist;
-}
-
-//获取开发编程应用列表
-QStringList UkuiMenuInterface::get_develop_app_list()
-{
-    QStringList videolist;
-    videolist.clear();
-    videolist=get_specified_category_app_list("Development");
-//    qDebug()<<videolist.count();
-    return videolist;
-}
-
-//获取图形图像应用列表
-QStringList UkuiMenuInterface::get_graphics_app_list()
-{
-    QStringList graphiclist;
-    graphiclist.clear();
-    graphiclist=get_specified_category_app_list("Graphics");
-//    qDebug()<<graphiclist.count();
-    return graphiclist;
-}
-
-//获取游戏娱乐应用列表
-QStringList UkuiMenuInterface::get_game_app_list()
-{
-    QStringList gamelist;
-    gamelist.clear();
-    gamelist=get_specified_category_app_list("Game");
-//    qDebug()<<gamelist.count();
-    return gamelist;
-}
-
-//获取办公学习应用列表
-QStringList UkuiMenuInterface::get_office_app_list()
-{
-    QStringList office=get_specified_category_app_list("Office");
-    QStringList calculator=get_specified_category_app_list("Calculator");
-    QStringList wpssheet=get_specified_category_app_list("Spreadsheet");
-    QStringList wpsresentation=get_specified_category_app_list("Presentation");
-    QStringList wpsword=get_specified_category_app_list("WordProcessor");
-
-    int j;
-    for(int i=0;i<calculator.count();i++)
-    {
-        for(j=0;j<office.count();j++)
-        {
-            if(QString::compare(office.at(j),calculator.at(i))==0)
-                break;
-        }
-        if(j==office.count())
-            office.append(calculator.at(i));
-    }
-
-    for(int i=0;i<wpssheet.count();i++)
-    {
-        for(j=0;j<office.count();j++)
-        {
-            if(QString::compare(office.at(j),wpssheet.at(i))==0)
-                break;
-        }
-        if(j==office.count())
-            office.append(wpssheet.at(i));
-    }
-    for(int i=0;i<wpsresentation.count();i++)
-    {
-        for(j=0;j<office.count();j++)
-        {
-            if(QString::compare(office.at(j),wpsresentation.at(i))==0)
-                break;
-        }
-        if(j==office.count())
-            office.append(wpsresentation.at(i));
-    }
-    for(int i=0;i<wpsword.count();i++)
-    {
-        for(j=0;j<office.count();j++)
-        {
-            if(QString::compare(office.at(j),wpsword.at(i))==0)
-                break;
-        }
-        if(j==office.count())
-            office.append(wpsword.at(i));
-    }
-//    qDebug()<<officelist.count();
-    return office;
-}
-
-//阅读翻译
-QStringList UkuiMenuInterface::get_education_app_list()
-{
-    QStringList educationlist;
-    educationlist.clear();
-    educationlist=get_specified_category_app_list("Education");
-    return educationlist;
-}
-
-//获取系统管理应用列表
-QStringList UkuiMenuInterface::get_systemadmin_app_list()
-{
-    QStringList systemlist=get_specified_category_app_list("System");
-    QStringList settingslist=get_specified_category_app_list("Settings");
-    QStringList securitylist=get_specified_category_app_list("Security");
-
-    remove_repetition_appname(settingslist,systemlist);
-    remove_repetition_appname(securitylist,systemlist);
-
-    int j=0;
-    for(int i=0;i<settingslist.count();i++)
-    {
-        for(j=0;j<systemlist.count();j++)
-        {
-            if(QString::compare(settingslist.at(i),systemlist.at(j))==0)
-                break;
-        }
-        if(j==systemlist.count())
-            systemlist.append(settingslist.at(i));
-
-
-    }
-
-    for(int i=0;i<securitylist.count();i++)
-    {
-        for(j=0;j<systemlist.count();j++)
-        {
-            if(QString::compare(securitylist.at(i),systemlist.at(j))==0)
-                break;
-        }
-        if(j==systemlist.count())
-            systemlist.append(securitylist.at(i));
-
-    }
-
-//    qDebug()<<systemlist.count();
-    return systemlist;
-}
-
-//获取其他应用列表
-QStringList UkuiMenuInterface::get_other_app_list()
-{
-    QStringList otherlist;
-    otherlist.clear();
-
-    QStringList desktopfpList=get_desktop_file_path();
-
-    for(int i=0;i<desktopfpList.count();i++)
-    {
-        QString appname=get_app_name(desktopfpList.at(i));
-        otherlist.append(appname);
-    }
-    QStringList networkList=get_network_app_list();
-    QStringList socialList=get_social_app_list();
-    QStringList avList=get_av_app_list();
-    QStringList developList=get_develop_app_list();
-    QStringList graphList=get_graphics_app_list();
-    QStringList gameList=get_game_app_list();
-    QStringList officeList=get_office_app_list();
-    QStringList systemadminList=get_systemadmin_app_list();
-
-    remove_repetition_appname(otherlist,networkList);
-    remove_repetition_appname(otherlist,socialList);
-    remove_repetition_appname(otherlist,avList);
-    remove_repetition_appname(otherlist,developList);
-    remove_repetition_appname(otherlist,graphList);
-    remove_repetition_appname(otherlist,gameList);
-    remove_repetition_appname(otherlist,officeList);
-    remove_repetition_appname(otherlist,systemadminList);
-
-//    qDebug()<<otherlist.count();
-
-    return otherlist;
-
-}
-
-//移除重复项
-void UkuiMenuInterface::remove_repetition_appname(QStringList &list, QStringList complist)
-{
-    for(int i=0;i<complist.count();i++)
-        for(int j=0;j<list.count();j++)
-        {
-            if(QString::compare(complist.at(i),list.at(j))==0)
-            {
-                list.removeAt(j);
-                j--;
-            }
-        }
 }
 
 //获取用户图像
@@ -1221,7 +817,7 @@ QString UkuiMenuInterface::get_user_name()
                              objPath.value().path(),
                              "org.freedesktop.DBus.Properties",
                              QDBusConnection::systemBus());
-    QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","RealName");
+    QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","UserName");
     QString name=var.value().toString();
     return name;
 }

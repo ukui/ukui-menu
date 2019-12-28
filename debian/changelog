@@ -1,5 +1,5 @@
-ukui-menu (0.9.0-1) juniper; urgency=medium
+ukui-menu (0.9.0-1) eoan; urgency=medium
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release. (Closes: #919549)
 
  -- liuhao <liuhao@kylinos.cn>  Sun, 03 Nov 2019 13:37:43 +0800

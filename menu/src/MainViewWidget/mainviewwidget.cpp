@@ -11,6 +11,7 @@ MainViewWidget::MainViewWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     init_widget();
+    load_letter_widget();
 }
 
 MainViewWidget::~MainViewWidget()
@@ -22,7 +23,9 @@ MainViewWidget::~MainViewWidget()
     delete fullletterwid;
     delete functionwid;
     delete fullfunctionwid;
+    delete searchresultwid;
     delete fullsearchresultwid;
+    delete searchappthread;
     delete pUkuiMenuInterface;
 }
 
@@ -30,15 +33,16 @@ void MainViewWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
+//    this->setStyleSheet("border:0px;background:transparent;");
+    char style[100];
+    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
+    this->setStyleSheet(QString::fromLocal8Bit(style));
 
     mainLayout=new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     topWidget=new QWidget(this);
-    char topWidgetcolor[100];
-    sprintf(topWidgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    topWidget->setStyleSheet(QString::fromLocal8Bit(topWidgetcolor));
+    topWidget->setStyleSheet("border:0px;background:transparent;");
     verticalSpacer=new QSpacerItem(20,40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     mainLayout->addWidget(topWidget);
     mainLayout->addItem(verticalSpacer);
@@ -78,22 +82,16 @@ void MainViewWidget::init_widget()
     connect(searchresultwid,SIGNAL(send_update_applist_signal()),commonusewid,SLOT(update_listview_slot()));
     connect(fullsearchresultwid,SIGNAL(send_update_applist_signal()),fullcommonusewid,SLOT(update_listview_slot()));
 
-    //记录字母排序模块与功能分类模块默认态与全屏态界面状态
-    connect(letterwid,SIGNAL(send_letterwid_state(int,QString)),this,SLOT(recv_letterwid_state(int,QString)));
-    connect(functionwid,SIGNAL(send_functionwid_state(int,QString)),this,SLOT(recv_functionwid_state(int,QString)));
-    connect(fullletterwid,SIGNAL(send_fullletterwid_state(int,QString)),this,SLOT(recv_letterwid_state(int,QString)));
-    connect(fullfunctionwid,SIGNAL(send_fullfunctionwid_state(int,QString)),this,SLOT(recv_functionwid_state(int,QString)));
-
     //监控.desktop文件目录
     fileWatcher=new QFileSystemWatcher(this);
     fileWatcher->addPath("/usr/share/applications");
-//    connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),this,SLOT(directoryChangedSlot()));
-//    connect(this,SIGNAL(directoryChangedSignal(QString,QString,int)),letterwid,SLOT(update_app_listview(QString,QString,int)));
-//    connect(this,SIGNAL(directoryChangedSignal(QString,QString,int)),fullletterwid,SLOT(update_app_listview(QString,QString,int)));
-//    connect(this,SIGNAL(directoryChangedSignal(QString,QString,int)),functionwid,SLOT(update_app_listview(QString,QString,int)));
-//    connect(this,SIGNAL(directoryChangedSignal(QString,QString,int)),fullfunctionwid,SLOT(update_app_listview(QString,QString,int)));
-//    connect(this,SIGNAL(directoryChangedSignal(QString,QString,int)),commonusewid,SLOT(update_listview_slot()));
-//    connect(this,SIGNAL(directoryChangedSignal(QString,QString,int)),fullcommonusewid,SLOT(update_listview_slot()));
+    connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),this,SLOT(directoryChangedSlot()));
+    connect(this,SIGNAL(directoryChangedSignal()),letterwid,SLOT(update_app_listview()));
+    connect(this,SIGNAL(directoryChangedSignal()),fullletterwid,SLOT(update_app_listview()));
+    connect(this,SIGNAL(directoryChangedSignal()),functionwid,SLOT(update_app_listview()));
+    connect(this,SIGNAL(directoryChangedSignal()),fullfunctionwid,SLOT(update_app_listview()));
+    connect(this,SIGNAL(directoryChangedSignal()),commonusewid,SLOT(update_listview_slot()));
+    connect(this,SIGNAL(directoryChangedSignal()),fullcommonusewid,SLOT(update_listview_slot()));
 
     //发送隐藏主界面信号
     connect(commonusewid,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
@@ -114,20 +112,6 @@ void MainViewWidget::init_widget()
 
     QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
-
-//    setting->beginGroup("allapps");
-//    setting->remove("");
-//    QStringList dflist=pUkuiMenuInterface->get_desktop_file_path();
-//    for(int i=0;i<dflist.count();i++)
-//    {
-//        QFileInfo fileinfo(dflist.at(i));
-//        QString desktopfile=fileinfo.fileName();
-//        QString appname=pUkuiMenuInterface->get_app_name(dflist.at(i));
-//        setting->setValue(desktopfile,appname);
-//        setting->sync();
-//    }
-//    setting->endGroup();
-
 }
 
 /**
@@ -135,70 +119,66 @@ void MainViewWidget::init_widget()
  */
 void MainViewWidget::add_top_control()
 {
-    topLayout=new QVBoxLayout(topWidget);
+    topLayout=new QHBoxLayout(topWidget);
     topLayout->setSpacing(0);
-
-    minmaxWidget=new QWidget(topWidget);
-    minmaxWidget->setStyleSheet("QWidget{background:transparent;}");
-    minmaxLayout=new QHBoxLayout(minmaxWidget);
-    minmaxbtn=new QToolButton(minmaxWidget);
-    minmaxbtn->setShortcut(QKeySequence::InsertParagraphSeparator);
-//    minmaxbtn->setShortcut(Qt::Key_Return);
-    horizontalSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
-    minmaxLayout->addItem(horizontalSpacer);
-    minmaxLayout->addWidget(minmaxbtn);
-    minmaxWidget->setLayout(minmaxLayout);
-
-    queryWidget=new QWidget(topWidget);
-    queryWidget->setStyleSheet("QWidget{background-color:rgb(136,151,163,20%);}");
-
-    topLayout->addWidget(minmaxWidget);
-    topLayout->addWidget(queryWidget);
+    querylineEdit=new QLineEdit(topWidget);
+    queryLayout=new QHBoxLayout;
+    queryLayout->setContentsMargins(0,0,0,0);
+    queryLayout->setSpacing(0);
+    querylineEdit->setLayout(queryLayout);
+    char style[100];
+    sprintf(style, "QLineEdit{border:0px;background-color:%s;}",QueryLineEditBackground);
+    querylineEdit->setStyleSheet(style);
+    topLayout->addWidget(querylineEdit);
+//    topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
     topWidget->setLayout(topLayout);
 
-    add_query_lineedit();
+    init_query_lineedit();
 
 }
 
 /**
  * 添加搜索框
  */
-void MainViewWidget::add_query_lineedit()
+void MainViewWidget::init_query_lineedit()
 {
-    queryLayout=new QHBoxLayout(queryWidget);
-    queryLayout->setContentsMargins(5,0,0,0);
-    queryLayout->setSpacing(5);
-    querybtn=new QToolButton(queryWidget);
-//    QPixmap pixmap(QString(":/data/img/mainviewwidget/搜索.svg"));
-//    querybtn->setFixedSize(pixmap.size());
-    QSvgRenderer* svgRender = new QSvgRenderer(querybtn);
+    pIconTextWid=new QWidget(querylineEdit);
+    pIconTextWid->setStyleSheet("background:transparent");
+    pIconTextWidLayout=new QHBoxLayout;
+    pIconTextWidLayout->setContentsMargins(0,0,0,0);
+    pIconTextWidLayout->setSpacing(5);
+    pIconTextWid->setLayout(pIconTextWidLayout);
+    QSvgRenderer* svgRender = new QSvgRenderer();
     svgRender->load(QString(":/data/img/mainviewwidget/search.svg"));
-    QPixmap* pixmap = new QPixmap(19,19);
+    QPixmap* pixmap = new QPixmap(14,14);
     pixmap->fill(Qt::transparent);//设置背景透明
     QPainter p(pixmap);
     svgRender->render(&p);
-    querybtn->setIcon(QIcon(*pixmap));
-    querybtn->setFixedSize(pixmap->size());
-    querybtn->setStyleSheet("QToolButton{background:transparent;border:0px;padding-left:0px;}");
-    querylineEdit=new QLineEdit(queryWidget);
-    querylineEdit->setPlaceholderText("搜索程序");
-    querylineEdit->setStyleSheet("QLineEdit{background-color:rgb(255,255,255,0);color:#626c6e;font-size:14px;border: 0px groove #bebebe;}");
-    queryLayout->addWidget(querybtn);
-    queryLayout->addWidget(querylineEdit);
-    queryWidget->setLayout(queryLayout);
-
+    pQueryIcon=new QLabel(pIconTextWid);
+    pQueryIcon->setStyleSheet("background:transparent");
+    pQueryIcon->setFixedSize(pixmap->size());
+    pQueryIcon->setPixmap(*pixmap);
+    pQueryText=new QLabel(pIconTextWid);
+    pQueryText->setText(tr("搜索"));
+    pQueryText->setStyleSheet("background:transparent;color:#626c6e;font-size:14px;");
+    pQueryText->adjustSize();
+    pIconTextWidLayout->addWidget(pQueryIcon);
+    pIconTextWidLayout->addWidget(pQueryText);
+    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,querylineEdit->height());
+    queryLayout->addWidget(pIconTextWid);
+    queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     querylineEdit->setFocusPolicy(Qt::ClickFocus);
     querylineEdit->installEventFilter(this);
+
+    searchAction = new QAction(querylineEdit);
+    searchAction->setIcon(QIcon(":/data/img/mainviewwidget/search.svg"));
 
     searchappthread=new SearchAppThread;
     connect(this,SIGNAL(send_search_keyword(QString)),
             searchappthread,SLOT(recv_search_keyword(QString)));
-//    emit send_search_keyword(arg);
     connect(searchappthread,SIGNAL(send_search_result(QStringList)),
             this,SLOT(recv_search_result(QStringList)));
-
     connect(querylineEdit, SIGNAL(textChanged(QString)), this, SLOT(search_app_slot(QString)));
-
 }
 
 bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
@@ -206,8 +186,15 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
     if(watched==querylineEdit)
     {
         if(event->type()==QEvent::FocusIn)
-        {
-             queryWidget->setStyleSheet("QWidget{background-color:#ffffff;}");
+        {   
+             emit send_querylineEdit_focusin_signal();
+             querylineEdit->addAction(searchAction,QLineEdit::LeadingPosition);
+             char style[200];
+             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;font-size:14px;color:#ffffff;}",
+                     QueryLineEditClickedBorder,QueryLineEditClickedBackground);
+             querylineEdit->setStyleSheet(style);
+             queryLayout->removeWidget(pIconTextWid);
+             pIconTextWid->setParent(nullptr);
 
              QLayoutItem* child;
              if((child=mainLayout->takeAt(1))!=nullptr)
@@ -230,7 +217,12 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
         }
         else if(event->type()==QEvent::FocusOut)
         {
-             queryWidget->setStyleSheet("QWidget{background-color:rgb(136,151,163,20%);}");
+             querylineEdit->removeAction(searchAction);
+             char style[100];
+             sprintf(style, "QLineEdit{border:0px;background-color:%s;}",QueryLineEditBackground);
+             querylineEdit->setStyleSheet(style);
+             queryLayout->addWidget(pIconTextWid);
+             queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
         }
     }
 
@@ -263,11 +255,6 @@ void MainViewWidget::search_app_slot(QString arg)
 
 void MainViewWidget::recv_search_result(QStringList desktopfplist)
 {
-//    qDebug()<<desktopfplist;
-//    searchappthread->quit();
-//    searchappthread->wait();
-//    delete searchappthread;
-
     searchappthread->quit();
     fullsearchresultwid->update_app_listview(desktopfplist);
     searchresultwid->update_app_listview(desktopfplist);
@@ -278,17 +265,13 @@ void MainViewWidget::recv_search_result(QStringList desktopfplist)
  */
 void MainViewWidget::load_min_mainview()
 {
-    this->setGeometry(60,QApplication::desktop()->availableGeometry().height()-532,330,532);
-    set_max_btn();
-    topLayout->setContentsMargins(15,0,0,20);
-    topWidget->setFixedSize(330,70);
-    minmaxWidget->setFixedSize(330-15,20);
-    minmaxLayout->setContentsMargins(0,0,0,0);
-    disconnect(minmaxbtn,SIGNAL(clicked()),this, SLOT(default_btn_slot()));
-    connect(minmaxbtn, SIGNAL(clicked()),this,SLOT(fullscreen_btn_slot()));
-
-    queryWidget->setFixedSize(290,30);
-    querylineEdit->setFixedSize(queryWidget->width()-querybtn->width(),30);
+//    this->setGeometry(60,QApplication::desktop()->availableGeometry().height()-532,330,532);
+//    this->setGeometry(0,QApplication::desktop()->availableGeometry().height()-532,330,532);
+    this->setFixedSize(320,590);
+    topWidget->setFixedSize(320,90);
+    topLayout->setContentsMargins(0,0,0,0);
+    topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
+    querylineEdit->setFixedSize(290,30);
 
     is_fullWid=false;
     if(widgetState==0)
@@ -305,27 +288,12 @@ void MainViewWidget::load_min_mainview()
         }
         mainLayout->addWidget(searchresultwid);
     }
-}
-
-/**
- * 设置全屏按钮
- */
-void MainViewWidget::set_max_btn()
-{
-    minmaxbtn->setFixedSize(20,20);
-    QSvgRenderer* svgRender = new QSvgRenderer(minmaxbtn);
-    svgRender->load(QString(":/data/img/mainviewwidget/max.svg"));
-    QPixmap* pixmap = new QPixmap(14,14);
-    pixmap->fill(Qt::transparent);//设置背景透明
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    minmaxbtn->setIcon(QIcon(*pixmap));
-    char btncolor[300];
-    sprintf(btncolor,"QToolButton{background:transparent;border:0px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;}\
-            QToolButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-    minmaxbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-
+    else if(widgetState==1)
+        load_commonuse_widget();
+    else if(widgetState==2)
+        load_letter_widget();
+    else
+        load_function_widget();
 }
 
 /**
@@ -333,18 +301,28 @@ void MainViewWidget::set_max_btn()
  */
 void MainViewWidget::load_max_mainview()
 {
-    this->setGeometry(160,0,QApplication::desktop()->availableGeometry().width()-160,QApplication::desktop()->availableGeometry().height());
-    set_min_btn();
-    topLayout->setContentsMargins(30,0,0,20);
-    topWidget->setFixedSize(QApplication::desktop()->availableGeometry().width()-160,70);
-    minmaxWidget->setFixedSize(QApplication::desktop()->availableGeometry().width()-160-30,20);
-    minmaxLayout->setContentsMargins(0,5,5,0);
+//    this->setGeometry(160,0,QApplication::desktop()->availableGeometry().width()-160,QApplication::desktop()->availableGeometry().height());
+//    this->setGeometry(0,0,QApplication::desktop()->availableGeometry().width()-60,QApplication::desktop()->availableGeometry().height());
 
-    disconnect(minmaxbtn, SIGNAL(clicked()),this,SLOT(fullscreen_btn_slot()));
-    connect(minmaxbtn, SIGNAL(clicked()),this,SLOT(default_btn_slot()));
+    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+    {
+        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-265,
+                     QApplication::desktop()->availableGeometry().height());
+        topWidget->setFixedSize(this->width(),87);
+        querylineEdit->setFixedSize(350,30);
+    }
+    else
+    {
+        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-286,
+                     QApplication::desktop()->availableGeometry().height());
+        topWidget->setFixedSize(this->width(),105);
+        querylineEdit->setFixedSize(350,30);
+    }
 
-    queryWidget->setFixedSize(600,30);
-    querylineEdit->setFixedSize(queryWidget->width()-querybtn->width(),30);
+    topLayout->setContentsMargins((QApplication::desktop()->width()-querylineEdit->width())/2,
+                                  0,
+                                  topWidget->width()-(QApplication::desktop()->width()-querylineEdit->width())/2-querylineEdit->width(),
+                                  0);
 
     is_fullWid=true;
     if(widgetState==0)
@@ -361,45 +339,12 @@ void MainViewWidget::load_max_mainview()
         }
         mainLayout->addWidget(fullsearchresultwid);
     }
-}
-
-/**
- * 设置还原按钮
- */
-void MainViewWidget::set_min_btn()
-{
-    minmaxbtn->setFixedSize(15,15);
-    QSvgRenderer* svgRender = new QSvgRenderer(minmaxbtn);
-    svgRender->load(QString(":/data/img/mainviewwidget/min.svg"));
-    QPixmap* pixmap = new QPixmap(14,14);
-    pixmap->fill(Qt::transparent);//设置背景透明
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    minmaxbtn->setIcon(QIcon(*pixmap));
-    char btncolor[300];
-    sprintf(btncolor,"QToolButton{background:transparent;border:0px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;}\
-            QToolButton:pressed{background-color:%s;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-    minmaxbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-}
-
-/**
- * 接收默认或全屏字母排序界面状态信号
- */
-void MainViewWidget::recv_letterwid_state(int arg,QString btnname)
-{
-    this->letterwid_state=arg;
-    this->letterbtnname=btnname;
-}
-
-/**
- * 接收默认与全屏功能分类界面状态信号
- */
-void MainViewWidget::recv_functionwid_state(int arg,QString btnname)
-{
-    this->functionwid_state=arg;
-    this->functionbtnname=btnname;
-
+    else if(widgetState==1)
+        load_fullcommonuse_widget();
+    else if(widgetState==2)
+        load_fullletter_widget();
+    else if(widgetState==3)
+        load_fullfunction_widget();
 }
 
 /**
@@ -419,6 +364,7 @@ void MainViewWidget::load_commonuse_widget()
     }
     mainLayout->addWidget(commonusewid);
     widgetState=1;
+//    emit send_mainview_state(1);
 
 }
 
@@ -427,9 +373,6 @@ void MainViewWidget::load_commonuse_widget()
  */
 void MainViewWidget::load_letter_widget()
 {
-    if(letterbtnname.isEmpty())
-        letterbtnname="A";
-    letterwid->set_letterwidge_state(letterwid_state,letterbtnname);
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -442,6 +385,7 @@ void MainViewWidget::load_letter_widget()
     }
     mainLayout->addWidget(letterwid);
     widgetState=2;
+
 }
 
 /**
@@ -449,9 +393,6 @@ void MainViewWidget::load_letter_widget()
  */
 void MainViewWidget::load_function_widget()
 {
-    if(functionbtnname.isEmpty())
-        functionbtnname="最近添加";
-    functionwid->set_functionwidge_state(functionwid_state,functionbtnname);
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -464,6 +405,7 @@ void MainViewWidget::load_function_widget()
     }
     mainLayout->addWidget(functionwid);
     widgetState=3;
+
 }
 
 
@@ -483,7 +425,9 @@ void MainViewWidget::load_fullcommonuse_widget()
 
     }
     mainLayout->addWidget(fullcommonusewid);
+//    emit send_mainview_state(1);
     widgetState=1;
+
 
 }
 
@@ -492,9 +436,6 @@ void MainViewWidget::load_fullcommonuse_widget()
  */
 void MainViewWidget::load_fullletter_widget()
 {
-    if(letterbtnname.isEmpty())
-        letterbtnname="A";
-    fullletterwid->set_fullletterwidge_state(letterwid_state,letterbtnname);
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -506,6 +447,7 @@ void MainViewWidget::load_fullletter_widget()
     }
     mainLayout->addWidget(fullletterwid);
     widgetState=2;
+
 }
 
 /**
@@ -513,9 +455,6 @@ void MainViewWidget::load_fullletter_widget()
  */
 void MainViewWidget::load_fullfunction_widget()
 {
-    if(functionbtnname.isEmpty())
-        functionbtnname="最近添加";
-    fullfunctionwid->set_fullfunctionwidge_state(functionwid_state,functionbtnname);
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -528,48 +467,7 @@ void MainViewWidget::load_fullfunction_widget()
     }
     mainLayout->addWidget(fullfunctionwid);
     widgetState=3;
-}
 
-/**
- * 全屏按钮槽函数
- */
-void MainViewWidget::fullscreen_btn_slot()
-{
-    emit send_fullscreenbtn_signal(widgetState);
-}
-
-/**
- * 默认态按钮槽函数
- */
-void MainViewWidget::default_btn_slot()
-{
-    emit send_defaultbtn_signal(widgetState);
-}
-
-/**
- * 设置主界面从全屏回到默认状态时应加载的分类窗口
- */
-void MainViewWidget::load_classification_widget(int arg)
-{
-    if(arg==1)
-        load_commonuse_widget();
-    else if(arg==2)
-        load_letter_widget();
-    else if(arg==3)
-        load_function_widget();
-}
-
-/**
- * 主界面全屏时应加载的分类窗口
- */
-void MainViewWidget::load_full_classification_widget(int arg)
-{
-    if(arg==1)
-        load_fullcommonuse_widget();
-    else if(arg==2)
-        load_fullletter_widget();
-    else if(arg==3)
-        load_fullfunction_widget();
 }
 
 /**
@@ -612,52 +510,56 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
  */
 void MainViewWidget::directoryChangedSlot()
 {
-        QStringList desktopfpList=pUkuiMenuInterface->get_desktop_file_path();
-        QStringList desktopfnList;
+    QStringList desktopfpList=pUkuiMenuInterface->get_desktop_file_path();
+    if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
+    {
+        setting->beginGroup("recentapp");
         for(int i=0;i<desktopfpList.count();i++)
         {
-    //        QString appname=KylinStartMenuInterface::get_app_name(desktopList.at(i));
-    //        appnameList.append(appname);
-            QFileInfo fileinfo(desktopfpList.at(i));
-            QString desktopfn=fileinfo.fileName();
-            desktopfnList.append(desktopfn);
-        }
-        QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
-        setting=new QSettings(path,QSettings::IniFormat);
-        setting->beginGroup("allapps");
-        QStringList keyList=setting->childKeys();
-        if(desktopfnList.count()>keyList.count())
-        {
-            for(int i=0;i<desktopfnList.count();i++)//有新的应用安装
+            if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i)))
             {
-                if(keyList.indexOf(desktopfnList.at(i))==-1)
-                {
-                    QString appname=pUkuiMenuInterface->get_app_name(QString("/usr/share/applications/"+desktopfnList.at(i)));
-                    setting->setValue(desktopfnList.at(i),appname);
-                    setting->sync();
-                    emit directoryChangedSignal(desktopfnList.at(i),appname,0);
-                    break;
-                }
+                QString appname=pUkuiMenuInterface->get_app_name(desktopfpList.at(i));
+                setting->setValue(appname,0);
+                qDebug()<<"anzhuang:"<<appname;
+            }
+
+        }
+        setting->endGroup();
+        UkuiMenuInterface::appInfoVector.clear();
+        UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
+        emit directoryChangedSignal();
+    }
+    else//软件卸载
+    {
+        for(int i=0;i<UkuiMenuInterface::desktopfpVector.size();i++)
+        {
+            if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i)))
+            {
+//                QString appname=pUkuiMenuInterface->get_app_name(UkuiMenuInterface::desktopfpVector.at(i));
+                QString appname=UkuiMenuInterface::appInfoVector.at(i).at(2);
+                setting->beginGroup("application");
+                setting->remove(appname);
+                setting->endGroup();
+                setting->beginGroup("recentapp");
+                setting->remove(appname);
+                setting->endGroup();
+                qDebug()<<"xiezai:"<<appname;
             }
         }
-        QString appname;
-        if(desktopfnList.count()<keyList.count())//有软件被卸载
-        {
-            for(int i=0;i<keyList.count();i++)
-            {
-                if(desktopfnList.indexOf(keyList.at(i))==-1)
-                {
-                    appname=setting->value(keyList.at(i)).toString();
-                    emit directoryChangedSignal(keyList.at(i),appname,-1);
-                    setting->remove(keyList.at(i));
-                    setting->sync();
-                    setting->endGroup();//setting->beginGroup("allapps");
-                    break;
-                }
-            }
-            setting->beginGroup("application");
-            setting->remove(appname);
-            setting->sync();
-            setting->endGroup();
-        }
+        UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
+        emit directoryChangedSignal();
+    }
+}
+
+void MainViewWidget::widget_make_zero()
+{
+    commonusewid->widget_make_zero();
+    fullcommonusewid->widget_make_zero();
+    letterwid->widget_make_zero();
+    fullletterwid->widget_make_zero();
+    functionwid->widget_make_zero();
+    fullfunctionwid->widget_make_zero();
+    querylineEdit->clear();
+    querylineEdit->clearFocus();
+//    load_letter_widget();
 }

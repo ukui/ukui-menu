@@ -15,7 +15,6 @@ ListModel::~ListModel()
 void ListModel::setData(const QVector<QStringList> &data)
 {
     m_data=data;
-
 }
 
 void ListModel::updateData(const QVector<QStringList> &data)
@@ -138,7 +137,7 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
     }
     case Qt::SizeHintRole:
     {
-        return QSize(312,42);
+        return QSize(300,38);
 
     }
     default:

@@ -42,6 +42,7 @@
 #include "qtsingleapplication.h"
 #include "qtlocalpeer.h"
 #include <QWidget>
+#include <QDesktopWidget>
 
 
 /*!
@@ -323,10 +324,20 @@ QWidget* QtSingleApplication::activationWindow() const
 void QtSingleApplication::activateWindow()
 {
     if (actWin) {
-        actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
-        actWin->raise();
-        actWin->showNormal();
-        actWin->activateWindow();
+        if(this->applicationState() & Qt::ApplicationInactive)
+        {
+            actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
+            actWin->raise();
+            actWin->showNormal();
+            actWin->activateWindow();
+            actWin->setGeometry(QRect(0,this->desktop()->availableGeometry().height()-actWin->height(),
+                                      actWin->width(),actWin->height()));
+        }
+        else {
+            actWin->setWindowState(actWin->windowState() & Qt::WindowMinimized);
+            actWin->hide();
+        }
+
     }
 }
 

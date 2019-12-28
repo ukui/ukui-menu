@@ -23,65 +23,12 @@ void LetterButtonWidget::init_widget()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,532-70);
+    this->setFixedSize(320,500);
 
-    mainLayout=new QVBoxLayout(this);
-    mainLayout->setContentsMargins(15,0,6,0);
-    mainLayout->setSpacing(5);
-    this->setLayout(mainLayout);
-
-    add_letterbtn_control();
-    QSpacerItem* verticalSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    mainLayout->addItem(verticalSpacer);
-
-}
-
-//添加字母分类按钮
-void LetterButtonWidget::add_letterbtn_control()
-{
-    QStringList letterlist;
-
-    letterlist.clear();
-    for(int i=0;i<26;i++)
-    {
-        char letter=static_cast<char>(65+i);
-        letterlist.append(QString(QChar(letter)));
-    }
-    letterlist.append("&&");
-    letterlist.append("#");
-
-    for(int i=0;i<6;i++)
-    {
-        QWidget* wid=new QWidget(this);
-        wid->setStyleSheet("QWidget{border:0px;background:transparent;}");
-        QHBoxLayout* layout=new QHBoxLayout(wid);
-        layout->setContentsMargins(0,0,0,0);
-        layout->setSpacing(5);
-        wid->setLayout(layout);
-
-        for(int j=0;j<5;j++)
-        {
-            QToolButton* btn=new QToolButton(wid);
-            btn->setFixedSize(55,48);
-            char btncolor[400];
-            sprintf(btncolor,"QToolButton{background:transparent;;color:#ffffff;font-size:20px;padding-left:0px;}\
-                    QToolButton:hover{background-color:%s;color:#ffffff;font-size:20px;}\
-                    QToolButton:pressed{background-color:%s;color:#8b8b8b;font-size:20px;}\
-                    QToolButton:disabled{color:#33ffffff;}", MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-            btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-
-            btn->setText(letterlist.at(i*5+j));
-            layout->addWidget(btn);
-
-            connect(btn, SIGNAL(clicked()), this, SLOT(letterbtn_clicked_slot()));
-            if(i*5+j==27)break;
-
-        }
-        QSpacerItem* righthorizontalSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
-        layout->addItem(righthorizontalSpacer);
-        mainLayout->addWidget(wid);
-    }
-
+    gridLayout=new QGridLayout(this);
+    gridLayout->setContentsMargins(15,0,6,this->height()-48*6);
+    gridLayout->setSpacing(5);
+    this->setLayout(gridLayout);
 }
 
 /**
@@ -99,22 +46,30 @@ void LetterButtonWidget::letterbtn_clicked_slot()
  */
 void LetterButtonWidget::recv_letterbtn_list(QStringList list)
 {
-    for(int i=0;i<6;i++)
+    char btncolor[400];
+    sprintf(btncolor,"QToolButton{background:transparent;color:rgba(255, 255, 255, 0.5);font-size:20px;padding-left:0px;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;font-size:20px;}\
+            QToolButton:pressed{background-color:%s;color:#8b8b8b;font-size:20px;}\
+            QToolButton:disabled{color:#33ffffff;}", ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
+
+    if(list.indexOf("&")!=-1)
+            list.replace(list.indexOf("&"),"&&");
+    for(int row=0;row<6;row++)
     {
-        QLayoutItem* item=mainLayout->itemAt(i);
-        QWidget* wid=item->widget();
-
-        for(int j=0;j<5;j++)
+        for(int col=0;col<5;col++)
         {
-            QLayoutItem* item=wid->layout()->itemAt(j);
-            QWidget* wid=item->widget();
-            QToolButton* btn=static_cast<QToolButton*>(wid);
-            QString letter=btn->text();
-            if(list.indexOf(QString(QChar(letter.at(0))))==-1)
-                btn->setEnabled(false);
-
-            if(i*5+j==27)break;
-
+            if(row*5+col<list.size())
+            {
+                QToolButton* btn=new QToolButton(this);
+                btn->setFixedSize(55,48);
+                btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+                btn->setText(list.at(row*5+col));
+                gridLayout->addWidget(btn,row,col);
+                connect(btn, SIGNAL(clicked()), this, SLOT(letterbtn_clicked_slot()));
+            }
+            else {
+                break;
+            }
         }
     }
 }

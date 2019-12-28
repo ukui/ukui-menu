@@ -21,22 +21,29 @@ void FullSearchResultWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    char widgetcolor[100];
-    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-    this->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
+    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(QApplication::desktop()->availableGeometry().width()-160,
-                                  QApplication::desktop()->availableGeometry().height()-70);
+    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+    {
+        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-265,
+                           QApplication::desktop()->availableGeometry().height()-87);
+    }
+    else
+    {
+        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-286,
+                       QApplication::desktop()->availableGeometry().height()-105);
+    }
 
     mainLayout=new QHBoxLayout(this);
-    mainLayout->setContentsMargins(30,0,2,0);
-    listview=new FullListView(this,this->width()-32-12,this->height(),3);
+    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+        mainLayout->setContentsMargins(263,0,0,0);
+    else
+        mainLayout->setContentsMargins(287,0,0,0);
+    listview=new FullListView(this,3);
     mainLayout->addWidget(listview);
     this->setLayout(mainLayout);
 
     data.clear();
-    itemdelegate=new FullItemDelegate(this,3);
-    listview->setItemDelegate(itemdelegate);
     listview->addData(data);
 
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
@@ -67,8 +74,5 @@ void FullSearchResultWidget::update_app_listview(QStringList desktopfplist)
 {
     data.clear();
     data=desktopfplist;
-//    listview->updateData(data);
-    itemdelegate=new FullItemDelegate(this,3);
-    listview->setItemDelegate(itemdelegate);
     listview->updateData(data);
 }

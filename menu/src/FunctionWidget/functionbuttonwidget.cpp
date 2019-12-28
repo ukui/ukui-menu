@@ -24,118 +24,51 @@ void FunctionButtonWidget::init_widget()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(330,532-70);
+    this->setFixedSize(320,500);
 
-    mainLayout=new QVBoxLayout(this);
-    mainLayout->setContentsMargins(15,0,6,0);
-    mainLayout->setSpacing(5);
-    this->setLayout(mainLayout);
+    gridLayout=new QGridLayout(this);
+    gridLayout->setContentsMargins(15,0,6,this->height()-48*6);
+    gridLayout->setSpacing(5);
+    this->setLayout(gridLayout);
 
-    QToolButton* recentbtn=new QToolButton;
-    set_functionbtn_style(recentbtn,":/data/img/mainviewwidget/recent.svg", "最近添加");
-    QToolButton* netbtn=new QToolButton;
-    set_functionbtn_style(netbtn,":/data/img/mainviewwidget/net.svg","网络应用");
-    QToolButton* socialbtn=new QToolButton;
-    set_functionbtn_style(socialbtn,":/data/img/mainviewwidget/social.svg","社交沟通");
-    QToolButton* avbtn=new QToolButton;
-    set_functionbtn_style(avbtn,":/data/img/mainviewwidget/video.svg","影音播放");
-    QToolButton* developbtn=new QToolButton;
-    set_functionbtn_style(developbtn,":/data/img/mainviewwidget/develop.svg","开发编程");
-    QToolButton* imgbtn=new QToolButton;
-    set_functionbtn_style(imgbtn,":/data/img/mainviewwidget/img.svg","图形图像");
-    QToolButton* gamebtn=new QToolButton;
-    set_functionbtn_style(gamebtn,":/data/img/mainviewwidget/game.svg","游戏娱乐");
-    QToolButton* officebtn=new QToolButton;
-    set_functionbtn_style(officebtn,":/data/img/mainviewwidget/office.svg","办公学习");
-    QToolButton* readingbtn=new QToolButton;
-    set_functionbtn_style(readingbtn,":/data/img/mainviewwidget/reading.svg","阅读翻译");
-    QToolButton* systembtn=new QToolButton;
-    set_functionbtn_style(systembtn,":/data/img/mainviewwidget/system.svg","系统管理");
-    QToolButton* otherbtn=new QToolButton;
-    set_functionbtn_style(otherbtn,":/data/img/mainviewwidget/other.svg","其他应用");
+    iconlist.clear();
+    iconlist.append(":/data/img/mainviewwidget/recent-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/net-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/social-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/video-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/develop-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/img-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/game-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/office-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/reading-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/system-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/other-gray.svg");
 
-    add_functionbtn_control(recentbtn,netbtn);
-    add_functionbtn_control(socialbtn,avbtn);
-    add_functionbtn_control(developbtn,imgbtn);
-    add_functionbtn_control(gamebtn,officebtn);
-    add_functionbtn_control(readingbtn,systembtn);
+    iconlightlist.clear();
+    iconlightlist.append(":/data/img/mainviewwidget/recent.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/net.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/social.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/video.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/develop.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/img.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/game.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/office.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/reading.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/system.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/other.svg");
 
-    QWidget* wid=new QWidget(this);
-    wid->setStyleSheet("QWidget{border:0px;}");
-    wid->setFixedSize(295,48);
-    QHBoxLayout* layout=new QHBoxLayout(wid);
-    layout->setContentsMargins(0,0,0,0);
-    layout->setSpacing(5);
-    otherbtn->setParent(wid);
-    layout->addWidget(otherbtn);
-    horizontalSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
-    layout->addItem(horizontalSpacer);
-    wid->setLayout(layout);
-    mainLayout->addWidget(wid);
-
-    verticalSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    mainLayout->addItem(verticalSpacer);
-}
-
-/**
- * 添加功能分类按钮
- */
-void FunctionButtonWidget::add_functionbtn_control(QToolButton* firstbtn, QToolButton* secondbtn)
-{
-    QWidget* wid=new QWidget(this);
-    firstbtn->setParent(wid);
-    secondbtn->setParent(wid);
-    wid->setStyleSheet("QWidget{border:0px;}");
-    wid->setFixedSize(295,48);
-    QHBoxLayout* layout=new QHBoxLayout(wid);
-    layout->setContentsMargins(0,0,0,0);
-    layout->setSpacing(5);
-    layout->addWidget(firstbtn);
-    layout->addWidget(secondbtn);
-    wid->setLayout(layout);
-    mainLayout->addWidget(wid);
-}
-
-/**
- * 设置功能分类按钮样式
- */
-void FunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString btnicon, QString btnname)
-{
-    char btncolor[300];
-    sprintf(btncolor,"QToolButton{background:transparent;border:0px;}\
-            QToolButton:hover{background-color:%s;}\
-            QToolButton:pressed{background-color:%s;}",MAINVIEWBTNHOVER,MAINVIEWBTNPRESSED);
-    btn->setFixedSize(145,48);
-    btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-    QHBoxLayout* btnlayout=new QHBoxLayout(btn);
-
-    QSvgRenderer* svgRender = new QSvgRenderer(btn);
-    svgRender->load(btnicon);
-    QPixmap* pixmap = new QPixmap(19,19);
-    pixmap->fill(Qt::transparent);//设置背景透明
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    QLabel* labelicon=new QLabel(btn);
-    labelicon->setAlignment(Qt::AlignCenter);
-//    QPixmap pixmapicon(btnicon);
-    labelicon->setStyleSheet("QLabel{background:transparent;}");
-    labelicon->setFixedSize(pixmap->size());
-    labelicon->setPixmap(*pixmap);
-    btnlayout->addWidget(labelicon);
-
-    QLabel* labeltext=new QLabel(btn);
-    QByteArray btnnamebyte=btnname.toLocal8Bit();
-    char* name=btnnamebyte.data();
-    labeltext->setText(tr(name));
-    labeltext->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
-    labeltext->adjustSize();
-    btnlayout->addWidget(labeltext);
-    btn->setLayout(btnlayout);
-
-    btnlayout->setContentsMargins(10,0,btn->width()-10*2-labelicon->width()-labeltext->width(),0);
-    btnlayout->setSpacing(10);
-
-    connect(btn, SIGNAL(clicked()), this, SLOT(functionbtn_clicked_slot()));
+    functionnamelist.clear();
+    functionnamelist.append("最近");
+    functionnamelist.append("网络");
+    functionnamelist.append("社交");
+    functionnamelist.append("影音");
+    functionnamelist.append("开发");
+    functionnamelist.append("图像");
+    functionnamelist.append("游戏");
+    functionnamelist.append("办公");
+    functionnamelist.append("教育");
+    functionnamelist.append("系统");
+    functionnamelist.append("其它");
 }
 
 /**
@@ -143,7 +76,7 @@ void FunctionButtonWidget::set_functionbtn_style(QToolButton *btn, QString btnic
  */
 void FunctionButtonWidget::functionbtn_clicked_slot()
 {
-    QToolButton* btn=dynamic_cast<QToolButton *>(QObject::sender());
+    FunctionClassifyButton* btn=dynamic_cast<FunctionClassifyButton *>(QObject::sender());
     QWidget* wid=btn->layout()->itemAt(1)->widget();
     QLabel* label=qobject_cast<QLabel *>(wid);
     QString btnname=label->text();
@@ -155,66 +88,27 @@ void FunctionButtonWidget::functionbtn_clicked_slot()
  */
 void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
 {
-    for(int i=0;i<6;i++)
+    for(int i=0;i<list.size();i++)
     {
-        QLayoutItem* item=mainLayout->itemAt(i);
-        QWidget* wid=item->widget();
-        for(int j=0;j<2;j++)
-        {
-            QLayoutItem* btnitem=wid->layout()->itemAt(j);
-            QWidget* btnwid=btnitem->widget();
-            QToolButton* btn=static_cast<QToolButton*>(btnwid);
-            QLayoutItem* labelitem=btn->layout()->itemAt(1);
-            QWidget* labelwid=labelitem->widget();
-            QLabel* label=static_cast<QLabel*>(labelwid);
-            QString str=label->text();
-            if(list.indexOf(str)==-1)
-            {
-                label->setStyleSheet("QLabel{background:transparent;color:#4Dffffff;font-size:14px;}");
-                btn->setEnabled(false);
-                QLayoutItem* labelitem=btn->layout()->itemAt(0);
-                QWidget* labelwid=labelitem->widget();
-                QLabel* label=static_cast<QLabel*>(labelwid);
-                if(i*2+j==0)
-                    change_label_icon(label,":/data/img/mainviewwidget/recent-disabled.svg");
-                if(i*2+j==1)
-                    change_label_icon(label,":/data/img/mainviewwidget/net-disabled.svg");
-                if(i*2+j==2)
-                    change_label_icon(label,":/data/img/mainviewwidget/social-disabled.svg");
-                if(i*2+j==3)
-                    change_label_icon(label,":/data/img/mainviewwidget/video-disabled.svg");
-                if(i*2+j==4)
-                    change_label_icon(label,":/data/img/mainviewwidget/develop-disabled.svg");
-                if(i*2+j==5)
-                    change_label_icon(label,":/data/img/mainviewwidget/img-disabled.svg");
-                if(i*2+j==6)
-                    change_label_icon(label,":/data/img/mainviewwidget/game-disabled.svg");
-                if(i*2+j==7)
-                    change_label_icon(label,":/data/img/mainviewwidget/office-disabled.svg");
-                if(i*2+j==8)
-                    change_label_icon(label,":/data/img/mainviewwidget/reading-disabled.svg");
-                if(i*2+j==9)
-                    change_label_icon(label,":/data/img/mainviewwidget/system-disabled.svg");
-                if(i*2+j==10)
-                    change_label_icon(label,":/data/img/mainviewwidget/develop-disabled.svg");
-            }
-
-            if(i*2+j==10)break;
-        }
+        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
+                                                                   106,
+                                                                   48,
+                                                                   iconlist.at(functionnamelist.indexOf(list.at(i))),
+                                                                   iconlightlist.at(functionnamelist.indexOf(list.at(i))),
+                                                                   ClassifyBtnHoverBackground,
+                                                                   ClassifyBtnHoverBackground,
+                                                                   2,
+                                                                   list.at(i));
+        vector.append(iconbtn);
+        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionbtn_clicked_slot()));
     }
-}
 
-/**
- * 更改QLabel图片
- */
-void FunctionButtonWidget::change_label_icon(QLabel *label, QString iconstr)
-{
-    QSvgRenderer* svg=new QSvgRenderer(label);
-    svg->load(iconstr);
-    QPixmap* pixmap=new QPixmap(19,19);
-    pixmap->fill(Qt::transparent);
-    QPainter p(pixmap);
-    svg->render(&p);
-    label->setPixmap(*pixmap);
-
+    for(int row=0;row<6;row++)
+        for(int col=0;col<2;col++)
+        {
+            if(row*2+col < vector.size())
+                gridLayout->addWidget(vector.at(row*2+col),row,col);
+            else
+                break;
+        }
 }
