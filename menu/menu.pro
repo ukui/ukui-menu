@@ -45,7 +45,8 @@ SOURCES += main.cpp \
     src/UtilityFunction/listmodel.cpp \
     src/UtilityFunction/fulllistmodel.cpp \
     src/UtilityFunction/functionclassifybutton.cpp \
-    src/UtilityFunction/pushbutton.cpp
+    src/UtilityFunction/pushbutton.cpp \
+    src/Style/style.cpp
 
 HEADERS  += \
     src/MainWindow/mainwindow.h \
@@ -61,7 +62,6 @@ HEADERS  += \
     src/LetterWidget/fullletterwidget.h \
     src/SearchResultWidget/searchresultwidget.h \
     src/SearchResultWidget/fullsearchresultwidget.h \
-    src/color.h \
     src/RightClickMenu/rightclickmenu.h \
     src/SearchResultWidget/searchappthread.h \
     src/UtilityFunction/toolbutton.h \
@@ -74,7 +74,8 @@ HEADERS  += \
     src/UtilityFunction/listmodel.h \
     src/UtilityFunction/fulllistmodel.h \
     src/UtilityFunction/functionclassifybutton.h \
-    src/UtilityFunction/pushbutton.h
+    src/UtilityFunction/pushbutton.h \
+    src/Style/style.h
 
 FORMS    += \
     src/MainWindow/mainwindow.ui \

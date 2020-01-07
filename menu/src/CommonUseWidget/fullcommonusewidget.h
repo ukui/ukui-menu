@@ -33,6 +33,7 @@
 #include <ukuimenuinterface.h>
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/fulllistview.h"
+#include "src/Style/style.h"
 
 namespace Ui {
 class FullCommonUseWidget;

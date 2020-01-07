@@ -34,7 +34,7 @@
 #include <QDBusInterface>
 #include <QProcess>
 #include <ukuimenuinterface.h>
-#include "src/color.h"
+#include "src/Style/style.h"
 
 class RightClickMenu: public QObject
 {
@@ -51,6 +51,8 @@ private:
     QString appname;
     int action_number;//记录执行的action编号
     QSettings* setting=nullptr;
+
+    char style[300];
 
     QMenu* cuappbtnmenu;
     QWidgetAction* CuFix2CommonUseAction;

@@ -8,9 +8,6 @@
         <file>data/img/sidebarwidget/letter.svg</file>
         <file>data/img/sidebarwidget/rightarrow.svg</file>
         <file>data/img/sidebarwidget/shutdown.svg</file>
-        <file>data/img/sidebarwidget/usericon.png</file>
-        <file>data/img/mainviewwidget/max.svg</file>
-        <file>data/img/mainviewwidget/min.svg</file>
         <file>data/img/mainviewwidget/game.svg</file>
         <file>data/img/mainviewwidget/img.svg</file>
         <file>data/img/mainviewwidget/leftarrow.svg</file>
@@ -64,5 +61,9 @@
         <file>data/img/mainviewwidget/uparrow-pressed.svg</file>
         <file>data/img/mainviewwidget/uparrow.svg</file>
         <file>data/qss/ukui-menu.qss</file>
+        <file>data/img/sidebarwidget/max.svg</file>
+        <file>data/img/sidebarwidget/min.svg</file>
+        <file>data/img/sidebarwidget/usericon-darkcolor.svg</file>
+        <file>data/img/sidebarwidget/usericon-lightcolor.svg</file>
     </qresource>
 </RCC>

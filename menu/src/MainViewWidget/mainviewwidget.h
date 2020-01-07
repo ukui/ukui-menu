@@ -40,6 +40,7 @@
 #include "src/SearchResultWidget/fullsearchresultwidget.h"
 #include "src/SearchResultWidget/searchresultwidget.h"
 #include "src/SearchResultWidget/searchappthread.h"
+#include "src/Style/style.h"
 
 namespace Ui {
 class MainViewWidget;

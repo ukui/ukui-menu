@@ -28,6 +28,7 @@
 #include <QScrollBar>
 #include <ukuimenuinterface.h>
 #include "src/UtilityFunction/fulllistview.h"
+#include "src/Style/style.h"
 
 namespace Ui {
 class FullSearchResultWidget;

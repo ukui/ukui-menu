@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "functionclassifybutton.h"
 #include <QDebug>
 
@@ -12,6 +30,8 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
                        QString text):
     QPushButton (parent)
 {
+    this->width=width;
+    this->height=height;
     this->setFixedSize(width,height);
     this->iconstr=iconstr;
     this->piconstr=piconstr;
@@ -23,7 +43,7 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     this->setFocusPolicy(Qt::NoFocus);
     svgRender=new QSvgRenderer(this);
     svgRender->load(iconstr);
-    pixmap=new QPixmap(19,19);
+    pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
     pixmap->fill(Qt::transparent);
     QPainter p(pixmap);
     svgRender->render(&p);
@@ -34,85 +54,90 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
 
     textlabel=new QLabel(this);
     textlabel->setText(this->text);
-    textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);font-size:14px;");
+    QFont font;
+    font.setPixelSize(Style::LeftFontSize);
+    textlabel->setFont(font);
+    textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
     textlabel->adjustSize();
 
     mainlayout=new QHBoxLayout;
-    mainlayout->setContentsMargins(16,0,0,0);
-    mainlayout->setSpacing(10);
+    mainlayout->setContentsMargins(Style::LeftSpaceIconLeft,0,0,0);
+    mainlayout->setSpacing(Style::LeftSpaceIconText);
     this->setLayout(mainlayout);
     mainlayout->addWidget(iconlabel);
     mainlayout->addWidget(textlabel);
-
-//    if(module==2)
-//    {
-//        this->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-//        this->setText(tr(text.toLocal8Bit().data()));
-//        this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255, 50%);font-size:14px;");
-//    }
-//    else
-//        this->setStyleSheet("border:0px;padding-left:0px;background:transparent;");
 }
 
 void FunctionClassifyButton::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
+    this->setFixedSize(width,height);
     QByteArray byte=hoverbg.toLocal8Bit();
     char* hover=byte.data();
     char style[100];
-//    if(module==2)
-//        sprintf(style,"border:0px;padding-left:16px;background-color:%s;color:#ffffff;font-size:14px;",hover);
-//    else
     sprintf(style,"border:0px;padding-left:0px;background-color:%s;",hover);
     this->setStyleSheet(QString::fromLocal8Bit(style));
     delete svgRender;
     svgRender=new QSvgRenderer(this);
     svgRender->load(piconstr);
-    pixmap=new QPixmap(19,19);
+    pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
     pixmap->fill(Qt::transparent);
     QPainter p(pixmap);
     svgRender->render(&p);
     iconlabel->setPixmap(*pixmap);
-    textlabel->setStyleSheet("background:transparent;color:#ffffff;font-size:14px;");
+    iconlabel->setFixedSize(pixmap->size());
+    QFont font;
+    font.setPixelSize(Style::LeftFontSize);
+    textlabel->setFont(font);
+    textlabel->setStyleSheet("background:transparent;color:#ffffff;");
+    textlabel->adjustSize();
 }
 
 void FunctionClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
-//    if(module==2)
-//    {
-//        if(!is_pressed)
-//            this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255, 50%);font-size:14px;");
-//        else
-//            this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255);font-size:14px;");
-//    }
-//    else
     this->setStyleSheet("border:0px;padding-left:0px;background:transparent;");
     delete svgRender;
     svgRender=new QSvgRenderer(this);
     if(module==2 && is_pressed)
+    {
+        this->setFixedSize(width,height);
         svgRender->load(piconstr);
+        pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+        QFont font;
+        font.setPixelSize(Style::LeftFontSize);
+        textlabel->setFont(font);
+
+    }
     else
+    {
+        this->setFixedSize(width,height);
         svgRender->load(iconstr);
-    pixmap=new QPixmap(19,19);
+        pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+        QFont font;
+        font.setPixelSize(Style::LeftFontSize);
+        textlabel->setFont(font);
+
+    }
+//    pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
     pixmap->fill(Qt::transparent);
     QPainter p(pixmap);
     svgRender->render(&p);
     iconlabel->setPixmap(*pixmap);
+    iconlabel->setFixedSize(pixmap->size());
     if(is_pressed)
-        textlabel->setStyleSheet("background:transparent;color:#ffffff;font-size:14px;");
+        textlabel->setStyleSheet("background:transparent;color:#ffffff;");
     else
-        textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);font-size:14px;");
+        textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
+    textlabel->adjustSize();
 }
 
 void FunctionClassifyButton::mousePressEvent(QMouseEvent *event)
 {
+    this->setFixedSize(width,height);
     QByteArray byte=pressedbg.toLocal8Bit();
     char* pressed=byte.data();
     char style[100];
-//    if(module==2)
-//        sprintf(style,"border:0px;padding-left:16px;background-color:%s;color:#ffffff;font-size:14px;",pressed);
-//    else
     sprintf(style,"border:0px;padding-left:0px;background-color:%s;",pressed);
     if(event->button()==Qt::LeftButton)
     {
@@ -120,12 +145,17 @@ void FunctionClassifyButton::mousePressEvent(QMouseEvent *event)
         delete svgRender;
         svgRender=new QSvgRenderer(this);
         svgRender->load(piconstr);
-        pixmap=new QPixmap(19,19);
+        pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
         pixmap->fill(Qt::transparent);
         QPainter p(pixmap);
         svgRender->render(&p);
         iconlabel->setPixmap(*pixmap);
-        textlabel->setStyleSheet("background:transparent;color:#ffffff;font-size:14px;");
+        iconlabel->setFixedSize(pixmap->size());
+        QFont font;
+        font.setPixelSize(Style::LeftFontSize);
+        textlabel->setFont(font);
+        textlabel->setStyleSheet("background:transparent;color:#ffffff;");
+        textlabel->adjustSize();
         is_pressed=true;
     }
 }
@@ -135,9 +165,6 @@ void FunctionClassifyButton::mouseReleaseEvent(QMouseEvent *event)
     QByteArray byte=hoverbg.toLocal8Bit();
     char* hover=byte.data();
     char style[100];
-//    if(module==2)
-//        sprintf(style,"border:0px;padding-left:16px;background-color:%s;color:#ffffff;font-size:14px;",hover);
-//    else
     sprintf(style,"border:0px;padding-left:0px;background-color:%s;",hover);
     if(event->button()==Qt::LeftButton)
     {
@@ -145,12 +172,17 @@ void FunctionClassifyButton::mouseReleaseEvent(QMouseEvent *event)
         delete svgRender;
         svgRender=new QSvgRenderer(this);
         svgRender->load(piconstr);
-        pixmap=new QPixmap(19,19);
+        pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
         pixmap->fill(Qt::transparent);
         QPainter p(pixmap);
         svgRender->render(&p);
         iconlabel->setPixmap(*pixmap);
-        textlabel->setStyleSheet("background:transparent;color:#ffffff;font-size:14px;");
+        iconlabel->setFixedSize(pixmap->size());
+        QFont font;
+        font.setPixelSize(Style::LeftFontSize);
+        textlabel->setFont(font);
+        textlabel->setStyleSheet("background:transparent;color:#ffffff;");
+        textlabel->adjustSize();
         emit buttonClicked(this);
     }
 }

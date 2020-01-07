@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "fullletterwidget.h"
 #include "ui_fullletterwidget.h"
 #include <QDebug>
@@ -29,20 +47,10 @@ void FullLetterWidget::init_widget()
 
     applistWid=new QWidget(this);
     letterlistWid=new QWidget(this);
-    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-    {
-        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-265,
-                           QApplication::desktop()->availableGeometry().height()-87);
-        applistWid->setFixedSize(this->width()-263,this->height());
-        letterlistWid->setFixedSize(263,this->height());
-    }
-    else
-    {
-        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-286,
-                       QApplication::desktop()->availableGeometry().height()-105);
-        applistWid->setFixedSize(this->width()-287,this->height());
-        letterlistWid->setFixedSize(287,this->height());
-    }
+    this->setFixedSize(Style::MainViewWidWidth,
+                       Style::AppListWidHeight);
+    applistWid->setFixedSize(Style::AppListWidWidth,this->height());
+    letterlistWid->setFixedSize(Style::LeftWidWidth,this->height());
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
@@ -230,11 +238,7 @@ void FullLetterWidget::resize_scrollarea_controls()
         QWidget* wid=widItem->widget();
         FullListView* listview=qobject_cast<FullListView*>(wid);
         listview->adjustSize();
-        int dividend=0;
-        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-            dividend=(scrollarea->width()-12)/159;
-        else
-            dividend=(scrollarea->width()-12)/200;
+        int dividend=(scrollarea->width()-Style::SliderSize)/Style::AppListGridSizeWidth;
 
         int rowcount=0;
         if(listview->model()->rowCount()%dividend>0)
@@ -247,10 +251,8 @@ void FullLetterWidget::resize_scrollarea_controls()
 
         }
 
-        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-            listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
-        else
-            listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
+//        listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
+        listview->setFixedSize(scrollarea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
         if(row<scrollareawidLayout->count()/2-1)
         {
             pos+=(20+listview->height());
@@ -270,20 +272,17 @@ void FullLetterWidget::init_letterlist_widget()
     letterlistrightSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
 
     letterlistLayout=new QHBoxLayout(letterlistWid);
-    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-        letterlistLayout->setContentsMargins(50,0,165,0);
-    else
-        letterlistLayout->setContentsMargins(50,0,189,0);
+    letterlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
     letterlistLayout->setSpacing(0);
     letterlistWid->setLayout(letterlistLayout);
 
     letterlistscrollarea=new ClassifyScrollArea();
 //    letterlistscrollarea->setFixedSize(25,28*30+27*10);
-    letterlistscrollarea->setFixedSize(48,letterlistWid->height());
+    letterlistscrollarea->setFixedSize(Style::LeftBtnHeight,letterlistWid->height());
     letterlistscrollareaWid=new QWidget;
     letterlistscrollareawidLayout=new QVBoxLayout;
     letterlistscrollareawidLayout->setContentsMargins(0,0,0,0);
-    letterlistscrollareawidLayout->setSpacing(12);
+    letterlistscrollareawidLayout->setSpacing(Style::LeftSpaceBetweenItem);
     letterlistscrollareaWid->setLayout(letterlistscrollareawidLayout);
     letterlistscrollarea->setWidget(letterlistscrollareaWid);
     letterlistscrollarea->setWidgetResizable(true);
@@ -299,11 +298,14 @@ void FullLetterWidget::init_letterlist_widget()
 void FullLetterWidget::init_letterlist_scrollarea()
 {
     char btnstyle[500];
-    sprintf(btnstyle,"QToolButton{background:transparent;color:#8b8b8b;font-size:14px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;font-size:14px;}\
-            QToolButton:pressed{background-color:%s;color:#8b8b8b;font-size:14px;}\
-            QToolButton:checked{background:transparent;color:#ffffff;font-size:14px;}",
+    sprintf(btnstyle,"QToolButton{background:transparent;color:#8b8b8b;padding-left:0px;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;}\
+            QToolButton:pressed{background-color:%s;color:#8b8b8b;}\
+            QToolButton:checked{background:transparent;color:#ffffff;}",
             ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
+
+    QFont font;
+    font.setPixelSize(Style::LeftFontSize);
 
     QStringList letterbtnlist=this->letterbtnlist;
     if(letterbtnlist.contains("&"))
@@ -313,8 +315,9 @@ void FullLetterWidget::init_letterlist_scrollarea()
         QToolButton* letterbtn=new QToolButton;
         letterbtn->setText(letterbtnlist.at(i));
         letterbtn->setStyleSheet(btnstyle);
-        letterbtn->setFixedSize(48,48);
+        letterbtn->setFixedSize(Style::LeftBtnHeight,Style::LeftBtnHeight);
         letterbtn->setCheckable(true);
+        letterbtn->setFont(font);
         buttonList.append(letterbtn);
         letterlistscrollareawidLayout->addWidget(letterbtn);
 //        connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));

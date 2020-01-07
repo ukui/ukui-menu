@@ -45,10 +45,11 @@ private:
 
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
-    QHBoxLayout* mainLayout=nullptr;
+    QVBoxLayout* mainLayout=nullptr;
 
     LetterButtonWidget* letterbtnwid=nullptr;//分类按钮界面
 
+    QLabel* line=nullptr;
     ListView* applistview=nullptr;
     QVector<QStringList> data;
     ItemDelegate* m_delegate=nullptr;

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "rightclickmenu.h"
 #include <QDebug>
 
@@ -9,7 +27,7 @@ RightClickMenu::RightClickMenu()
     //其它按钮右键菜单项
     othermenu=new QMenu();
     othermenu->setLayoutDirection(Qt::LeftToRight);
-    othermenu->setFixedSize(250,34*2);
+    othermenu->setFixedSize(250+2,36*2+12+2);
     OtherFix2TaskBarAction=new QWidgetAction(othermenu);
     OtherFix2TaskBarWid=new QWidget();
     OtherUnfix2TaskBarAction=new QWidgetAction(othermenu);
@@ -20,7 +38,7 @@ RightClickMenu::RightClickMenu()
     //常用应用按钮右键菜单
     cuappbtnmenu=new QMenu();
     cuappbtnmenu->setLayoutDirection(Qt::LeftToRight);
-    cuappbtnmenu->setFixedSize(250,34*7+15);
+    cuappbtnmenu->setFixedSize(250+2,36*7+15+12+2);
     CuFix2CommonUseAction=new QWidgetAction(cuappbtnmenu);
     CuFix2CommonUseWid=new QWidget();
     CuUnfixed4CommonUseAction=new QWidgetAction(cuappbtnmenu);
@@ -43,7 +61,7 @@ RightClickMenu::RightClickMenu()
     //普通应用按钮右键菜单
     appbtnmenu=new QMenu();
     appbtnmenu->setLayoutDirection(Qt::LeftToRight);
-    appbtnmenu->setFixedSize(250,34*5+10);
+    appbtnmenu->setFixedSize(250+2,36*5+10+12+2);
     Fix2CommonUseAction=new QWidgetAction(appbtnmenu);
     Fix2CommonUseWid=new QWidget();
     Unfixed4CommonUseAction=new QWidgetAction(appbtnmenu);
@@ -60,6 +78,11 @@ RightClickMenu::RightClickMenu()
     AttributeWid=new QWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
+
+    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid #626c6e;border-radius:3px;background-color:%s;}\
+            QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
+            RightClickMenuBackground,RightClickMenuSeparator);
+
 
     add_shutdown_action();
     add_other_action();
@@ -198,8 +221,9 @@ void RightClickMenu::add_commonuse_appbtn_action()
     cuappbtnmenu->addAction(CuAttributeAction);
     connect(CuAttributeAction, SIGNAL(triggered()),this,SLOT(attributeaction_trigger_slot()));
 
-    cuappbtnmenu->setStyleSheet("QMenu{border:1px solid #626c6e;background-color:#151a1e;}\
-                         QMenu::separator{height:1px;background:#475760;margin-left:2px;margin-right:2px;margin-top:2px;margin-bottom:2px;}");
+    cuappbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
+    cuappbtnmenu->setWindowOpacity(RightClickMenuOpacity);
+    cuappbtnmenu->setStyleSheet(style);
 
     setting->endGroup();
 }
@@ -268,8 +292,9 @@ void RightClickMenu::add_appbtn_action()
     appbtnmenu->addAction(AttributeAction);
     connect(AttributeAction, SIGNAL(triggered()),this,SLOT(attributeaction_trigger_slot()));
 
-    appbtnmenu->setStyleSheet("QMenu{border:1px solid #626c6e;background-color:#151a1e;}\
-                         QMenu::separator{height:1px;background:#475760;margin-left:2px;margin-right:2px;margin-top:2px;margin-bottom:2px;}");
+    appbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
+    appbtnmenu->setWindowOpacity(RightClickMenuOpacity);
+    appbtnmenu->setStyleSheet(style);
 }
 
 //关机按钮右键菜单
@@ -277,7 +302,7 @@ void RightClickMenu::add_shutdown_action()
 {
     shutdownmenu=new QMenu();
     shutdownmenu->setLayoutDirection(Qt::LeftToRight);
-    shutdownmenu->setFixedSize(250,34*5);
+    shutdownmenu->setFixedSize(250+2,36*5+12+2);
 
     LockScreenAction=new QWidgetAction(shutdownmenu);
     LockScreenWid=new QWidget();
@@ -314,7 +339,9 @@ void RightClickMenu::add_shutdown_action()
     shutdownmenu->addAction(ShutDownAction);
     connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownaction_trigger_slot()));
 
-    shutdownmenu->setStyleSheet("QMenu{border:1px solid #626c6e;background-color:#151a1e;}");
+    shutdownmenu->setAttribute(Qt::WA_TranslucentBackground);
+    shutdownmenu->setWindowOpacity(RightClickMenuOpacity);
+    shutdownmenu->setStyleSheet(style);
 }
 
 //其它按钮右键菜单
@@ -335,19 +362,25 @@ void RightClickMenu::add_other_action()
     othermenu->addAction(OtherListAction);
     connect(OtherListAction,SIGNAL(triggered()),this,SLOT(otherlistaction_trigger_slot()));
 
-    othermenu->setStyleSheet("QMenu{border:1px solid #626c6e;background-color:#151a1e;}");
-
+    othermenu->setAttribute(Qt::WA_TranslucentBackground);
+    othermenu->setWindowOpacity(RightClickMenuOpacity);
+    othermenu->setStyleSheet(style);
 }
 
 void RightClickMenu::init_widget_action(QWidget *wid, QString iconstr, QString textstr)
 {
-    QString style="QWidget{background:transparent;border:0px;}\
-            QWidget:hover{background-color:#33bed8ef;}\
-            QWidget:pressed{background-color:#1abed8ef;}";
+    char style[200];
+    sprintf(style,"QWidget{background:transparent;border:0px;border-radius:2px;}\
+            QWidget:hover{background-color:%s;}",
+            RightClickMenuHover);
+
+    char labelstyle[100];
+    sprintf(labelstyle,"background:transparent;border:0px;color:%s;font-size:14px;",
+            RightClickMenuFont);
 
     QHBoxLayout* layout=new QHBoxLayout(wid);
     wid->setLayout(layout);
-    wid->setFixedSize(250,34);
+    wid->setFixedSize(246,36);
     wid->setStyleSheet(style);
     wid->setFocusPolicy(Qt::NoFocus);
 
@@ -363,13 +396,13 @@ void RightClickMenu::init_widget_action(QWidget *wid, QString iconstr, QString t
         labelicon->setPixmap(*pixmap);
         labelicon->setFixedSize(pixmap->size());
         labelicon->setAlignment(Qt::AlignCenter);
-        labelicon->setStyleSheet("QLabel{background:transparent;border:0px;}");
+        labelicon->setStyleSheet(labelstyle);
         layout->addWidget(labelicon);
 
     }
 
     QLabel* labeltext=new QLabel(wid);
-    labeltext->setStyleSheet("background:transparent;border:0px;color:#ffffff;font-size:14px;");
+    labeltext->setStyleSheet(labelstyle);
     QByteArray textbyte=textstr.toLocal8Bit();
     char* text=textbyte.data();
     labeltext->setText(tr(text));

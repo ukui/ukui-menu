@@ -1,9 +1,27 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "sidebarwidget.h"
 #include "ui_sidebarwidget.h"
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QPainter>
-#include "src/color.h"
+#include "src/Style/style.h"
 
 SideBarWidget::SideBarWidget(QWidget *parent) :
     QWidget(parent),
@@ -28,38 +46,38 @@ void SideBarWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-//    this->setStyleSheet("border:0px;background:transparent;");
-    char style[100];
-    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
-    this->setStyleSheet(QString::fromLocal8Bit(style));
+    this->setStyleSheet("border:0px;background:transparent;");
+//    char style[100];
+//    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
+//    this->setStyleSheet(QString::fromLocal8Bit(style));
     this->setFocusPolicy(Qt::NoFocus);
 
     add_sidebar_btn();
     load_min_sidebar();
 
     //全屏侧边栏悬浮动画
-    pEnterAnimation=new QPropertyAnimation;
-    pEnterAnimation->setTargetObject(pMainWidget);
-    pEnterAnimation->setPropertyName("pos");
-    pEnterAnimation->setDuration(500);
+//    pEnterAnimation=new QPropertyAnimation;
+//    pEnterAnimation->setTargetObject(pMainWidget);
+//    pEnterAnimation->setPropertyName("pos");
+//    pEnterAnimation->setDuration(500);
 //    pAnimation->setStartValue(QRect(390,QApplication::desktop()->availableGeometry().height()-532,390,532));
 //    pAnimation->setEndValue(QRect(490,QApplication::desktop()->availableGeometry().height()-532,490,532));
 //    pAnimation->setStartValue(QRect(100,0,
 //                              60,QApplication::desktop()->availableGeometry().height()));
 //    pAnimation->setEndValue(QRect(0,0,
 //                                  160,QApplication::desktop()->availableGeometry().height()));
-    pEnterAnimation->setStartValue(QPoint(100,0));
-    pEnterAnimation->setEndValue(QPoint(0,0));
-    pEnterAnimation->setEasingCurve(QEasingCurve::Linear);
+//    pEnterAnimation->setStartValue(QPoint(100,0));
+//    pEnterAnimation->setEndValue(QPoint(0,0));
+//    pEnterAnimation->setEasingCurve(QEasingCurve::Linear);
 //    connect(pEnterAnimation,SIGNAL(finished()),this,SLOT(animation_finished_slot()));
 
-    pLeaveAnimation=new QPropertyAnimation;
-    pLeaveAnimation->setTargetObject(pMainWidget);
-    pLeaveAnimation->setPropertyName("pos");
-    pLeaveAnimation->setDuration(500);
-    pLeaveAnimation->setStartValue(QPoint(0,0));
-    pLeaveAnimation->setEndValue(QPoint(100,0));
-    pLeaveAnimation->setEasingCurve(QEasingCurve::Linear);
+//    pLeaveAnimation=new QPropertyAnimation;
+//    pLeaveAnimation->setTargetObject(pMainWidget);
+//    pLeaveAnimation->setPropertyName("pos");
+//    pLeaveAnimation->setDuration(500);
+//    pLeaveAnimation->setStartValue(QPoint(0,0));
+//    pLeaveAnimation->setEndValue(QPoint(100,0));
+//    pLeaveAnimation->setEasingCurve(QEasingCurve::Linear);
 
     pUkuiMenuInterface=new UkuiMenuInterface;
 
@@ -81,7 +99,7 @@ void SideBarWidget::add_sidebar_btn()
     pMainWidget=new QWidget(this);
     pMainWidgetLayout=new QVBoxLayout;
     pMainWidgetLayout->setContentsMargins(0,0,0,0);
-    pMainWidgetLayout->setSpacing(0);
+    pMainWidgetLayout->setSpacing(10);
     pMainWidget->setLayout(pMainWidgetLayout);
 //    layout->addWidget(pMainWidget);
     pMainWidget->setStyleSheet("background:transparent;");
@@ -96,12 +114,12 @@ void SideBarWidget::add_sidebar_btn()
 //    horizontalSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
 //    minmaxLayout->addItem(horizontalSpacer);
     minmaxLayout->addWidget(minmaxbtn);
-    minmaxLayout->setAlignment(minmaxbtn,Qt::AlignRight);
+//    minmaxLayout->setAlignment(minmaxbtn,Qt::AlignCenter);
     minmaxWidget->setLayout(minmaxLayout);
     char btncolor[300];
-    sprintf(btncolor,"QToolButton{background:transparent;border:0px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;border:0px;}\
-            QToolButton:pressed{background-color:%s;border:0px;}",
+    sprintf(btncolor,"QToolButton{background:transparent;border:0px;padding-left:0px;border-radius:2px;}\
+            QToolButton:hover{background-color:%s;border:0px;border-radius:2px;}\
+            QToolButton:pressed{background-color:%s;border:0px;border-radius:2px;}",
             MMBtnHoverBackground,MMBtnHoverBackground);
     minmaxbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
@@ -142,45 +160,49 @@ void SideBarWidget::add_sidebar_btn()
     connect(shutdownbtn,SIGNAL(clicked()),this,SLOT(shutdownbtn_clicked_slot()));
     connect(usericonbtn,SIGNAL(clicked()),this,SLOT(usericonbtn_clicked_slot()));
 
+    QString fontsizestr=QString::number(Style::SideBarFontSize)+"px";
+    char textstyle[100];
+    sprintf(textstyle,"QLabel{background:transparent;color:#ffffff;font-size:%s;}",
+            fontsizestr.toLocal8Bit().data());
     commonusebtnname=new QLabel;
     commonusebtnname->setText(tr("常用软件"));
-    commonusebtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+    commonusebtnname->setStyleSheet(textstyle);
     commonusebtnname->adjustSize();
 //    commonusebtn->layout()->addWidget(commonusebtnname);
 
     letterbtnname=new QLabel;
     letterbtnname->setText(tr("字母排序"));
-    letterbtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+    letterbtnname->setStyleSheet(textstyle);
     letterbtnname->adjustSize();
 //    letterbtn->layout()->addWidget(letterbtnname);
 
     functionbtnname=new QLabel;
     functionbtnname->setText(tr("功能分类"));
-    functionbtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+    functionbtnname->setStyleSheet(textstyle);
     functionbtnname->adjustSize();
 //    functionbtn->layout()->addWidget(functionbtnname);
 
     QString username=pUkuiMenuInterface->get_user_name();
     usericonbtnname=new QLabel;
     usericonbtnname->setText(username);
-    usericonbtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+    usericonbtnname->setStyleSheet(textstyle);
     usericonbtnname->adjustSize();
 
     computerbtnname=new QLabel;
     computerbtnname->setText(tr("我的电脑"));
-    computerbtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+    computerbtnname->setStyleSheet(textstyle);
     computerbtnname->adjustSize();
 //    computerbtn->layout()->addWidget(computerbtnname);
 
     controlbtnname=new QLabel;
     controlbtnname->setText(tr("控制面板"));
-    controlbtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+    controlbtnname->setStyleSheet(textstyle);
     controlbtnname->adjustSize();
 //    controlbtn->layout()->addWidget(controlbtnname);
 
     shutdownbtnname=new QLabel;
     shutdownbtnname->setText(tr("关机"));
-    shutdownbtnname->setStyleSheet("QLabel{background:transparent;color:#ffffff;font-size:14px;}");
+    shutdownbtnname->setStyleSheet(textstyle);
     shutdownbtnname->adjustSize();
 //    shutdownbtn->layout()->addWidget(shutdownbtnname);
 
@@ -190,6 +212,18 @@ void SideBarWidget::add_sidebar_btn()
     shutdownbtn->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(shutdownbtn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
             SLOT(shutdownbtn_right_click_slot()));
+
+    //监控用户账户信息更改
+    qint64 uid=static_cast<qint64>(getuid());
+    QDBusInterface iface("org.freedesktop.Accounts",
+                         "/org/freedesktop/Accounts",
+                         "org.freedesktop.Accounts",
+                         QDBusConnection::systemBus());
+    QDBusReply<QDBusObjectPath>objPath=iface.call("FindUserById",uid);
+    QDBusConnection::systemBus().connect("org.freedesktop.Accounts",
+                                          objPath.value().path(),
+                                          "org.freedesktop.Accounts.User",
+                                         QString("Changed"),this,SLOT(user_accounts_changed()));
 
     verticalSpacer = new QSpacerItem(20,40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     pMainWidgetLayout->addWidget(minmaxWidget);
@@ -211,21 +245,21 @@ void SideBarWidget::add_sidebar_btn()
 void SideBarWidget::set_btn_style(QPushButton *btn, QString btnicon, int num)
 {
     char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;}\
-            QPushButton:hover{background-color:%s;border:0px;}\
-            QPushButton:pressed{background-color:%s;border:0px;}",
+    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:2px;}\
+            QPushButton:hover{background-color:%s;border:0px;border-radius:2px;}\
+            QPushButton:pressed{background-color:%s;border:0px;border-radius:2px;}",
             SBFunBtnHoverBackground,SBFunBtnHoverBackground);
     btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
     btnlayout=new QHBoxLayout;
     labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);
-    labelicon->setStyleSheet("QLabel{background:transparent;}");
+    labelicon->setStyleSheet("background:transparent;");
 
     if(num!=3)
     {
         QSvgRenderer* svgRender = new QSvgRenderer(btn);
         svgRender->load(btnicon);
-        QPixmap* pixmap = new QPixmap(19,19);
+        QPixmap* pixmap = new QPixmap(Style::SideBarIconSize,Style::SideBarIconSize);
         pixmap->fill(Qt::transparent);//设置背景透明
         QPainter p(pixmap);
         svgRender->render(&p);
@@ -233,9 +267,43 @@ void SideBarWidget::set_btn_style(QPushButton *btn, QString btnicon, int num)
         labelicon->setFixedSize(pixmap->size());
     }
     else {
-        QIcon icon=QIcon::fromTheme(btnicon);
-        labelicon->setPixmap(icon.pixmap(19,19));
-        labelicon->setFixedSize(19,19);
+        QPixmap pixmapa;
+        QFileInfo fileInfo(btnicon);
+        if(fileInfo.isFile())
+            pixmapa=QPixmap(btnicon);
+        else
+            pixmapa=QPixmap(":/data/img/sidebarwidget/usericon-darkcolor.svg");
+        QPixmap pixmap(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+        pixmap.fill(Qt::transparent);
+        QPainter painter(&pixmap);
+        painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+        QPainterPath path;
+        path.addEllipse(1, 1, Style::SideBarIconSize+2,Style::SideBarIconSize+2);
+
+        //画背景
+        QColor color;
+        color.setNamedColor(UserIconBackground);
+        painter.setOpacity(UserIconOpacity);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(QBrush(color));
+        painter.drawPath(path);
+
+        //填充图片
+        painter.setOpacity(1);
+        painter.setClipPath(path);
+        painter.drawPixmap(1, 1, Style::SideBarIconSize+2,Style::SideBarIconSize+2, pixmapa);
+
+        //画圈圈
+        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+        painter.setOpacity(1);
+        color.setNamedColor("#d5d5d5");
+        painter.setPen(QPen(color,2));
+        painter.setBrush(Qt::NoBrush);
+        painter.drawPath(path);
+
+        labelicon->setPixmap(pixmap);
+        labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
     }
 
     btnlayout->addWidget(labelicon);
@@ -324,6 +392,50 @@ void SideBarWidget::usericonbtn_clicked_slot()
     system("ukui-control-center --u");
 }
 
+void SideBarWidget::user_accounts_changed()
+{
+    QString usericon=pUkuiMenuInterface->get_user_icon();
+    QPixmap pixmapa;
+    QFileInfo fileInfo(usericon);
+    if(fileInfo.isFile())
+        pixmapa=QPixmap(usericon);
+    else
+        pixmapa=QPixmap(":/data/img/sidebarwidget/usericon-darkcolor.svg");
+    QPixmap pixmap(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+    QPainterPath path;
+    path.addEllipse(1, 1, Style::SideBarIconSize+2,Style::SideBarIconSize+2);
+
+    //画背景
+    QColor color;
+    color.setNamedColor(UserIconBackground);
+    painter.setOpacity(UserIconOpacity);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QBrush(color));
+    painter.drawPath(path);
+
+    //填充图片
+    painter.setOpacity(1);
+    painter.setClipPath(path);
+    painter.drawPixmap(1, 1, Style::SideBarIconSize+2,Style::SideBarIconSize+2, pixmapa);
+
+    //画圈圈
+    path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+    painter.setOpacity(1);
+    color.setNamedColor("#d5d5d5");
+    painter.setPen(QPen(color,2));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawPath(path);
+
+    QLayoutItem* item=usericonbtn->layout()->itemAt(0);
+    QLabel* labelicon=qobject_cast<QLabel*>(item->widget());
+    labelicon->setPixmap(pixmap);
+    labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+}
+
 /**
  * 加载默认侧边栏
  */
@@ -334,7 +446,10 @@ void SideBarWidget::load_min_sidebar()
 
     this->setFixedSize(55,590);
     pMainWidget->setGeometry(QRect(0,0,this->width(),this->height()));
-    minmaxWidget->setFixedSize(55,70);
+    minmaxWidget->setFixedSize(37,70);
+    minmaxLayout->setContentsMargins(0,0,0,0);
+
+    pMainWidgetLayout->setContentsMargins(8,0,10,0);
 
     set_min_sidebar_btn(commonusebtn);
     set_min_sidebar_btn(letterbtn);
@@ -354,9 +469,9 @@ void SideBarWidget::load_min_sidebar()
  */
 void SideBarWidget::set_max_btn()
 {
-    minmaxbtn->setFixedSize(30,30);
+    minmaxbtn->setFixedSize(37,37);
     QSvgRenderer* svgRender = new QSvgRenderer(minmaxbtn);
-    svgRender->load(QString(":/data/img/mainviewwidget/max.svg"));
+    svgRender->load(QString(":/data/img/sidebarwidget/max.svg"));
     QPixmap* pixmap = new QPixmap(14,14);
     pixmap->fill(Qt::transparent);//设置背景透明
     QPainter p(pixmap);
@@ -369,7 +484,7 @@ void SideBarWidget::set_max_btn()
  */
 void SideBarWidget::set_min_sidebar_btn(QPushButton* btn)
 {
-    btn->setFixedSize(55,37);
+    btn->setFixedSize(37,37);
     btn->layout()->setContentsMargins(0,0,0,0);
     btn->layout()->setSpacing(10);
 
@@ -403,20 +518,14 @@ void SideBarWidget::load_max_sidebar()
     is_fullscreen=true;
     set_min_btn();
 
-    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-    {
-        this->setFixedSize(265,QApplication::desktop()->availableGeometry().height());
-        pMainWidget->setGeometry(QRect(265-112-21,0,112,QApplication::desktop()->availableGeometry().height()));
+    this->setFixedSize(Style::SideBarWidWidth,QApplication::desktop()->availableGeometry().height());
+    pMainWidget->setGeometry(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
+                                   this->width(),QApplication::desktop()->availableGeometry().height()));
 
-        minmaxWidget->setFixedSize(112,87);
+    minmaxWidget->setFixedSize(Style::MinMaxWidWidth,Style::MinMaxWidHeight);
+    minmaxLayout->setContentsMargins(minmaxWidget->width()-minmaxbtn->width(),0,0,0);
 
-    }
-    else{
-        this->setFixedSize(286,QApplication::desktop()->availableGeometry().height());
-        pMainWidget->setGeometry(QRect(286-112-21,0,112,QApplication::desktop()->availableGeometry().height()));
-
-        minmaxWidget->setFixedSize(112,105);
-    }
+    pMainWidgetLayout->setContentsMargins(0,0,0,0);
 
     commonusebtn->layout()->addWidget(commonusebtnname);
     letterbtn->layout()->addWidget(letterbtnname);
@@ -443,10 +552,10 @@ void SideBarWidget::load_max_sidebar()
  */
 void SideBarWidget::set_min_btn()
 {
-    minmaxbtn->setFixedSize(70.2,70.2);
+    minmaxbtn->setFixedSize(Style::MinMaxBtnWidth,Style::MinMaxBtnWidth);
     QSvgRenderer* svgRender = new QSvgRenderer(minmaxbtn);
-    svgRender->load(QString(":/data/img/mainviewwidget/min.svg"));
-    QPixmap* pixmap = new QPixmap(16,16);
+    svgRender->load(QString(":/data/img/sidebarwidget/min.svg"));
+    QPixmap* pixmap = new QPixmap(Style::MinMaxIconSize,Style::MinMaxIconSize);
     pixmap->fill(Qt::transparent);//设置背景透明
     QPainter p(pixmap);
     svgRender->render(&p);
@@ -462,48 +571,53 @@ void SideBarWidget::set_max_sidebar_btn(QPushButton *btn)
 //    btn->layout()->setContentsMargins(0,0,0,0);
 //    btn->layout()->setSpacing(10);
 
-    btn->setFixedSize(112,50);
+    btn->setFixedSize(Style::SideBarBtnWidth,Style::SideBarBtnHeight);
 //    QLayoutItem* item=btn->layout()->itemAt(1);
 //    QWidget* wid=item->widget();
 //    QLabel* label=qobject_cast<QLabel*>(wid);
 //    int len=label->text().length();
+//    qDebug()<<len;
 //    btn->layout()->setContentsMargins(15,0,btn->width()-40-labelicon->width()-letterbtnname->width(),0);
-    btn->layout()->setContentsMargins(15,0,0,0);
-    btn->layout()->setSpacing(10);
+    btn->layout()->setContentsMargins(Style::SideBarSpaceIconLeft,
+                                      0,
+                                      0,
+                                      0);
+    btn->layout()->setSpacing(Style::SideBarSpaceIconText);
+//    btn->setStyleSheet("border:1px solid #ff0000;");
 
 }
 
-void SideBarWidget::enterEvent(QEvent *e)
-{
-    this->is_hover=true;
-    Q_UNUSED(e);
-    if(!is_fullscreen)
-    {
-        emit send_hover_signal(true);
-    }
-    else
-    {
-//        pEnterAnimation->start();
-    }
-}
+//void SideBarWidget::enterEvent(QEvent *e)
+//{
+//    this->is_hover=true;
+//    Q_UNUSED(e);
+//    if(!is_fullscreen)
+//    {
+//        emit send_hover_signal(true);
+//    }
+//    else
+//    {
+////        pEnterAnimation->start();
+//    }
+//}
 
-void SideBarWidget::leaveEvent(QEvent *e)
-{
-    this->is_hover=false;
-    Q_UNUSED(e);
-    if(!is_fullscreen)
-    {
-        emit send_hover_signal(false);
-    }
-    else
-    {
-//        pLeaveAnimation->start();
-    }
-}
+//void SideBarWidget::leaveEvent(QEvent *e)
+//{
+//    this->is_hover=false;
+//    Q_UNUSED(e);
+//    if(!is_fullscreen)
+//    {
+//        emit send_hover_signal(false);
+//    }
+//    else
+//    {
+////        pLeaveAnimation->start();
+//    }
+//}
 
-void SideBarWidget::animation_finished_slot()
-{
-}
+//void SideBarWidget::animation_finished_slot()
+//{
+//}
 
 /**
  * 按钮焦点事件过滤
@@ -588,8 +702,14 @@ void SideBarWidget::animation_finished_slot()
 
 void SideBarWidget::btngroup_clicked_slot(QAbstractButton *btn)
 {
+    char btncolor[300];
+    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:2px;}\
+            QPushButton:hover{background-color:%s;border:0px;border-radius:2px;}\
+            QPushButton:pressed{background-color:%s;border:0px;border-radius:2px;}",
+            SBFunBtnHoverBackground,SBFunBtnHoverBackground);
+
     char pressstyle[200];
-    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;}",SBClassifyBtnHoverBackground);
+    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:2px;}",SBClassifyBtnSelectedBackground);
 
     foreach (QAbstractButton* button, buttonList) {
         if(pBtnGroup->id(btn)==buttonList.indexOf(button))
@@ -619,6 +739,7 @@ void SideBarWidget::btngroup_clicked_slot(QAbstractButton *btn)
             }
         }
         else{
+//            button->setStyleSheet(QString::fromLocal8Bit(btncolor));
             button->setStyleSheet("background:transparent;");
         }
     }

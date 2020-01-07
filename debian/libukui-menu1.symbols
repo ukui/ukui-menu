@@ -17,17 +17,29 @@ libukui-menu.so.1 libukui-menu1 #MINVER#
  _ZN17UkuiMenuInterface13get_user_iconEv@Base 0.9.0
  _ZN17UkuiMenuInterface13get_user_nameEv@Base 0.9.0
  _ZN17UkuiMenuInterface13sort_app_nameEv@Base 0.9.0
- _ZN17UkuiMenuInterface15desktopfpVectorE@Base 0.9.0
  _ZN17UkuiMenuInterface15get_app_commentE7QString@Base 0.9.0
+ _ZN17UkuiMenuInterface15get_av_app_listEv@Base 0.9.0
+ _ZN17UkuiMenuInterface17get_game_app_listEv@Base 0.9.0
  _ZN17UkuiMenuInterface18get_app_categoriesE7QString@Base 0.9.0
+ _ZN17UkuiMenuInterface18get_other_app_listEv@Base 0.9.0
  _ZN17UkuiMenuInterface19get_app_name_pinyinE7QString@Base 0.9.0
+ _ZN17UkuiMenuInterface19get_office_app_listEv@Base 0.9.0
+ _ZN17UkuiMenuInterface19get_recent_app_listEv@Base 0.9.0
+ _ZN17UkuiMenuInterface19get_social_app_listEv@Base 0.9.0
  _ZN17UkuiMenuInterface20get_app_english_nameE7QString@Base 0.9.0
+ _ZN17UkuiMenuInterface20get_develop_app_listEv@Base 0.9.0
+ _ZN17UkuiMenuInterface20get_network_app_listEv@Base 0.9.0
  _ZN17UkuiMenuInterface21create_appinfo_vectorEv@Base 0.9.0
  _ZN17UkuiMenuInterface21get_desktop_file_pathEv@Base 0.9.0
+ _ZN17UkuiMenuInterface21get_graphics_app_listEv@Base 0.9.0
  _ZN17UkuiMenuInterface21recursive_search_fileERK7QString@Base 0.9.0
+ _ZN17UkuiMenuInterface22get_education_app_listEv@Base 0.9.0
  _ZN17UkuiMenuInterface23matching_app_categoriesE7QString11QStringList@Base 0.9.0
+ _ZN17UkuiMenuInterface24get_systemadmin_app_listEv@Base 0.9.0
+ _ZN17UkuiMenuInterface25remove_repetition_appnameER11QStringListS0_@Base 0.9.0
  _ZN17UkuiMenuInterface28get_desktop_path_by_app_nameE7QString@Base 0.9.0
  _ZN17UkuiMenuInterface29get_alphabetic_classificationEv@Base 0.9.0
+ _ZN17UkuiMenuInterface29get_app_diff_first_letter_posEv@Base 0.9.0
  _ZN17UkuiMenuInterface29get_functional_classificationEv@Base 0.9.0
  _ZN17UkuiMenuInterface31get_specified_category_app_listE7QString@Base 0.9.0
  _ZN17UkuiMenuInterface36get_desktop_path_by_app_english_nameE7QString@Base 0.9.0
@@ -53,11 +65,12 @@ libukui-menu.so.1 libukui-menu1 #MINVER#
  _ZN5QListI7QStringEC2ERKS1_@Base 0.9.0
  _ZN5QListI7QStringED1Ev@Base 0.9.0
  _ZN5QListI7QStringED2Ev@Base 0.9.0
- _ZN5QListI7QStringEpLERKS1_@Base 0.9.0
  _ZN5QListI9QFileInfoE13detach_helperEi@Base 0.9.0
  _ZN5QListI9QFileInfoE9removeAllERKS0_@Base 0.9.0
  _ZN5QListI9QFileInfoED1Ev@Base 0.9.0
  _ZN5QListI9QFileInfoED2Ev@Base 0.9.0
+ _ZN7QStringC1EPKc@Base 0.9.0
+ _ZN7QStringC2EPKc@Base 0.9.0
  _ZN7QStringD1Ev@Base 0.9.0
  _ZN7QStringD2Ev@Base 0.9.0
  _ZN7QStringaSEPKc@Base 0.9.0
@@ -65,10 +78,6 @@ libukui-menu.so.1 libukui-menu1 #MINVER#
  _ZN7QVectorI11QStringListE6appendERKS0_@Base 0.9.0
  _ZN7QVectorI11QStringListED1Ev@Base 0.9.0
  _ZN7QVectorI11QStringListED2Ev@Base 0.9.0
- _ZN7QVectorI7QStringE11reallocDataEii6QFlagsIN10QArrayData16AllocationOptionEE@Base 0.9.0
- _ZN7QVectorI7QStringE6appendERKS0_@Base 0.9.0
- _ZN7QVectorI7QStringED1Ev@Base 0.9.0
- _ZN7QVectorI7QStringED2Ev@Base 0.9.0
  _ZSt11__make_heapIN5QListI7QStringE8iteratorEN9__gnu_cxx5__ops15_Iter_comp_iterI9QCollatorEEEvT_S9_RT0_@Base 0.9.0
  _ZSt13__adjust_heapIN5QListI7QStringE8iteratorExS1_N9__gnu_cxx5__ops15_Iter_comp_iterI9QCollatorEEEvT_T0_SA_T1_T2_@Base 0.9.0
  _ZSt16__insertion_sortIN5QListI7QStringE8iteratorEN9__gnu_cxx5__ops15_Iter_comp_iterI9QCollatorEEEvT_S9_T0_@Base 0.9.0

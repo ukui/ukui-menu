@@ -1,6 +1,24 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "mainviewwidget.h"
 #include "ui_mainviewwidget.h"
-#include "src/color.h"
+#include "src/Style/style.h"
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QDebug>
@@ -11,7 +29,6 @@ MainViewWidget::MainViewWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     init_widget();
-    load_letter_widget();
 }
 
 MainViewWidget::~MainViewWidget()
@@ -33,16 +50,17 @@ void MainViewWidget::init_widget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-//    this->setStyleSheet("border:0px;background:transparent;");
-    char style[100];
-    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
-    this->setStyleSheet(QString::fromLocal8Bit(style));
+    this->setStyleSheet("border:0px;background:transparent;");
+//    char style[100];
+//    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
+//    this->setStyleSheet(QString::fromLocal8Bit(style));
 
     mainLayout=new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     topWidget=new QWidget(this);
     topWidget->setStyleSheet("border:0px;background:transparent;");
+
     verticalSpacer=new QSpacerItem(20,40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     mainLayout->addWidget(topWidget);
     mainLayout->addItem(verticalSpacer);
@@ -105,6 +123,7 @@ void MainViewWidget::init_widget()
 
     add_top_control();
     load_min_mainview();
+    load_letter_widget();
 
     //监控应用进程开启
     QDBusConnection::sessionBus().connect("org.ayatana.bamf","/org/ayatana/bamf/matcher","org.ayatana.bamf.matcher",
@@ -127,7 +146,7 @@ void MainViewWidget::add_top_control()
     queryLayout->setSpacing(0);
     querylineEdit->setLayout(queryLayout);
     char style[100];
-    sprintf(style, "QLineEdit{border:0px;background-color:%s;}",QueryLineEditBackground);
+    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
     querylineEdit->setStyleSheet(style);
     topLayout->addWidget(querylineEdit);
 //    topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
@@ -150,7 +169,7 @@ void MainViewWidget::init_query_lineedit()
     pIconTextWid->setLayout(pIconTextWidLayout);
     QSvgRenderer* svgRender = new QSvgRenderer();
     svgRender->load(QString(":/data/img/mainviewwidget/search.svg"));
-    QPixmap* pixmap = new QPixmap(14,14);
+    QPixmap* pixmap = new QPixmap(Style::QueryLineEditIconSize,Style::QueryLineEditIconSize);
     pixmap->fill(Qt::transparent);//设置背景透明
     QPainter p(pixmap);
     svgRender->render(&p);
@@ -158,13 +177,16 @@ void MainViewWidget::init_query_lineedit()
     pQueryIcon->setStyleSheet("background:transparent");
     pQueryIcon->setFixedSize(pixmap->size());
     pQueryIcon->setPixmap(*pixmap);
+    QFont font;
+    font.setPixelSize(Style::QueryLineEditFontSize);
     pQueryText=new QLabel(pIconTextWid);
+    pQueryText->setFont(font);
     pQueryText->setText(tr("搜索"));
-    pQueryText->setStyleSheet("background:transparent;color:#626c6e;font-size:14px;");
+    pQueryText->setStyleSheet("background:transparent;color:#626c6e;");
     pQueryText->adjustSize();
     pIconTextWidLayout->addWidget(pQueryIcon);
     pIconTextWidLayout->addWidget(pQueryText);
-    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,querylineEdit->height());
+    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+5,Style::QueryLineEditHeight);
     queryLayout->addWidget(pIconTextWid);
     queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     querylineEdit->setFocusPolicy(Qt::ClickFocus);
@@ -190,7 +212,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
              emit send_querylineEdit_focusin_signal();
              querylineEdit->addAction(searchAction,QLineEdit::LeadingPosition);
              char style[200];
-             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;font-size:14px;color:#ffffff;}",
+             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:2px;font-size:14px;color:#ffffff;}",
                      QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              querylineEdit->setStyleSheet(style);
              queryLayout->removeWidget(pIconTextWid);
@@ -219,7 +241,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
         {
              querylineEdit->removeAction(searchAction);
              char style[100];
-             sprintf(style, "QLineEdit{border:0px;background-color:%s;}",QueryLineEditBackground);
+             sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
              querylineEdit->setStyleSheet(style);
              queryLayout->addWidget(pIconTextWid);
              queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
@@ -268,10 +290,10 @@ void MainViewWidget::load_min_mainview()
 //    this->setGeometry(60,QApplication::desktop()->availableGeometry().height()-532,330,532);
 //    this->setGeometry(0,QApplication::desktop()->availableGeometry().height()-532,330,532);
     this->setFixedSize(320,590);
-    topWidget->setFixedSize(320,90);
+    topWidget->setFixedSize(320,54);
     topLayout->setContentsMargins(0,0,0,0);
     topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
-    querylineEdit->setFixedSize(290,30);
+    querylineEdit->setFixedSize(288,30);
 
     is_fullWid=false;
     if(widgetState==0)
@@ -304,24 +326,14 @@ void MainViewWidget::load_max_mainview()
 //    this->setGeometry(160,0,QApplication::desktop()->availableGeometry().width()-160,QApplication::desktop()->availableGeometry().height());
 //    this->setGeometry(0,0,QApplication::desktop()->availableGeometry().width()-60,QApplication::desktop()->availableGeometry().height());
 
-    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-    {
-        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-265,
-                     QApplication::desktop()->availableGeometry().height());
-        topWidget->setFixedSize(this->width(),87);
-        querylineEdit->setFixedSize(350,30);
-    }
-    else
-    {
-        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-286,
-                     QApplication::desktop()->availableGeometry().height());
-        topWidget->setFixedSize(this->width(),105);
-        querylineEdit->setFixedSize(350,30);
-    }
+    this->setFixedSize(Style::MainViewWidWidth,
+                       QApplication::desktop()->availableGeometry().height());
+    topWidget->setFixedSize(this->width(),Style::TopWidgetHeight);
+    querylineEdit->setFixedSize(Style::QueryLineEditWidth,Style::QueryLineEditHeight);
 
-    topLayout->setContentsMargins((QApplication::desktop()->width()-querylineEdit->width())/2,
+    topLayout->setContentsMargins((Style::AppListWidHeight-querylineEdit->width())/2+Style::LeftWidWidth,
                                   0,
-                                  topWidget->width()-(QApplication::desktop()->width()-querylineEdit->width())/2-querylineEdit->width(),
+                                  (Style::AppListWidHeight-querylineEdit->width())/2,
                                   0);
 
     is_fullWid=true;

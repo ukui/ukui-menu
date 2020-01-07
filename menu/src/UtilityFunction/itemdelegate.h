@@ -19,7 +19,7 @@
 #ifndef ITEMDELEGATE_H
 #define ITEMDELEGATE_H
 #include <QStyledItemDelegate>
-#include "src/color.h"
+#include "src/Style/style.h"
 #include <QPainter>
 #include <QSettings>
 #include <ukuimenuinterface.h>

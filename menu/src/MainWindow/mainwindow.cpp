@@ -1,9 +1,27 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QDesktopWidget>
-#include "src/color.h"
+#include "src/Style/style.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     pUkuiMenuInterface=new UkuiMenuInterface;
     UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
+    Style::init_wid_style();
     init_mainwindow();
 
     pEnterAnimation=new QPropertyAnimation;
@@ -40,9 +59,9 @@ MainWindow::~MainWindow()
 void MainWindow::init_mainwindow()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::SplashScreen);
-//    this->setStyleSheet("background-color:rgba(14,19,22,92%);");
+//    this->setStyleSheet("background:transparent;");
 //    char style[100];
-//    sprintf(style, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
+//    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
 //    this->setStyleSheet(QString::fromLocal8Bit(style));
 //    this->setWindowOpacity(0.95);//设置总体透明度
     this->setAttribute(Qt::WA_TranslucentBackground, true);
@@ -69,15 +88,22 @@ void MainWindow::init_mainwindow()
 
     line=new QFrame(this);
     line->setFrameShape(QFrame::VLine);
-    line->setStyleSheet("background-color:rgba(75,77,79)");
+//    line->setStyleSheet("background-color:rgba(75,77,79)");
     line->setFixedSize(1,this->height());
     mainlayout->addWidget(line);
+    char linestyle[100];
+    sprintf(linestyle, "background-color:%s;",LineBackground);
+    line->setStyleSheet(linestyle);
 
     mainlayout->addWidget(sidebarwid);
     mainlayout->setContentsMargins(0,0,0,0);
     mainlayout->setSpacing(0);
     centralWidget()->setLayout(mainlayout);
-    mainwidget->setStyleSheet("background:transparent;");
+//    mainwidget->setStyleSheet("background:transparent;");
+
+    char style[100];
+    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
+    mainwidget->setStyleSheet(style);
 
 //    connect(sidebarwid,SIGNAL(send_hover_signal(bool)),this,SLOT(recv_hover_signal_slot(bool)));
     connect(sidebarwid, SIGNAL(send_commonusebtn_signal()), mainviewwid, SLOT(load_commonuse_widget()));
@@ -126,8 +152,10 @@ void MainWindow::paintEvent(QPaintEvent *)
         path1.lineTo(rect1.bottomRight());
         path1.lineTo(rect1.topRight() + QPointF(0, radius));
         path1.quadTo(rect1.topRight(), rect1.topRight() + QPointF(-radius, -0));
-        painter.setPen(QPen(QColor("#0F0F0F"),2));
-        painter.setOpacity(0.9);
+        QColor color;
+        color.setNamedColor(QString::fromLocal8Bit(BORDERCOLOR));
+        painter.setPen(QPen(color,2));
+        painter.setOpacity(0.06);
         painter.setBrush(Qt::NoBrush);
         painter.drawPath(path1);
 
@@ -248,7 +276,6 @@ void MainWindow::recv_hide_mainwindow_slot()
     this->hide();
     mainviewwid->widget_make_zero();
     sidebarwid->widget_make_zero();
-    qDebug()<<"---"<<qApp->applicationState();
 }
 
 void MainWindow::recv_hover_signal_slot(bool is_hover)

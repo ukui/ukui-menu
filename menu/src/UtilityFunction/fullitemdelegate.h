@@ -19,10 +19,12 @@
 #ifndef FULLITEMDELEGATE_H
 #define FULLITEMDELEGATE_H
 #include <QStyledItemDelegate>
-#include "src/color.h"
+#include "src/Style/style.h"
 #include <QPainter>
 #include <QSettings>
 #include <QDir>
+#include <QToolTip>
+#include "src/Style/style.h"
 
 class FullItemDelegate : public QStyledItemDelegate
 {

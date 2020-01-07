@@ -27,6 +27,7 @@
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QHBoxLayout>
+#include "src/Style/style.h"
 
 class FunctionClassifyButton : public QPushButton
 {
@@ -52,6 +53,8 @@ public:
     bool is_pressed=false;//记录功能分类模块点击状态
 
 private:
+    int width;
+    int height;
     QString iconstr;
     QString piconstr;
     QString hoverbg;

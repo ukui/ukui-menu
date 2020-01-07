@@ -1,4 +1,3 @@
-#ifndef FULLLISTVIEW_H
 /*
  * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
  *
@@ -17,6 +16,7 @@
  *
  */
 
+#ifndef FULLLISTVIEW_H
 #define FULLLISTVIEW_H
 #include <QListView>
 #include <QSettings>
@@ -26,7 +26,7 @@
 #include <QScrollBar>
 #include "fullitemdelegate.h"
 #include "fulllistmodel.h"
-#include "src/color.h"
+#include "src/Style/style.h"
 
 class FullListView : public QListView
 {

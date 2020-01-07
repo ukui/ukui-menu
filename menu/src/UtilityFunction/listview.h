@@ -23,7 +23,7 @@
 #include <QEvent>
 #include <QScrollBar>
 #include "listmodel.h"
-#include "src/color.h"
+#include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include <QSettings>
 #include <ukuimenuinterface.h>

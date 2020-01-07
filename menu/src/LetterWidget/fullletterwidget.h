@@ -29,7 +29,6 @@
 #include <QLabel>
 #include <QDesktopWidget>
 #include <QHeaderView>
-#include "src/color.h"
 #include <QScrollBar>
 #include "ukuimenuinterface.h"
 #include <QPushButton>
@@ -44,6 +43,7 @@
 #include "src/UtilityFunction/fulllistview.h"
 #include "src/UtilityFunction/classifyscrollarea.h"
 #include "src/UtilityFunction/toolbutton.h"
+#include "src/Style/style.h"
 
 namespace Ui {
 class FullLetterWidget;

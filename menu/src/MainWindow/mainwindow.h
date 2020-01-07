@@ -30,6 +30,7 @@
 #include <ukuimenuinterface.h>
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
+#include "src/Style/style.h"
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
 

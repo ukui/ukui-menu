@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "fullitemdelegate.h"
 #include <QDebug>
 
@@ -24,7 +42,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         QRectF rect;
         rect.setX(option.rect.x());
         rect.setY(option.rect.y());
-        rect.setWidth( option.rect.width());
+        rect.setWidth(option.rect.width());
         rect.setHeight(option.rect.height());
 
         //QPainterPath画圆角矩形
@@ -58,19 +76,21 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //            painter->drawPath(path);
 //        }
 
-        painter->setRenderHint(QPainter::Antialiasing);
-        if(option.state & QStyle::State_MouseOver)
-        {
-            painter->setPen(QPen(Qt::NoPen));
-            painter->setBrush(QColor(AppBtnHover));
-            painter->setOpacity(0.4);
-            painter->drawPath(path);
+//        painter->setRenderHint(QPainter::Antialiasing);
+//        if(option.state & QStyle::State_MouseOver)
+//        {
+//            painter->setPen(QPen(Qt::NoPen));
+//            QColor color;
+//            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
+//            painter->setBrush(QBrush(color));
 
-//            painter->setOpacity(1);
-//            painter->setPen(QPen(QColor("#4877F2"),2));
-//            painter->setBrush(Qt::NoBrush);
+//            painter->setOpacity(0.14);
 //            painter->drawPath(path);
-        }
+
+//            QFontMetrics fm=painter->fontMetrics();
+//            if(fm.boundingRect(appname).width()>rect.width())
+//                QToolTip::showText(QCursor::pos(),appname);
+//        }
 
         painter->setOpacity(1);
         QIcon icon=index.data(Qt::DecorationRole).value<QIcon>();
@@ -78,16 +98,11 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
         QFont font;
         QRect iconRect;
-        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-        {
-            font.setPixelSize(12);
-            iconRect=QRect(rect.x()+32,rect.y()+15,64,64);
-        }
-        else
-        {
-            font.setPixelSize(14);
-            iconRect=QRect(rect.x()+40,rect.y()+20,80,80);
-        }
+        font.setPixelSize(Style::AppListFontSize);
+        iconRect=QRect(rect.x()+Style::AppLeftSpace ,
+                       rect.y()+Style::AppTopSpace,
+                       Style::AppListIconSize,
+                       Style::AppListIconSize);
         painter->setFont(font);
         icon.paint(painter,iconRect);
         if(module==0)
@@ -96,8 +111,9 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             if(setting->value(appname).toInt()==0)
             {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
-                painter->drawImage(QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16),
-                                   icon.pixmap(icon.actualSize(QSize(16, 16))).toImage());
+                icon.paint(painter,QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16));
+//                painter->drawImage(QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16),
+//                                   icon.pixmap(icon.actualSize(QSize(16, 16))).toImage());
             }
             setting->endGroup();
 
@@ -105,16 +121,31 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
         painter->setPen(QPen(Qt::white));
         QRect textRect;
-        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
+
+        textRect=QRect(rect.x(),
+                       iconRect.bottom()+Style::AppSpaceBetweenIconText,
+                       rect.width(),
+                       rect.height()-iconRect.height()-Style::AppSpaceBetweenIconText);
+        QFontMetrics fm=painter->fontMetrics();
+        QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width(),Qt::TextShowMnemonic);
+//        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter | Qt::AlignTop,appname);
+        painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
+
+        painter->setRenderHint(QPainter::Antialiasing);
+        if(option.state & QStyle::State_MouseOver)
         {
-            textRect=QRect(rect.x(),iconRect.bottom()+14,
-                           rect.width(),rect.height()-iconRect.height()-14-22);
+            painter->setPen(QPen(Qt::NoPen));
+            QColor color;
+            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
+            painter->setBrush(QBrush(color));
+
+            painter->setOpacity(0.14);
+            painter->drawPath(path);
+
+            if(fm.boundingRect(appname).width()>rect.width())
+                QToolTip::showText(QCursor::pos(),appname);
+
         }
-        else{
-            textRect=QRect(rect.x(),iconRect.bottom()+22,
-                           rect.width(),rect.height()-iconRect.height()-22-27);
-        }
-        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignCenter,appname);
 
         painter->restore();
 

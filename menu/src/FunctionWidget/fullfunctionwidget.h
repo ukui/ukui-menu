@@ -37,6 +37,7 @@
 #include "src/UtilityFunction/classifyscrollarea.h"
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/UtilityFunction/functionclassifybutton.h"
+#include "src/Style/style.h"
 
 namespace Ui {
 class FullFunctionWidget;
@@ -101,10 +102,6 @@ protected:
 
 private slots:
     void exec_app_name(QString appname);//执行应用程序
-//    void leftbtn_clicked_slot();//向左按钮槽函数
-//    void rightbtn_clicked_slot();//向右按钮槽函数
-//    void iconbtn_clicked_slot();//图标列表数据项被点击槽函数
-//    void iconbtn_checked_slot(bool check);//图标列表按钮check状态改变
     void btngroup_clicked_slot(QAbstractButton *btn);
     void update_app_listview();//更新应用列表
 

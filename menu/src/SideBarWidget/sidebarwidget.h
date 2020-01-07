@@ -29,6 +29,8 @@
 #include <QPropertyAnimation>
 #include <QButtonGroup>
 #include <ukuimenuinterface.h>
+#include <QBitmap>
+#include "src/Style/style.h"
 #include "src/MainViewWidget/mainviewwidget.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 
@@ -91,8 +93,8 @@ private:
     RightClickMenu* othermenu;
 
 //    QPropertyAnimation* pAnimation=nullptr;
-    QPropertyAnimation* pEnterAnimation=nullptr;
-    QPropertyAnimation* pLeaveAnimation=nullptr;
+//    QPropertyAnimation* pEnterAnimation=nullptr;
+//    QPropertyAnimation* pLeaveAnimation=nullptr;
     bool is_hover=false;
 
 protected:
@@ -108,8 +110,8 @@ protected:
     void set_min_btn();//设置还原按钮
     void set_max_btn();//设置全屏按钮
 
-    void enterEvent(QEvent* e);
-    void leaveEvent(QEvent* e);
+//    void enterEvent(QEvent* e);
+//    void leaveEvent(QEvent* e);
 
 //    void mousePressEvent(QMouseEvent* e);
 
@@ -118,12 +120,13 @@ private slots:
     void btngroup_clicked_slot(QAbstractButton *btn);
     void shutdownbtn_right_click_slot();//加载关机按钮右键菜单
     void otherbtn_right_click_slot();//加载载右键菜单
-    void animation_finished_slot();
+//    void animation_finished_slot();
     void computerbtn_clicked_slot();
     void controlbtn_clicked_slot();
     void shutdownbtn_clicked_slot();
     void usericonbtn_clicked_slot();
     void recv_querylineEdit_focusin_slot();//接收搜索框获取焦点槽函数
+    void user_accounts_changed();
 
 signals:
     void send_commonusebtn_signal();//发送常用分类按钮信号

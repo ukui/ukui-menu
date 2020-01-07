@@ -1,8 +1,26 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "fullfunctionwidget.h"
 #include "ui_fullfunctionwidget.h"
 #include <QDesktopWidget>
 #include <QHeaderView>
-#include "src/color.h"
+#include "src/Style/style.h"
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QPainter>
@@ -30,20 +48,10 @@ void FullFunctionWidget::init_widget()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     applistWid=new QWidget(this);
     iconlistWid=new QWidget(this);
-    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-    {
-        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-265,
-                           QApplication::desktop()->availableGeometry().height()-87);
-        applistWid->setFixedSize(this->width()-263,this->height());
-        iconlistWid->setFixedSize(263,this->height());
-    }
-    else
-    {
-        this->setFixedSize(QApplication::desktop()->availableGeometry().width()-286,
-                       QApplication::desktop()->availableGeometry().height()-105);
-        applistWid->setFixedSize(this->width()-287,this->height());
-        iconlistWid->setFixedSize(287,this->height());
-    }
+    this->setFixedSize(Style::MainViewWidWidth,
+                       Style::AppListWidHeight);
+    applistWid->setFixedSize(Style::AppListWidWidth,this->height());
+    iconlistWid->setFixedSize(Style::LeftWidWidth,this->height());
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
@@ -305,8 +313,8 @@ void FullFunctionWidget::update_app_listview()
     for(int i=0;i<classificationbtnlist.size();i++)
     {
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
-                                                                   106,
-                                                                   48,
+                                                                   Style::LeftBtnWidth,
+                                                                   Style::LeftBtnHeight,
                                                                    iconlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    iconlightlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    ClassifyBtnHoverBackground,
@@ -346,11 +354,7 @@ void FullFunctionWidget::resize_scrollarea_controls()
         QWidget* wid=widItem->widget();
         FullListView* listview=qobject_cast<FullListView*>(wid);
         listview->adjustSize();
-        int dividend=0;
-        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-            dividend=(scrollarea->width()-12)/159;
-        else
-            dividend=(scrollarea->width()-12)/200;
+        int dividend=(scrollarea->width()-Style::SliderSize)/Style::AppListGridSizeWidth;
         int rowcount=0;
         if(listview->model()->rowCount()%dividend>0)
         {
@@ -362,10 +366,7 @@ void FullFunctionWidget::resize_scrollarea_controls()
 
         }
 
-        if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-            listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
-        else
-            listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
+        listview->setFixedSize(scrollarea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
         if(row<scrollareawidLayout->count()/2-1)
         {
             pos+=(20+listview->height());
@@ -382,19 +383,16 @@ void FullFunctionWidget::resize_scrollarea_controls()
 void FullFunctionWidget::init_iconlist_widget()
 {
     iconlistLayout=new QHBoxLayout(iconlistWid);
-    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-        iconlistLayout->setContentsMargins(21,0,136,0);
-    else
-        iconlistLayout->setContentsMargins(21,0,160,0);
+    iconlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
     iconlistLayout->setSpacing(0);
     iconlistWid->setLayout(iconlistLayout);
 
     iconlistscrollarea=new ClassifyScrollArea();
-    iconlistscrollarea->setFixedSize(108,iconlistWid->height());
+    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,iconlistWid->height());
     iconlistscrollareaWid=new QWidget;
     iconlistscrollareawidLayout=new QVBoxLayout;
     iconlistscrollareawidLayout->setContentsMargins(0,0,0,0);
-    iconlistscrollareawidLayout->setSpacing(12);
+    iconlistscrollareawidLayout->setSpacing(Style::LeftSpaceBetweenItem);
     iconlistscrollareaWid->setLayout(iconlistscrollareawidLayout);
     iconlistscrollarea->setWidget(iconlistscrollareaWid);
     iconlistLayout->addWidget(iconlistscrollarea);
@@ -414,8 +412,8 @@ void FullFunctionWidget::init_iconlist_scrollarea()
     for(int i=0;i<classificationbtnlist.size();i++)
     {
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
-                                                                   106,
-                                                                   48,
+                                                                   Style::LeftBtnWidth,
+                                                                   Style::LeftBtnHeight,
                                                                    iconlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    iconlightlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    ClassifyBtnHoverBackground,
@@ -425,8 +423,6 @@ void FullFunctionWidget::init_iconlist_scrollarea()
         buttonList.append(iconbtn);
         iconlistscrollareawidLayout->addWidget(iconbtn);
         connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
-//        connect(iconbtn,SIGNAL(clicked(bool)),this,SLOT(iconbtn_clicked_slot()));
-//        connect(iconbtn,SIGNAL(toggled(bool)),this,SLOT(iconbtn_checked_slot(bool)));
     }
     iconlistscrollareawidLayout->addItem(pIconListBottomSpacer);
 
@@ -461,35 +457,25 @@ void FullFunctionWidget::btngroup_clicked_slot(QAbstractButton *btn)
 
             QSvgRenderer* svgRender = new QSvgRenderer;
             svgRender->load(iconlightlist.at(functionnamelist.indexOf(textlabel->text())));
-            QPixmap* pixmap = new QPixmap(19,19);
+            QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
             pixmap->fill(Qt::transparent);
             QPainter p(pixmap);
             svgRender->render(&p);
-//            button->setIcon(*pixmap);
-//            FunctionClassifyButton* toolBtn=qobject_cast<FunctionClassifyButton*>(button);
-//            QLayoutItem* item=toolBtn->layout()->itemAt(0);
-//            QLabel* iconlabel=qobject_cast<QLabel*>(item->widget());
             iconlabel->setPixmap(*pixmap);
-            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);font-size:14px;");
+            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
             fcbutton->is_pressed=true;
-//            toolBtn->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255);font-size:14px;");
 
         }
         else{
             QSvgRenderer* svgRender = new QSvgRenderer;
             svgRender->load(iconlist.at(functionnamelist.indexOf(textlabel->text())));
-            QPixmap* pixmap = new QPixmap(19,19);
+            QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
             pixmap->fill(Qt::transparent);
             QPainter p(pixmap);
             svgRender->render(&p);
-//            button->setIcon(*pixmap);
-//            FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-//            QLayoutItem* item=fcbutton->layout()->itemAt(0);
-//            QLabel* iconlabel=qobject_cast<QLabel*>(item->widget());
             iconlabel->setPixmap(*pixmap);
-            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);font-size:14px;");
+            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);");
             fcbutton->is_pressed=false;
-//            fcbutton->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255,50%);font-size:14px;");
         }
     }
 }
@@ -505,100 +491,3 @@ void FullFunctionWidget::widget_make_zero()
         }
     }
 }
-
-///**
-// * 向左按钮槽函数
-// */
-//void FullFunctionWidget::leftbtn_clicked_slot()
-//{
-//    if(btnPos>0)
-//    {
-//        btnPos--;
-//        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(btnPos);
-//        QWidget* wid=item->widget();
-//        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-//        btn->click();
-//        if((btn->pos().x()+iconlistscrollarea->widget()->pos().x()) <= 0)
-//        {   if(btnPos>0)
-//            {
-//                int val=iconlistscrollarea->horizontalScrollBar()->value();
-//                iconlistscrollarea->horizontalScrollBar()->setValue(val-40);
-//            }
-//            else{
-////                qDebug()<<iconlistscrollarea->horizontalScrollBar()->minimum();
-//                iconlistscrollarea->horizontalScrollBar()->setValue(iconlistscrollarea->horizontalScrollBar()->minimum());
-//            }
-
-//        }
-
-//    }
-//}
-
-///**
-// * 向右按钮槽函数
-// */
-//void FullFunctionWidget::rightbtn_clicked_slot()
-//{
-//    if(btnPos<iconlistscrollarea->widget()->layout()->count()-1)
-//    {
-//        btnPos++;
-//        QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(btnPos);
-//        QWidget* wid=item->widget();
-//        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-//        btn->click();
-////        qDebug()<<"---"<<btn->pos().x();
-////        qDebug()<<"---111---"<<letterlistscrollarea->widget()->pos().x();
-
-//        if((btn->pos().x()+iconlistscrollarea->widget()->pos().x()) >= iconlistscrollarea->width())
-//        {   if(btnPos<iconlistscrollarea->widget()->layout()->count()-1)
-//            {
-//                int val=iconlistscrollarea->horizontalScrollBar()->value();
-//                iconlistscrollarea->horizontalScrollBar()->setValue(val+40);
-//            }
-//            else{
-////                qDebug()<<scrollarea->horizontalScrollBar()->maximum();
-//                iconlistscrollarea->horizontalScrollBar()->setValue(iconlistscrollarea->horizontalScrollBar()->maximum());
-//            }
-
-//        }
-//    }
-//}
-
-///**
-// * 图标列表数据项被点击槽函数
-// */
-//void FullFunctionWidget::iconbtn_clicked_slot()
-//{
-//    QLayoutItem* item=iconlistscrollarea->widget()->layout()->itemAt(beforebtnPos);
-//    QWidget* wid=item->widget();
-//    QToolButton* beforebtn=qobject_cast<QToolButton*>(wid);
-//    beforebtn->setChecked(false);
-
-//    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
-//    btnPos=iconlistscrollarea->widget()->layout()->indexOf(btn);
-//    beforebtnPos=btnPos;
-//    //此处需实现将被选定的功能图标所包含的应用列表移动到applistWid界面最顶端
-//    int num=classificationbtnlist.indexOf(functionnamelist.at(btnPos-1));
-//    btn->setChecked(true);
-//    if(num!=-1)
-//    {
-//        int pos=classificationbtnrowlist.at(num).toInt();
-//        scrollarea->verticalScrollBar()->setSliderPosition(pos);
-//    }
-//}
-
-//void FullFunctionWidget::iconbtn_checked_slot(bool check)
-//{
-//    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
-//    int pos=iconlistscrollarea->widget()->layout()->indexOf(btn);
-//    QSvgRenderer* svgRender = new QSvgRenderer;
-//    if(check)
-//        svgRender->load(iconlightlist.at(pos-1));
-//    else
-//        svgRender->load(iconlist.at(pos-1));
-//    QPixmap* pixmap = new QPixmap(19,19);
-//    pixmap->fill(Qt::transparent);
-//    QPainter p(pixmap);
-//    svgRender->render(&p);
-//    btn->setIcon(*pixmap);
-//}

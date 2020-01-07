@@ -24,7 +24,7 @@
 #include <QPixmap>
 #include <QSettings>
 #include <ukuimenuinterface.h>
-#include "src/color.h"
+#include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 
 class PushButton : public QPushButton

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "fulllistview.h"
 #include <QDebug>
 
@@ -21,13 +39,14 @@ FullListView::~FullListView()
 
 void FullListView::init_widget()
 {
-    char style[400];
+    char style[500];
     sprintf(style,"QListView{border:0px;}\
             QListView:Item{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;}\
             QListView:Item:hover{background:transparent;}\
             QListView:Item:pressed{background:transparent;}");
 
-    this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background-color:#283138;border-radius:6px;}"
+    if(module!=1 && module!=2)
+        this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background-color:#283138;border-radius:6px;}"
                                              "QScrollBar::handle{background-color:rgba(255,255,255,0.25); width:3px;border-radius:1.5px;}"
                                              "QScrollBar::handle:hover{background-color:#697883;border-radius:1.5px;}"
                                              "QScrollBar::handle:pressed{background-color:#8897a3;border-radius:1.5px;}"
@@ -41,22 +60,15 @@ void FullListView::init_widget()
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     if(module==1 || module==2)
         this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setIconSize(QSize(80,80));
+//    this->setIconSize(QSize(80,80));
     this->setViewMode(QListView::IconMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setResizeMode(QListView::Adjust);
+    this->setTextElideMode(Qt::ElideRight);
 //    this->setUpdatesEnabled(true);
-    if(QApplication::desktop()->width()*QApplication::desktop()->height() <= 1600*900)
-    {
-//        this->setSpacing(32);
-        this->setGridSize(QSize(159,159));
-    }
-    else
-    {
-//        this->setSpacing(40);
-        this->setGridSize(QSize(200,200));
-    }
 
+//    this->setSpacing(32);
+    this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
 
