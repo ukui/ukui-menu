@@ -1,4 +1,0 @@
-<menuitem name="Normal" action="UkuiNormalMenu"/>
-<menuitem name="Category" action="UkuiCategoryMenu"/>
-<menuitem name="Reload" action="UkuiMenuReload"/>
-<menuitem name="About" action="UkuiMenuAbout"/>
