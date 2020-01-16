@@ -33,6 +33,9 @@
 #include <QTextEdit>
 #include <ukuimenuinterface.h>
 #include <QHeaderView>
+#include <QMenu>
+#include <QWidgetAction>
+#include "windowmove.h"
 #include "toolbutton.h"
 #include "color.h"
 
@@ -53,33 +56,41 @@ private:
     Ui::AttributeDialog *ui;
 
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    WindowMove* wm=nullptr;
 
-    QVBoxLayout* mainLayout=nullptr;
+    QHBoxLayout* mainLayout=nullptr;
+    QFrame* frame=nullptr;
+    QVBoxLayout* frameLayout=nullptr;
+
     QWidget* titlebarWid=nullptr;
     QWidget* upWid=nullptr;
-    QFrame* line=nullptr;
     QWidget* downWid=nullptr;
+    QWidget* downmainWid;
     //标题栏
     QHBoxLayout* titlebarwidLayout=nullptr;
-    QLabel* appnameLabel=nullptr;
-    QLabel* titlebarLabel=nullptr;
     ToolButton* closebtn=nullptr;
     QSpacerItem* leftSpacer=nullptr;
-    QSpacerItem* rightSpacer=nullptr;
-    //分割线上部控件
+    //上部控件
     QHBoxLayout* upwidLayout=nullptr;
     QLabel* labelIcon=nullptr;
     QLabel* labelappName=nullptr;
-    //分割线下部控件
-    QVBoxLayout* downwidLayout;
-    QTableWidget* tableWid;
+    //下部控件
+    QGridLayout* gridLayout=nullptr;
+    QVBoxLayout* downwidLayout=nullptr;
 
-    QTextEdit* typeEdit=nullptr;
-    QTextEdit* execEdit=nullptr;
-    QTextEdit* commentEdit=nullptr;
-    QTextEdit* typevalueEdit=nullptr;
-    QTextEdit* execvalueEdit=nullptr;
-    QTextEdit* commentvalueEdit=nullptr;
+//    QTextEdit* typeEdit=nullptr;
+//    QTextEdit* execEdit=nullptr;
+//    QTextEdit* commentEdit=nullptr;
+//    QTextEdit* typevalueEdit=nullptr;
+//    QTextEdit* execvalueEdit=nullptr;
+//    QTextEdit* commentvalueEdit=nullptr;
+
+    QLabel* typeLabel=nullptr;
+    QLabel* execLabel=nullptr;
+    QLabel* commentLabel=nullptr;
+    QLineEdit* typevalueEdit=nullptr;
+    QLineEdit* execvalueEdit=nullptr;
+    QLineEdit* commentvalueEdit=nullptr;
 
     //关闭按钮
     QWidget* closeWid;
@@ -87,9 +98,31 @@ private:
     QSpacerItem* btnleftSpacer;
     QPushButton* btn;
 
+    //右键菜单
+    QMenu* menu=nullptr;
+    QWidgetAction* cutAction=nullptr;
+    QWidget* cutWid=nullptr;
+    QWidgetAction* copyAction=nullptr;
+    QWidget* copyWid=nullptr;
+    QWidgetAction* pasteAction=nullptr;
+    QWidget* pasteWid=nullptr;
+    QWidgetAction* deleteAction=nullptr;
+    QWidget* deleteWid=nullptr;
+    QWidgetAction* selectallAction=nullptr;
+    QWidget* selectallWid=nullptr;
+
 protected:
     void init_widget();
-    void set_controls_style(QTextEdit* edit,QTextEdit* valueEdit,QString str,int height);
+    void set_controls_style(QLabel* edit,QLineEdit* valueEdit,QString str,int height);
+    void init_widget_action(QWidget* wid, QString textstr,bool enabled);
+
+private slots:
+    void show_menu();
+    void cutaction_trigger_slot();
+    void copyaction_trigger_slot();
+    void pasteaction_trigger_slot();
+    void deleteaction_trigger_slot();
+    void selectallaction_trigger_slot();
 };
 
 #endif // ATTRIBUTEDIALOG_H

@@ -46,7 +46,7 @@ void FullListView::init_widget()
             QListView:Item:pressed{background:transparent;}");
 
     if(module!=1 && module!=2)
-        this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background-color:#283138;border-radius:6px;}"
+        this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background:transparent;border-radius:6px;}"
                                              "QScrollBar::handle{background-color:rgba(255,255,255,0.25); width:3px;border-radius:1.5px;}"
                                              "QScrollBar::handle:hover{background-color:#697883;border-radius:1.5px;}"
                                              "QScrollBar::handle:pressed{background-color:#8897a3;border-radius:1.5px;}"
@@ -65,13 +65,13 @@ void FullListView::init_widget()
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setResizeMode(QListView::Adjust);
     this->setTextElideMode(Qt::ElideRight);
+    this->setMouseTracking(true);
 //    this->setUpdatesEnabled(true);
 
 //    this->setSpacing(32);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
-
 }
 
 void FullListView::addData(QStringList data)
@@ -120,7 +120,7 @@ void FullListView::rightClickedSlot()
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString appname=var.value<QString>();
-        menu=new RightClickMenu;
+        menu=new RightClickMenu(this);
         if(module>0)
         {
             int ret=menu->show_appbtn_menu(appname);
@@ -128,6 +128,8 @@ void FullListView::rightClickedSlot()
             {
                 emit sendFixedOrUnfixedSignal();
             }
+            if(ret==7)
+                emit send_hide_mainwindow_signal();
         }
         else{
             int ret=menu->show_commonuse_appbtn_menu(appname);
@@ -135,6 +137,9 @@ void FullListView::rightClickedSlot()
             {
                 this->setCurrentIndex(index);
             }
+
+            if(ret==7)
+                emit send_hide_mainwindow_signal();
 
             if(ret==8 || ret==9)
             {

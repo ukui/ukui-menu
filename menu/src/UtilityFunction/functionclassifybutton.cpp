@@ -75,7 +75,7 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
     QByteArray byte=hoverbg.toLocal8Bit();
     char* hover=byte.data();
     char style[100];
-    sprintf(style,"border:0px;padding-left:0px;background-color:%s;",hover);
+    sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",hover);
     this->setStyleSheet(QString::fromLocal8Bit(style));
     delete svgRender;
     svgRender=new QSvgRenderer(this);
@@ -96,7 +96,7 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
 void FunctionClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    this->setStyleSheet("border:0px;padding-left:0px;background:transparent;");
+    this->setStyleSheet("border:0px;border-radius:2px;padding-left:0px;background:transparent;");
     delete svgRender;
     svgRender=new QSvgRenderer(this);
     if(module==2 && is_pressed)
@@ -138,7 +138,7 @@ void FunctionClassifyButton::mousePressEvent(QMouseEvent *event)
     QByteArray byte=pressedbg.toLocal8Bit();
     char* pressed=byte.data();
     char style[100];
-    sprintf(style,"border:0px;padding-left:0px;background-color:%s;",pressed);
+    sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",pressed);
     if(event->button()==Qt::LeftButton)
     {
         this->setStyleSheet(QString::fromLocal8Bit(style));
@@ -165,7 +165,7 @@ void FunctionClassifyButton::mouseReleaseEvent(QMouseEvent *event)
     QByteArray byte=hoverbg.toLocal8Bit();
     char* hover=byte.data();
     char style[100];
-    sprintf(style,"border:0px;padding-left:0px;background-color:%s;",hover);
+    sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",hover);
     if(event->button()==Qt::LeftButton)
     {
         this->setStyleSheet(QString::fromLocal8Bit(style));

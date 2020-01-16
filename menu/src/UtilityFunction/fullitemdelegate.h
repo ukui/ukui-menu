@@ -24,6 +24,7 @@
 #include <QSettings>
 #include <QDir>
 #include <QToolTip>
+#include <QHelpEvent>
 #include "src/Style/style.h"
 
 class FullItemDelegate : public QStyledItemDelegate
@@ -37,6 +38,9 @@ public:
 private:
     int module=0;
     QSettings* setting=nullptr;
+
+protected:
+//    bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);
 };
 
 #endif // FULLITEMDELEGATE_H

@@ -23,7 +23,7 @@
 #include <math.h>
 
 //颜色
-#define BORDERCOLOR "#ffffff" //边框
+#define BORDERCOLOR "rgba(37,41,43)" //边框
 #define SHADOWCOLOR "#80000000" //阴影
 
 #define UserIconBackground "#ffffff"

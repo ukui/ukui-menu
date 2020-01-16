@@ -53,7 +53,7 @@ private:
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
     QFrame* line=nullptr;//垂直分割线
     //主窗口样式
-    QWidget* mainwidget=nullptr;
+    QFrame* frame=nullptr;
     QHBoxLayout* mainlayout=nullptr;
     //侧边栏
     SideBarWidget* sidebarwid=nullptr;
@@ -66,12 +66,14 @@ protected:
     void init_mainwindow();
     bool event(QEvent *event);//鼠标点击窗口外部事件
     void paintEvent(QPaintEvent*);//添加阴影
+    void changeEvent(QEvent* e);
 
 private slots:
     void show_fullscreen_widget();//加载全屏窗口
     void show_default_widget();//显示默认窗口
     void recv_hide_mainwindow_slot();//接收隐藏主窗口信号
-    void recv_hover_signal_slot(bool is_hover);
+//    void recv_hover_signal_slot(bool is_hover);
+    void monitor_resolution_change(int screen);//监控屏幕分辨率
 };
 
 #endif // MAINWINDOW_H

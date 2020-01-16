@@ -21,6 +21,7 @@
 #include <QAbstractListModel>
 #include <QIcon>
 #include <ukuimenuinterface.h>
+#include <QEvent>
 #include "src/Style/style.h"
 
 class FullListModel : public QAbstractListModel

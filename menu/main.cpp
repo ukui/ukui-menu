@@ -20,6 +20,7 @@
 #include <QtSingleApplication>
 #include <QDesktopWidget>
 #include <QFile>
+#include <QScreen>
 #include "ukuimenuinterface.h"
 
 int main(int argc, char *argv[])
@@ -43,11 +44,22 @@ int main(int argc, char *argv[])
     qApp->setStyleSheet(style);
 
     MainWindow w;
-    w.setGeometry(QRect(0,QtSingleApplication::desktop()->availableGeometry().height()-590-10,376+10,590+10));
+    w.setGeometry(QRect(0,QtSingleApplication::desktop()->availableGeometry().height()-590-2,376+2,590+2));
     app.setActivationWindow(&w);
 
+    qDebug()<<"Single:"<<QtSingleApplication::desktop()->availableGeometry().height();
+    qDebug()<<"Main:"<<Style::AppListWidHeight<<QApplication::desktop()->availableGeometry().height();
+    foreach (QScreen *screen, QGuiApplication::screens())
+    {
+        qDebug()<<"Gui:"<< screen->availableSize().height();
+        qDebug()<<"Gui:"<< screen->availableSize().height();
+    }
+
+    //注释掉，以保证自启动时不显示界面
     w.show();
     w.raise();
     w.activateWindow();
+//    w.hide();
+
     return app.exec();
 }

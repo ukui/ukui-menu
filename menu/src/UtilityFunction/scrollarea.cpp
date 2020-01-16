@@ -22,7 +22,7 @@
 ScrollArea::ScrollArea()
 {
     this->verticalScrollBar()->setVisible(false);
-    this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background-color:#283138;border-radius:6px;}"
+    this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background:transparent;border-radius:6px;}"
                                              "QScrollBar::handle{background-color:rgba(255,255,255,0.25); width:3px;border-radius:1.5px;}"
                                              "QScrollBar::handle:hover{background-color:#697883;border-radius:1.5px;}"
                                              "QScrollBar::handle:pressed{background-color:#8897a3;border-radius:1.5px;}"

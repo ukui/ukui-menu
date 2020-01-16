@@ -4,12 +4,13 @@
 #
 #-------------------------------------------------
 
-QT       += core gui svg dbus
+QT       += core gui svg dbus x11extras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ukui-menu-attr
 TEMPLATE = app
+QMAKE_CXXFLAGS += -g
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -31,15 +32,18 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         attributedialog.cpp \
-    toolbutton.cpp
+    toolbutton.cpp \
+    windowmove.cpp
 
 HEADERS += \
         attributedialog.h \
     color.h \
-    toolbutton.h
+    toolbutton.h \
+    windowmove.h
 
 FORMS += \
-        attributedialog.ui
+        attributedialog.ui \
+    windowmove.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -48,3 +52,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     img.qrc
+
+LIBS += -lX11

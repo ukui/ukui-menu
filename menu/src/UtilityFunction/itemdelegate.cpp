@@ -45,9 +45,22 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         rect.setY(option.rect.y());
         rect.setWidth(option.rect.width());
         rect.setHeight(option.rect.height()-10);
+        //QPainterPath画圆角矩形
+        const qreal radius = 2;
+        QPainterPath path;
+        path.moveTo(rect.topRight() - QPointF(radius, 0));
+        path.lineTo(rect.topLeft() + QPointF(radius, 0));
+        path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
+        path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+        path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+        path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+        path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+        path.lineTo(rect.topRight() + QPointF(0, radius));
+        path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
+
 
         QFont font;
-//            font.setFamily("Microsoft YaHei");
+//        font.setFamily("Microsoft YaHei");
 
         font.setPixelSize(14);
         painter->setFont(font);
@@ -57,26 +70,15 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 //        if(!icon.isNull())
 //            painter->fillRect(QRect(rect.x(),rect.y(),40,40),QColor(Qt::blue));//图片加背景
 
+        painter->setRenderHint(QPainter::Antialiasing);
         if(option.state & QStyle::State_MouseOver)
         {
-            if(strlist.at(1).toInt()==1)
-            {
-                painter->setPen(QPen(Qt::NoPen));
-                QColor color;
-                color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
-                painter->setBrush(color);
-                painter->setOpacity(0.14);
-                painter->drawRect(rect);
-            }
-            else
-            {
-                painter->setPen(QPen(Qt::NoPen));
-                QColor color;
-                color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
-                painter->setBrush(color);
-                painter->setOpacity(0.14);
-                painter->drawRect(rect);
-            }
+            painter->setPen(QPen(Qt::NoPen));
+            QColor color;
+            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
+            painter->setBrush(color);
+            painter->setOpacity(0.14);
+            painter->drawPath(path);
 
         }
         painter->setOpacity(1);
@@ -85,7 +87,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         {
             if(strlist.at(1).toInt()==1)
             {
-                QRect iconRect=QRect(rect.left()+15,rect.y()+(rect.height()-32)/2,32,32);
+                QRect iconRect=QRect(rect.x()+11,rect.y()+(rect.height()-32)/2,32,32);
                 icon.paint(painter,iconRect);
                 painter->setPen(QPen(Qt::white));
                 QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
@@ -96,7 +98,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             else
             {
                 painter->setPen(QPen(Qt::white));
-                QRect textRect=QRect(rect.x()+15,rect.y()+(rect.height()-14)/2,strlist.at(0).size()*14,14);
+                QRect textRect=QRect(rect.x()+11,rect.y()+(rect.height()-14)/2,strlist.at(0).size()*14,14);
                 painter->drawText(textRect,Qt::AlignVCenter,strlist.at(0));
                 painter->setRenderHint(QPainter::Antialiasing, true);
                 painter->setPen(QPen(QColor("#FFFFFF"),1));
@@ -108,14 +110,14 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         else
         {
             setting->beginGroup("application");
-            QRect iconRect=QRect(rect.left()+15,rect.y()+(rect.height()-28)/2,28,28);
+            QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
             icon.paint(painter,iconRect);
 
             QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
             if(setting->value(appname).toInt()==0)
             {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
-                icon.paint(painter,QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16));
+                icon.paint(painter,QRect(iconRect.topRight().x()-7,iconRect.topRight().y()-2,12,12));
             }
             painter->setOpacity(1);
             painter->setPen(QPen(Qt::white));

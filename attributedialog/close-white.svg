@@ -5,10 +5,10 @@
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
 </style>
-<g>
+<g class="st0">
 	<rect x="4" y="-1.4" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -1.8639 4.4998)" class="st0" width="1" height="11.7"/>
 </g>
-<g>
+<g class="st0">
 	<rect x="-1.4" y="4" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -1.8639 4.4998)" class="st0" width="11.7" height="1"/>
 </g>
 </svg>

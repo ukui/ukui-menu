@@ -131,6 +131,7 @@ void FullLetterWidget::fill_app_list()
 
             connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
             connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
+            connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
         }
     }
 
@@ -153,8 +154,7 @@ void FullLetterWidget::exec_app_name(QString appname)
             execpath.remove(i,2);
         }
     }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
+    QProcess::startDetached(execpath);
 
 }
 
@@ -298,10 +298,10 @@ void FullLetterWidget::init_letterlist_widget()
 void FullLetterWidget::init_letterlist_scrollarea()
 {
     char btnstyle[500];
-    sprintf(btnstyle,"QToolButton{background:transparent;color:#8b8b8b;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;}\
-            QToolButton:pressed{background-color:%s;color:#8b8b8b;}\
-            QToolButton:checked{background:transparent;color:#ffffff;}",
+    sprintf(btnstyle,"QToolButton{background:transparent;color:#8b8b8b;padding-left:0px;border-radius:2px;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;border-radius:2px;}\
+            QToolButton:pressed{background-color:%s;color:#8b8b8b;border-radius:2px;}\
+            QToolButton:checked{background:transparent;color:#ffffff;border-radius:2px;}",
             ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
 
     QFont font;

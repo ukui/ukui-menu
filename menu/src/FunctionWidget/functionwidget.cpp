@@ -33,7 +33,6 @@ FunctionWidget::FunctionWidget(QWidget *parent) :
 FunctionWidget::~FunctionWidget()
 {
     delete ui;
-    delete menu;
     delete pUkuiMenuInterface;
 }
 
@@ -68,6 +67,7 @@ void FunctionWidget::init_applist_widget()
     fill_app_listview();
     connect(applistview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(recvItemClickedSlot(QStringList)));
     connect(applistview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
+    connect(applistview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
 
 }
 
@@ -202,8 +202,7 @@ void FunctionWidget::exec_app_name(QString exec)
             exec.remove(i,2);
         }
     }
-    QProcess *process=new QProcess(this);
-    process->startDetached(exec);
+    QProcess::startDetached(exec);
 }
 
 /**

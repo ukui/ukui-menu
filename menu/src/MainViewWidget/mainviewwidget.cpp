@@ -326,15 +326,19 @@ void MainViewWidget::load_max_mainview()
 //    this->setGeometry(160,0,QApplication::desktop()->availableGeometry().width()-160,QApplication::desktop()->availableGeometry().height());
 //    this->setGeometry(0,0,QApplication::desktop()->availableGeometry().width()-60,QApplication::desktop()->availableGeometry().height());
 
+    qDebug()<<"MainViewWidget111:"<<Style::AppListWidHeight<<QApplication::desktop()->availableGeometry().height();
     this->setFixedSize(Style::MainViewWidWidth,
                        QApplication::desktop()->availableGeometry().height());
     topWidget->setFixedSize(this->width(),Style::TopWidgetHeight);
     querylineEdit->setFixedSize(Style::QueryLineEditWidth,Style::QueryLineEditHeight);
 
-    topLayout->setContentsMargins((Style::AppListWidHeight-querylineEdit->width())/2+Style::LeftWidWidth,
+    topLayout->setContentsMargins((topWidget->width()-Style::LeftWidWidth-querylineEdit->width())/2+Style::LeftWidWidth,
                                   0,
-                                  (Style::AppListWidHeight-querylineEdit->width())/2,
+                                  (topWidget->width()-Style::LeftWidWidth-querylineEdit->width())/2,
                                   0);
+
+    qDebug()<<"MainViewWidget:"<<Style::AppListWidHeight<<QApplication::desktop()->availableGeometry().height();
+//    qDebug()<<topWidget->height()<<Style::AppListWidHeight<<QApplication::desktop()->availableGeometry().height();
 
     is_fullWid=true;
     if(widgetState==0)

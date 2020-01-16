@@ -25,13 +25,10 @@ FullItemDelegate::FullItemDelegate(QObject *parent, int module):
     this->module=module;
     QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
-
-
 }
 
 FullItemDelegate::~FullItemDelegate()
 {
-
 }
 
 void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -46,7 +43,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         rect.setHeight(option.rect.height());
 
         //QPainterPath画圆角矩形
-        const qreal radius = 7;
+        const qreal radius = 4;
         QPainterPath path;
         path.moveTo(rect.topRight() - QPointF(radius, 0));
         path.lineTo(rect.topLeft() + QPointF(radius, 0));
@@ -110,8 +107,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             setting->beginGroup("application");
             if(setting->value(appname).toInt()==0)
             {
-                QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
-                icon.paint(painter,QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16));
+                QIcon icon(QString(":/data/img/mainviewwidget/lock-fs.svg"));
+                icon.paint(painter,QRect(iconRect.topRight().x()-14,iconRect.topRight().y()-2,16,16));
 //                painter->drawImage(QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16),
 //                                   icon.pixmap(icon.actualSize(QSize(16, 16))).toImage());
             }
@@ -146,8 +143,18 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
                 QToolTip::showText(QCursor::pos(),appname);
 
         }
-
         painter->restore();
 
     }
 }
+
+//bool FullItemDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index)
+//{
+//    if(event->type()==QEvent::ToolTip)
+//    {
+//    }
+//    else if(event->type()==QEvent::Leave)
+//    {
+//    }
+//    return true;
+//}

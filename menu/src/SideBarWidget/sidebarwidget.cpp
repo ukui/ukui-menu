@@ -35,8 +35,7 @@ SideBarWidget::SideBarWidget(QWidget *parent) :
 SideBarWidget::~SideBarWidget()
 {
     delete ui;
-    delete shutdownmenu;
-    delete [] othermenu;
+    delete pUkuiMenuInterface;
 }
 
 /**
@@ -316,27 +315,26 @@ void SideBarWidget::set_btn_style(QPushButton *btn, QString btnicon, int num)
  */
 void SideBarWidget::shutdownbtn_right_click_slot()
 {
-    shutdownmenu=new RightClickMenu;
+    shutdownmenu=new RightClickMenu(this);
     int ret=shutdownmenu->show_shutdown_menu();
     if(ret>=10 && ret<=14)
     {
         emit send_hide_mainwindow_signal();
-        QProcess *process=new QProcess(this);
         switch (ret) {
         case 10:
-            process->startDetached(QString("ukui-screensaver-command -l"));
+            QProcess::startDetached(QString("ukui-screensaver-command -l"));
             break;
         case 11:
-            process->startDetached(QString("ukui-session-tools --switchuser"));
+            QProcess::startDetached(QString("ukui-session-tools --switchuser"));
             break;
         case 12:
-            process->startDetached(QString("ukui-session-tools --logout"));
+            QProcess::startDetached(QString("ukui-session-tools --logout"));
             break;
         case 13:
-            process->startDetached(QString("ukui-session-tools --reboot"));
+            QProcess::startDetached(QString("ukui-session-tools --reboot"));
             break;
         case 14:
-            process->startDetached(QString("ukui-session-tools --shutdown"));
+            QProcess::startDetached(QString("ukui-session-tools --shutdown"));
             break;
         default:
             break;
@@ -353,15 +351,14 @@ void SideBarWidget::add_right_click_menu(QPushButton *btn)
 
 void SideBarWidget::otherbtn_right_click_slot()
 {
-    othermenu=new RightClickMenu;
+    othermenu=new RightClickMenu(this);
     othermenu->show_other_menu();
 }
 
 void SideBarWidget::computerbtn_clicked_slot()
 {
     emit send_hide_mainwindow_signal();
-    QProcess *process=new QProcess(this);
-    process->startDetached(QString("peony-qt computer:///"));
+    QProcess::startDetached(QString("peony-qt computer:///"));
 }
 
 void SideBarWidget::controlbtn_clicked_slot()
@@ -376,8 +373,7 @@ void SideBarWidget::controlbtn_clicked_slot()
             execpath.remove(i,2);
         }
     }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
+    QProcess::startDetached(execpath);
 
 }
 

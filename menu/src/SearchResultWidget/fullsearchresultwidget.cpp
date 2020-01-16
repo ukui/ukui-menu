@@ -33,6 +33,7 @@ FullSearchResultWidget::FullSearchResultWidget(QWidget *parent) :
 FullSearchResultWidget::~FullSearchResultWidget()
 {
     delete ui;
+    delete pUkuiMenuInterface;
 }
 
 void FullSearchResultWidget::init_widget()
@@ -52,9 +53,11 @@ void FullSearchResultWidget::init_widget()
 
     data.clear();
     listview->addData(data);
+    pUkuiMenuInterface=new UkuiMenuInterface;
 
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
     connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
+    connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
 }
 
 /**
@@ -73,8 +76,7 @@ void FullSearchResultWidget::exec_app_name(QString appname)
             execpath.remove(i,2);
         }
     }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
+    QProcess::startDetached(execpath);
 }
 
 void FullSearchResultWidget::update_app_listview(QStringList desktopfplist)

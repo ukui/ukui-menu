@@ -107,7 +107,7 @@ void ListView::rightClickedSlot()
 {
     if(!this->selectionModel()->selectedIndexes().isEmpty())
     {
-        menu=new RightClickMenu;
+        menu=new RightClickMenu(this);
         QModelIndex index=this->currentIndex();
         QVariant var=model->data(index, Qt::DisplayRole);
         QStringList strlist=var.value<QStringList>();
@@ -119,6 +119,8 @@ void ListView::rightClickedSlot()
                 int ret=menu->show_appbtn_menu(appname);
                 if(ret==1 || ret==2)
                     emit sendFixedOrUnfixedSignal();
+                if(ret==7)
+                    emit send_hide_mainwindow_signal();
             }
         }
         else{
@@ -128,6 +130,9 @@ void ListView::rightClickedSlot()
             {
                 this->setCurrentIndex(index);
             }
+
+            if(ret==7)
+                emit send_hide_mainwindow_signal();
 
             if(ret==8 || ret==9)
             {

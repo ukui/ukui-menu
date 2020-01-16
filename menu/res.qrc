@@ -39,7 +39,6 @@
         <file>data/img/mainviewwidget/uninstall.svg</file>
         <file>data/img/sidebarwidget/fixed.svg</file>
         <file>data/img/sidebarwidget/lock.svg</file>
-        <file>data/img/sidebarwidget/rcshutdown.svg</file>
         <file>data/img/sidebarwidget/setting.svg</file>
         <file>data/img/sidebarwidget/unfixed.svg</file>
         <file>data/img/mainviewwidget/develop.svg</file>
@@ -65,5 +64,6 @@
         <file>data/img/sidebarwidget/min.svg</file>
         <file>data/img/sidebarwidget/usericon-darkcolor.svg</file>
         <file>data/img/sidebarwidget/usericon-lightcolor.svg</file>
+        <file>data/img/mainviewwidget/lock-fs.svg</file>
     </qresource>
 </RCC>

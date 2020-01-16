@@ -30,8 +30,12 @@
 #define BORDERCOLOR "#1affffff" //边框
 #define SHADOWCOLOR "#80000000" //阴影
 
-#define AttributeDialogHover "#d42320" //属性窗口按钮悬浮
-#define AttributeDialogPressed "#ac4844" //属性窗口按钮点击
+#define AttributeDialogHover "#F04134" //属性窗口按钮悬浮
+#define AttributeDialogPressed "#D73435" //属性窗口按钮点击
+#define RightClickMenuBackground "rgba(26, 26, 26)"
+#define RightClickMenuHover "rgba(255, 255, 255, 0.12)"
+#define RightClickMenuFont "rgba(255, 255, 255, 0.91)"
+#define RightClickMenuOpacity 0.95
 
 #define DefaultBackground "rgba(15,15,15,90%)" //默认态背景色
 #define SBClassifyBtnHoverBackground "rgba(65, 95, 196, 1)" //侧边栏上部分类按钮悬浮背景

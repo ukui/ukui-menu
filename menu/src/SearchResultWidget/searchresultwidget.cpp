@@ -57,6 +57,7 @@ void SearchResultWidget::init_widget()
 
     connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(exec_app_name(QStringList)));
     connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
+    connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
 }
 
 /**
@@ -75,8 +76,7 @@ void SearchResultWidget::exec_app_name(QStringList arg)
             execpath.remove(i,2);
         }
     }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
+    QProcess::startDetached(execpath);
 }
 
 void SearchResultWidget::update_app_listview(QStringList desktopfplist)

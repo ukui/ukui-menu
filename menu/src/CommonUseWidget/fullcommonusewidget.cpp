@@ -64,6 +64,7 @@ void FullCommonUseWidget::init_applist_widget()
     mainLayout->addWidget(listview);
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
     connect(listview,SIGNAL(send_update_applist_signal()),this,SIGNAL(send_update_applist_signal()));
+    connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
 }
 
 void FullCommonUseWidget::fill_app_tablewidget()
@@ -107,8 +108,7 @@ void FullCommonUseWidget::exec_app_name(QString appname)
             execpath.remove(i,2);
         }
     }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
+    QProcess::startDetached(execpath);
 }
 
 /**

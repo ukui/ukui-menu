@@ -36,11 +36,11 @@
 #include <ukuimenuinterface.h>
 #include "src/Style/style.h"
 
-class RightClickMenu: public QObject
+class RightClickMenu: public QWidget
 {
     Q_OBJECT
 public:
-    RightClickMenu();
+    RightClickMenu(QWidget *parent);
     virtual ~RightClickMenu();
     int show_commonuse_appbtn_menu(QString appname);
     int show_appbtn_menu(QString appname);
@@ -53,6 +53,8 @@ private:
     QSettings* setting=nullptr;
 
     char style[300];
+
+    QProcess* cmdProc=nullptr;
 
     QMenu* cuappbtnmenu;
     QWidgetAction* CuFix2CommonUseAction;
@@ -138,6 +140,8 @@ private slots:
     void shutdownaction_trigger_slot();
 
     void otherlistaction_trigger_slot();
+
+    void on_readoutput();
 };
 
 #endif // RIGHTCLICKMENU_H

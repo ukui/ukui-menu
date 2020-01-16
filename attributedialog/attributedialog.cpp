@@ -7,7 +7,8 @@ AttributeDialog::AttributeDialog(QWidget *parent) :
     ui(new Ui::AttributeDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint|Qt::Dialog);
+    this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint|Qt::Tool);
+    this->setFocusPolicy(Qt::StrongFocus);
     init_widget();
 }
 
@@ -19,188 +20,284 @@ AttributeDialog::~AttributeDialog()
 
 void AttributeDialog::init_widget()
 {
-    this->resize(436,334);
-    this->setStyleSheet("background-color:#f5f6f7;border:1px solid #2a6b9f;");
-    mainLayout=new QVBoxLayout;
+    this->resize(400,335);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setStyleSheet("background:transparent;border:0px;");
+    mainLayout=new QHBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     this->setLayout(mainLayout);
 
+    frame=new QFrame;
+    frame->setFixedSize(this->width(),this->height());
+    frame->setStyleSheet("background-color:rgba(26, 26, 26, 0.95);border:1px solid rgba(255, 255, 255, 0.05);border-radius:6px;");
+    frameLayout=new QVBoxLayout;
+    frameLayout->setContentsMargins(0,0,0,0);
+    frameLayout->setSpacing(0);
+    frame->setLayout(frameLayout);
+    mainLayout->addWidget(frame);
+
     //标题栏
     titlebarWid=new QWidget(this);
     titlebarWid->setStyleSheet("border:0px;background:transparent;");
-    titlebarWid->setFixedSize(this->width(),30);
+    titlebarWid->setFixedSize(this->width(),45);
     titlebarwidLayout=new QHBoxLayout;
-    titlebarwidLayout->setContentsMargins(0,0,0,0);
+    titlebarwidLayout->setContentsMargins(0,5,4,0);
     titlebarwidLayout->setSpacing(0);
-    leftSpacer=new QSpacerItem(40,20,QSizePolicy::Fixed,QSizePolicy::Fixed);
-    appnameLabel=new QLabel(titlebarWid);
-    appnameLabel->setStyleSheet("color:#000000;font-size:14px;");
-    titlebarLabel=new QLabel(titlebarWid);
-    titlebarLabel->setText(" "+tr("属性"));
-    titlebarLabel->setStyleSheet("color:#000000;font-size:14px;");
-    titlebarLabel->adjustSize();
-//    minbtn=new ToolButton(QString(":/data/img/attributedialog/min-black.svg"),QString(":/data/img/attributedialog/min-black.svg"),
-//                          QString("#1a000000"),QString("#33000000"));
-    closebtn=new ToolButton(45,30,QString(":/close-black.svg"),QString(":/close-white.svg"),
+    leftSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
+    closebtn=new ToolButton(40,40,QString(":/close.svg"),QString(":/close-white.svg"),
                             AttributeDialogHover,AttributeDialogPressed,3,"");
-//    minbtn->setFixedSize(45,30);
-    closebtn->setFixedSize(45,30);
-//    connect(minbtn,SIGNAL(clicked()),this,SLOT(showMinimized()));
-    connect(closebtn,SIGNAL(clicked()),this,SLOT(close()));
+    connect(closebtn,SIGNAL(clicked()),qApp,SLOT(quit()));
 
-    rightSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     titlebarwidLayout->addItem(leftSpacer);
-    titlebarwidLayout->addWidget(appnameLabel);
-    titlebarwidLayout->addWidget(titlebarLabel);
-    titlebarwidLayout->addItem(rightSpacer);
-//    titlebarwidLayout->addWidget(minbtn);
     titlebarwidLayout->addWidget(closebtn);
     titlebarWid->setLayout(titlebarwidLayout);
 
     //上部控件
     upWid=new QWidget(this);
     upWid->setStyleSheet("border:0px;background:transparent;");
-    upWid->setFixedSize(this->width(),90);
+    upWid->setFixedSize(this->width(),68);
     upwidLayout=new QHBoxLayout;
-    upwidLayout->setContentsMargins(22,22,0,20);
+    upwidLayout->setContentsMargins(19,10,0,0);
     upwidLayout->setSpacing(22);
     labelIcon=new QLabel(upWid);
-    labelIcon->setFixedSize(48,48);
     labelappName=new QLabel(upWid);
-    labelappName->setStyleSheet("color:#000000;font-size:14px;");
+    labelappName->setStyleSheet("color:#ffffff;font-size:24px;");
     upwidLayout->addWidget(labelIcon);
     upwidLayout->addWidget(labelappName);
     upWid->setLayout(upwidLayout);
 
-    //分割线
-    line=new QFrame(this);
-    line->setFrameShape(QFrame::HLine);
-    line->setFixedSize(this->width(),1);
-    line->setStyleSheet("border:0px;background-color:#cccccc");
-
     //下部控件
     downWid=new QWidget(this);
     downWid->setStyleSheet("border:0px;background:transparent;");
-    downWid->setFixedSize(this->width(),this->height()-titlebarWid->height()-upWid->height()-1-50);
+    downWid->setFixedSize(this->width(),this->height()-titlebarWid->height()-upWid->height()-72);
     downwidLayout=new QVBoxLayout;
-    downwidLayout->setContentsMargins(22,20,10,0);
-//    downwidLayout->setSpacing(32);
+    downwidLayout->setContentsMargins(21,20,17,0);
     downWid->setLayout(downwidLayout);
 
-    tableWid=new QTableWidget;
-    tableWid->setFixedSize(downWid->width()-32,downWid->height()-20);
-    QStringList header;
-    header.append("");
-    header.append("");
-    tableWid->setHorizontalHeaderLabels(header);
-    tableWid->setRowCount(3);
-    tableWid->setColumnCount(2);
-    tableWid->setRowHeight(0,32);
-    tableWid->setRowHeight(1,32);
-    tableWid->setRowHeight(2,tableWid->height()-64);
-    tableWid->setColumnWidth(0,70);
-    tableWid->setColumnWidth(1,tableWid->width()-70);
-    tableWid->verticalHeader()->setHidden(true);
-    tableWid->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    tableWid->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    tableWid->setFocusPolicy(Qt::NoFocus);
-    tableWid->horizontalHeader()->setFixedHeight(0);
-    tableWid->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    tableWid->setSelectionMode(QAbstractItemView::NoSelection);
-    tableWid->setShowGrid(false);
-    tableWid->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
-    tableWid->setStyleSheet("QTableWidget{border:0px;background:transparent;}"
-                            "QTableWidget:Item{color:#000000;font-size:12px;border:0px;}");
-    typeEdit=new QTextEdit;
-    execEdit=new QTextEdit;
-    commentEdit=new QTextEdit;
-    typevalueEdit=new QTextEdit;
-    execvalueEdit=new  QTextEdit;
-    commentvalueEdit=new QTextEdit;
-    typeEdit->setStyleSheet("border:0px;background:transparent;");
-    execEdit->setStyleSheet("border:0px;background:transparent;");
-    commentEdit->setStyleSheet("border:0px;background:transparent;");
-    typevalueEdit->setStyleSheet("border:0px;background:transparent;");
-    execvalueEdit->setStyleSheet("border:0px;background:transparent;");
-    commentvalueEdit->setStyleSheet("border:0px;background:transparent;");
-    set_controls_style(typeEdit,typevalueEdit,"类型",32);
-    set_controls_style(execEdit,execvalueEdit,"命令",32);
-    set_controls_style(commentEdit,commentvalueEdit,"备注",tableWid->height()-64);
-    tableWid->setCellWidget(0,0,typeEdit);
-    tableWid->setCellWidget(1,0,execEdit);
-    tableWid->setCellWidget(2,0,commentEdit);
-    tableWid->setCellWidget(0,1,typevalueEdit);
-    tableWid->setCellWidget(1,1,execvalueEdit);
-    tableWid->setCellWidget(2,1,commentvalueEdit);
-    downwidLayout->addWidget(tableWid);
+    downmainWid=new QWidget(downWid);
+    downmainWid->setFixedSize(downWid->width()-38,downWid->height()-20);
+    gridLayout=new QGridLayout;
+    gridLayout->setContentsMargins(11,14,11,14);
+    gridLayout->setHorizontalSpacing(0);
+    gridLayout->setVerticalSpacing(0);
+    downmainWid->setLayout(gridLayout);
+    downwidLayout->addWidget(downmainWid);
+    downmainWid->setStyleSheet("border:0px;background-color:rgba(255, 255, 255, 0.06);");
+
+//    typeEdit=new QTextEdit;
+//    execEdit=new QTextEdit;
+//    commentEdit=new QTextEdit;
+//    typevalueEdit=new QTextEdit;
+//    execvalueEdit=new  QTextEdit;
+//    commentvalueEdit=new QTextEdit;
+//    set_controls_style(typeEdit,typevalueEdit,"类型",32);
+//    set_controls_style(execEdit,execvalueEdit,"命令",32);
+//    set_controls_style(commentEdit,commentvalueEdit,"备注",downmainWid->height()-64-14);
+
+    typeLabel=new QLabel;
+    execLabel=new QLabel;
+    commentLabel=new QLabel;
+    typevalueEdit=new QLineEdit;
+    execvalueEdit=new  QLineEdit;
+    commentvalueEdit=new QLineEdit;
+    set_controls_style(typeLabel,typevalueEdit,"类型",38);
+    set_controls_style(execLabel,execvalueEdit,"命令",38);
+    set_controls_style(commentLabel,commentvalueEdit,"备注",38);
+
+
+    gridLayout->addWidget(typeLabel,0,0);
+    gridLayout->addWidget(typevalueEdit,0,1);
+    gridLayout->addWidget(execLabel,1,0);
+    gridLayout->addWidget(execvalueEdit,1,1);
+    gridLayout->addWidget(commentLabel,2,0);
+    gridLayout->addWidget(commentvalueEdit,2,1);
+
 
     //关闭按钮
     closeWid=new QWidget(this);
-    closeWid->setFixedSize(this->width(),50);
+    closeWid->setFixedSize(this->width(),72);
     closeWid->setStyleSheet("border:0px;background:transparent;");
     closewidLayout=new QHBoxLayout;
-    closewidLayout->setContentsMargins(0,0,20,20);
+    closewidLayout->setContentsMargins(0,20,20,18);
     btnleftSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     btn=new QPushButton(closeWid);
-    btn->setFixedSize(90,30);
+    btn->setFixedSize(120,34);
     btn->setText(tr("关闭"));
     btn->setFocusPolicy(Qt::NoFocus);
     closewidLayout->addItem(btnleftSpacer);
     closewidLayout->addWidget(btn);
     closeWid->setLayout(closewidLayout);
-    btn->setStyleSheet("QPushButton{background:#fbfbfb;border:1px solid #9e9e9e;font-size:14px;color:#000000;}\
-                        QPushButton:hover{background:#fbfbfb;border:2px solid #629ee8;font-size:14px;color:#000000;}\
-                        QPushButton:pressed{background:#e2e2e2;border:1px solid #9e9e9e;font-size:14px;color:#000000;}");
-    connect(btn,SIGNAL(clicked(bool)),this,SLOT(close()));
+    btn->setStyleSheet("QPushButton{background-color:rgba(61, 107, 229, 1);border:0px;border-radius:4px;font-size:14px;color:#ffffff;}\
+                        QPushButton:hover{background-color:rgba(107, 142, 235, 1);border:0px;border-radius:4px;font-size:14px;color:#ffffff;}\
+                        QPushButton:pressed{background-color:rgba(50, 87, 202, 1);border:0px;border-radius:4px;font-size:14px;color:#ffffff;}");
+    connect(btn,SIGNAL(clicked(bool)),qApp,SLOT(quit()));
 
-    mainLayout->addWidget(titlebarWid);
-    mainLayout->addWidget(upWid);
-    mainLayout->addWidget(line);
-    mainLayout->addWidget(downWid);
-    mainLayout->addWidget(closeWid);
+    frameLayout->addWidget(titlebarWid);
+    frameLayout->addWidget(upWid);
+    frameLayout->addWidget(downWid);
+    frameLayout->addWidget(closeWid);
+
+    //右键菜单
+    menu=new QMenu;
+    menu->setLayoutDirection(Qt::LeftToRight);
+    menu->setFixedSize(100+2,36*5+12);
+    char style[200];
+    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid #626c6e;border-radius:3px;background-color:%s;}",
+            RightClickMenuBackground);
+    menu->setStyleSheet(style);
+    menu->setAttribute(Qt::WA_TranslucentBackground);
+    menu->setWindowOpacity(RightClickMenuOpacity);
+
+    cutAction=new QWidgetAction(this);
+    cutWid=new QWidget;
+    init_widget_action(cutWid,"剪切(T)",false);
+    cutAction->setDefaultWidget(cutWid);
+    menu->addAction(cutAction);
+    connect(cutAction,SIGNAL(triggered()),this,SLOT(cutaction_trigger_slot()));
+    cutAction->setEnabled(false);
+
+    copyAction=new QWidgetAction(menu);
+    copyWid=new QWidget;
+    init_widget_action(copyWid,"复制(C)",true);
+    copyAction->setDefaultWidget(copyWid);
+    menu->addAction(copyAction);
+    connect(copyAction,SIGNAL(triggered()),this,SLOT(copyaction_trigger_slot()));
+
+    pasteAction=new QWidgetAction(menu);
+    pasteWid=new QWidget;
+    init_widget_action(pasteWid,"粘贴(V)",false);
+    pasteAction->setDefaultWidget(pasteWid);
+    menu->addAction(pasteAction);
+    connect(pasteAction,SIGNAL(triggered()),this,SLOT(pasteaction_trigger_slot()));
+    pasteAction->setEnabled(false);
+
+    deleteAction=new QWidgetAction(menu);
+    deleteWid=new QWidget;
+    init_widget_action(deleteWid,"删除(D)",false);
+    deleteAction->setDefaultWidget(deleteWid);
+    menu->addAction(deleteAction);
+    connect(deleteAction,SIGNAL(triggered()),this,SLOT(deleteaction_trigger_slot()));
+    deleteAction->setEnabled(false);
+
+    selectallAction=new QWidgetAction(menu);
+    selectallWid=new QWidget;
+    init_widget_action(selectallWid,"全选(A)",true);
+    selectallAction->setDefaultWidget(selectallWid);
+    menu->addAction(selectallAction);
+    connect(selectallAction,SIGNAL(triggered()),this,SLOT(selectallaction_trigger_slot()));
 
     pUkuiMenuInterface=new UkuiMenuInterface;
 
+    wm=new WindowMove;
+    wm->move(0,0);
+    wm->setParent(this);
+    wm->resize(this->width()-45,30);
 }
 
-void AttributeDialog::set_controls_style(QTextEdit *edit, QTextEdit *valueEdit, QString str, int height)
+void AttributeDialog::set_controls_style(QLabel *edit, QLineEdit *valueEdit, QString str, int height)
 {
     QByteArray byte=str.toLocal8Bit();
     char* arg=byte.data();
     edit->setText(tr(arg)+":");
-    edit->setStyleSheet("background:transparent;color:#000000;font-size:14px;");
-    edit->setFixedSize(70,height);
-    edit->setAlignment(Qt::AlignLeft);
+    edit->setStyleSheet("background:transparent;color:#ffffff;font-size:14px;border:0px;");
+    edit->setFixedSize(50,height);
+//    edit->setAlignment(Qt::AlignLeft);
     edit->setEnabled(false);
     edit->setContextMenuPolicy(Qt::NoContextMenu);
+    edit->setFocusPolicy(Qt::NoFocus);
 
-    valueEdit->setFixedSize(tableWid->width()-70,height);
-    valueEdit->setStyleSheet("background:transparent;color:#000000;font-size:14px;");
-    valueEdit->setContextMenuPolicy(Qt::NoContextMenu);
-    valueEdit->setReadOnly(true);
-//    valueEdit->setAcceptDrops(true);
-    valueEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
+    valueEdit->setFixedSize(340-50,height);
+    valueEdit->setStyleSheet("border:0px;background:transparent;color:#ffffff;font-size:14px;");
+//    valueEdit->setReadOnly(false);
+//    valueEdit->setEnabled(false);
+    valueEdit->setAcceptDrops(false);
+//    valueEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    valueEdit->setFocusPolicy(Qt::ClickFocus);
+//    valueEdit->setContextMenuPolicy(Qt::CustomContextMenu);
+//    connect(valueEdit,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(show_menu()));
 }
 
 void AttributeDialog::set_attribute_value(QString desktopfp)
 {
-//    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
-//    qDebug()<<desktopfp;
     QString appname=pUkuiMenuInterface->get_app_name(desktopfp);
-    appnameLabel->setText(appname);
-    appnameLabel->adjustSize();
-    leftSpacer->changeSize((titlebarWid->width()-appnameLabel->width()-titlebarLabel->width())/2,20,QSizePolicy::Fixed,QSizePolicy::Fixed);
     QString iconstr=pUkuiMenuInterface->get_app_icon(desktopfp);
     QIcon icon=QIcon::fromTheme(iconstr);
-    QPixmap pixmapicon(icon.pixmap(QSize(48,48)));
+    QPixmap pixmapicon(icon.pixmap(QSize(58,58)));
     labelIcon->setPixmap(pixmapicon);
+    labelIcon->setFixedSize(58,58);
     this->labelappName->setText(appname);
     QString type=pUkuiMenuInterface->get_app_type(desktopfp);
     QString exec=pUkuiMenuInterface->get_app_exec(desktopfp);
     QString comment=pUkuiMenuInterface->get_app_comment(desktopfp);
-    typevalueEdit->setText(type);
+    typevalueEdit->setText("应用程序");
     execvalueEdit->setText(exec);
     commentvalueEdit->setText(comment);
+    execvalueEdit->setCursorPosition(0);
+    commentvalueEdit->setCursorPosition(0);
+}
+
+void AttributeDialog::show_menu()
+{
+    menu->exec(QCursor::pos());
+}
+
+void AttributeDialog::init_widget_action(QWidget *wid, QString textstr,bool enabled)
+{
+    char style[200];
+    sprintf(style,"QWidget{background:transparent;border:0px;border-radius:2px;}\
+            QWidget:hover{background-color:%s;}",
+            RightClickMenuHover);
+
+    char labelstyle[100];
+    if(enabled)
+        sprintf(labelstyle,"background:transparent;border:0px;color:%s;font-size:14px;",
+                RightClickMenuFont);
+    else
+        sprintf(labelstyle,"background:transparent;border:0px;color:rgba(255, 255, 255, 0.35);font-size:14px;");
+
+    QHBoxLayout* layout=new QHBoxLayout(wid);
+    wid->setLayout(layout);
+    wid->setFixedSize(96,36);
+    wid->setStyleSheet(style);
+    wid->setFocusPolicy(Qt::NoFocus);
+
+    QLabel* labeltext=new QLabel(wid);
+    labeltext->setStyleSheet(labelstyle);
+    QByteArray textbyte=textstr.toLocal8Bit();
+    char* text=textbyte.data();
+    labeltext->setText(tr(text));
+    labeltext->adjustSize();
+    layout->addWidget(labeltext);
+
+    layout->setContentsMargins(10,0,0,0);
+}
+
+void AttributeDialog::cutaction_trigger_slot()
+{
+    qDebug()<<"---1---";
+}
+
+void AttributeDialog::copyaction_trigger_slot()
+{
+    qDebug()<<"---2---";
+    QTextEdit* textEdit=dynamic_cast<QTextEdit*>(QObject::sender());
+    textEdit->copy();
+}
+
+void AttributeDialog::pasteaction_trigger_slot()
+{
+    qDebug()<<"---3---";
+}
+
+void AttributeDialog::deleteaction_trigger_slot()
+{
+    qDebug()<<"---4---";
+}
+
+void AttributeDialog::selectallaction_trigger_slot()
+{
+    qDebug()<<"---5---";
+//    QLineEdit* textEdit=dynamic_cast<QLineEdit*>(QObject::sender());
+//    textEdit->selectAll();
 }

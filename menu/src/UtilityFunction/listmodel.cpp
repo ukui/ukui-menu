@@ -135,7 +135,11 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
         else
         {
             QString iconstr=pUkuiMenuInterface->get_app_icon(val.at(0));
+            iconstr.remove(".png");
+            iconstr.remove(".svg");
             QIcon icon=QIcon::fromTheme(iconstr);
+            if(icon.isNull())
+                icon=QIcon::fromTheme(QString("application-x-desktop"));
             return icon;
         }
     }

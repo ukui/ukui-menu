@@ -258,6 +258,7 @@ void FullFunctionWidget::insert_app_list(QStringList appnamelist)
     listview->addData(data);
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
     connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
+    connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
 }
 
 /**
@@ -276,8 +277,7 @@ void FullFunctionWidget::exec_app_name(QString appname)
             execpath.remove(i,2);
         }
     }
-    QProcess *process=new QProcess(this);
-    process->startDetached(execpath);
+    QProcess::startDetached(execpath);
 }
 
 /**

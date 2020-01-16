@@ -19,13 +19,15 @@
 #include "rightclickmenu.h"
 #include <QDebug>
 
-RightClickMenu::RightClickMenu()
+RightClickMenu::RightClickMenu(QWidget *parent):
+    QWidget (parent)
+
 {
     QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
     //其它按钮右键菜单项
-    othermenu=new QMenu();
+    othermenu=new QMenu(this);
     othermenu->setLayoutDirection(Qt::LeftToRight);
     othermenu->setFixedSize(250+2,36*2+12+2);
     OtherFix2TaskBarAction=new QWidgetAction(othermenu);
@@ -36,7 +38,7 @@ RightClickMenu::RightClickMenu()
     OtherListWid=new QWidget();
 
     //常用应用按钮右键菜单
-    cuappbtnmenu=new QMenu();
+    cuappbtnmenu=new QMenu(this);
     cuappbtnmenu->setLayoutDirection(Qt::LeftToRight);
     cuappbtnmenu->setFixedSize(250+2,36*7+15+12+2);
     CuFix2CommonUseAction=new QWidgetAction(cuappbtnmenu);
@@ -59,7 +61,7 @@ RightClickMenu::RightClickMenu()
     CuAttributeWid=new QWidget();
 
     //普通应用按钮右键菜单
-    appbtnmenu=new QMenu();
+    appbtnmenu=new QMenu(this);
     appbtnmenu->setLayoutDirection(Qt::LeftToRight);
     appbtnmenu->setFixedSize(250+2,36*5+10+12+2);
     Fix2CommonUseAction=new QWidgetAction(appbtnmenu);
@@ -78,11 +80,12 @@ RightClickMenu::RightClickMenu()
     AttributeWid=new QWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
+    cmdProc=new QProcess(this);
+    connect(cmdProc , SIGNAL(readyReadStandardOutput()) , this , SLOT(on_readoutput()));
 
     sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid #626c6e;border-radius:3px;background-color:%s;}\
             QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
             RightClickMenuBackground,RightClickMenuSeparator);
-
 
     add_shutdown_action();
     add_other_action();
@@ -90,36 +93,36 @@ RightClickMenu::RightClickMenu()
 
 RightClickMenu::~RightClickMenu()
 {
-    delete cuappbtnmenu;
-    delete CuFix2CommonUseWid;
-    delete CuUnfixed4CommonUseWid;
-    delete CuFix2TaskBarWid;
-    delete CuUnfixed4TaskBarWid;
-    delete CuAdd2DesktopWid;
-    delete CuDeleteAllWid;
-    delete CuDeleteAllWid;
-    delete CuUninstallWid;
-    delete CuAttributeWid;
+//    delete cuappbtnmenu;
+//    delete CuFix2CommonUseWid;
+//    delete CuUnfixed4CommonUseWid;
+//    delete CuFix2TaskBarWid;
+//    delete CuUnfixed4TaskBarWid;
+//    delete CuAdd2DesktopWid;
+//    delete CuDeleteAllWid;
+//    delete CuDeleteAllWid;
+//    delete CuUninstallWid;
+//    delete CuAttributeWid;
 
-    delete appbtnmenu;
-    delete Fix2CommonUseWid;
-    delete Unfixed4CommonUseWid;
-    delete Fix2TaskBarWid;
-    delete Unfixed4TaskBarWid;
-    delete Add2DesktopWid;
-    delete UninstallWid;
-    delete AttributeWid;
+//    delete appbtnmenu;
+//    delete Fix2CommonUseWid;
+//    delete Unfixed4CommonUseWid;
+//    delete Fix2TaskBarWid;
+//    delete Unfixed4TaskBarWid;
+//    delete Add2DesktopWid;
+//    delete UninstallWid;
+//    delete AttributeWid;
 
-    delete shutdownmenu;
-    delete LockScreenWid;
-    delete LogOutWid;
-    delete RebootWid;
-    delete ShutDownWid;
+//    delete shutdownmenu;
+//    delete LockScreenWid;
+//    delete LogOutWid;
+//    delete RebootWid;
+//    delete ShutDownWid;
 
-    delete othermenu;
-    delete OtherFix2TaskBarWid;
-    delete OtherUnfix2TaskBarWid;
-    delete OtherListWid;
+//    delete othermenu;
+//    delete OtherFix2TaskBarWid;
+//    delete OtherUnfix2TaskBarWid;
+//    delete OtherListWid;
 
     delete pUkuiMenuInterface;
 
@@ -300,7 +303,7 @@ void RightClickMenu::add_appbtn_action()
 //关机按钮右键菜单
 void RightClickMenu::add_shutdown_action()
 {
-    shutdownmenu=new QMenu();
+    shutdownmenu=new QMenu(this);
     shutdownmenu->setLayoutDirection(Qt::LeftToRight);
     shutdownmenu->setFixedSize(250+2,36*5+12+2);
 
@@ -334,7 +337,7 @@ void RightClickMenu::add_shutdown_action()
 
     ShutDownAction=new QWidgetAction(shutdownmenu);
     ShutDownWid=new QWidget();
-    init_widget_action(ShutDownWid,":/data/img/sidebarwidget/rcshutdown.svg","关闭计算机");
+    init_widget_action(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg","关闭计算机");
     ShutDownAction->setDefaultWidget(ShutDownWid);
     shutdownmenu->addAction(ShutDownAction);
     connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownaction_trigger_slot()));
@@ -464,22 +467,73 @@ void RightClickMenu::unfixed4taskbaraction_trigger_slot()
 
 void RightClickMenu::add2desktopaction_trigger_slot()
 {
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+    QString path=QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QFileInfo fileInfo(desktopfp);
+    QString desktopfn=fileInfo.fileName();
+    QFile file(desktopfp);
+    QString newname=QString(path+"/"+desktopfn);
+    bool ret=file.copy(QString(path+"/"+desktopfn));
+    if(ret)
+    {
+        char command[200];
+        sprintf(command,"chmod a+x %s",newname.toLocal8Bit().data());
+        system(command);
+    }
     action_number=5;
 }
 
 void RightClickMenu::uninstallaction_trigger_slot()
 {
+//    QString exec=pUkuiMenuInterface->get_app_exec(pUkuiMenuInterface->get_desktop_path_by_app_name(appname));
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+//    QFileInfo fileInfo(exec.split(" ").at(0));
+//    bool ret=fileInfo.isAbsolute();
+
+    QString cmd=QString("dpkg -S "+desktopfp);
+    cmdProc->setReadChannel(QProcess::StandardOutput);
+    cmdProc->start("sh",QStringList()<<"-c"<<cmd);
+    cmdProc->waitForFinished();
+    cmdProc->waitForReadyRead();
+    cmdProc->close();
+
+//    if(ret)
+//    {
+//        QString cmd=QString("dpkg -S "+exec.split(" ").at(0));
+//        cmdProc->setReadChannel(QProcess::StandardOutput);
+//        cmdProc->start("sh",QStringList()<<"-c"<<cmd);
+//        cmdProc->waitForFinished();
+//        cmdProc->waitForReadyRead();
+//        cmdProc->close();
+//    }
+//    else {
+//        QString cmd=QString("dpkg -S "+exec.split(" ").at(0)+"| grep /usr/bin");
+//        cmdProc->setReadChannel(QProcess::StandardOutput);
+//        cmdProc->start("sh",QStringList()<<"-c"<<cmd);
+//        cmdProc->waitForFinished();
+//        cmdProc->waitForReadyRead();
+//        cmdProc->close();
+//    }
     action_number=6;
+}
+
+void RightClickMenu::on_readoutput()
+{
+    QString packagestr=QString::fromLocal8Bit(cmdProc->readAllStandardOutput().data());
+    QString packageName=packagestr.split(":").at(0);
+    qDebug()<<packagestr<<packageName;
+    char command[100];
+    sprintf(command,"ubuntu-kylin-software-center -remove %s",packageName.toLocal8Bit().data());
+    QProcess::startDetached(command);
 }
 
 void RightClickMenu::attributeaction_trigger_slot()
 {
-    action_number=7;
     QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
     char command[100];
     sprintf(command,"ukui-menu-attr %s",desktopfp.toLocal8Bit().data());
-    QProcess* proc=new QProcess(this);
-    proc->startDetached(command);
+    QProcess::startDetached(command);
+    action_number=7;
 }
 
 void RightClickMenu::cudeleteaction_trigger_slot()

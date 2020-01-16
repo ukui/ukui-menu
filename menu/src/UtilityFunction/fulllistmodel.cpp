@@ -105,7 +105,11 @@ QVariant FullListModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
     {
         QString iconstr=pUkuiMenuInterface->get_app_icon(val);
+        iconstr.remove(".png");
+        iconstr.remove(".svg");
         QIcon icon=QIcon::fromTheme(iconstr);
+        if(icon.isNull())
+            icon=QIcon::fromTheme(QString("application-x-desktop"));
         return icon;
     }
     case Qt::DisplayRole:

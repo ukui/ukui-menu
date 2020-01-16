@@ -200,6 +200,8 @@ void Style::init_wid_style()
 //        AppBottomSpace=static_cast<int>(round(27*0.84));
         SliderSize=10;
 
+        qDebug()<<"style:"<<QApplication::desktop()->availableGeometry().height()<<heightavailable<<AppListWidHeight;
+
         SideBarWidWidth=round((width-1090)/2);
         SideBarMargin=10;
         MinMaxWidWidth=110;
