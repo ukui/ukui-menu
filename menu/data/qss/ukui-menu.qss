@@ -1,0 +1,2 @@
+QToolButton:focus{outline: none;}  /*remove all  QToolButton's focus border*/
+QWidget{border:0px;}

@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>close-black.svg</file>
+        <file>close-white.svg</file>
+        <file>min-black.svg</file>
+        <file>ukui-menu-attr.qss</file>
+        <file>close.svg</file>
+    </qresource>
+</RCC>
