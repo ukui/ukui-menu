@@ -88,7 +88,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
             RightClickMenuBackground,RightClickMenuSeparator);
 
     add_shutdown_action();
-    add_other_action();
+//    add_other_action();
 }
 
 RightClickMenu::~RightClickMenu()
@@ -134,7 +134,7 @@ void RightClickMenu::add_commonuse_appbtn_action()
     setting->beginGroup("application");
     if(!setting->contains(appname) || setting->value(appname).toInt()>0)
     {
-        init_widget_action(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg","固定到“常用软件”");
+        init_widget_action(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to commmon"));
         CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
         cuappbtnmenu->addAction(CuFix2CommonUseAction);
         connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fix2commonuseaction_trigger_slot()));
@@ -142,7 +142,7 @@ void RightClickMenu::add_commonuse_appbtn_action()
 
     if(setting->contains(appname) && setting->value(appname).toInt()==0)
     {
-        init_widget_action(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg","从“常用软件”取消固定");
+        init_widget_action(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
         CuUnfixed4CommonUseAction->setDefaultWidget(CuUnfixed4CommonUseWid);
         cuappbtnmenu->addAction(CuUnfixed4CommonUseAction);
         connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixed4commonuseaction_trigger_slot()));
@@ -157,19 +157,19 @@ void RightClickMenu::add_commonuse_appbtn_action()
     QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
     if(!ret)
     {
-        init_widget_action(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg","固定到任务栏");
+        init_widget_action(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
         CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
         cuappbtnmenu->addAction(CuFix2TaskBarAction);
         connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
     }
     else {
-        init_widget_action(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg","从任务栏取消固定");
+        init_widget_action(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
         CuUnfixed4TaskBarAction->setDefaultWidget(CuUnfixed4TaskBarWid);
         cuappbtnmenu->addAction(CuUnfixed4TaskBarAction);
         connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
     }
 
-    init_widget_action(CuAdd2DesktopWid,"","添加到桌面快捷方式");
+    init_widget_action(CuAdd2DesktopWid,"",tr("Add to desktop shortcuts"));
     CuAdd2DesktopAction->setDefaultWidget(CuAdd2DesktopWid);
     cuappbtnmenu->addAction(CuAdd2DesktopAction);
     connect(CuAdd2DesktopAction, SIGNAL(triggered()),this,SLOT(add2desktopaction_trigger_slot()));
@@ -177,7 +177,7 @@ void RightClickMenu::add_commonuse_appbtn_action()
 
     cuappbtnmenu->addSeparator();
 
-    init_widget_action(CuDeleteWid,"","从列表中删除");
+    init_widget_action(CuDeleteWid,"",tr("Remove from list"));
     CuDeleteAction->setDefaultWidget(CuDeleteWid);
     cuappbtnmenu->addAction(CuDeleteAction);
     connect(CuDeleteAction,SIGNAL(triggered()),this,SLOT(cudeleteaction_trigger_slot()));
@@ -190,7 +190,7 @@ void RightClickMenu::add_commonuse_appbtn_action()
         CuDeleteAction->setDisabled(true);
     }
 
-    init_widget_action(CuDeleteAllWid,"","删除所有");
+    init_widget_action(CuDeleteAllWid,"",tr("Remove all"));
     CuDeleteAllAction->setDefaultWidget(CuDeleteAllWid);
     cuappbtnmenu->addAction(CuDeleteAllAction);
     connect(CuDeleteAllAction,SIGNAL(triggered()),this,SLOT(cudeleteallaction_trigger_slot()));
@@ -212,14 +212,14 @@ void RightClickMenu::add_commonuse_appbtn_action()
 
     cuappbtnmenu->addSeparator();
 
-    init_widget_action(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg","卸载");
+    init_widget_action(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
     CuUninstallAction->setDefaultWidget(CuUninstallWid);
     cuappbtnmenu->addAction(CuUninstallAction);
     connect(CuUninstallAction, SIGNAL(triggered()),this,SLOT(uninstallaction_trigger_slot()));
 
     cuappbtnmenu->addSeparator();
 
-    init_widget_action(CuAttributeWid,":/data/img/mainviewwidget/attributeaction.svg","属性");
+    init_widget_action(CuAttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
     CuAttributeAction->setDefaultWidget(CuAttributeWid);
     cuappbtnmenu->addAction(CuAttributeAction);
     connect(CuAttributeAction, SIGNAL(triggered()),this,SLOT(attributeaction_trigger_slot()));
@@ -238,7 +238,7 @@ void RightClickMenu::add_appbtn_action()
     setting->beginGroup("application");
     if(!setting->contains(appname) || setting->value(appname).toInt()>0)
     {
-        init_widget_action(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg","固定到“常用软件”");
+        init_widget_action(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to commmon"));
         Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
         appbtnmenu->addAction(Fix2CommonUseAction);
         connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fix2commonuseaction_trigger_slot()));
@@ -246,7 +246,7 @@ void RightClickMenu::add_appbtn_action()
 
     if(setting->contains(appname) && setting->value(appname).toInt()==0)
     {
-        init_widget_action(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg","从“常用软件”取消固定");
+        init_widget_action(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
         Unfixed4CommonUseAction->setDefaultWidget(Unfixed4CommonUseWid);
         appbtnmenu->addAction(Unfixed4CommonUseAction);
         connect(Unfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixed4commonuseaction_trigger_slot()));
@@ -262,20 +262,20 @@ void RightClickMenu::add_appbtn_action()
     QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
     if(!ret)
     {
-        init_widget_action(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg","固定到任务栏");
+        init_widget_action(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
         Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
         appbtnmenu->addAction(Fix2TaskBarAction);
         connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
 
     }
     else{
-        init_widget_action(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg","从任务栏取消固定");
+        init_widget_action(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
         Unfixed4TaskBarAction->setDefaultWidget(Unfixed4TaskBarWid);
         appbtnmenu->addAction(Unfixed4TaskBarAction);
         connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
     }
 
-    init_widget_action(Add2DesktopWid,"","添加到桌面快捷方式");
+    init_widget_action(Add2DesktopWid,"",tr("Add to desktop shortcuts"));
     Add2DesktopAction->setDefaultWidget(Add2DesktopWid);
     appbtnmenu->addAction(Add2DesktopAction);
     connect(Add2DesktopAction, SIGNAL(triggered()),this,SLOT(add2desktopaction_trigger_slot()));
@@ -283,14 +283,14 @@ void RightClickMenu::add_appbtn_action()
 
     appbtnmenu->addSeparator();
 
-    init_widget_action(UninstallWid,":/data/img/mainviewwidget/uninstall.svg","卸载");
+    init_widget_action(UninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
     UninstallAction->setDefaultWidget(UninstallWid);
     appbtnmenu->addAction(UninstallAction);
     connect(UninstallAction, SIGNAL(triggered()),this,SLOT(uninstallaction_trigger_slot()));
 
     appbtnmenu->addSeparator();
 
-    init_widget_action(AttributeWid,":/data/img/mainviewwidget/attributeaction.svg","属性");
+    init_widget_action(AttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
     AttributeAction->setDefaultWidget(AttributeWid);
     appbtnmenu->addAction(AttributeAction);
     connect(AttributeAction, SIGNAL(triggered()),this,SLOT(attributeaction_trigger_slot()));
@@ -309,35 +309,35 @@ void RightClickMenu::add_shutdown_action()
 
     LockScreenAction=new QWidgetAction(shutdownmenu);
     LockScreenWid=new QWidget();
-    init_widget_action(LockScreenWid,":/data/img/sidebarwidget/lock.svg"," 锁定屏幕");
+    init_widget_action(LockScreenWid,":/data/img/sidebarwidget/lock.svg",tr("Lock"));
     LockScreenAction->setDefaultWidget(LockScreenWid);
     shutdownmenu->addAction(LockScreenAction);
     connect(LockScreenAction,SIGNAL(triggered()),this,SLOT(lockscreenaction_trigger_slot()));
 
     SwitchUserAction=new QWidgetAction(shutdownmenu);
     SwitchUserWid=new QWidget();
-    init_widget_action(SwitchUserWid,"","切换用户");
+    init_widget_action(SwitchUserWid,"",tr("Switch user"));
     SwitchUserAction->setDefaultWidget(SwitchUserWid);
     shutdownmenu->addAction(SwitchUserAction);
     connect(SwitchUserAction,SIGNAL(triggered()),this,SLOT(switchuseraction_trigger_slot()));
 
     LogOutAction=new QWidgetAction(shutdownmenu);
     LogOutWid=new QWidget();
-    init_widget_action(LogOutWid,"","注销");
+    init_widget_action(LogOutWid,"",tr("Sign out"));
     LogOutAction->setDefaultWidget(LogOutWid);
     shutdownmenu->addAction(LogOutAction);
     connect(LogOutAction,SIGNAL(triggered()),this,SLOT(logoutaction_trigger_slot()));
 
     RebootAction=new QWidgetAction(shutdownmenu);
     RebootWid=new QWidget();
-    init_widget_action(RebootWid,"","重启计算机");
+    init_widget_action(RebootWid,"",tr("Restart"));
     RebootAction->setDefaultWidget(RebootWid);
     shutdownmenu->addAction(RebootAction);
     connect(RebootAction,SIGNAL(triggered()),this,SLOT(rebootaction_trigger_slot()));
 
     ShutDownAction=new QWidgetAction(shutdownmenu);
     ShutDownWid=new QWidget();
-    init_widget_action(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg","关闭计算机");
+    init_widget_action(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg",tr("Shut down"));
     ShutDownAction->setDefaultWidget(ShutDownWid);
     shutdownmenu->addAction(ShutDownAction);
     connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownaction_trigger_slot()));
@@ -350,17 +350,28 @@ void RightClickMenu::add_shutdown_action()
 //其它按钮右键菜单
 void RightClickMenu::add_other_action()
 {
-    init_widget_action(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg","固定到任务栏");
-    OtherFix2TaskBarAction->setDefaultWidget(OtherFix2TaskBarWid);
-    othermenu->addAction(OtherFix2TaskBarAction);
-    connect(OtherFix2TaskBarAction,SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
 
-    init_widget_action(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg","从任务栏取消固定");
-    OtherUnfix2TaskBarAction->setDefaultWidget(OtherUnfix2TaskBarWid);
-//    othermenu->addAction(OtherUnfix2TaskBarAction);
-    connect(OtherUnfix2TaskBarAction,SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+    QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
+    if(!ret)
+    {
+        init_widget_action(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"));
+        OtherFix2TaskBarAction->setDefaultWidget(OtherFix2TaskBarWid);
+        othermenu->addAction(OtherFix2TaskBarAction);
+        connect(OtherFix2TaskBarAction,SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+    }
+    else {
+        init_widget_action(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"));
+        OtherUnfix2TaskBarAction->setDefaultWidget(OtherUnfix2TaskBarWid);
+        othermenu->addAction(OtherUnfix2TaskBarAction);
+        connect(OtherUnfix2TaskBarAction,SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+    }
 
-    init_widget_action(OtherListWid,":/data/img/sidebarwidget/setting.svg","设置开始菜单显示列表");
+    init_widget_action(OtherListWid,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"));
     OtherListAction->setDefaultWidget(OtherListWid);
     othermenu->addAction(OtherListAction);
     connect(OtherListAction,SIGNAL(triggered()),this,SLOT(otherlistaction_trigger_slot()));
@@ -406,9 +417,9 @@ void RightClickMenu::init_widget_action(QWidget *wid, QString iconstr, QString t
 
     QLabel* labeltext=new QLabel(wid);
     labeltext->setStyleSheet(labelstyle);
-    QByteArray textbyte=textstr.toLocal8Bit();
-    char* text=textbyte.data();
-    labeltext->setText(tr(text));
+//    QByteArray textbyte=textstr.toLocal8Bit();
+//    char* text=textbyte.data();
+    labeltext->setText(textstr);
     labeltext->adjustSize();
     layout->addWidget(labeltext);
 
@@ -478,7 +489,8 @@ void RightClickMenu::add2desktopaction_trigger_slot()
     {
         char command[200];
         sprintf(command,"chmod a+x %s",newname.toLocal8Bit().data());
-        system(command);
+//        system(command);
+        QProcess::startDetached(QString::fromLocal8Bit(command));
     }
     action_number=5;
 }
@@ -616,8 +628,10 @@ int RightClickMenu::show_shutdown_menu()
 
 }
 
-void RightClickMenu::show_other_menu()
+void RightClickMenu::show_other_menu(QString appname)
 {
+    this->appname=appname;
+    add_other_action();
     othermenu->exec(QCursor::pos());
 }
 

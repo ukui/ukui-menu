@@ -16,6 +16,9 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -g
 
+TRANSLATIONS+=\
+    ukui_menu_ch.ts
+
 DESTDIR = $$PROJECT_BINDIR
 unix:QMAKE_RPATHDIR+=$$PROJECT_LIBDIR
 
@@ -87,9 +90,7 @@ FORMS    += \
     src/FunctionWidget/functionbuttonwidget.ui \
     src/LetterWidget/letterbuttonwidget.ui \
     src/CommonUseWidget/fullcommonusewidget.ui \
-    src/FunctionWidget/fullfunctionbuttonwidget.ui \
     src/FunctionWidget/fullfunctionwidget.ui \
-    src/LetterWidget/fullletterbuttonwidget.ui \
     src/LetterWidget/fullletterwidget.ui \
     src/SearchResultWidget/searchresultwidget.ui \
     src/SearchResultWidget/fullsearchresultwidget.ui

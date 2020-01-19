@@ -180,6 +180,21 @@ QStringList UkuiMenuInterface::get_desktop_file_path()
     filePathList.removeAll("/usr/share/applications/mate-about.desktop");
     filePathList.removeAll("/usr/share/applications/pcmanfm-qt.desktop");
     filePathList.removeAll("/usr/share/applications/qlipper.desktop");
+    filePathList.removeAll("/usr/share/applications/ktelnetservice5.desktop");
+    filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
+    filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
+    filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
+    filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
+    filePathList.removeAll("/usr/share/applications/galternatives.desktop");
+    filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
+    filePathList.removeAll("/usr/share/applications/update-manager.desktop");
+    filePathList.removeAll("/usr/share/applications/pcmanfm-qt-desktop-pref.desktop");
+    filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
+    filePathList.removeAll("/usr/share/applications/gucharmap.desktop");
+    filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
+    filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
+    filePathList.removeAll("/usr/share/applications/indicator-china-weather.desktop");
+    filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
 
     return filePathList;
 }

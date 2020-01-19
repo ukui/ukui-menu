@@ -44,7 +44,7 @@ private:
     Ui::FunctionButtonWidget *ui;
     QGridLayout* gridLayout=nullptr;
     QVector<QAbstractButton*> vector;
-    QStringList iconlist,iconlightlist,functionnamelist;
+    QStringList icondisabledlist, iconlist,iconlightlist,functionnamelist;
 
 protected:
     void init_widget();

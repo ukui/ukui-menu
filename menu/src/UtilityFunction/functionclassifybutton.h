@@ -48,7 +48,9 @@ public:
                QString hoverbg,
                QString pressedbg,
                int module,
-               QString text);
+               QString text,
+               bool is_fullscreen,
+               bool enabled);
 
     bool is_pressed=false;//记录功能分类模块点击状态
 
@@ -66,6 +68,8 @@ private:
     QPixmap* pixmap;
     QSvgRenderer* svgRender;
     QString text;
+    bool is_fullscreen;
+    bool enabled;
 
 protected:
     void enterEvent(QEvent* e);

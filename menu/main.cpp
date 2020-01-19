@@ -21,6 +21,8 @@
 #include <QDesktopWidget>
 #include <QFile>
 #include <QScreen>
+#include <QTranslator>
+#include <QLocale>
 #include "ukuimenuinterface.h"
 
 int main(int argc, char *argv[])
@@ -37,6 +39,15 @@ int main(int argc, char *argv[])
     QFile qss(":/data/qss/ukui-menu.qss");
     qss.open(QFile::ReadOnly);
     qApp->setStyleSheet(qss.readAll());
+
+    QString locale = QLocale::system().name();
+    QTranslator translator;
+    if (locale == "zh_CN"){
+        if (translator.load(":/ukui_menu_ch.qm"))
+            app.installTranslator(&translator);
+        else
+            qDebug() << "Load translations file" << locale << "failed!";
+    }
 
     char style[400];
     sprintf(style,"QToolTip{border:0px;border-radius:3px;color:#ffffff;background-color:%s}",

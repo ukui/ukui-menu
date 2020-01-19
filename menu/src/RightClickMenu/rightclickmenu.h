@@ -45,7 +45,7 @@ public:
     int show_commonuse_appbtn_menu(QString appname);
     int show_appbtn_menu(QString appname);
     int show_shutdown_menu();
-    void show_other_menu();
+    void show_other_menu(QString appname);
 
 private:
     QString appname;

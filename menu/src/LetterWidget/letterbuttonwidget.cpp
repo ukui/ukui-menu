@@ -47,6 +47,41 @@ void LetterButtonWidget::init_widget()
     gridLayout->setContentsMargins(15,0,6,this->height()-48*6);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
+
+    char btncolor[400];
+    sprintf(btncolor,"QToolButton{background:transparent;color:#ffffff;font-size:20px;padding-left:0px;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;font-size:20px;}\
+            QToolButton:pressed{background-color:%s;color:#ffffff;font-size:20px;}\
+            QToolButton:disabled{color:rgba(255, 255, 255, 0.25);}", ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
+
+    QStringList letterlist;
+    letterlist.clear();
+    for(int i=0;i<26;i++)
+    {
+        char letter=static_cast<char>(65+i);
+        letterlist.append(QString(QChar(letter)));
+    }
+    letterlist.append("&&");
+    letterlist.append("#");
+
+    for(int row=0;row<6;row++)
+    {
+        for(int col=0;col<5;col++)
+        {
+            if(row*5+col<letterlist.size())
+            {
+                QToolButton* btn=new QToolButton(this);
+                btn->setFixedSize(55,48);
+                btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+                btn->setText(letterlist.at(row*5+col));
+                gridLayout->addWidget(btn,row,col);
+                connect(btn, SIGNAL(clicked()), this, SLOT(letterbtn_clicked_slot()));
+            }
+            else {
+                break;
+            }
+        }
+    }
 }
 
 /**
@@ -64,30 +99,17 @@ void LetterButtonWidget::letterbtn_clicked_slot()
  */
 void LetterButtonWidget::recv_letterbtn_list(QStringList list)
 {
-    char btncolor[400];
-    sprintf(btncolor,"QToolButton{background:transparent;color:rgba(255, 255, 255, 0.5);font-size:20px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;font-size:20px;}\
-            QToolButton:pressed{background-color:%s;color:#8b8b8b;font-size:20px;}\
-            QToolButton:disabled{color:#33ffffff;}", ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
-
-    if(list.indexOf("&")!=-1)
-            list.replace(list.indexOf("&"),"&&");
     for(int row=0;row<6;row++)
     {
         for(int col=0;col<5;col++)
         {
-            if(row*5+col<list.size())
-            {
-                QToolButton* btn=new QToolButton(this);
-                btn->setFixedSize(55,48);
-                btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-                btn->setText(list.at(row*5+col));
-                gridLayout->addWidget(btn,row,col);
-                connect(btn, SIGNAL(clicked()), this, SLOT(letterbtn_clicked_slot()));
-            }
-            else {
-                break;
-            }
+            QLayoutItem* item=gridLayout->itemAt(row*5+col);
+            QToolButton* btn=static_cast<QToolButton*>(item->widget());
+            QString letterstr=btn->text();
+            if(list.indexOf(letterstr.at(0))==-1)
+                btn->setEnabled(false);
+
+            if(row*5+col==27) break;
         }
     }
 }

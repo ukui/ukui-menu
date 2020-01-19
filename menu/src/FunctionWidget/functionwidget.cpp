@@ -81,60 +81,59 @@ void FunctionWidget::fill_app_listview()
     classificationbtnrowlist.clear();
 
     QVector<QStringList> vector=pUkuiMenuInterface->get_functional_classification();
-
     QStringList recentlist=vector.at(0);
     if(!recentlist.isEmpty())
     {
-        insert_classification_btn("最近");
+        insert_classification_btn(tr("Recently"));
         insert_app_list(recentlist);
     }
 
     QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
-        insert_classification_btn("网络");
+        insert_classification_btn(tr("Internet"));
         insert_app_list(netlist);
     }
     QStringList sociallist=vector.at(2);
     if(!sociallist.isEmpty())
     {
-        insert_classification_btn("社交");
+        insert_classification_btn(tr("Social"));
         insert_app_list(sociallist);
     }
     QStringList avlist=vector.at(3);
     if(!avlist.isEmpty())
     {
-        insert_classification_btn("影音");
+        insert_classification_btn(tr("Video"));
         insert_app_list(avlist);
     }
     QStringList developlist=vector.at(4);
     if(!developlist.isEmpty())
     {
-        insert_classification_btn("开发");
+        insert_classification_btn(tr("Development"));
         insert_app_list(developlist);
     }
     QStringList graphicslist=vector.at(5);
     if(!graphicslist.isEmpty())
     {
-        insert_classification_btn("图像");
+        insert_classification_btn(tr("Image"));
         insert_app_list(graphicslist);
     }
     QStringList gamelist=vector.at(6);
     if(!gamelist.isEmpty())
     {
-        insert_classification_btn("游戏");
+        insert_classification_btn(tr("Game"));
         insert_app_list(gamelist);
     }
     QStringList officelist=vector.at(7);
     if(!officelist.isEmpty())
     {
-        insert_classification_btn("办公");
+        insert_classification_btn(tr("Office"));
         insert_app_list(officelist);
     }
     QStringList educationlist=vector.at(8);
     if(!educationlist.isEmpty())
     {
-        insert_classification_btn("教育");
+        insert_classification_btn(tr("Education"));
 
         insert_app_list(educationlist);
     }
@@ -142,13 +141,13 @@ void FunctionWidget::fill_app_listview()
     QStringList systemadminlist=vector.at(9);
     if(!systemadminlist.isEmpty())
     {
-        insert_classification_btn("系统");
+        insert_classification_btn(tr("System"));
         insert_app_list(systemadminlist);
     }
     QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
-        insert_classification_btn("其它");
+        insert_classification_btn(tr("Others"));
         insert_app_list(otherlist);
     }
 
@@ -195,12 +194,10 @@ void FunctionWidget::exec_app_name(QString exec)
 {
     emit send_hide_mainwindow_signal();
     //移除启动参数%u或者%U
-    for(int i=0;i<exec.length();i++)
+    if(exec.contains("%"))
     {
-        if(exec.at(i)=='%')
-        {
-            exec.remove(i,2);
-        }
+        int index=exec.indexOf(QString("%").at(0));
+        exec.remove(index-1,3);
     }
     QProcess::startDetached(exec);
 }
@@ -216,60 +213,59 @@ void FunctionWidget::update_app_listview()
     data.clear();
 
     QVector<QStringList> vector=pUkuiMenuInterface->get_functional_classification();
-
     QStringList recentlist=vector.at(0);
     if(!recentlist.isEmpty())
     {
-        insert_classification_btn("最近");
+        insert_classification_btn(tr("Recently"));
         insert_app_list(recentlist);
     }
 
     QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
-        insert_classification_btn("网络");
+        insert_classification_btn(tr("Internet"));
         insert_app_list(netlist);
     }
     QStringList sociallist=vector.at(2);
     if(!sociallist.isEmpty())
     {
-        insert_classification_btn("社交");
+        insert_classification_btn(tr("Social"));
         insert_app_list(sociallist);
     }
     QStringList avlist=vector.at(3);
     if(!avlist.isEmpty())
     {
-        insert_classification_btn("影音");
+        insert_classification_btn(tr("Video"));
         insert_app_list(avlist);
     }
     QStringList developlist=vector.at(4);
     if(!developlist.isEmpty())
     {
-        insert_classification_btn("开发");
+        insert_classification_btn(tr("Development"));
         insert_app_list(developlist);
     }
     QStringList graphicslist=vector.at(5);
     if(!graphicslist.isEmpty())
     {
-        insert_classification_btn("图像");
+        insert_classification_btn(tr("Image"));
         insert_app_list(graphicslist);
     }
     QStringList gamelist=vector.at(6);
     if(!gamelist.isEmpty())
     {
-        insert_classification_btn("游戏");
+        insert_classification_btn(tr("Game"));
         insert_app_list(gamelist);
     }
     QStringList officelist=vector.at(7);
     if(!officelist.isEmpty())
     {
-        insert_classification_btn("办公");
+        insert_classification_btn(tr("Office"));
         insert_app_list(officelist);
     }
     QStringList educationlist=vector.at(8);
     if(!educationlist.isEmpty())
     {
-        insert_classification_btn("教育");
+        insert_classification_btn(tr("Education"));
 
         insert_app_list(educationlist);
     }
@@ -277,13 +273,13 @@ void FunctionWidget::update_app_listview()
     QStringList systemadminlist=vector.at(9);
     if(!systemadminlist.isEmpty())
     {
-        insert_classification_btn("系统");
+        insert_classification_btn(tr("System"));
         insert_app_list(systemadminlist);
     }
     QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
-        insert_classification_btn("其它");
+        insert_classification_btn(tr("Others"));
         insert_app_list(otherlist);
     }
     applistview->updateData(data);

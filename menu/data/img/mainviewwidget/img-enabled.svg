@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="图层_6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 19 19" style="enable-background:new 0 0 19 19;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+</style>
+<title>画板 1</title>
+<g>
+	<g>
+		<path class="st0" d="M16,3c0.6,0,1,0.4,1,1v11c0,0.6-0.4,1-1,1H3c-0.6,0-1-0.4-1-1V4c0-0.6,0.4-1,1-1H16 M16,2H3C1.9,2,1,2.9,1,4
+			v11c0,1.1,0.9,2,2,2h13c1.1,0,2-0.9,2-2V4C18,2.9,17.1,2,16,2L16,2z"/>
+	</g>
+</g>
+<polygon class="st0" points="3,14 7,6 11,12 13,8 16,14 16,15 3,15 "/>
+<g>
+	<circle class="st0" cx="13.5" cy="5.5" r="1.5"/>
+</g>
+</svg>

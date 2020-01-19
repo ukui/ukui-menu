@@ -158,25 +158,29 @@ void SideBarWidget::add_sidebar_btn()
     connect(controlbtn,SIGNAL(clicked()),this,SLOT(controlbtn_clicked_slot()));
     connect(shutdownbtn,SIGNAL(clicked()),this,SLOT(shutdownbtn_clicked_slot()));
     connect(usericonbtn,SIGNAL(clicked()),this,SLOT(usericonbtn_clicked_slot()));
+    otherButtonList.append(usericonbtn);
+    otherButtonList.append(computerbtn);
+    otherButtonList.append(controlbtn);
+    otherButtonList.append(shutdownbtn);
 
     QString fontsizestr=QString::number(Style::SideBarFontSize)+"px";
     char textstyle[100];
     sprintf(textstyle,"QLabel{background:transparent;color:#ffffff;font-size:%s;}",
             fontsizestr.toLocal8Bit().data());
     commonusebtnname=new QLabel;
-    commonusebtnname->setText(tr("常用软件"));
+    commonusebtnname->setText(tr("Common"));
     commonusebtnname->setStyleSheet(textstyle);
     commonusebtnname->adjustSize();
 //    commonusebtn->layout()->addWidget(commonusebtnname);
 
     letterbtnname=new QLabel;
-    letterbtnname->setText(tr("字母排序"));
+    letterbtnname->setText(tr("Letter"));
     letterbtnname->setStyleSheet(textstyle);
     letterbtnname->adjustSize();
 //    letterbtn->layout()->addWidget(letterbtnname);
 
     functionbtnname=new QLabel;
-    functionbtnname->setText(tr("功能分类"));
+    functionbtnname->setText(tr("Function"));
     functionbtnname->setStyleSheet(textstyle);
     functionbtnname->adjustSize();
 //    functionbtn->layout()->addWidget(functionbtnname);
@@ -188,19 +192,19 @@ void SideBarWidget::add_sidebar_btn()
     usericonbtnname->adjustSize();
 
     computerbtnname=new QLabel;
-    computerbtnname->setText(tr("我的电脑"));
+    computerbtnname->setText(tr("Computer"));
     computerbtnname->setStyleSheet(textstyle);
     computerbtnname->adjustSize();
 //    computerbtn->layout()->addWidget(computerbtnname);
 
     controlbtnname=new QLabel;
-    controlbtnname->setText(tr("控制面板"));
+    controlbtnname->setText(tr("Settings"));
     controlbtnname->setStyleSheet(textstyle);
     controlbtnname->adjustSize();
 //    controlbtn->layout()->addWidget(controlbtnname);
 
     shutdownbtnname=new QLabel;
-    shutdownbtnname->setText(tr("关机"));
+    shutdownbtnname->setText(tr("Power"));
     shutdownbtnname->setStyleSheet(textstyle);
     shutdownbtnname->adjustSize();
 //    shutdownbtn->layout()->addWidget(shutdownbtnname);
@@ -278,28 +282,28 @@ void SideBarWidget::set_btn_style(QPushButton *btn, QString btnicon, int num)
         painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
         QPainterPath path;
-        path.addEllipse(1, 1, Style::SideBarIconSize+2,Style::SideBarIconSize+2);
+        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
 
         //画背景
-        QColor color;
-        color.setNamedColor(UserIconBackground);
-        painter.setOpacity(UserIconOpacity);
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(QBrush(color));
-        painter.drawPath(path);
+//        QColor color;
+//        color.setNamedColor(UserIconBackground);
+//        painter.setOpacity(UserIconOpacity);
+//        painter.setPen(Qt::NoPen);
+//        painter.setBrush(QBrush(color));
+//        painter.drawPath(path);
 
         //填充图片
         painter.setOpacity(1);
         painter.setClipPath(path);
-        painter.drawPixmap(1, 1, Style::SideBarIconSize+2,Style::SideBarIconSize+2, pixmapa);
+        painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa);
 
         //画圈圈
-        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-        painter.setOpacity(1);
-        color.setNamedColor("#d5d5d5");
-        painter.setPen(QPen(color,2));
-        painter.setBrush(Qt::NoBrush);
-        painter.drawPath(path);
+//        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+//        painter.setOpacity(1);
+//        color.setNamedColor("#d5d5d5");
+//        painter.setPen(QPen(color,2));
+//        painter.setBrush(Qt::NoBrush);
+//        painter.drawPath(path);
 
         labelicon->setPixmap(pixmap);
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
@@ -352,7 +356,14 @@ void SideBarWidget::add_right_click_menu(QPushButton *btn)
 void SideBarWidget::otherbtn_right_click_slot()
 {
     othermenu=new RightClickMenu(this);
-    othermenu->show_other_menu();
+    QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
+    int index=otherButtonList.indexOf(btn);
+    QString desktopfp;
+    if(index==1)
+        desktopfp=QString("/usr/share/applications/peony-qt.desktop");
+    if(index==2)
+        desktopfp=QString("/usr/share/applications/ukui-control-center.desktop");
+    othermenu->show_other_menu(pUkuiMenuInterface->get_app_name(desktopfp));
 }
 
 void SideBarWidget::computerbtn_clicked_slot()
@@ -366,12 +377,10 @@ void SideBarWidget::controlbtn_clicked_slot()
     emit send_hide_mainwindow_signal();
     QString execpath=pUkuiMenuInterface->get_app_exec(QString("/usr/share/applications/ukui-control-center.desktop"));
     //移除启动参数%u或者%U
-    for(int i=0;i<execpath.length();i++)
+    if(execpath.contains("%"))
     {
-        if(execpath.at(i)=='%')
-        {
-            execpath.remove(i,2);
-        }
+        int index=execpath.indexOf(QString("%").at(0));
+        execpath.remove(index-1,3);
     }
     QProcess::startDetached(execpath);
 
@@ -385,7 +394,7 @@ void SideBarWidget::shutdownbtn_clicked_slot()
 void SideBarWidget::usericonbtn_clicked_slot()
 {
     emit send_hide_mainwindow_signal();
-    system("ukui-control-center --u");
+    QProcess::startDetached(QString("ukui-control-center --u"));
 }
 
 void SideBarWidget::user_accounts_changed()
@@ -403,28 +412,28 @@ void SideBarWidget::user_accounts_changed()
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     QPainterPath path;
-    path.addEllipse(1, 1, Style::SideBarIconSize+2,Style::SideBarIconSize+2);
+    path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
 
     //画背景
-    QColor color;
-    color.setNamedColor(UserIconBackground);
-    painter.setOpacity(UserIconOpacity);
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QBrush(color));
-    painter.drawPath(path);
+//    QColor color;
+//    color.setNamedColor(UserIconBackground);
+//    painter.setOpacity(UserIconOpacity);
+//    painter.setPen(Qt::NoPen);
+//    painter.setBrush(QBrush(color));
+//    painter.drawPath(path);
 
     //填充图片
     painter.setOpacity(1);
     painter.setClipPath(path);
-    painter.drawPixmap(1, 1, Style::SideBarIconSize+2,Style::SideBarIconSize+2, pixmapa);
+    painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa);
 
     //画圈圈
-    path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-    painter.setOpacity(1);
-    color.setNamedColor("#d5d5d5");
-    painter.setPen(QPen(color,2));
-    painter.setBrush(Qt::NoBrush);
-    painter.drawPath(path);
+//    path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+//    painter.setOpacity(1);
+//    color.setNamedColor("#d5d5d5");
+//    painter.setPen(QPen(color,2));
+//    painter.setBrush(Qt::NoBrush);
+//    painter.drawPath(path);
 
     QLayoutItem* item=usericonbtn->layout()->itemAt(0);
     QLabel* labelicon=qobject_cast<QLabel*>(item->widget());

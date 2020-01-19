@@ -121,8 +121,6 @@ QVariant FullListModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole:
     {
         return QSize(Style::AppListItemSizeWidth,Style::AppListItemSizeWidth);
-//        return  QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth);
-
     }
     default:
         return QVariant();

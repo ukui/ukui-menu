@@ -65,5 +65,17 @@
         <file>data/img/sidebarwidget/usericon-darkcolor.svg</file>
         <file>data/img/sidebarwidget/usericon-lightcolor.svg</file>
         <file>data/img/mainviewwidget/lock-fs.svg</file>
+        <file>data/img/mainviewwidget/develop-enabled.svg</file>
+        <file>data/img/mainviewwidget/game-enabled.svg</file>
+        <file>data/img/mainviewwidget/img-enabled.svg</file>
+        <file>data/img/mainviewwidget/net-enabled.svg</file>
+        <file>data/img/mainviewwidget/office-enabled.svg</file>
+        <file>data/img/mainviewwidget/other-enabled.svg</file>
+        <file>data/img/mainviewwidget/reading-enabled.svg</file>
+        <file>data/img/mainviewwidget/recent-enabled.svg</file>
+        <file>data/img/mainviewwidget/social-enabled.svg</file>
+        <file>data/img/mainviewwidget/system-enabled.svg</file>
+        <file>data/img/mainviewwidget/video-enabled.svg</file>
+        <file>ukui_menu_ch.qm</file>
     </qresource>
 </RCC>

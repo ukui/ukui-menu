@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "attributedialog.h"
 #include "ui_attributedialog.h"
 #include <QDebug>
@@ -101,9 +119,12 @@ void AttributeDialog::init_widget()
     typevalueEdit=new QLineEdit;
     execvalueEdit=new  QLineEdit;
     commentvalueEdit=new QLineEdit;
-    set_controls_style(typeLabel,typevalueEdit,"类型",38);
-    set_controls_style(execLabel,execvalueEdit,"命令",38);
-    set_controls_style(commentLabel,commentvalueEdit,"备注",38);
+//    typeLabel->setText(tr("Type")+":");
+//    execLabel->setText(tr("Exec")+":");
+//    commentLabel->setText(tr("Comment")+":");
+    set_controls_style(typeLabel,typevalueEdit,tr("Type"),38);
+    set_controls_style(execLabel,execvalueEdit,tr("Exec"),38);
+    set_controls_style(commentLabel,commentvalueEdit,tr("Comment"),38);
 
 
     gridLayout->addWidget(typeLabel,0,0);
@@ -123,7 +144,7 @@ void AttributeDialog::init_widget()
     btnleftSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     btn=new QPushButton(closeWid);
     btn->setFixedSize(120,34);
-    btn->setText(tr("关闭"));
+    btn->setText(tr("Close"));
     btn->setFocusPolicy(Qt::NoFocus);
     closewidLayout->addItem(btnleftSpacer);
     closewidLayout->addWidget(btn);
@@ -197,9 +218,9 @@ void AttributeDialog::init_widget()
 
 void AttributeDialog::set_controls_style(QLabel *edit, QLineEdit *valueEdit, QString str, int height)
 {
-    QByteArray byte=str.toLocal8Bit();
-    char* arg=byte.data();
-    edit->setText(tr(arg)+":");
+//    QByteArray byte=str.toLocal8Bit();
+//    char* arg=byte.data();
+    edit->setText(str+":");
     edit->setStyleSheet("background:transparent;color:#ffffff;font-size:14px;border:0px;");
     edit->setFixedSize(50,height);
 //    edit->setAlignment(Qt::AlignLeft);
@@ -230,7 +251,7 @@ void AttributeDialog::set_attribute_value(QString desktopfp)
     QString type=pUkuiMenuInterface->get_app_type(desktopfp);
     QString exec=pUkuiMenuInterface->get_app_exec(desktopfp);
     QString comment=pUkuiMenuInterface->get_app_comment(desktopfp);
-    typevalueEdit->setText("应用程序");
+    typevalueEdit->setText(type);
     execvalueEdit->setText(exec);
     commentvalueEdit->setText(comment);
     execvalueEdit->setCursorPosition(0);

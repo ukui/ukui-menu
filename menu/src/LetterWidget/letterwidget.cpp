@@ -150,12 +150,10 @@ void LetterWidget::exec_app_name(QString exec)
 {
     emit send_hide_mainwindow_signal();
     //移除启动参数%u或者%U
-    for(int i=0;i<exec.length();i++)
+    if(exec.contains("%"))
     {
-        if(exec.at(i)=='%')
-        {
-            exec.remove(i,2);
-        }
+        int index=exec.indexOf(QString("%").at(0));
+        exec.remove(index-1,3);
     }
     QProcess::startDetached(exec);
 }

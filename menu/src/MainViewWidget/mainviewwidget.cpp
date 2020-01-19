@@ -181,7 +181,7 @@ void MainViewWidget::init_query_lineedit()
     font.setPixelSize(Style::QueryLineEditFontSize);
     pQueryText=new QLabel(pIconTextWid);
     pQueryText->setFont(font);
-    pQueryText->setText(tr("搜索"));
+    pQueryText->setText(tr("Search"));
     pQueryText->setStyleSheet("background:transparent;color:#626c6e;");
     pQueryText->adjustSize();
     pIconTextWidLayout->addWidget(pQueryIcon);

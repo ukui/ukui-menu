@@ -145,14 +145,11 @@ void FullLetterWidget::exec_app_name(QString appname)
 {
     emit send_hide_mainwindow_signal();
     QString execpath=pUkuiMenuInterface->get_app_exec(pUkuiMenuInterface->get_desktop_path_by_app_name(appname));
-    //    qDebug()<<execpath;
     //移除启动参数%u或者%U
-    for(int i=0;i<execpath.length();i++)
+    if(execpath.contains("%"))
     {
-        if(execpath.at(i)=='%')
-        {
-            execpath.remove(i,2);
-        }
+        int index=execpath.indexOf(QString("%").at(0));
+        execpath.remove(index-1,3);
     }
     QProcess::startDetached(execpath);
 

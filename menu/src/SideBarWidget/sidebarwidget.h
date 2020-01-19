@@ -84,6 +84,7 @@ private:
     QPushButton* shutdownbtn=nullptr;
     QLabel* shutdownbtnname=nullptr;
     QSpacerItem* verticalSpacer=nullptr;
+    QList<QAbstractButton*> otherButtonList;
 
     MainViewWidget* mainviewwid=nullptr;
 

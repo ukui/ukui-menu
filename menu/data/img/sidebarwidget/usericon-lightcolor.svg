@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 24.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 21 21" style="enable-background:new 0 0 21 21;" xml:space="preserve">
+	 viewBox="0 0 23 23" style="enable-background:new 0 0 23 23;" xml:space="preserve">
 <style type="text/css">
-	.st0{opacity:0.95;}
+	.st0{opacity:0.18;enable-background:new    ;}
+	.st1{opacity:0.95;}
 </style>
-<g class="st0">
-	<circle cx="10.5" cy="7.5" r="3.5"/>
-	<path d="M13.5,12h-6C6.1,12,5,13.1,5,14.5v1C5,16.3,5.7,17,6.5,17h8c0.8,0,1.5-0.7,1.5-1.5v-1C16,13.1,14.9,12,13.5,12z"/>
+<rect class="st0" width="23" height="23"/>
+<g class="st1">
+	<circle cx="11.5" cy="8.5" r="3.5"/>
+	<path d="M14.5,13h-6C7.1,13,6,14.1,6,15.5v1C6,17.3,6.7,18,7.5,18h8c0.8,0,1.5-0.7,1.5-1.5v-1C17,14.1,15.9,13,14.5,13z"/>
 </g>
 </svg>

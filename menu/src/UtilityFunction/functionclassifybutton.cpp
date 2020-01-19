@@ -27,7 +27,9 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
                        QString hoverbg,
                        QString pressedbg,
                        int module,
-                       QString text):
+                       QString text,
+                       bool is_fullscreen,
+                       bool enabled):
     QPushButton (parent)
 {
     this->width=width;
@@ -39,6 +41,8 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     this->pressedbg=pressedbg;
     this->module=module;
     this->text=text;
+    this->is_fullscreen=is_fullscreen;
+    this->enabled=enabled;
 
     this->setFocusPolicy(Qt::NoFocus);
     svgRender=new QSvgRenderer(this);
@@ -57,7 +61,15 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     QFont font;
     font.setPixelSize(Style::LeftFontSize);
     textlabel->setFont(font);
-    textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
+    if(is_fullscreen)
+        textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
+    else
+    {
+        if(enabled)
+            textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255);");
+        else
+            textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 25%);");
+    }
     textlabel->adjustSize();
 
     mainlayout=new QHBoxLayout;
@@ -75,7 +87,10 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
     QByteArray byte=hoverbg.toLocal8Bit();
     char* hover=byte.data();
     char style[100];
-    sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",hover);
+    if(enabled)
+        sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",hover);
+    else
+        sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background:transparent");
     this->setStyleSheet(QString::fromLocal8Bit(style));
     delete svgRender;
     svgRender=new QSvgRenderer(this);
@@ -89,7 +104,8 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
     QFont font;
     font.setPixelSize(Style::LeftFontSize);
     textlabel->setFont(font);
-    textlabel->setStyleSheet("background:transparent;color:#ffffff;");
+    if(enabled)
+        textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
     textlabel->adjustSize();
 }
 
@@ -125,10 +141,13 @@ void FunctionClassifyButton::leaveEvent(QEvent *e)
     svgRender->render(&p);
     iconlabel->setPixmap(*pixmap);
     iconlabel->setFixedSize(pixmap->size());
-    if(is_pressed)
-        textlabel->setStyleSheet("background:transparent;color:#ffffff;");
-    else
-        textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
+    if(is_fullscreen)
+    {
+        if(is_pressed)
+            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
+        else
+            textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
+    }
     textlabel->adjustSize();
 }
 
@@ -138,7 +157,8 @@ void FunctionClassifyButton::mousePressEvent(QMouseEvent *event)
     QByteArray byte=pressedbg.toLocal8Bit();
     char* pressed=byte.data();
     char style[100];
-    sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",pressed);
+    if(enabled)
+        sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",pressed);
     if(event->button()==Qt::LeftButton)
     {
         this->setStyleSheet(QString::fromLocal8Bit(style));
@@ -165,7 +185,8 @@ void FunctionClassifyButton::mouseReleaseEvent(QMouseEvent *event)
     QByteArray byte=hoverbg.toLocal8Bit();
     char* hover=byte.data();
     char style[100];
-    sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",hover);
+    if(enabled)
+        sprintf(style,"border:0px;border-radius:2px;padding-left:0px;background-color:%s;",hover);
     if(event->button()==Qt::LeftButton)
     {
         this->setStyleSheet(QString::fromLocal8Bit(style));

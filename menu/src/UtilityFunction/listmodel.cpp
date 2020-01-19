@@ -73,56 +73,6 @@ bool ListModel::removeRow(int row, const QModelIndex &parent)
 
 QVariant ListModel::data(const QModelIndex &index, int role) const
 {
-//    if(!index.isValid())
-//        return QVariant();
-//    switch (role){
-//    case Qt::DisplayRole:
-//    {
-//        if(index.column()==0)
-//        {
-//            int row=index.row();
-//            QStringList val=m_data.at(row);
-//            if(val.at(1).toInt()==0)
-//            {
-//                return val.at(0);
-//            }
-//        }
-//        if(index.column()==1)
-//        {
-//            int row=index.row();
-//            QStringList val=m_data.at(row);
-//            if(val.at(1).toInt()==0)
-////                return val.at(0);
-////                return val;
-//                return QVariant();
-//            else
-//            {
-//                QString appname=KylinStartMenuInterface::get_app_name(val.at(0));
-//                return appname;
-//            }
-
-//        }
-//    }
-//    case Qt::DecorationRole:
-//    {
-//        if(index.column()==0)
-//        {
-//            int row=index.row();
-//            QStringList val=m_data.at(row);
-//            if(val.at(1).toInt()==0)
-//                return QVariant();
-//            else
-//            {
-//                QString iconstr=KylinStartMenuInterface::get_app_icon(val.at(0));
-//                QIcon icon=QIcon::fromTheme(iconstr);
-//                return icon;
-//            }
-//        }
-//    }
-//    default:
-//        return QVariant();
-//    }
-
     if(!index.isValid())
         return QVariant();
     switch (role){
@@ -147,14 +97,6 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
     {
         int row=index.row();
         QStringList val=m_data.at(row);
-//        if(val.at(1).toInt()==0)
-//            return val.at(0);
-//        else
-//        {
-//            QString appname=KylinStartMenuInterface::get_app_name(val.at(0));
-//            return appname;
-//        }
-
         return val;
     }
     case Qt::SizeHintRole:

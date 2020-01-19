@@ -49,18 +49,31 @@ void FunctionButtonWidget::init_widget()
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
 
+    icondisabledlist.clear();
+    icondisabledlist.append(":/data/img/mainviewwidget/recent-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/net-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/social-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/video-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/develop-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/img-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/game-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/office-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/reading-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/system-disabled.svg");
+    icondisabledlist.append(":/data/img/mainviewwidget/other-disabled.svg");
+
     iconlist.clear();
-    iconlist.append(":/data/img/mainviewwidget/recent-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/net-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/social-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/video-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/develop-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/img-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/game-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/office-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/reading-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/system-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/other-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/recent-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/net-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/social-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/video-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/develop-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/img-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/game-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/office-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/reading-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/system-enabled.svg");
+    iconlist.append(":/data/img/mainviewwidget/other-enabled.svg");
 
     iconlightlist.clear();
     iconlightlist.append(":/data/img/mainviewwidget/recent.svg");
@@ -76,17 +89,41 @@ void FunctionButtonWidget::init_widget()
     iconlightlist.append(":/data/img/mainviewwidget/other.svg");
 
     functionnamelist.clear();
-    functionnamelist.append("最近");
-    functionnamelist.append("网络");
-    functionnamelist.append("社交");
-    functionnamelist.append("影音");
-    functionnamelist.append("开发");
-    functionnamelist.append("图像");
-    functionnamelist.append("游戏");
-    functionnamelist.append("办公");
-    functionnamelist.append("教育");
-    functionnamelist.append("系统");
-    functionnamelist.append("其它");
+    functionnamelist.append(tr("Recently"));
+    functionnamelist.append(tr("Internet"));
+    functionnamelist.append(tr("Social"));
+    functionnamelist.append(tr("Video"));
+    functionnamelist.append(tr("Development"));
+    functionnamelist.append(tr("Image"));
+    functionnamelist.append(tr("Game"));
+    functionnamelist.append(tr("Office"));
+    functionnamelist.append(tr("Education"));
+    functionnamelist.append(tr("System"));
+    functionnamelist.append(tr("Others"));
+
+//    for(int i=0;i<11;i++)
+//    {
+//        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
+//                                                                   106,
+//                                                                   48,
+//                                                                   iconlist.at(i),
+//                                                                   iconlightlist.at(i),
+//                                                                   ClassifyBtnHoverBackground,
+//                                                                   ClassifyBtnHoverBackground,
+//                                                                   2,
+//                                                                   functionnamelist.at(i));
+//        vector.append(iconbtn);
+//        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionbtn_clicked_slot()));
+//    }
+
+//    for(int row=0;row<6;row++)
+//        for(int col=0;col<2;col++)
+//        {
+//            if(row*2+col < vector.size())
+//                gridLayout->addWidget(vector.at(row*2+col),row,col);
+//            else
+//                break;
+//        }
 }
 
 /**
@@ -106,27 +143,74 @@ void FunctionButtonWidget::functionbtn_clicked_slot()
  */
 void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
 {
-    for(int i=0;i<list.size();i++)
-    {
-        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
-                                                                   106,
-                                                                   48,
-                                                                   iconlist.at(functionnamelist.indexOf(list.at(i))),
-                                                                   iconlightlist.at(functionnamelist.indexOf(list.at(i))),
-                                                                   ClassifyBtnHoverBackground,
-                                                                   ClassifyBtnHoverBackground,
-                                                                   2,
-                                                                   list.at(i));
-        vector.append(iconbtn);
-        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionbtn_clicked_slot()));
-    }
-
     for(int row=0;row<6;row++)
         for(int col=0;col<2;col++)
         {
-            if(row*2+col < vector.size())
-                gridLayout->addWidget(vector.at(row*2+col),row,col);
-            else
-                break;
+            FunctionClassifyButton* iconbtn=nullptr;
+            if(list.indexOf(functionnamelist.at(row*2+col))==-1)
+            {
+                iconbtn=new FunctionClassifyButton(this,
+                                                   106,
+                                                   48,
+                                                   icondisabledlist.at(row*2+col),
+                                                   icondisabledlist.at(row*2+col),
+                                                   ClassifyBtnHoverBackground,
+                                                   ClassifyBtnHoverBackground,
+                                                   2,
+                                                   functionnamelist.at(row*2+col),
+                                                   false,
+                                                   false);
+                iconbtn->setEnabled(false);
+            }
+            else {
+                iconbtn=new FunctionClassifyButton(this,
+                                                   106,
+                                                   48,
+                                                   iconlist.at(row*2+col),
+                                                   iconlightlist.at(row*2+col),
+                                                   ClassifyBtnHoverBackground,
+                                                   ClassifyBtnHoverBackground,
+                                                   2,
+                                                   functionnamelist.at(row*2+col),
+                                                   false,
+                                                   true);
+                connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionbtn_clicked_slot()));
+            }
+            QLayoutItem* item=gridLayout->itemAt(row*2+col);
+            if(item!=nullptr)
+            {
+                QWidget* wid=item->widget();
+                gridLayout->replaceWidget(wid,iconbtn);
+            }
+            else {
+                gridLayout->addWidget(iconbtn,row,col);
+            }
+
+            if(row*2+col==10)break;
         }
+
+
+//    for(int i=0;i<list.size();i++)
+//    {
+//        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
+//                                                                   106,
+//                                                                   48,
+//                                                                   iconlist.at(functionnamelist.indexOf(list.at(i))),
+//                                                                   iconlightlist.at(functionnamelist.indexOf(list.at(i))),
+//                                                                   ClassifyBtnHoverBackground,
+//                                                                   ClassifyBtnHoverBackground,
+//                                                                   2,
+//                                                                   list.at(i));
+//        vector.append(iconbtn);
+//        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionbtn_clicked_slot()));
+//    }
+
+//    for(int row=0;row<6;row++)
+//        for(int col=0;col<2;col++)
+//        {
+//            if(row*2+col < vector.size())
+//                gridLayout->addWidget(vector.at(row*2+col),row,col);
+//            else
+//                break;
+//        }
 }
