@@ -1,4 +1,5 @@
 libukui-menu.so.1 libukui-menu1 #MINVER#
+* Build-Depends-Package: libukui-menu-dev
  _ZN10QByteArrayD1Ev@Base 0.9.0
  _ZN10QByteArrayD2Ev@Base 0.9.0
  _ZN10QDBusReplyI15QDBusObjectPathED1Ev@Base 0.9.0

@@ -2,15 +2,17 @@ Source: ukui-menu
 Section: x11
 Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
-Uploaders: liuhao <liuhao@kylinos.cn>
-Build-Depends: debhelper (>=12),
+Uploaders: Aron Xu <aron@debian.org>,
+           handsome_feng <jianfengli@ubuntukylin.com>
+Build-Depends: debhelper-compat (=12),
                qtbase5-dev,
                libqt5svg5-dev,
                libglib2.0-dev (>= 2.36)
-Standards-Version: 4.4.0
-Homepage: https://github.com/explorer-cs/ukui-start-menu
-Vcs-Git: https://github.com/explorer-cs/ukui-start-menu
-Vcs-Browser: https://github.com/explorer-cs/ukui-start-menu
+Standards-Version: 4.5.0
+Rules-Requires-Root: no
+Homepage: https://github.com/ukui/ukui-menu
+Vcs-Git: https://github.com/ukui/ukui-menu
+Vcs-Browser: https://github.com/ukui/ukui-menu
 
 Package: ukui-menu
 Architecture: any

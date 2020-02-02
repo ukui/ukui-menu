@@ -1,5 +1,81 @@
-ukui-menu (0.9.0-1) eoan; urgency=medium
+ukui-menu (2.0.0-1) unstable; urgency=medium
 
-  * Initial release. (Closes: #919549)
+  * New upstream release.
+    - Migrate from gtk to qt.
 
- -- liuhao <liuhao@kylinos.cn>  Sun, 03 Nov 2019 13:37:43 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Sun, 02 Feb 2020 15:22:30 +0800
+
+ukui-menu (1.1.12-1) unstable; urgency=medium
+
+  * Remove the duplicated timed-shutdown.py file.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 19 Aug 2019 14:57:14 +0800
+
+ukui-menu (1.1.11-1) unstable; urgency=medium
+
+  * Upload to unstable.
+  * Add network detection for feedback.
+  * Update some labels.
+  * Update tr.po.
+  * debian/control:
+    - Bump standards-version to 4.4.0.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 07 Aug 2019 09:52:56 +0800
+
+ukui-menu (1.1.10-1) experimental; urgency=medium
+
+  * Update the default icon of user face.
+  * Fix the error when show popup menu.
+  * Change the timing of update recent files.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 21 Mar 2019 17:29:11 +0800
+
+ukui-menu (1.1.9-1) unstable; urgency=medium
+
+  * Add transparency effect.
+  * Add a shutdown timer.
+  * Deal with the situation when get_desktop_file_path is None.
+  * Update the code of keybinding.
+  * Update the icon of start menu.
+  * Bump standards-version to 4.3.0.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Fri, 04 Jan 2019 14:27:45 +0800
+
+ukui-menu (1.1.7-2) unstable; urgency=medium
+
+  * Debian/control:
+    - Remove gvfs-open. (Closes: 906326)
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Fri, 16 Nov 2018 17:04:47 +0800
+
+ukui-menu (1.1.7-1) unstable; urgency=medium
+
+  * Skip 'Education' for 'Normal Menu'.
+  * Add fr.po, pt.po, ru.po, es.po.
+  * Update start.svg.
+  * Deal with filename which contain '&'.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 07 Nov 2018 12:55:21 +0800
+
+ukui-menu (1.1.5-1) UNRELEASED; urgency=medium
+
+  * Use mate-terminal instead of gnome-terminal.
+  * Port to python3.
+  * Update for ukui-panel.
+  * Add support for resize the menu icon.
+  * Add right-click menu for recent files.
+  * Add feedback window.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 17 Sep 2018 16:11:00 +0800
+
+ukui-menu (1.0.2-2) unstable; urgency=medium
+
+  * Use tracker.d.o team address (Closes: #899863)
+
+ -- Aron Xu <aron@debian.org>  Mon, 09 Jul 2018 14:47:31 +0800
+
+ukui-menu (1.0.2-1) unstable; urgency=medium
+
+  * Initial release (Closes: #872967)
+
+ -- Aron Xu <aron@debian.org>  Sat, 26 Aug 2017 14:57:14 +0800
