@@ -18,12 +18,24 @@ Package: ukui-menu
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         libukui-menu1 (= ${binary:Version})
+         libukui-menu1 (= ${binary:Version}),
+         ukui-menu-attr (= ${binary:Version})
 Description: Advanced ukui menu
  UKUI menu provides start menu development library and advanced
  graphical user interface.
  .
  The package contains executable file.
+
+Package: ukui-menu-attr
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         libukui-menu1 (= ${binary:Version})
+Description: ukui menu attribute
+ UKUI menu provides start menu development library and advanced
+ graphical user interface.
+ .
+ The package contains the attribute executable file.
 
 Package: libukui-menu-dev
 Architecture: any

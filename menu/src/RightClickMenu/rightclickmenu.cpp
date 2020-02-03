@@ -134,7 +134,7 @@ void RightClickMenu::add_commonuse_appbtn_action()
     setting->beginGroup("application");
     if(!setting->contains(appname) || setting->value(appname).toInt()>0)
     {
-        init_widget_action(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to commmon"));
+        init_widget_action(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
         CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
         cuappbtnmenu->addAction(CuFix2CommonUseAction);
         connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fix2commonuseaction_trigger_slot()));
@@ -238,7 +238,7 @@ void RightClickMenu::add_appbtn_action()
     setting->beginGroup("application");
     if(!setting->contains(appname) || setting->value(appname).toInt()>0)
     {
-        init_widget_action(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to commmon"));
+        init_widget_action(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
         Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
         appbtnmenu->addAction(Fix2CommonUseAction);
         connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fix2commonuseaction_trigger_slot()));

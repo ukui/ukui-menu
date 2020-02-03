@@ -14,13 +14,11 @@ include(src/QtSingleApplication/qtsingleapplication.pri)
 TARGET = ukui-menu
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -g
-
 TRANSLATIONS+=\
     ukui_menu_ch.ts
 
 DESTDIR = $$PROJECT_BINDIR
-unix:QMAKE_RPATHDIR+=$$PROJECT_LIBDIR
+unix:QMAKE_RPATHDIR+ = $$PROJECT_LIBDIR
 
 SOURCES += main.cpp \
     src/MainWindow/mainwindow.cpp \
@@ -99,9 +97,3 @@ RESOURCES += \
     res.qrc
 
 DISTFILES +=
-
-#LIBS+= -L/usr/lib/ukui-menu/ -lkylin-start-menu-interface
-#INCLUDEPATH+=-I/usr/include/ukui-menu/
-#LIBS+=-L ../lib -lukui-start-menu-interface
-#QMAKE_RPATHDIR+=-L ../lib -lukui-start-menu-interface
-#INCLUDEPATH+=-I ../lib

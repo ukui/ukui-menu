@@ -286,7 +286,7 @@
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="137"/>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="241"/>
-        <source>Pin to commmon</source>
+        <source>Pin to common</source>
         <translation>固定到&quot;常用软件&quot;</translation>
     </message>
     <message>

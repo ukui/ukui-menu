@@ -10,7 +10,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ukui-menu-attr
 TEMPLATE = app
-QMAKE_CXXFLAGS += -g
 
 TRANSLATIONS += \
     ukui_menu_attr_ch.ts
@@ -28,30 +27,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 include(../interface/interface.pri)
 DESTDIR = $$PROJECT_BINDIR
-unix:QMAKE_RPATHDIR+=$$PROJECT_LIBDIR
+unix:QMAKE_RPATHDIR+ = $$PROJECT_LIBDIR
 
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        attributedialog.cpp \
+    main.cpp \
+    attributedialog.cpp \
     toolbutton.cpp \
     windowmove.cpp
 
 HEADERS += \
-        attributedialog.h \
+    attributedialog.h \
     color.h \
     toolbutton.h \
     windowmove.h
 
 FORMS += \
-        attributedialog.ui \
+    attributedialog.ui \
     windowmove.ui
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
     img.qrc
