@@ -1,7 +1,11 @@
 ukui-menu (2.0.0-1) unstable; urgency=medium
 
   * New upstream release.
-    - Migrate from gtk to qt.
+    - Migrate from python to qt.
+  * debian/control:
+    - Bump Standards-Versions to 4.5.0.
+  * debian/{control,compat}:
+    - Use debhelper-compat notation.
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Sun, 02 Feb 2020 15:22:30 +0800
 
