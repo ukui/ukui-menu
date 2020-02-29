@@ -16,16 +16,16 @@
  *
  */
 
-#include "chineseletterhelper.h"
+#include "ukuichineseletter.h"
 #include <QDebug>
 #include <QTextCodec>
 
-ChineseLetterHelper::ChineseLetterHelper()
+UkuiChineseLetter::UkuiChineseLetter()
 {
 
 }
 
-bool ChineseLetterHelper::In(wchar_t start, wchar_t end, wchar_t code)
+bool UkuiChineseLetter::In(wchar_t start, wchar_t end, wchar_t code)
 {
     if (code >= start && code <= end)
     {
@@ -34,7 +34,7 @@ bool ChineseLetterHelper::In(wchar_t start, wchar_t end, wchar_t code)
     return false;
 }
 
-char ChineseLetterHelper::Convert(int n)//此方法有缺陷，只能识别一级字库中的汉字
+char UkuiChineseLetter::Convert(int n)//此方法有缺陷，只能识别一级字库中的汉字
 {
     /*
      * GB2312码范围 (B0A1-F7FE)
@@ -79,7 +79,7 @@ char ChineseLetterHelper::Convert(int n)//此方法有缺陷，只能识别一�
     return '\0';
 }
 
-QString ChineseLetterHelper::GetFirstLetter(const QString &src)
+QString UkuiChineseLetter::getFirstLetter(const QString &src)
 {
     wchar_t wchr = 0;
     QString firstLetter;
@@ -113,7 +113,7 @@ QString ChineseLetterHelper::GetFirstLetter(const QString &src)
     return firstLetter;
 }
 
-QString ChineseLetterHelper::GetFirstLetters(const QString &src)
+QString UkuiChineseLetter::getFirstLetters(const QString &src)
 {
     QString firstLetters;
     for (int i=0; i<src.length(); i++)
@@ -147,7 +147,7 @@ QString ChineseLetterHelper::GetFirstLetters(const QString &src)
     return firstLetters;
 }
 
-QString ChineseLetterHelper::GetFirstLettersAll(const QString &src)
+QString UkuiChineseLetter::getFirstLettersAll(const QString &src)
 {
     QString pinyins;
     for (int i=0; i<src.length(); i++)
@@ -180,13 +180,13 @@ QString ChineseLetterHelper::GetFirstLettersAll(const QString &src)
             code = (high - 0xa0) * 100 + low - 0xa0;
         }
 
-        pinyins += GetPinyin(code).at(0);
+        pinyins += getPinyin(code).at(0);
     }
     return pinyins;
 }
 
 
-QString ChineseLetterHelper::GetPinyins(const QString &text)
+QString UkuiChineseLetter::getPinyins(const QString &text)
 {
     QString pinyins;
     for (int i=0; i<text.length(); i++)
@@ -226,13 +226,13 @@ QString ChineseLetterHelper::GetPinyins(const QString &text)
             code = (high - 0xa0) * 100 + low - 0xa0;
         }
 
-        pinyins += GetPinyin(code);
+        pinyins += getPinyin(code);
     }
     return pinyins;
 }
 
 
-QString ChineseLetterHelper::GetPinyin(int code)//此方法可以获取所有汉字的拼音
+QString UkuiChineseLetter::getPinyin(int code)//此方法可以获取所有汉字的拼音
 {
     QString pinyin;
     switch(code)

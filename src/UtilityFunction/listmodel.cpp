@@ -84,7 +84,7 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
             return QVariant();
         else
         {
-            QString iconstr=pUkuiMenuInterface->get_app_icon(val.at(0));
+            QString iconstr=pUkuiMenuInterface->getAppIcon(val.at(0));
             iconstr.remove(".png");
             iconstr.remove(".svg");
             QIcon icon=QIcon::fromTheme(iconstr);

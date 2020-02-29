@@ -26,7 +26,7 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QScrollBar>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/fulllistview.h"
 #include "src/Style/style.h"
 
@@ -41,7 +41,7 @@ class FullSearchResultWidget : public QWidget
 public:
     explicit FullSearchResultWidget(QWidget *parent = nullptr);
     ~FullSearchResultWidget();
-    void update_app_listview(QStringList desktopfplist);
+    void updateAppListView(QStringList desktopfplist);
 
 private:
     Ui::FullSearchResultWidget *ui;
@@ -53,14 +53,14 @@ private:
     QStringList data;
 
 protected:
-    void init_widget();
+    void initWidget();
 
 private Q_SLOTS:
-    void exec_app_name(QString appname);//执行应用程序
+    void execApplication(QString appname);//执行应用程序
 
 Q_SIGNALS:
-    void send_update_applist_signal();//向CommonUseWidget发送更新应用列表信号
-    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
+    void sendUpdateAppListSignal();//向CommonUseWidget发送更新应用列表信号
+    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 
 };
 

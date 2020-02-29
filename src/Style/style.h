@@ -21,6 +21,9 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <math.h>
+#include <QDBusConnection>
+#include <QDBusReply>
+#include <QDBusInterface>
 
 //颜色
 #define BORDERCOLOR "rgba(37,41,43)" //边框
@@ -77,10 +80,11 @@ class Style
 {
 public:
     Style();
-    static void init_wid_style();
-    /**
-      * 主视图
-      */
+    static void initWidStyle();
+
+    //主窗口
+    static int widthavailable;
+    static int heightavailable;
     //主视图
     static int MainViewWidWidth;//宽度
     //搜索栏

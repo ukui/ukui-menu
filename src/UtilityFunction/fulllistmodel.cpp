@@ -59,7 +59,7 @@ void FullListModel::updateData(QStringList data)
 
     m_data.clear();
     m_data=data;
-//    emit dataChanged(createIndex(0,0), createIndex(4,5));
+//    Q_EMIT dataChanged(createIndex(0,0), createIndex(4,5));
 
 }
 
@@ -104,7 +104,7 @@ QVariant FullListModel::data(const QModelIndex &index, int role) const
     switch (role){
     case Qt::DecorationRole:
     {
-        QString iconstr=pUkuiMenuInterface->get_app_icon(val);
+        QString iconstr=pUkuiMenuInterface->getAppIcon(val);
         iconstr.remove(".png");
         iconstr.remove(".svg");
         QIcon icon=QIcon::fromTheme(iconstr);
@@ -115,8 +115,8 @@ QVariant FullListModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
     {
 
-        QString appname=pUkuiMenuInterface->get_app_name(val);
-        return appname;
+//        QString appname=pUkuiMenuInterface->getAppName(val);
+        return val;
     }
     case Qt::SizeHintRole:
     {

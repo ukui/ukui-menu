@@ -43,6 +43,10 @@
 #include "qtlocalpeer.h"
 #include <QWidget>
 #include <QDesktopWidget>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include "src/MainWindow/mainwindow.h"
 
 
 /*!
@@ -330,8 +334,26 @@ void QtSingleApplication::activateWindow()
             actWin->raise();
             actWin->showNormal();
             actWin->activateWindow();
-            actWin->setGeometry(QRect(0,this->desktop()->availableGeometry().height()-actWin->height(),
-                                      actWin->width(),actWin->height()));
+            QDBusInterface iface("com.ukui.panel.desktop",
+                                 "/",
+                                 "com.ukui.panel.desktop",
+                                 QDBusConnection::sessionBus());
+
+            QDBusReply<int> position=iface.call("GetPanelPosition","");
+            QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+            if(position==0)
+                actWin->setGeometry(QRect(0,this->desktop()->height()-position-actWin->height(),
+                                          actWin->width(),actWin->height()));
+            else if(position==1)
+                actWin->setGeometry(QRect(0,panelSize,actWin->width(),actWin->height()));
+            else if(position==2)
+                actWin->setGeometry(QRect(panelSize,0,actWin->width(),actWin->height()));
+            else
+                actWin->setGeometry(QRect(this->desktop()->width()-actWin->width(),0,
+                                          actWin->width(),actWin->height()));
+
+            MainWindow* w=qobject_cast<MainWindow*>(actWin);
+            w->setFrameStyle();
         }
         else {
             actWin->setWindowState(actWin->windowState() & Qt::WindowMinimized);

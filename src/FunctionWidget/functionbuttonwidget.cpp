@@ -28,7 +28,7 @@ FunctionButtonWidget::FunctionButtonWidget(QWidget *parent) :
     ui(new Ui::FunctionButtonWidget)
 {
     ui->setupUi(this);
-    init_widget();
+    initWidget();
 }
 
 FunctionButtonWidget::~FunctionButtonWidget()
@@ -36,7 +36,7 @@ FunctionButtonWidget::~FunctionButtonWidget()
     delete ui;
 }
 
-void FunctionButtonWidget::init_widget()
+void FunctionButtonWidget::initWidget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -113,7 +113,7 @@ void FunctionButtonWidget::init_widget()
 //                                                                   2,
 //                                                                   functionnamelist.at(i));
 //        vector.append(iconbtn);
-//        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionbtn_clicked_slot()));
+//        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
 //    }
 
 //    for(int row=0;row<6;row++)
@@ -129,19 +129,19 @@ void FunctionButtonWidget::init_widget()
 /**
  * 功能分类按钮槽函数
  */
-void FunctionButtonWidget::functionbtn_clicked_slot()
+void FunctionButtonWidget::functionBtnClickedSlot()
 {
     FunctionClassifyButton* btn=dynamic_cast<FunctionClassifyButton *>(QObject::sender());
     QWidget* wid=btn->layout()->itemAt(1)->widget();
     QLabel* label=qobject_cast<QLabel *>(wid);
     QString btnname=label->text();
-    Q_EMIT send_functionbtn_signal(btnname);
+    Q_EMIT sendFunctionBtnSignal(btnname);
 }
 
 /**
  * 接收FunctionWidget界面分类按钮列表
  */
-void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
+void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
 {
     for(int row=0;row<6;row++)
         for(int col=0;col<2;col++)
@@ -174,7 +174,7 @@ void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
                                                    functionnamelist.at(row*2+col),
                                                    false,
                                                    true);
-                connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionbtn_clicked_slot()));
+                connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
             }
             QLayoutItem* item=gridLayout->itemAt(row*2+col);
             if(item!=nullptr)
@@ -202,7 +202,7 @@ void FunctionButtonWidget::recv_classificationbtn_list(QStringList list)
 //                                                                   2,
 //                                                                   list.at(i));
 //        vector.append(iconbtn);
-//        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionbtn_clicked_slot()));
+//        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
 //    }
 
 //    for(int row=0;row<6;row++)

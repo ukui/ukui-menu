@@ -20,7 +20,7 @@
 #define LISTMODEL_H
 #include <QAbstractListModel>
 #include <QIcon>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 
 class ListModel : public QAbstractListModel
 {

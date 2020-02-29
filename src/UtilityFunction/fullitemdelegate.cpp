@@ -23,12 +23,14 @@ FullItemDelegate::FullItemDelegate(QObject *parent, int module):
     QStyledItemDelegate(parent)
 {
     this->module=module;
-    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
+    pUkuiMenuInterface=new UkuiMenuInterface;
 }
 
 FullItemDelegate::~FullItemDelegate()
 {
+    delete pUkuiMenuInterface;
 }
 
 void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -91,7 +93,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
         painter->setOpacity(1);
         QIcon icon=index.data(Qt::DecorationRole).value<QIcon>();
-        QString appname=index.data(Qt::DisplayRole).value<QString>();
+        QString desktopfp=index.data(Qt::DisplayRole).value<QString>();
+        QString appname=pUkuiMenuInterface->getAppName(desktopfp);
 
         QFont font;
         QRect iconRect;
@@ -105,7 +108,9 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         if(module==0)
         {
             setting->beginGroup("application");
-            if(setting->value(appname).toInt()==0)
+            QFileInfo fileInfo(desktopfp);
+            QString desktopfn=fileInfo.fileName();
+            if(setting->value(desktopfn).toInt()==0)
             {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock-fs.svg"));
                 icon.paint(painter,QRect(iconRect.topRight().x()-14,iconRect.topRight().y()-2,16,16));

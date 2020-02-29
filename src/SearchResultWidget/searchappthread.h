@@ -19,7 +19,7 @@
 #ifndef SEARCHAPPTHREAD_H
 #define SEARCHAPPTHREAD_H
 #include <QThread>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include <QObject>
 
 class SearchAppThread : public QThread
@@ -38,10 +38,10 @@ private:
     QVector<QStringList> appInfoVector;
 
 private Q_SLOTS:
-    void recv_search_keyword(QString arg);
+    void recvSearchKeyword(QString arg);
 
 Q_SIGNALS:
-    void send_search_result(QStringList list);
+    void sendSearchResult(QStringList list);
 
 };
 

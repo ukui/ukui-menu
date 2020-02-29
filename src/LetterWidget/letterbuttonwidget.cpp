@@ -27,7 +27,7 @@ LetterButtonWidget::LetterButtonWidget(QWidget *parent) :
     ui(new Ui::LetterButtonWidget)
 {
     ui->setupUi(this);
-    init_widget();
+    initWidget();
 }
 
 LetterButtonWidget::~LetterButtonWidget()
@@ -35,7 +35,7 @@ LetterButtonWidget::~LetterButtonWidget()
     delete ui;
 }
 
-void LetterButtonWidget::init_widget()
+void LetterButtonWidget::initWidget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -75,7 +75,7 @@ void LetterButtonWidget::init_widget()
                 btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
                 btn->setText(letterlist.at(row*5+col));
                 gridLayout->addWidget(btn,row,col);
-                connect(btn, SIGNAL(clicked()), this, SLOT(letterbtn_clicked_slot()));
+                connect(btn, SIGNAL(clicked()), this, SLOT(letterBtnClickedSlot()));
             }
             else {
                 break;
@@ -87,17 +87,17 @@ void LetterButtonWidget::init_widget()
 /**
  * 字母分类按钮槽函数
  */
-void LetterButtonWidget::letterbtn_clicked_slot()
+void LetterButtonWidget::letterBtnClickedSlot()
 {
     QToolButton* btn=dynamic_cast<QToolButton *>(QObject::sender());
     QString btnname=btn->text();
-    Q_EMIT send_letterbtn_signal(btnname);
+    Q_EMIT sendLetterBtnSignal(btnname);
 }
 
 /**
  * 接收LetterWidget字母按钮列表
  */
-void LetterButtonWidget::recv_letterbtn_list(QStringList list)
+void LetterButtonWidget::recvLetterBtnList(QStringList list)
 {
     for(int row=0;row<6;row++)
     {

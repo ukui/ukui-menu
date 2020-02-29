@@ -27,7 +27,7 @@ FullSearchResultWidget::FullSearchResultWidget(QWidget *parent) :
     ui(new Ui::FullSearchResultWidget)
 {
     ui->setupUi(this);
-    init_widget();
+    initWidget();
 }
 
 FullSearchResultWidget::~FullSearchResultWidget()
@@ -36,7 +36,7 @@ FullSearchResultWidget::~FullSearchResultWidget()
     delete pUkuiMenuInterface;
 }
 
-void FullSearchResultWidget::init_widget()
+void FullSearchResultWidget::initWidget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -55,18 +55,18 @@ void FullSearchResultWidget::init_widget()
     listview->addData(data);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
-    connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
+    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
+    connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 }
 
 /**
  * 执行应用程序
  */
-void FullSearchResultWidget::exec_app_name(QString appname)
+void FullSearchResultWidget::execApplication(QString appname)
 {
-    Q_EMIT send_hide_mainwindow_signal();
-    QString execpath=pUkuiMenuInterface->get_app_exec(pUkuiMenuInterface->get_desktop_path_by_app_name(appname));
+    Q_EMIT sendHideMainWindowSignal();
+    QString execpath=pUkuiMenuInterface->getAppExec(pUkuiMenuInterface->getDesktopPathByAppName(appname));
     //移除启动参数%u或者%U
     if(execpath.contains("%"))
     {
@@ -76,7 +76,7 @@ void FullSearchResultWidget::exec_app_name(QString appname)
     QProcess::startDetached(execpath);
 }
 
-void FullSearchResultWidget::update_app_listview(QStringList desktopfplist)
+void FullSearchResultWidget::updateAppListView(QStringList desktopfplist)
 {
     data.clear();
     data=desktopfplist;

@@ -23,7 +23,7 @@
 #include <QScreen>
 #include <QTranslator>
 #include <QLocale>
-#include "src/interface/ukuimenuinterface.h"
+//#include "ukuimenuinterface.h"
 
 int main(int argc, char *argv[])
 {
@@ -55,20 +55,28 @@ int main(int argc, char *argv[])
     qApp->setStyleSheet(style);
 
     MainWindow w;
-    w.setGeometry(QRect(0,QtSingleApplication::desktop()->availableGeometry().height()-590-2,376+2,590+2));
-    app.setActivationWindow(&w);
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
 
-//    Q_FOREACH (QScreen *screen, QGuiApplication::screens())
-//    {
-//        qDebug()<<"Gui:"<< screen->availableSize().height();
-//        qDebug()<<"Gui:"<< screen->availableSize().height();
-//    }
+    QDBusReply<int> position=iface.call("GetPanelPosition","");
+    QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+    if(position==0)
+        w.setGeometry(QRect(0,Style::heightavailable-590-2,376,590));
+    else if(position==1)
+        w.setGeometry(QRect(0,panelSize,376,590));
+    else if(position==2)
+        w.setGeometry(QRect(panelSize,0,376,590));
+    else
+        w.setGeometry(QRect(Style::widthavailable-376,0,376,590));
+    app.setActivationWindow(&w);
 
     //注释掉，以保证自启动时不显示界面
     w.show();
     w.raise();
     w.activateWindow();
-//    w.hide();
+    w.hide();
 
     return app.exec();
 }

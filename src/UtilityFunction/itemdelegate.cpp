@@ -23,7 +23,7 @@ ItemDelegate::ItemDelegate(QObject* parent, int module):
     QStyledItemDelegate(parent)
 {
     this->module=module;
-    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
@@ -90,7 +90,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 QRect iconRect=QRect(rect.x()+11,rect.y()+(rect.height()-32)/2,32,32);
                 icon.paint(painter,iconRect);
                 painter->setPen(QPen(Qt::white));
-                QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
+                QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
                 painter->drawText(QRect(iconRect.right()+15,rect.y(),
                                         rect.width()-62,rect.height()),Qt::AlignVCenter,appname);
 
@@ -113,8 +113,10 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
             icon.paint(painter,iconRect);
 
-            QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
-            if(setting->value(appname).toInt()==0)
+            QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
+            QFileInfo fileInfo(strlist.at(0));
+            QString desktopfn=fileInfo.fileName();
+            if(setting->value(desktopfn).toInt()==0)
             {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
                 icon.paint(painter,QRect(iconRect.topRight().x()-7,iconRect.topRight().y()-2,12,12));

@@ -26,7 +26,7 @@ FullLetterWidget::FullLetterWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    init_widget();
+    initWidget();
 }
 
 FullLetterWidget::~FullLetterWidget()
@@ -38,7 +38,7 @@ FullLetterWidget::~FullLetterWidget()
 /**
  * 主界面初始化
  */
-void FullLetterWidget::init_widget()
+void FullLetterWidget::initWidget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -62,14 +62,14 @@ void FullLetterWidget::init_widget()
     this->setLayout(mainLayout);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    init_applist_widget();
-    init_letterlist_widget();
+    initAppListWidget();
+    initLetterListWidget();
 }
 
 /**
  * 初始化应用列表界面
  */
-void FullLetterWidget::init_applist_widget()
+void FullLetterWidget::initAppListWidget()
 {
     QHBoxLayout* layout=new QHBoxLayout(applistWid);
     layout->setContentsMargins(0,0,0,0);
@@ -86,19 +86,19 @@ void FullLetterWidget::init_applist_widget()
     scrollareawid->setLayout(scrollareawidLayout);
     layout->addWidget(scrollarea);
 
-    fill_app_list();
+    fillAppList();
 
 }
 
 /**
  * 填充应用列表
  */
-void FullLetterWidget::fill_app_list()
+void FullLetterWidget::fillAppList()
 {
     letterbtnlist.clear();
     letterbtnrowlist.clear();
 
-    QVector<QStringList> vector=pUkuiMenuInterface->get_alphabetic_classification();
+    QVector<QStringList> vector=pUkuiMenuInterface->getAlphabeticClassification();
     for(int i=0;i<vector.size();i++)
     {
         QStringList appList=vector.at(i);
@@ -123,28 +123,29 @@ void FullLetterWidget::fill_app_list()
             data.clear();
             for(int i=0;i<appList.count();i++)
             {
-                QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appList.at(i));
+                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
                 data.append(desktopfp);
 
             }
             listview->addData(data);
 
-            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
-            connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
-            connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
+            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
+            connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+            connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
         }
     }
 
-        resize_scrollarea_controls();
+        resizeScrollAreaControls();
 }
 
 /**
  * 执行应用程序
  */
-void FullLetterWidget::exec_app_name(QString appname)
+void FullLetterWidget::execApplication(QString appname)
 {
-    Q_EMIT send_hide_mainwindow_signal();
-    QString execpath=pUkuiMenuInterface->get_app_exec(pUkuiMenuInterface->get_desktop_path_by_app_name(appname));
+    qDebug()<<appname;
+    Q_EMIT sendHideMainWindowSignal();
+    QString execpath=pUkuiMenuInterface->getAppExec(pUkuiMenuInterface->getDesktopPathByAppName(appname));
     //移除启动参数%u或者%U
     if(execpath.contains("%"))
     {
@@ -158,7 +159,7 @@ void FullLetterWidget::exec_app_name(QString appname)
 /**
  * 更新应用列表
  */
-void FullLetterWidget::update_app_listview()
+void FullLetterWidget::updateAppListView()
 {
     //刷新应用列表界面
     for(int index=scrollareawidLayout->count()-1;index>=0;index--)
@@ -170,7 +171,7 @@ void FullLetterWidget::update_app_listview()
             delete wid;
     }
 
-    fill_app_list();
+    fillAppList();
 
     //刷新字母列表界面
     Q_FOREACH (QAbstractButton* button, buttonList) {
@@ -218,7 +219,7 @@ void FullLetterWidget::update_app_listview()
 /**
  * 设置scrollarea所填充控件大小
  */
-void FullLetterWidget::resize_scrollarea_controls()
+void FullLetterWidget::resizeScrollAreaControls()
 {
     int pos=0;
     letterbtnrowlist.append(QString::number(pos));
@@ -263,7 +264,7 @@ void FullLetterWidget::resize_scrollarea_controls()
 /**
  * 初始化字母列表界面
  */
-void FullLetterWidget::init_letterlist_widget()
+void FullLetterWidget::initLetterListWidget()
 {
     letterlistleftSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     letterlistrightSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -286,13 +287,13 @@ void FullLetterWidget::init_letterlist_widget()
 
     letterlistLayout->addWidget(letterlistscrollarea);
     pBtnGroup=new QButtonGroup(letterlistscrollareaWid);
-    init_letterlist_scrollarea();
+    initLetterListScrollArea();
 }
 
 /**
  * 初始化字母列表
  */
-void FullLetterWidget::init_letterlist_scrollarea()
+void FullLetterWidget::initLetterListScrollArea()
 {
     char btnstyle[500];
     sprintf(btnstyle,"QToolButton{background:transparent;color:#8b8b8b;padding-left:0px;border-radius:2px;}\
@@ -317,19 +318,19 @@ void FullLetterWidget::init_letterlist_scrollarea()
         letterbtn->setFont(font);
         buttonList.append(letterbtn);
         letterlistscrollareawidLayout->addWidget(letterbtn);
-//        connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterbtn_clicked_slot()));
+//        connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterBtnClickedSlot()));
     }
     int id=0;
     Q_FOREACH (QAbstractButton* btn, buttonList) {
         pBtnGroup->addButton(btn,id++);
     }
 
-    connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btngroup_clicked_slot(QAbstractButton*)));
+    connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btnGroupClickedSlot(QAbstractButton*)));
     letterlistscrollarea->widget()->adjustSize();
     pBtnGroup->button(0)->click();
 }
 
-void FullLetterWidget::btngroup_clicked_slot(QAbstractButton *btn)
+void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
 {
     Q_FOREACH (QAbstractButton* button, buttonList) {
         if(pBtnGroup->id(btn)==buttonList.indexOf(button))
@@ -350,7 +351,7 @@ void FullLetterWidget::btngroup_clicked_slot(QAbstractButton *btn)
     }
 }
 
-void FullLetterWidget::widget_make_zero()
+void FullLetterWidget::widgetMakeZero()
 {
     Q_FOREACH (QAbstractButton* button, buttonList) {
         QString letterstr=button->text().at(0);
@@ -435,7 +436,7 @@ void FullLetterWidget::widget_make_zero()
 /**
  * 字母列表数据项被选定槽函数
  */
-//void FullLetterWidget::letterbtn_clicked_slot()
+//void FullLetterWidget::letterBtnClickedSlot()
 //{
 //    QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
 //    QWidget* wid=item->widget();
@@ -452,6 +453,6 @@ void FullLetterWidget::widget_make_zero()
 //        int pos=letterbtnrowlist.at(num).toInt();
 //        scrollarea->verticalScrollBar()->setSliderPosition(pos);
 //    }
-////    emit send_fullletterwid_state(0,letterstr);
+////    Q_EMIT send_fullletterwid_state(0,letterstr);
 
 //}

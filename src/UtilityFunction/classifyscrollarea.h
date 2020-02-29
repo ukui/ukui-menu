@@ -27,7 +27,7 @@ public:
     ClassifyScrollArea();
 
 protected:
-    void init_wid();
+    void initWid();
 };
 
 #endif // CLASSIFYSCROLLAREA_H

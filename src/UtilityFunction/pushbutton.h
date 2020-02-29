@@ -23,7 +23,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QSettings>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 
@@ -44,7 +44,7 @@ private:
     int height;
 
 protected:
-    void init_app_btn();
+    void initAppBtn();
 
 };
 

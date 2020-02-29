@@ -27,7 +27,7 @@ SearchResultWidget::SearchResultWidget(QWidget *parent) :
     ui(new Ui::SearchResultWidget)
 {
     ui->setupUi(this);
-    init_widget();
+    initWidget();
 }
 
 SearchResultWidget::~SearchResultWidget()
@@ -36,7 +36,7 @@ SearchResultWidget::~SearchResultWidget()
     delete pUkuiMenuInterface;
 }
 
-void SearchResultWidget::init_widget()
+void SearchResultWidget::initWidget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -55,18 +55,18 @@ void SearchResultWidget::init_widget()
     listview->addData(data);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(exec_app_name(QStringList)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
-    connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
+    connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(execApplication(QStringList)));
+    connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 }
 
 /**
  * 执行应用程序
  */
-void SearchResultWidget::exec_app_name(QStringList arg)
+void SearchResultWidget::execApplication(QStringList arg)
 {
-    Q_EMIT send_hide_mainwindow_signal();
-    QString execpath=pUkuiMenuInterface->get_app_exec(arg.at(0));
+    Q_EMIT sendHideMainWindowSignal();
+    QString execpath=pUkuiMenuInterface->getAppExec(arg.at(0));
     //移除启动参数%u或者%U
     if(execpath.contains("%"))
     {
@@ -76,7 +76,7 @@ void SearchResultWidget::exec_app_name(QStringList arg)
     QProcess::startDetached(execpath);
 }
 
-void SearchResultWidget::update_app_listview(QStringList desktopfplist)
+void SearchResultWidget::updateAppListView(QStringList desktopfplist)
 {
     data.clear();
     for(int i=0;i<desktopfplist.count();i++)

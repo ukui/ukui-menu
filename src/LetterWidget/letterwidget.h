@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QTableWidget>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include "letterbuttonwidget.h"
 #include "src/UtilityFunction/listview.h"
 #include "src/UtilityFunction/itemdelegate.h"
@@ -38,7 +38,7 @@ class LetterWidget : public QWidget
 public:
      explicit LetterWidget(QWidget *parent=nullptr);
     ~LetterWidget();
-    void widget_make_zero();//MainWindow隐藏时，此界面恢复至初始状态
+    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
 
 private:
     Ui::LetterWidget *ui;
@@ -60,23 +60,23 @@ private:
     QStringList appsortlist;//存放应用排序列表
 
 protected:
-    void init_widget();
-    void init_applist_widget();//初始化应用列表界面
-    void fill_app_listview();//填充应用列表
+    void initWidget();
+    void initAppListWidget();//初始化应用列表界面
+    void fillAppListView();//填充应用列表
 
 private Q_SLOTS:
-    void app_classificationbtn_clicked_slot();//应用列表字母分类按钮槽函数
-    void recv_letterbtn_signal(QString btnname);//接收LetterButtonWidget界面按钮信号
-    void exec_app_name(QString exec);//执行应用程序
-    void update_app_listview();//更新应用列表
+    void appClassificationBtnClickedSlot();//应用列表字母分类按钮槽函数
+    void recvLetterBtnSignal(QString btnname);//接收LetterButtonWidget界面按钮信号
+    void execApplication(QString exec);//执行应用程序
+    void updateAppListView();//更新应用列表
 
     void recvItemClickedSlot(QStringList arg);
 
 
 Q_SIGNALS:
-    void send_letterbtn_list(QStringList list);//向LetterButtonWidget发送字母按钮列表
-    void send_update_applist_signal();//向常用软件模块发送更新应用列表信号
-    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
+    void sendLetterBtnList(QStringList list);//向LetterButtonWidget发送字母按钮列表
+    void sendUpdateAppListSignal();//向常用软件模块发送更新应用列表信号
+    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 
 
 };

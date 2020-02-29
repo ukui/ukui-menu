@@ -30,7 +30,7 @@
 #include <QProcess>
 #include <QSvgRenderer>
 #include <QHeaderView>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/fulllistview.h"
 #include "src/Style/style.h"
@@ -46,7 +46,7 @@ class FullCommonUseWidget : public QWidget
 public:
     explicit FullCommonUseWidget(QWidget *parent = nullptr);
     ~FullCommonUseWidget();
-    void widget_make_zero();//MainWindow隐藏时，此界面恢复至初始状态
+    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
 
 private:
     Ui::FullCommonUseWidget *ui;
@@ -64,17 +64,17 @@ private:
     RightClickMenu* menu=nullptr;
 
 protected:
-    void init_widget();
-    void init_applist_widget();//初始化应用列表界面
-    void fill_app_tablewidget();//填充应用列表
+    void initWidget();
+    void initAppListWidget();//初始化应用列表界面
+    void fillAppList();//填充应用列表
 
 private Q_SLOTS:
-    void update_listview_slot();//更新应用列表槽函数
-    void exec_app_name(QString appname);//执行应用程序
+    void updateListViewSlot();//更新应用列表槽函数
+    void execApplication(QString appname);//执行应用程序
 
 Q_SIGNALS:
-    void send_update_applist_signal();//向CommonUseWidget发送更新应用列表信号
-    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
+    void sendUpdateAppListSignal();//向CommonUseWidget发送更新应用列表信号
+    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 };
 
 #endif // FULLCOMMONUSEWIDGET_H

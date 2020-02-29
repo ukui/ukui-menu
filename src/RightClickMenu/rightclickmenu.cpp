@@ -23,7 +23,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     QWidget (parent)
 
 {
-    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
     //其它按钮右键菜单项
@@ -81,14 +81,14 @@ RightClickMenu::RightClickMenu(QWidget *parent):
 
     pUkuiMenuInterface=new UkuiMenuInterface;
     cmdProc=new QProcess(this);
-    connect(cmdProc , SIGNAL(readyReadStandardOutput()) , this , SLOT(on_readoutput()));
+    connect(cmdProc , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutput()));
 
     sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid #626c6e;border-radius:3px;background-color:%s;}\
             QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
             RightClickMenuBackground,RightClickMenuSeparator);
 
-    add_shutdown_action();
-//    add_other_action();
+    addShutdownAction();
+//    addOtherAction();
 }
 
 RightClickMenu::~RightClickMenu()
@@ -129,26 +129,29 @@ RightClickMenu::~RightClickMenu()
 }
 
 //常用应用按钮右键菜单
-void RightClickMenu::add_commonuse_appbtn_action()
+void RightClickMenu::addCommonUseAppBtnAction()
 {
     setting->beginGroup("application");
-    if(!setting->contains(appname) || setting->value(appname).toInt()>0)
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
+    QFileInfo fileInfo(desktopfp);
+    QString desktopfn=fileInfo.fileName();
+    if(!setting->contains(desktopfn) || setting->value(desktopfn).toInt()>0)
     {
-        init_widget_action(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
+        initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to commmon"));
         CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
         cuappbtnmenu->addAction(CuFix2CommonUseAction);
-        connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fix2commonuseaction_trigger_slot()));
+        connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
     }
 
-    if(setting->contains(appname) && setting->value(appname).toInt()==0)
+    if(setting->contains(desktopfn) && setting->value(desktopfn).toInt()==0)
     {
-        init_widget_action(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
+        initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
         CuUnfixed4CommonUseAction->setDefaultWidget(CuUnfixed4CommonUseWid);
         cuappbtnmenu->addAction(CuUnfixed4CommonUseAction);
-        connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixed4commonuseaction_trigger_slot()));
+        connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
     }
 
-    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+//    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -157,31 +160,31 @@ void RightClickMenu::add_commonuse_appbtn_action()
     QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
     if(!ret)
     {
-        init_widget_action(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
+        initWidgetAction(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
         CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
         cuappbtnmenu->addAction(CuFix2TaskBarAction);
-        connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+        connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
     }
     else {
-        init_widget_action(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
+        initWidgetAction(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
         CuUnfixed4TaskBarAction->setDefaultWidget(CuUnfixed4TaskBarWid);
         cuappbtnmenu->addAction(CuUnfixed4TaskBarAction);
-        connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+        connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
     }
 
-    init_widget_action(CuAdd2DesktopWid,"",tr("Add to desktop shortcuts"));
+    initWidgetAction(CuAdd2DesktopWid,"",tr("Add to desktop shortcuts"));
     CuAdd2DesktopAction->setDefaultWidget(CuAdd2DesktopWid);
     cuappbtnmenu->addAction(CuAdd2DesktopAction);
-    connect(CuAdd2DesktopAction, SIGNAL(triggered()),this,SLOT(add2desktopaction_trigger_slot()));
+    connect(CuAdd2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
 
 
     cuappbtnmenu->addSeparator();
 
-    init_widget_action(CuDeleteWid,"",tr("Remove from list"));
+    initWidgetAction(CuDeleteWid,"",tr("Remove from list"));
     CuDeleteAction->setDefaultWidget(CuDeleteWid);
     cuappbtnmenu->addAction(CuDeleteAction);
-    connect(CuDeleteAction,SIGNAL(triggered()),this,SLOT(cudeleteaction_trigger_slot()));
-    if(setting->contains(appname) && setting->value(appname).toInt()==0)
+    connect(CuDeleteAction,SIGNAL(triggered()),this,SLOT(commonUseDeleteActionTriggerSlot()));
+    if(setting->contains(desktopfn) && setting->value(desktopfn).toInt()==0)
     {
         QLayoutItem* item=CuDeleteWid->layout()->itemAt(0);
         QWidget* wid=item->widget();
@@ -190,10 +193,10 @@ void RightClickMenu::add_commonuse_appbtn_action()
         CuDeleteAction->setDisabled(true);
     }
 
-    init_widget_action(CuDeleteAllWid,"",tr("Remove all"));
+    initWidgetAction(CuDeleteAllWid,"",tr("Remove all"));
     CuDeleteAllAction->setDefaultWidget(CuDeleteAllWid);
     cuappbtnmenu->addAction(CuDeleteAllAction);
-    connect(CuDeleteAllAction,SIGNAL(triggered()),this,SLOT(cudeleteallaction_trigger_slot()));
+    connect(CuDeleteAllAction,SIGNAL(triggered()),this,SLOT(commonUseDeleteAllActionTriggerSlot()));
     QStringList keys=setting->childKeys();
     int count;
     for(count=0;count<keys.count();count++)
@@ -212,17 +215,17 @@ void RightClickMenu::add_commonuse_appbtn_action()
 
     cuappbtnmenu->addSeparator();
 
-    init_widget_action(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
+    initWidgetAction(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
     CuUninstallAction->setDefaultWidget(CuUninstallWid);
     cuappbtnmenu->addAction(CuUninstallAction);
-    connect(CuUninstallAction, SIGNAL(triggered()),this,SLOT(uninstallaction_trigger_slot()));
+    connect(CuUninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 
     cuappbtnmenu->addSeparator();
 
-    init_widget_action(CuAttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
+    initWidgetAction(CuAttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
     CuAttributeAction->setDefaultWidget(CuAttributeWid);
     cuappbtnmenu->addAction(CuAttributeAction);
-    connect(CuAttributeAction, SIGNAL(triggered()),this,SLOT(attributeaction_trigger_slot()));
+    connect(CuAttributeAction, SIGNAL(triggered()),this,SLOT(attributeActionTriggerSlot()));
 
     cuappbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
     cuappbtnmenu->setWindowOpacity(RightClickMenuOpacity);
@@ -232,28 +235,31 @@ void RightClickMenu::add_commonuse_appbtn_action()
 }
 
 //普通应用按钮右键菜单
-void RightClickMenu::add_appbtn_action()
+void RightClickMenu::addAppBtnAction()
 {
 
     setting->beginGroup("application");
-    if(!setting->contains(appname) || setting->value(appname).toInt()>0)
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
+    QFileInfo fileInfo(desktopfp);
+    QString desktopfn=fileInfo.fileName();
+    if(!setting->contains(desktopfn) || setting->value(desktopfn).toInt()>0)
     {
-        init_widget_action(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
+        initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to commmon"));
         Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
         appbtnmenu->addAction(Fix2CommonUseAction);
-        connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fix2commonuseaction_trigger_slot()));
+        connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
     }
 
-    if(setting->contains(appname) && setting->value(appname).toInt()==0)
+    if(setting->contains(desktopfn) && setting->value(desktopfn).toInt()==0)
     {
-        init_widget_action(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
+        initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
         Unfixed4CommonUseAction->setDefaultWidget(Unfixed4CommonUseWid);
         appbtnmenu->addAction(Unfixed4CommonUseAction);
-        connect(Unfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixed4commonuseaction_trigger_slot()));
+        connect(Unfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
     }
     setting->endGroup();
 
-    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+//    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -262,38 +268,38 @@ void RightClickMenu::add_appbtn_action()
     QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
     if(!ret)
     {
-        init_widget_action(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
+        initWidgetAction(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
         Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
         appbtnmenu->addAction(Fix2TaskBarAction);
-        connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+        connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
 
     }
     else{
-        init_widget_action(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
+        initWidgetAction(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
         Unfixed4TaskBarAction->setDefaultWidget(Unfixed4TaskBarWid);
         appbtnmenu->addAction(Unfixed4TaskBarAction);
-        connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+        connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
     }
 
-    init_widget_action(Add2DesktopWid,"",tr("Add to desktop shortcuts"));
+    initWidgetAction(Add2DesktopWid,"",tr("Add to desktop shortcuts"));
     Add2DesktopAction->setDefaultWidget(Add2DesktopWid);
     appbtnmenu->addAction(Add2DesktopAction);
-    connect(Add2DesktopAction, SIGNAL(triggered()),this,SLOT(add2desktopaction_trigger_slot()));
+    connect(Add2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
 
 
     appbtnmenu->addSeparator();
 
-    init_widget_action(UninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
+    initWidgetAction(UninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
     UninstallAction->setDefaultWidget(UninstallWid);
     appbtnmenu->addAction(UninstallAction);
-    connect(UninstallAction, SIGNAL(triggered()),this,SLOT(uninstallaction_trigger_slot()));
+    connect(UninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 
     appbtnmenu->addSeparator();
 
-    init_widget_action(AttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
+    initWidgetAction(AttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
     AttributeAction->setDefaultWidget(AttributeWid);
     appbtnmenu->addAction(AttributeAction);
-    connect(AttributeAction, SIGNAL(triggered()),this,SLOT(attributeaction_trigger_slot()));
+    connect(AttributeAction, SIGNAL(triggered()),this,SLOT(attributeActionTriggerSlot()));
 
     appbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
     appbtnmenu->setWindowOpacity(RightClickMenuOpacity);
@@ -301,7 +307,7 @@ void RightClickMenu::add_appbtn_action()
 }
 
 //关机按钮右键菜单
-void RightClickMenu::add_shutdown_action()
+void RightClickMenu::addShutdownAction()
 {
     shutdownmenu=new QMenu(this);
     shutdownmenu->setLayoutDirection(Qt::LeftToRight);
@@ -309,38 +315,38 @@ void RightClickMenu::add_shutdown_action()
 
     LockScreenAction=new QWidgetAction(shutdownmenu);
     LockScreenWid=new QWidget();
-    init_widget_action(LockScreenWid,":/data/img/sidebarwidget/lock.svg",tr("Lock"));
+    initWidgetAction(LockScreenWid,":/data/img/sidebarwidget/lock.svg",tr("Lock"));
     LockScreenAction->setDefaultWidget(LockScreenWid);
     shutdownmenu->addAction(LockScreenAction);
-    connect(LockScreenAction,SIGNAL(triggered()),this,SLOT(lockscreenaction_trigger_slot()));
+    connect(LockScreenAction,SIGNAL(triggered()),this,SLOT(lockScreenActionTriggerSlot()));
 
     SwitchUserAction=new QWidgetAction(shutdownmenu);
     SwitchUserWid=new QWidget();
-    init_widget_action(SwitchUserWid,"",tr("Switch user"));
+    initWidgetAction(SwitchUserWid,"",tr("Switch user"));
     SwitchUserAction->setDefaultWidget(SwitchUserWid);
     shutdownmenu->addAction(SwitchUserAction);
-    connect(SwitchUserAction,SIGNAL(triggered()),this,SLOT(switchuseraction_trigger_slot()));
+    connect(SwitchUserAction,SIGNAL(triggered()),this,SLOT(switchUserActionTriggerSlot()));
 
     LogOutAction=new QWidgetAction(shutdownmenu);
     LogOutWid=new QWidget();
-    init_widget_action(LogOutWid,"",tr("Sign out"));
+    initWidgetAction(LogOutWid,"",tr("Sign out"));
     LogOutAction->setDefaultWidget(LogOutWid);
     shutdownmenu->addAction(LogOutAction);
-    connect(LogOutAction,SIGNAL(triggered()),this,SLOT(logoutaction_trigger_slot()));
+    connect(LogOutAction,SIGNAL(triggered()),this,SLOT(logoutActionTriggerSlot()));
 
     RebootAction=new QWidgetAction(shutdownmenu);
     RebootWid=new QWidget();
-    init_widget_action(RebootWid,"",tr("Restart"));
+    initWidgetAction(RebootWid,"",tr("Restart"));
     RebootAction->setDefaultWidget(RebootWid);
     shutdownmenu->addAction(RebootAction);
-    connect(RebootAction,SIGNAL(triggered()),this,SLOT(rebootaction_trigger_slot()));
+    connect(RebootAction,SIGNAL(triggered()),this,SLOT(rebootActionTriggerSlot()));
 
     ShutDownAction=new QWidgetAction(shutdownmenu);
     ShutDownWid=new QWidget();
-    init_widget_action(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg",tr("Shut down"));
+    initWidgetAction(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg",tr("Shut down"));
     ShutDownAction->setDefaultWidget(ShutDownWid);
     shutdownmenu->addAction(ShutDownAction);
-    connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownaction_trigger_slot()));
+    connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownActionTriggerSlot()));
 
     shutdownmenu->setAttribute(Qt::WA_TranslucentBackground);
     shutdownmenu->setWindowOpacity(RightClickMenuOpacity);
@@ -348,9 +354,9 @@ void RightClickMenu::add_shutdown_action()
 }
 
 //其它按钮右键菜单
-void RightClickMenu::add_other_action()
+void RightClickMenu::addOtherAction()
 {
-    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -359,29 +365,29 @@ void RightClickMenu::add_other_action()
     QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
     if(!ret)
     {
-        init_widget_action(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"));
+        initWidgetAction(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"));
         OtherFix2TaskBarAction->setDefaultWidget(OtherFix2TaskBarWid);
         othermenu->addAction(OtherFix2TaskBarAction);
-        connect(OtherFix2TaskBarAction,SIGNAL(triggered()),this,SLOT(fix2taskbaraction_trigger_slot()));
+        connect(OtherFix2TaskBarAction,SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
     }
     else {
-        init_widget_action(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"));
+        initWidgetAction(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"));
         OtherUnfix2TaskBarAction->setDefaultWidget(OtherUnfix2TaskBarWid);
         othermenu->addAction(OtherUnfix2TaskBarAction);
-        connect(OtherUnfix2TaskBarAction,SIGNAL(triggered()),this,SLOT(unfixed4taskbaraction_trigger_slot()));
+        connect(OtherUnfix2TaskBarAction,SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
     }
 
-    init_widget_action(OtherListWid,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"));
+    initWidgetAction(OtherListWid,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"));
     OtherListAction->setDefaultWidget(OtherListWid);
     othermenu->addAction(OtherListAction);
-    connect(OtherListAction,SIGNAL(triggered()),this,SLOT(otherlistaction_trigger_slot()));
+    connect(OtherListAction,SIGNAL(triggered()),this,SLOT(otherListActionTriggerSlot()));
 
     othermenu->setAttribute(Qt::WA_TranslucentBackground);
     othermenu->setWindowOpacity(RightClickMenuOpacity);
     othermenu->setStyleSheet(style);
 }
 
-void RightClickMenu::init_widget_action(QWidget *wid, QString iconstr, QString textstr)
+void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString textstr)
 {
     char style[200];
     sprintf(style,"QWidget{background:transparent;border:0px;border-radius:2px;}\
@@ -433,29 +439,43 @@ void RightClickMenu::init_widget_action(QWidget *wid, QString iconstr, QString t
     }
 }
 
-void RightClickMenu::fix2commonuseaction_trigger_slot()
+void RightClickMenu::fixToCommonUseActionTriggerSlot()
 {
     action_number=1;
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
+    QFileInfo fileInfo(desktopfp);
+    QString desktopfn=fileInfo.fileName();
     setting->beginGroup("application");
-    setting->setValue(appname,0);
+    setting->setValue(desktopfn,0);
     setting->sync();
     setting->endGroup();
-
+    setting->beginGroup("datetime");
+    setting->remove(desktopfn);
+    setting->sync();
+    setting->endGroup();
 }
 
-void RightClickMenu::unfixed4commonuseaction_trigger_slot()
+void RightClickMenu::unfixedFromCommonUseActionTriggerSlot()
 {
     action_number=2;
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
+    QFileInfo fileInfo(desktopfp);
+    QString desktopfn=fileInfo.fileName();
     setting->beginGroup("application");
-    setting->setValue(appname,2);
+    setting->setValue(desktopfn,2);
     setting->sync();
     setting->endGroup();
-
+    setting->beginGroup("datetime");
+    QDateTime dt=QDateTime::currentDateTime();
+    int dateTime=dt.toTime_t();
+    setting->setValue(desktopfn,dateTime);
+    setting->sync();
+    setting->endGroup();
 }
 
-void RightClickMenu::fix2taskbaraction_trigger_slot()
+void RightClickMenu::fixToTaskbarActionTriggerSlot()
 {
-    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -465,9 +485,9 @@ void RightClickMenu::fix2taskbaraction_trigger_slot()
     action_number=3;
 }
 
-void RightClickMenu::unfixed4taskbaraction_trigger_slot()
+void RightClickMenu::unfixedFromTaskbarActionTriggerSlot()
 {
-    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -476,9 +496,9 @@ void RightClickMenu::unfixed4taskbaraction_trigger_slot()
     action_number=4;
 }
 
-void RightClickMenu::add2desktopaction_trigger_slot()
+void RightClickMenu::addToDesktopActionTriggerSlot()
 {
-    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QString path=QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
@@ -495,10 +515,10 @@ void RightClickMenu::add2desktopaction_trigger_slot()
     action_number=5;
 }
 
-void RightClickMenu::uninstallaction_trigger_slot()
+void RightClickMenu::uninstallActionTriggerSlot()
 {
-//    QString exec=pUkuiMenuInterface->get_app_exec(pUkuiMenuInterface->get_desktop_path_by_app_name(appname));
-    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
+//    QString exec=pUkuiMenuInterface->getAppExec(pUkuiMenuInterface->getDesktopPathByAppName(appname));
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
 //    QFileInfo fileInfo(exec.split(" ").at(0));
 //    bool ret=fileInfo.isAbsolute();
 
@@ -529,7 +549,7 @@ void RightClickMenu::uninstallaction_trigger_slot()
     action_number=6;
 }
 
-void RightClickMenu::on_readoutput()
+void RightClickMenu::onReadOutput()
 {
     QString packagestr=QString::fromLocal8Bit(cmdProc->readAllStandardOutput().data());
     QString packageName=packagestr.split(":").at(0);
@@ -539,27 +559,36 @@ void RightClickMenu::on_readoutput()
     QProcess::startDetached(command);
 }
 
-void RightClickMenu::attributeaction_trigger_slot()
+void RightClickMenu::attributeActionTriggerSlot()
 {
-//    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appname);
-//    char command[100];
-//    sprintf(command,"ukui-menu-attr %s",desktopfp.toLocal8Bit().data());
-//    QProcess::startDetached(command);
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
+    char command[100];
+    sprintf(command,"ukui-menu-attr %s",desktopfp.toLocal8Bit().data());
+    QProcess::startDetached(command);
     action_number=7;
 }
 
-void RightClickMenu::cudeleteaction_trigger_slot()
+void RightClickMenu::commonUseDeleteActionTriggerSlot()
 {
     action_number=8;
+    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
+    QFileInfo fileInfo(desktopfp);
+    QString desktopfn=fileInfo.fileName();
     setting->beginGroup("application");
-    setting->remove(appname);
+    setting->remove(desktopfn);
+    setting->sync();
+    setting->endGroup();
+    setting->beginGroup("datetime");
+    setting->remove(desktopfn);
     setting->sync();
     setting->endGroup();
 }
 
-void RightClickMenu::cudeleteallaction_trigger_slot()
+void RightClickMenu::commonUseDeleteAllActionTriggerSlot()
 {
     action_number=9;
+    QStringList deleteKeys;
+    deleteKeys.clear();
     setting->beginGroup("application");
     QStringList keys=setting->childKeys();
     for(int i=0;i<keys.count();i++)
@@ -567,71 +596,80 @@ void RightClickMenu::cudeleteallaction_trigger_slot()
         if(setting->value(keys.at(i)).toInt()==2)
         {
             setting->remove(keys.at(i));
+            deleteKeys.append(keys.at(i));
         }
     }
     setting->sync();
     setting->endGroup();
 
+    for(int i=0;i<deleteKeys.count();i++)
+    {
+        setting->beginGroup("datetime");
+        setting->remove(deleteKeys.at(i));
+        setting->sync();
+        setting->endGroup();
+    }
+
 }
 
-void RightClickMenu::lockscreenaction_trigger_slot()
+void RightClickMenu::lockScreenActionTriggerSlot()
 {
     action_number=10;
 }
 
-void RightClickMenu::switchuseraction_trigger_slot()
+void RightClickMenu::switchUserActionTriggerSlot()
 {
     action_number=11;
 }
 
-void RightClickMenu::logoutaction_trigger_slot()
+void RightClickMenu::logoutActionTriggerSlot()
 {
     action_number=12;
 }
 
-void RightClickMenu::rebootaction_trigger_slot()
+void RightClickMenu::rebootActionTriggerSlot()
 {
     action_number=13;
 }
 
-void RightClickMenu::shutdownaction_trigger_slot()
+void RightClickMenu::shutdownActionTriggerSlot()
 {
     action_number=14;
 }
 
-void RightClickMenu::otherlistaction_trigger_slot()
+void RightClickMenu::otherListActionTriggerSlot()
 {
     action_number=15;
     qDebug()<<"---2---";
 }
 
-int RightClickMenu::show_commonuse_appbtn_menu(QString appname)
+int RightClickMenu::showCommonUseAppBtnMenu(QString appname)
 {
     this->appname=appname;
-    add_commonuse_appbtn_action();
+    addCommonUseAppBtnAction();
     cuappbtnmenu->exec(QCursor::pos());
     return action_number;
 }
 
-int RightClickMenu::show_appbtn_menu(QString appname)
+int RightClickMenu::showAppBtnMenu(QString appname)
 {
     this->appname=appname;
-    add_appbtn_action();
+    addAppBtnAction();
     appbtnmenu->exec(QCursor::pos());
     return action_number;
 }
 
-int RightClickMenu::show_shutdown_menu()
+int RightClickMenu::showShutdownMenu()
 {
     shutdownmenu->exec(QCursor::pos());
     return action_number;
 
 }
 
-void RightClickMenu::show_other_menu(QString appname)
+void RightClickMenu::showOtherMenu(QString appname)
 {
     this->appname=appname;
-    add_other_action();
+    addOtherAction();
     othermenu->exec(QCursor::pos());
 }
 

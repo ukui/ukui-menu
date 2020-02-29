@@ -27,7 +27,7 @@
 #include <QToolButton>
 #include <QScrollBar>
 #include <QPushButton>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 //#include "searchappthread.h"
 #include "src/UtilityFunction/listview.h"
 #include "src/UtilityFunction/itemdelegate.h"
@@ -43,7 +43,7 @@ class SearchResultWidget : public QWidget
 public:
     explicit SearchResultWidget(QWidget *parent = nullptr);
     ~SearchResultWidget();
-    void update_app_listview(QStringList desktopfplist);
+    void updateAppListView(QStringList desktopfplist);
 
 private:
     Ui::SearchResultWidget *ui;
@@ -56,14 +56,14 @@ private:
     QVector<QStringList> data;
 
 protected:
-    void init_widget();
+    void initWidget();
 
 private Q_SLOTS:
-    void exec_app_name(QStringList arg);//执行应用程序
+    void execApplication(QStringList arg);//执行应用程序
 
 Q_SIGNALS:
-    void send_update_applist_signal();//向常用软件模块发送更新应用列表信号
-    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
+    void sendUpdateAppListSignal();//向常用软件模块发送更新应用列表信号
+    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 };
 
 #endif // SEARCHRESULTWIDGET_H

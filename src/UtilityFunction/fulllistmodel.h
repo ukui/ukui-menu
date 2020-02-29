@@ -20,7 +20,7 @@
 #define FULLLISTMODEL_H
 #include <QAbstractListModel>
 #include <QIcon>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include <QEvent>
 #include "src/Style/style.h"
 

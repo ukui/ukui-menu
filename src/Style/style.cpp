@@ -24,9 +24,9 @@ Style::Style()
 
 }
 
-/**
-  * 主视图
-  */
+//主窗口
+int Style::widthavailable=0;
+int Style::heightavailable=0;
 //主视图
 int Style::MainViewWidWidth=0;
 //搜索栏
@@ -76,20 +76,40 @@ int Style::SideBarSpaceIconText=0;
 int Style::SideBarSpaceBetweenItem=0;
 
 
-void Style::init_wid_style()
+void Style::initWidStyle()
 {
-    int width=QApplication::desktop()->width();
-    int height=QApplication::desktop()->height();
-    int heightavailable=QApplication::desktop()->availableGeometry().height();
-    if(width>=2000 && width<=4000)
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
+
+    QDBusReply<int> position=iface.call("GetPanelPosition","");
+    QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+//    int widthavailable=0;
+//    int heightavailable=0;
+    if(position==0 || position==1)
     {
-        MainViewWidWidth=width-round((width-1440)/2);
+        widthavailable=QApplication::desktop()->width();
+        heightavailable=QApplication::desktop()->height()-panelSize;
+    }
+    if(position==2 || position==3)
+    {
+        widthavailable=QApplication::desktop()->width()-panelSize;
+        heightavailable=QApplication::desktop()->height();
+    }
+
+    QApplication::desktop()->width();
+//    int height=QApplication::desktop()->height();
+//    int heightavailable=QApplication::desktop()->availableGeometry().height();
+    if(widthavailable>=2000 && widthavailable<=4000)
+    {
+        MainViewWidWidth=widthavailable-round((widthavailable-1440)/2);
         TopWidgetHeight=107;
         QueryLineEditWidth=350;
         QueryLineEditHeight=30;
         QueryLineEditFontSize=14;
         QueryLineEditIconSize=16;
-        LeftWidWidth=round((width-1440)/2);
+        LeftWidWidth=round((widthavailable-1440)/2);
         LeftWidHeight=heightavailable-TopWidgetHeight;
         LeftBtnWidth=100;
         LeftBtnHeight=43;
@@ -112,7 +132,7 @@ void Style::init_wid_style()
 //        AppBottomSpace=27;
         SliderSize=12;
 
-        SideBarWidWidth=round((width-1440)/2);
+        SideBarWidWidth=round((widthavailable-1440)/2);
         SideBarMargin=20;
         MinMaxWidWidth=110;
         MinMaxWidHeight=TopWidgetHeight;
@@ -126,14 +146,14 @@ void Style::init_wid_style()
         SideBarSpaceIconText=9;
         SideBarSpaceBetweenItem=16;
     }
-    else if (width>=1920 && width<2000) {
-        MainViewWidWidth=width-round((width-1314)/2);
+    else if (widthavailable>=1920 && widthavailable<2000) {
+        MainViewWidWidth=widthavailable-round((widthavailable-1314)/2);
         TopWidgetHeight=107;
         QueryLineEditWidth=350;
         QueryLineEditHeight=30;
         QueryLineEditFontSize=14;
         QueryLineEditIconSize=16;
-        LeftWidWidth=round((width-1314)/2);
+        LeftWidWidth=round((widthavailable-1314)/2);
         LeftWidHeight=heightavailable-TopWidgetHeight;
         LeftBtnWidth=100;
         LeftBtnHeight=43;
@@ -156,7 +176,7 @@ void Style::init_wid_style()
 //        AppBottomSpace=27;
         SliderSize=12;
 
-        SideBarWidWidth=round((width-1314)/2);
+        SideBarWidWidth=round((widthavailable-1314)/2);
         SideBarMargin=20;
         MinMaxWidWidth=110;
         MinMaxWidHeight=TopWidgetHeight;
@@ -170,14 +190,14 @@ void Style::init_wid_style()
         SideBarSpaceIconText=9;
         SideBarSpaceBetweenItem=16;
     }
-    else if (width>=1600 && width<1920) {
-        MainViewWidWidth=width-round((width-1090)/2);
+    else if (widthavailable>=1600 && widthavailable<1920) {
+        MainViewWidWidth=widthavailable-round((widthavailable-1090)/2);
         TopWidgetHeight=107;
         QueryLineEditWidth=260;
         QueryLineEditHeight=22;
         QueryLineEditFontSize=11;
         QueryLineEditIconSize=12;
-        LeftWidWidth=round((width-1090)/2);
+        LeftWidWidth=round((widthavailable-1090)/2);
         LeftBtnHeight=heightavailable-TopWidgetHeight;
         LeftBtnWidth=74;
         LeftBtnHeight=32;
@@ -202,7 +222,7 @@ void Style::init_wid_style()
 
         qDebug()<<"style:"<<QApplication::desktop()->availableGeometry().height()<<heightavailable<<AppListWidHeight;
 
-        SideBarWidWidth=round((width-1090)/2);
+        SideBarWidWidth=round((widthavailable-1090)/2);
         SideBarMargin=10;
         MinMaxWidWidth=110;
         MinMaxWidHeight=TopWidgetHeight;
@@ -216,14 +236,14 @@ void Style::init_wid_style()
         SideBarSpaceIconText=9;
         SideBarSpaceBetweenItem=16;
     }
-    else if (width>=1366 && width<1600) {
-        MainViewWidWidth=width-round((width-850)/2);
+    else if (widthavailable>=1366 && widthavailable<1600) {
+        MainViewWidWidth=widthavailable-round((widthavailable-850)/2);
         TopWidgetHeight=round(107*0.78);
         QueryLineEditWidth=260;
         QueryLineEditHeight=22;
         QueryLineEditFontSize=11;
         QueryLineEditIconSize=12;
-        LeftWidWidth=round((width-850)/2);
+        LeftWidWidth=round((widthavailable-850)/2);
         LeftWidHeight=heightavailable-TopWidgetHeight;
         LeftMargin=10;
         LeftBtnWidth=74;
@@ -246,7 +266,7 @@ void Style::init_wid_style()
 //        AppBottomSpace=static_cast<int>(round(27*0.74));
         SliderSize=10;
 
-        SideBarWidWidth=round((width-850)/2);
+        SideBarWidWidth=round((widthavailable-850)/2);
         SideBarMargin=10;
         MinMaxWidWidth=110;
         MinMaxWidHeight=TopWidgetHeight;
@@ -260,14 +280,14 @@ void Style::init_wid_style()
         SideBarSpaceIconText=9;
         SideBarSpaceBetweenItem=16;
     }
-    else if (width>=1280 && width<1366) {
-        MainViewWidWidth=width-round((width-718)/2);
+    else if (widthavailable>=1280 && widthavailable<1366) {
+        MainViewWidWidth=widthavailable-round((widthavailable-718)/2);
         TopWidgetHeight=round(107*0.78);
         QueryLineEditWidth=260;
         QueryLineEditHeight=22;
         QueryLineEditFontSize=11;
         QueryLineEditIconSize=12;
-        LeftWidWidth=round((width-718)/2);
+        LeftWidWidth=round((widthavailable-718)/2);
         LeftWidHeight=heightavailable-TopWidgetHeight;
         LeftMargin=10;
         LeftBtnWidth=74;
@@ -290,7 +310,7 @@ void Style::init_wid_style()
 //        AppBottomSpace=static_cast<int>(round(27*0.65));
         SliderSize=8;
 
-        SideBarWidWidth=round((width-718)/2);
+        SideBarWidWidth=round((widthavailable-718)/2);
         SideBarMargin=10;
         MinMaxWidWidth=110;
         MinMaxWidHeight=TopWidgetHeight;
@@ -304,14 +324,14 @@ void Style::init_wid_style()
         SideBarSpaceIconText=9;
         SideBarSpaceBetweenItem=16;
     }
-    else if (width>=1152 && width<1280) {
-        MainViewWidWidth=width-round((width-718)/2);
+    else if (widthavailable>=1152 && widthavailable<1280) {
+        MainViewWidWidth=widthavailable-round((widthavailable-718)/2);
         TopWidgetHeight=round(107*0.78);
         QueryLineEditWidth=260;
         QueryLineEditHeight=22;
         QueryLineEditFontSize=11;
         QueryLineEditIconSize=12;
-        LeftWidWidth=round((width-718)/2);
+        LeftWidWidth=round((widthavailable-718)/2);
         LeftWidHeight=heightavailable-TopWidgetHeight;
         LeftMargin=10;
         LeftBtnWidth=74;
@@ -334,7 +354,7 @@ void Style::init_wid_style()
 //        AppBottomSpace=static_cast<int>(round(27*0.65));
         SliderSize=8;
 
-        SideBarWidWidth=round((width-718)/2);
+        SideBarWidWidth=round((widthavailable-718)/2);
         SideBarMargin=10;
         MinMaxWidWidth=110;
         MinMaxWidHeight=TopWidgetHeight;
@@ -349,13 +369,13 @@ void Style::init_wid_style()
         SideBarSpaceBetweenItem=16;
     }
     else {
-        MainViewWidWidth=width-round((width-572)/2);
+        MainViewWidWidth=widthavailable-round((widthavailable-572)/2);
         TopWidgetHeight=round(107*0.78);
         QueryLineEditWidth=260;
         QueryLineEditHeight=22;
         QueryLineEditFontSize=11;
         QueryLineEditIconSize=12;
-        LeftWidWidth=round((width-572)/2);
+        LeftWidWidth=round((widthavailable-572)/2);
         LeftWidHeight=heightavailable-TopWidgetHeight;
         LeftMargin=10;
         LeftBtnWidth=74;
@@ -378,7 +398,7 @@ void Style::init_wid_style()
 //        AppBottomSpace=static_cast<int>(round(27*0.52));
         SliderSize=8;
 
-        SideBarWidWidth=round((width-572)/2);
+        SideBarWidWidth=round((widthavailable-572)/2);
         SideBarMargin=10;
         MinMaxWidWidth=110;
         MinMaxWidHeight=TopWidgetHeight;

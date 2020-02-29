@@ -23,11 +23,11 @@ FullListView::FullListView(QWidget *parent, int module):
     QListView(parent)
 {
     this->module=module;
-    init_widget();
+    initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
 }
@@ -37,7 +37,7 @@ FullListView::~FullListView()
     delete pUkuiMenuInterface;
 }
 
-void FullListView::init_widget()
+void FullListView::initWidget()
 {
     char style[500];
     sprintf(style,"QListView{border:0px;}\
@@ -107,8 +107,9 @@ void FullListView::onClicked(QModelIndex index)
      QVariant var = listmodel->data(index, Qt::DisplayRole);
      if(var.isValid())
      {
-
-         Q_EMIT sendItemClickedSignal(var.value<QString>());
+         QString desktopfp=var.value<QString>();
+         QString appname=pUkuiMenuInterface->getAppName(desktopfp);
+         Q_EMIT sendItemClickedSignal(appname);
 
      }
 }
@@ -119,27 +120,28 @@ void FullListView::rightClickedSlot()
     {
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
-        QString appname=var.value<QString>();
+        QString desktopfp=var.value<QString>();
+        QString appname=pUkuiMenuInterface->getAppName(desktopfp);
         menu=new RightClickMenu(this);
         if(module>0)
         {
-            int ret=menu->show_appbtn_menu(appname);
+            int ret=menu->showAppBtnMenu(appname);
             if(ret==1 || ret==2)
             {
                 Q_EMIT sendFixedOrUnfixedSignal();
             }
             if(ret==7)
-                Q_EMIT send_hide_mainwindow_signal();
+                Q_EMIT sendHideMainWindowSignal();
         }
         else{
-            int ret=menu->show_commonuse_appbtn_menu(appname);
+            int ret=menu->showCommonUseAppBtnMenu(appname);
             if(ret==1 || ret==2)
             {
                 this->setCurrentIndex(index);
             }
 
             if(ret==7)
-                Q_EMIT send_hide_mainwindow_signal();
+                Q_EMIT sendHideMainWindowSignal();
 
             if(ret==8 || ret==9)
             {
@@ -159,12 +161,13 @@ void FullListView::rightClickedSlot()
                 data.clear();
                 for(int i=0;i<applist.count();i++)
                 {
-                    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(applist.at(i));
+//                    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(applist.at(i));
+                    QString desktopfp=QString("/usr/share/applications/"+applist.at(i));
                     data.append(desktopfp);
                 }
                 this->updateData(data);
                 setting->endGroup();
-                Q_EMIT send_update_applist_signal();
+                Q_EMIT sendUpdateAppListSignal();
             }
         }
 

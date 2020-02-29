@@ -35,7 +35,7 @@ LetterWidget::LetterWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    init_widget();
+    initWidget();
 }
 
 LetterWidget::~LetterWidget()
@@ -47,7 +47,7 @@ LetterWidget::~LetterWidget()
 /**
  * 主界面初始化
  */
-void LetterWidget::init_widget()
+void LetterWidget::initWidget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -74,21 +74,21 @@ void LetterWidget::init_widget()
 
 //    mainLayout->addWidget(line);
 
-    init_applist_widget();
+    initAppListWidget();
 
 }
 
 /**
  * 初始化应用列表界面
  */
-void LetterWidget::init_applist_widget()
+void LetterWidget::initAppListWidget()
 {
     applistview=new ListView(this,this->width()-4,this->height(),1);
     mainLayout->addWidget(applistview);
-    fill_app_listview();
+    fillAppListView();
     connect(applistview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(recvItemClickedSlot(QStringList)));
-    connect(applistview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(send_update_applist_signal()));
-    connect(applistview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
+    connect(applistview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+    connect(applistview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 
 }
 
@@ -96,10 +96,10 @@ void LetterWidget::init_applist_widget()
 /**
  * 填充应用列表
  */
-void LetterWidget::fill_app_listview()
+void LetterWidget::fillAppListView()
 {
     int row=0;
-    QVector<QStringList> vector=pUkuiMenuInterface->get_alphabetic_classification();
+    QVector<QStringList> vector=pUkuiMenuInterface->getAlphabeticClassification();
     for(int i=0;i<vector.size();i++)
     {
         QStringList appList=vector.at(i);
@@ -117,7 +117,7 @@ void LetterWidget::fill_app_listview()
             data.append(QStringList()<<letterstr<<"0");
             for(int i=0;i<appList.count();i++)
             {
-                QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appList.at(i));
+                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
                 data.append(QStringList()<<desktopfp<<"1");
             }
             row+=(appList.count()+1);
@@ -134,11 +134,11 @@ void LetterWidget::recvItemClickedSlot(QStringList arg)
 {
     if(arg.at(1).toInt()==0)
     {
-        app_classificationbtn_clicked_slot();
+        appClassificationBtnClickedSlot();
     }
     else{
-        QString exec=pUkuiMenuInterface->get_app_exec(arg.at(0));
-        exec_app_name(exec);
+        QString exec=pUkuiMenuInterface->getAppExec(arg.at(0));
+        execApplication(exec);
     }
 
 }
@@ -146,9 +146,9 @@ void LetterWidget::recvItemClickedSlot(QStringList arg)
 /**
  * 执行应用程序
  */
-void LetterWidget::exec_app_name(QString exec)
+void LetterWidget::execApplication(QString exec)
 {
-    Q_EMIT send_hide_mainwindow_signal();
+    Q_EMIT sendHideMainWindowSignal();
     //移除启动参数%u或者%U
     if(exec.contains("%"))
     {
@@ -161,13 +161,13 @@ void LetterWidget::exec_app_name(QString exec)
 /**
  * 更新应用列表
  */
-void LetterWidget::update_app_listview()
+void LetterWidget::updateAppListView()
 {
     int row=0;
     data.clear();
     letterbtnlist.clear();
     letterbtnrowlist.clear();
-    QVector<QStringList> vector=pUkuiMenuInterface->get_alphabetic_classification();
+    QVector<QStringList> vector=pUkuiMenuInterface->getAlphabeticClassification();
     for(int i=0;i<vector.size();i++)
     {
         QStringList appList=vector.at(i);
@@ -185,7 +185,7 @@ void LetterWidget::update_app_listview()
             data.append(QStringList()<<letterstr<<"0");
             for(int i=0;i<appList.count();i++)
             {
-                QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(appList.at(i));
+                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
                 data.append(QStringList()<<desktopfp<<"1");
             }
             row+=(appList.count()+1);
@@ -198,25 +198,25 @@ void LetterWidget::update_app_listview()
 /**
  * 应用列表字母分类按钮槽函数
  */
-void LetterWidget::app_classificationbtn_clicked_slot()
+void LetterWidget::appClassificationBtnClickedSlot()
 {
     //加载LetterBUttonWidget界面
     letterbtnwid=new LetterButtonWidget(this);
-    connect(this,SIGNAL(send_letterbtn_list(QStringList)),letterbtnwid,SLOT(recv_letterbtn_list(QStringList)));
-    Q_EMIT send_letterbtn_list(letterbtnlist);
+    connect(this,SIGNAL(sendLetterBtnList(QStringList)),letterbtnwid,SLOT(recvLetterBtnList(QStringList)));
+    Q_EMIT sendLetterBtnList(letterbtnlist);
 //    mainLayout->removeWidget(line);
 //    line->setParent(nullptr);
     mainLayout->removeWidget(applistview);
     applistview->setParent(nullptr);
     mainLayout->addWidget(letterbtnwid);
 
-    connect(letterbtnwid, SIGNAL(send_letterbtn_signal(QString)),this,SLOT(recv_letterbtn_signal(QString)));
+    connect(letterbtnwid, SIGNAL(sendLetterBtnSignal(QString)),this,SLOT(recvLetterBtnSignal(QString)));
 }
 
 /**
  * 接收LetterButtonWidget界面按钮信号
  */
-void LetterWidget::recv_letterbtn_signal(QString btnname)
+void LetterWidget::recvLetterBtnSignal(QString btnname)
 {
     mainLayout->removeWidget(letterbtnwid);
     letterbtnwid->setParent(nullptr);
@@ -238,7 +238,7 @@ void LetterWidget::recv_letterbtn_signal(QString btnname)
     }
 }
 
-void LetterWidget::widget_make_zero()
+void LetterWidget::widgetMakeZero()
 {
     if(letterbtnwid!=nullptr)
     {

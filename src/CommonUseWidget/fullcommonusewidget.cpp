@@ -27,7 +27,7 @@ FullCommonUseWidget::FullCommonUseWidget(QWidget *parent) :
     ui(new Ui::FullCommonUseWidget)
 {
     ui->setupUi(this);
-    init_widget();
+    initWidget();
 }
 
 FullCommonUseWidget::~FullCommonUseWidget()
@@ -36,7 +36,7 @@ FullCommonUseWidget::~FullCommonUseWidget()
     delete pUkuiMenuInterface;
 }
 
-void FullCommonUseWidget::init_widget()
+void FullCommonUseWidget::initWidget()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -50,24 +50,24 @@ void FullCommonUseWidget::init_widget()
 
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
-    init_applist_widget();
-    fill_app_tablewidget();
+    initAppListWidget();
+    fillAppList();
 }
 
-void FullCommonUseWidget::init_applist_widget()
+void FullCommonUseWidget::initAppListWidget()
 {
     mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
     listview=new FullListView(this,0);
     mainLayout->addWidget(listview);
-    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(exec_app_name(QString)));
-    connect(listview,SIGNAL(send_update_applist_signal()),this,SIGNAL(send_update_applist_signal()));
-    connect(listview,SIGNAL(send_hide_mainwindow_signal()),this,SIGNAL(send_hide_mainwindow_signal()));
+    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
+    connect(listview,SIGNAL(sendUpdateAppListSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 }
 
-void FullCommonUseWidget::fill_app_tablewidget()
+void FullCommonUseWidget::fillAppList()
 {
     QStringList keys;
     keys.clear();
@@ -85,7 +85,8 @@ void FullCommonUseWidget::fill_app_tablewidget()
     data.clear();
     for(int i=0;i<applist.count();i++)
     {
-        QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(applist.at(i));
+//        QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(applist.at(i));
+        QString desktopfp=QString("/usr/share/applications/"+applist.at(i));
         data.append(desktopfp);
     }
 
@@ -96,10 +97,10 @@ void FullCommonUseWidget::fill_app_tablewidget()
 /**
  * 执行应用程序
  */
-void FullCommonUseWidget::exec_app_name(QString appname)
+void FullCommonUseWidget::execApplication(QString appname)
 {
-    Q_EMIT send_hide_mainwindow_signal();
-    QString execpath=pUkuiMenuInterface->get_app_exec(pUkuiMenuInterface->get_desktop_path_by_app_name(appname));
+    Q_EMIT sendHideMainWindowSignal();
+    QString execpath=pUkuiMenuInterface->getAppExec(pUkuiMenuInterface->getDesktopPathByAppName(appname));
     //移除启动参数%u或者%U
     if(execpath.contains("%"))
     {
@@ -112,7 +113,7 @@ void FullCommonUseWidget::exec_app_name(QString appname)
 /**
  * 更新应用列表
  */
-void FullCommonUseWidget::update_listview_slot()
+void FullCommonUseWidget::updateListViewSlot()
 {
     QStringList keys;
     keys.clear();
@@ -130,7 +131,8 @@ void FullCommonUseWidget::update_listview_slot()
     data.clear();
     for(int i=0;i<applist.count();i++)
     {
-        QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(applist.at(i));
+//        QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(applist.at(i));
+        QString desktopfp=QString("/usr/share/applications/"+applist.at(i));
         data.append(desktopfp);
     }
 
@@ -138,7 +140,7 @@ void FullCommonUseWidget::update_listview_slot()
     setting->endGroup();
 }
 
-void FullCommonUseWidget::widget_make_zero()
+void FullCommonUseWidget::widgetMakeZero()
 {
     listview->verticalScrollBar()->setSliderPosition(0);
 }

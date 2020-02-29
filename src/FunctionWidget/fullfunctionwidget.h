@@ -30,9 +30,7 @@
 #include <QScrollBar>
 #include <QPushButton>
 #include <QButtonGroup>
-#include <QAbstractButton>
-#include "src/interface/chineseletterhelper.h"
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
 #include "src/UtilityFunction/fulllistview.h"
@@ -52,7 +50,7 @@ class FullFunctionWidget : public QWidget
 public:
     explicit FullFunctionWidget(QWidget *parent=nullptr);
     ~FullFunctionWidget();
-    void widget_make_zero();//MainWindow隐藏时，此界面恢复至初始状态
+    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
 
 private:
     Ui::FullFunctionWidget *ui;
@@ -92,25 +90,24 @@ private:
     int beforebtnPos=0;
 
 protected:
-    void init_widget();
-    void init_iconlist_widget();//初始化图标列表界面
-    void init_iconlist_scrollarea();//初始化图标列表界面数据表格iconlisttableWid
+    void initWidget();
+    void initIconListWidget();//初始化图标列表界面
+    void initIconListScrollArea();//初始化图标列表界面数据表格iconlisttableWid
 
-    void init_applist_widget();//初始化应用列表界面
-    void fill_app_list();//填充应用列表
-    void insert_classification_btn(QString btnname);//插入分类按钮
-    void insert_app_list(QStringList appnamelist);//插入应用列表
-    void resize_scrollarea_controls();//设置scrollarea填充控件大小
+    void initAppListWidget();//初始化应用列表界面
+    void fillAppList();//填充应用列表
+    void insertClassificationBtn(QString btnname);//插入分类按钮
+    void insertAppList(QStringList appnamelist);//插入应用列表
+    void resizeScrollAreaControls();//设置scrollarea填充控件大小
 
 private Q_SLOTS:
-    void exec_app_name(QString appname);//执行应用程序
-    void btngroup_clicked_slot(QAbstractButton *btn);
-    void update_app_listview();//更新应用列表
+    void execApplication(QString appname);//执行应用程序
+    void btnGroupClickedSlot(QAbstractButton *btn);
+    void updateAppListView();//更新应用列表
 
 Q_SIGNALS:
-    void send_classificationbtn_list(QStringList list);//向FullFunctionButtonWidget界面发送分类按钮列表
-    void send_update_applist_signal();//向常用软件模块发送更新应用列表信号
-    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
+    void sendUpdateAppListSignal();//向常用软件模块发送更新应用列表信号
+    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 };
 
 #endif // FULLFUNCTIONWIDGET_H

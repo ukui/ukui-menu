@@ -20,11 +20,11 @@
 
 ClassifyScrollArea::ClassifyScrollArea()
 {
-    init_wid();
+    initWid();
 
 }
 
-void ClassifyScrollArea::init_wid()
+void ClassifyScrollArea::initWid()
 {
     this->verticalScrollBar()->setHidden(true);
     this->horizontalScrollBar()->setHidden(true);

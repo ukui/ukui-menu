@@ -47,18 +47,18 @@ private:
     QStringList icondisabledlist, iconlist,iconlightlist,functionnamelist;
 
 protected:
-    void init_widget();
+    void initWidget();
 
 Q_SIGNALS:
     /**
      * 向FunctionWidget界面发送功能分类按钮被点击信号
      * @param btnname存放被点击按钮名称
      */
-    void send_functionbtn_signal(QString btnname);
+    void sendFunctionBtnSignal(QString btnname);
 
 private Q_SLOTS:
-    void functionbtn_clicked_slot();//功能分类按钮槽函数
-    void recv_classificationbtn_list(QStringList list);//接收FunctionWidget界面分类按钮列表
+    void functionBtnClickedSlot();//功能分类按钮槽函数
+    void recvClassificationBtnList(QStringList list);//接收FunctionWidget界面分类按钮列表
 };
 
 #endif // FUNCTIONBUTTONWIDGET_H

@@ -34,8 +34,8 @@ private:
     QSettings* setting=nullptr;
 
 protected:
-    void recursive_search_file(const QString& _filePath);//遍历/usr/share/applications/文件夹
-    QStringList get_specified_category_app_list(QString categorystr);//获取指定类型应用列表
+    void recursiveSearchFile(const QString& _filePath);//遍历/usr/share/applications/文件夹
+    QStringList getSpecifiedCategoryAppList(QString categorystr);//获取指定类型应用列表
 
 public:
     UkuiMenuInterface();
@@ -49,30 +49,30 @@ public:
      * @param desktopfp 为应用.desktop文件所在路径
      * @return 返回应用名称
      */
-    QString get_app_name(QString desktopfp);//获取应用名
-    QString get_app_english_name(QString desktopfp);//获取英语英文名
-    QString get_app_icon(QString desktopfp);//获取应用图像
-    QString get_app_categories(QString desktopfp);//获取应用分类
-    QString get_app_exec(QString desktopfp);//获取应用命令
-    QString get_app_type(QString desktopfp);//获取应用类型
-    QString get_app_comment(QString desktopfp);//获取应用注释
+    QString getAppName(QString desktopfp);//获取应用名
+    QString getAppEnglishName(QString desktopfp);//获取英语英文名
+    QString getAppIcon(QString desktopfp);//获取应用图像
+    QString getAppCategories(QString desktopfp);//获取应用分类
+    QString getAppExec(QString desktopfp);//获取应用命令
+    QString getAppType(QString desktopfp);//获取应用类型
+    QString getAppComment(QString desktopfp);//获取应用注释
 
-    QStringList get_desktop_file_path();//获取系统deskyop文件路径
+    QStringList getDesktopFilePath();//获取系统deskyop文件路径
 
-    QString get_desktop_path_by_app_name(QString appname);//根据应用名获取deskyop文件路径
-    QString get_desktop_path_by_app_english_name(QString appname);//根据应用英文名获取deskyop文件路径
+    QString getDesktopPathByAppName(QString appname);//根据应用名获取deskyop文件路径
+    QString getDesktopPathByAppEnglishName(QString appname);//根据应用英文名获取deskyop文件路径
 
-    QStringList sort_app_name();//应用排序
-    QVector<QStringList> get_alphabetic_classification();//获取字母分类
-    QVector<QStringList> get_functional_classification();//获取功能分类
-    bool matching_app_categories(QString desktopfp,QStringList categorylist);//匹配应用Categories
+    QStringList sortAppName();//应用排序
+    QVector<QStringList> getAlphabeticClassification();//获取字母分类
+    QVector<QStringList> getFunctionalClassification();//获取功能分类
+    bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
 
-    QString get_app_name_pinyin(QString appname);//获取应用名拼音
+    QString getAppNamePinyin(QString appname);//获取应用名拼音
 
     //获取用户图像
-    QString get_user_icon();
+    QString getUserIcon();
     //获取用户姓名
-    QString get_user_name();
+    QString getUserName();
 
 };
 

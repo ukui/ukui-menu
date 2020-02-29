@@ -27,9 +27,10 @@
 #include <QtMath>
 #include <QEvent>
 #include <QSpacerItem>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
+#include <QSettings>
 #include "src/Style/style.h"
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
@@ -45,12 +46,15 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void setFrameStyle();
 
 private:
     Ui::MainWindow *ui;
 
     bool is_fullscreen=false;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    QSettings* setting=nullptr;
+
     QFrame* line=nullptr;//垂直分割线
     //主窗口样式
     QFrame* frame=nullptr;
@@ -63,17 +67,17 @@ private:
     QPropertyAnimation* pLeaveAnimation=nullptr;
 
 protected:
-    void init_mainwindow();
+    void initMainWindow();
     bool event(QEvent *event);//鼠标点击窗口外部事件
     void paintEvent(QPaintEvent*);//添加阴影
     void changeEvent(QEvent* e);
 
 private Q_SLOTS:
-    void show_fullscreen_widget();//加载全屏窗口
-    void show_default_widget();//显示默认窗口
-    void recv_hide_mainwindow_slot();//接收隐藏主窗口信号
+    void showFullScreenWidget();//加载全屏窗口
+    void showDefaultWidget();//显示默认窗口
+    void recvHideMainWindowSlot();//接收隐藏主窗口信号
 //    void recv_hover_signal_slot(bool is_hover);
-    void monitor_resolution_change(int screen);//监控屏幕分辨率
+    void monitorResolutionChange(int screen);//监控屏幕分辨率
 };
 
 #endif // MAINWINDOW_H

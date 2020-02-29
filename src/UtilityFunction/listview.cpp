@@ -25,11 +25,11 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     this->w=width;
     this->h=height;
     this->module=module;
-    init_widget();
+    initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
 }
@@ -38,7 +38,7 @@ ListView::~ListView()
     delete pUkuiMenuInterface;
 }
 
-void ListView::init_widget()
+void ListView::initWidget()
 {
     this->setFixedSize(w,h);
     char style[400];
@@ -115,24 +115,24 @@ void ListView::rightClickedSlot()
         {
             if(strlist.at(1).toInt()==1)
             {
-                QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
-                int ret=menu->show_appbtn_menu(appname);
+                QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
+                int ret=menu->showAppBtnMenu(appname);
                 if(ret==1 || ret==2)
                     Q_EMIT sendFixedOrUnfixedSignal();
                 if(ret==7)
-                    Q_EMIT send_hide_mainwindow_signal();
+                    Q_EMIT sendHideMainWindowSignal();
             }
         }
         else{
-            QString appname=pUkuiMenuInterface->get_app_name(strlist.at(0));
-            int ret=menu->show_commonuse_appbtn_menu(appname);
+            QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
+            int ret=menu->showCommonUseAppBtnMenu(appname);
             if(ret==1 || ret==2)
             {
                 this->setCurrentIndex(index);
             }
 
             if(ret==7)
-                Q_EMIT send_hide_mainwindow_signal();
+                Q_EMIT sendHideMainWindowSignal();
 
             if(ret==8 || ret==9)
             {
@@ -152,14 +152,15 @@ void ListView::rightClickedSlot()
                 data.clear();
                 for(int i=0;i<applist.count();i++)
                 {
-                    QString desktopfp=pUkuiMenuInterface->get_desktop_path_by_app_name(applist.at(i));
+//                    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(applist.at(i));
+                    QString desktopfp=QString("/usr/share/applications/"+applist.at(i));
                     data.append(QStringList()<<desktopfp<<"1");
                 }
 
                 this->updateData(data);
                 setting->endGroup();
 
-                Q_EMIT send_update_applist_signal();
+                Q_EMIT sendUpdateAppListSignal();
             }
         }
 

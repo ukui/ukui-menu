@@ -23,14 +23,14 @@ PushButton::PushButton(QString name, int width, int height)
     this->name=name;
     this->width=width;
     this->height=height;
-    init_app_btn();
+    initAppBtn();
 }
 
 PushButton::~PushButton()
 {
 }
 
-void PushButton::init_app_btn()
+void PushButton::initAppBtn()
 {
     char btnstyle[300];
     sprintf(btnstyle,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\

@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QToolTip>
 #include <QHelpEvent>
+#include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 
 class FullItemDelegate : public QStyledItemDelegate
@@ -38,6 +39,7 @@ public:
 private:
     int module=0;
     QSettings* setting=nullptr;
+    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
 protected:
 //    bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);

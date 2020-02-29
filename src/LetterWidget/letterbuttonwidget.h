@@ -45,18 +45,18 @@ private:
     QGridLayout* gridLayout=nullptr;
 
 protected:
-    void init_widget();
+    void initWidget();
 
 Q_SIGNALS:
     /**
      * 向LetterWidget界面发送字母分类按钮被点击信号
      * @param btnname存放按钮名称
      */
-    void send_letterbtn_signal(QString btnname);
+    void sendLetterBtnSignal(QString btnname);
 
 private Q_SLOTS:
-    void letterbtn_clicked_slot();//字母分类按钮槽函数
-    void recv_letterbtn_list(QStringList list);//接收LetterWidget字母按钮列表
+    void letterBtnClickedSlot();//字母分类按钮槽函数
+    void recvLetterBtnList(QStringList list);//接收LetterWidget字母按钮列表
 };
 
 #endif // LETTERBUTTONWIDGET_H

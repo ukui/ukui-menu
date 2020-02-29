@@ -28,7 +28,7 @@
 #include <QEvent>
 #include <QPropertyAnimation>
 #include <QButtonGroup>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include <QBitmap>
 #include "src/Style/style.h"
 #include "src/MainViewWidget/mainviewwidget.h"
@@ -45,9 +45,9 @@ class SideBarWidget : public QWidget
 public:
     explicit SideBarWidget(QWidget *parent = nullptr);
     ~SideBarWidget();
-    void load_min_sidebar();//加载默认侧边栏
-    void load_max_sidebar();//加载全屏侧边栏
-    void widget_make_zero();//MainWindow隐藏时，此界面恢复至初始状态
+    void loadMinSidebar();//加载默认侧边栏
+    void loadMaxSidebar();//加载全屏侧边栏
+    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
 
 private:
     Ui::SideBarWidget *ui;
@@ -99,17 +99,17 @@ private:
     bool is_hover=false;
 
 protected:
-    void init_widget();//初始化主界面
-    void add_sidebar_btn();//添加侧边栏按钮
-    void set_btn_style(QPushButton *btn, QString btnicon, int num);//设置按钮样式
+    void initWidget();//初始化主界面
+    void addSidebarBtn();//添加侧边栏按钮
+    void setBtnStyle(QPushButton *btn, QString btnicon, int num);//设置按钮样式
 
-    void set_min_sidebar_btn(QPushButton *btn);//设置默认侧边栏按钮
-    void set_max_sidebar_btn(QPushButton *btn);//设置全屏侧边栏按钮
+    void setMinSidebarBtn(QPushButton *btn);//设置默认侧边栏按钮
+    void setMaxSidebarBtn(QPushButton *btn);//设置全屏侧边栏按钮
 
-    void add_right_click_menu(QPushButton* btn);
+    void addRightClickMenu(QPushButton* btn);
 
-    void set_min_btn();//设置还原按钮
-    void set_max_btn();//设置全屏按钮
+    void setMinBtn();//设置还原按钮
+    void setMaxBtn();//设置全屏按钮
 
 //    void enterEvent(QEvent* e);
 //    void leaveEvent(QEvent* e);
@@ -118,28 +118,27 @@ protected:
 
 private Q_SLOTS:
 //    bool eventFilter(QObject *watched, QEvent *event);
-    void btngroup_clicked_slot(QAbstractButton *btn);
-    void shutdownbtn_right_click_slot();//加载关机按钮右键菜单
-    void otherbtn_right_click_slot();//加载载右键菜单
+    void btnGroupClickedSlot(QAbstractButton *btn);
+    void shutdownBtnRightClickSlot();//加载关机按钮右键菜单
+    void otherBtnRightClickSlot();//加载载右键菜单
 //    void animation_finished_slot();
-    void computerbtn_clicked_slot();
-    void controlbtn_clicked_slot();
-    void shutdownbtn_clicked_slot();
-    void usericonbtn_clicked_slot();
-    void recv_querylineEdit_focusin_slot();//接收搜索框获取焦点槽函数
-    void user_accounts_changed();
+    void computerBtnClickedSlot();
+    void controlBtnClickedSlot();
+    void shutdownBtnClickedSlot();
+    void userIconBtnClickedSlot();
+    void recvQueryLineEditFocusInSlot();//接收搜索框获取焦点槽函数
+    void userAccountsChanged();
 
 Q_SIGNALS:
-    void send_commonusebtn_signal();//发送常用分类按钮信号
-    void send_letterbtn_signal();//发送字母分类按钮信号
-    void send_functionbtn_signal();//发送功能分类按钮信号
-    void send_fullscreen_commonusebtn_signal();//发送常用分类按钮信号
-    void send_fullscreen_letterbtn_signal();//发送字母分类按钮信号
-    void send_fullscreen_functionbtn_signal();//发送功能分类按钮信号
-    void send_hide_mainwindow_signal();//向MainViewWidget发送隐藏主窗口信号
-    void send_fullscreenbtn_signal();//发送全屏按钮点击信号
-    void send_defaultbtn_signal();//发送默认(还原)按钮点击信号
-    void send_hover_signal(bool is_hover);
+    void sendCommonUseBtnSignal();//发送常用分类按钮信号
+    void sendLetterBtnSignal();//发送字母分类按钮信号
+    void sendFunctionBtnSignal();//发送功能分类按钮信号
+    void sendFullScreenCommonUseBtnSignal();//发送常用分类按钮信号
+    void sendFullScreenLetterBtnSignal();//发送字母分类按钮信号
+    void sendFullScreenFunctionBtnSignal();//发送功能分类按钮信号
+    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
+    void sendFullScreenBtnSignal();//发送全屏按钮点击信号
+    void sendDefaultBtnSignal();//发送默认(还原)按钮点击信号
 };
 
 #endif // SIDEBARWIDGET_H

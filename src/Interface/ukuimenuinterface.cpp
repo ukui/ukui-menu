@@ -23,7 +23,7 @@
 #include <QCollator>
 #include <QLocale>
 #include <QStringList>
-#include "chineseletterhelper.h"
+#include "ukuichineseletter.h"
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
@@ -35,7 +35,7 @@ UkuiMenuInterface::~UkuiMenuInterface()
 }
 
 //文件递归查询
-void UkuiMenuInterface::recursive_search_file(const QString& _filePath)
+void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -61,7 +61,7 @@ void UkuiMenuInterface::recursive_search_file(const QString& _filePath)
         //如果是文件夹，递归
         bool isDir = fileInfo.isDir();
         if(isDir) {
-            recursive_search_file(fileInfo.filePath());
+            recursiveSearchFile(fileInfo.filePath());
         }
         else{
             //过滤后缀不是.desktop的文件
@@ -120,10 +120,10 @@ void UkuiMenuInterface::recursive_search_file(const QString& _filePath)
 }
 
 //获取系统deskyop文件路径
-QStringList UkuiMenuInterface::get_desktop_file_path()
+QStringList UkuiMenuInterface::getDesktopFilePath()
 {
     filePathList.clear();
-    recursive_search_file("/usr/share/applications/");
+    recursiveSearchFile("/usr/share/applications/");
 
     filePathList.removeAll("/usr/share/applications/peony-folder-handler.desktop");
     filePathList.removeAll("/usr/share/applications/peony.desktop");
@@ -218,16 +218,16 @@ QVector<QStringList> UkuiMenuInterface::create_appinfo_vector()
     vector.append(QStringList()<<"Education");//8教育
     vector.append(QStringList()<<"System"<<"Settings"<<"Security");//9系统
 
-    QStringList desktopfpList=get_desktop_file_path();
+    QStringList desktopfpList=getDesktopFilePath();
 
     for(int i=0;i<desktopfpList.count();i++)
     {
         QStringList appInfoList;
         QString desktopfp=desktopfpList.at(i);
-        QString icon=get_app_icon(desktopfpList.at(i));
-        QString name=get_app_name(desktopfpList.at(i));
-        QString exec=get_app_exec(desktopfpList.at(i));
-        QString comment=get_app_comment(desktopfpList.at(i));
+        QString icon=getAppIcon(desktopfpList.at(i));
+        QString name=getAppName(desktopfpList.at(i));
+        QString exec=getAppExec(desktopfpList.at(i));
+        QString comment=getAppComment(desktopfpList.at(i));
 
         desktopfpVector.append(desktopfp);
 
@@ -235,7 +235,7 @@ QVector<QStringList> UkuiMenuInterface::create_appinfo_vector()
         bool is_owned=false;
         for(int j=0;j<vector.size();j++)
         {
-            if(matching_app_categories(desktopfpList.at(i),vector.at(j)))//有对应分类
+            if(matchingAppCategories(desktopfpList.at(i),vector.at(j)))//有对应分类
             {
                 is_owned=true;
                 appInfoList.append(QString::number(j+1));
@@ -251,7 +251,7 @@ QVector<QStringList> UkuiMenuInterface::create_appinfo_vector()
 }
 
 //获取应用名称
-QString UkuiMenuInterface::get_app_name(QString desktopfp)
+QString UkuiMenuInterface::getAppName(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -282,7 +282,7 @@ QString UkuiMenuInterface::get_app_name(QString desktopfp)
 }
 
 //获取英应用英文名
-QString UkuiMenuInterface::get_app_english_name(QString desktopfp)
+QString UkuiMenuInterface::getAppEnglishName(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -297,7 +297,7 @@ QString UkuiMenuInterface::get_app_english_name(QString desktopfp)
 }
 
 //获取应用分类
-QString UkuiMenuInterface::get_app_categories(QString desktopfp)
+QString UkuiMenuInterface::getAppCategories(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -312,7 +312,7 @@ QString UkuiMenuInterface::get_app_categories(QString desktopfp)
 }
 
 //获取应用图标
-QString UkuiMenuInterface::get_app_icon(QString desktopfp)
+QString UkuiMenuInterface::getAppIcon(QString desktopfp)
 {   
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -327,7 +327,7 @@ QString UkuiMenuInterface::get_app_icon(QString desktopfp)
 }
 
 //获取应用命令
-QString UkuiMenuInterface::get_app_exec(QString desktopfp)
+QString UkuiMenuInterface::getAppExec(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -342,7 +342,7 @@ QString UkuiMenuInterface::get_app_exec(QString desktopfp)
 }
 
 //获取应用注释
-QString UkuiMenuInterface::get_app_comment(QString desktopfp)
+QString UkuiMenuInterface::getAppComment(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -358,7 +358,7 @@ QString UkuiMenuInterface::get_app_comment(QString desktopfp)
 }
 
 //获取应用类型
-QString UkuiMenuInterface::get_app_type(QString desktopfp)
+QString UkuiMenuInterface::getAppType(QString desktopfp)
 {
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -373,7 +373,7 @@ QString UkuiMenuInterface::get_app_type(QString desktopfp)
 }
 
 //根据应用名获取deskyop文件路径
-QString UkuiMenuInterface::get_desktop_path_by_app_name(QString appname)
+QString UkuiMenuInterface::getDesktopPathByAppName(QString appname)
 {
     QString desktopfp;
     int index=0;
@@ -392,14 +392,14 @@ QString UkuiMenuInterface::get_desktop_path_by_app_name(QString appname)
 }
 
 //根据应用英文名获取desktop文件路径
-QString UkuiMenuInterface::get_desktop_path_by_app_english_name(QString appname)
+QString UkuiMenuInterface::getDesktopPathByAppEnglishName(QString appname)
 {
     int i=0;
     QString desktopfilepath;
-    QStringList desktopfpList=get_desktop_file_path();
+    QStringList desktopfpList=getDesktopFilePath();
     for(i=0;i<desktopfpList.count();i++)
     {
-        QString name=get_app_english_name(desktopfpList.at(i));
+        QString name=getAppEnglishName(desktopfpList.at(i));
         if(QString::compare(name,appname)==0)
         {
             desktopfilepath=desktopfpList.at(i);
@@ -408,7 +408,7 @@ QString UkuiMenuInterface::get_desktop_path_by_app_english_name(QString appname)
     return desktopfilepath;
 }
 
-QVector<QStringList> UkuiMenuInterface::get_alphabetic_classification()
+QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
 {
     QVector<QStringList> data;
     QStringList appnameList;
@@ -418,7 +418,7 @@ QVector<QStringList> UkuiMenuInterface::get_alphabetic_classification()
     while(index<appInfoVector.size())
     {
         QString appname=appInfoVector.at(index).at(2);
-        QString appnamepy=ChineseLetterHelper::GetPinyins(appname);
+        QString appnamepy=UkuiChineseLetter::getPinyins(appname);
         char c=appnamepy.at(0).toLatin1();
         switch (c) {
         case 'A':
@@ -539,7 +539,7 @@ QVector<QStringList> UkuiMenuInterface::get_alphabetic_classification()
     return data;
 }
 
-QVector<QStringList> UkuiMenuInterface::get_functional_classification()
+QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
 {
     QStringList list[11];
     int index=0;
@@ -591,7 +591,7 @@ QVector<QStringList> UkuiMenuInterface::get_functional_classification()
 //    for(int i=0;i<10;i++)
 //        list[0].append(recentList.at(i));
 
-    QString path=QDir::homePath()+"/.config/ukui-menu/ukui-menu.ini";
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
     setting->beginGroup("recentapp");
     QStringList keys=setting->childKeys();
@@ -617,9 +617,9 @@ QVector<QStringList> UkuiMenuInterface::get_functional_classification()
 
 }
 
-bool UkuiMenuInterface::matching_app_categories(QString desktopfp, QStringList categorylist)
+bool UkuiMenuInterface::matchingAppCategories(QString desktopfp, QStringList categorylist)
 {
-    QString category=get_app_categories(desktopfp);
+    QString category=getAppCategories(desktopfp);
     int index;
     for(index=0;index<categorylist.count();index++)
     {
@@ -633,14 +633,14 @@ bool UkuiMenuInterface::matching_app_categories(QString desktopfp, QStringList c
 }
 
 //应用排序
-QStringList UkuiMenuInterface::sort_app_name()
+QStringList UkuiMenuInterface::sortAppName()
 {
-    QStringList desktopfpList=get_desktop_file_path();
+    QStringList desktopfpList=getDesktopFilePath();
     QStringList appnameList;
     appnameList.clear();
     for(int i=0;i<desktopfpList.count();i++)
     {
-        QString appname=get_app_name(desktopfpList.at(i));
+        QString appname=getAppName(desktopfpList.at(i));
         appnameList.append(appname);
     }
 
@@ -651,7 +651,7 @@ QStringList UkuiMenuInterface::sort_app_name()
     numberappname.clear();
     for(int i=0;i<appnameList.count();i++)
     {
-        QString appname=ChineseLetterHelper::GetPinyins(appnameList.at(i));
+        QString appname=UkuiChineseLetter::getPinyins(appnameList.at(i));
         QChar c=appname.at(0);
         if( c<48 || (c>57 && c<65) || c>90 )
         {
@@ -744,8 +744,8 @@ QStringList UkuiMenuInterface::sort_app_name()
         for(int i=0;i<appnameList.count()-1;i++)
             for(int j=0;j<appnameList.count()-1-i;j++)
             {
-                QString appname_1=ChineseLetterHelper::GetPinyins(appnameList.at(j));
-                QString appname_2=ChineseLetterHelper::GetPinyins(appnameList.at(j+1));
+                QString appname_1=UkuiChineseLetter::getPinyins(appnameList.at(j));
+                QString appname_2=UkuiChineseLetter::getPinyins(appnameList.at(j+1));
                 if(QString::compare(appname_1,appname_2)>0)
                 {
                     QString tmp=appnameList.at(j);
@@ -778,23 +778,23 @@ QStringList UkuiMenuInterface::sort_app_name()
 }
 
 //获取应用拼音
-QString UkuiMenuInterface::get_app_name_pinyin(QString appname)
+QString UkuiMenuInterface::getAppNamePinyin(QString appname)
 {
-    return ChineseLetterHelper::GetPinyins(appname);
+    return UkuiChineseLetter::getPinyins(appname);
 }
 
 //获取指定类型应用列表
-QStringList UkuiMenuInterface::get_specified_category_app_list(QString categorystr)
+QStringList UkuiMenuInterface::getSpecifiedCategoryAppList(QString categorystr)
 {
     QByteArray categorybyte=categorystr.toLocal8Bit();
     char* category=categorybyte.data();
 
-    QStringList desktopfpList=get_desktop_file_path();
+    QStringList desktopfpList=getDesktopFilePath();
     QStringList appnameList;
     appnameList.clear();
     for(int index=0;index<desktopfpList.count();index++)
     {
-        QString appcategorystr=get_app_categories(desktopfpList.at(index));
+        QString appcategorystr=getAppCategories(desktopfpList.at(index));
         if(!appcategorystr.isEmpty())
         {
             QByteArray appcategorybyte=appcategorystr.toLocal8Bit();
@@ -804,7 +804,7 @@ QStringList UkuiMenuInterface::get_specified_category_app_list(QString categorys
             {
                 if(strncmp(appcategory+i,category,strlen(category))==0)
                 {
-                    QString appname=get_app_name(desktopfpList.at(index));
+                    QString appname=getAppName(desktopfpList.at(index));
                     if(QString::compare(appname,"访问提示")==0)
 //                        qDebug()<<desktopfpList.at(index);
                     appnameList.append(appname);
@@ -819,7 +819,7 @@ QStringList UkuiMenuInterface::get_specified_category_app_list(QString categorys
 }
 
 //获取用户图像
-QString UkuiMenuInterface::get_user_icon()
+QString UkuiMenuInterface::getUserIcon()
 {
     qint64 uid=static_cast<qint64>(getuid());
     QDBusInterface iface("org.freedesktop.Accounts",
@@ -837,7 +837,7 @@ QString UkuiMenuInterface::get_user_icon()
     return iconstr;
 }
 
-QString UkuiMenuInterface::get_user_name()
+QString UkuiMenuInterface::getUserName()
 {
     qint64 uid=static_cast<qint64>(getuid());
 //    QString name=QDir::homePath();

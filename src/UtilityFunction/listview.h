@@ -26,7 +26,7 @@
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include <QSettings>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 
 class ListView : public QListView
 {
@@ -40,7 +40,7 @@ public:
     void updateData(QVector<QStringList> data);
 
 protected:
-    void init_widget();
+    void initWidget();
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
 
@@ -63,8 +63,8 @@ private Q_SLOTS:
 Q_SIGNALS:
     void sendItemClickedSignal(QStringList arg);//向字母排序或功能分类模块发送item点击信号
     void sendFixedOrUnfixedSignal();//向字母排序、功能分类发送固定或者取消固定信号
-    void send_update_applist_signal();//向CommonUseWidget发送更新应用列表信号
-    void send_hide_mainwindow_signal();
+    void sendUpdateAppListSignal();//向CommonUseWidget发送更新应用列表信号
+    void sendHideMainWindowSignal();
 };
 
 #endif // LISTVIEW_H

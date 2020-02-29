@@ -22,7 +22,7 @@
 #include "src/Style/style.h"
 #include <QPainter>
 #include <QSettings>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 
 class ItemDelegate : public QStyledItemDelegate
 {

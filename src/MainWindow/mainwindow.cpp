@@ -31,24 +31,65 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     pUkuiMenuInterface=new UkuiMenuInterface;
     UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
-    Style::init_wid_style();
-    init_mainwindow();
+    Style::initWidStyle();
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
+    setting=new QSettings(path,QSettings::IniFormat);
+    //获取当前时间戳
+    QDateTime dt=QDateTime::currentDateTime();
+    int currentDateTime=dt.toTime_t();
+    int nDaySec=24*60*60;
+    setting->beginGroup("datetime");
+    QStringList dateTimeKeys=setting->allKeys();
+    QStringList timeOutKeys;
+    timeOutKeys.clear();
+    for(int i=0;i<dateTimeKeys.count();i++)
+    {
+        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 7)
+        {
+            timeOutKeys.append(dateTimeKeys.at(i));
+        }
 
-    pEnterAnimation=new QPropertyAnimation;
-    pEnterAnimation->setTargetObject(this);
-    pEnterAnimation->setPropertyName("size");
-    pEnterAnimation->setDuration(500);
-    pEnterAnimation->setStartValue(QSize(390,532));
-    pEnterAnimation->setEndValue(QSize(490,532));
-    pEnterAnimation->setEasingCurve(QEasingCurve::Linear);
+    }
+    setting->endGroup();
+    for(int i=0;i<timeOutKeys.count();i++)
+    {
+        setting->beginGroup("application");
+        setting->remove(timeOutKeys.at(i));
+        setting->sync();
+        setting->endGroup();
+        setting->beginGroup("datetime");
+        setting->remove(timeOutKeys.at(i));
+        setting->sync();
+        setting->endGroup();
+    }
 
-    pLeaveAnimation=new QPropertyAnimation;
-    pLeaveAnimation->setTargetObject(this);
-    pLeaveAnimation->setPropertyName("size");
-    pLeaveAnimation->setDuration(500);
-    pLeaveAnimation->setStartValue(QSize(490,532));
-    pLeaveAnimation->setEndValue(QSize(390,532));
-    pLeaveAnimation->setEasingCurve(QEasingCurve::Linear);
+    setting->beginGroup("recentapp");
+    QStringList recentAppKeys=setting->allKeys();
+    for(int i=0;i<recentAppKeys.count();i++)
+    {
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt()) >= 7)
+            setting->remove(recentAppKeys.at(i));
+    }
+    setting->sync();
+    setting->endGroup();
+
+    initMainWindow();
+
+//    pEnterAnimation=new QPropertyAnimation;
+//    pEnterAnimation->setTargetObject(this);
+//    pEnterAnimation->setPropertyName("size");
+//    pEnterAnimation->setDuration(500);
+//    pEnterAnimation->setStartValue(QSize(390,532));
+//    pEnterAnimation->setEndValue(QSize(490,532));
+//    pEnterAnimation->setEasingCurve(QEasingCurve::Linear);
+
+//    pLeaveAnimation=new QPropertyAnimation;
+//    pLeaveAnimation->setTargetObject(this);
+//    pLeaveAnimation->setPropertyName("size");
+//    pLeaveAnimation->setDuration(500);
+//    pLeaveAnimation->setStartValue(QSize(490,532));
+//    pLeaveAnimation->setEndValue(QSize(390,532));
+//    pLeaveAnimation->setEasingCurve(QEasingCurve::Linear);
 }
 
 MainWindow::~MainWindow()
@@ -57,7 +98,7 @@ MainWindow::~MainWindow()
     delete pUkuiMenuInterface;
 }
 
-void MainWindow::init_mainwindow()
+void MainWindow::initMainWindow()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::SplashScreen);
 //    this->setStyleSheet("background:transparent;");
@@ -75,8 +116,8 @@ void MainWindow::init_mainwindow()
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 //    this->setMinimumSize(390+20+2,532+20+2);
 //    this->setContentsMargins(1,21,21,1);
-    this->setMinimumSize(376+2,590+2);
-    this->setContentsMargins(0,2,2,0);
+    this->setMinimumSize(376,590);
+    this->setContentsMargins(0,0,0,0);
 
     frame=new QFrame(this);
     sidebarwid=new SideBarWidget(this);
@@ -99,30 +140,39 @@ void MainWindow::init_mainwindow()
     mainlayout->setContentsMargins(0,0,0,0);
     mainlayout->setSpacing(0);
     centralWidget()->setLayout(mainlayout);
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
+    QDBusReply<int> position=iface.call("GetPanelPosition","");
     char style[100];
-    sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
+    if(position==0)
+        sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
+    else if(position==1 || position==2)
+        sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
+    else
+        sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
     frame->setStyleSheet(style);
 
-//    connect(sidebarwid,SIGNAL(send_hover_signal(bool)),this,SLOT(recv_hover_signal_slot(bool)));
-    connect(sidebarwid, SIGNAL(send_commonusebtn_signal()), mainviewwid, SLOT(load_commonuse_widget()));
-    connect(sidebarwid,SIGNAL(send_letterbtn_signal()), mainviewwid, SLOT(load_letter_widget()));
-    connect(sidebarwid, SIGNAL(send_functionbtn_signal()), mainviewwid, SLOT(load_function_widget()));
+    connect(sidebarwid, SIGNAL(sendCommonUseBtnSignal()), mainviewwid, SLOT(loadCommonUseWidget()));
+    connect(sidebarwid,SIGNAL(sendLetterBtnSignal()), mainviewwid, SLOT(loadLetterWidget()));
+    connect(sidebarwid, SIGNAL(sendFunctionBtnSignal()), mainviewwid, SLOT(loadFunctionWidget()));
 
-    connect(sidebarwid,SIGNAL(send_fullscreen_commonusebtn_signal()),
-            mainviewwid,SLOT(load_fullcommonuse_widget()));
-    connect(sidebarwid,SIGNAL(send_fullscreen_letterbtn_signal()),
-            mainviewwid,SLOT(load_fullletter_widget()));
-    connect(sidebarwid, SIGNAL(send_fullscreen_functionbtn_signal()),
-            mainviewwid, SLOT(load_fullfunction_widget()));
+    connect(sidebarwid,SIGNAL(sendFullScreenCommonUseBtnSignal()),
+            mainviewwid,SLOT(loadFullCommonUseWidget()));
+    connect(sidebarwid,SIGNAL(sendFullScreenLetterBtnSignal()),
+            mainviewwid,SLOT(loadFullLetterWidget()));
+    connect(sidebarwid, SIGNAL(sendFullScreenFunctionBtnSignal()),
+            mainviewwid, SLOT(loadFullFunctionWidget()));
 
-    connect(mainviewwid,SIGNAL(send_querylineEdit_focusin_signal()),sidebarwid,SLOT(recv_querylineEdit_focusin_slot()));
+    connect(mainviewwid,SIGNAL(sendQueryLineEditFocusInSignal()),sidebarwid,SLOT(recvQueryLineEditFocusInSlot()));
 
-    connect(sidebarwid,SIGNAL(send_fullscreenbtn_signal()),this,SLOT(show_fullscreen_widget()));
-    connect(sidebarwid, SIGNAL(send_defaultbtn_signal()),this,SLOT(show_default_widget()));
-    connect(mainviewwid,SIGNAL(send_hide_mainwindow_signal()),this,SLOT(recv_hide_mainwindow_slot()));
-    connect(sidebarwid,SIGNAL(send_hide_mainwindow_signal()),this,SLOT(recv_hide_mainwindow_slot()));
+    connect(sidebarwid,SIGNAL(sendFullScreenBtnSignal()),this,SLOT(showFullScreenWidget()));
+    connect(sidebarwid, SIGNAL(sendDefaultBtnSignal()),this,SLOT(showDefaultWidget()));
+    connect(mainviewwid,SIGNAL(sendHideMainWindowSignal()),this,SLOT(recvHideMainWindowSlot()));
+    connect(sidebarwid,SIGNAL(sendHideMainWindowSignal()),this,SLOT(recvHideMainWindowSlot()));
 
-    connect(QApplication::desktop(),SIGNAL(resized(int)),this,SLOT(monitor_resolution_change(int)));
+    connect(QApplication::desktop(),SIGNAL(resized(int)),this,SLOT(monitorResolutionChange(int)));
 }
 
 /**
@@ -198,7 +248,7 @@ void MainWindow::paintEvent(QPaintEvent *)
 /**
  * 显示全屏窗口
  */
-void MainWindow::show_fullscreen_widget()
+void MainWindow::showFullScreenWidget()
 {
 ////    this->showMaximized();
 //    is_full=true;
@@ -212,25 +262,38 @@ void MainWindow::show_fullscreen_widget()
 
     is_fullscreen=true;
     this->setContentsMargins(0,0,0,0);
-    this->setGeometry(QApplication::desktop()->availableGeometry());
-    sidebarwid->load_max_sidebar();
-    mainviewwid->load_max_mainview();
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
+
+    QDBusReply<int> position=iface.call("GetPanelPosition","");
+    QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+    if(position==0)
+        this->setGeometry(QRect(0,0,Style::widthavailable,Style::heightavailable));
+    else if(position==1)
+        this->setGeometry(QRect(0,panelSize,Style::widthavailable,Style::heightavailable));
+    else if(position==2)
+        this->setGeometry(QRect(panelSize,0,Style::widthavailable,Style::heightavailable));
+    else
+        this->setGeometry(QRect(0,0,Style::widthavailable,Style::heightavailable));
+//    this->setGeometry(QApplication::desktop()->availableGeometry());
+    sidebarwid->loadMaxSidebar();
+    mainviewwid->loadMaxMainView();
     //移除分割线
     mainlayout->removeWidget(line);
     line->setParent(nullptr);
     this->repaint();
-//    mainviewwid->load_full_classification_widget(widgetState);
 
     char style[100];
     sprintf(style, "border:0px;background-color:%s;border-top-right-radius:0px;",DefaultBackground);
-//    mainwidget->setStyleSheet(style);
     frame->setStyleSheet(style);
 }
 
 /**
  * 显示默认窗口
  */
-void MainWindow::show_default_widget()
+void MainWindow::showDefaultWidget()
 {
 ////    this->showNormal();
 //    is_full=false;
@@ -243,19 +306,40 @@ void MainWindow::show_default_widget()
 //    pAnimation->start();
 
     is_fullscreen=false;
-    this->setContentsMargins(0,2,2,0);
-//    this->setGeometry(QRect(0,QApplication::desktop()->availableGeometry().height()-532,390+20+2,532+20+2));
-    this->setGeometry(QRect(0,QApplication::desktop()->availableGeometry().height()-590-2,376+2,590+2));
-    sidebarwid->load_min_sidebar();
-    mainviewwid->load_min_mainview();
+    this->setContentsMargins(0,0,0,0);
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
+
+    QDBusReply<int> position=iface.call("GetPanelPosition","");
+    QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+    char style[100];
+    if(position==0)
+    {
+        sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
+        this->setGeometry(QRect(0,Style::heightavailable-590,376,590));
+    }
+    else if(position==1)
+    {
+        sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
+        this->setGeometry(QRect(0,panelSize,376,590));
+    }
+    else if(position==2)
+    {
+        sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
+        this->setGeometry(QRect(panelSize,0,376,590));
+    }
+    else
+    {
+        sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
+        this->setGeometry(QRect(Style::widthavailable-376,0,376,590));
+    }
+    sidebarwid->loadMinSidebar();
+    mainviewwid->loadMinMainView();
     //插入分割线
     mainlayout->insertWidget(1,line);
     this->repaint();
-//    mainviewwid->load_classification_widget(widgetState);
-
-    char style[100];
-    sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
-//    mainwidget->setStyleSheet(style);
     frame->setStyleSheet(style);
 }
 
@@ -271,8 +355,8 @@ bool MainWindow::event ( QEvent * event )
             this->hide();
 //            qDebug()<<qApp->applicationState();
 //            this->setWindowState(this->windowState() & Qt::WindowMinimized);
-            mainviewwid->widget_make_zero();
-            sidebarwid->widget_make_zero();
+            mainviewwid->widgetMakeZero();
+            sidebarwid->widgetMakeZero();
         }
    }
    return QWidget::event(event);
@@ -281,11 +365,11 @@ bool MainWindow::event ( QEvent * event )
 /**
  * 隐藏窗口
  */
-void MainWindow::recv_hide_mainwindow_slot()
+void MainWindow::recvHideMainWindowSlot()
 {
     this->hide();
-    mainviewwid->widget_make_zero();
-    sidebarwid->widget_make_zero();
+    mainviewwid->widgetMakeZero();
+    sidebarwid->widgetMakeZero();
 }
 
 //void MainWindow::recv_hover_signal_slot(bool is_hover)
@@ -296,10 +380,10 @@ void MainWindow::recv_hide_mainwindow_slot()
 //        pLeaveAnimation->start();
 //}
 
-void MainWindow::monitor_resolution_change(int screen)
+void MainWindow::monitorResolutionChange(int screen)
 {
     qApp->quit();
-    QProcess::startDetached(QString("/home/kylin/ukui-start-menu/bin/ukui-menu"));
+    QProcess::startDetached(QString("/usr/bin/ukui-menu"));
 }
 
 void MainWindow::changeEvent(QEvent *e)
@@ -311,4 +395,38 @@ void MainWindow::changeEvent(QEvent *e)
 //        this->hide();
 //    }
 //    QMainWindow::changeEvent(e);
+}
+
+void MainWindow::setFrameStyle()
+{
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
+
+    QDBusReply<int> position=iface.call("GetPanelPosition","");
+    char style[100];
+    if(!is_fullscreen)
+    {
+        if(position==0)
+        {
+            sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
+        }
+        else if(position==1)
+        {
+            sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
+        }
+        else if(position==2)
+        {
+            sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
+        }
+        else
+        {
+            sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
+        }
+    }
+    else {
+        sprintf(style, "border:0px;background-color:%s;border-top-right-radius:0px;",DefaultBackground);
+    }
+    frame->setStyleSheet(style);
 }

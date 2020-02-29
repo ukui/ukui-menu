@@ -33,7 +33,7 @@
 #include <QFileInfo>
 #include <QDBusInterface>
 #include <QProcess>
-#include "src/interface/ukuimenuinterface.h"
+#include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 
 class RightClickMenu: public QWidget
@@ -42,10 +42,10 @@ class RightClickMenu: public QWidget
 public:
     RightClickMenu(QWidget *parent);
     virtual ~RightClickMenu();
-    int show_commonuse_appbtn_menu(QString appname);
-    int show_appbtn_menu(QString appname);
-    int show_shutdown_menu();
-    void show_other_menu(QString appname);
+    int showCommonUseAppBtnMenu(QString appname);
+    int showAppBtnMenu(QString appname);
+    int showShutdownMenu();
+    void showOtherMenu(QString appname);
 
 private:
     QString appname;
@@ -115,33 +115,33 @@ private:
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
 protected:
-    void add_commonuse_appbtn_action();
-    void add_appbtn_action();
-    void add_shutdown_action();
-    void add_other_action();
-    void init_widget_action(QWidget* wid, QString iconstr, QString textstr);
+    void addCommonUseAppBtnAction();
+    void addAppBtnAction();
+    void addShutdownAction();
+    void addOtherAction();
+    void initWidgetAction(QWidget* wid, QString iconstr, QString textstr);
 
 private Q_SLOTS:
-    void cudeleteaction_trigger_slot();
-    void cudeleteallaction_trigger_slot();
+    void commonUseDeleteActionTriggerSlot();
+    void commonUseDeleteAllActionTriggerSlot();
 
-    void fix2commonuseaction_trigger_slot();
-    void unfixed4commonuseaction_trigger_slot();
-    void fix2taskbaraction_trigger_slot();
-    void unfixed4taskbaraction_trigger_slot();
-    void add2desktopaction_trigger_slot();
-    void uninstallaction_trigger_slot();
-    void attributeaction_trigger_slot();
+    void fixToCommonUseActionTriggerSlot();
+    void unfixedFromCommonUseActionTriggerSlot();
+    void fixToTaskbarActionTriggerSlot();
+    void unfixedFromTaskbarActionTriggerSlot();
+    void addToDesktopActionTriggerSlot();
+    void uninstallActionTriggerSlot();
+    void attributeActionTriggerSlot();
 
-    void lockscreenaction_trigger_slot();
-    void switchuseraction_trigger_slot();
-    void logoutaction_trigger_slot();
-    void rebootaction_trigger_slot();
-    void shutdownaction_trigger_slot();
+    void lockScreenActionTriggerSlot();
+    void switchUserActionTriggerSlot();
+    void logoutActionTriggerSlot();
+    void rebootActionTriggerSlot();
+    void shutdownActionTriggerSlot();
 
-    void otherlistaction_trigger_slot();
+    void otherListActionTriggerSlot();
 
-    void on_readoutput();
+    void onReadOutput();
 };
 
 #endif // RIGHTCLICKMENU_H

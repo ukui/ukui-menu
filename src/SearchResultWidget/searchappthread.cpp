@@ -34,11 +34,11 @@ void SearchAppThread::run()
     searchResultList.clear();
     if(!this->keyword.isEmpty())
     {
-        QString str=pUkuiMenuInterface->get_app_name_pinyin(keyword);
+        QString str=pUkuiMenuInterface->getAppNamePinyin(keyword);
         int index=0;
         while(index<appInfoVector.size())
         {
-            QString appNamePy=pUkuiMenuInterface->get_app_name_pinyin(appInfoVector.at(index).at(2));
+            QString appNamePy=pUkuiMenuInterface->getAppNamePinyin(appInfoVector.at(index).at(2));
             if(appNamePy.contains(str,Qt::CaseInsensitive))
             {
                 searchResultList.append(appInfoVector.at(index).at(0));
@@ -47,10 +47,10 @@ void SearchAppThread::run()
         }
     }
 
-    Q_EMIT send_search_result(searchResultList);
+    Q_EMIT sendSearchResult(searchResultList);
 }
 
-void SearchAppThread::recv_search_keyword(QString arg)
+void SearchAppThread::recvSearchKeyword(QString arg)
 {
     this->keyword.clear();
     this->keyword=arg;
