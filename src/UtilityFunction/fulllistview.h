@@ -24,6 +24,7 @@
 #include "src/Interface/ukuimenuinterface.h"
 #include <QEvent>
 #include <QScrollBar>
+#include <QToolTip>
 #include "fullitemdelegate.h"
 #include "fulllistmodel.h"
 #include "src/Style/style.h"
@@ -44,6 +45,7 @@ protected:
     void initWidget();
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
+//    bool event(QEvent* e) Q_DECL_OVERRIDE;
 
 private:
     FullItemDelegate* m_delegate=nullptr;
@@ -59,6 +61,7 @@ private:
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
     void rightClickedSlot();//右键菜单
+    void showToolTip(const QModelIndex &index);
 
 Q_SIGNALS:
     void sendItemClickedSignal(QString arg);//向字母排序或功能分类模块发送item点击信号

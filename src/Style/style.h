@@ -36,7 +36,7 @@
 #define RightClickMenuHover "rgba(255, 255, 255, 0.12)"
 #define RightClickMenuFont "rgba(255, 255, 255, 0.91)"
 #define RightClickMenuOpacity 0.95
-#define ToolTipBackground "rgba(18, 18, 18, 0.95)"
+#define ToolTipBackground "rgba(26, 26, 26, 0.7)"
 #define DefaultBackground "rgba(14,19,22,0.90)" //默认态背景色
 #define LineBackground "rgba(255,255,255,0.06)" //分割线背景色
 #define SBClassifyBtnSelectedBackground "rgba(65, 95, 196, 1)" //侧边栏上部分类按钮选择背景

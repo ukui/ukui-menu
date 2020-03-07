@@ -126,7 +126,6 @@ private Q_SLOTS:
     void controlBtnClickedSlot();
     void shutdownBtnClickedSlot();
     void userIconBtnClickedSlot();
-    void recvQueryLineEditFocusInSlot();//接收搜索框获取焦点槽函数
     void userAccountsChanged();
 
 Q_SIGNALS:

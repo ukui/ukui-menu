@@ -74,7 +74,7 @@ private:
     QHBoxLayout* pIconTextWidLayout=nullptr;
     QLabel* pQueryIcon=nullptr;
     QLabel* pQueryText=nullptr;
-    QAction *searchAction=nullptr;
+//    QWidgetAction *searchAction=nullptr;
 
     FullSearchResultWidget* fullsearchresultwid=nullptr;
     SearchResultWidget* searchresultwid=nullptr;
@@ -88,6 +88,7 @@ private:
     FullFunctionWidget* fullfunctionwid=nullptr;
 
     int widgetState=-1;//分类窗口编号
+    int saveCurrentWidState=-1;//存放当前分类窗口编号
 
     bool is_fullWid=false;
 
@@ -125,7 +126,6 @@ Q_SIGNALS:
     void viewOpenedSignal();//向常用软件模块发送刷新信号
     void directoryChangedSignal();//desktop文件目录改变信号
     void sendSearchKeyword(QString);//向SearchAppThread发送搜索关键字
-    void sendQueryLineEditFocusInSignal();//发送搜索框获取焦点信号
 };
 
 #endif // MAINVIEWWIDGET_H

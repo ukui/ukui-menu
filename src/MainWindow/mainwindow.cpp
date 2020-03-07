@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList recentAppKeys=setting->allKeys();
     for(int i=0;i<recentAppKeys.count();i++)
     {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt()) >= 7)
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 7)
             setting->remove(recentAppKeys.at(i));
     }
     setting->sync();
@@ -100,7 +100,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::initMainWindow()
 {
-    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::SplashScreen);
+//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::SplashScreen);
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::Popup);
 //    this->setStyleSheet("background:transparent;");
 //    char style[100];
 //    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
@@ -164,8 +165,6 @@ void MainWindow::initMainWindow()
             mainviewwid,SLOT(loadFullLetterWidget()));
     connect(sidebarwid, SIGNAL(sendFullScreenFunctionBtnSignal()),
             mainviewwid, SLOT(loadFullFunctionWidget()));
-
-    connect(mainviewwid,SIGNAL(sendQueryLineEditFocusInSignal()),sidebarwid,SLOT(recvQueryLineEditFocusInSlot()));
 
     connect(sidebarwid,SIGNAL(sendFullScreenBtnSignal()),this,SLOT(showFullScreenWidget()));
     connect(sidebarwid, SIGNAL(sendDefaultBtnSignal()),this,SLOT(showDefaultWidget()));
@@ -355,8 +354,8 @@ bool MainWindow::event ( QEvent * event )
             this->hide();
 //            qDebug()<<qApp->applicationState();
 //            this->setWindowState(this->windowState() & Qt::WindowMinimized);
-            mainviewwid->widgetMakeZero();
-            sidebarwid->widgetMakeZero();
+//            mainviewwid->widgetMakeZero();
+//            sidebarwid->widgetMakeZero();
         }
    }
    return QWidget::event(event);
@@ -368,6 +367,17 @@ bool MainWindow::event ( QEvent * event )
 void MainWindow::recvHideMainWindowSlot()
 {
     this->hide();
+//    mainviewwid->widgetMakeZero();
+//    sidebarwid->widgetMakeZero();
+}
+
+bool MainWindow::checkIfFullScreen()
+{
+    return is_fullscreen;
+}
+
+void MainWindow::mainWindowMakeZero()
+{
     mainviewwid->widgetMakeZero();
     sidebarwid->widgetMakeZero();
 }
@@ -384,17 +394,6 @@ void MainWindow::monitorResolutionChange(int screen)
 {
     qApp->quit();
     QProcess::startDetached(QString("/usr/bin/ukui-menu"));
-}
-
-void MainWindow::changeEvent(QEvent *e)
-{
-//    QWindowStateChangeEvent* event=static_cast<QWindowStateChangeEvent*>(e);
-//    if(!(event->oldState() & Qt::ApplicationHidden) && (windowState() & Qt::ApplicationActive))
-//    if(windowState() & Qt::WindowMinimized)
-//    {
-//        this->hide();
-//    }
-//    QMainWindow::changeEvent(e);
 }
 
 void MainWindow::setFrameStyle()

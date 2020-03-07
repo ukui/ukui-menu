@@ -72,6 +72,7 @@ void FullListView::initWidget()
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
+    connect(this,SIGNAL(entered(QModelIndex)),this,SLOT(showToolTip(QModelIndex)));
 }
 
 void FullListView::addData(QStringList data)
@@ -186,3 +187,39 @@ void FullListView::leaveEvent(QEvent *e)
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
 }
+
+void FullListView::showToolTip(const QModelIndex &index)
+{
+//    qDebug()<<this->y()<<this->visualRect(index).y();
+//    if(!index.isValid())
+//        return;
+
+//    QVariant var=listmodel->data(index, Qt::DisplayRole);
+//    QString desktopfp=var.value<QString>();
+//    QString appname=pUkuiMenuInterface->getAppName(desktopfp);
+
+////    if(file_name.isEmpty())
+////        return;
+
+//    QToolTip::showText(QCursor::pos(), appname,this);
+//    QToolTip::hideText();
+}
+
+//bool FullListView::event(QEvent* e)
+//{
+//    if (e->type() == QEvent::ToolTip) {
+//        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
+//        QModelIndex index=this->currentIndex();
+//        QVariant var=listmodel->data(index, Qt::DisplayRole);
+//        QString desktopfp=var.value<QString>();
+//        QString appname=pUkuiMenuInterface->getAppName(desktopfp);
+//        if (!appname.isEmpty()) {
+//            QToolTip::showText(helpEvent->globalPos(), appname);
+//        } else {
+//            QToolTip::hideText();
+//            e->ignore();
+//        }
+//        return true;
+//    }
+//    return QWidget::event(e);
+//}

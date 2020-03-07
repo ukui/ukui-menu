@@ -32,7 +32,9 @@ ListModel::~ListModel()
 
 void ListModel::setData(const QVector<QStringList> &data)
 {
+    m_data.clear();
     m_data=data;
+    Q_EMIT dataChanged(createIndex(0,0), createIndex(m_data.size()-1,0));
 }
 
 void ListModel::updateData(const QVector<QStringList> &data)

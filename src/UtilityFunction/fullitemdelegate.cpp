@@ -75,21 +75,17 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //            painter->drawPath(path);
 //        }
 
-//        painter->setRenderHint(QPainter::Antialiasing);
-//        if(option.state & QStyle::State_MouseOver)
-//        {
-//            painter->setPen(QPen(Qt::NoPen));
-//            QColor color;
-//            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
-//            painter->setBrush(QBrush(color));
+        painter->setRenderHint(QPainter::Antialiasing);
+        if(option.state & QStyle::State_MouseOver)
+        {
+            painter->setPen(QPen(Qt::NoPen));
+            QColor color;
+            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
+            painter->setBrush(QBrush(color));
 
-//            painter->setOpacity(0.14);
-//            painter->drawPath(path);
-
-//            QFontMetrics fm=painter->fontMetrics();
-//            if(fm.boundingRect(appname).width()>rect.width())
-//                QToolTip::showText(QCursor::pos(),appname);
-//        }
+            painter->setOpacity(0.14);
+            painter->drawPath(path);
+        }
 
         painter->setOpacity(1);
         QIcon icon=index.data(Qt::DecorationRole).value<QIcon>();
@@ -133,20 +129,26 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter | Qt::AlignTop,appname);
         painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
 
-        painter->setRenderHint(QPainter::Antialiasing);
+//        painter->setRenderHint(QPainter::Antialiasing);
         if(option.state & QStyle::State_MouseOver)
         {
-            painter->setPen(QPen(Qt::NoPen));
-            QColor color;
-            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
-            painter->setBrush(QBrush(color));
+//            painter->setPen(QPen(Qt::NoPen));
+//            QColor color;
+//            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
+//            painter->setBrush(QBrush(color));
 
-            painter->setOpacity(0.14);
-            painter->drawPath(path);
+//            painter->setOpacity(0.14);
+//            painter->drawPath(path);
 
             if(fm.boundingRect(appname).width()>rect.width())
+            {
                 QToolTip::showText(QCursor::pos(),appname);
+            }
+//                QToolTip::showText(QPoint(QCursor::pos().x(),option.rect.bottom()),appname);
 
+        }
+        else {
+            QToolTip::hideText();
         }
         painter->restore();
 

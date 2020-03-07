@@ -50,7 +50,9 @@ int main(int argc, char *argv[])
     }
 
     char style[400];
-    sprintf(style,"QToolTip{border:0px;border-radius:3px;color:#ffffff;background-color:%s}",
+    sprintf(style,"QToolTip{min-height:30px;border-style: none;border:1px solid rgba(255, 255, 255, 0.2);"
+                  "padding-left:4px;padding-top:0px;padding-right:4px;padding-bottom:0px;border-radius:3px;"
+                  "font-size:14px;color:#ffffff;background-color:%s;}",
             ToolTipBackground);
     qApp->setStyleSheet(style);
 
@@ -63,7 +65,7 @@ int main(int argc, char *argv[])
     QDBusReply<int> position=iface.call("GetPanelPosition","");
     QDBusReply<int> panelSize=iface.call("GetPanelSize","");
     if(position==0)
-        w.setGeometry(QRect(0,Style::heightavailable-590-2,376,590));
+        w.setGeometry(QRect(0,Style::heightavailable-590,376,590));
     else if(position==1)
         w.setGeometry(QRect(0,panelSize,376,590));
     else if(position==2)

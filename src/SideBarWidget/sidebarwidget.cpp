@@ -464,6 +464,14 @@ void SideBarWidget::loadMinSidebar()
     setMinSidebarBtn(computerbtn);
     setMinSidebarBtn(controlbtn);
     setMinSidebarBtn(shutdownbtn);
+    commonusebtn->setToolTip(tr("Common"));
+    letterbtn->setToolTip(tr("Letter"));
+    functionbtn->setToolTip(tr("Function"));
+    QString username=pUkuiMenuInterface->getUserName();
+    usericonbtn->setToolTip(username);
+    computerbtn->setToolTip(tr("Computer"));
+    controlbtn->setToolTip(tr("Settings"));
+    shutdownbtn->setToolTip(tr("Power"));
 
     disconnect(minmaxbtn,SIGNAL(clicked()),this, SIGNAL(sendDefaultBtnSignal()));
     connect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendFullScreenBtnSignal()));
@@ -751,12 +759,4 @@ void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
 void SideBarWidget::widgetMakeZero()
 {
     letterbtn->click();
-}
-
-void SideBarWidget::recvQueryLineEditFocusInSlot()
-{
-    Q_FOREACH (QAbstractButton* button, buttonList)
-    {
-        button->setStyleSheet("background:transparent;");
-    }
 }

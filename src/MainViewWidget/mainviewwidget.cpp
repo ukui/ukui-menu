@@ -164,7 +164,7 @@ void MainViewWidget::initQueryLineEdit()
     pIconTextWid=new QWidget(querylineEdit);
     pIconTextWid->setStyleSheet("background:transparent");
     pIconTextWidLayout=new QHBoxLayout;
-    pIconTextWidLayout->setContentsMargins(0,0,0,0);
+    pIconTextWidLayout->setContentsMargins(5,0,0,0);
     pIconTextWidLayout->setSpacing(5);
     pIconTextWid->setLayout(pIconTextWidLayout);
     QSvgRenderer* svgRender = new QSvgRenderer();
@@ -186,14 +186,12 @@ void MainViewWidget::initQueryLineEdit()
     pQueryText->adjustSize();
     pIconTextWidLayout->addWidget(pQueryIcon);
     pIconTextWidLayout->addWidget(pQueryText);
-    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+5,Style::QueryLineEditHeight);
+//    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+5,Style::QueryLineEditHeight);
     queryLayout->addWidget(pIconTextWid);
     queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     querylineEdit->setFocusPolicy(Qt::ClickFocus);
     querylineEdit->installEventFilter(this);
-
-    searchAction = new QAction(querylineEdit);
-    searchAction->setIcon(QIcon(":/data/img/mainviewwidget/search.svg"));
+    querylineEdit->setTextMargins(20,1,0,1);
 
     searchappthread=new SearchAppThread;
     connect(this,SIGNAL(sendSearchKeyword(QString)),
@@ -209,41 +207,25 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
     {
         if(event->type()==QEvent::FocusIn)
         {   
-             Q_EMIT sendQueryLineEditFocusInSignal();
-             querylineEdit->addAction(searchAction,QLineEdit::LeadingPosition);
+            pIconTextWidLayout->removeWidget(pQueryText);
+            pQueryText->setParent(nullptr);
+            pIconTextWid->setFixedSize(pQueryIcon->width()+5,Style::QueryLineEditHeight);
+            queryLayout->setAlignment(pIconTextWid,Qt::AlignLeft);
+
              char style[200];
              sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:2px;font-size:14px;color:#ffffff;}",
                      QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              querylineEdit->setStyleSheet(style);
-             queryLayout->removeWidget(pIconTextWid);
-             pIconTextWid->setParent(nullptr);
-
-             QLayoutItem* child;
-             if((child=mainLayout->takeAt(1))!=nullptr)
-             {
-                 QWidget* childWid=child->widget();
-                 if(childWid!=nullptr)
-                 {
-                     mainLayout->removeWidget(childWid);
-                     childWid->setParent(nullptr);
-                 }
-             }
-             widgetState=0;
-             if(is_fullWid==false)
-             {
-                 mainLayout->addWidget(searchresultwid);
-             }
-             else{
-                 mainLayout->addWidget(fullsearchresultwid);
-             }
+             if(!querylineEdit->text().isEmpty())
+                 searchAppSlot(querylineEdit->text());
         }
         else if(event->type()==QEvent::FocusOut)
         {
-             querylineEdit->removeAction(searchAction);
              char style[100];
              sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
              querylineEdit->setStyleSheet(style);
-             queryLayout->addWidget(pIconTextWid);
+             pIconTextWidLayout->addWidget(pQueryText);
+             pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
              queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
         }
     }
@@ -271,6 +253,60 @@ void MainViewWidget::keyPressEvent(QKeyEvent *e)
  */
 void MainViewWidget::searchAppSlot(QString arg)
 {
+    if(!arg.isEmpty())
+    {
+        if(widgetState!=0)
+        {
+            QLayoutItem* child;
+            if((child=mainLayout->takeAt(1))!=nullptr)
+            {
+                QWidget* childWid=child->widget();
+                if(childWid!=nullptr)
+                {
+                    mainLayout->removeWidget(childWid);
+                    childWid->setParent(nullptr);
+                }
+            }
+            widgetState=0;
+            if(is_fullWid==false)
+            {
+                mainLayout->addWidget(searchresultwid);
+            }
+            else{
+                mainLayout->addWidget(fullsearchresultwid);
+            }
+        }
+    }
+    else{
+        QLayoutItem* child;
+        if((child=mainLayout->takeAt(1))!=nullptr)
+        {
+            QWidget* childWid=child->widget();
+            if(childWid!=nullptr)
+            {
+                mainLayout->removeWidget(childWid);
+                childWid->setParent(nullptr);
+            }
+        }
+        if(is_fullWid)
+        {
+            if(saveCurrentWidState==1)
+                loadFullCommonUseWidget();
+            else if(saveCurrentWidState==2)
+                loadFullLetterWidget();
+            else if(saveCurrentWidState==3)
+                loadFullFunctionWidget();
+        }
+        else {
+            if(saveCurrentWidState==1)
+                loadCommonUseWidget();
+            else if(saveCurrentWidState==2)
+                loadLetterWidget();
+            else
+                loadFunctionWidget();
+        }
+    }
+
     Q_EMIT sendSearchKeyword(arg);
     searchappthread->start();
 }
@@ -372,8 +408,7 @@ void MainViewWidget::loadCommonUseWidget()
     }
     mainLayout->addWidget(commonusewid);
     widgetState=1;
-//    Q_EMIT send_mainview_state(1);
-
+    saveCurrentWidState=1;
 }
 
 /**
@@ -393,7 +428,7 @@ void MainViewWidget::loadLetterWidget()
     }
     mainLayout->addWidget(letterwid);
     widgetState=2;
-
+    saveCurrentWidState=2;
 }
 
 /**
@@ -413,7 +448,7 @@ void MainViewWidget::loadFunctionWidget()
     }
     mainLayout->addWidget(functionwid);
     widgetState=3;
-
+    saveCurrentWidState=3;
 }
 
 
@@ -434,8 +469,7 @@ void MainViewWidget::loadFullCommonUseWidget()
     }
     mainLayout->addWidget(fullcommonusewid);
     widgetState=1;
-
-
+    saveCurrentWidState=1;
 }
 
 /**
@@ -454,7 +488,7 @@ void MainViewWidget::loadFullLetterWidget()
     }
     mainLayout->addWidget(fullletterwid);
     widgetState=2;
-
+    saveCurrentWidState=2;
 }
 
 /**
@@ -474,7 +508,7 @@ void MainViewWidget::loadFullFunctionWidget()
     }
     mainLayout->addWidget(fullfunctionwid);
     widgetState=3;
-
+    saveCurrentWidState=3;
 }
 
 /**

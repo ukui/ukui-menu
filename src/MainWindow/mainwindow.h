@@ -46,7 +46,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void setFrameStyle();
+    void setFrameStyle();//设置QFrame样式
+    void mainWindowMakeZero();//窗口状态归零
+    bool checkIfFullScreen();//检查是否全屏
 
 private:
     Ui::MainWindow *ui;
@@ -70,7 +72,6 @@ protected:
     void initMainWindow();
     bool event(QEvent *event);//鼠标点击窗口外部事件
     void paintEvent(QPaintEvent*);//添加阴影
-    void changeEvent(QEvent* e);
 
 private Q_SLOTS:
     void showFullScreenWidget();//加载全屏窗口
