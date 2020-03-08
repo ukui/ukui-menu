@@ -62,6 +62,9 @@ void FullLetterWidget::initWidget()
     this->setLayout(mainLayout);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
+    timer=new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(timeOutSlot()));
+
     initAppListWidget();
     initLetterListWidget();
 }
@@ -341,8 +344,10 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
             int num=letterbtnlist.indexOf(letterstr);
             if(num!=-1)
             {
-                int pos=letterbtnrowlist.at(num).toInt();
-                scrollarea->verticalScrollBar()->setSliderPosition(pos);
+                beginPos=scrollarea->verticalScrollBar()->sliderPosition();
+                endPos=letterbtnrowlist.at(num).toInt();
+                timer->start(1);
+//                scrollarea->verticalScrollBar()->setSliderPosition(pos);
             }
         }
         else{
@@ -350,6 +355,29 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
         }
     }
 }
+
+void FullLetterWidget::timeOutSlot()
+{
+
+    if(beginPos<endPos)
+    {
+        if(endPos-scrollarea->verticalScrollBar()->sliderPosition()<50)
+            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
+        else
+            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+50);
+    }
+    else
+    {
+        if(scrollarea->verticalScrollBar()->sliderPosition()-endPos<50)
+            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
+        else
+            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-50);
+    }
+    if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
+            scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
+        timer->stop();
+}
+
 
 void FullLetterWidget::widgetMakeZero()
 {

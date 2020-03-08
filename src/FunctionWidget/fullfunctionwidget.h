@@ -30,6 +30,7 @@
 #include <QScrollBar>
 #include <QPushButton>
 #include <QButtonGroup>
+#include <QTimer>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
@@ -89,6 +90,11 @@ private:
     int btnPos=0;
     int beforebtnPos=0;
 
+    //计时器
+    QTimer* timer=nullptr;
+    int beginPos=0;//滑动条起始位置
+    int endPos=0;//滑动条终止位置
+
 protected:
     void initWidget();
     void initIconListWidget();//初始化图标列表界面
@@ -104,6 +110,7 @@ private Q_SLOTS:
     void execApplication(QString appname);//执行应用程序
     void btnGroupClickedSlot(QAbstractButton *btn);
     void updateAppListView();//更新应用列表
+    void timeOutSlot();//计时器槽函数
 
 Q_SIGNALS:
     void sendUpdateAppListSignal();//向常用软件模块发送更新应用列表信号

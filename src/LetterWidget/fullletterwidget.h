@@ -38,6 +38,7 @@
 #include <QPainter>
 #include "src/Interface/ukuimenuinterface.h"
 #include <QButtonGroup>
+#include <QTimer>
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
 #include "src/UtilityFunction/fulllistview.h"
@@ -90,6 +91,11 @@ private:
     QList<QAbstractButton*> buttonList;
     QButtonGroup* pBtnGroup=nullptr;
 
+    //计时器
+    QTimer* timer=nullptr;
+    int beginPos=0;//滑动条起始位置
+    int endPos=0;//滑动条终止位置
+
 protected:
     void initWidget();
     void fillAppList();//填充应用列表
@@ -105,6 +111,7 @@ private Q_SLOTS:
     void btnGroupClickedSlot(QAbstractButton *btn);
     void execApplication(QString appname);//执行应用程序
     void updateAppListView();//更新应用列表
+    void timeOutSlot();//计时器槽函数
 
 Q_SIGNALS:
     void sendUpdateAppListSignal();//向常用软件模块发送更新应用列表信号

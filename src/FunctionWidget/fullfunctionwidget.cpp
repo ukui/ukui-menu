@@ -125,6 +125,9 @@ void FullFunctionWidget::initWidget()
     functionnamelist.append(tr("System"));
     functionnamelist.append(tr("Others"));
 
+    timer=new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(timeOutSlot()));
+
     initAppListWidget();
     initIconListWidget();
 }
@@ -451,8 +454,10 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
             int num=classificationbtnlist.indexOf(textlabel->text());
             if(num!=-1)
             {
-                int pos=classificationbtnrowlist.at(num).toInt();
-                scrollarea->verticalScrollBar()->setSliderPosition(pos);
+                beforebtnPos=scrollarea->verticalScrollBar()->sliderPosition();
+                endPos=classificationbtnrowlist.at(num).toInt();
+                timer->start(1);
+//                scrollarea->verticalScrollBar()->setSliderPosition(pos);
             }
 
             QSvgRenderer* svgRender = new QSvgRenderer;
@@ -478,6 +483,27 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
             fcbutton->is_pressed=false;
         }
     }
+}
+
+void FullFunctionWidget::timeOutSlot()
+{
+    if(beginPos<endPos)
+    {
+        if(endPos-scrollarea->verticalScrollBar()->sliderPosition()<50)
+            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
+        else
+            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+50);
+    }
+    else
+    {
+        if(scrollarea->verticalScrollBar()->sliderPosition()-endPos<50)
+            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
+        else
+            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-50);
+    }
+    if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
+            scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
+        timer->stop();
 }
 
 void FullFunctionWidget::widgetMakeZero()
