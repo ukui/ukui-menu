@@ -235,13 +235,12 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
 
 void MainViewWidget::keyPressEvent(QKeyEvent *e)
 {
-    querylineEdit->setFocus();
     if(e->type()==QEvent::KeyPress)
     {
-
         QKeyEvent* ke=static_cast<QKeyEvent*>(e);
         if(ke->key()>=0x30 && ke->key()<=0x39 && ke->key()>=0x41 && ke->key()<=0x5a)
         {
+            querylineEdit->setFocus();
             querylineEdit->setText(QKeySequence(ke->key()).toString());
         }
     }

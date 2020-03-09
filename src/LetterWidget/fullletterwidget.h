@@ -96,6 +96,8 @@ private:
     int beginPos=0;//滑动条起始位置
     int endPos=0;//滑动条终止位置
 
+    int btnPos=0;//记住分类按钮位置
+
 protected:
     void initWidget();
     void fillAppList();//填充应用列表
@@ -112,6 +114,7 @@ private Q_SLOTS:
     void execApplication(QString appname);//执行应用程序
     void updateAppListView();//更新应用列表
     void timeOutSlot();//计时器槽函数
+    void valueChangedSlot(int value);//滑动条滚动槽函数
 
 Q_SIGNALS:
     void sendUpdateAppListSignal();//向常用软件模块发送更新应用列表信号

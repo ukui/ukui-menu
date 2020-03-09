@@ -88,6 +88,8 @@ void FullLetterWidget::initAppListWidget()
     scrollareawidLayout->setSpacing(0);
     scrollareawid->setLayout(scrollareawidLayout);
     layout->addWidget(scrollarea);
+    connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
+            this,SLOT(valueChangedSlot(int)));
 
     fillAppList();
 
@@ -290,6 +292,8 @@ void FullLetterWidget::initLetterListWidget()
 
     letterlistLayout->addWidget(letterlistscrollarea);
     pBtnGroup=new QButtonGroup(letterlistscrollareaWid);
+
+    letterlistscrollarea->setStyleSheet("border:1px solid #ff0000;");
     initLetterListScrollArea();
 }
 
@@ -335,6 +339,8 @@ void FullLetterWidget::initLetterListScrollArea()
 
 void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
 {
+    disconnect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
+            this,SLOT(valueChangedSlot(int)));
     Q_FOREACH (QAbstractButton* button, buttonList) {
         if(pBtnGroup->id(btn)==buttonList.indexOf(button))
         {
@@ -375,9 +381,47 @@ void FullLetterWidget::timeOutSlot()
     }
     if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
             scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
+    {
         timer->stop();
+        connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
+                this,SLOT(valueChangedSlot(int)));
+    }
 }
 
+void FullLetterWidget::valueChangedSlot(int value)
+{
+    int count=0;
+    while(count<letterbtnrowlist.count()-1)
+    {
+        if(value>=letterbtnrowlist.at(count).toInt() &&
+                value <letterbtnrowlist.at(count+1).toInt())
+        {
+            buttonList.at(count)->setChecked(true);
+            break;
+        }
+        else
+            count++;
+    }
+    if(count==letterbtnrowlist.count()-1)
+        buttonList.at(count)->setChecked(true);
+    letterlistscrollarea->verticalScrollBar()->setSliderPosition(buttonList.at(count)->pos().y());
+
+//    if(buttonList.at(count)->pos().y()+buttonList.at(count)->height()>=letterlistscrollarea->height() &&
+//            buttonList.at(count)->pos().y()>btnPos)
+//    {
+//        btnPos=buttonList.at(count)->pos().y();
+//        letterlistscrollarea->verticalScrollBar()->setSliderPosition(letterlistscrollarea->verticalScrollBar()->sliderPosition()+
+//                                                                     buttonList.at(count)->y()-buttonList.at(count-1)->y());
+//    }
+//    if(letterlistscrollarea->verticalScrollBar()->sliderPosition()-buttonList.at(count)->y()
+//            >=letterlistscrollarea->height() && buttonList.at(count)->pos().y()<btnPos)
+//    {
+//        btnPos=buttonList.at(count)->pos().y();
+//        letterlistscrollarea->verticalScrollBar()->setSliderPosition(letterlistscrollarea->verticalScrollBar()->sliderPosition()-
+//                                                                     buttonList.at(count+1)->y()+buttonList.at(count)->y());
+//    }
+
+}
 
 void FullLetterWidget::widgetMakeZero()
 {
