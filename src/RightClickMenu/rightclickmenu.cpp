@@ -137,7 +137,7 @@ void RightClickMenu::addCommonUseAppBtnAction()
     QString desktopfn=fileInfo.fileName();
     if(!setting->contains(desktopfn) || setting->value(desktopfn).toInt()>0)
     {
-        initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to commmon"));
+        initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
         CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
         cuappbtnmenu->addAction(CuFix2CommonUseAction);
         connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
@@ -244,7 +244,7 @@ void RightClickMenu::addAppBtnAction()
     QString desktopfn=fileInfo.fileName();
     if(!setting->contains(desktopfn) || setting->value(desktopfn).toInt()>0)
     {
-        initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to commmon"));
+        initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
         Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
         appbtnmenu->addAction(Fix2CommonUseAction);
         connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
