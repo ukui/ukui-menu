@@ -107,9 +107,6 @@ protected:
     void resizeScrollAreaControls();//设置scrollarea填充控件大小
 
 private Q_SLOTS:
-//    void leftbtn_clicked_slot();//向左按钮槽函数
-//    void rightbtn_clicked_slot();//向右按钮槽函数
-//    void letterBtnClickedSlot();//字母列表数据项被选定槽函数
     void btnGroupClickedSlot(QAbstractButton *btn);
     void execApplication(QString appname);//执行应用程序
     void updateAppListView();//更新应用列表

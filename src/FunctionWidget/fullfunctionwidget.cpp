@@ -561,7 +561,8 @@ void FullFunctionWidget::valueChangedSlot(int value)
         else
             count++;
     }
-    if(count==classificationbtnrowlist.count()-1)
+    if(count==classificationbtnrowlist.count()-1 ||
+            scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
     {
         Q_FOREACH (QAbstractButton* button, buttonList) {
 
@@ -571,7 +572,7 @@ void FullFunctionWidget::valueChangedSlot(int value)
             QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
             QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
 
-            if(count==buttonList.indexOf(button))
+            if(classificationbtnrowlist.count()-1==buttonList.indexOf(button))
             {
                 QSvgRenderer* svgRender = new QSvgRenderer;
                 svgRender->load(iconlightlist.at(functionnamelist.indexOf(textlabel->text())));

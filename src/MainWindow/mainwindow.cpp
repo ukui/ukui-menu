@@ -392,6 +392,7 @@ void MainWindow::mainWindowMakeZero()
 
 void MainWindow::monitorResolutionChange(int screen)
 {
+    Q_UNUSED(screen);
     qApp->quit();
     QProcess::startDetached(QString("/usr/bin/ukui-menu"));
 }

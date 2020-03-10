@@ -280,7 +280,6 @@ void FullLetterWidget::initLetterListWidget()
     letterlistWid->setLayout(letterlistLayout);
 
     letterlistscrollarea=new ClassifyScrollArea();
-//    letterlistscrollarea->setFixedSize(25,28*30+27*10);
     letterlistscrollarea->setFixedSize(Style::LeftBtnHeight,letterlistWid->height());
     letterlistscrollareaWid=new QWidget;
     letterlistscrollareawidLayout=new QVBoxLayout;
@@ -293,7 +292,6 @@ void FullLetterWidget::initLetterListWidget()
     letterlistLayout->addWidget(letterlistscrollarea);
     pBtnGroup=new QButtonGroup(letterlistscrollareaWid);
 
-    letterlistscrollarea->setStyleSheet("border:1px solid #ff0000;");
     initLetterListScrollArea();
 }
 
@@ -402,24 +400,28 @@ void FullLetterWidget::valueChangedSlot(int value)
         else
             count++;
     }
-    if(count==letterbtnrowlist.count()-1)
-        buttonList.at(count)->setChecked(true);
-    letterlistscrollarea->verticalScrollBar()->setSliderPosition(buttonList.at(count)->pos().y());
+    if(count==letterbtnrowlist.count()-1 ||
+            scrollarea->verticalScrollBar()->sliderPosition()==scrollarea->verticalScrollBar()->maximum())
+    {
+        buttonList.at(letterbtnrowlist.count()-1)->setChecked(true);
+        letterlistscrollarea->verticalScrollBar()->setSliderPosition(letterlistscrollarea->verticalScrollBar()->maximum());
 
-//    if(buttonList.at(count)->pos().y()+buttonList.at(count)->height()>=letterlistscrollarea->height() &&
-//            buttonList.at(count)->pos().y()>btnPos)
-//    {
-//        btnPos=buttonList.at(count)->pos().y();
-//        letterlistscrollarea->verticalScrollBar()->setSliderPosition(letterlistscrollarea->verticalScrollBar()->sliderPosition()+
-//                                                                     buttonList.at(count)->y()-buttonList.at(count-1)->y());
-//    }
-//    if(letterlistscrollarea->verticalScrollBar()->sliderPosition()-buttonList.at(count)->y()
-//            >=letterlistscrollarea->height() && buttonList.at(count)->pos().y()<btnPos)
-//    {
-//        btnPos=buttonList.at(count)->pos().y();
-//        letterlistscrollarea->verticalScrollBar()->setSliderPosition(letterlistscrollarea->verticalScrollBar()->sliderPosition()-
-//                                                                     buttonList.at(count+1)->y()+buttonList.at(count)->y());
-//    }
+    }
+
+    //向下滚动
+    if((buttonList.at(count)->pos().y()+buttonList.at(count)->height()+letterlistscrollarea->widget()->pos().y()) >= letterlistscrollarea->height())
+    {
+        int val=letterlistscrollarea->verticalScrollBar()->sliderPosition()+buttonList.at(count)->height();
+        letterlistscrollarea->verticalScrollBar()->setSliderPosition(val);
+    }
+
+    //向上滚动
+    if((buttonList.at(count)->pos().y()+letterlistscrollarea->widget()->pos().y()) <= 0)
+    {
+
+        int val=letterlistscrollarea->verticalScrollBar()->value()-buttonList.at(count)->height();
+        letterlistscrollarea->verticalScrollBar()->setValue(val);
+    }
 
 }
 
@@ -435,96 +437,3 @@ void FullLetterWidget::widgetMakeZero()
         }
     }
 }
-
-///**
-// * 向左按钮槽函数
-// */
-//void FullLetterWidget::leftbtn_clicked_slot()
-//{
-//    if(btnPos>0)
-//    {
-//        QLayoutItem* afteritem=letterlistscrollarea->widget()->layout()->itemAt(btnPos--);
-//        QWidget* afterwid=afteritem->widget();
-//        QToolButton* afterbtn=qobject_cast<QToolButton*>(afterwid);
-//        afterbtn->setChecked(false);
-//        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
-//        QWidget* wid=item->widget();
-//        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-//        btn->click();
-////        btn->checkStateSet();
-////        int pos=btnPosList.at(btnPos).toInt();
-//        if((btn->pos().x()+letterlistscrollarea->widget()->pos().x()) <= 0)
-//        {   if(btnPos>0)
-//            {
-//                int val=letterlistscrollarea->horizontalScrollBar()->value();
-//                letterlistscrollarea->horizontalScrollBar()->setValue(val-40);
-//            }
-//            else{
-////                qDebug()<<letterlistscrollarea->horizontalScrollBar()->minimum();
-//                letterlistscrollarea->horizontalScrollBar()->setValue(letterlistscrollarea->horizontalScrollBar()->minimum());
-//            }
-
-//        }
-
-//    }
-//}
-
-///**
-// * 向右按钮槽函数
-// */
-//void FullLetterWidget::rightbtn_clicked_slot()
-//{
-//    if(btnPos<letterlistscrollarea->widget()->layout()->count()-1)
-//    {
-//        QLayoutItem* beforeitem=letterlistscrollarea->widget()->layout()->itemAt(btnPos++);
-//        QWidget* beforewid=beforeitem->widget();
-//        QToolButton* beforebtn=qobject_cast<QToolButton*>(beforewid);
-//        beforebtn->setChecked(false);
-//        QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
-//        QWidget* wid=item->widget();
-//        QToolButton* btn=qobject_cast<QToolButton*>(wid);
-//        btn->click();
-////        qDebug()<<"---"<<btn->pos().x();
-////        qDebug()<<"---111---"<<letterlistscrollarea->widget()->pos().x();
-
-//        if((btn->pos().x()+letterlistscrollarea->widget()->pos().x()) >= letterlistscrollarea->width())
-//        {   if(btnPos<letterlistscrollarea->widget()->layout()->count()-1)
-//            {
-//                int val=letterlistscrollarea->horizontalScrollBar()->value();
-//                letterlistscrollarea->horizontalScrollBar()->setValue(val+40);
-//            }
-//            else{
-////                qDebug()<<scrollarea->horizontalScrollBar()->maximum();
-//                letterlistscrollarea->horizontalScrollBar()->setValue(letterlistscrollarea->horizontalScrollBar()->maximum());
-//            }
-
-//        }
-
-////        qDebug()<<scrollarea->horizontalScrollBar()->value();
-
-//    }
-//}
-
-/**
- * 字母列表数据项被选定槽函数
- */
-//void FullLetterWidget::letterBtnClickedSlot()
-//{
-//    QLayoutItem* item=letterlistscrollarea->widget()->layout()->itemAt(btnPos);
-//    QWidget* wid=item->widget();
-//    QToolButton* beforebtn=qobject_cast<QToolButton*>(wid);
-//    beforebtn->setChecked(false);
-//    QToolButton* btn=dynamic_cast<QToolButton*>(QObject::sender());
-//    btnPos=letterlistscrollarea->widget()->layout()->indexOf(btn);
-//    btn->setChecked(true);
-//    QString letterstr=btn->text().at(0);
-//    //此处需实现将被选定的字母包含的应用列表移动到applistWid界面最顶端
-//    int num=letterbtnlist.indexOf(letterstr);
-//    if(num!=-1)
-//    {
-//        int pos=letterbtnrowlist.at(num).toInt();
-//        scrollarea->verticalScrollBar()->setSliderPosition(pos);
-//    }
-////    Q_EMIT send_fullletterwid_state(0,letterstr);
-
-//}
