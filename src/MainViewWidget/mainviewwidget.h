@@ -56,6 +56,7 @@ public:
     void loadMinMainView();//加载默认主视图
     void loadMaxMainView();//加载全屏主视图
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    void setLineEditFocus(QString arg);//设置搜索框焦点
 
 private:
     Ui::MainViewWidget *ui;
@@ -105,7 +106,6 @@ protected:
     void initWidget();//初始化界面
     void addTopControl();//添加顶部窗口控件
     void initQueryLineEdit();//初始化查询框
-    void keyPressEvent(QKeyEvent* e);//查询框响应键盘事件
 
 private Q_SLOTS:
     bool eventFilter(QObject *watched, QEvent *event);

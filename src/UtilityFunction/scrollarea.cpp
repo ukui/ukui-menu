@@ -30,7 +30,7 @@ ScrollArea::ScrollArea()
                                              "QScrollBar::add-line{background-color:transparent;height:0px;width:0px;}"
                                              );
       installEventFilter(this);
-      this->setFocusPolicy(Qt::StrongFocus);
+      this->setFocusPolicy(Qt::NoFocus);
 }
 
 void ScrollArea::enterEvent(QEvent *e)

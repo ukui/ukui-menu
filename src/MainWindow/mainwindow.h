@@ -27,6 +27,7 @@
 #include <QtMath>
 #include <QEvent>
 #include <QSpacerItem>
+#include <QKeyEvent>
 #include "src/Interface/ukuimenuinterface.h"
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
@@ -72,6 +73,7 @@ protected:
     void initMainWindow();
     bool event(QEvent *event);//鼠标点击窗口外部事件
     void paintEvent(QPaintEvent*);//添加阴影
+    void keyPressEvent(QKeyEvent* e);//查询框响应键盘事件
 
 private Q_SLOTS:
     void showFullScreenWidget();//加载全屏窗口

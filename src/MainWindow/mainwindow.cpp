@@ -109,7 +109,7 @@ void MainWindow::initMainWindow()
 //    this->setWindowOpacity(0.95);//设置总体透明度
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
-    this->setFocusPolicy(Qt::ClickFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
 
     ui->mainToolBar->hide();
     ui->menuBar->hide();
@@ -429,4 +429,18 @@ void MainWindow::setFrameStyle()
         sprintf(style, "border:0px;background-color:%s;border-top-right-radius:0px;",DefaultBackground);
     }
     frame->setStyleSheet(style);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+    if(e->type()==QEvent::KeyPress)
+    {
+        QKeyEvent* ke=static_cast<QKeyEvent*>(e);
+        if((ke->key()>=0x30 && ke->key()<=0x39) || (ke->key()>=0x41 && ke->key()<=0x5a))
+        {
+//            qDebug()<<ke->key()<<QKeySequence(ke->key()).toString()<<e->text();
+            mainviewwid->setLineEditFocus(e->text());
+        }
+    }
+
 }

@@ -66,6 +66,7 @@ void FullListView::initWidget()
     this->setResizeMode(QListView::Adjust);
     this->setTextElideMode(Qt::ElideRight);
     this->setMouseTracking(true);
+    this->setFocusPolicy(Qt::NoFocus);
 //    this->setUpdatesEnabled(true);
 
 //    this->setSpacing(32);

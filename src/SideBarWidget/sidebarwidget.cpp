@@ -555,6 +555,13 @@ void SideBarWidget::loadMaxSidebar()
     setMaxSidebarBtn(computerbtn);
     setMaxSidebarBtn(controlbtn);
     setMaxSidebarBtn(shutdownbtn);
+    commonusebtn->setToolTip("");
+    letterbtn->setToolTip("");
+    functionbtn->setToolTip("");
+    usericonbtn->setToolTip("");
+    computerbtn->setToolTip("");
+    controlbtn->setToolTip("");
+    shutdownbtn->setToolTip("");
 
     disconnect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendFullScreenBtnSignal()));
     connect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendDefaultBtnSignal()));

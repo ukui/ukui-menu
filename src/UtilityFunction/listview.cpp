@@ -62,6 +62,7 @@ void ListView::initWidget()
     this->setGridSize(QSize(300,48));
     this->setViewMode(QListView::ListMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->setFocusPolicy(Qt::NoFocus);
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
 

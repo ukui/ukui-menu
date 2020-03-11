@@ -66,7 +66,7 @@ void MainViewWidget::initWidget()
     mainLayout->addItem(verticalSpacer);
     this->setLayout(mainLayout);
 
-    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocusPolicy(Qt::NoFocus);
 
     commonusewid=new CommonUseWidget;
     fullcommonusewid=new FullCommonUseWidget;
@@ -162,6 +162,7 @@ void MainViewWidget::addTopControl()
 void MainViewWidget::initQueryLineEdit()
 {
     pIconTextWid=new QWidget(querylineEdit);
+    pIconTextWid->setFocusPolicy(Qt::NoFocus);
     pIconTextWid->setStyleSheet("background:transparent");
     pIconTextWidLayout=new QHBoxLayout;
     pIconTextWidLayout->setContentsMargins(5,0,0,0);
@@ -191,7 +192,6 @@ void MainViewWidget::initQueryLineEdit()
     queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     querylineEdit->setFocusPolicy(Qt::ClickFocus);
     querylineEdit->installEventFilter(this);
-    querylineEdit->setTextMargins(20,1,0,1);
 
     searchappthread=new SearchAppThread;
     connect(this,SIGNAL(sendSearchKeyword(QString)),
@@ -216,6 +216,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
              sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:2px;font-size:14px;color:#ffffff;}",
                      QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              querylineEdit->setStyleSheet(style);
+             querylineEdit->setTextMargins(20,1,0,1);
              if(!querylineEdit->text().isEmpty())
                  searchAppSlot(querylineEdit->text());
         }
@@ -224,6 +225,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
              char style[100];
              sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
              querylineEdit->setStyleSheet(style);
+             querylineEdit->setTextMargins(0,1,0,1);
              pIconTextWidLayout->addWidget(pQueryText);
              pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
              queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
@@ -233,18 +235,13 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
      return QWidget::eventFilter(watched,event);     // 最后将事件交给上层对话框
 }
 
-void MainViewWidget::keyPressEvent(QKeyEvent *e)
+void MainViewWidget::setLineEditFocus(QString arg)
 {
-    if(e->type()==QEvent::KeyPress)
+    if(!querylineEdit->hasFocus())
     {
-        QKeyEvent* ke=static_cast<QKeyEvent*>(e);
-        if(ke->key()>=0x30 && ke->key()<=0x39 && ke->key()>=0x41 && ke->key()<=0x5a)
-        {
-            querylineEdit->setFocus();
-            querylineEdit->setText(QKeySequence(ke->key()).toString());
-        }
+        querylineEdit->setFocus();
+        querylineEdit->setText(arg);
     }
-
 }
 
 /**
