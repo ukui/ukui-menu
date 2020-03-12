@@ -595,7 +595,12 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     setting=new QSettings(path,QSettings::IniFormat);
     setting->beginGroup("recentapp");
     QStringList keys=setting->childKeys();
-    list[0].append(keys);
+    for(int i=0;i<keys.count();i++)
+    {
+        QString desktopfp=QString("/usr/share/applications/"+keys.at(i));
+        QString appname=getAppName(desktopfp);
+        list[0].append(appname);
+    }
     setting->endGroup();
 
     QVector<QStringList> data;

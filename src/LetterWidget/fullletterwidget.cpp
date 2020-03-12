@@ -420,7 +420,7 @@ void FullLetterWidget::valueChangedSlot(int value)
     {
 
         int val=letterlistscrollarea->verticalScrollBar()->value()-buttonList.at(count)->height();
-        letterlistscrollarea->verticalScrollBar()->setValue(val);
+        letterlistscrollarea->verticalScrollBar()->setSliderPosition(val);
     }
 
 }
@@ -433,6 +433,7 @@ void FullLetterWidget::widgetMakeZero()
         if(num!=-1)
         {
             pBtnGroup->button(num)->click();
+            letterlistscrollarea->verticalScrollBar()->setSliderPosition(0);
             break;
         }
     }

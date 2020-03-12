@@ -43,6 +43,8 @@ public:
     FunctionClassifyButton(QWidget *parent,
                int width,
                int height,
+               int iconSize,
+               int textSize,
                QString iconstr,
                QString piconstr,
                QString hoverbg,
@@ -57,6 +59,8 @@ public:
 private:
     int width;
     int height;
+    int iconSize;
+    int textSize;
     QString iconstr;
     QString piconstr;
     QString hoverbg;

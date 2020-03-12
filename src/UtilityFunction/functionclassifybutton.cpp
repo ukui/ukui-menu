@@ -22,6 +22,8 @@
 FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
                        int width,
                        int height,
+                       int iconSize,
+                       int textSize,
                        QString iconstr,
                        QString piconstr,
                        QString hoverbg,
@@ -34,6 +36,8 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
 {
     this->width=width;
     this->height=height;
+    this->iconSize=iconSize;
+    this->textSize=textSize;
     this->setFixedSize(width,height);
     this->iconstr=iconstr;
     this->piconstr=piconstr;
@@ -47,7 +51,7 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     this->setFocusPolicy(Qt::NoFocus);
     svgRender=new QSvgRenderer(this);
     svgRender->load(iconstr);
-    pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+    pixmap=new QPixmap(iconSize,iconSize);
     pixmap->fill(Qt::transparent);
     QPainter p(pixmap);
     svgRender->render(&p);
@@ -59,7 +63,7 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     textlabel=new QLabel(this);
     textlabel->setText(this->text);
     QFont font;
-    font.setPixelSize(Style::LeftFontSize);
+    font.setPixelSize(textSize);
     textlabel->setFont(font);
     if(is_fullscreen)
         textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
@@ -95,14 +99,14 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
     delete svgRender;
     svgRender=new QSvgRenderer(this);
     svgRender->load(piconstr);
-    pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+    pixmap=new QPixmap(iconSize,iconSize);
     pixmap->fill(Qt::transparent);
     QPainter p(pixmap);
     svgRender->render(&p);
     iconlabel->setPixmap(*pixmap);
     iconlabel->setFixedSize(pixmap->size());
     QFont font;
-    font.setPixelSize(Style::LeftFontSize);
+    font.setPixelSize(textSize);
     textlabel->setFont(font);
     if(enabled)
         textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
@@ -119,9 +123,9 @@ void FunctionClassifyButton::leaveEvent(QEvent *e)
     {
         this->setFixedSize(width,height);
         svgRender->load(piconstr);
-        pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+        pixmap=new QPixmap(iconSize,iconSize);
         QFont font;
-        font.setPixelSize(Style::LeftFontSize);
+        font.setPixelSize(textSize);
         textlabel->setFont(font);
 
     }
@@ -129,13 +133,13 @@ void FunctionClassifyButton::leaveEvent(QEvent *e)
     {
         this->setFixedSize(width,height);
         svgRender->load(iconstr);
-        pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+        pixmap=new QPixmap(iconSize,iconSize);
         QFont font;
-        font.setPixelSize(Style::LeftFontSize);
+        font.setPixelSize(textSize);
         textlabel->setFont(font);
 
     }
-//    pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+//    pixmap=new QPixmap(iconSize,iconSize);
     pixmap->fill(Qt::transparent);
     QPainter p(pixmap);
     svgRender->render(&p);
@@ -165,14 +169,14 @@ void FunctionClassifyButton::mousePressEvent(QMouseEvent *event)
         delete svgRender;
         svgRender=new QSvgRenderer(this);
         svgRender->load(piconstr);
-        pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+        pixmap=new QPixmap(iconSize,iconSize);
         pixmap->fill(Qt::transparent);
         QPainter p(pixmap);
         svgRender->render(&p);
         iconlabel->setPixmap(*pixmap);
         iconlabel->setFixedSize(pixmap->size());
         QFont font;
-        font.setPixelSize(Style::LeftFontSize);
+        font.setPixelSize(textSize);
         textlabel->setFont(font);
         textlabel->setStyleSheet("background:transparent;color:#ffffff;");
         textlabel->adjustSize();
@@ -193,14 +197,14 @@ void FunctionClassifyButton::mouseReleaseEvent(QMouseEvent *event)
         delete svgRender;
         svgRender=new QSvgRenderer(this);
         svgRender->load(piconstr);
-        pixmap=new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+        pixmap=new QPixmap(iconSize,iconSize);
         pixmap->fill(Qt::transparent);
         QPainter p(pixmap);
         svgRender->render(&p);
         iconlabel->setPixmap(*pixmap);
         iconlabel->setFixedSize(pixmap->size());
         QFont font;
-        font.setPixelSize(Style::LeftFontSize);
+        font.setPixelSize(textSize);
         textlabel->setFont(font);
         textlabel->setStyleSheet("background:transparent;color:#ffffff;");
         textlabel->adjustSize();

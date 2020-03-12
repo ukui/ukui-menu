@@ -373,6 +373,8 @@ void MainWindow::recvHideMainWindowSlot()
 
 bool MainWindow::checkIfFullScreen()
 {
+    //默认开启默认态
+    showDefaultWidget();
     return is_fullscreen;
 }
 

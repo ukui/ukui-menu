@@ -355,13 +355,6 @@ void QtSingleApplication::activateWindow()
             }
             else {
                 w->setFrameStyle();
-//                QDBusInterface iface("com.ukui.panel.desktop",
-//                                     "/",
-//                                     "com.ukui.panel.desktop",
-//                                     QDBusConnection::sessionBus());
-
-//                QDBusReply<int> position=iface.call("GetPanelPosition","");
-//                QDBusReply<int> panelSize=iface.call("GetPanelSize","");
                 if(position==0)
                     actWin->setGeometry(QRect(0,this->desktop()->height()-panelSize-actWin->height(),
                                               actWin->width(),actWin->height()));

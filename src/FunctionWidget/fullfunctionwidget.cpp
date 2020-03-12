@@ -316,6 +316,8 @@ void FullFunctionWidget::updateAppListView()
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
                                                                    Style::LeftBtnWidth,
                                                                    Style::LeftBtnHeight,
+                                                                   Style::LeftIconSize,
+                                                                   Style::LeftFontSize,
                                                                    iconlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    iconlightlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    ClassifyBtnHoverBackground,
@@ -417,6 +419,8 @@ void FullFunctionWidget::initIconListScrollArea()
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
                                                                    Style::LeftBtnWidth,
                                                                    Style::LeftBtnHeight,
+                                                                   Style::LeftIconSize,
+                                                                   Style::LeftFontSize,
                                                                    iconlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    iconlightlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    ClassifyBtnHoverBackground,
@@ -608,6 +612,7 @@ void FullFunctionWidget::widgetMakeZero()
         if(num!=-1)
         {
             pBtnGroup->button(num)->click();
+            iconlistscrollarea->verticalScrollBar()->setSliderPosition(0);
             break;
         }
     }

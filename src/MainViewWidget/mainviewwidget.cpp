@@ -402,6 +402,7 @@ void MainViewWidget::loadCommonUseWidget()
         }
 
     }
+    commonusewid->widgetMakeZero();
     mainLayout->addWidget(commonusewid);
     widgetState=1;
     saveCurrentWidState=1;
@@ -422,6 +423,7 @@ void MainViewWidget::loadLetterWidget()
         }
 
     }
+    letterwid->widgetMakeZero();
     mainLayout->addWidget(letterwid);
     widgetState=2;
     saveCurrentWidState=2;
@@ -442,6 +444,7 @@ void MainViewWidget::loadFunctionWidget()
         }
 
     }
+    functionwid->widgetMakeZero();
     mainLayout->addWidget(functionwid);
     widgetState=3;
     saveCurrentWidState=3;
@@ -463,6 +466,7 @@ void MainViewWidget::loadFullCommonUseWidget()
         }
 
     }
+    fullcommonusewid->widgetMakeZero();
     mainLayout->addWidget(fullcommonusewid);
     widgetState=1;
     saveCurrentWidState=1;
@@ -482,6 +486,7 @@ void MainViewWidget::loadFullLetterWidget()
             childwid->setParent(nullptr);
         }
     }
+    fullletterwid->widgetMakeZero();
     mainLayout->addWidget(fullletterwid);
     widgetState=2;
     saveCurrentWidState=2;
@@ -502,6 +507,7 @@ void MainViewWidget::loadFullFunctionWidget()
         }
 
     }
+    fullfunctionwid->widgetMakeZero();
     mainLayout->addWidget(fullfunctionwid);
     widgetState=3;
     saveCurrentWidState=3;
@@ -571,9 +577,11 @@ void MainViewWidget::directoryChangedSlot()
                 //获取当前时间戳
                 QDateTime dt=QDateTime::currentDateTime();
                 int datetime=dt.toTime_t();
-                QString appname=pUkuiMenuInterface->getAppName(desktopfpList.at(i));
-                setting->setValue(appname,datetime);
-                qDebug()<<"anzhuang:"<<appname;
+//                QString appname=pUkuiMenuInterface->getAppName(desktopfpList.at(i));
+                QFileInfo fileInfo(desktopfpList.at(i));
+                QString desktopfn=fileInfo.fileName();
+                setting->setValue(desktopfn,datetime);
+                qDebug()<<"anzhuang:"<<desktopfn;
             }
 
         }
@@ -589,7 +597,7 @@ void MainViewWidget::directoryChangedSlot()
             if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i)))
             {
 //                QString appname=pUkuiMenuInterface->getAppName(UkuiMenuInterface::desktopfpVector.at(i));
-                QString appname=UkuiMenuInterface::appInfoVector.at(i).at(2);
+//                QString appname=UkuiMenuInterface::appInfoVector.at(i).at(2);
                 QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
                 QFileInfo fileInfo(desktopfp);
                 QString desktopfn=fileInfo.fileName();
@@ -602,10 +610,10 @@ void MainViewWidget::directoryChangedSlot()
                 setting->sync();
                 setting->endGroup();
                 setting->beginGroup("recentapp");
-                setting->remove(appname);
+                setting->remove(desktopfn);
                 setting->sync();
                 setting->endGroup();
-                qDebug()<<"xiezai:"<<appname;
+                qDebug()<<"xiezai:"<<desktopfn;
             }
         }
         UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
