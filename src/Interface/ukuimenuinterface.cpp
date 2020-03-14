@@ -187,7 +187,6 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
     filePathList.removeAll("/usr/share/applications/galternatives.desktop");
     filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
-    filePathList.removeAll("/usr/share/applications/update-manager.desktop");
     filePathList.removeAll("/usr/share/applications/pcmanfm-qt-desktop-pref.desktop");
     filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
     filePathList.removeAll("/usr/share/applications/gucharmap.desktop");
@@ -195,6 +194,15 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
     filePathList.removeAll("/usr/share/applications/indicator-china-weather.desktop");
     filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
+    filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
+    filePathList.removeAll("/usr/share/applications/mpv.desktop");
+    filePathList.removeAll("/usr/share/applications/atril.desktop");
+    filePathList.removeAll("/usr/share/applications/ukui-control-center.desktop");
+    filePathList.removeAll("/usr/share/applications/org.kde.kwalletmanager5.desktop");
+    filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
+    filePathList.removeAll("/usr/share/applications/vim.desktop");
+    filePathList.removeAll("/usr/share/applications/kwalletmanager5-kwalletd.desktop");
+    filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
 
     return filePathList;
 }

@@ -56,6 +56,15 @@ private:
 
     QProcess* cmdProc=nullptr;
 
+    //间隔线
+    QLabel* separatorLabel=nullptr;
+    QWidget* separatorWid=nullptr;
+    QWidgetAction* separatorAction_1=nullptr;
+    QWidgetAction* separatorAction_2=nullptr;
+    QWidgetAction* separatorAction_3=nullptr;
+    QWidgetAction* separatorAction_4=nullptr;
+    QWidgetAction* separatorAction_5=nullptr;
+
     QMenu* cuappbtnmenu;
     QWidgetAction* CuFix2CommonUseAction;
     QWidget* CuFix2CommonUseWid;
