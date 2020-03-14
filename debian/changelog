@@ -3,8 +3,10 @@ ukui-menu (2.0.2-1) unstable; urgency=medium
   * New upstream bugfix release.
     - Get the panel position to avoid popup at wrong place.
     - Fix the stuck when scroll the area.
+    - Fix the focus issue.
+    - Fix the display problem of 'recent app" bar.
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 10 Mar 2020 14:27:28 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Sat, 14 Mar 2020 14:33:14 +0800
 
 ukui-menu (2.0.1-1) unstable; urgency=medium
 
