@@ -25,6 +25,7 @@
 #include <QEvent>
 #include <QScrollBar>
 #include <QToolTip>
+#include <QStandardItemModel>
 #include "fullitemdelegate.h"
 #include "fulllistmodel.h"
 #include "src/Style/style.h"
@@ -38,8 +39,8 @@ public:
 
     void addData(QStringList data);//字母排序模块添加数据
     void updateData(QStringList data);
-    void removeRow(QString desktopfp);
-    void insertRow(QString desktopfp);
+//    void removeRow(QString desktopfp);
+//    void insertRow(QString desktopfp);
 
 protected:
     void initWidget();
@@ -49,7 +50,9 @@ protected:
 
 private:
     FullItemDelegate* m_delegate=nullptr;
-    FullListModel* listmodel=nullptr;
+//    FullListModel* listmodel=nullptr;
+//    QStringListModel* listmodel=nullptr;
+    QStandardItemModel* listmodel=nullptr;
     int module=0;
 
     RightClickMenu* menu;//右键菜单

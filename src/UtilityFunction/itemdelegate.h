@@ -34,6 +34,7 @@ public:
     ItemDelegate(QObject* parent,int module);
     ~ItemDelegate();
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 private:
     int module=0;

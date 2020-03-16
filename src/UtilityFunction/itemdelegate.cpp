@@ -39,7 +39,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     if(index.isValid())
     {
         painter->save();
-
+        QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
         rect.setX(option.rect.x());
         rect.setY(option.rect.y());
@@ -65,7 +65,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         font.setPixelSize(14);
         painter->setFont(font);
 
-        QIcon icon=index.model()->data(index,Qt::DecorationRole).value<QIcon>();
+//        QIcon icon=index.model()->data(index,Qt::DecorationRole).value<QIcon>();
         QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
 //        if(!icon.isNull())
 //            painter->fillRect(QRect(rect.x(),rect.y(),40,40),QColor(Qt::blue));//图片加背景
@@ -88,6 +88,12 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             if(strlist.at(1).toInt()==1)
             {
                 QRect iconRect=QRect(rect.x()+11,rect.y()+(rect.height()-32)/2,32,32);
+                QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
+                iconstr.remove(".png");
+                iconstr.remove(".svg");
+                QIcon icon=QIcon::fromTheme(iconstr);
+                if(icon.isNull())
+                    icon=QIcon::fromTheme(QString("application-x-desktop"));
                 icon.paint(painter,iconRect);
                 painter->setPen(QPen(Qt::white));
                 QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
@@ -111,8 +117,13 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         {
             setting->beginGroup("application");
             QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
+            QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
+            iconstr.remove(".png");
+            iconstr.remove(".svg");
+            QIcon icon=QIcon::fromTheme(iconstr);
+            if(icon.isNull())
+                icon=QIcon::fromTheme(QString("application-x-desktop"));
             icon.paint(painter,iconRect);
-
             QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
             QFileInfo fileInfo(strlist.at(0));
             QString desktopfn=fileInfo.fileName();
@@ -131,4 +142,9 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         painter->restore();
     }
 
+}
+
+QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    return QSize(296,48);
 }

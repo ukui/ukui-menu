@@ -79,9 +79,15 @@ void ListView::initWidget()
 
 void ListView::addData(QVector<QStringList> data)
 {
-    model=new ListModel(this);
-    this->setModel(model);
-    model->setData(data);
+    listmodel=new QStandardItemModel(this);
+    this->setModel(listmodel);
+    Q_FOREACH(QStringList desktopfp,data)
+    {
+        QStandardItem* item=new QStandardItem;
+        item->setData(QVariant::fromValue<QStringList>(desktopfp),Qt::DisplayRole);
+        listmodel->appendRow(item);
+    }
+//    listmodel->setData(data);
 }
 
 void ListView::updateData(QVector<QStringList> data)
@@ -90,12 +96,20 @@ void ListView::updateData(QVector<QStringList> data)
 //    model->removeRows(0,model->rowCount());
 //    qDebug()<<model->rowCount()<<data.size();
 //    model->setData(data);
-    model->updateData(data);
+//    listmodel->updateData(data);
+
+    Q_FOREACH(QStringList desktopfp,data)
+    {
+        QStandardItem* item=new QStandardItem;
+        item->setData(QVariant::fromValue<QStringList>(desktopfp),Qt::DisplayRole);
+        listmodel->appendRow(item);
+    }
+
 }
 
 void ListView::onClicked(QModelIndex index)
 {
-     QVariant var = model->data(index, Qt::DisplayRole);
+     QVariant var = listmodel->data(index, Qt::DisplayRole);
      if(var.isValid())
      {
 //         qDebug()<<var.value<QStringList>()<<index.row();
@@ -110,7 +124,7 @@ void ListView::rightClickedSlot()
     {
         menu=new RightClickMenu(this);
         QModelIndex index=this->currentIndex();
-        QVariant var=model->data(index, Qt::DisplayRole);
+        QVariant var=listmodel->data(index, Qt::DisplayRole);
         QStringList strlist=var.value<QStringList>();
         if(module>0)
         {

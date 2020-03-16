@@ -40,7 +40,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     //常用应用按钮右键菜单
     cuappbtnmenu=new QMenu(this);
     cuappbtnmenu->setLayoutDirection(Qt::LeftToRight);
-    cuappbtnmenu->setFixedSize(250+2,36*7+4*6+12+2);
+    cuappbtnmenu->setFixedSize(250+2,36*7+4*3+9*3+12+2);
     CuFix2CommonUseAction=new QWidgetAction(cuappbtnmenu);
     CuFix2CommonUseWid=new QWidget();
     CuUnfixed4CommonUseAction=new QWidgetAction(cuappbtnmenu);
@@ -63,7 +63,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     //普通应用按钮右键菜单
     appbtnmenu=new QMenu(this);
     appbtnmenu->setLayoutDirection(Qt::LeftToRight);
-    appbtnmenu->setFixedSize(250+2,36*5+4*4+12+2);
+    appbtnmenu->setFixedSize(250+2,36*5+4*2+9*2+12+2);
     Fix2CommonUseAction=new QWidgetAction(appbtnmenu);
     Fix2CommonUseWid=new QWidget();
     Unfixed4CommonUseAction=new QWidgetAction(appbtnmenu);
@@ -91,12 +91,12 @@ RightClickMenu::RightClickMenu(QWidget *parent):
         separatorWid[i].setStyleSheet("background:transparent;");
         QHBoxLayout* layout=new QHBoxLayout(&separatorWid[i]);
         separatorWid[i].setLayout(layout);
-        layout->setContentsMargins(0,0,0,0);
-        separatorWid[i].setFixedSize(246,4);
+        layout->setContentsMargins(8,0,8,0);
+        separatorWid[i].setFixedSize(246,9);
         separatorWid[i].setFocusPolicy(Qt::NoFocus);
-        separatorLabel[i].setFixedSize(separatorWid->width(),1);
+        separatorLabel[i].setFixedSize(separatorWid->width()-16,1);
         layout->addWidget(&separatorLabel[i]);
-        layout->setAlignment(&separatorLabel[i],Qt::AlignVCenter);
+        layout->setAlignment(&separatorLabel[i],Qt::AlignCenter);
     }
 
     separatorAction_1=new QWidgetAction(cuappbtnmenu);

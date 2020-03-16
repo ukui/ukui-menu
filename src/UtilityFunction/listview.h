@@ -22,6 +22,7 @@
 #include <QStandardItem>
 #include <QEvent>
 #include <QScrollBar>
+#include <QStandardItemModel>
 #include "listmodel.h"
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
@@ -45,7 +46,8 @@ protected:
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
 
 private:
-    ListModel* model=nullptr;
+//    ListModel* model=nullptr;
+    QStandardItemModel* listmodel=nullptr;
     int w=0;
     int h=0;
     int module=0;

@@ -38,6 +38,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     if(index.isValid())
     {
         painter->save();
+        QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
         rect.setX(option.rect.x());
         rect.setY(option.rect.y());
@@ -57,24 +58,6 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         path.lineTo(rect.topRight() + QPointF(0, radius));
         path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
-//        if(option.state.testFlag(QStyle::State_Selected))
-//        {
-//            painter->setPen(QPen(Qt::blue));
-//            painter->setBrush(QColor(229, 241, 255));
-//            painter->drawPath(path);
-//        }
-//        else if(option.state.testFlag(QStyle::State_MouseOver))
-//        {
-//            painter->setPen(QPen(Qt::green));
-//            painter->setBrush(Qt::NoBrush);
-//            painter->drawPath(path);
-//        }
-//        else{
-//            painter->setPen(QPen(Qt::gray));
-//            painter->setBrush(Qt::NoBrush);
-//            painter->drawPath(path);
-//        }
-
         painter->setRenderHint(QPainter::Antialiasing);
         if(option.state & QStyle::State_MouseOver)
         {
@@ -88,8 +71,15 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         }
 
         painter->setOpacity(1);
-        QIcon icon=index.data(Qt::DecorationRole).value<QIcon>();
+//        QIcon icon=index.data(Qt::DecorationRole).value<QIcon>();
         QString desktopfp=index.data(Qt::DisplayRole).value<QString>();
+//        QString desktopfp=index.data().value<QString>();
+        QString iconstr=pUkuiMenuInterface->getAppIcon(desktopfp);
+        iconstr.remove(".png");
+        iconstr.remove(".svg");
+        QIcon icon=QIcon::fromTheme(iconstr);
+        if(icon.isNull())
+            icon=QIcon::fromTheme(QString("application-x-desktop"));
         QString appname=pUkuiMenuInterface->getAppName(desktopfp);
 
         QFont font;
@@ -153,6 +143,11 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->restore();
 
     }
+}
+
+QSize FullItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    return QSize(Style::AppListItemSizeWidth, Style::AppListItemSizeWidth);
 }
 
 //bool FullItemDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index)
