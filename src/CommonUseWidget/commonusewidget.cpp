@@ -100,8 +100,6 @@ void CommonUseWidget::fillAppList()
         data.append(QStringList()<<desktopfp<<"1");
     }
 
-    m_delegate= new ItemDelegate(this,0);
-    listview->setItemDelegate(m_delegate);
     listview->addData(data);
     setting->endGroup();
 }

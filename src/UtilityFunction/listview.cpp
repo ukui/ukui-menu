@@ -68,15 +68,6 @@ void ListView::initWidget()
 
 }
 
-//void ListView::addData(QVector<QStringList> data, QStringList rowlist)
-//{
-//    this->rowlist.clear();
-//    model=new ListModel(this);
-//    this->setModel(model);
-//    model->setData(data);
-//    this->rowlist=rowlist;
-//}
-
 void ListView::addData(QVector<QStringList> data)
 {
     listmodel=new QStandardItemModel(this);
@@ -87,17 +78,13 @@ void ListView::addData(QVector<QStringList> data)
         item->setData(QVariant::fromValue<QStringList>(desktopfp),Qt::DisplayRole);
         listmodel->appendRow(item);
     }
-//    listmodel->setData(data);
+    m_delegate= new ItemDelegate(this,module);
+    this->setItemDelegate(m_delegate);
 }
 
 void ListView::updateData(QVector<QStringList> data)
 {
-//    qDebug()<<model->rowCount();
-//    model->removeRows(0,model->rowCount());
-//    qDebug()<<model->rowCount()<<data.size();
-//    model->setData(data);
-//    listmodel->updateData(data);
-
+    listmodel->clear();
     Q_FOREACH(QStringList desktopfp,data)
     {
         QStandardItem* item=new QStandardItem;

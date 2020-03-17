@@ -8,7 +8,7 @@ QT       += core gui svg dbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 include(src/QtSingleApplication/qtsingleapplication.pri)
-#QMAKE_CXXFLAGS += -g
+QMAKE_CXXFLAGS += -g
 
 TARGET = ukui-menu
 TEMPLATE = app
@@ -35,11 +35,9 @@ SOURCES += \
     src/Style/style.cpp \
     src/UtilityFunction/classifyscrollarea.cpp \
     src/UtilityFunction/fullitemdelegate.cpp \
-    src/UtilityFunction/fulllistmodel.cpp \
     src/UtilityFunction/fulllistview.cpp \
     src/UtilityFunction/functionclassifybutton.cpp \
     src/UtilityFunction/itemdelegate.cpp \
-    src/UtilityFunction/listmodel.cpp \
     src/UtilityFunction/listview.cpp \
     src/UtilityFunction/pushbutton.cpp \
     src/UtilityFunction/scrollarea.cpp \
@@ -67,11 +65,9 @@ HEADERS  += \
     src/Style/style.h \
     src/UtilityFunction/classifyscrollarea.h \
     src/UtilityFunction/fullitemdelegate.h \
-    src/UtilityFunction/fulllistmodel.h \
     src/UtilityFunction/fulllistview.h \
     src/UtilityFunction/functionclassifybutton.h \
     src/UtilityFunction/itemdelegate.h \
-    src/UtilityFunction/listmodel.h \
     src/UtilityFunction/listview.h \
     src/UtilityFunction/pushbutton.h \
     src/UtilityFunction/scrollarea.h \

@@ -52,7 +52,6 @@ private:
     QLabel* line=nullptr;
     ListView* applistview=nullptr;
     QVector<QStringList> data;
-    ItemDelegate* m_delegate=nullptr;
 
     QStringList letterbtnlist;//存放字母按钮
     QStringList letterbtnrowlist;//存放字母按钮所在行

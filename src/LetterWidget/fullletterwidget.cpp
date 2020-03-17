@@ -176,7 +176,47 @@ void FullLetterWidget::updateAppListView()
             delete wid;
     }
 
-    fillAppList();
+    letterbtnlist.clear();
+    letterbtnrowlist.clear();
+
+    QVector<QStringList> vector=pUkuiMenuInterface->getAlphabeticClassification();
+    for(int i=0;i<vector.size();i++)
+    {
+        QStringList appList=vector.at(i);
+        if(!appList.isEmpty())
+        {
+            QString letterstr;
+            if(i<26)
+                letterstr=QString(QChar(static_cast<char>(i+65)));
+            else if(i==26)
+                letterstr="&";
+            else
+                letterstr="#";
+            letterbtnlist.append(letterstr);//存储分类字符
+            //插入字母分类按钮
+            PushButton* letterbtn=new PushButton(letterstr,scrollarea->width()-12,20);
+//            letterbtn->setFixedSize(scrollarea->width(),20);
+            scrollareawidLayout->addWidget(letterbtn);
+
+            //插入应用列表
+            FullListView* listview=new FullListView(this,1);
+            scrollareawidLayout->addWidget(listview);
+            data.clear();
+            for(int i=0;i<appList.count();i++)
+            {
+                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
+                data.append(desktopfp);
+
+            }
+            listview->updateData(data);
+
+            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
+            connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+            connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+        }
+    }
+
+        resizeScrollAreaControls();
 
     //刷新字母列表界面
     Q_FOREACH (QAbstractButton* button, buttonList) {

@@ -52,7 +52,6 @@ private:
 
     QHBoxLayout* mainLayout=nullptr;
     ListView* listview=nullptr;
-    ItemDelegate* itemdelegate=nullptr;
     QVector<QStringList> data;
 
 protected:

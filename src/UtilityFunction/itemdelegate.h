@@ -29,7 +29,7 @@ class ItemDelegate : public QStyledItemDelegate
     Q_OBJECT
 public:
     /**
-     * @param module为0时为常用模块，1为字母模块、2为功能模块
+     * @param module为0时为常用模块，1为字母模块、2为功能模块、3为搜索模块
      */
     ItemDelegate(QObject* parent,int module);
     ~ItemDelegate();

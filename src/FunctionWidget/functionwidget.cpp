@@ -151,8 +151,6 @@ void FunctionWidget::fillAppListView()
         insertAppList(otherlist);
     }
 
-    m_delegate= new ItemDelegate(this,2);
-    applistview->setItemDelegate(m_delegate);
     applistview->addData(data);
 }
 

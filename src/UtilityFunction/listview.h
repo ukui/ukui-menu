@@ -23,11 +23,11 @@
 #include <QEvent>
 #include <QScrollBar>
 #include <QStandardItemModel>
-#include "listmodel.h"
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include <QSettings>
 #include "src/Interface/ukuimenuinterface.h"
+#include "itemdelegate.h"
 
 class ListView : public QListView
 {
@@ -36,7 +36,6 @@ public:
     ListView(QWidget *parent, int width, int height, int module);
     ~ListView();
 
-//    void addData(QVector<QStringList> data,QStringList rowlist);//字母排序模块添加数据
     void addData(QVector<QStringList> data);
     void updateData(QVector<QStringList> data);
 
@@ -57,6 +56,7 @@ private:
     RightClickMenu* menu;//右键菜单
     QSettings *setting=nullptr;
     QVector<QStringList> data;
+    ItemDelegate* m_delegate=nullptr;
 
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item

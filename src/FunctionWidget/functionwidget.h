@@ -55,7 +55,6 @@ private:
 
     ListView* applistview=nullptr;
     QVector<QStringList> data;
-    ItemDelegate* m_delegate=nullptr;
 
     QStringList classificationbtnlist;//存放分类按钮
     QStringList classificationbtnrowlist;//存放分类按钮所在行

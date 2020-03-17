@@ -27,7 +27,6 @@
 #include <QToolTip>
 #include <QStandardItemModel>
 #include "fullitemdelegate.h"
-#include "fulllistmodel.h"
 #include "src/Style/style.h"
 
 class FullListView : public QListView

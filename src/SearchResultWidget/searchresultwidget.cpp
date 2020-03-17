@@ -50,8 +50,6 @@ void SearchResultWidget::initWidget()
     mainLayout->addWidget(listview);
     this->setLayout(mainLayout);
     data.clear();
-    itemdelegate=new ItemDelegate(this,3);
-    listview->setItemDelegate(itemdelegate);
     listview->addData(data);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
@@ -84,7 +82,4 @@ void SearchResultWidget::updateAppListView(QStringList desktopfplist)
         data.append(QStringList()<<desktopfplist.at(i)<<"1");
     }
     listview->updateData(data);
-//    itemdelegate=new FullItemDelegate(this,3);
-//    listview->setItemDelegate(itemdelegate);
-//    listview->addData(data);
 }

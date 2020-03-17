@@ -103,7 +103,7 @@ protected:
     void initAppListWidget();//初始化应用列表界面
     void fillAppList();//填充应用列表
     void insertClassificationBtn(QString btnname);//插入分类按钮
-    void insertAppList(QStringList appnamelist);//插入应用列表
+    void insertAppList(QStringList appnamelist,int type);//插入应用列表
     void resizeScrollAreaControls();//设置scrollarea填充控件大小
 
 private Q_SLOTS:

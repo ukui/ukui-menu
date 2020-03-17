@@ -88,19 +88,10 @@ void FullListView::addData(QStringList data)
     }
     m_delegate= new FullItemDelegate(this,module);
     this->setItemDelegate(m_delegate);
-//    listmodel=new FullListModel(this);
-//    this->setModel(listmodel);
-//    listmodel->setData(data);
 }
 
 void FullListView::updateData(QStringList data)
 {
-//    m_delegate->setParent(nullptr);
-//    delete m_delegate;
-//    m_delegate=new FullItemDelegate(this,module);
-//    this->setItemDelegate(m_delegate);
-//    listmodel->updateData(data);
-
     listmodel->clear();
     Q_FOREACH(QString desktopfp,data)
     {
@@ -109,16 +100,6 @@ void FullListView::updateData(QStringList data)
         listmodel->appendRow(item);
     }
 }
-
-//void FullListView::removeRow(QString desktopfp)
-//{
-//    listmodel->removeRow(desktopfp);
-//}
-
-//void FullListView::insertRow(QString desktopfp)
-//{
-//    listmodel->insertRow(desktopfp);
-//}
 
 void FullListView::onClicked(QModelIndex index)
 {

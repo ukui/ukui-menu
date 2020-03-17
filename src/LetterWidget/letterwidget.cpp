@@ -125,8 +125,6 @@ void LetterWidget::fillAppListView()
         }
     }
 
-    m_delegate= new ItemDelegate(this,1);
-    applistview->setItemDelegate(m_delegate);
     applistview->addData(data);
 }
 
