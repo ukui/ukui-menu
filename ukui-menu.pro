@@ -13,6 +13,8 @@ QMAKE_CXXFLAGS += -g
 TARGET = ukui-menu
 TEMPLATE = app
 
+target.path = /usr/bin
+
 TRANSLATIONS+=\
     ukui_menu_ch.ts
 
@@ -95,3 +97,9 @@ RESOURCES += \
 
 PKGCONFIG+=glib-2.0
 CONFIG += no_keywords link_pkgconfig
+
+desktop_file.files = ukui-menu.desktop
+desktop_file.path = /etc/xdg/autostart
+
+INSTALLS += \
+    target desktop_file
