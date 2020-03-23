@@ -7,7 +7,8 @@ Uploaders: Aron Xu <aron@debian.org>,
 Build-Depends: debhelper-compat (=12),
                qtbase5-dev,
                libqt5svg5-dev,
-               libglib2.0-dev (>= 2.36)
+               libglib2.0-dev (>= 2.36),
+               libgsettings-qt-dev
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/ukui-menu
@@ -17,7 +18,8 @@ Vcs-Browser: https://github.com/ukui/ukui-menu
 Package: ukui-menu
 Architecture: any
 Depends: ${shlibs:Depends},
-         ${misc:Depends}
+         ${misc:Depends},
+         libgsettings-qt1
 Description: Advanced ukui menu
  UKUI menu provides start menu development library and advanced
  graphical user interface.

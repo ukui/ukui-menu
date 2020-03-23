@@ -62,7 +62,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         QFont font;
 //        font.setFamily("Microsoft YaHei");
 
-        font.setPixelSize(14);
+        font.setPixelSize(Style::AppListFontSize);
         painter->setFont(font);
 
 //        QIcon icon=index.model()->data(index,Qt::DecorationRole).value<QIcon>();

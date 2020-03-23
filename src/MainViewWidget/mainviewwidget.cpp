@@ -203,6 +203,8 @@ void MainViewWidget::initQueryLineEdit()
 
 bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
 {
+    QFont font;
+    font.setPixelSize(Style::QueryLineEditFontSize);
     if(watched==querylineEdit)
     {
         if(event->type()==QEvent::FocusIn)
@@ -213,22 +215,32 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             queryLayout->setAlignment(pIconTextWid,Qt::AlignLeft);
 
              char style[200];
-             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:2px;font-size:14px;color:#ffffff;}",
+             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:2px;color:#ffffff;}",
                      QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              querylineEdit->setStyleSheet(style);
              querylineEdit->setTextMargins(20,1,0,1);
+             querylineEdit->setFont(font);
              if(!querylineEdit->text().isEmpty())
                  searchAppSlot(querylineEdit->text());
         }
         else if(event->type()==QEvent::FocusOut)
         {
-             char style[100];
-             sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
-             querylineEdit->setStyleSheet(style);
-             querylineEdit->setTextMargins(0,1,0,1);
-             pIconTextWidLayout->addWidget(pQueryText);
-             pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
-             queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
+            if(querylineEdit->text().isEmpty())
+            {
+                char style[100];
+                sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
+                querylineEdit->setStyleSheet(style);
+                querylineEdit->setTextMargins(0,1,0,1);
+                pIconTextWidLayout->addWidget(pQueryText);
+                pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
+                queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
+            }
+            else {
+                char style[100];
+                sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;color:#ffffff;}",
+                        QueryLineEditBackground);
+                querylineEdit->setStyleSheet(style);
+            }
         }
     }
 

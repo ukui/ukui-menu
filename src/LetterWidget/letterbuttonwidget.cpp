@@ -49,10 +49,12 @@ void LetterButtonWidget::initWidget()
     this->setLayout(gridLayout);
 
     char btncolor[400];
-    sprintf(btncolor,"QToolButton{background:transparent;color:#ffffff;font-size:20px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;font-size:20px;}\
-            QToolButton:pressed{background-color:%s;color:#ffffff;font-size:20px;}\
-            QToolButton:disabled{color:rgba(255, 255, 255, 0.25);}", ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
+    sprintf(btncolor,"QToolButton{background:transparent;color:#ffffff;padding-left:0px;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;}\
+            QToolButton:pressed{background-color:%s;color:#ffffff;}\
+            QToolButton:disabled{color:rgba(255, 255, 255, 0.25);}",
+            ClassifyBtnHoverBackground,
+            ClassifyBtnHoverBackground);
 
     QStringList letterlist;
     letterlist.clear();
@@ -64,6 +66,8 @@ void LetterButtonWidget::initWidget()
     letterlist.append("&&");
     letterlist.append("#");
 
+    QFont font;
+    font.setPixelSize(Style::LeftFontSize);
     for(int row=0;row<6;row++)
     {
         for(int col=0;col<5;col++)
@@ -73,6 +77,7 @@ void LetterButtonWidget::initWidget()
                 QToolButton* btn=new QToolButton(this);
                 btn->setFixedSize(55,48);
                 btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
+                btn->setFont(font);
                 btn->setText(letterlist.at(row*5+col));
                 gridLayout->addWidget(btn,row,col);
                 connect(btn, SIGNAL(clicked()), this, SLOT(letterBtnClickedSlot()));

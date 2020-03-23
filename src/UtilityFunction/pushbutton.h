@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QSettings>
+#include "src/Style/style.h"
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
