@@ -129,6 +129,8 @@ void FullListView::rightClickedSlot()
             {
                 Q_EMIT sendFixedOrUnfixedSignal();
             }
+            if(ret==6)
+                Q_EMIT sendHideMainWindowSignal();
             if(ret==7)
                 Q_EMIT sendHideMainWindowSignal();
         }
@@ -168,6 +170,8 @@ void FullListView::rightClickedSlot()
                 setting->endGroup();
                 Q_EMIT sendUpdateAppListSignal();
             }
+            if(ret==6)
+                Q_EMIT sendHideMainWindowSignal();
         }
 
         this->selectionModel()->clear();

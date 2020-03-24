@@ -121,6 +121,8 @@ void ListView::rightClickedSlot()
                 int ret=menu->showAppBtnMenu(appname);
                 if(ret==1 || ret==2)
                     Q_EMIT sendFixedOrUnfixedSignal();
+                if(ret==6)
+                    Q_EMIT sendHideMainWindowSignal();
                 if(ret==7)
                     Q_EMIT sendHideMainWindowSignal();
             }
@@ -164,6 +166,9 @@ void ListView::rightClickedSlot()
 
                 Q_EMIT sendUpdateAppListSignal();
             }
+
+            if(ret==6)
+                Q_EMIT sendHideMainWindowSignal();
         }
 
         this->selectionModel()->clear();

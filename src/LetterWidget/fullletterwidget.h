@@ -82,8 +82,6 @@ private:
     //字母列表界面
     QWidget* letterlistWid=nullptr;
     QHBoxLayout* letterlistLayout=nullptr;
-    QSpacerItem* letterlistleftSpacer=nullptr;
-    QSpacerItem* letterlistrightSpacer=nullptr;
 
     ClassifyScrollArea* letterlistscrollarea=nullptr;
     QWidget* letterlistscrollareaWid=nullptr;

@@ -36,7 +36,7 @@ public:
      * @param classify为0时为分类按钮、1为应用按钮
      * @param module为0时为常用模块，1为字母模块、2为功能模块
      */
-    PushButton(QString name,int width,int height);
+    PushButton(QWidget *parent,QString name,int width,int height);
     ~PushButton();
 
 private:

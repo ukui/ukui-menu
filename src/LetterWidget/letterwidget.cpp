@@ -185,8 +185,6 @@ void LetterWidget::updateAppListView()
             {
                 QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
                 data.append(QStringList()<<desktopfp<<"1");
-
-                qDebug()<<"图片："<<pUkuiMenuInterface->getAppIcon(desktopfp);
             }
             row+=(appList.count()+1);
 

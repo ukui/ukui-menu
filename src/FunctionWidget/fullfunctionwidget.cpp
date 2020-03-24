@@ -169,69 +169,69 @@ void FullFunctionWidget::fillAppList()
     if(!recentlist.isEmpty())
     {
         insertClassificationBtn(tr("Recently"));
-        insertAppList(recentlist,0);
+        insertAppList(recentlist);
     }
 
     QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
         insertClassificationBtn(tr("Internet"));
-        insertAppList(netlist,0);
+        insertAppList(netlist);
     }
     QStringList sociallist=vector.at(2);
     if(!sociallist.isEmpty())
     {
         insertClassificationBtn(tr("Social"));
-        insertAppList(sociallist,0);
+        insertAppList(sociallist);
     }
     QStringList avlist=vector.at(3);
     if(!avlist.isEmpty())
     {
         insertClassificationBtn(tr("Video"));
-        insertAppList(avlist,0);
+        insertAppList(avlist);
     }
     QStringList developlist=vector.at(4);
     if(!developlist.isEmpty())
     {
         insertClassificationBtn(tr("Development"));
-        insertAppList(developlist,0);
+        insertAppList(developlist);
     }
     QStringList graphicslist=vector.at(5);
     if(!graphicslist.isEmpty())
     {
         insertClassificationBtn(tr("Image"));
-        insertAppList(graphicslist,0);
+        insertAppList(graphicslist);
     }
     QStringList gamelist=vector.at(6);
     if(!gamelist.isEmpty())
     {
         insertClassificationBtn(tr("Game"));
-        insertAppList(gamelist,0);
+        insertAppList(gamelist);
     }
     QStringList officelist=vector.at(7);
     if(!officelist.isEmpty())
     {
         insertClassificationBtn(tr("Office"));
-        insertAppList(officelist,0);
+        insertAppList(officelist);
     }
     QStringList educationlist=vector.at(8);
     if(!educationlist.isEmpty())
     {
         insertClassificationBtn(tr("Education"));
-        insertAppList(educationlist,0);
+        insertAppList(educationlist);
     }
 
     QStringList systemadminlist=vector.at(9);
     if(!systemadminlist.isEmpty())
     {
         insertClassificationBtn(tr("System"));
-        insertAppList(systemadminlist,0);
+        insertAppList(systemadminlist);
     }
     QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
         insertClassificationBtn(tr("Others"));
-        insertAppList(otherlist,0);
+        insertAppList(otherlist);
     }
 
     resizeScrollAreaControls();
@@ -239,14 +239,14 @@ void FullFunctionWidget::fillAppList()
 
 void FullFunctionWidget::insertClassificationBtn(QString btnname)
 {
-    PushButton* classificationbtn=new PushButton(btnname,scrollarea->width()-12,20);
+    PushButton* classificationbtn=new PushButton(this,btnname,scrollarea->width()-12,20);
     classificationbtn->setFixedSize(scrollarea->width()-12,20);
     scrollareawidLayout->addWidget(classificationbtn);
     classificationbtnlist.append(btnname);
 
 }
 
-void FullFunctionWidget::insertAppList(QStringList appnamelist, int type)
+void FullFunctionWidget::insertAppList(QStringList appnamelist)
 {
     FullListView* listview=new FullListView(this,2);
     scrollareawidLayout->addWidget(listview);
@@ -257,11 +257,7 @@ void FullFunctionWidget::insertAppList(QStringList appnamelist, int type)
         QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appnamelist.at(i));
         data.append(desktopfp);
     }
-
-    if(type==0)
-        listview->addData(data);
-    else
-        listview->updateData(data);
+    listview->addData(data);
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
     connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
     connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
@@ -289,129 +285,43 @@ void FullFunctionWidget::execApplication(QString appname)
 void FullFunctionWidget::updateAppListView()
 {
     //刷新应用列表界面
-    for(int index=scrollareawidLayout->count()-1;index>=0;index--)
-    {
-            QLayoutItem* item=scrollareawidLayout->takeAt(index);
-            QWidget* wid=item->widget();
-            scrollareawidLayout->removeWidget(wid);
-            wid->setParent(nullptr);
-            delete wid;
-    }
-
-    classificationbtnlist.clear();
-    classificationbtnrowlist.clear();
-
-    QVector<QStringList> vector=pUkuiMenuInterface->getFunctionalClassification();
-    QStringList recentlist=vector.at(0);
-    if(!recentlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Recently"));
-        insertAppList(recentlist,1);
-    }
-
-    QStringList netlist=vector.at(1);
-    if(!netlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Internet"));
-        insertAppList(netlist,1);
-    }
-    QStringList sociallist=vector.at(2);
-    if(!sociallist.isEmpty())
-    {
-        insertClassificationBtn(tr("Social"));
-        insertAppList(sociallist,1);
-    }
-    QStringList avlist=vector.at(3);
-    if(!avlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Video"));
-        insertAppList(avlist,1);
-    }
-    QStringList developlist=vector.at(4);
-    if(!developlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Development"));
-        insertAppList(developlist,1);
-    }
-    QStringList graphicslist=vector.at(5);
-    if(!graphicslist.isEmpty())
-    {
-        insertClassificationBtn(tr("Image"));
-        insertAppList(graphicslist,1);
-    }
-    QStringList gamelist=vector.at(6);
-    if(!gamelist.isEmpty())
-    {
-        insertClassificationBtn(tr("Game"));
-        insertAppList(gamelist,1);
-    }
-    QStringList officelist=vector.at(7);
-    if(!officelist.isEmpty())
-    {
-        insertClassificationBtn(tr("Office"));
-        insertAppList(officelist,1);
-    }
-    QStringList educationlist=vector.at(8);
-    if(!educationlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Education"));
-        insertAppList(educationlist,1);
-    }
-
-    QStringList systemadminlist=vector.at(9);
-    if(!systemadminlist.isEmpty())
-    {
-        insertClassificationBtn(tr("System"));
-        insertAppList(systemadminlist,1);
-    }
-    QStringList otherlist=vector.at(10);
-    if(!otherlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Others"));
-        insertAppList(otherlist,1);
-    }
-
-    resizeScrollAreaControls();
+    QLayoutItem *child;
+     while ((child = scrollareawidLayout->takeAt(0)) != 0) {
+         QWidget* wid=child->widget();
+         scrollareawidLayout->removeWidget(wid);
+         wid->setParent(nullptr);
+         delete wid;
+         delete child;
+     }
+     fillAppList();
 
     //刷新图标列表界面
     Q_FOREACH (QAbstractButton* button, buttonList){
         pBtnGroup->removeButton(button);
     }
     buttonList.clear();
-    for(int index=iconlistscrollareawidLayout->count()-2;index>0;index--)
-    {
-        QLayoutItem* item=iconlistscrollareawidLayout->takeAt(index);
-        QWidget* wid=item->widget();
-        iconlistscrollareawidLayout->removeWidget(wid);
-        wid->setParent(nullptr);
-        delete wid;
-    }
-    for(int i=0;i<classificationbtnlist.size();i++)
-    {
-        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
-                                                                   Style::LeftBtnWidth,
-                                                                   Style::LeftBtnHeight,
-                                                                   Style::LeftIconSize,
-                                                                   Style::LeftFontSize,
-                                                                   iconlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
-                                                                   iconlightlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
-                                                                   ClassifyBtnHoverBackground,
-                                                                   ClassifyBtnHoverBackground,
-                                                                   2,
-                                                                   classificationbtnlist.at(i),
-                                                                   true,
-                                                                   true);
-        buttonList.append(iconbtn);
-        iconlistscrollareawidLayout->insertWidget(i+1,iconbtn);
-        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
-    }
+//    iconlistscrollareawidLayout->removeItem(pIconListTopSpacer);
+//    iconlistscrollareawidLayout->removeItem(pIconListBottomSpacer);
+//     while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
+//         QWidget* wid=child->widget();
+//         iconlistscrollareawidLayout->removeWidget(wid);
+//         wid->setParent(nullptr);
+//         delete wid;
+//         delete child;
+//     }
 
-    int id=0;
-    Q_FOREACH (QAbstractButton* btn, buttonList) {
-        pBtnGroup->addButton(btn,id++);
-    }
-    iconlistscrollarea->widget()->adjustSize();
-    pBtnGroup->button(0)->click();
+     for(int i=iconlistscrollareawidLayout->count()-2;i>0;i--)
+     {
+         if((child = iconlistscrollareawidLayout->takeAt(i)) != 0)
+         {
+             QWidget* wid=child->widget();
+             iconlistscrollareawidLayout->removeWidget(wid);
+             wid->setParent(nullptr);
+             delete wid;
+             delete child;
+         }
+     }
+    initIconListScrollArea();
 }
 
 /**
@@ -424,11 +334,6 @@ void FullFunctionWidget::resizeScrollAreaControls()
     int row=0;
     while(row<scrollareawidLayout->count()/2)
     {
-        //分类按钮
-//        QLayoutItem* classificationbtnwidItem=scrollareawidLayout->itemAt(row*2);
-//        QWidget* classificationbtnwid=classificationbtnwidItem->widget();
-//        QPushButton* classificationbtn=qobject_cast<QPushButton*>(classificationbtnwid);
-//        classificationbtn->setFixedSize(scrollarea->width()-32,20);
         //应用界面
         QLayoutItem* widItem=scrollareawidLayout->itemAt(row*2+1);
         QWidget* wid=widItem->widget();
@@ -477,6 +382,12 @@ void FullFunctionWidget::initIconListWidget()
     iconlistscrollarea->setWidget(iconlistscrollareaWid);
     iconlistLayout->addWidget(iconlistscrollarea);
     pBtnGroup=new QButtonGroup(iconlistscrollareaWid);
+//    iconlistscrollarea->setStyleSheet("border:1px solid #ff0000;");
+//    iconlistscrollareaWid->setStyleSheet("border:1px solid #00ff00;");
+    pIconListTopSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
+    pIconListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
+    iconlistscrollareawidLayout->addItem(pIconListTopSpacer);
+    iconlistscrollareawidLayout->addItem(pIconListBottomSpacer);
     initIconListScrollArea();
 }
 
@@ -485,10 +396,6 @@ void FullFunctionWidget::initIconListWidget()
  */
 void FullFunctionWidget::initIconListScrollArea()
 {
-    pIconListTopSpacer=new QSpacerItem(40,20,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    pIconListBottomSpacer=new QSpacerItem(40,20,QSizePolicy::Fixed,QSizePolicy::Expanding);
-
-    iconlistscrollareawidLayout->addItem(pIconListTopSpacer);
     for(int i=0;i<classificationbtnlist.size();i++)
     {
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
@@ -505,10 +412,10 @@ void FullFunctionWidget::initIconListScrollArea()
                                                                    true,
                                                                    true);
         buttonList.append(iconbtn);
-        iconlistscrollareawidLayout->addWidget(iconbtn);
+//        iconlistscrollareawidLayout->addWidget(iconbtn);
+        iconlistscrollareawidLayout->insertWidget(i+1,iconbtn);
         connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
     }
-    iconlistscrollareawidLayout->addItem(pIconListBottomSpacer);
 
     int id=0;
     Q_FOREACH (QAbstractButton* btn, buttonList) {
@@ -517,7 +424,6 @@ void FullFunctionWidget::initIconListScrollArea()
     connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btnGroupClickedSlot(QAbstractButton*)));
     iconlistscrollarea->widget()->adjustSize();
     pBtnGroup->button(0)->click();
-
 }
 
 void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)

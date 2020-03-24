@@ -18,7 +18,8 @@
 
 #include "pushbutton.h"
 
-PushButton::PushButton(QString name, int width, int height)
+PushButton::PushButton(QWidget *parent, QString name, int width, int height):
+    QPushButton(parent)
 {
     this->name=name;
     this->width=width;

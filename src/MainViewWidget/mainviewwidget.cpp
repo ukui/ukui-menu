@@ -593,7 +593,7 @@ void MainViewWidget::directoryChangedSlot()
                 QFileInfo fileInfo(desktopfpList.at(i));
                 QString desktopfn=fileInfo.fileName();
                 setting->setValue(desktopfn,datetime);
-                qDebug()<<"anzhuang:"<<desktopfn;
+                qDebug()<<"安装:"<<desktopfn;
             }
 
         }
@@ -625,7 +625,7 @@ void MainViewWidget::directoryChangedSlot()
                 setting->remove(desktopfn);
                 setting->sync();
                 setting->endGroup();
-                qDebug()<<"xiezai:"<<desktopfn;
+                qDebug()<<"卸载:"<<desktopfn;
             }
         }
         UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();

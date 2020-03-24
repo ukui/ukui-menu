@@ -118,7 +118,7 @@ void FullLetterWidget::fillAppList()
                 letterstr="#";
             letterbtnlist.append(letterstr);//存储分类字符
             //插入字母分类按钮
-            PushButton* letterbtn=new PushButton(letterstr,scrollarea->width()-12,20);
+            PushButton* letterbtn=new PushButton(this,letterstr,scrollarea->width()-12,20);
 //            letterbtn->setFixedSize(scrollarea->width(),20);
             scrollareawidLayout->addWidget(letterbtn);
 
@@ -167,98 +167,30 @@ void FullLetterWidget::execApplication(QString appname)
 void FullLetterWidget::updateAppListView()
 {
     //刷新应用列表界面
-    for(int index=scrollareawidLayout->count()-1;index>=0;index--)
-    {
-            QLayoutItem* item=scrollareawidLayout->takeAt(index);
-            QWidget* wid=item->widget();
-            scrollareawidLayout->removeWidget(wid);
-            wid->setParent(nullptr);
-            delete wid;
-    }
-
-    letterbtnlist.clear();
-    letterbtnrowlist.clear();
-
-    QVector<QStringList> vector=pUkuiMenuInterface->getAlphabeticClassification();
-    for(int i=0;i<vector.size();i++)
-    {
-        QStringList appList=vector.at(i);
-        if(!appList.isEmpty())
-        {
-            QString letterstr;
-            if(i<26)
-                letterstr=QString(QChar(static_cast<char>(i+65)));
-            else if(i==26)
-                letterstr="&";
-            else
-                letterstr="#";
-            letterbtnlist.append(letterstr);//存储分类字符
-            //插入字母分类按钮
-            PushButton* letterbtn=new PushButton(letterstr,scrollarea->width()-12,20);
-//            letterbtn->setFixedSize(scrollarea->width(),20);
-            scrollareawidLayout->addWidget(letterbtn);
-
-            //插入应用列表
-            FullListView* listview=new FullListView(this,1);
-            scrollareawidLayout->addWidget(listview);
-            data.clear();
-            for(int i=0;i<appList.count();i++)
-            {
-                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
-                data.append(desktopfp);
-
-            }
-            listview->updateData(data);
-
-            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-            connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
-            connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-        }
-    }
-
-        resizeScrollAreaControls();
+    QLayoutItem *child;
+     while ((child = scrollareawidLayout->takeAt(0)) != 0) {
+         QWidget* wid=child->widget();
+         scrollareawidLayout->removeWidget(wid);
+         wid->setParent(nullptr);
+         delete wid;
+         delete child;
+     }
+     fillAppList();
 
     //刷新字母列表界面
     Q_FOREACH (QAbstractButton* button, buttonList) {
         pBtnGroup->removeButton(button);
     }
     buttonList.clear();
-
-    for(int index=letterlistscrollareawidLayout->count()-1;index>=0;index--)
-    {
-        QLayoutItem* item=letterlistscrollareawidLayout->takeAt(index);
-        QWidget* wid=item->widget();
+    while ((child = letterlistscrollareawidLayout->takeAt(0)) != 0) {
+        QWidget* wid=child->widget();
         letterlistscrollareawidLayout->removeWidget(wid);
         wid->setParent(nullptr);
         delete wid;
-    }
-    char btnstyle[500];
-    sprintf(btnstyle,"QToolButton{background:transparent;color:#8b8b8b;font-size:14px;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;font-size:14px;}\
-            QToolButton:pressed{background-color:%s;color:#8b8b8b;font-size:14px;}\
-            QToolButton:checked{background:transparent;color:#ffffff;font-size:14px;}",
-            ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
-
-    QStringList letterbtnlist=this->letterbtnlist;
-    if(letterbtnlist.contains("&"))
-        letterbtnlist.replace(letterbtnlist.indexOf("&"),"&&");
-    for(int i=0;i<letterbtnlist.size();i++)
-    {
-        QToolButton* letterbtn=new QToolButton;
-        letterbtn->setText(letterbtnlist.at(i));
-        letterbtn->setStyleSheet(btnstyle);
-        letterbtn->setFixedSize(48,48);
-        letterbtn->setCheckable(true);
-        buttonList.append(letterbtn);
-        letterlistscrollareawidLayout->addWidget(letterbtn);
-    }
-    int id=0;
-    Q_FOREACH (QAbstractButton* btn, buttonList) {
-        pBtnGroup->addButton(btn,id++);
+        delete child;
     }
 
-    letterlistscrollarea->widget()->adjustSize();
-    pBtnGroup->button(0)->click();
+    initLetterListScrollArea();
 }
 
 /**
@@ -271,11 +203,6 @@ void FullLetterWidget::resizeScrollAreaControls()
     int row=0;
     while(row<scrollareawidLayout->count()/2)
     {
-        //分类按钮
-//        QLayoutItem* letterbtnwidItem=scrollareawidLayout->itemAt(row*2);
-//        QWidget* letterbtnwid=letterbtnwidItem->widget();
-//        QPushButton* letterbtn=qobject_cast<QPushButton*>(letterbtnwid);
-//        letterbtn->setFixedSize(scrollarea->width()-32,20);
         //应用界面
         QLayoutItem* widItem=scrollareawidLayout->itemAt(row*2+1);
         QWidget* wid=widItem->widget();
@@ -311,9 +238,6 @@ void FullLetterWidget::resizeScrollAreaControls()
  */
 void FullLetterWidget::initLetterListWidget()
 {
-    letterlistleftSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
-    letterlistrightSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
-
     letterlistLayout=new QHBoxLayout(letterlistWid);
     letterlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
     letterlistLayout->setSpacing(0);
@@ -355,7 +279,7 @@ void FullLetterWidget::initLetterListScrollArea()
         letterbtnlist.replace(letterbtnlist.indexOf("&"),"&&");
     for(int i=0;i<letterbtnlist.size();i++)
     {
-        QToolButton* letterbtn=new QToolButton;
+        QToolButton* letterbtn=new QToolButton(letterlistscrollareaWid);
         letterbtn->setText(letterbtnlist.at(i));
         letterbtn->setStyleSheet(btnstyle);
         letterbtn->setFixedSize(Style::LeftBtnHeight,Style::LeftBtnHeight);
