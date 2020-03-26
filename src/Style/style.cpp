@@ -82,7 +82,6 @@ void Style::initWidStyle()
     QString value=setting->get("font-name").toString();
     QStringList valstr=value.split(" ");
     int fontSize=valstr.at(valstr.count()-1).toInt();
-//    int fontSize=14;
 
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
@@ -91,22 +90,17 @@ void Style::initWidStyle()
 
     QDBusReply<int> position=iface.call("GetPanelPosition","");
     QDBusReply<int> panelSize=iface.call("GetPanelSize","");
-//    int widthavailable=0;
-//    int heightavailable=0;
     if(position==0 || position==1)
     {
-        widthavailable=QApplication::desktop()->width();
-        heightavailable=QApplication::desktop()->height()-panelSize;
+        widthavailable=QApplication::primaryScreen()->geometry().width();
+        heightavailable=QApplication::primaryScreen()->geometry().height()-panelSize;
     }
     if(position==2 || position==3)
     {
-        widthavailable=QApplication::desktop()->width()-panelSize;
-        heightavailable=QApplication::desktop()->height();
+        widthavailable=QApplication::primaryScreen()->geometry().width()-panelSize;
+        heightavailable=QApplication::primaryScreen()->geometry().height();
     }
 
-    QApplication::desktop()->width();
-//    int height=QApplication::desktop()->height();
-//    int heightavailable=QApplication::desktop()->availableGeometry().height();
     if(widthavailable>=2000 && widthavailable<=4000)
     {
         MainViewWidWidth=widthavailable-round((widthavailable-1440)/2);

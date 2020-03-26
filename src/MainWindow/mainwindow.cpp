@@ -171,7 +171,8 @@ void MainWindow::initMainWindow()
     connect(mainviewwid,SIGNAL(sendHideMainWindowSignal()),this,SLOT(recvHideMainWindowSlot()));
     connect(sidebarwid,SIGNAL(sendHideMainWindowSignal()),this,SLOT(recvHideMainWindowSlot()));
 
-    connect(QApplication::desktop(),SIGNAL(resized(int)),this,SLOT(monitorResolutionChange(int)));
+    connect(QApplication::primaryScreen(),SIGNAL(geometryChanged(QRect)),
+            this,SLOT(monitorResolutionChange(QRect)));
 }
 
 /**
@@ -392,9 +393,9 @@ void MainWindow::mainWindowMakeZero()
 //        pLeaveAnimation->start();
 //}
 
-void MainWindow::monitorResolutionChange(int screen)
+void MainWindow::monitorResolutionChange(QRect rect)
 {
-    Q_UNUSED(screen);
+    Q_UNUSED(rect);
     qApp->quit();
     QProcess::startDetached(QString("/usr/bin/ukui-menu"));
 }

@@ -80,7 +80,7 @@ private Q_SLOTS:
     void showDefaultWidget();//显示默认窗口
     void recvHideMainWindowSlot();//接收隐藏主窗口信号
 //    void recv_hover_signal_slot(bool is_hover);
-    void monitorResolutionChange(int screen);//监控屏幕分辨率
+    void monitorResolutionChange(QRect rect);//监控屏幕分辨率
 };
 
 #endif // MAINWINDOW_H

@@ -25,6 +25,7 @@
 #include <QDBusReply>
 #include <QDBusInterface>
 #include <qgsettings.h>
+#include <QScreen>
 
 //颜色
 #define BORDERCOLOR "rgba(37,41,43)" //边框

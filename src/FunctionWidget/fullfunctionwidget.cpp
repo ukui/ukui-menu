@@ -300,27 +300,25 @@ void FullFunctionWidget::updateAppListView()
         pBtnGroup->removeButton(button);
     }
     buttonList.clear();
-//    iconlistscrollareawidLayout->removeItem(pIconListTopSpacer);
-//    iconlistscrollareawidLayout->removeItem(pIconListBottomSpacer);
-//     while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
-//         QWidget* wid=child->widget();
-//         iconlistscrollareawidLayout->removeWidget(wid);
-//         wid->setParent(nullptr);
-//         delete wid;
-//         delete child;
-//     }
+    while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
+        QWidget* wid=child->widget();
+        iconlistscrollareawidLayout->removeWidget(wid);
+        wid->setParent(nullptr);
+        delete wid;
+        delete child;
+    }
 
-     for(int i=iconlistscrollareawidLayout->count()-2;i>0;i--)
-     {
-         if((child = iconlistscrollareawidLayout->takeAt(i)) != 0)
-         {
-             QWidget* wid=child->widget();
-             iconlistscrollareawidLayout->removeWidget(wid);
-             wid->setParent(nullptr);
-             delete wid;
-             delete child;
-         }
-     }
+//     for(int i=iconlistscrollareawidLayout->count()-2;i>0;i--)
+//     {
+//         if((child = iconlistscrollareawidLayout->takeAt(i)) != 0)
+//         {
+//             QWidget* wid=child->widget();
+//             iconlistscrollareawidLayout->removeWidget(wid);
+//             wid->setParent(nullptr);
+//             delete wid;
+//             delete child;
+//         }
+//     }
     initIconListScrollArea();
 }
 
@@ -373,21 +371,20 @@ void FullFunctionWidget::initIconListWidget()
     iconlistWid->setLayout(iconlistLayout);
 
     iconlistscrollarea=new ClassifyScrollArea();
-    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,iconlistWid->height());
+//    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,iconlistWid->height());
     iconlistscrollareaWid=new QWidget;
     iconlistscrollareawidLayout=new QVBoxLayout;
     iconlistscrollareawidLayout->setContentsMargins(0,0,0,0);
     iconlistscrollareawidLayout->setSpacing(Style::LeftSpaceBetweenItem);
     iconlistscrollareaWid->setLayout(iconlistscrollareawidLayout);
     iconlistscrollarea->setWidget(iconlistscrollareaWid);
-    iconlistLayout->addWidget(iconlistscrollarea);
-    pBtnGroup=new QButtonGroup(iconlistscrollareaWid);
-//    iconlistscrollarea->setStyleSheet("border:1px solid #ff0000;");
-//    iconlistscrollareaWid->setStyleSheet("border:1px solid #00ff00;");
+
     pIconListTopSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     pIconListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    iconlistscrollareawidLayout->addItem(pIconListTopSpacer);
-    iconlistscrollareawidLayout->addItem(pIconListBottomSpacer);
+    iconlistLayout->addItem(pIconListTopSpacer);
+    iconlistLayout->addWidget(iconlistscrollarea);
+    iconlistLayout->addItem(pIconListBottomSpacer);
+    pBtnGroup=new QButtonGroup(iconlistscrollareaWid);
     initIconListScrollArea();
 }
 
@@ -396,6 +393,8 @@ void FullFunctionWidget::initIconListWidget()
  */
 void FullFunctionWidget::initIconListScrollArea()
 {
+    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,
+                                     classificationbtnlist.size()*Style::LeftBtnHeight+(classificationbtnlist.size()-1)*Style::LeftSpaceBetweenItem);
     for(int i=0;i<classificationbtnlist.size();i++)
     {
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
@@ -412,8 +411,8 @@ void FullFunctionWidget::initIconListScrollArea()
                                                                    true,
                                                                    true);
         buttonList.append(iconbtn);
-//        iconlistscrollareawidLayout->addWidget(iconbtn);
-        iconlistscrollareawidLayout->insertWidget(i+1,iconbtn);
+        iconlistscrollareawidLayout->addWidget(iconbtn);
+//        iconlistscrollareawidLayout->insertWidget(i+1,iconbtn);
         connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
     }
 

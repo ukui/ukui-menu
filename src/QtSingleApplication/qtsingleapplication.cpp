@@ -344,26 +344,26 @@ void QtSingleApplication::activateWindow()
             if(ret)
             {
                 if(position==0)
-                    actWin->setGeometry(QRect(0,0,this->desktop()->width(),this->desktop()->height()-panelSize));
+                    actWin->setGeometry(QRect(0,0,this->primaryScreen()->geometry().width(),this->primaryScreen()->geometry().height()-panelSize));
                 else if(position==1)
-                    actWin->setGeometry(QRect(0,panelSize,this->desktop()->width(),this->desktop()->height()-panelSize));
+                    actWin->setGeometry(QRect(0,panelSize,this->primaryScreen()->geometry().width(),this->primaryScreen()->geometry().height()-panelSize));
                 else if(position==2)
-                    actWin->setGeometry(QRect(panelSize,0,this->desktop()->width()-panelSize,this->desktop()->height()));
+                    actWin->setGeometry(QRect(panelSize,0,this->primaryScreen()->geometry().width()-panelSize,this->primaryScreen()->geometry().height()));
                 else
-                    actWin->setGeometry(QRect(0,0,this->desktop()->width()-panelSize,this->desktop()->height()));
+                    actWin->setGeometry(QRect(0,0,this->primaryScreen()->geometry().width()-panelSize,this->primaryScreen()->geometry().height()));
 
             }
             else {
                 w->setFrameStyle();
                 if(position==0)
-                    actWin->setGeometry(QRect(0,this->desktop()->height()-panelSize-actWin->height(),
+                    actWin->setGeometry(QRect(0,this->primaryScreen()->geometry().height()-panelSize-actWin->height(),
                                               actWin->width(),actWin->height()));
                 else if(position==1)
                     actWin->setGeometry(QRect(0,panelSize,actWin->width(),actWin->height()));
                 else if(position==2)
                     actWin->setGeometry(QRect(panelSize,0,actWin->width(),actWin->height()));
                 else
-                    actWin->setGeometry(QRect(this->desktop()->width()-panelSize-actWin->width(),0,
+                    actWin->setGeometry(QRect(this->primaryScreen()->geometry().width()-panelSize-actWin->width(),0,
                                               actWin->width(),actWin->height()));
             }
             actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
