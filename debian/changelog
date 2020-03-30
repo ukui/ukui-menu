@@ -1,3 +1,12 @@
+ukui-menu (2.0.4-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+    - Fix the icon problem with newly installed software.
+    - Fix the crash during software installation and uninstallation.
+    - Not hardcode the font name.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 30 Mar 2020 11:21:48 +0800
+
 ukui-menu (2.0.3-1) unstable; urgency=medium
 
   * New upstream bugfix release.
