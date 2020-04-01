@@ -178,10 +178,10 @@ void MainViewWidget::initQueryLineEdit()
     pQueryIcon->setStyleSheet("background:transparent");
     pQueryIcon->setFixedSize(pixmap->size());
     pQueryIcon->setPixmap(*pixmap);
-    QFont font;
-    font.setPixelSize(Style::QueryLineEditFontSize);
+//    QFont font;
+//    font.setPixelSize(Style::QueryLineEditFontSize);
     pQueryText=new QLabel(pIconTextWid);
-    pQueryText->setFont(font);
+//    pQueryText->setFont(font);
     pQueryText->setText(tr("Search"));
     pQueryText->setStyleSheet("background:transparent;color:#626c6e;");
     pQueryText->adjustSize();
@@ -203,8 +203,8 @@ void MainViewWidget::initQueryLineEdit()
 
 bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    QFont font;
-    font.setPixelSize(Style::QueryLineEditFontSize);
+//    QFont font;
+//    font.setPixelSize(Style::QueryLineEditFontSize);
     if(watched==querylineEdit)
     {
         if(event->type()==QEvent::FocusIn)
@@ -219,7 +219,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                      QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              querylineEdit->setStyleSheet(style);
              querylineEdit->setTextMargins(20,1,0,1);
-             querylineEdit->setFont(font);
+//             querylineEdit->setFont(font);
              if(!querylineEdit->text().isEmpty())
                  searchAppSlot(querylineEdit->text());
         }

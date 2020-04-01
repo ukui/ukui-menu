@@ -79,8 +79,8 @@ private Q_SLOTS:
     void showFullScreenWidget();//加载全屏窗口
     void showDefaultWidget();//显示默认窗口
     void recvHideMainWindowSlot();//接收隐藏主窗口信号
-//    void recv_hover_signal_slot(bool is_hover);
     void monitorResolutionChange(QRect rect);//监控屏幕分辨率
+    void panelShangedSlot(QString key);
 };
 
 #endif // MAINWINDOW_H

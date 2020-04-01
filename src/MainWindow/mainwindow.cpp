@@ -74,22 +74,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setting->endGroup();
 
     initMainWindow();
-
-//    pEnterAnimation=new QPropertyAnimation;
-//    pEnterAnimation->setTargetObject(this);
-//    pEnterAnimation->setPropertyName("size");
-//    pEnterAnimation->setDuration(500);
-//    pEnterAnimation->setStartValue(QSize(390,532));
-//    pEnterAnimation->setEndValue(QSize(490,532));
-//    pEnterAnimation->setEasingCurve(QEasingCurve::Linear);
-
-//    pLeaveAnimation=new QPropertyAnimation;
-//    pLeaveAnimation->setTargetObject(this);
-//    pLeaveAnimation->setPropertyName("size");
-//    pLeaveAnimation->setDuration(500);
-//    pLeaveAnimation->setStartValue(QSize(490,532));
-//    pLeaveAnimation->setEndValue(QSize(390,532));
-//    pLeaveAnimation->setEasingCurve(QEasingCurve::Linear);
 }
 
 MainWindow::~MainWindow()
@@ -111,6 +95,12 @@ void MainWindow::initMainWindow()
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::StrongFocus);
 
+//    QPainterPath path;
+//    auto rect = this->rect();
+//    rect.adjust(1, 1, -1, -1);
+//    path.addRoundedRect(rect, 6, 6);
+//    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+
     ui->mainToolBar->hide();
     ui->menuBar->hide();
     ui->statusBar->hide();
@@ -121,7 +111,7 @@ void MainWindow::initMainWindow()
     this->setContentsMargins(0,0,0,0);
 
     frame=new QFrame(this);
-    sidebarwid=new SideBarWidget(this);
+    sidebarwid=new SideBarWidget();
     mainviewwid=new MainViewWidget(this);
 
     this->setCentralWidget(frame);
@@ -141,11 +131,8 @@ void MainWindow::initMainWindow()
     mainlayout->setContentsMargins(0,0,0,0);
     mainlayout->setSpacing(0);
     centralWidget()->setLayout(mainlayout);
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
-    QDBusReply<int> position=iface.call("GetPanelPosition","");
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+    int position=gsetting->get("panelposition").toInt();
     char style[100];
     if(position==0)
         sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
@@ -173,6 +160,9 @@ void MainWindow::initMainWindow()
 
     connect(QApplication::primaryScreen(),SIGNAL(geometryChanged(QRect)),
             this,SLOT(monitorResolutionChange(QRect)));
+
+    connect(gsetting,SIGNAL(changed(QString)),
+            this,SLOT(panelShangedSlot(QString)));
 }
 
 /**
@@ -250,25 +240,11 @@ void MainWindow::paintEvent(QPaintEvent *)
  */
 void MainWindow::showFullScreenWidget()
 {
-////    this->showMaximized();
-//    is_full=true;
-//    classification_widget=arg;
-//    sidebarwid->setVisible(false);
-//    mainviewwid->setVisible(false);
-//    char widgetcolor[100];
-//    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-//    mainwidget->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
-//    pAnimation->start();
-
     is_fullscreen=true;
     this->setContentsMargins(0,0,0,0);
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
-
-    QDBusReply<int> position=iface.call("GetPanelPosition","");
-    QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+    int position=gsetting->get("panelposition").toInt();
+    int panelSize=gsetting->get("panelsize").toInt();
     if(position==0)
         this->setGeometry(QRect(0,0,Style::widthavailable,Style::heightavailable));
     else if(position==1)
@@ -277,7 +253,6 @@ void MainWindow::showFullScreenWidget()
         this->setGeometry(QRect(panelSize,0,Style::widthavailable,Style::heightavailable));
     else
         this->setGeometry(QRect(0,0,Style::widthavailable,Style::heightavailable));
-//    this->setGeometry(QApplication::desktop()->availableGeometry());
     sidebarwid->loadMaxSidebar();
     mainviewwid->loadMaxMainView();
     //移除分割线
@@ -295,25 +270,11 @@ void MainWindow::showFullScreenWidget()
  */
 void MainWindow::showDefaultWidget()
 {
-////    this->showNormal();
-//    is_full=false;
-//    classification_widget=arg;
-//    sidebarwid->setVisible(false);
-//    mainviewwid->setVisible(false);
-//    char widgetcolor[100];
-//    sprintf(widgetcolor, "border:0px;background-color:%s;",MAINVIEWWIDGETCOLOR);
-//    mainwidget->setStyleSheet(QString::fromLocal8Bit(widgetcolor));
-//    pAnimation->start();
-
     is_fullscreen=false;
     this->setContentsMargins(0,0,0,0);
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
-
-    QDBusReply<int> position=iface.call("GetPanelPosition","");
-    QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+    int position=gsetting->get("panelposition").toInt();
+    int panelSize=gsetting->get("panelsize").toInt();
     char style[100];
     if(position==0)
     {
@@ -385,14 +346,6 @@ void MainWindow::mainWindowMakeZero()
     sidebarwid->widgetMakeZero();
 }
 
-//void MainWindow::recv_hover_signal_slot(bool is_hover)
-//{
-//    if(is_hover)
-//        pEnterAnimation->start();
-//    else
-//        pLeaveAnimation->start();
-//}
-
 void MainWindow::monitorResolutionChange(QRect rect)
 {
     Q_UNUSED(rect);
@@ -400,14 +353,17 @@ void MainWindow::monitorResolutionChange(QRect rect)
     QProcess::startDetached(QString("/usr/bin/ukui-menu"));
 }
 
+void MainWindow::panelShangedSlot(QString key)
+{
+    Q_UNUSED(key);
+    qApp->quit();
+    QProcess::startDetached(QString("/usr/bin/ukui-menu"));
+}
+
 void MainWindow::setFrameStyle()
 {
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
-
-    QDBusReply<int> position=iface.call("GetPanelPosition","");
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+    int position=gsetting->get("panelposition").toInt();
     char style[100];
     if(!is_fullscreen)
     {

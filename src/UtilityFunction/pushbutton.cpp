@@ -47,10 +47,10 @@ void PushButton::initAppBtn()
 
     char style[100];
     sprintf(style,"color:#ffffff;");
-    QFont font;
-    font.setPixelSize(Style::LeftFontSize);
+//    QFont font;
+//    font.setPixelSize(Style::LeftFontSize);
     QLabel* textlabel=new QLabel(this);
-    textlabel->setFont(font);
+//    textlabel->setFont(font);
     textlabel->setAlignment(Qt::AlignCenter);
     textlabel->setStyleSheet(style);
     textlabel->setText(name);

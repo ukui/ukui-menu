@@ -117,8 +117,7 @@ void ListView::rightClickedSlot()
         {
             if(strlist.at(1).toInt()==1)
             {
-                QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
-                int ret=menu->showAppBtnMenu(appname);
+                int ret=menu->showAppBtnMenu(strlist.at(0));
                 if(ret==1 || ret==2)
                     Q_EMIT sendFixedOrUnfixedSignal();
                 if(ret==6)
@@ -128,8 +127,7 @@ void ListView::rightClickedSlot()
             }
         }
         else{
-            QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
-            int ret=menu->showCommonUseAppBtnMenu(appname);
+            int ret=menu->showCommonUseAppBtnMenu(strlist.at(0));
             if(ret==1 || ret==2)
             {
                 this->setCurrentIndex(index);
@@ -173,7 +171,6 @@ void ListView::rightClickedSlot()
 
         this->selectionModel()->clear();
     }
-
 }
 
 void ListView::enterEvent(QEvent *e)

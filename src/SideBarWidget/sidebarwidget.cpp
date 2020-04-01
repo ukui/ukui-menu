@@ -360,16 +360,16 @@ void SideBarWidget::otherBtnRightClickSlot()
     int index=otherButtonList.indexOf(btn);
     QString desktopfp;
     if(index==1)
-        desktopfp=QString("/usr/share/applications/peony-qt.desktop");
+        desktopfp=QString("/usr/share/applications/peony-computer.desktop");
     if(index==2)
         desktopfp=QString("/usr/share/applications/ukui-control-center.desktop");
-    othermenu->showOtherMenu(pUkuiMenuInterface->getAppName(desktopfp));
+    othermenu->showOtherMenu(desktopfp);
 }
 
 void SideBarWidget::computerBtnClickedSlot()
 {
     Q_EMIT sendHideMainWindowSignal();
-    QProcess::startDetached(QString("peony computer:///"));
+    QProcess::startDetached(QString("/usr/bin/peony computer:///"));
 }
 
 void SideBarWidget::controlBtnClickedSlot()
@@ -394,7 +394,7 @@ void SideBarWidget::shutdownBtnClickedSlot()
 void SideBarWidget::userIconBtnClickedSlot()
 {
     Q_EMIT sendHideMainWindowSignal();
-    QProcess::startDetached(QString("ukui-control-center --u"));
+    QProcess::startDetached(QString("ukui-control-center -u"));
 }
 
 void SideBarWidget::userAccountsChanged()
@@ -511,16 +511,6 @@ void SideBarWidget::setMinSidebarBtn(QPushButton* btn)
             childwid->setParent(nullptr);
         }
     }
-
-
-//    btn->setFixedSize(160,48);
-//    QLayoutItem* item=btn->layout()->itemAt(1);
-//    QWidget* wid=item->widget();
-//    QLabel* label=qobject_cast<QLabel*>(wid);
-//    int len=label->text().length();
-////    btn->layout()->setContentsMargins(25,0,btn->width()-40-labelicon->width()-letterbtnname->width(),0);
-//    btn->layout()->setContentsMargins(25,0,btn->width()-40-labelicon->width()-len*14,0);
-//    btn->layout()->setSpacing(15);
 }
 
 /**
@@ -587,136 +577,13 @@ void SideBarWidget::setMinBtn()
  */
 void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
 {
-//    btn->setFixedSize(60,48);
-//    btn->layout()->setContentsMargins(0,0,0,0);
-//    btn->layout()->setSpacing(10);
-
     btn->setFixedSize(Style::SideBarBtnWidth,Style::SideBarBtnHeight);
-//    QLayoutItem* item=btn->layout()->itemAt(1);
-//    QWidget* wid=item->widget();
-//    QLabel* label=qobject_cast<QLabel*>(wid);
-//    int len=label->text().length();
-//    qDebug()<<len;
-//    btn->layout()->setContentsMargins(15,0,btn->width()-40-labelicon->width()-letterbtnname->width(),0);
     btn->layout()->setContentsMargins(Style::SideBarSpaceIconLeft,
                                       0,
                                       0,
                                       0);
     btn->layout()->setSpacing(Style::SideBarSpaceIconText);
-//    btn->setStyleSheet("border:1px solid #ff0000;");
-
 }
-
-//void SideBarWidget::enterEvent(QEvent *e)
-//{
-//    this->is_hover=true;
-//    Q_UNUSED(e);
-//    if(!is_fullscreen)
-//    {
-//    }
-//    else
-//    {
-////        pEnterAnimation->start();
-//    }
-//}
-
-//void SideBarWidget::leaveEvent(QEvent *e)
-//{
-//    this->is_hover=false;
-//    Q_UNUSED(e);
-//    if(!is_fullscreen)
-//    {
-//    }
-//    else
-//    {
-////        pLeaveAnimation->start();
-//    }
-//}
-
-//void SideBarWidget::animation_finished_slot()
-//{
-//}
-
-/**
- * 按钮焦点事件过滤
- */
-//bool SideBarWidget::eventFilter(QObject *watched, QEvent *event)
-//{
-//    char style[300];
-//    sprintf(style,"QToolButton{background-color:%s;border:0px;padding-left:0;}\
-//            QToolButton:hover{background-color:%s;}\
-//            QToolButton:pressed{background-color:%s;}", SIDEBARWIDGETCOLOR,SIDEBARBTNHOVER,SIDEBARBTNPRESSED);
-
-//    char pressstyle[200];
-//    sprintf(pressstyle,"QToolButton{background-color:%s;border:0px;padding-left:0;}",MAINVIEWWIDGETCOLOR);
-
-//    if(watched==commonusebtn)
-//    {
-//        if(event->type()==QEvent::FocusIn)
-//        {
-//            commonusebtn->setStyleSheet(QString::fromLocal8Bit(pressstyle));
-//        }
-//        else if(event->type()==QEvent::FocusOut){
-//            commonusebtn->setStyleSheet(QString::fromLocal8Bit(style));
-
-//        }
-//    }
-//    else if(watched==letterbtn)
-//    {
-//        if(event->type()==QEvent::FocusIn)
-//        {
-//            letterbtn->setStyleSheet(QString::fromLocal8Bit(pressstyle));
-//        }
-//        else if(event->type()==QEvent::FocusOut){
-//            letterbtn->setStyleSheet(QString::fromLocal8Bit(style));
-
-//        }
-//    }
-//    else if(watched==functionbtn)
-//    {
-//        if(event->type()==QEvent::FocusIn)
-//        {
-//            functionbtn->setStyleSheet(QString::fromLocal8Bit(pressstyle));
-//        }
-//        else if(event->type()==QEvent::FocusOut){
-//            functionbtn->setStyleSheet(QString::fromLocal8Bit(style));
-
-//        }
-
-//    }
-//    //屏蔽按键
-//    if(event->type()==QEvent::KeyPress)
-//        return true;
-
-//    return QWidget::eventFilter(watched,event);
-//}
-
-//void SideBarWidget::mousePressEvent(QMouseEvent *e)
-//{
-//    if(e->button()==Qt::RightButton)
-//    {
-//        if(commonusebtn->hasFocus())
-//        {
-//            if(is_fullscreen)
-//                Q_EMIT send_fullscreen_commonusebtn_signal();
-//            else Q_EMIT sendCommonUseBtnSignal();
-
-//        }
-//        else if(letterbtn->hasFocus())
-//        {
-//            if(is_fullscreen)
-//                Q_EMIT sendFullScreenLetterBtnSignal();
-//            else Q_EMIT sendLetterBtnSignal();
-//        }
-//        else if(functionbtn->hasFocus())
-//        {
-//            if(is_fullscreen)
-//                Q_EMIT sendFullScreenFunctionBtnSignal();
-//            else Q_EMIT sendFunctionBtnSignal();
-//        }
-
-//    }
-//}
 
 void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
 {
@@ -757,7 +624,6 @@ void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
             }
         }
         else{
-//            button->setStyleSheet(QString::fromLocal8Bit(btncolor));
             button->setStyleSheet("background:transparent;");
         }
     }

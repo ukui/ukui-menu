@@ -126,7 +126,6 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     recursiveSearchFile("/usr/share/applications/");
 
     filePathList.removeAll("/usr/share/applications/peony-folder-handler.desktop");
-    filePathList.removeAll("/usr/share/applications/peony.desktop");
     filePathList.removeAll("/usr/share/applications/gnome-software-local-file.desktop");
     filePathList.removeAll("/usr/share/applications/org.gnome.Software.Editor.desktop");
     filePathList.removeAll("/usr/share/applications/apport-gtk.desktop");
@@ -159,7 +158,6 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/remmina-gnome.desktop");
     filePathList.removeAll("/usr/share/applications/ukwm.desktop");
     filePathList.removeAll("/usr/share/applications/nm-applet.desktop");
-    filePathList.removeAll("/usr/share/applications/peony-home.desktop");
     filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
     filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
     filePathList.removeAll("/usr/share/applications/pavucontrol-qt.desktop");
@@ -203,7 +201,13 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/vim.desktop");
     filePathList.removeAll("/usr/share/applications/kwalletmanager5-kwalletd.desktop");
     filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
-
+    filePathList.removeAll("/usr/share/applications/redshift.desktop");
+    filePathList.removeAll("/usr/share/applications/python3.8.desktop");
+    filePathList.removeAll("/usr/share/applications/yelp.desktop");
+    filePathList.removeAll("/usr/share/applications/peony-computer.desktop");
+    filePathList.removeAll("/usr/share/applications/peony-home.desktop");
+    filePathList.removeAll("/usr/share/applications/peony-trash.desktop");
+    filePathList.removeAll("/usr/share/applications/peony.desktop");
     return filePathList;
 }
 

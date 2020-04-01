@@ -66,8 +66,8 @@ void LetterButtonWidget::initWidget()
     letterlist.append("&&");
     letterlist.append("#");
 
-    QFont font;
-    font.setPixelSize(Style::LeftFontSize);
+//    QFont font;
+//    font.setPixelSize(Style::LeftFontSize);
     for(int row=0;row<6;row++)
     {
         for(int col=0;col<5;col++)
@@ -77,7 +77,7 @@ void LetterButtonWidget::initWidget()
                 QToolButton* btn=new QToolButton(this);
                 btn->setFixedSize(55,48);
                 btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-                btn->setFont(font);
+//                btn->setFont(font);
                 btn->setText(letterlist.at(row*5+col));
                 gridLayout->addWidget(btn,row,col);
                 connect(btn, SIGNAL(clicked()), this, SLOT(letterBtnClickedSlot()));

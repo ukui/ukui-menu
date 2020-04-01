@@ -172,7 +172,6 @@ RightClickMenu::~RightClickMenu()
 void RightClickMenu::addCommonUseAppBtnAction()
 {
     setting->beginGroup("application");
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
     if(!setting->contains(desktopfn) || setting->value(desktopfn).toInt()>0)
@@ -290,7 +289,6 @@ void RightClickMenu::addAppBtnAction()
 {
 
     setting->beginGroup("application");
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
     if(!setting->contains(desktopfn) || setting->value(desktopfn).toInt()>0)
@@ -413,13 +411,13 @@ void RightClickMenu::addShutdownAction()
 //其它按钮右键菜单
 void RightClickMenu::addOtherAction()
 {
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
+//    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
                          QDBusConnection::sessionBus());
 
-    QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
+    QDBusReply<bool> ret=iface.call("CheckIfExist",this->desktopfp);
     if(!ret)
     {
         initWidgetAction(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"));
@@ -499,7 +497,6 @@ void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString tex
 void RightClickMenu::fixToCommonUseActionTriggerSlot()
 {
     action_number=1;
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
     setting->beginGroup("application");
@@ -515,7 +512,6 @@ void RightClickMenu::fixToCommonUseActionTriggerSlot()
 void RightClickMenu::unfixedFromCommonUseActionTriggerSlot()
 {
     action_number=2;
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
     setting->beginGroup("application");
@@ -532,7 +528,6 @@ void RightClickMenu::unfixedFromCommonUseActionTriggerSlot()
 
 void RightClickMenu::fixToTaskbarActionTriggerSlot()
 {
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -544,7 +539,6 @@ void RightClickMenu::fixToTaskbarActionTriggerSlot()
 
 void RightClickMenu::unfixedFromTaskbarActionTriggerSlot()
 {
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -555,7 +549,6 @@ void RightClickMenu::unfixedFromTaskbarActionTriggerSlot()
 
 void RightClickMenu::addToDesktopActionTriggerSlot()
 {
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QString path=QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
@@ -575,7 +568,6 @@ void RightClickMenu::addToDesktopActionTriggerSlot()
 void RightClickMenu::uninstallActionTriggerSlot()
 {
 //    QString exec=pUkuiMenuInterface->getAppExec(pUkuiMenuInterface->getDesktopPathByAppName(appname));
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
 //    QFileInfo fileInfo(exec.split(" ").at(0));
 //    bool ret=fileInfo.isAbsolute();
 
@@ -618,7 +610,6 @@ void RightClickMenu::onReadOutput()
 
 void RightClickMenu::attributeActionTriggerSlot()
 {
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     char command[100];
     sprintf(command,"ukui-menu-attr %s",desktopfp.toLocal8Bit().data());
     QProcess::startDetached(command);
@@ -628,7 +619,6 @@ void RightClickMenu::attributeActionTriggerSlot()
 void RightClickMenu::commonUseDeleteActionTriggerSlot()
 {
     action_number=8;
-    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
     setting->beginGroup("application");
@@ -700,17 +690,19 @@ void RightClickMenu::otherListActionTriggerSlot()
     qDebug()<<"---2---";
 }
 
-int RightClickMenu::showCommonUseAppBtnMenu(QString appname)
+int RightClickMenu::showCommonUseAppBtnMenu(QString desktopfp)
 {
-    this->appname=appname;
+    this->desktopfp.clear();
+    this->desktopfp=desktopfp;
     addCommonUseAppBtnAction();
     cuappbtnmenu->exec(QCursor::pos());
     return action_number;
 }
 
-int RightClickMenu::showAppBtnMenu(QString appname)
+int RightClickMenu::showAppBtnMenu(QString desktopfp)
 {
-    this->appname=appname;
+    this->desktopfp.clear();
+    this->desktopfp=desktopfp;
     addAppBtnAction();
     appbtnmenu->exec(QCursor::pos());
     return action_number;
@@ -723,9 +715,10 @@ int RightClickMenu::showShutdownMenu()
 
 }
 
-void RightClickMenu::showOtherMenu(QString appname)
+void RightClickMenu::showOtherMenu(QString desktopfp)
 {
-    this->appname=appname;
+    this->desktopfp.clear();
+    this->desktopfp=desktopfp;
     addOtherAction();
     othermenu->exec(QCursor::pos());
 }

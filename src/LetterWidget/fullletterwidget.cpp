@@ -271,8 +271,8 @@ void FullLetterWidget::initLetterListScrollArea()
             QToolButton:checked{background:transparent;color:#ffffff;border-radius:2px;}",
             ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
 
-    QFont font;
-    font.setPixelSize(Style::LeftFontSize);
+//    QFont font;
+//    font.setPixelSize(Style::LeftFontSize);
 
     QStringList letterbtnlist=this->letterbtnlist;
     if(letterbtnlist.contains("&"))
@@ -284,7 +284,7 @@ void FullLetterWidget::initLetterListScrollArea()
         letterbtn->setStyleSheet(btnstyle);
         letterbtn->setFixedSize(Style::LeftBtnHeight,Style::LeftBtnHeight);
         letterbtn->setCheckable(true);
-        letterbtn->setFont(font);
+//        letterbtn->setFont(font);
         buttonList.append(letterbtn);
         letterlistscrollareawidLayout->addWidget(letterbtn);
 //        connect(letterbtn,SIGNAL(clicked()),this,SLOT(letterBtnClickedSlot()));

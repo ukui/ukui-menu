@@ -59,11 +59,11 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
 
-        QFont font;
+//        QFont font;
 //        font.setFamily("Microsoft YaHei");
 
-        font.setPixelSize(Style::AppListFontSize);
-        painter->setFont(font);
+//        font.setPixelSize(Style::AppListFontSize);
+//        painter->setFont(font);
 
 //        QIcon icon=index.model()->data(index,Qt::DecorationRole).value<QIcon>();
         QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();

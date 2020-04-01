@@ -333,13 +333,9 @@ void QtSingleApplication::activateWindow()
             MainWindow* w=qobject_cast<MainWindow*>(actWin);
             w->mainWindowMakeZero();
             w->setFrameStyle();
-            QDBusInterface iface("com.ukui.panel.desktop",
-                                 "/",
-                                 "com.ukui.panel.desktop",
-                                 QDBusConnection::sessionBus());
-
-            QDBusReply<int> position=iface.call("GetPanelPosition","");
-            QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+            QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+            int position=gsetting->get("panelposition").toInt();
+            int panelSize=gsetting->get("panelsize").toInt();
             bool ret=w->checkIfFullScreen();
             if(ret)
             {

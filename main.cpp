@@ -40,6 +40,12 @@ int main(int argc, char *argv[])
     qss.open(QFile::ReadOnly);
     qApp->setStyleSheet(qss.readAll());
 
+//    QGSettings* setting=new QGSettings(QString("org.mate.interface").toLocal8Bit());
+//    QString value=setting->get("font-name").toString();
+//    QFont font;
+//    font.setFamily(value);
+//    qApp->setFont(font);
+
     QString locale = QLocale::system().name();
     QTranslator translator;
     if (locale == "zh_CN"){
@@ -57,13 +63,9 @@ int main(int argc, char *argv[])
     qApp->setStyleSheet(style);
 
     MainWindow w;
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
-
-    QDBusReply<int> position=iface.call("GetPanelPosition","");
-    QDBusReply<int> panelSize=iface.call("GetPanelSize","");
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+    int position=gsetting->get("panelposition").toInt();
+    int panelSize=gsetting->get("panelsize").toInt();
     if(position==0)
         w.setGeometry(QRect(0,Style::heightavailable-590,376,590));
     else if(position==1)

@@ -82,14 +82,14 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             icon=QIcon::fromTheme(QString("application-x-desktop"));
         QString appname=pUkuiMenuInterface->getAppName(desktopfp);
 
-        QFont font;
+//        QFont font;
         QRect iconRect;
-        font.setPixelSize(Style::AppListFontSize);
+//        font.setPixelSize(Style::AppListFontSize);
         iconRect=QRect(rect.x()+Style::AppLeftSpace ,
                        rect.y()+Style::AppTopSpace,
                        Style::AppListIconSize,
                        Style::AppListIconSize);
-        painter->setFont(font);
+//        painter->setFont(font);
         icon.paint(painter,iconRect);
         if(module==0)
         {

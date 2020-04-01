@@ -120,11 +120,10 @@ void FullListView::rightClickedSlot()
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
-        QString appname=pUkuiMenuInterface->getAppName(desktopfp);
         menu=new RightClickMenu(this);
         if(module>0)
         {
-            int ret=menu->showAppBtnMenu(appname);
+            int ret=menu->showAppBtnMenu(desktopfp);
             if(ret==1 || ret==2)
             {
                 Q_EMIT sendFixedOrUnfixedSignal();
@@ -135,7 +134,7 @@ void FullListView::rightClickedSlot()
                 Q_EMIT sendHideMainWindowSignal();
         }
         else{
-            int ret=menu->showCommonUseAppBtnMenu(appname);
+            int ret=menu->showCommonUseAppBtnMenu(desktopfp);
             if(ret==1 || ret==2)
             {
                 this->setCurrentIndex(index);

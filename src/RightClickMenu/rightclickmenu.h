@@ -42,13 +42,13 @@ class RightClickMenu: public QWidget
 public:
     RightClickMenu(QWidget *parent);
     virtual ~RightClickMenu();
-    int showCommonUseAppBtnMenu(QString appname);
-    int showAppBtnMenu(QString appname);
+    int showCommonUseAppBtnMenu(QString desktopfp);
+    int showAppBtnMenu(QString desktopfp);
     int showShutdownMenu();
-    void showOtherMenu(QString appname);
+    void showOtherMenu(QString desktopfp);
 
 private:
-    QString appname;
+    QString desktopfp;
     int action_number;//记录执行的action编号
     QSettings* setting=nullptr;
 

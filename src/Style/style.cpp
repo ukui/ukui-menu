@@ -83,13 +83,10 @@ void Style::initWidStyle()
     QStringList valstr=value.split(" ");
     int fontSize=valstr.at(valstr.count()-1).toInt();
 
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+    int position=gsetting->get("panelposition").toInt();
+    int panelSize=gsetting->get("panelsize").toInt();
 
-    QDBusReply<int> position=iface.call("GetPanelPosition","");
-    QDBusReply<int> panelSize=iface.call("GetPanelSize","");
     if(position==0 || position==1)
     {
         widthavailable=QApplication::primaryScreen()->geometry().width();
@@ -229,7 +226,7 @@ void Style::initWidStyle()
         SideBarBtnWidth=110;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
-        SideBarIconSize=16;
+        SideBarIconSize=19;
         SideBarSpaceIconLeft=14;
         SideBarSpaceIconText=6;
         SideBarSpaceBetweenItem=16;
@@ -273,7 +270,7 @@ void Style::initWidStyle()
         SideBarBtnWidth=110;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
-        SideBarIconSize=16;
+        SideBarIconSize=19;
         SideBarSpaceIconLeft=14;
         SideBarSpaceIconText=6;
         SideBarSpaceBetweenItem=16;
@@ -317,7 +314,7 @@ void Style::initWidStyle()
         SideBarBtnWidth=110;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
-        SideBarIconSize=16;
+        SideBarIconSize=19;
         SideBarSpaceIconLeft=14;
         SideBarSpaceIconText=6;
         SideBarSpaceBetweenItem=16;
@@ -361,7 +358,7 @@ void Style::initWidStyle()
         SideBarBtnWidth=110;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
-        SideBarIconSize=16;
+        SideBarIconSize=19;
         SideBarSpaceIconLeft=14;
         SideBarSpaceIconText=6;
         SideBarSpaceBetweenItem=16;
@@ -405,7 +402,7 @@ void Style::initWidStyle()
         SideBarBtnWidth=110;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
-        SideBarIconSize=16;
+        SideBarIconSize=19;
         SideBarSpaceIconLeft=14;
         SideBarSpaceIconText=6;
         SideBarSpaceBetweenItem=16;
