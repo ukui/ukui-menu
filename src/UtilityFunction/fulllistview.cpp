@@ -73,7 +73,6 @@ void FullListView::initWidget()
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
-    connect(this,SIGNAL(entered(QModelIndex)),this,SLOT(showToolTip(QModelIndex)));
 }
 
 void FullListView::addData(QStringList data)
@@ -135,37 +134,49 @@ void FullListView::rightClickedSlot()
         }
         else{
             int ret=menu->showCommonUseAppBtnMenu(desktopfp);
-            if(ret==1 || ret==2)
+            if(ret==1)
             {
                 this->setCurrentIndex(index);
+                listmodel->removeRow(index.row());
+                setting->beginGroup("lockapplication");
+                QStandardItem* item=new QStandardItem;
+                item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
+                listmodel->insertRow(setting->childKeys().size()-1,item);
+                setting->endGroup();
+                Q_EMIT sendUpdateAppListSignal();
+            }
+            if(ret==2)
+            {
+                listmodel->removeRow(index.row());
+                setting->beginGroup("lockapplication");
+                QStandardItem* item=new QStandardItem;
+                item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
+                listmodel->insertRow(setting->childKeys().size(),item);
+                setting->endGroup();
+                Q_EMIT sendUpdateAppListSignal();
             }
 
             if(ret==7)
                 Q_EMIT sendHideMainWindowSignal();
 
-            if(ret==8 || ret==9)
+            if(ret==8)
             {
-                QStringList keys;
-                keys.clear();
-                setting->beginGroup("application");
-                keys=setting->childKeys();
-                QStringList applist;
-                applist.clear();
-                for(int i=0;i<keys.count();i++)
-                {
-                    int val=setting->value(keys.at(i)).toInt();
-                    if(val==2 || val==0)
-                        applist.append(keys.at(i));
-                }
+                listmodel->removeRow(index.row());
+                Q_EMIT sendUpdateAppListSignal();
+            }
 
-                data.clear();
-                for(int i=0;i<applist.count();i++)
+            if(ret==9)
+            {
+                setting->beginGroup("lockapplication");
+                for(int i=listmodel->rowCount()-1;i>=0;i--)
                 {
-//                    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(applist.at(i));
-                    QString desktopfp=QString("/usr/share/applications/"+applist.at(i));
-                    data.append(desktopfp);
+                    QVariant var=listmodel->index(i,0).data(Qt::DisplayRole);
+                    QString desktopfp=var.value<QString>();
+                    QFileInfo fileInfo(desktopfp);
+                    QString desktopfn=fileInfo.fileName();
+                    if(!setting->contains(desktopfn))
+                        listmodel->removeRow(i);
                 }
-                this->updateData(data);
                 setting->endGroup();
                 Q_EMIT sendUpdateAppListSignal();
             }
@@ -188,39 +199,3 @@ void FullListView::leaveEvent(QEvent *e)
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
 }
-
-void FullListView::showToolTip(const QModelIndex &index)
-{
-//    qDebug()<<this->y()<<this->visualRect(index).y();
-//    if(!index.isValid())
-//        return;
-
-//    QVariant var=listmodel->data(index, Qt::DisplayRole);
-//    QString desktopfp=var.value<QString>();
-//    QString appname=pUkuiMenuInterface->getAppName(desktopfp);
-
-////    if(file_name.isEmpty())
-////        return;
-
-//    QToolTip::showText(QCursor::pos(), appname,this);
-//    QToolTip::hideText();
-}
-
-//bool FullListView::event(QEvent* e)
-//{
-//    if (e->type() == QEvent::ToolTip) {
-//        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
-//        QModelIndex index=this->currentIndex();
-//        QVariant var=listmodel->data(index, Qt::DisplayRole);
-//        QString desktopfp=var.value<QString>();
-//        QString appname=pUkuiMenuInterface->getAppName(desktopfp);
-//        if (!appname.isEmpty()) {
-//            QToolTip::showText(helpEvent->globalPos(), appname);
-//        } else {
-//            QToolTip::hideText();
-//            e->ignore();
-//        }
-//        return true;
-//    }
-//    return QWidget::event(e);
-//}

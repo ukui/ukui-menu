@@ -104,7 +104,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             else
             {
                 painter->setPen(QPen(Qt::white));
-                QRect textRect=QRect(rect.x()+11,rect.y()+(rect.height()-14)/2,strlist.at(0).size()*14,14);
+//                QRect textRect=QRect(rect.x()+11,rect.y()+(rect.height()-14)/2,strlist.at(0).size()*14,14);
+                QRect textRect=QRect(rect.x()+11,rect.y(),rect.width(),rect.height());
                 painter->drawText(textRect,Qt::AlignVCenter,strlist.at(0));
                 painter->setRenderHint(QPainter::Antialiasing, true);
                 painter->setPen(QPen(QColor("#FFFFFF"),1));
@@ -115,7 +116,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         }
         else
         {
-            setting->beginGroup("application");
+            setting->beginGroup("lockapplication");
             QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
             QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
             iconstr.remove(".png");
@@ -127,10 +128,10 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
             QFileInfo fileInfo(strlist.at(0));
             QString desktopfn=fileInfo.fileName();
-            if(setting->value(desktopfn).toInt()==0)
+            if(setting->contains(desktopfn))
             {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
-                icon.paint(painter,QRect(iconRect.topRight().x()-7,iconRect.topRight().y()-2,12,12));
+                icon.paint(painter,QRect(rect.topRight().x()-22,rect.y()+(rect.height()-16)/2,16,16));
             }
             painter->setOpacity(1);
             painter->setPen(QPen(Qt::white));

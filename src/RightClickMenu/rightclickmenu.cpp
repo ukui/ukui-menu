@@ -171,24 +171,24 @@ RightClickMenu::~RightClickMenu()
 //常用应用按钮右键菜单
 void RightClickMenu::addCommonUseAppBtnAction()
 {
-    setting->beginGroup("application");
+    setting->beginGroup("lockapplication");
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
-    if(!setting->contains(desktopfn) || setting->value(desktopfn).toInt()>0)
+    if(!setting->contains(desktopfn))
     {
         initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
         CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
         cuappbtnmenu->addAction(CuFix2CommonUseAction);
         connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
     }
-
-    if(setting->contains(desktopfn) && setting->value(desktopfn).toInt()==0)
+    else
     {
         initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
         CuUnfixed4CommonUseAction->setDefaultWidget(CuUnfixed4CommonUseWid);
         cuappbtnmenu->addAction(CuUnfixed4CommonUseAction);
         connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
     }
+    setting->endGroup();
 
     cuappbtnmenu->addSeparator();
 
@@ -224,11 +224,13 @@ void RightClickMenu::addCommonUseAppBtnAction()
     cuappbtnmenu->addAction(separatorAction_1);
 //    cuappbtnmenu->addSeparator();
 
+
     initWidgetAction(CuDeleteWid,"",tr("Remove from list"));
     CuDeleteAction->setDefaultWidget(CuDeleteWid);
     cuappbtnmenu->addAction(CuDeleteAction);
     connect(CuDeleteAction,SIGNAL(triggered()),this,SLOT(commonUseDeleteActionTriggerSlot()));
-    if(setting->contains(desktopfn) && setting->value(desktopfn).toInt()==0)
+    setting->beginGroup("lockapplication");
+    if(setting->contains(desktopfn))
     {
         QLayoutItem* item=CuDeleteWid->layout()->itemAt(0);
         QWidget* wid=item->widget();
@@ -236,6 +238,7 @@ void RightClickMenu::addCommonUseAppBtnAction()
         label->setStyleSheet("QLabel{background:transparent;border:0px;color:#4Dffffff;font-size:14px;}");
         CuDeleteAction->setDisabled(true);
     }
+    setting->endGroup();
 
     cuappbtnmenu->addSeparator();
 
@@ -243,6 +246,7 @@ void RightClickMenu::addCommonUseAppBtnAction()
     CuDeleteAllAction->setDefaultWidget(CuDeleteAllWid);
     cuappbtnmenu->addAction(CuDeleteAllAction);
     connect(CuDeleteAllAction,SIGNAL(triggered()),this,SLOT(commonUseDeleteAllActionTriggerSlot()));
+    setting->beginGroup("application");
     QStringList keys=setting->childKeys();
     int count;
     for(count=0;count<keys.count();count++)
@@ -258,6 +262,7 @@ void RightClickMenu::addCommonUseAppBtnAction()
         label->setStyleSheet("QLabel{background:transparent;border:0px;color:#4Dffffff;font-size:14px;}");
         CuDeleteAllAction->setDisabled(true);
     }
+    setting->endGroup();
 
 //    cuappbtnmenu->addSeparator();
     cuappbtnmenu->addAction(separatorAction_2);
@@ -280,26 +285,22 @@ void RightClickMenu::addCommonUseAppBtnAction()
     cuappbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    cuappbtnmenu->setWindowOpacity(RightClickMenuOpacity);
     cuappbtnmenu->setStyleSheet(style);
-
-    setting->endGroup();
 }
 
 //普通应用按钮右键菜单
 void RightClickMenu::addAppBtnAction()
 {
-
-    setting->beginGroup("application");
+    setting->beginGroup("lockapplication");
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
-    if(!setting->contains(desktopfn) || setting->value(desktopfn).toInt()>0)
+    if(!setting->contains(desktopfn))
     {
         initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
         Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
         appbtnmenu->addAction(Fix2CommonUseAction);
         connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
     }
-
-    if(setting->contains(desktopfn) && setting->value(desktopfn).toInt()==0)
+    else
     {
         initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
         Unfixed4CommonUseAction->setDefaultWidget(Unfixed4CommonUseWid);
@@ -499,8 +500,12 @@ void RightClickMenu::fixToCommonUseActionTriggerSlot()
     action_number=1;
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
+    setting->beginGroup("lockapplication");
+    setting->setValue(desktopfn,setting->allKeys().size());
+    setting->sync();
+    setting->endGroup();
     setting->beginGroup("application");
-    setting->setValue(desktopfn,0);
+    setting->remove(desktopfn);
     setting->sync();
     setting->endGroup();
     setting->beginGroup("datetime");
@@ -514,6 +519,17 @@ void RightClickMenu::unfixedFromCommonUseActionTriggerSlot()
     action_number=2;
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
+    setting->beginGroup("lockapplication");
+    Q_FOREACH(QString desktop,setting->allKeys())
+    {
+        if(setting->value(desktop).toInt() > setting->value(desktopfn).toInt())
+        {
+            setting->setValue(desktop,setting->value(desktop).toInt()-1);
+        }
+    }
+    setting->remove(desktopfn);
+    setting->sync();
+    setting->endGroup();
     setting->beginGroup("application");
     setting->setValue(desktopfn,2);
     setting->sync();
@@ -722,5 +738,3 @@ void RightClickMenu::showOtherMenu(QString desktopfp)
     addOtherAction();
     othermenu->exec(QCursor::pos());
 }
-
-

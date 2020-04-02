@@ -128,40 +128,49 @@ void ListView::rightClickedSlot()
         }
         else{
             int ret=menu->showCommonUseAppBtnMenu(strlist.at(0));
-            if(ret==1 || ret==2)
+            if(ret==1)
             {
                 this->setCurrentIndex(index);
+                listmodel->removeRow(index.row());
+                setting->beginGroup("lockapplication");
+                QStandardItem* item=new QStandardItem;
+                item->setData(QVariant::fromValue<QStringList>(strlist),Qt::DisplayRole);
+                listmodel->insertRow(setting->allKeys().size()-1,item);
+                setting->endGroup();
+                Q_EMIT sendUpdateAppListSignal();
+            }
+            if(ret==2)
+            {
+                listmodel->removeRow(index.row());
+                setting->beginGroup("lockapplication");
+                QStandardItem* item=new QStandardItem;
+                item->setData(QVariant::fromValue<QStringList>(strlist),Qt::DisplayRole);
+                listmodel->insertRow(setting->allKeys().size(),item);
+                setting->endGroup();
+                Q_EMIT sendUpdateAppListSignal();
             }
 
             if(ret==7)
                 Q_EMIT sendHideMainWindowSignal();
 
-            if(ret==8 || ret==9)
+            if(ret==8)
             {
-                QStringList keys;
-                keys.clear();
-                setting->beginGroup("application");
-                keys=setting->childKeys();
-                QStringList applist;
-                applist.clear();
-                for(int i=0;i<keys.count();i++)
+                listmodel->removeRow(index.row());
+                Q_EMIT sendUpdateAppListSignal();
+            }
+            if(ret==9)
+            {
+                setting->beginGroup("lockapplication");
+                for(int i=listmodel->rowCount()-1;i>=0;i--)
                 {
-                    int val=setting->value(keys.at(i)).toInt();
-                    if(val==2 || val==0)
-                        applist.append(keys.at(i));
+                    QVariant var=listmodel->index(i,0).data(Qt::DisplayRole);
+                    QString desktopfp=var.value<QStringList>().at(0);
+                    QFileInfo fileInfo(desktopfp);
+                    QString desktopfn=fileInfo.fileName();
+                    if(!setting->contains(desktopfn))
+                        listmodel->removeRow(i);
                 }
-
-                data.clear();
-                for(int i=0;i<applist.count();i++)
-                {
-//                    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(applist.at(i));
-                    QString desktopfp=QString("/usr/share/applications/"+applist.at(i));
-                    data.append(QStringList()<<desktopfp<<"1");
-                }
-
-                this->updateData(data);
                 setting->endGroup();
-
                 Q_EMIT sendUpdateAppListSignal();
             }
 

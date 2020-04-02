@@ -67,6 +67,7 @@ protected:
     void initWidget();
     void initAppListWidget();//初始化应用列表界面
     void fillAppList();//填充应用列表
+    void getCommonUseAppList();//获取常用应用列表
 
 private Q_SLOTS:
     void updateListViewSlot();//更新应用列表槽函数

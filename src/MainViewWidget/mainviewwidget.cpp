@@ -613,6 +613,10 @@ void MainViewWidget::directoryChangedSlot()
                 QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
                 QFileInfo fileInfo(desktopfp);
                 QString desktopfn=fileInfo.fileName();
+                setting->beginGroup("lockapplication");
+                setting->remove(desktopfn);
+                setting->sync();
+                setting->endGroup();
                 setting->beginGroup("application");
                 setting->remove(desktopfn);
                 setting->sync();

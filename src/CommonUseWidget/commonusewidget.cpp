@@ -79,29 +79,8 @@ void CommonUseWidget::initAppListWidget()
  */
 void CommonUseWidget::fillAppList()
 {
-    QStringList keys;
-    keys.clear();
-    setting->beginGroup("application");
-    keys=setting->childKeys();
-    QStringList applist;
-    applist.clear();
-    for(int i=0;i<keys.count();i++)
-    {
-        int val=setting->value(keys.at(i)).toInt();
-        if(val==2 || val==0)
-            applist.append(keys.at(i));
-    }
-
-    data.clear();
-    for(int i=0;i<applist.count();i++)
-    {
-//        QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(applist.at(i));
-        QString desktopfp=QString("/usr/share/applications/"+applist.at(i));
-        data.append(QStringList()<<desktopfp<<"1");
-    }
-
+    getCommonUseAppList();
     listview->addData(data);
-    setting->endGroup();
 }
 
 /**
@@ -126,30 +105,50 @@ void CommonUseWidget::execApplication(QStringList arg)
  */
 void CommonUseWidget::updateListViewSlot()
 {
-    QStringList keys;
-    keys.clear();
-    setting->beginGroup("application");
-    keys=setting->childKeys();
-    QStringList applist;
-    applist.clear();
-    for(int i=0;i<keys.count();i++)
-    {
-        int val=setting->value(keys.at(i)).toInt();
-        if(val==2 || val==0)
-            applist.append(keys.at(i));
-    }
+    getCommonUseAppList();
+    listview->updateData(data);
+}
 
-    data.clear();
-    for(int i=0;i<applist.count();i++)
+void CommonUseWidget::getCommonUseAppList()
+{
+//    QStringList lockdesktopfnList;
+    QStringList desktopfnList;
+//    lockdesktopfnList.clear();
+    desktopfnList.clear();
+    setting->beginGroup("lockapplication");
+    QStringList lockdesktopfnList=setting->allKeys();
+    for(int i=0;i<lockdesktopfnList.count()-1;i++)
+        for(int j=0;j<lockdesktopfnList.count()-1-i;j++)
+        {
+            int value_1=setting->value(lockdesktopfnList.at(j)).toInt();
+            int value_2=setting->value(lockdesktopfnList.at(j+1)).toInt();
+            if(value_1 > value_2)
+            {
+                QString tmp=lockdesktopfnList.at(j);
+                lockdesktopfnList.replace(j,lockdesktopfnList.at(j+1));
+                lockdesktopfnList.replace(j+1,tmp);
+
+            }
+        }
+    setting->endGroup();
+    setting->beginGroup("application");
+    Q_FOREACH(QString desktopfn,setting->childKeys())
     {
-//        QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(applist.at(i));
-        QString desktopfp=QString("/usr/share/applications/"+applist.at(i));
+        if(setting->value(desktopfn)==2)
+            desktopfnList.append(desktopfn);
+    }
+    setting->endGroup();
+    data.clear();
+    Q_FOREACH(QString desktopfn,lockdesktopfnList)
+    {
+        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
         data.append(QStringList()<<desktopfp<<"1");
     }
-
-    listview->updateData(data);
-    setting->endGroup();
-
+    Q_FOREACH(QString desktopfn,desktopfnList)
+    {
+        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
+        data.append(QStringList()<<desktopfp<<"1");
+    }
 }
 
 void CommonUseWidget::widgetMakeZero()

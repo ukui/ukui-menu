@@ -101,9 +101,8 @@ void MainWindow::initMainWindow()
 //    path.addRoundedRect(rect, 6, 6);
 //    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    ui->mainToolBar->hide();
-    ui->menuBar->hide();
-    ui->statusBar->hide();
+    ui->menubar->hide();
+    ui->statusbar->hide();
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 //    this->setMinimumSize(390+20+2,532+20+2);
 //    this->setContentsMargins(1,21,21,1);
@@ -111,7 +110,7 @@ void MainWindow::initMainWindow()
     this->setContentsMargins(0,0,0,0);
 
     frame=new QFrame(this);
-    sidebarwid=new SideBarWidget();
+    sidebarwid=new SideBarWidget(this);
     mainviewwid=new MainViewWidget(this);
 
     this->setCentralWidget(frame);
@@ -168,10 +167,10 @@ void MainWindow::initMainWindow()
 /**
  * 添加阴影
  */
-void MainWindow::paintEvent(QPaintEvent *)
-{
-    if(!is_fullscreen)
-    {
+//void MainWindow::paintEvent(QPaintEvent *)
+//{
+//    if(!is_fullscreen)
+//    {
 //        QPainter painter(this);
 //        const qreal radius =6;
 
@@ -232,8 +231,8 @@ void MainWindow::paintEvent(QPaintEvent *)
     //        painter.setBrush(Qt::NoBrush);
     //        painter.drawPath(path);
     //    }
-    }
-}
+//    }
+//}
 
 /**
  * 显示全屏窗口
@@ -300,7 +299,7 @@ void MainWindow::showDefaultWidget()
     mainviewwid->loadMinMainView();
     //插入分割线
     mainlayout->insertWidget(1,line);
-    this->repaint();
+//    this->repaint();
     frame->setStyleSheet(style);
 }
 
@@ -401,5 +400,4 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             mainviewwid->setLineEditFocus(e->text());
         }
     }
-
 }

@@ -54,30 +54,6 @@ void SideBarWidget::initWidget()
     addSidebarBtn();
     loadMinSidebar();
 
-    //全屏侧边栏悬浮动画
-//    pEnterAnimation=new QPropertyAnimation;
-//    pEnterAnimation->setTargetObject(pMainWidget);
-//    pEnterAnimation->setPropertyName("pos");
-//    pEnterAnimation->setDuration(500);
-//    pAnimation->setStartValue(QRect(390,QApplication::desktop()->availableGeometry().height()-532,390,532));
-//    pAnimation->setEndValue(QRect(490,QApplication::desktop()->availableGeometry().height()-532,490,532));
-//    pAnimation->setStartValue(QRect(100,0,
-//                              60,QApplication::desktop()->availableGeometry().height()));
-//    pAnimation->setEndValue(QRect(0,0,
-//                                  160,QApplication::desktop()->availableGeometry().height()));
-//    pEnterAnimation->setStartValue(QPoint(100,0));
-//    pEnterAnimation->setEndValue(QPoint(0,0));
-//    pEnterAnimation->setEasingCurve(QEasingCurve::Linear);
-//    connect(pEnterAnimation,SIGNAL(finished()),this,SLOT(animation_finished_slot()));
-
-//    pLeaveAnimation=new QPropertyAnimation;
-//    pLeaveAnimation->setTargetObject(pMainWidget);
-//    pLeaveAnimation->setPropertyName("pos");
-//    pLeaveAnimation->setDuration(500);
-//    pLeaveAnimation->setStartValue(QPoint(0,0));
-//    pLeaveAnimation->setEndValue(QPoint(100,0));
-//    pLeaveAnimation->setEasingCurve(QEasingCurve::Linear);
-
     pUkuiMenuInterface=new UkuiMenuInterface;
 
 }

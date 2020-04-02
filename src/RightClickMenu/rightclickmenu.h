@@ -33,6 +33,7 @@
 #include <QFileInfo>
 #include <QDBusInterface>
 #include <QProcess>
+#include <QEvent>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 

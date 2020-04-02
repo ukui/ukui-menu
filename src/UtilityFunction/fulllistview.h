@@ -38,19 +38,14 @@ public:
 
     void addData(QStringList data);//字母排序模块添加数据
     void updateData(QStringList data);
-//    void removeRow(QString desktopfp);
-//    void insertRow(QString desktopfp);
 
 protected:
     void initWidget();
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-//    bool event(QEvent* e) Q_DECL_OVERRIDE;
 
 private:
     FullItemDelegate* m_delegate=nullptr;
-//    FullListModel* listmodel=nullptr;
-//    QStringListModel* listmodel=nullptr;
     QStandardItemModel* listmodel=nullptr;
     int module=0;
 
@@ -63,7 +58,6 @@ private:
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
     void rightClickedSlot();//右键菜单
-    void showToolTip(const QModelIndex &index);
 
 Q_SIGNALS:
     void sendItemClickedSignal(QString arg);//向字母排序或功能分类模块发送item点击信号

@@ -273,21 +273,24 @@ QString UkuiMenuInterface::getAppName(QString desktopfp)
     char* filepath=fpbyte.data();
     g_key_file_load_from_file(keyfile,filepath,flags,error);
 
-    QString namestr;
-    QLocale cn;
-    QString language=cn.languageToString(cn.language());
-    if(QString::compare(language,"Chinese")==0)
-    {
-        char* name;
-        name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name[zh_CN]", nullptr, nullptr);
-        if(QString::fromLocal8Bit(name).isEmpty())
-            name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name", nullptr, nullptr);
-        namestr=QString::fromLocal8Bit(name);
-    }
-    else {
-        char* name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name", nullptr, nullptr);
-        namestr=QString::fromLocal8Bit(name);
-    }
+    char* name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name", nullptr, nullptr);
+    QString namestr=QString::fromLocal8Bit(name);
+
+//    QString namestr;
+//    QLocale cn;
+//    QString language=cn.languageToString(cn.language());
+//    if(QString::compare(language,"Chinese")==0)
+//    {
+//        char* name;
+//        name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name[zh_CN]", nullptr, nullptr);
+//        if(QString::fromLocal8Bit(name).isEmpty())
+//            name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name", nullptr, nullptr);
+//        namestr=QString::fromLocal8Bit(name);
+//    }
+//    else {
+//        char* name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name", nullptr, nullptr);
+//        namestr=QString::fromLocal8Bit(name);
+//    }
 
     g_key_file_free(keyfile);
     return namestr;

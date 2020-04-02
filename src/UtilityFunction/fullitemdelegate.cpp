@@ -93,18 +93,16 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         icon.paint(painter,iconRect);
         if(module==0)
         {
-            setting->beginGroup("application");
+            setting->beginGroup("lockapplication");
             QFileInfo fileInfo(desktopfp);
             QString desktopfn=fileInfo.fileName();
-            if(setting->value(desktopfn).toInt()==0)
+            if(setting->contains(desktopfn))
             {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock-fs.svg"));
                 icon.paint(painter,QRect(iconRect.topRight().x()-14,iconRect.topRight().y()-2,16,16));
-//                painter->drawImage(QRect(iconRect.topRight().x()-8,iconRect.topRight().y(),16,16),
-//                                   icon.pixmap(icon.actualSize(QSize(16, 16))).toImage());
+//                icon.paint(painter,QRect(rect.topRight().x()-18,rect.topRight().y()+6,12,12));
             }
             setting->endGroup();
-
         }
 
         painter->setPen(QPen(Qt::white));
@@ -116,10 +114,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
                        rect.height()-iconRect.height()-Style::AppSpaceBetweenIconText);
         QFontMetrics fm=painter->fontMetrics();
         QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width(),Qt::TextShowMnemonic);
-//        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter | Qt::AlignTop,appname);
         painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
 
-//        painter->setRenderHint(QPainter::Antialiasing);
         if(option.state & QStyle::State_MouseOver)
         {
 //            painter->setPen(QPen(Qt::NoPen));
