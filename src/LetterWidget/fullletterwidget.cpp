@@ -135,7 +135,7 @@ void FullLetterWidget::fillAppList()
             listview->addData(data);
 
             connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-            connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+            connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
             connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
         }
     }
@@ -314,8 +314,8 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
             {
                 beginPos=scrollarea->verticalScrollBar()->sliderPosition();
                 endPos=letterbtnrowlist.at(num).toInt();
+                scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 timer->start(1);
-//                scrollarea->verticalScrollBar()->setSliderPosition(pos);
             }
         }
         else{
@@ -326,7 +326,6 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
 
 void FullLetterWidget::timeOutSlot()
 {
-
     if(beginPos<endPos)
     {
         if(endPos-scrollarea->verticalScrollBar()->sliderPosition()<50)
@@ -345,6 +344,7 @@ void FullLetterWidget::timeOutSlot()
             scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
     {
         timer->stop();
+        scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
                 this,SLOT(valueChangedSlot(int)));
     }

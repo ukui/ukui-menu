@@ -37,6 +37,21 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     OtherListAction=new QWidgetAction(othermenu);
     OtherListWid=new QWidget();
 
+    //关机按钮右键菜单
+    shutdownmenu=new QMenu(this);
+    shutdownmenu->setLayoutDirection(Qt::LeftToRight);
+    shutdownmenu->setFixedSize(250+2,36*5+12+2);
+    LockScreenAction=new QWidgetAction(shutdownmenu);
+    LockScreenWid=new QWidget();
+    SwitchUserAction=new QWidgetAction(shutdownmenu);
+    SwitchUserWid=new QWidget();
+    LogOutAction=new QWidgetAction(shutdownmenu);
+    LogOutWid=new QWidget();
+    RebootAction=new QWidgetAction(shutdownmenu);
+    RebootWid=new QWidget();
+    ShutDownAction=new QWidgetAction(shutdownmenu);
+    ShutDownWid=new QWidget();
+
     //常用应用按钮右键菜单
     cuappbtnmenu=new QMenu(this);
     cuappbtnmenu->setLayoutDirection(Qt::LeftToRight);
@@ -365,40 +380,26 @@ void RightClickMenu::addAppBtnAction()
 //关机按钮右键菜单
 void RightClickMenu::addShutdownAction()
 {
-    shutdownmenu=new QMenu(this);
-    shutdownmenu->setLayoutDirection(Qt::LeftToRight);
-    shutdownmenu->setFixedSize(250+2,36*5+12+2);
-
-    LockScreenAction=new QWidgetAction(shutdownmenu);
-    LockScreenWid=new QWidget();
     initWidgetAction(LockScreenWid,":/data/img/sidebarwidget/lock.svg",tr("Lock"));
     LockScreenAction->setDefaultWidget(LockScreenWid);
     shutdownmenu->addAction(LockScreenAction);
     connect(LockScreenAction,SIGNAL(triggered()),this,SLOT(lockScreenActionTriggerSlot()));
 
-    SwitchUserAction=new QWidgetAction(shutdownmenu);
-    SwitchUserWid=new QWidget();
     initWidgetAction(SwitchUserWid,"",tr("Switch user"));
     SwitchUserAction->setDefaultWidget(SwitchUserWid);
     shutdownmenu->addAction(SwitchUserAction);
     connect(SwitchUserAction,SIGNAL(triggered()),this,SLOT(switchUserActionTriggerSlot()));
 
-    LogOutAction=new QWidgetAction(shutdownmenu);
-    LogOutWid=new QWidget();
     initWidgetAction(LogOutWid,"",tr("Sign out"));
     LogOutAction->setDefaultWidget(LogOutWid);
     shutdownmenu->addAction(LogOutAction);
     connect(LogOutAction,SIGNAL(triggered()),this,SLOT(logoutActionTriggerSlot()));
 
-    RebootAction=new QWidgetAction(shutdownmenu);
-    RebootWid=new QWidget();
     initWidgetAction(RebootWid,"",tr("Restart"));
     RebootAction->setDefaultWidget(RebootWid);
     shutdownmenu->addAction(RebootAction);
     connect(RebootAction,SIGNAL(triggered()),this,SLOT(rebootActionTriggerSlot()));
 
-    ShutDownAction=new QWidgetAction(shutdownmenu);
-    ShutDownWid=new QWidget();
     initWidgetAction(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg",tr("Shut down"));
     ShutDownAction->setDefaultWidget(ShutDownWid);
     shutdownmenu->addAction(ShutDownAction);

@@ -63,6 +63,7 @@ void ListView::initWidget()
     this->setViewMode(QListView::ListMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setFocusPolicy(Qt::NoFocus);
+    this->setMovement(QListView::Static);
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
 
@@ -118,8 +119,10 @@ void ListView::rightClickedSlot()
             if(strlist.at(1).toInt()==1)
             {
                 int ret=menu->showAppBtnMenu(strlist.at(0));
-                if(ret==1 || ret==2)
-                    Q_EMIT sendFixedOrUnfixedSignal();
+                if(ret==1)
+                    Q_EMIT sendFixedOrUnfixedSignal(strlist.at(0),0);
+                if(ret==2)
+                    Q_EMIT sendFixedOrUnfixedSignal(strlist.at(0),1);
                 if(ret==6)
                     Q_EMIT sendHideMainWindowSignal();
                 if(ret==7)
@@ -137,7 +140,7 @@ void ListView::rightClickedSlot()
                 item->setData(QVariant::fromValue<QStringList>(strlist),Qt::DisplayRole);
                 listmodel->insertRow(setting->allKeys().size()-1,item);
                 setting->endGroup();
-                Q_EMIT sendUpdateAppListSignal();
+                Q_EMIT sendUpdateAppListSignal(strlist.at(0),0);
             }
             if(ret==2)
             {
@@ -147,7 +150,7 @@ void ListView::rightClickedSlot()
                 item->setData(QVariant::fromValue<QStringList>(strlist),Qt::DisplayRole);
                 listmodel->insertRow(setting->allKeys().size(),item);
                 setting->endGroup();
-                Q_EMIT sendUpdateAppListSignal();
+                Q_EMIT sendUpdateAppListSignal(strlist.at(0),1);
             }
 
             if(ret==7)
@@ -156,7 +159,7 @@ void ListView::rightClickedSlot()
             if(ret==8)
             {
                 listmodel->removeRow(index.row());
-                Q_EMIT sendUpdateAppListSignal();
+                Q_EMIT removeListItemSignal(strlist.at(0));
             }
             if(ret==9)
             {
@@ -171,7 +174,7 @@ void ListView::rightClickedSlot()
                         listmodel->removeRow(i);
                 }
                 setting->endGroup();
-                Q_EMIT sendUpdateAppListSignal();
+                Q_EMIT removeListAllItemSignal();
             }
 
             if(ret==6)

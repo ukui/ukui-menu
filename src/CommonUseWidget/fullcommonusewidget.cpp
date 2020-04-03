@@ -63,7 +63,9 @@ void FullCommonUseWidget::initAppListWidget()
     listview=new FullListView(this,0);
     mainLayout->addWidget(listview);
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-    connect(listview,SIGNAL(sendUpdateAppListSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+    connect(listview,SIGNAL(sendUpdateAppListSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
+    connect(listview,SIGNAL(removeListItemSignal(QString)),this,SIGNAL(removeListItemSignal(QString)));
+    connect(listview,SIGNAL(removeListAllItemSignal()),this,SIGNAL(removeListAllItemSignal()));
     connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 }
 
@@ -92,10 +94,62 @@ void FullCommonUseWidget::execApplication(QString appname)
 /**
  * 更新应用列表
  */
-void FullCommonUseWidget::updateListViewSlot()
+void FullCommonUseWidget::updateListViewSlot(QString desktopfp, int type)
+{
+    for(int i=0;i<listview->model()->rowCount();i++)
+    {
+        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
+        QString path=var.value<QString>();
+        if(QString::compare(path,desktopfp)==0)
+        {
+            listview->model()->removeRow(i);
+            break;
+        }
+    }
+    setting->beginGroup("lockapplication");
+    QStandardItem* item=new QStandardItem;
+    item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
+    QStandardItemModel* listmodel=qobject_cast<QStandardItemModel*>(listview->model());
+    if(type==0)
+        listmodel->insertRow(setting->allKeys().size()-1,item);
+    else
+        listmodel->insertRow(setting->allKeys().size(),item);
+    setting->endGroup();
+}
+
+void FullCommonUseWidget::updateListViewAllSlot()
 {
     getCommonUseAppList();
     listview->updateData(data);
+}
+
+void FullCommonUseWidget::removeListItemSlot(QString desktopfp)
+{
+    for(int i=0;i<listview->model()->rowCount();i++)
+    {
+        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
+        QString path=var.value<QString>();
+        if(QString::compare(path,desktopfp)==0)
+        {
+            listview->model()->removeRow(i);
+            break;
+        }
+    }
+}
+
+void FullCommonUseWidget::removeListAllItemSlot()
+{
+    setting->beginGroup("lockapplication");
+    for(int i=listview->model()->rowCount()-1;i>=0;i--)
+    {
+        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
+        QString desktopfp=var.value<QString>();
+        QFileInfo fileInfo(desktopfp);
+        QString desktopfn=fileInfo.fileName();
+        if(!setting->contains(desktopfn))
+            listview->model()->removeRow(i);
+    }
+    setting->endGroup();
 }
 
 void FullCommonUseWidget::getCommonUseAppList()

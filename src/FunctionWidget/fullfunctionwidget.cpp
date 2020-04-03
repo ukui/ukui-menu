@@ -259,7 +259,7 @@ void FullFunctionWidget::insertAppList(QStringList appnamelist)
     }
     listview->addData(data);
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal()),this,SIGNAL(sendUpdateAppListSignal()));
+    connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
     connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 }
 
@@ -307,18 +307,6 @@ void FullFunctionWidget::updateAppListView()
         delete wid;
         delete child;
     }
-
-//     for(int i=iconlistscrollareawidLayout->count()-2;i>0;i--)
-//     {
-//         if((child = iconlistscrollareawidLayout->takeAt(i)) != 0)
-//         {
-//             QWidget* wid=child->widget();
-//             iconlistscrollareawidLayout->removeWidget(wid);
-//             wid->setParent(nullptr);
-//             delete wid;
-//             delete child;
-//         }
-//     }
     initIconListScrollArea();
 }
 
@@ -444,8 +432,8 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
             {
                 beforebtnPos=scrollarea->verticalScrollBar()->sliderPosition();
                 endPos=classificationbtnrowlist.at(num).toInt();
+                scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 timer->start(1);
-//                scrollarea->verticalScrollBar()->setSliderPosition(pos);
             }
 
             QSvgRenderer* svgRender = new QSvgRenderer;
@@ -493,6 +481,7 @@ void FullFunctionWidget::timeOutSlot()
             scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
     {
         timer->stop();
+        scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
                 this,SLOT(valueChangedSlot(int)));
     }

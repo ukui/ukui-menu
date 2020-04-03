@@ -68,12 +68,22 @@ protected:
     void getCommonUseAppList();//获取常用应用列表
 
 private Q_SLOTS:
-    void updateListViewSlot();//更新应用列表槽函数
+    /**
+     * @brief 更新单个item槽函数
+     * @param desktopfp为desktop文件路径
+     * @param type为0时表示固定，为1时表示取消固定
+     */
+    void updateListViewSlot(QString desktopfp,int type);
     void execApplication(QStringList arg);//执行应用程序
+    void removeListItemSlot(QString desktopfp);//删除单个item
+    void removeListAllItemSlot();//删除所有非固定item
+    void updateListViewAllSlot();//更新应用列表槽函数
 
 Q_SIGNALS:
     void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
-    void sendUpdateAppListSignal();//向FullCommonUseWidget发送更新应用列表信号
+    void sendUpdateAppListSignal(QString desktopfp,int type);//向FullCommonUseWidget发送更新应用列表信号
+    void removeListItemSignal(QString desktopfp);
+    void removeListAllItemSignal();
 };
 
 #endif // COMMONUSEWIDGET_H

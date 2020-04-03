@@ -81,24 +81,28 @@ void MainViewWidget::initWidget()
     pUkuiMenuInterface=new UkuiMenuInterface;
 
     //进程开启，刷新常用软件界面
-    connect(this,SIGNAL(viewOpenedSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
-    connect(this,SIGNAL(viewOpenedSignal()),commonusewid,SLOT(updateListViewSlot()));
+    connect(this,SIGNAL(viewOpenedSignal()),fullcommonusewid,SLOT(updateListViewAllSlot()));
+    connect(this,SIGNAL(viewOpenedSignal()),commonusewid,SLOT(updateListViewAllSlot()));
 
     //常用软件界面删除操作，刷新界面
-    connect(commonusewid,SIGNAL(sendUpdateAppListSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
-    connect(fullcommonusewid,SIGNAL(sendUpdateAppListSignal()),commonusewid,SLOT(updateListViewSlot()));
+    connect(commonusewid,SIGNAL(sendUpdateAppListSignal(QString,int)),fullcommonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(fullcommonusewid,SIGNAL(sendUpdateAppListSignal(QString,int)),commonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(commonusewid,SIGNAL(removeListItemSignal(QString)),fullcommonusewid,SLOT(removeListItemSlot(QString)));
+    connect(fullcommonusewid,SIGNAL(removeListItemSignal(QString)),commonusewid,SLOT(removeListItemSlot(QString)));
+    connect(commonusewid,SIGNAL(removeListAllItemSignal()),fullcommonusewid,SLOT(removeListAllItemSlot()));
+    connect(fullcommonusewid,SIGNAL(removeListAllItemSignal()),commonusewid,SLOT(removeListAllItemSlot()));
 
     //字母排序、功能分类界面、搜索界面固定或取消固定到常用软件，刷新常用软件界面
-    connect(letterwid,SIGNAL(sendUpdateAppListSignal()),commonusewid,SLOT(updateListViewSlot()));
-    connect(fullletterwid,SIGNAL(sendUpdateAppListSignal()),commonusewid,SLOT(updateListViewSlot()));
-    connect(functionwid,SIGNAL(sendUpdateAppListSignal()),commonusewid,SLOT(updateListViewSlot()));
-    connect(fullfunctionwid,SIGNAL(sendUpdateAppListSignal()),commonusewid,SLOT(updateListViewSlot()));
-    connect(letterwid,SIGNAL(sendUpdateAppListSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
-    connect(fullletterwid,SIGNAL(sendUpdateAppListSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
-    connect(functionwid,SIGNAL(sendUpdateAppListSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
-    connect(fullfunctionwid,SIGNAL(sendUpdateAppListSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
-    connect(searchresultwid,SIGNAL(sendUpdateAppListSignal()),commonusewid,SLOT(updateListViewSlot()));
-    connect(fullsearchresultwid,SIGNAL(sendUpdateAppListSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
+    connect(letterwid,SIGNAL(sendUpdateAppListSignal(QString,int)),commonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(fullletterwid,SIGNAL(sendUpdateAppListSignal(QString,int)),commonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(functionwid,SIGNAL(sendUpdateAppListSignal(QString,int)),commonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(fullfunctionwid,SIGNAL(sendUpdateAppListSignal(QString,int)),commonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(letterwid,SIGNAL(sendUpdateAppListSignal(QString,int)),fullcommonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(fullletterwid,SIGNAL(sendUpdateAppListSignal(QString,int)),fullcommonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(functionwid,SIGNAL(sendUpdateAppListSignal(QString,int)),fullcommonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(fullfunctionwid,SIGNAL(sendUpdateAppListSignal(QString,int)),fullcommonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(searchresultwid,SIGNAL(sendUpdateAppListSignal(QString,int)),commonusewid,SLOT(updateListViewSlot(QString,int)));
+    connect(fullsearchresultwid,SIGNAL(sendUpdateAppListSignal(QString,int)),fullcommonusewid,SLOT(updateListViewSlot(QString,int)));
 
     //监控.desktop文件目录
     fileWatcher=new QFileSystemWatcher(this);
@@ -108,8 +112,8 @@ void MainViewWidget::initWidget()
     connect(this,SIGNAL(directoryChangedSignal()),fullletterwid,SLOT(updateAppListView()));
     connect(this,SIGNAL(directoryChangedSignal()),functionwid,SLOT(updateAppListView()));
     connect(this,SIGNAL(directoryChangedSignal()),fullfunctionwid,SLOT(updateAppListView()));
-    connect(this,SIGNAL(directoryChangedSignal()),commonusewid,SLOT(updateListViewSlot()));
-    connect(this,SIGNAL(directoryChangedSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
+    connect(this,SIGNAL(directoryChangedSignal()),commonusewid,SLOT(updateListViewAllSlot()));
+    connect(this,SIGNAL(directoryChangedSignal()),fullcommonusewid,SLOT(updateListViewAllSlot()));
 
     //发送隐藏主界面信号
     connect(commonusewid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
@@ -404,6 +408,11 @@ void MainViewWidget::loadMaxMainView()
  */
 void MainViewWidget::loadCommonUseWidget()
 {
+    fullcommonusewid->widgetMakeZero();
+    letterwid->widgetMakeZero();
+    fullletterwid->widgetMakeZero();
+    functionwid->widgetMakeZero();
+    fullfunctionwid->widgetMakeZero();
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -414,7 +423,6 @@ void MainViewWidget::loadCommonUseWidget()
         }
 
     }
-    commonusewid->widgetMakeZero();
     mainLayout->addWidget(commonusewid);
     widgetState=1;
     saveCurrentWidState=1;
@@ -425,6 +433,11 @@ void MainViewWidget::loadCommonUseWidget()
  */
 void MainViewWidget::loadLetterWidget()
 {
+    commonusewid->widgetMakeZero();
+    fullcommonusewid->widgetMakeZero();
+    fullletterwid->widgetMakeZero();
+    functionwid->widgetMakeZero();
+    fullfunctionwid->widgetMakeZero();
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -435,7 +448,6 @@ void MainViewWidget::loadLetterWidget()
         }
 
     }
-    letterwid->widgetMakeZero();
     mainLayout->addWidget(letterwid);
     widgetState=2;
     saveCurrentWidState=2;
@@ -446,6 +458,11 @@ void MainViewWidget::loadLetterWidget()
  */
 void MainViewWidget::loadFunctionWidget()
 {
+    commonusewid->widgetMakeZero();
+    fullcommonusewid->widgetMakeZero();
+    letterwid->widgetMakeZero();
+    fullletterwid->widgetMakeZero();
+    fullfunctionwid->widgetMakeZero();
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -456,7 +473,6 @@ void MainViewWidget::loadFunctionWidget()
         }
 
     }
-    functionwid->widgetMakeZero();
     mainLayout->addWidget(functionwid);
     widgetState=3;
     saveCurrentWidState=3;
@@ -468,6 +484,11 @@ void MainViewWidget::loadFunctionWidget()
  */
 void MainViewWidget::loadFullCommonUseWidget()
 {
+    commonusewid->widgetMakeZero();
+    letterwid->widgetMakeZero();
+    fullletterwid->widgetMakeZero();
+    functionwid->widgetMakeZero();
+    fullfunctionwid->widgetMakeZero();
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -478,7 +499,6 @@ void MainViewWidget::loadFullCommonUseWidget()
         }
 
     }
-    fullcommonusewid->widgetMakeZero();
     mainLayout->addWidget(fullcommonusewid);
     widgetState=1;
     saveCurrentWidState=1;
@@ -489,6 +509,11 @@ void MainViewWidget::loadFullCommonUseWidget()
  */
 void MainViewWidget::loadFullLetterWidget()
 {
+    commonusewid->widgetMakeZero();
+    fullcommonusewid->widgetMakeZero();
+    letterwid->widgetMakeZero();
+    functionwid->widgetMakeZero();
+    fullfunctionwid->widgetMakeZero();
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -498,7 +523,6 @@ void MainViewWidget::loadFullLetterWidget()
             childwid->setParent(nullptr);
         }
     }
-    fullletterwid->widgetMakeZero();
     mainLayout->addWidget(fullletterwid);
     widgetState=2;
     saveCurrentWidState=2;
@@ -509,6 +533,11 @@ void MainViewWidget::loadFullLetterWidget()
  */
 void MainViewWidget::loadFullFunctionWidget()
 {
+    commonusewid->widgetMakeZero();
+    fullcommonusewid->widgetMakeZero();
+    letterwid->widgetMakeZero();
+    fullletterwid->widgetMakeZero();
+    functionwid->widgetMakeZero();
     QLayoutItem *child;
     if((child = mainLayout->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
@@ -519,7 +548,6 @@ void MainViewWidget::loadFullFunctionWidget()
         }
 
     }
-    fullfunctionwid->widgetMakeZero();
     mainLayout->addWidget(fullfunctionwid);
     widgetState=3;
     saveCurrentWidState=3;

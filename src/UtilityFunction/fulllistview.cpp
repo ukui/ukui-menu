@@ -67,6 +67,8 @@ void FullListView::initWidget()
     this->setTextElideMode(Qt::ElideRight);
     this->setMouseTracking(true);
     this->setFocusPolicy(Qt::NoFocus);
+//    this->setAcceptDrops(false);
+    this->setMovement(QListView::Static);
 //    this->setUpdatesEnabled(true);
 
 //    this->setSpacing(32);
@@ -123,10 +125,10 @@ void FullListView::rightClickedSlot()
         if(module>0)
         {
             int ret=menu->showAppBtnMenu(desktopfp);
-            if(ret==1 || ret==2)
-            {
-                Q_EMIT sendFixedOrUnfixedSignal();
-            }
+            if(ret==1)
+                Q_EMIT sendFixedOrUnfixedSignal(desktopfp,0);
+            if(ret==2)
+                Q_EMIT sendFixedOrUnfixedSignal(desktopfp,1);
             if(ret==6)
                 Q_EMIT sendHideMainWindowSignal();
             if(ret==7)
@@ -143,7 +145,7 @@ void FullListView::rightClickedSlot()
                 item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
                 listmodel->insertRow(setting->childKeys().size()-1,item);
                 setting->endGroup();
-                Q_EMIT sendUpdateAppListSignal();
+                Q_EMIT sendUpdateAppListSignal(desktopfp,0);
             }
             if(ret==2)
             {
@@ -153,7 +155,7 @@ void FullListView::rightClickedSlot()
                 item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
                 listmodel->insertRow(setting->childKeys().size(),item);
                 setting->endGroup();
-                Q_EMIT sendUpdateAppListSignal();
+                Q_EMIT sendUpdateAppListSignal(desktopfp,1);
             }
 
             if(ret==7)
@@ -162,7 +164,7 @@ void FullListView::rightClickedSlot()
             if(ret==8)
             {
                 listmodel->removeRow(index.row());
-                Q_EMIT sendUpdateAppListSignal();
+                Q_EMIT removeListItemSignal(desktopfp);
             }
 
             if(ret==9)
@@ -178,7 +180,7 @@ void FullListView::rightClickedSlot()
                         listmodel->removeRow(i);
                 }
                 setting->endGroup();
-                Q_EMIT sendUpdateAppListSignal();
+                Q_EMIT removeListAllItemSignal();
             }
             if(ret==6)
                 Q_EMIT sendHideMainWindowSignal();

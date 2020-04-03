@@ -114,7 +114,7 @@ private Q_SLOTS:
     void valueChangedSlot(int value);//滑动条滚动槽函数
 
 Q_SIGNALS:
-    void sendUpdateAppListSignal();//向常用软件模块发送更新应用列表信号
+    void sendUpdateAppListSignal(QString desktopfp,int type);//向常用软件模块发送更新应用列表信号
     void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 };
 

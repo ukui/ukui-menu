@@ -79,10 +79,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void sendClassificationbtnList(QStringList list);//向FunctionButtonWidget界面发送分类按钮列表
-    void sendUpdateAppListSignal();//向常用软件模块发送更新应用列表信号
+    void sendUpdateAppListSignal(QString desktopfp,int type);//向常用软件模块发送更新应用列表信号
     void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
-
-
 };
 
 #endif // FUNCTIONWIDGET_H
