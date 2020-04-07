@@ -130,8 +130,18 @@ void MainWindow::initMainWindow()
     mainlayout->setContentsMargins(0,0,0,0);
     mainlayout->setSpacing(0);
     centralWidget()->setLayout(mainlayout);
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-    int position=gsetting->get("panelposition").toInt();
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
+    int position=0;
+    QGSettings* gsetting=nullptr;
+    if(fileInfo.exists())
+    {
+        gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        position=gsetting->get("panelposition").toInt();
+    }
+    else
+    {
+        position=0;
+    }
     char style[100];
     if(position==0)
         sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
@@ -241,9 +251,20 @@ void MainWindow::showFullScreenWidget()
 {
     is_fullscreen=true;
     this->setContentsMargins(0,0,0,0);
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-    int position=gsetting->get("panelposition").toInt();
-    int panelSize=gsetting->get("panelsize").toInt();
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
+    int position=0;
+    int panelSize=0;
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        position=gsetting->get("panelposition").toInt();
+        panelSize=gsetting->get("panelsize").toInt();
+    }
+    else
+    {
+        position=0;
+        panelSize=46;
+    }
     if(position==0)
         this->setGeometry(QRect(0,0,Style::widthavailable,Style::heightavailable));
     else if(position==1)
@@ -271,9 +292,20 @@ void MainWindow::showDefaultWidget()
 {
     is_fullscreen=false;
     this->setContentsMargins(0,0,0,0);
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-    int position=gsetting->get("panelposition").toInt();
-    int panelSize=gsetting->get("panelsize").toInt();
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
+    int position=0;
+    int panelSize=0;
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        position=gsetting->get("panelposition").toInt();
+        panelSize=gsetting->get("panelsize").toInt();
+    }
+    else
+    {
+        position=0;
+        panelSize=46;
+    }
     char style[100];
     if(position==0)
     {
@@ -361,8 +393,17 @@ void MainWindow::panelShangedSlot(QString key)
 
 void MainWindow::setFrameStyle()
 {
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-    int position=gsetting->get("panelposition").toInt();
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
+    int position=0;
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        position=gsetting->get("panelposition").toInt();
+    }
+    else
+    {
+        position=0;
+    }
     char style[100];
     if(!is_fullscreen)
     {
