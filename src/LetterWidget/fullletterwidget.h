@@ -39,6 +39,7 @@
 #include "src/Interface/ukuimenuinterface.h"
 #include <QButtonGroup>
 #include <QTimer>
+#include "src/UtilityFunction/letterclassifybutton.h"
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
 #include "src/UtilityFunction/fulllistview.h"
@@ -88,6 +89,8 @@ private:
     QVBoxLayout* letterlistscrollareawidLayout=nullptr;
     QList<QAbstractButton*> buttonList;
     QButtonGroup* pBtnGroup=nullptr;
+    QSpacerItem* pLetterListTopSpacer=nullptr;
+    QSpacerItem* pLetterListBottomSpacer=nullptr;
 
     //计时器
     QTimer* timer=nullptr;

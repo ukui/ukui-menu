@@ -40,6 +40,7 @@ SOURCES += \
     src/UtilityFunction/fulllistview.cpp \
     src/UtilityFunction/functionclassifybutton.cpp \
     src/UtilityFunction/itemdelegate.cpp \
+    src/UtilityFunction/letterclassifybutton.cpp \
     src/UtilityFunction/listview.cpp \
     src/UtilityFunction/pushbutton.cpp \
     src/UtilityFunction/scrollarea.cpp \
@@ -70,6 +71,7 @@ HEADERS  += \
     src/UtilityFunction/fulllistview.h \
     src/UtilityFunction/functionclassifybutton.h \
     src/UtilityFunction/itemdelegate.h \
+    src/UtilityFunction/letterclassifybutton.h \
     src/UtilityFunction/listview.h \
     src/UtilityFunction/pushbutton.h \
     src/UtilityFunction/scrollarea.h \

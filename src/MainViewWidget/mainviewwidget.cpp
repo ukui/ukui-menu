@@ -196,6 +196,7 @@ void MainViewWidget::initQueryLineEdit()
     queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     querylineEdit->setFocusPolicy(Qt::ClickFocus);
     querylineEdit->installEventFilter(this);
+    querylineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
     searchappthread=new SearchAppThread;
     connect(this,SIGNAL(sendSearchKeyword(QString)),

@@ -47,6 +47,7 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     this->text=text;
     this->is_fullscreen=is_fullscreen;
     this->enabled=enabled;
+    this->setCheckable(true);
 
     this->setFocusPolicy(Qt::NoFocus);
     svgRender=new QSvgRenderer(this);
@@ -82,6 +83,7 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     this->setLayout(mainlayout);
     mainlayout->addWidget(iconlabel);
     mainlayout->addWidget(textlabel);
+    connect(this,SIGNAL(toggled(bool)),this,SLOT(reactToToggle(bool)));
 }
 
 void FunctionClassifyButton::enterEvent(QEvent *e)
@@ -212,5 +214,35 @@ void FunctionClassifyButton::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-
-
+void FunctionClassifyButton::reactToToggle(bool checked)
+{
+    if(checked)
+    {
+        delete svgRender;
+        svgRender=new QSvgRenderer(this);
+        svgRender->load(piconstr);
+        pixmap=new QPixmap(iconSize,iconSize);
+        pixmap->fill(Qt::transparent);
+        QPainter p(pixmap);
+        svgRender->render(&p);
+        iconlabel->setPixmap(*pixmap);
+        iconlabel->setFixedSize(pixmap->size());
+        textlabel->setStyleSheet("background:transparent;color:#ffffff;");
+        textlabel->adjustSize();
+        is_pressed=true;
+    }
+    else{
+        delete svgRender;
+        svgRender = new QSvgRenderer(this);
+        svgRender->load(iconstr);
+        pixmap=new QPixmap(iconSize,iconSize);
+        pixmap->fill(Qt::transparent);
+        QPainter p(pixmap);
+        svgRender->render(&p);
+        iconlabel->setPixmap(*pixmap);
+        iconlabel->setFixedSize(pixmap->size());
+        textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);");
+        textlabel->adjustSize();
+        is_pressed=false;
+    }
+}
