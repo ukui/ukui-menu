@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timeOutKeys.clear();
     for(int i=0;i<dateTimeKeys.count();i++)
     {
-        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 7)
+        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 4)
         {
             timeOutKeys.append(dateTimeKeys.at(i));
         }
@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList recentAppKeys=setting->allKeys();
     for(int i=0;i<recentAppKeys.count();i++)
     {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 7)
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
             setting->remove(recentAppKeys.at(i));
     }
     setting->sync();

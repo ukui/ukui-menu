@@ -228,7 +228,6 @@ void FullLetterWidget::resizeScrollAreaControls()
 
         }
 
-//        listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
         listview->setFixedSize(scrollarea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
         if(row<scrollareawidLayout->count()/2-1)
         {
@@ -327,19 +326,23 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
 
 void FullLetterWidget::timeOutSlot()
 {
+    int speed=0;
+    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=100)
+        speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
+    else if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())>100 &&
+            qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=300)
+        speed=50;
+    else
+        speed=170;
+
     if(beginPos<endPos)
     {
-        if(endPos-scrollarea->verticalScrollBar()->sliderPosition()<50)
-            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
-        else
-            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+50);
+
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+speed);
     }
     else
     {
-        if(scrollarea->verticalScrollBar()->sliderPosition()-endPos<50)
-            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
-        else
-            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-50);
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-speed);
     }
     if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
             scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
@@ -424,4 +427,5 @@ void FullLetterWidget::widgetMakeZero()
             break;
         }
     }
+    scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }

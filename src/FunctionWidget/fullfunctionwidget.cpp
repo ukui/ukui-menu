@@ -429,7 +429,7 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
             int num=classificationbtnlist.indexOf(textlabel->text());
             if(num!=-1)
             {
-                beforebtnPos=scrollarea->verticalScrollBar()->sliderPosition();
+                beginPos=scrollarea->verticalScrollBar()->sliderPosition();
                 endPos=classificationbtnrowlist.at(num).toInt();
                 scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 timer->start(1);
@@ -444,19 +444,22 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
 
 void FullFunctionWidget::timeOutSlot()
 {
+    int speed=0;
+    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=100)
+        speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
+    else if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())>100 &&
+            qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=300)
+        speed=50;
+    else
+        speed=170;
+
     if(beginPos<endPos)
     {
-        if(endPos-scrollarea->verticalScrollBar()->sliderPosition()<50)
-            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
-        else
-            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+50);
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+speed);
     }
     else
     {
-        if(scrollarea->verticalScrollBar()->sliderPosition()-endPos<50)
-            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
-        else
-            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-50);
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-speed);
     }
     if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
             scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
@@ -543,4 +546,5 @@ void FullFunctionWidget::widgetMakeZero()
             break;
         }
     }
+    scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }

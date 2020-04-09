@@ -262,14 +262,7 @@ void RightClickMenu::addCommonUseAppBtnAction()
     cuappbtnmenu->addAction(CuDeleteAllAction);
     connect(CuDeleteAllAction,SIGNAL(triggered()),this,SLOT(commonUseDeleteAllActionTriggerSlot()));
     setting->beginGroup("application");
-    QStringList keys=setting->childKeys();
-    int count;
-    for(count=0;count<keys.count();count++)
-    {
-        if(setting->value(keys.at(count)).toInt()==2)
-            break;
-    }
-    if(count==keys.count())
+    if(setting->allKeys().size()==0)
     {
         QLayoutItem* item=CuDeleteAllWid->layout()->itemAt(0);
         QWidget* wid=item->widget();
@@ -279,18 +272,14 @@ void RightClickMenu::addCommonUseAppBtnAction()
     }
     setting->endGroup();
 
-//    cuappbtnmenu->addSeparator();
     cuappbtnmenu->addAction(separatorAction_2);
-//    cuappbtnmenu->addSeparator();
 
     initWidgetAction(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
     CuUninstallAction->setDefaultWidget(CuUninstallWid);
     cuappbtnmenu->addAction(CuUninstallAction);
     connect(CuUninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 
-//    cuappbtnmenu->addSeparator();
     cuappbtnmenu->addAction(separatorAction_3);
-//    cuappbtnmenu->addSeparator();
 
     initWidgetAction(CuAttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
     CuAttributeAction->setDefaultWidget(CuAttributeWid);
@@ -326,7 +315,6 @@ void RightClickMenu::addAppBtnAction()
 
     appbtnmenu->addSeparator();
 
-//    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -356,7 +344,6 @@ void RightClickMenu::addAppBtnAction()
     connect(Add2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
 
 
-//    appbtnmenu->addSeparator();
     appbtnmenu->addAction(separatorAction_4);
 
     initWidgetAction(UninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
@@ -364,7 +351,6 @@ void RightClickMenu::addAppBtnAction()
     appbtnmenu->addAction(UninstallAction);
     connect(UninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 
-//    appbtnmenu->addSeparator();
     appbtnmenu->addAction(separatorAction_5);
 
     initWidgetAction(AttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
@@ -413,7 +399,6 @@ void RightClickMenu::addShutdownAction()
 //其它按钮右键菜单
 void RightClickMenu::addOtherAction()
 {
-//    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -532,7 +517,13 @@ void RightClickMenu::unfixedFromCommonUseActionTriggerSlot()
     setting->sync();
     setting->endGroup();
     setting->beginGroup("application");
-    setting->setValue(desktopfn,2);
+    int maxValue=1;
+    Q_FOREACH(QString desktopfn,setting->allKeys())
+    {
+        if(setting->value(desktopfn).toInt()>maxValue)
+            maxValue=setting->value(desktopfn).toInt();
+    }
+    setting->setValue(desktopfn,maxValue+1);
     setting->sync();
     setting->endGroup();
     setting->beginGroup("datetime");
@@ -654,25 +645,17 @@ void RightClickMenu::commonUseDeleteAllActionTriggerSlot()
     QStringList deleteKeys;
     deleteKeys.clear();
     setting->beginGroup("application");
-    QStringList keys=setting->childKeys();
-    for(int i=0;i<keys.count();i++)
-    {
-        if(setting->value(keys.at(i)).toInt()==2)
-        {
-            setting->remove(keys.at(i));
-            deleteKeys.append(keys.at(i));
-        }
-    }
+    QStringList keys=setting->allKeys();
+    deleteKeys=keys;
+    setting->remove("");
     setting->sync();
     setting->endGroup();
 
+    setting->beginGroup("datetime");
     for(int i=0;i<deleteKeys.count();i++)
-    {
-        setting->beginGroup("datetime");
         setting->remove(deleteKeys.at(i));
-        setting->sync();
-        setting->endGroup();
-    }
+    setting->sync();
+    setting->endGroup();
 
 }
 

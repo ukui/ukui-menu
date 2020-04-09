@@ -87,8 +87,8 @@ private:
     QList<QAbstractButton*> buttonList;
     QButtonGroup* pBtnGroup=nullptr;
 
-    int btnPos=0;
-    int beforebtnPos=0;
+//    int btnPos=0;
+//    int beforebtnPos=0;
 
     //计时器
     QTimer* timer=nullptr;

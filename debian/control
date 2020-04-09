@@ -19,7 +19,8 @@ Package: ukui-menu
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         libgsettings-qt1
+         libgsettings-qt1,
+         bamfdaemon
 Description: Advanced ukui menu
  UKUI menu provides start menu development library and advanced
  graphical user interface.
