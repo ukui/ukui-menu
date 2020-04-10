@@ -85,7 +85,8 @@ MainWindow::~MainWindow()
 void MainWindow::initMainWindow()
 {
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::SplashScreen);
-    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::Popup);
+//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::Popup);
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
 //    this->setStyleSheet("background:transparent;");
 //    char style[100];
 //    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);

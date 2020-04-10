@@ -445,13 +445,13 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
 void FullFunctionWidget::timeOutSlot()
 {
     int speed=0;
-    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=100)
+    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=300)
         speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
-    else if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())>100 &&
-            qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=300)
-        speed=50;
     else
-        speed=170;
+    {
+        int height=QApplication::primaryScreen()->geometry().height();
+        speed=height*170/1080;
+    }
 
     if(beginPos<endPos)
     {
