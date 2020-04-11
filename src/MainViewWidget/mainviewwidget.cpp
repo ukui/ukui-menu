@@ -344,7 +344,6 @@ void MainViewWidget::loadMinMainView()
     topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
     querylineEdit->setFixedSize(288,30);
 
-    is_fullWid=false;
     if(widgetState==0)
     {
         QLayoutItem* child;
@@ -365,6 +364,7 @@ void MainViewWidget::loadMinMainView()
         loadLetterWidget();
     else
         loadFunctionWidget();
+    is_fullWid=false;
 }
 
 /**
@@ -381,7 +381,6 @@ void MainViewWidget::loadMaxMainView()
                                   0,
                                   (topWidget->width()-Style::LeftWidWidth-querylineEdit->width())/2,
                                   0);
-    is_fullWid=true;
     if(widgetState==0)
     {
         QLayoutItem* child;
@@ -402,6 +401,7 @@ void MainViewWidget::loadMaxMainView()
         loadFullLetterWidget();
     else if(widgetState==3)
         loadFullFunctionWidget();
+    is_fullWid=true;
 }
 
 /**
@@ -525,6 +525,8 @@ void MainViewWidget::loadFullLetterWidget()
         }
     }
     mainLayout->addWidget(fullletterwid);
+    if(!is_fullWid || (is_fullWid && saveCurrentWidState!=2))
+        fullletterwid->enterAnimation();
     widgetState=2;
     saveCurrentWidState=2;
 }
@@ -550,6 +552,8 @@ void MainViewWidget::loadFullFunctionWidget()
 
     }
     mainLayout->addWidget(fullfunctionwid);
+    if(!is_fullWid || (is_fullWid && saveCurrentWidState!=3))
+        fullfunctionwid->enterAnimation();
     widgetState=3;
     saveCurrentWidState=3;
 }
@@ -625,6 +629,7 @@ void MainViewWidget::directoryChangedSlot()
                 QString desktopfn=fileInfo.fileName();
                 setting->setValue(desktopfn,datetime);
                 qDebug()<<"安装:"<<desktopfn;
+                break;
             }
 
         }
@@ -639,8 +644,6 @@ void MainViewWidget::directoryChangedSlot()
         {
             if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i)))
             {
-//                QString appname=pUkuiMenuInterface->getAppName(UkuiMenuInterface::desktopfpVector.at(i));
-//                QString appname=UkuiMenuInterface::appInfoVector.at(i).at(2);
                 QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
                 QFileInfo fileInfo(desktopfp);
                 QString desktopfn=fileInfo.fileName();
@@ -661,6 +664,7 @@ void MainViewWidget::directoryChangedSlot()
                 setting->sync();
                 setting->endGroup();
                 qDebug()<<"卸载:"<<desktopfn;
+                break;
             }
         }
         UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();

@@ -353,10 +353,10 @@ void FullFunctionWidget::resizeScrollAreaControls()
  */
 void FullFunctionWidget::initIconListWidget()
 {
-    iconlistLayout=new QHBoxLayout(iconlistWid);
-    iconlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
-    iconlistLayout->setSpacing(0);
-    iconlistWid->setLayout(iconlistLayout);
+//    iconlistLayout=new QHBoxLayout(iconlistWid);
+//    iconlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
+//    iconlistLayout->setSpacing(0);
+//    iconlistWid->setLayout(iconlistLayout);
 
     iconlistscrollarea=new ClassifyScrollArea(iconlistWid);
 //    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,iconlistWid->height());
@@ -369,10 +369,11 @@ void FullFunctionWidget::initIconListWidget()
 
     pIconListTopSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     pIconListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    iconlistLayout->addItem(pIconListTopSpacer);
-    iconlistLayout->addWidget(iconlistscrollarea);
-    iconlistLayout->addItem(pIconListBottomSpacer);
+//    iconlistLayout->addItem(pIconListTopSpacer);
+//    iconlistLayout->addWidget(iconlistscrollarea);
+//    iconlistLayout->addItem(pIconListBottomSpacer);
     pBtnGroup=new QButtonGroup(iconlistscrollareaWid);
+    pAnimation = new QPropertyAnimation(iconlistscrollarea, "geometry");
     initIconListScrollArea();
 }
 
@@ -381,8 +382,8 @@ void FullFunctionWidget::initIconListWidget()
  */
 void FullFunctionWidget::initIconListScrollArea()
 {
-    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,
-                                     classificationbtnlist.size()*Style::LeftBtnHeight+(classificationbtnlist.size()-1)*Style::LeftSpaceBetweenItem);
+//    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,
+//                                     classificationbtnlist.size()*Style::LeftBtnHeight+(classificationbtnlist.size()-1)*Style::LeftSpaceBetweenItem);
     for(int i=0;i<classificationbtnlist.size();i++)
     {
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
@@ -533,6 +534,21 @@ void FullFunctionWidget::valueChangedSlot(int value)
 //        }
 //    }
 //    iconlistscrollarea->verticalScrollBar()->setSliderPosition(buttonList.at(count)->pos().y());
+}
+
+void FullFunctionWidget::enterAnimation()
+{
+    int height=classificationbtnlist.size()*Style::LeftBtnHeight+(classificationbtnlist.size()-1)*Style::LeftSpaceBetweenItem;
+    pAnimation->setDuration(200);//动画总时间
+    pAnimation->setStartValue(QRect(0,(iconlistWid->height()-height)/2,
+                                    0,height));
+    pAnimation->setEndValue(QRect(Style::LeftMargin,
+                                  (iconlistWid->height()-height)/2,
+                                  Style::LeftBtnWidth,
+                                  height));
+    pAnimation->setEasingCurve(QEasingCurve::InQuart);
+//    pAnimation->setEasingCurve(QEasingCurve::Linear);
+    pAnimation->start();
 }
 
 void FullFunctionWidget::widgetMakeZero()

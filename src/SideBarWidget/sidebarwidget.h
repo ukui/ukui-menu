@@ -48,6 +48,7 @@ public:
     void loadMinSidebar();//加载默认侧边栏
     void loadMaxSidebar();//加载全屏侧边栏
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    void enterAnimation();
 
 private:
     Ui::SideBarWidget *ui;
@@ -93,7 +94,7 @@ private:
     RightClickMenu* shutdownmenu;
     RightClickMenu* othermenu;
 
-//    QPropertyAnimation* pAnimation=nullptr;
+    QPropertyAnimation* pAnimation=nullptr;
 //    QPropertyAnimation* pEnterAnimation=nullptr;
 //    QPropertyAnimation* pLeaveAnimation=nullptr;
     bool is_hover=false;

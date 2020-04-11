@@ -139,10 +139,8 @@ void SideBarWidget::addSidebarBtn()
     otherButtonList.append(controlbtn);
     otherButtonList.append(shutdownbtn);
 
-    QString fontsizestr=QString::number(Style::SideBarFontSize)+"px";
     char textstyle[100];
-    sprintf(textstyle,"QLabel{background:transparent;color:#ffffff;font-size:%s;}",
-            fontsizestr.toLocal8Bit().data());
+    sprintf(textstyle,"QLabel{background:transparent;color:#ffffff;}");
     commonusebtnname=new QLabel;
     commonusebtnname->setText(tr("Common"));
     commonusebtnname->setStyleSheet(textstyle);
@@ -216,6 +214,8 @@ void SideBarWidget::addSidebarBtn()
     pMainWidgetLayout->addWidget(computerbtn);
     pMainWidgetLayout->addWidget(controlbtn);
     pMainWidgetLayout->addWidget(shutdownbtn);
+
+    pAnimation = new QPropertyAnimation(pMainWidget, "geometry");
 }
 
 /**
@@ -498,8 +498,8 @@ void SideBarWidget::loadMaxSidebar()
     setMinBtn();
 
     this->setFixedSize(Style::SideBarWidWidth,Style::heightavailable);
-    pMainWidget->setGeometry(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
-                                   this->width(),this->height()));
+//    pMainWidget->setGeometry(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
+//                                   Style::SideBarBtnWidth,this->height()));
 
     minmaxWidget->setFixedSize(Style::MinMaxWidWidth,Style::MinMaxWidHeight);
     minmaxLayout->setContentsMargins(minmaxWidget->width()-minmaxbtn->width(),0,0,0);
@@ -603,6 +603,20 @@ void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
             button->setStyleSheet("background:transparent;");
         }
     }
+}
+
+void SideBarWidget::enterAnimation()
+{
+    pAnimation->setDuration(200);//动画总时间
+    pAnimation->setStartValue(QRect(this->width(),0,
+                                    0,this->height()));
+    pAnimation->setEndValue(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
+                                  Style::SideBarBtnWidth,this->height()));
+    pAnimation->setEasingCurve(QEasingCurve::InQuart);
+//    pAnimation->setEasingCurve(QEasingCurve::Linear);
+
+    pAnimation->start();
+
 }
 
 void SideBarWidget::widgetMakeZero()

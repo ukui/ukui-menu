@@ -190,13 +190,7 @@ void FullLetterWidget::updateAppListView()
     }
 
     //防止按钮位置偏移
-    letterlistLayout->removeItem(pLetterListTopSpacer);
-    letterlistLayout->removeWidget(letterlistscrollarea);
-    letterlistscrollarea->setParent(nullptr);
-    delete letterlistscrollarea;
-    letterlistLayout->removeItem(pLetterListBottomSpacer);
-    delete letterlistLayout;
-    initLetterListWidget();
+    initLetterListScrollArea();
 }
 
 /**
@@ -243,10 +237,10 @@ void FullLetterWidget::resizeScrollAreaControls()
  */
 void FullLetterWidget::initLetterListWidget()
 {
-    letterlistLayout=new QHBoxLayout;
-    letterlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
-    letterlistLayout->setSpacing(0);
-    letterlistWid->setLayout(letterlistLayout);
+//    letterlistLayout=new QHBoxLayout;
+//    letterlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
+//    letterlistLayout->setSpacing(0);
+//    letterlistWid->setLayout(letterlistLayout);
 
     letterlistscrollarea=new ClassifyScrollArea(letterlistWid);
     letterlistscrollareaWid=new QWidget(letterlistscrollarea);
@@ -259,11 +253,11 @@ void FullLetterWidget::initLetterListWidget()
 
     pLetterListTopSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     pLetterListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    letterlistLayout->addItem(pLetterListTopSpacer);
-    letterlistLayout->addWidget(letterlistscrollarea);
-    letterlistLayout->addItem(pLetterListBottomSpacer);
+//    letterlistLayout->addItem(pLetterListTopSpacer);
+//    letterlistLayout->addWidget(letterlistscrollarea);
+//    letterlistLayout->addItem(pLetterListBottomSpacer);
     pBtnGroup=new QButtonGroup(letterlistscrollareaWid);
-
+    pAnimation = new QPropertyAnimation(letterlistscrollarea, "geometry");
     initLetterListScrollArea();
 }
 
@@ -272,8 +266,8 @@ void FullLetterWidget::initLetterListWidget()
  */
 void FullLetterWidget::initLetterListScrollArea()
 {
-    letterlistscrollarea->setFixedSize(Style::LeftLetterBtnHeight*2,
-                                       (letterbtnlist.size()+1)*Style::LeftLetterBtnHeight);
+//    letterlistscrollarea->setFixedSize(Style::LeftLetterBtnHeight*2,
+//                                       (letterbtnlist.size()+1)*Style::LeftLetterBtnHeight);
     if(letterbtnlist.contains("&"))
         letterbtnlist.replace(letterbtnlist.indexOf("&"),"&&");
     for(int i=0;i<letterbtnlist.size();i++)
@@ -412,6 +406,20 @@ void FullLetterWidget::valueChangedSlot(int value)
         letterlistscrollarea->verticalScrollBar()->setSliderPosition(val);
     }
 
+}
+
+void FullLetterWidget::enterAnimation()
+{
+    pAnimation->setDuration(200);//动画总时间
+    pAnimation->setStartValue(QRect(0,(letterlistWid->height()-(letterbtnlist.size()+1)*Style::LeftLetterBtnHeight)/2,
+                                    0,(letterbtnlist.size()+1)*Style::LeftLetterBtnHeight));
+    pAnimation->setEndValue(QRect(Style::LeftMargin,
+                                  (letterlistWid->height()-(letterbtnlist.size()+1)*Style::LeftLetterBtnHeight)/2,
+                                  Style::LeftLetterBtnHeight*2,
+                            (letterbtnlist.size()+1)*Style::LeftLetterBtnHeight));
+    pAnimation->setEasingCurve(QEasingCurve::InQuart);
+//    pAnimation->setEasingCurve(QEasingCurve::Linear);
+    pAnimation->start();
 }
 
 void FullLetterWidget::widgetMakeZero()

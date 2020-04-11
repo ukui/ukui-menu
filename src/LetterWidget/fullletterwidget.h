@@ -39,6 +39,7 @@
 #include "src/Interface/ukuimenuinterface.h"
 #include <QButtonGroup>
 #include <QTimer>
+#include <QPropertyAnimation>
 #include "src/UtilityFunction/letterclassifybutton.h"
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
@@ -59,6 +60,7 @@ public:
     explicit FullLetterWidget(QWidget *parent=nullptr);
     ~FullLetterWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    void enterAnimation();
 
 private:
     Ui::FullLetterWidget *ui;
@@ -91,6 +93,8 @@ private:
     QButtonGroup* pBtnGroup=nullptr;
     QSpacerItem* pLetterListTopSpacer=nullptr;
     QSpacerItem* pLetterListBottomSpacer=nullptr;
+
+    QPropertyAnimation* pAnimation=nullptr;
 
     //计时器
     QTimer* timer=nullptr;

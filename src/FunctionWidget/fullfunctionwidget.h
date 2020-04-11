@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include <QTimer>
+#include <QPropertyAnimation>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
@@ -52,6 +53,7 @@ public:
     explicit FullFunctionWidget(QWidget *parent=nullptr);
     ~FullFunctionWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    void enterAnimation();
 
 private:
     Ui::FullFunctionWidget *ui;
@@ -86,6 +88,8 @@ private:
     QVBoxLayout* iconlistscrollareawidLayout=nullptr;
     QList<QAbstractButton*> buttonList;
     QButtonGroup* pBtnGroup=nullptr;
+
+    QPropertyAnimation* pAnimation=nullptr;
 
 //    int btnPos=0;
 //    int beforebtnPos=0;
