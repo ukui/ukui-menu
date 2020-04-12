@@ -104,7 +104,9 @@ public:
     static int RightMargin;//内右侧边距
     static int LeftBtnWidth;//按钮宽度
     static int LeftBtnHeight;//按钮高度
+    static int LeftLetterBtnHeight;//按钮高度
     static int LeftFontSize; //字体大小
+    static int LeftLetterFontSize; //字体大小
     static int LeftIconSize; //图标大小
     static int LeftSpaceIconLeft; //按钮内左侧边距
     static int LeftSpaceIconText; //按钮图标与文字内边距

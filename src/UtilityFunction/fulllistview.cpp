@@ -143,7 +143,7 @@ void FullListView::rightClickedSlot()
                 setting->beginGroup("lockapplication");
                 QStandardItem* item=new QStandardItem;
                 item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-                listmodel->insertRow(setting->childKeys().size()-1,item);
+                listmodel->insertRow(setting->allKeys().size()-1,item);
                 setting->endGroup();
                 Q_EMIT sendUpdateAppListSignal(desktopfp,0);
             }
@@ -153,7 +153,7 @@ void FullListView::rightClickedSlot()
                 setting->beginGroup("lockapplication");
                 QStandardItem* item=new QStandardItem;
                 item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-                listmodel->insertRow(setting->childKeys().size(),item);
+                listmodel->insertRow(setting->allKeys().size(),item);
                 setting->endGroup();
                 Q_EMIT sendUpdateAppListSignal(desktopfp,1);
             }

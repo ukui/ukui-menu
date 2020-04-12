@@ -139,7 +139,6 @@ void FullLetterWidget::fillAppList()
             connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
         }
     }
-
         resizeScrollAreaControls();
 }
 
@@ -148,7 +147,6 @@ void FullLetterWidget::fillAppList()
  */
 void FullLetterWidget::execApplication(QString appname)
 {
-    qDebug()<<appname;
     Q_EMIT sendHideMainWindowSignal();
     QString execpath=pUkuiMenuInterface->getAppExec(pUkuiMenuInterface->getDesktopPathByAppName(appname));
     //移除启动参数%u或者%U
@@ -221,7 +219,6 @@ void FullLetterWidget::resizeScrollAreaControls()
 
         }
 
-//        listview->setFixedSize(scrollarea->width()-12,listview->gridSize().height()*rowcount);
         listview->setFixedSize(scrollarea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
         if(row<scrollareawidLayout->count()/2-1)
         {
@@ -326,19 +323,23 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
 
 void FullLetterWidget::timeOutSlot()
 {
+    int speed=0;
+    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=300)
+        speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
+    else
+    {
+        int height=QApplication::primaryScreen()->geometry().height();
+        speed=height*170/1080;
+    }
+
     if(beginPos<endPos)
     {
-        if(endPos-scrollarea->verticalScrollBar()->sliderPosition()<50)
-            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
-        else
-            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+50);
+
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+speed);
     }
     else
     {
-        if(scrollarea->verticalScrollBar()->sliderPosition()-endPos<50)
-            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
-        else
-            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-50);
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-speed);
     }
     if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
             scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
@@ -364,13 +365,13 @@ void FullLetterWidget::valueChangedSlot(int value)
         else
             count++;
     }
-    if(count==letterbtnrowlist.count()-1 ||
-            scrollarea->verticalScrollBar()->sliderPosition()==scrollarea->verticalScrollBar()->maximum())
-    {
-        buttonList.at(letterbtnrowlist.count()-1)->setChecked(true);
-        letterlistscrollarea->verticalScrollBar()->setSliderPosition(letterlistscrollarea->verticalScrollBar()->maximum());
+//    if(count==letterbtnrowlist.count()-1 ||
+//            scrollarea->verticalScrollBar()->sliderPosition()==scrollarea->verticalScrollBar()->maximum())
+//    {
+//        buttonList.at(letterbtnrowlist.count()-1)->setChecked(true);
+//        letterlistscrollarea->verticalScrollBar()->setSliderPosition(letterlistscrollarea->verticalScrollBar()->maximum());
 
-    }
+//    }
 
     //向下滚动
     if((buttonList.at(count)->pos().y()+buttonList.at(count)->height()+letterlistscrollarea->widget()->pos().y()) >= letterlistscrollarea->height())
@@ -401,4 +402,5 @@ void FullLetterWidget::widgetMakeZero()
             break;
         }
     }
+    scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }

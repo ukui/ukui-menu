@@ -93,9 +93,6 @@ private:
     RightClickMenu* shutdownmenu;
     RightClickMenu* othermenu;
 
-//    QPropertyAnimation* pAnimation=nullptr;
-//    QPropertyAnimation* pEnterAnimation=nullptr;
-//    QPropertyAnimation* pLeaveAnimation=nullptr;
     bool is_hover=false;
 
 protected:

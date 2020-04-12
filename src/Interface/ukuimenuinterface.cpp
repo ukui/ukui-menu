@@ -609,7 +609,7 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
     setting->beginGroup("recentapp");
-    QStringList keys=setting->childKeys();
+    QStringList keys=setting->allKeys();
     for(int i=0;i<keys.count();i++)
     {
         QString desktopfp=QString("/usr/share/applications/"+keys.at(i));

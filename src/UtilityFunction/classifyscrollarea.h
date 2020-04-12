@@ -24,7 +24,7 @@
 class ClassifyScrollArea : public QScrollArea
 {
 public:
-    ClassifyScrollArea();
+    explicit ClassifyScrollArea(QWidget* parent=nullptr);
 
 protected:
     void initWid();

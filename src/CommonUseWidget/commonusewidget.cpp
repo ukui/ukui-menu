@@ -164,8 +164,6 @@ void CommonUseWidget::removeListAllItemSlot()
 
 void CommonUseWidget::getCommonUseAppList()
 {
-    QStringList desktopfnList;
-    desktopfnList.clear();
     setting->beginGroup("lockapplication");
     QStringList lockdesktopfnList=setting->allKeys();
     for(int i=0;i<lockdesktopfnList.count()-1;i++)
@@ -183,11 +181,20 @@ void CommonUseWidget::getCommonUseAppList()
         }
     setting->endGroup();
     setting->beginGroup("application");
-    Q_FOREACH(QString desktopfn,setting->childKeys())
-    {
-        if(setting->value(desktopfn)==2)
-            desktopfnList.append(desktopfn);
-    }
+    QStringList desktopfnList=setting->allKeys();
+    for(int i=0;i<desktopfnList.count()-1;i++)
+        for(int j=0;j<desktopfnList.count()-1-i;j++)
+        {
+            int value_1=setting->value(desktopfnList.at(j)).toInt();
+            int value_2=setting->value(desktopfnList.at(j+1)).toInt();
+            if(value_1 < value_2)
+            {
+                QString tmp=desktopfnList.at(j);
+                desktopfnList.replace(j,desktopfnList.at(j+1));
+                desktopfnList.replace(j+1,tmp);
+
+            }
+        }
     setting->endGroup();
     data.clear();
     Q_FOREACH(QString desktopfn,lockdesktopfnList)

@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include <QTimer>
+#include <QPropertyAnimation>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
@@ -86,9 +87,6 @@ private:
     QVBoxLayout* iconlistscrollareawidLayout=nullptr;
     QList<QAbstractButton*> buttonList;
     QButtonGroup* pBtnGroup=nullptr;
-
-    int btnPos=0;
-    int beforebtnPos=0;
 
     //计时器
     QTimer* timer=nullptr;

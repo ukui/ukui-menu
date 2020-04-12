@@ -84,6 +84,9 @@ protected:
 
 Q_SIGNALS:
     void buttonClicked(QAbstractButton* btn);
+
+private Q_SLOTS:
+    void reactToToggle(bool checked);
 };
 
 #endif // FUNCTIONCLASSIFYBUTTON_H

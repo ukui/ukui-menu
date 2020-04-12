@@ -18,7 +18,8 @@
 
 #include "classifyscrollarea.h"
 
-ClassifyScrollArea::ClassifyScrollArea()
+ClassifyScrollArea::ClassifyScrollArea(QWidget *parent):
+    QScrollArea(parent)
 {
     initWid();
 

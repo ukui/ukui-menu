@@ -139,10 +139,8 @@ void SideBarWidget::addSidebarBtn()
     otherButtonList.append(controlbtn);
     otherButtonList.append(shutdownbtn);
 
-    QString fontsizestr=QString::number(Style::SideBarFontSize)+"px";
     char textstyle[100];
-    sprintf(textstyle,"QLabel{background:transparent;color:#ffffff;font-size:%s;}",
-            fontsizestr.toLocal8Bit().data());
+    sprintf(textstyle,"QLabel{background:transparent;color:#ffffff;}");
     commonusebtnname=new QLabel;
     commonusebtnname->setText(tr("Common"));
     commonusebtnname->setStyleSheet(textstyle);
@@ -499,7 +497,7 @@ void SideBarWidget::loadMaxSidebar()
 
     this->setFixedSize(Style::SideBarWidWidth,Style::heightavailable);
     pMainWidget->setGeometry(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
-                                   this->width(),this->height()));
+                                   Style::SideBarBtnWidth,this->height()));
 
     minmaxWidget->setFixedSize(Style::MinMaxWidWidth,Style::MinMaxWidHeight);
     minmaxLayout->setContentsMargins(minmaxWidget->width()-minmaxbtn->width(),0,0,0);

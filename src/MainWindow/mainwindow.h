@@ -80,6 +80,7 @@ private Q_SLOTS:
     void showDefaultWidget();//显示默认窗口
     void recvHideMainWindowSlot();//接收隐藏主窗口信号
     void monitorResolutionChange(QRect rect);//监控屏幕分辨率
+    void primaryScreenChangedSlot(QScreen *screen);
     void panelShangedSlot(QString key);
 };
 

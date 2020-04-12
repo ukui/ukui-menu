@@ -88,6 +88,8 @@ private:
     QVBoxLayout* letterlistscrollareawidLayout=nullptr;
     QList<QAbstractButton*> buttonList;
     QButtonGroup* pBtnGroup=nullptr;
+    QSpacerItem* pLetterListTopSpacer=nullptr;
+    QSpacerItem* pLetterListBottomSpacer=nullptr;
 
     //计时器
     QTimer* timer=nullptr;

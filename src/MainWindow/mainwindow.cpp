@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timeOutKeys.clear();
     for(int i=0;i<dateTimeKeys.count();i++)
     {
-        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 7)
+        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 4)
         {
             timeOutKeys.append(dateTimeKeys.at(i));
         }
@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList recentAppKeys=setting->allKeys();
     for(int i=0;i<recentAppKeys.count();i++)
     {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 7)
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
             setting->remove(recentAppKeys.at(i));
     }
     setting->sync();
@@ -85,7 +85,8 @@ MainWindow::~MainWindow()
 void MainWindow::initMainWindow()
 {
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::SplashScreen);
-    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::Popup);
+//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::Popup);
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
 //    this->setStyleSheet("background:transparent;");
 //    char style[100];
 //    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
@@ -169,6 +170,8 @@ void MainWindow::initMainWindow()
 
     connect(QApplication::primaryScreen(),SIGNAL(geometryChanged(QRect)),
             this,SLOT(monitorResolutionChange(QRect)));
+    connect(qApp,SIGNAL(primaryScreenChanged(QScreen*)),this,
+            SLOT(primaryScreenChangedSlot(QScreen*)));
 
     connect(gsetting,SIGNAL(changed(QString)),
             this,SLOT(panelShangedSlot(QString)));
@@ -265,14 +268,16 @@ void MainWindow::showFullScreenWidget()
         position=0;
         panelSize=46;
     }
+    int x=QApplication::primaryScreen()->geometry().x();
+    int y=QApplication::primaryScreen()->geometry().y();
     if(position==0)
-        this->setGeometry(QRect(0,0,Style::widthavailable,Style::heightavailable));
+        this->setGeometry(QRect(x,y,Style::widthavailable,Style::heightavailable));
     else if(position==1)
-        this->setGeometry(QRect(0,panelSize,Style::widthavailable,Style::heightavailable));
+        this->setGeometry(QRect(x,panelSize,Style::widthavailable,Style::heightavailable));
     else if(position==2)
-        this->setGeometry(QRect(panelSize,0,Style::widthavailable,Style::heightavailable));
+        this->setGeometry(QRect(panelSize,y,Style::widthavailable,Style::heightavailable));
     else
-        this->setGeometry(QRect(0,0,Style::widthavailable,Style::heightavailable));
+        this->setGeometry(QRect(x,y,Style::widthavailable,Style::heightavailable));
     sidebarwid->loadMaxSidebar();
     mainviewwid->loadMaxMainView();
     //移除分割线
@@ -307,25 +312,27 @@ void MainWindow::showDefaultWidget()
         panelSize=46;
     }
     char style[100];
+    int x=QApplication::primaryScreen()->geometry().x();
+    int y=QApplication::primaryScreen()->geometry().y();
     if(position==0)
     {
         sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
-        this->setGeometry(QRect(0,Style::heightavailable-590,376,590));
+        this->setGeometry(QRect(x,Style::heightavailable-590,376,590));
     }
     else if(position==1)
     {
         sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
-        this->setGeometry(QRect(0,panelSize,376,590));
+        this->setGeometry(QRect(x,panelSize,376,590));
     }
     else if(position==2)
     {
         sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
-        this->setGeometry(QRect(panelSize,0,376,590));
+        this->setGeometry(QRect(panelSize,y,376,590));
     }
     else
     {
         sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
-        this->setGeometry(QRect(Style::widthavailable-376,0,376,590));
+        this->setGeometry(QRect(Style::widthavailable-376,y,376,590));
     }
     sidebarwid->loadMinSidebar();
     mainviewwid->loadMinMainView();
@@ -380,6 +387,13 @@ void MainWindow::mainWindowMakeZero()
 void MainWindow::monitorResolutionChange(QRect rect)
 {
     Q_UNUSED(rect);
+    qApp->quit();
+    QProcess::startDetached(QString("/usr/bin/ukui-menu"));
+}
+
+void MainWindow::primaryScreenChangedSlot(QScreen *screen)
+{
+    Q_UNUSED(screen);
     qApp->quit();
     QProcess::startDetached(QString("/usr/bin/ukui-menu"));
 }

@@ -50,8 +50,8 @@ void LetterButtonWidget::initWidget()
 
     char btncolor[400];
     sprintf(btncolor,"QToolButton{background:transparent;color:#ffffff;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;}\
-            QToolButton:pressed{background-color:%s;color:#ffffff;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;border-radius:2px;}\
+            QToolButton:pressed{background-color:%s;color:#ffffff;border-radius:2px;}\
             QToolButton:disabled{color:rgba(255, 255, 255, 0.25);}",
             ClassifyBtnHoverBackground,
             ClassifyBtnHoverBackground);

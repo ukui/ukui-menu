@@ -358,7 +358,7 @@ void FullFunctionWidget::initIconListWidget()
     iconlistLayout->setSpacing(0);
     iconlistWid->setLayout(iconlistLayout);
 
-    iconlistscrollarea=new ClassifyScrollArea();
+    iconlistscrollarea=new ClassifyScrollArea(iconlistWid);
 //    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,iconlistWid->height());
     iconlistscrollareaWid=new QWidget;
     iconlistscrollareawidLayout=new QVBoxLayout;
@@ -400,7 +400,6 @@ void FullFunctionWidget::initIconListScrollArea()
                                                                    true);
         buttonList.append(iconbtn);
         iconlistscrollareawidLayout->addWidget(iconbtn);
-//        iconlistscrollareawidLayout->insertWidget(i+1,iconbtn);
         connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
     }
 
@@ -420,8 +419,8 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
     Q_FOREACH (QAbstractButton* button, buttonList) {
 
         FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-        QLayoutItem* iconitem=fcbutton->layout()->itemAt(0);
-        QLabel* iconlabel=qobject_cast<QLabel*>(iconitem->widget());
+//        QLayoutItem* iconitem=fcbutton->layout()->itemAt(0);
+//        QLabel* iconlabel=qobject_cast<QLabel*>(iconitem->widget());
         QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
         QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
 
@@ -430,52 +429,37 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
             int num=classificationbtnlist.indexOf(textlabel->text());
             if(num!=-1)
             {
-                beforebtnPos=scrollarea->verticalScrollBar()->sliderPosition();
+                beginPos=scrollarea->verticalScrollBar()->sliderPosition();
                 endPos=classificationbtnrowlist.at(num).toInt();
                 scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 timer->start(1);
             }
-
-            QSvgRenderer* svgRender = new QSvgRenderer;
-            svgRender->load(iconlightlist.at(functionnamelist.indexOf(textlabel->text())));
-            QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
-            pixmap->fill(Qt::transparent);
-            QPainter p(pixmap);
-            svgRender->render(&p);
-            iconlabel->setPixmap(*pixmap);
-            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
-            fcbutton->is_pressed=true;
-
+            fcbutton->setChecked(true);
         }
         else{
-            QSvgRenderer* svgRender = new QSvgRenderer;
-            svgRender->load(iconlist.at(functionnamelist.indexOf(textlabel->text())));
-            QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
-            pixmap->fill(Qt::transparent);
-            QPainter p(pixmap);
-            svgRender->render(&p);
-            iconlabel->setPixmap(*pixmap);
-            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);");
-            fcbutton->is_pressed=false;
+            fcbutton->setChecked(false);
         }
     }
 }
 
 void FullFunctionWidget::timeOutSlot()
 {
+    int speed=0;
+    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=300)
+        speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
+    else
+    {
+        int height=QApplication::primaryScreen()->geometry().height();
+        speed=height*170/1080;
+    }
+
     if(beginPos<endPos)
     {
-        if(endPos-scrollarea->verticalScrollBar()->sliderPosition()<50)
-            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
-        else
-            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+50);
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+speed);
     }
     else
     {
-        if(scrollarea->verticalScrollBar()->sliderPosition()-endPos<50)
-            scrollarea->verticalScrollBar()->setSliderPosition(endPos);
-        else
-            scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-50);
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-speed);
     }
     if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
             scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
@@ -497,36 +481,13 @@ void FullFunctionWidget::valueChangedSlot(int value)
                 value <classificationbtnrowlist.at(count+1).toInt())
         {
             Q_FOREACH (QAbstractButton* button, buttonList) {
-
                 FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-                QLayoutItem* iconitem=fcbutton->layout()->itemAt(0);
-                QLabel* iconlabel=qobject_cast<QLabel*>(iconitem->widget());
-                QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
-                QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
-
                 if(count==buttonList.indexOf(button))
                 {
-                    QSvgRenderer* svgRender = new QSvgRenderer;
-                    svgRender->load(iconlightlist.at(functionnamelist.indexOf(textlabel->text())));
-                    QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
-                    pixmap->fill(Qt::transparent);
-                    QPainter p(pixmap);
-                    svgRender->render(&p);
-                    iconlabel->setPixmap(*pixmap);
-                    textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
-                    fcbutton->is_pressed=true;
-
+                    fcbutton->setChecked(true);
                 }
                 else{
-                    QSvgRenderer* svgRender = new QSvgRenderer;
-                    svgRender->load(iconlist.at(functionnamelist.indexOf(textlabel->text())));
-                    QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
-                    pixmap->fill(Qt::transparent);
-                    QPainter p(pixmap);
-                    svgRender->render(&p);
-                    iconlabel->setPixmap(*pixmap);
-                    textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);");
-                    fcbutton->is_pressed=false;
+                    fcbutton->setChecked(false);
                 }
             }
             break;
@@ -534,44 +495,44 @@ void FullFunctionWidget::valueChangedSlot(int value)
         else
             count++;
     }
-    if(count==classificationbtnrowlist.count()-1 ||
-            scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
-    {
-        Q_FOREACH (QAbstractButton* button, buttonList) {
+//    if(count==classificationbtnrowlist.count()-1 ||
+//            scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
+//    {
+//        Q_FOREACH (QAbstractButton* button, buttonList) {
 
-            FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-            QLayoutItem* iconitem=fcbutton->layout()->itemAt(0);
-            QLabel* iconlabel=qobject_cast<QLabel*>(iconitem->widget());
-            QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
-            QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
+//            FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
+//            QLayoutItem* iconitem=fcbutton->layout()->itemAt(0);
+//            QLabel* iconlabel=qobject_cast<QLabel*>(iconitem->widget());
+//            QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
+//            QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
 
-            if(classificationbtnrowlist.count()-1==buttonList.indexOf(button))
-            {
-                QSvgRenderer* svgRender = new QSvgRenderer;
-                svgRender->load(iconlightlist.at(functionnamelist.indexOf(textlabel->text())));
-                QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
-                pixmap->fill(Qt::transparent);
-                QPainter p(pixmap);
-                svgRender->render(&p);
-                iconlabel->setPixmap(*pixmap);
-                textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
-                fcbutton->is_pressed=true;
+//            if(classificationbtnrowlist.count()-1==buttonList.indexOf(button))
+//            {
+//                QSvgRenderer* svgRender = new QSvgRenderer;
+//                svgRender->load(iconlightlist.at(functionnamelist.indexOf(textlabel->text())));
+//                QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+//                pixmap->fill(Qt::transparent);
+//                QPainter p(pixmap);
+//                svgRender->render(&p);
+//                iconlabel->setPixmap(*pixmap);
+//                textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
+//                fcbutton->is_pressed=true;
 
-            }
-            else{
-                QSvgRenderer* svgRender = new QSvgRenderer;
-                svgRender->load(iconlist.at(functionnamelist.indexOf(textlabel->text())));
-                QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
-                pixmap->fill(Qt::transparent);
-                QPainter p(pixmap);
-                svgRender->render(&p);
-                iconlabel->setPixmap(*pixmap);
-                textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);");
-                fcbutton->is_pressed=false;
-            }
-        }
-    }
-    iconlistscrollarea->verticalScrollBar()->setSliderPosition(buttonList.at(count)->pos().y());
+//            }
+//            else{
+//                QSvgRenderer* svgRender = new QSvgRenderer;
+//                svgRender->load(iconlist.at(functionnamelist.indexOf(textlabel->text())));
+//                QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
+//                pixmap->fill(Qt::transparent);
+//                QPainter p(pixmap);
+//                svgRender->render(&p);
+//                iconlabel->setPixmap(*pixmap);
+//                textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);");
+//                fcbutton->is_pressed=false;
+//            }
+//        }
+//    }
+//    iconlistscrollarea->verticalScrollBar()->setSliderPosition(buttonList.at(count)->pos().y());
 }
 
 void FullFunctionWidget::widgetMakeZero()
@@ -585,4 +546,5 @@ void FullFunctionWidget::widgetMakeZero()
             break;
         }
     }
+    scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }

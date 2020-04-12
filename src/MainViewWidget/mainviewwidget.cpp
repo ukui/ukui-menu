@@ -196,6 +196,7 @@ void MainViewWidget::initQueryLineEdit()
     queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     querylineEdit->setFocusPolicy(Qt::ClickFocus);
     querylineEdit->installEventFilter(this);
+    querylineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
     searchappthread=new SearchAppThread;
     connect(this,SIGNAL(sendSearchKeyword(QString)),
@@ -343,7 +344,6 @@ void MainViewWidget::loadMinMainView()
     topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
     querylineEdit->setFixedSize(288,30);
 
-    is_fullWid=false;
     if(widgetState==0)
     {
         QLayoutItem* child;
@@ -364,6 +364,7 @@ void MainViewWidget::loadMinMainView()
         loadLetterWidget();
     else
         loadFunctionWidget();
+    is_fullWid=false;
 }
 
 /**
@@ -380,7 +381,6 @@ void MainViewWidget::loadMaxMainView()
                                   0,
                                   (topWidget->width()-Style::LeftWidWidth-querylineEdit->width())/2,
                                   0);
-    is_fullWid=true;
     if(widgetState==0)
     {
         QLayoutItem* child;
@@ -401,6 +401,7 @@ void MainViewWidget::loadMaxMainView()
         loadFullLetterWidget();
     else if(widgetState==3)
         loadFullFunctionWidget();
+    is_fullWid=true;
 }
 
 /**
@@ -566,37 +567,39 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
                                 "org.ayatana.bamf.application",QDBusConnection::sessionBus());
         QDBusReply<QString> replyapp =ifaceapp.call("DesktopFile");
         QString desktopfp=replyapp.value();
-        QFileInfo fileInfo(desktopfp);
-        QString desktopfn=fileInfo.fileName();
-
-        QString dateTimeKey;
-        dateTimeKey.clear();
-        if(!desktopfp.isEmpty())
+        QStringList desktopfpList=pUkuiMenuInterface->getDesktopFilePath();
+        if(desktopfpList.contains(desktopfp))
         {
-            setting->beginGroup("application");
-            if(!setting->contains(desktopfn))
-            {
-                setting->setValue(desktopfn,1);
-                setting->sync();
-            }
-            else if(setting->value(desktopfn).toInt()==1)
-            {
-                setting->setValue(desktopfn,2);
-                setting->sync();
-                dateTimeKey=desktopfn;
-                Q_EMIT viewOpenedSignal();
-            }
-            setting->endGroup();
-        }
+            QFileInfo fileInfo(desktopfp);
+            QString desktopfn=fileInfo.fileName();
 
-        if(!dateTimeKey.isEmpty())
-        {
-            QDateTime dt=QDateTime::currentDateTime();
-            int datetime=dt.toTime_t();
-            setting->beginGroup("datetime");
-            setting->setValue(dateTimeKey,datetime);
-            setting->sync();
-            setting->endGroup();
+            QString dateTimeKey;
+            dateTimeKey.clear();
+            if(!desktopfn.isEmpty())
+            {
+                setting->beginGroup("lockapplication");
+                bool ret=setting->contains(desktopfn);
+                setting->endGroup();
+                if(!ret)
+                {
+                    setting->beginGroup("application");
+                    setting->setValue(desktopfn,setting->value(desktopfn).toInt()+1);
+                    dateTimeKey=desktopfn;
+                    Q_EMIT viewOpenedSignal();
+                    setting->sync();
+                    setting->endGroup();
+                }
+            }
+
+            if(!dateTimeKey.isEmpty())
+            {
+                QDateTime dt=QDateTime::currentDateTime();
+                int datetime=dt.toTime_t();
+                setting->beginGroup("datetime");
+                setting->setValue(dateTimeKey,datetime);
+                setting->sync();
+                setting->endGroup();
+            }
         }
     }
 }
@@ -622,6 +625,7 @@ void MainViewWidget::directoryChangedSlot()
                 QString desktopfn=fileInfo.fileName();
                 setting->setValue(desktopfn,datetime);
                 qDebug()<<"安装:"<<desktopfn;
+                break;
             }
 
         }
@@ -636,8 +640,6 @@ void MainViewWidget::directoryChangedSlot()
         {
             if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i)))
             {
-//                QString appname=pUkuiMenuInterface->getAppName(UkuiMenuInterface::desktopfpVector.at(i));
-//                QString appname=UkuiMenuInterface::appInfoVector.at(i).at(2);
                 QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
                 QFileInfo fileInfo(desktopfp);
                 QString desktopfn=fileInfo.fileName();
@@ -658,6 +660,7 @@ void MainViewWidget::directoryChangedSlot()
                 setting->sync();
                 setting->endGroup();
                 qDebug()<<"卸载:"<<desktopfn;
+                break;
             }
         }
         UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
