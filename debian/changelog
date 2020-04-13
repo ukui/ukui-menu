@@ -1,3 +1,14 @@
+ukui-menu (2.0.6-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+    - Fix that the 'recent' page is empty. (LP: #1870954)
+    - Fix the focus issue.
+    - Fix the issues when change primary screen.
+  * debian/control:
+    - Add bamfdaemon to depends and libbamf3-dev to build-depends.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 13 Apr 2020 15:47:37 +0800
+
 ukui-menu (2.0.5-1) unstable; urgency=medium
 
   * New upstream bugfix release.

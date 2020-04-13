@@ -20,9 +20,6 @@ Package: ukui-menu
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         libgsettings-qt1,
-         libbamf3-2,
-         gir1.2-bamf-3,
          bamfdaemon
 Description: Advanced ukui menu
  UKUI menu provides start menu development library and advanced
