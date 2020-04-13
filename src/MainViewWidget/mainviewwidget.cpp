@@ -21,6 +21,7 @@
 #include "src/Style/style.h"
 #include <QSvgRenderer>
 #include <QPainter>
+#include <libbamf/bamf-matcher.h>
 #include <QDebug>
 
 MainViewWidget::MainViewWidget(QWidget *parent) :
@@ -130,6 +131,7 @@ void MainViewWidget::initWidget()
     loadLetterWidget();
 
     //监控应用进程开启
+    bamf_matcher_get_default();
     QDBusConnection::sessionBus().connect("org.ayatana.bamf","/org/ayatana/bamf/matcher","org.ayatana.bamf.matcher",
                                          QString("ViewOpened"),this,SLOT(ViewOpenedSlot(QDBusMessage)));
 
