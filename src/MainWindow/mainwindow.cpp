@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     pUkuiMenuInterface=new UkuiMenuInterface;
-    UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
+    UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -152,6 +152,10 @@ void MainWindow::initMainWindow()
         sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
     frame->setStyleSheet(style);
 
+    pAnimation = new QPropertyAnimation(this, "geometry");
+    connect(pAnimation,SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)),
+            this,SLOT(stateChangedSlot(QAbstractAnimation::State,QAbstractAnimation::State)));
+
     connect(sidebarwid, SIGNAL(sendCommonUseBtnSignal()), mainviewwid, SLOT(loadCommonUseWidget()));
     connect(sidebarwid,SIGNAL(sendLetterBtnSignal()), mainviewwid, SLOT(loadLetterWidget()));
     connect(sidebarwid, SIGNAL(sendFunctionBtnSignal()), mainviewwid, SLOT(loadFunctionWidget()));
@@ -270,25 +274,41 @@ void MainWindow::showFullScreenWidget()
     }
     int x=QApplication::primaryScreen()->geometry().x();
     int y=QApplication::primaryScreen()->geometry().y();
+    QRect startRect;
+    QRect endRect;
     if(position==0)
-        this->setGeometry(QRect(x,y,Style::widthavailable,Style::heightavailable));
+    {
+        startRect.setRect(x,Style::heightavailable-590,376,590);
+        endRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
+    }
     else if(position==1)
-        this->setGeometry(QRect(x,panelSize,Style::widthavailable,Style::heightavailable));
+    {
+        startRect.setRect(x,panelSize,376,590);
+        endRect.setRect(x,panelSize,Style::widthavailable,Style::heightavailable);
+    }
     else if(position==2)
-        this->setGeometry(QRect(panelSize,y,Style::widthavailable,Style::heightavailable));
+    {
+        startRect.setRect(panelSize,y,376,590);
+        endRect.setRect(panelSize,y,Style::widthavailable,Style::heightavailable);
+    }
     else
-        this->setGeometry(QRect(x,y,Style::widthavailable,Style::heightavailable));
-    sidebarwid->loadMaxSidebar();
-    mainviewwid->loadMaxMainView();
-    sidebarwid->enterAnimation();
-    //移除分割线
+    {
+        startRect.setRect(Style::widthavailable-376,y,376,590);
+        endRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
+    }
+
+    mainlayout->removeWidget(mainviewwid);
+    mainviewwid->setParent(nullptr);
     mainlayout->removeWidget(line);
     line->setParent(nullptr);
-    this->repaint();
+    mainlayout->removeWidget(sidebarwid);
+    sidebarwid->setParent(nullptr);
 
-    char style[100];
-    sprintf(style, "border:0px;background-color:%s;border-top-right-radius:0px;",DefaultBackground);
-    frame->setStyleSheet(style);
+    pAnimation->setDuration(100);//动画总时间
+    pAnimation->setStartValue(startRect);
+    pAnimation->setEndValue(endRect);
+    pAnimation->setEasingCurve(QEasingCurve::InQuart);
+    pAnimation->start();
 }
 
 /**
@@ -315,32 +335,68 @@ void MainWindow::showDefaultWidget()
     char style[100];
     int x=QApplication::primaryScreen()->geometry().x();
     int y=QApplication::primaryScreen()->geometry().y();
+    QRect startRect;
+    QRect endRect;
     if(position==0)
     {
+        endRect.setRect(x,Style::heightavailable-590,376,590);
+        startRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
         sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
-        this->setGeometry(QRect(x,Style::heightavailable-590,376,590));
     }
     else if(position==1)
     {
+        endRect.setRect(x,panelSize,376,590);
+        startRect.setRect(x,panelSize,Style::widthavailable,Style::heightavailable);
         sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
-        this->setGeometry(QRect(x,panelSize,376,590));
     }
     else if(position==2)
     {
+        endRect.setRect(panelSize,y,376,590);
+        startRect.setRect(panelSize,y,Style::widthavailable,Style::heightavailable);
         sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
-        this->setGeometry(QRect(panelSize,y,376,590));
     }
     else
     {
+        endRect.setRect(Style::widthavailable-376,y,376,590);
+        startRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
         sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
-        this->setGeometry(QRect(Style::widthavailable-376,y,376,590));
     }
-    sidebarwid->loadMinSidebar();
-    mainviewwid->loadMinMainView();
-    //插入分割线
-    mainlayout->insertWidget(1,line);
-//    this->repaint();
-    frame->setStyleSheet(style);
+
+    mainlayout->removeWidget(mainviewwid);
+    mainviewwid->setParent(nullptr);
+    mainlayout->removeWidget(sidebarwid);
+    sidebarwid->setParent(nullptr);
+
+    pAnimation->setDuration(100);//动画总时间
+    pAnimation->setStartValue(startRect);
+    pAnimation->setEndValue(endRect);
+    pAnimation->setEasingCurve(QEasingCurve::InQuart);
+    pAnimation->start();
+}
+
+void MainWindow::stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+{
+    if(is_fullscreen && newState==QAbstractAnimation::Stopped)
+    {
+        mainlayout->addWidget(mainviewwid);
+        mainlayout->addWidget(sidebarwid);
+        sidebarwid->loadMaxSidebar();
+        mainviewwid->loadMaxMainView();
+        sidebarwid->enterAnimation();
+//        this->repaint();
+    }
+    if(!is_fullscreen && newState==QAbstractAnimation::Stopped)
+    {
+        mainlayout->addWidget(mainviewwid);
+        mainlayout->addWidget(line);
+        mainlayout->addWidget(sidebarwid);
+        mainviewwid->setVisible(true);
+        sidebarwid->setVisible(true);
+        sidebarwid->loadMinSidebar();
+        mainviewwid->loadMinMainView();
+    //    this->repaint();
+    }
+    setFrameStyle();
 }
 
 /**
@@ -355,8 +411,8 @@ bool MainWindow::event ( QEvent * event )
             this->hide();
 //            qDebug()<<qApp->applicationState();
 //            this->setWindowState(this->windowState() & Qt::WindowMinimized);
-//            mainviewwid->widgetMakeZero();
-//            sidebarwid->widgetMakeZero();
+            mainviewwid->widgetMakeZero();
+            sidebarwid->widgetMakeZero();
         }
    }
    return QWidget::event(event);
@@ -368,21 +424,99 @@ bool MainWindow::event ( QEvent * event )
 void MainWindow::recvHideMainWindowSlot()
 {
     this->hide();
-//    mainviewwid->widgetMakeZero();
-//    sidebarwid->widgetMakeZero();
+    mainviewwid->widgetMakeZero();
+    sidebarwid->widgetMakeZero();
 }
 
 bool MainWindow::checkIfFullScreen()
 {
     //默认开启默认态
-    showDefaultWidget();
-    return is_fullscreen;
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
+        if(gsetting->get("menufull-screen").toBool())
+            return true;
+        else
+            return false;
+    }
+    else
+        return false;
 }
 
-void MainWindow::mainWindowMakeZero()
+void MainWindow::setDefaultWidget()
 {
-    mainviewwid->widgetMakeZero();
-    sidebarwid->widgetMakeZero();
+    is_fullscreen=false;
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
+    int position=0;
+    int panelSize=0;
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        position=gsetting->get("panelposition").toInt();
+        panelSize=gsetting->get("panelsize").toInt();
+    }
+    else
+    {
+        position=0;
+        panelSize=46;
+    }
+    int x=QApplication::primaryScreen()->geometry().x();
+    int y=QApplication::primaryScreen()->geometry().y();
+    if(position==0)
+        this->setGeometry(QRect(x,QApplication::primaryScreen()->geometry().height()-panelSize-590,
+                                  376,590));
+    else if(position==1)
+        this->setGeometry(QRect(x,panelSize,376,590));
+    else if(position==2)
+        this->setGeometry(QRect(panelSize,y,376,590));
+    else
+        this->setGeometry(QRect(QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
+                                  376,590));
+    mainlayout->addWidget(mainviewwid);
+    mainlayout->addWidget(line);
+    mainlayout->addWidget(sidebarwid);
+    mainviewwid->setVisible(true);
+    sidebarwid->setVisible(true);
+    sidebarwid->loadMinSidebar();
+    mainviewwid->loadMinMainView();
+    setFrameStyle();
+}
+
+void MainWindow::setFullScreenWidget()
+{
+    is_fullscreen=true;
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
+    int position=0;
+    int panelSize=0;
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        position=gsetting->get("panelposition").toInt();
+        panelSize=gsetting->get("panelsize").toInt();
+    }
+    else
+    {
+        position=0;
+        panelSize=46;
+    }
+    int x=QApplication::primaryScreen()->geometry().x();
+    int y=QApplication::primaryScreen()->geometry().y();
+    if(position==0)
+        this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+    else if(position==1)
+        this->setGeometry(QRect(x,panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+    else if(position==2)
+        this->setGeometry(QRect(panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+    else
+        this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+    mainlayout->addWidget(mainviewwid);
+    mainlayout->addWidget(sidebarwid);
+    sidebarwid->loadMaxSidebar();
+    mainviewwid->changeIsFullscreenValue();
+    mainviewwid->loadMaxMainView();
+    sidebarwid->enterAnimation();
+    setFrameStyle();
 }
 
 void MainWindow::monitorResolutionChange(QRect rect)

@@ -32,6 +32,7 @@
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
 #include <QSettings>
+#include <QPropertyAnimation>
 #include "src/Style/style.h"
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
@@ -48,8 +49,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void setFrameStyle();//设置QFrame样式
-    void mainWindowMakeZero();//窗口状态归零
     bool checkIfFullScreen();//检查是否全屏
+    void setDefaultWidget();
+    void setFullScreenWidget();
 
 private:
     Ui::MainWindow *ui;
@@ -69,6 +71,8 @@ private:
     QPropertyAnimation* pEnterAnimation=nullptr;
     QPropertyAnimation* pLeaveAnimation=nullptr;
 
+    QPropertyAnimation* pAnimation=nullptr;
+
 protected:
     void initMainWindow();
     bool event(QEvent *event);//鼠标点击窗口外部事件
@@ -82,6 +86,7 @@ private Q_SLOTS:
     void monitorResolutionChange(QRect rect);//监控屏幕分辨率
     void primaryScreenChangedSlot(QScreen *screen);
     void panelShangedSlot(QString key);
+    void stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 };
 
 #endif // MAINWINDOW_H

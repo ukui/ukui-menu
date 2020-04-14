@@ -148,7 +148,7 @@ void FullFunctionWidget::initAppListWidget()
     scrollarea->setWidgetResizable(true);
     scrollareawidLayout=new QVBoxLayout;
     scrollareawidLayout->setContentsMargins(0,0,0,0);
-    scrollareawidLayout->setSpacing(0);
+    scrollareawidLayout->setSpacing(10);
     scrollareawid->setLayout(scrollareawidLayout);
     layout->addWidget(scrollarea);
     connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
@@ -340,7 +340,7 @@ void FullFunctionWidget::resizeScrollAreaControls()
         listview->setFixedSize(scrollarea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
         if(row<scrollareawidLayout->count()/2-1)
         {
-            pos+=(20+listview->height());
+            pos+=(20+20+listview->height());
             classificationbtnrowlist.append(QString::number(pos));
         }
         row++;

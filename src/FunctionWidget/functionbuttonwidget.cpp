@@ -150,9 +150,9 @@ void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
             if(list.indexOf(functionnamelist.at(row*2+col))==-1)
             {
                 iconbtn=new FunctionClassifyButton(this,
-                                                   106,
-                                                   48,
-                                                   19,
+                                                   Style::LeftBtnWidth,
+                                                   Style::LeftBtnHeight,
+                                                   Style::LeftIconSize,
                                                    Style::LeftFontSize,
                                                    icondisabledlist.at(row*2+col),
                                                    icondisabledlist.at(row*2+col),
@@ -166,9 +166,9 @@ void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
             }
             else {
                 iconbtn=new FunctionClassifyButton(this,
-                                                   106,
-                                                   48,
-                                                   19,
+                                                   Style::LeftBtnWidth,
+                                                   Style::LeftBtnHeight,
+                                                   Style::LeftIconSize,
                                                    Style::LeftFontSize,
                                                    iconlist.at(row*2+col),
                                                    iconlightlist.at(row*2+col),

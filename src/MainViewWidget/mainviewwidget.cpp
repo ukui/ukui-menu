@@ -21,6 +21,7 @@
 #include "src/Style/style.h"
 #include <QSvgRenderer>
 #include <QPainter>
+#include <libbamf/bamf-matcher.h>
 #include <QDebug>
 
 MainViewWidget::MainViewWidget(QWidget *parent) :
@@ -130,6 +131,7 @@ void MainViewWidget::initWidget()
     loadLetterWidget();
 
     //监控应用进程开启
+    bamf_matcher_get_default();
     QDBusConnection::sessionBus().connect("org.ayatana.bamf","/org/ayatana/bamf/matcher","org.ayatana.bamf.matcher",
                                          QString("ViewOpened"),this,SLOT(ViewOpenedSlot(QDBusMessage)));
 
@@ -281,7 +283,7 @@ void MainViewWidget::searchAppSlot(QString arg)
                 }
             }
             widgetState=0;
-            if(is_fullWid==false)
+            if(is_fullscreen==false)
             {
                 mainLayout->addWidget(searchresultwid);
             }
@@ -301,7 +303,7 @@ void MainViewWidget::searchAppSlot(QString arg)
                 childWid->setParent(nullptr);
             }
         }
-        if(is_fullWid)
+        if(is_fullscreen)
         {
             if(saveCurrentWidState==1)
                 loadFullCommonUseWidget();
@@ -364,7 +366,7 @@ void MainViewWidget::loadMinMainView()
         loadLetterWidget();
     else
         loadFunctionWidget();
-    is_fullWid=false;
+    is_fullscreen=false;
 }
 
 /**
@@ -401,7 +403,12 @@ void MainViewWidget::loadMaxMainView()
         loadFullLetterWidget();
     else if(widgetState==3)
         loadFullFunctionWidget();
-    is_fullWid=true;
+    is_fullscreen=true;
+}
+
+void MainViewWidget::changeIsFullscreenValue()
+{
+    is_fullscreen=false;
 }
 
 /**
@@ -525,7 +532,7 @@ void MainViewWidget::loadFullLetterWidget()
         }
     }
     mainLayout->addWidget(fullletterwid);
-    if(!is_fullWid || (is_fullWid && saveCurrentWidState!=2))
+    if(!is_fullscreen || (is_fullscreen && saveCurrentWidState!=2))
         fullletterwid->enterAnimation();
     widgetState=2;
     saveCurrentWidState=2;
@@ -552,7 +559,7 @@ void MainViewWidget::loadFullFunctionWidget()
 
     }
     mainLayout->addWidget(fullfunctionwid);
-    if(!is_fullWid || (is_fullWid && saveCurrentWidState!=3))
+    if(!is_fullscreen || (is_fullscreen && saveCurrentWidState!=3))
         fullfunctionwid->enterAnimation();
     widgetState=3;
     saveCurrentWidState=3;
@@ -635,7 +642,7 @@ void MainViewWidget::directoryChangedSlot()
         }
         setting->endGroup();
         UkuiMenuInterface::appInfoVector.clear();
-        UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
+        UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
         Q_EMIT directoryChangedSignal();
     }
     else//软件卸载
@@ -667,7 +674,7 @@ void MainViewWidget::directoryChangedSlot()
                 break;
             }
         }
-        UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->create_appinfo_vector();
+        UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
         Q_EMIT directoryChangedSignal();
     }
 }

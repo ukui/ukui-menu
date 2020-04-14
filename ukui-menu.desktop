@@ -9,3 +9,4 @@ Icon=ukui-menu
 X-UKUI-AutoRestart=true
 OnlyShowIn=UKUI
 X-UKUI-Autostart-Phase=Application
+NoDisplay=true

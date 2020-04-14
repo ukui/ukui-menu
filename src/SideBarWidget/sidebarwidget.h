@@ -80,12 +80,17 @@ private:
     QLabel* usericonbtnname=nullptr;
     QPushButton* computerbtn=nullptr;
     QLabel* computerbtnname=nullptr;
+    QPushButton* personalbtn=nullptr;
+    QLabel* personalbtnname=nullptr;
     QPushButton* controlbtn=nullptr;
     QLabel* controlbtnname=nullptr;
+    QPushButton* trashbtn=nullptr;
+    QLabel* trashbtnname=nullptr;
     QPushButton* shutdownbtn=nullptr;
     QLabel* shutdownbtnname=nullptr;
     QSpacerItem* verticalSpacer=nullptr;
     QList<QAbstractButton*> otherButtonList;
+    QList<int> otherButtonListIndex;
 
     MainViewWidget* mainviewwid=nullptr;
 
@@ -124,10 +129,13 @@ private Q_SLOTS:
     void otherBtnRightClickSlot();//加载载右键菜单
 //    void animation_finished_slot();
     void computerBtnClickedSlot();
+    void personalBtnClickedSlot();
     void controlBtnClickedSlot();
+    void trashBtnClickedSlot();
     void shutdownBtnClickedSlot();
     void userIconBtnClickedSlot();
     void userAccountsChanged();
+    void resetSidebarBtnSlot();
 
 Q_SIGNALS:
     void sendCommonUseBtnSignal();//发送常用分类按钮信号

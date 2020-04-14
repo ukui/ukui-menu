@@ -135,12 +135,8 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     connect(cmdProc , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutput()));
 
 //    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
-//            QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
-//            RightClickMenuBorder ,RightClickMenuBackground,RightClickMenuSeparator);
-
-    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
-            QMenu::separator{height:4px;background:transparent;}",
-            RightClickMenuBorder ,RightClickMenuBackground);
+//            QMenu::separator{height:4px;background:transparent;}",
+//            RightClickMenuBorder ,RightClickMenuBackground);
 
     addShutdownAction();
 //    addOtherAction();
@@ -288,7 +284,7 @@ void RightClickMenu::addCommonUseAppBtnAction()
 
     cuappbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    cuappbtnmenu->setWindowOpacity(RightClickMenuOpacity);
-    cuappbtnmenu->setStyleSheet(style);
+//    cuappbtnmenu->setStyleSheet(style);
 }
 
 //普通应用按钮右键菜单
@@ -360,23 +356,23 @@ void RightClickMenu::addAppBtnAction()
 
     appbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    appbtnmenu->setWindowOpacity(RightClickMenuOpacity);
-    appbtnmenu->setStyleSheet(style);
+//    appbtnmenu->setStyleSheet(style);
 }
 
 //关机按钮右键菜单
 void RightClickMenu::addShutdownAction()
 {
-    initWidgetAction(LockScreenWid,":/data/img/sidebarwidget/lock.svg",tr("Lock"));
+    initWidgetAction(LockScreenWid,":/data/img/sidebarwidget/lock.svg",tr("Lock Screen"));
     LockScreenAction->setDefaultWidget(LockScreenWid);
     shutdownmenu->addAction(LockScreenAction);
     connect(LockScreenAction,SIGNAL(triggered()),this,SLOT(lockScreenActionTriggerSlot()));
 
-    initWidgetAction(SwitchUserWid,"",tr("Switch user"));
+    initWidgetAction(SwitchUserWid,"",tr("Switch User"));
     SwitchUserAction->setDefaultWidget(SwitchUserWid);
     shutdownmenu->addAction(SwitchUserAction);
     connect(SwitchUserAction,SIGNAL(triggered()),this,SLOT(switchUserActionTriggerSlot()));
 
-    initWidgetAction(LogOutWid,"",tr("Sign out"));
+    initWidgetAction(LogOutWid,"",tr("Log Out"));
     LogOutAction->setDefaultWidget(LogOutWid);
     shutdownmenu->addAction(LogOutAction);
     connect(LogOutAction,SIGNAL(triggered()),this,SLOT(logoutActionTriggerSlot()));
@@ -386,14 +382,14 @@ void RightClickMenu::addShutdownAction()
     shutdownmenu->addAction(RebootAction);
     connect(RebootAction,SIGNAL(triggered()),this,SLOT(rebootActionTriggerSlot()));
 
-    initWidgetAction(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg",tr("Shut down"));
+    initWidgetAction(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg",tr("Power Off"));
     ShutDownAction->setDefaultWidget(ShutDownWid);
     shutdownmenu->addAction(ShutDownAction);
     connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownActionTriggerSlot()));
 
     shutdownmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    shutdownmenu->setWindowOpacity(RightClickMenuOpacity);
-    shutdownmenu->setStyleSheet(style);
+//    shutdownmenu->setStyleSheet(style);
 }
 
 //其它按钮右键菜单
@@ -426,7 +422,7 @@ void RightClickMenu::addOtherAction()
 
     othermenu->setAttribute(Qt::WA_TranslucentBackground);
 //    othermenu->setWindowOpacity(RightClickMenuOpacity);
-    othermenu->setStyleSheet(style);
+//    othermenu->setStyleSheet(style);
 }
 
 void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString textstr)

@@ -195,7 +195,6 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
     filePathList.removeAll("/usr/share/applications/mpv.desktop");
     filePathList.removeAll("/usr/share/applications/atril.desktop");
-    filePathList.removeAll("/usr/share/applications/ukui-control-center.desktop");
     filePathList.removeAll("/usr/share/applications/org.kde.kwalletmanager5.desktop");
     filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
     filePathList.removeAll("/usr/share/applications/vim.desktop");
@@ -215,7 +214,7 @@ QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
 
 //创建应用信息容器
-QVector<QStringList> UkuiMenuInterface::create_appinfo_vector()
+QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
 {
     desktopfpVector.clear();
     QVector<QStringList> appInfoVector;

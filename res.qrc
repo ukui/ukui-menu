@@ -75,7 +75,8 @@
         <file>data/img/sidebarwidget/unfixed.svg</file>
         <file>data/img/sidebarwidget/usericon-darkcolor.svg</file>
         <file>data/img/sidebarwidget/usericon-lightcolor.svg</file>
-        <file>data/qss/ukui-menu.qss</file>
         <file>ukui_menu_ch.qm</file>
+        <file>data/img/sidebarwidget/personal.svg</file>
+        <file>data/img/sidebarwidget/trash.svg</file>
     </qresource>
 </RCC>

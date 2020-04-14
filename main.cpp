@@ -36,16 +36,6 @@ int main(int argc, char *argv[])
         return EXIT_SUCCESS;
     }
 
-    QFile qss(":/data/qss/ukui-menu.qss");
-    qss.open(QFile::ReadOnly);
-    qApp->setStyleSheet(qss.readAll());
-
-//    QGSettings* setting=new QGSettings(QString("org.mate.interface").toLocal8Bit());
-//    QString value=setting->get("font-name").toString();
-//    QFont font;
-//    font.setFamily(value);
-//    qApp->setFont(font);
-
     QString locale = QLocale::system().name();
     QTranslator translator;
     if (locale == "zh_CN"){
@@ -54,13 +44,6 @@ int main(int argc, char *argv[])
         else
             qDebug() << "Load translations file" << locale << "failed!";
     }
-
-    char style[400];
-    sprintf(style,"QToolTip{min-height:30px;border-style: none;border:1px solid rgba(255, 255, 255, 0.2);"
-                  "padding-left:4px;padding-top:0px;padding-right:4px;padding-bottom:0px;border-radius:3px;"
-                  "font-size:14px;color:#ffffff;background-color:%s;}",
-            ToolTipBackground);
-    qApp->setStyleSheet(style);
 
     MainWindow w;
     QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));

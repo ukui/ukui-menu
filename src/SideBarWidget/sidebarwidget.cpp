@@ -100,15 +100,15 @@ void SideBarWidget::addSidebarBtn()
 
     //分类按钮
     pBtnGroup=new QButtonGroup(pMainWidget);
-    commonusebtn=new QPushButton(pMainWidget);
+    commonusebtn=new QPushButton();
 //    commonusebtn->setFocusPolicy(Qt::NoFocus);
 //    commonusebtn->installEventFilter(this);
     setBtnStyle(commonusebtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),0);
-    letterbtn=new QPushButton(pMainWidget);
+    letterbtn=new QPushButton();
 //    letterbtn->setFocusPolicy(Qt::NoFocus);
 //    letterbtn->installEventFilter(this);
     setBtnStyle(letterbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/letter.svg"),1);
-    functionbtn=new QPushButton(pMainWidget);
+    functionbtn=new QPushButton();
 //    functionbtn->setFocusPolicy(Qt::NoFocus);
 //    functionbtn->installEventFilter(this);
     setBtnStyle(functionbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/function.svg"),2);
@@ -121,22 +121,55 @@ void SideBarWidget::addSidebarBtn()
     }
 
     QString usericon=pUkuiMenuInterface->getUserIcon();
-    usericonbtn=new QPushButton(pMainWidget);
+    usericonbtn=new QPushButton();
     setBtnStyle(usericonbtn,usericon,3);
-    computerbtn=new QPushButton(pMainWidget);
+    computerbtn=new QPushButton();
     setBtnStyle(computerbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/computer.svg"),4);
-    controlbtn=new QPushButton(pMainWidget);
-    setBtnStyle(controlbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/control.svg"),5);
-    shutdownbtn=new QPushButton(pMainWidget);
-    setBtnStyle(shutdownbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),6);
+    personalbtn=new QPushButton();
+    setBtnStyle(personalbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/personal.svg"),5);
+    controlbtn=new QPushButton();
+    setBtnStyle(controlbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/control.svg"),6);
+    trashbtn=new QPushButton();
+    setBtnStyle(trashbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),7);
+    shutdownbtn=new QPushButton();
+    setBtnStyle(shutdownbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),8);
     connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btnGroupClickedSlot(QAbstractButton*)));
     connect(computerbtn,SIGNAL(clicked()),this,SLOT(computerBtnClickedSlot()));
+    connect(personalbtn,SIGNAL(clicked()),this,SLOT(personalBtnClickedSlot()));
     connect(controlbtn,SIGNAL(clicked()),this,SLOT(controlBtnClickedSlot()));
+    connect(trashbtn,SIGNAL(clicked()),this,SLOT(trashBtnClickedSlot()));
     connect(shutdownbtn,SIGNAL(clicked()),this,SLOT(shutdownBtnClickedSlot()));
     connect(usericonbtn,SIGNAL(clicked()),this,SLOT(userIconBtnClickedSlot()));
+
+    otherButtonList.clear();
     otherButtonList.append(usericonbtn);
-    otherButtonList.append(computerbtn);
-    otherButtonList.append(controlbtn);
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
+        if(gsetting->get("personal-icon-locking").toBool())
+        {
+                otherButtonList.append(personalbtn);
+                otherButtonListIndex.append(1);
+        }
+        if(gsetting->get("trash-icon-locking").toBool())
+        {
+                otherButtonList.append(trashbtn);
+                otherButtonListIndex.append(2);
+        }
+        if(gsetting->get("computer-icon-locking").toBool())
+        {
+                otherButtonList.append(computerbtn);
+                otherButtonListIndex.append(3);
+        }
+        if(gsetting->get("settings-icon-locking").toBool())
+        {
+                otherButtonList.append(controlbtn);
+                otherButtonListIndex.append(4);
+        }
+        connect(gsetting,SIGNAL(changed(QString)),
+                this,SLOT(resetSidebarBtnSlot()));
+    }
     otherButtonList.append(shutdownbtn);
 
     char textstyle[100];
@@ -171,11 +204,21 @@ void SideBarWidget::addSidebarBtn()
     computerbtnname->adjustSize();
 //    computerbtn->layout()->addWidget(computerbtnname);
 
+    personalbtnname=new QLabel;
+    personalbtnname->setText(tr("Personal"));
+    personalbtnname->setStyleSheet(textstyle);
+    personalbtnname->adjustSize();
+
     controlbtnname=new QLabel;
     controlbtnname->setText(tr("Settings"));
     controlbtnname->setStyleSheet(textstyle);
     controlbtnname->adjustSize();
 //    controlbtn->layout()->addWidget(controlbtnname);
+
+    trashbtnname=new QLabel;
+    trashbtnname->setText(tr("Recycle Bin"));
+    trashbtnname->setStyleSheet(textstyle);
+    trashbtnname->adjustSize();
 
     shutdownbtnname=new QLabel;
     shutdownbtnname->setText(tr("Power"));
@@ -184,8 +227,12 @@ void SideBarWidget::addSidebarBtn()
 //    shutdownbtn->layout()->addWidget(shutdownbtnname);
 
 
-    addRightClickMenu(computerbtn);
-    addRightClickMenu(controlbtn);
+    Q_FOREACH(QAbstractButton* button,otherButtonList)
+    {
+        QPushButton* btn=qobject_cast<QPushButton*>(button);
+        if(otherButtonList.indexOf(button)!=0 && otherButtonList.indexOf(button)!=otherButtonList.count()-1)
+            addRightClickMenu(btn);
+    }
     shutdownbtn->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(shutdownbtn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
             SLOT(shutdownBtnRightClickSlot()));
@@ -202,20 +249,65 @@ void SideBarWidget::addSidebarBtn()
                                           "org.freedesktop.Accounts.User",
                                          QString("Changed"),this,SLOT(userAccountsChanged()));
 
-    verticalSpacer = new QSpacerItem(20,40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     pMainWidgetLayout->addWidget(minmaxWidget);
-
     pMainWidgetLayout->addWidget(commonusebtn);
     pMainWidgetLayout->addWidget(letterbtn);
     pMainWidgetLayout->addWidget(functionbtn);
-
+    verticalSpacer = new QSpacerItem(20,40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     pMainWidgetLayout->addItem(verticalSpacer);
-    pMainWidgetLayout->addWidget(usericonbtn);
-    pMainWidgetLayout->addWidget(computerbtn);
-    pMainWidgetLayout->addWidget(controlbtn);
-    pMainWidgetLayout->addWidget(shutdownbtn);
+    Q_FOREACH(QAbstractButton* button,otherButtonList)
+        pMainWidgetLayout->addWidget(button);
 
     pAnimation = new QPropertyAnimation(pMainWidget, "geometry");
+}
+
+void SideBarWidget::resetSidebarBtnSlot()
+{
+    QLayoutItem *child;
+    while ((child = pMainWidgetLayout->takeAt(5)) != 0) {
+        QWidget* wid=child->widget();
+        pMainWidgetLayout->removeWidget(wid);
+        wid->setParent(nullptr);
+        delete child;
+    }
+    otherButtonList.clear();
+    otherButtonList.append(usericonbtn);
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
+        if(gsetting->get("personal-icon-locking").toBool())
+        {
+                otherButtonList.append(personalbtn);
+                otherButtonListIndex.append(1);
+        }
+        if(gsetting->get("trash-icon-locking").toBool())
+        {
+                otherButtonList.append(trashbtn);
+                otherButtonListIndex.append(2);
+        }
+        if(gsetting->get("computer-icon-locking").toBool())
+        {
+                otherButtonList.append(computerbtn);
+                otherButtonListIndex.append(3);
+        }
+        if(gsetting->get("settings-icon-locking").toBool())
+        {
+                otherButtonList.append(controlbtn);
+                otherButtonListIndex.append(4);
+        }
+
+        connect(gsetting,SIGNAL(changed(QString)),
+                this,SLOT(resetSidebarBtnSlot()));
+    }
+    otherButtonList.append(shutdownbtn);
+    Q_FOREACH(QAbstractButton* button,otherButtonList)
+        pMainWidgetLayout->addWidget(button);
+
+    if(!is_fullscreen)
+        loadMinSidebar();
+    else
+        loadMaxSidebar();
 }
 
 /**
@@ -224,9 +316,9 @@ void SideBarWidget::addSidebarBtn()
 void SideBarWidget::setBtnStyle(QPushButton *btn, QString btnicon, int num)
 {
     char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:2px;}\
-            QPushButton:hover{background-color:%s;border:0px;border-radius:2px;}\
-            QPushButton:pressed{background-color:%s;border:0px;border-radius:2px;}",
+    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\
+            QPushButton:hover{background-color:%s;border:0px;border-radius:4px;}\
+            QPushButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
             SBFunBtnHoverBackground,SBFunBtnHoverBackground);
     btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
     btnlayout=new QHBoxLayout;
@@ -333,12 +425,24 @@ void SideBarWidget::otherBtnRightClickSlot()
 {
     othermenu=new RightClickMenu(this);
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
-    int index=otherButtonList.indexOf(btn);
+    int index=otherButtonListIndex.at(otherButtonList.indexOf(btn)-1);
     QString desktopfp;
-    if(index==1)
+    switch (index) {
+    case 1:
+        desktopfp=QString("/usr/share/applications/peony-home.desktop");
+        break;
+    case 2:
+        desktopfp=QString("/usr/share/applications/peony-trash.desktop");
+        break;
+    case 3:
         desktopfp=QString("/usr/share/applications/peony-computer.desktop");
-    if(index==2)
+        break;
+    case 4:
         desktopfp=QString("/usr/share/applications/ukui-control-center.desktop");
+        break;
+    default:
+        break;
+    }
     othermenu->showOtherMenu(desktopfp);
 }
 
@@ -346,6 +450,12 @@ void SideBarWidget::computerBtnClickedSlot()
 {
     Q_EMIT sendHideMainWindowSignal();
     QProcess::startDetached(QString("/usr/bin/peony computer:///"));
+}
+
+void SideBarWidget::personalBtnClickedSlot()
+{
+    Q_EMIT sendHideMainWindowSignal();
+    QProcess::startDetached(QString("/usr/bin/peony"));
 }
 
 void SideBarWidget::controlBtnClickedSlot()
@@ -360,6 +470,12 @@ void SideBarWidget::controlBtnClickedSlot()
     }
     QProcess::startDetached(execpath);
 
+}
+
+void SideBarWidget::trashBtnClickedSlot()
+{
+    Q_EMIT sendHideMainWindowSignal();
+    QProcess::startDetached(QString("/usr/bin/peony trash:///"));
 }
 
 void SideBarWidget::shutdownBtnClickedSlot()
@@ -436,17 +552,20 @@ void SideBarWidget::loadMinSidebar()
     setMinSidebarBtn(letterbtn);
     setMinSidebarBtn(functionbtn);
 
-    setMinSidebarBtn(usericonbtn);
-    setMinSidebarBtn(computerbtn);
-    setMinSidebarBtn(controlbtn);
-    setMinSidebarBtn(shutdownbtn);
+    Q_FOREACH(QAbstractButton* button,otherButtonList)
+    {
+        QPushButton* btn=qobject_cast<QPushButton*>(button);
+        setMinSidebarBtn(btn);
+    }
     commonusebtn->setToolTip(tr("Common"));
     letterbtn->setToolTip(tr("Letter"));
     functionbtn->setToolTip(tr("Function"));
     QString username=pUkuiMenuInterface->getUserName();
     usericonbtn->setToolTip(username);
     computerbtn->setToolTip(tr("Computer"));
+    personalbtn->setToolTip(tr("Personal"));
     controlbtn->setToolTip(tr("Settings"));
+    trashbtn->setToolTip(tr("Recycle Bin"));
     shutdownbtn->setToolTip(tr("Power"));
 
     disconnect(minmaxbtn,SIGNAL(clicked()),this, SIGNAL(sendDefaultBtnSignal()));
@@ -510,24 +629,35 @@ void SideBarWidget::loadMaxSidebar()
     letterbtn->layout()->addWidget(letterbtnname);
     functionbtn->layout()->addWidget(functionbtnname);
     usericonbtn->layout()->addWidget(usericonbtnname);
-    computerbtn->layout()->addWidget(computerbtnname);
-    controlbtn->layout()->addWidget(controlbtnname);
+//    computerbtn->layout()->addWidget(computerbtnname);
+//    controlbtn->layout()->addWidget(controlbtnname);
     shutdownbtn->layout()->addWidget(shutdownbtnname);
+
+    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
+    if(fileInfo.exists())
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
+        if(gsetting->get("computer-icon-locking").toBool())
+                computerbtn->layout()->addWidget(computerbtnname);
+        if(gsetting->get("personal-icon-locking").toBool())
+                personalbtn->layout()->addWidget(personalbtnname);
+        if(gsetting->get("settings-icon-locking").toBool())
+                controlbtn->layout()->addWidget(controlbtnname);
+        if(gsetting->get("trash-icon-locking").toBool())
+                trashbtn->layout()->addWidget(trashbtnname);
+    }
+
 
     setMaxSidebarBtn(commonusebtn);
     setMaxSidebarBtn(letterbtn);
     setMaxSidebarBtn(functionbtn);
-    setMaxSidebarBtn(usericonbtn);
-    setMaxSidebarBtn(computerbtn);
-    setMaxSidebarBtn(controlbtn);
-    setMaxSidebarBtn(shutdownbtn);
-    commonusebtn->setToolTip("");
-    letterbtn->setToolTip("");
-    functionbtn->setToolTip("");
-    usericonbtn->setToolTip("");
-    computerbtn->setToolTip("");
-    controlbtn->setToolTip("");
-    shutdownbtn->setToolTip("");
+
+    Q_FOREACH(QAbstractButton* button,otherButtonList)
+    {
+        QPushButton* btn=qobject_cast<QPushButton*>(button);
+        setMaxSidebarBtn(btn);
+        button->setToolTip("");
+    }
 
     disconnect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendFullScreenBtnSignal()));
     connect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendDefaultBtnSignal()));

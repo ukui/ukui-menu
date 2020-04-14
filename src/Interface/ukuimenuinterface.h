@@ -40,7 +40,7 @@ protected:
 public:
     UkuiMenuInterface();
     ~UkuiMenuInterface();
-    QVector<QStringList> create_appinfo_vector();//创建应用信息容器
+    QVector<QStringList> createAppInfoVector();//创建应用信息容器
     static QVector<QStringList> appInfoVector;
     static QVector<QString> desktopfpVector;
 

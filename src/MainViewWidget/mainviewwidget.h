@@ -55,6 +55,7 @@ public:
     ~MainViewWidget();
     void loadMinMainView();//加载默认主视图
     void loadMaxMainView();//加载全屏主视图
+    void changeIsFullscreenValue();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
     void setLineEditFocus(QString arg);//设置搜索框焦点
 
@@ -91,7 +92,7 @@ private:
     int widgetState=-1;//分类窗口编号
     int saveCurrentWidState=-1;//存放当前分类窗口编号
 
-    bool is_fullWid=false;
+    bool is_fullscreen=false;
 
     int letterwid_state=0;
     int functionwid_state=0;
