@@ -319,14 +319,12 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
 
 void FullLetterWidget::timeOutSlot()
 {
+    int height=QApplication::primaryScreen()->geometry().height();
     int speed=0;
-    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition())<=300)
+    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()) <= height*300/1080)
         speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
     else
-    {
-        int height=QApplication::primaryScreen()->geometry().height();
         speed=height*170/1080;
-    }
 
     if(beginPos<endPos)
     {

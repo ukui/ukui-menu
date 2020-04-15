@@ -158,7 +158,7 @@ void Style::initWidStyle()
         MinMaxWidHeight=TopWidgetHeight;
         MinMaxBtnWidth=49;
         MinMaxIconSize=19;
-        SideBarBtnWidth=110+len;
+        SideBarBtnWidth=110+2*len;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
         SideBarIconSize=19;
@@ -204,7 +204,7 @@ void Style::initWidStyle()
         MinMaxWidHeight=TopWidgetHeight;
         MinMaxBtnWidth=49;
         MinMaxIconSize=19;
-        SideBarBtnWidth=110+len;
+        SideBarBtnWidth=110+2*len;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
         SideBarIconSize=19;
@@ -250,7 +250,7 @@ void Style::initWidStyle()
         MinMaxWidHeight=TopWidgetHeight;
         MinMaxBtnWidth=49;
         MinMaxIconSize=19;
-        SideBarBtnWidth=110+len;
+        SideBarBtnWidth=110+2*len;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
         SideBarIconSize=19;
@@ -296,7 +296,7 @@ void Style::initWidStyle()
         MinMaxWidHeight=TopWidgetHeight;
         MinMaxBtnWidth=49;
         MinMaxIconSize=19;
-        SideBarBtnWidth=110+len;
+        SideBarBtnWidth=110+2*len;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
         SideBarIconSize=19;
@@ -342,7 +342,7 @@ void Style::initWidStyle()
         MinMaxWidHeight=TopWidgetHeight;
         MinMaxBtnWidth=49;
         MinMaxIconSize=19;
-        SideBarBtnWidth=110+len;
+        SideBarBtnWidth=110+2*len;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
         SideBarIconSize=19;
@@ -388,7 +388,7 @@ void Style::initWidStyle()
         MinMaxWidHeight=TopWidgetHeight;
         MinMaxBtnWidth=49;
         MinMaxIconSize=19;
-        SideBarBtnWidth=110+len;
+        SideBarBtnWidth=110+2*len;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
         SideBarIconSize=19;
@@ -434,7 +434,7 @@ void Style::initWidStyle()
         MinMaxWidHeight=TopWidgetHeight;
         MinMaxBtnWidth=49;
         MinMaxIconSize=19;
-        SideBarBtnWidth=110+len;
+        SideBarBtnWidth=110+2*len;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
         SideBarIconSize=19;

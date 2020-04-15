@@ -33,6 +33,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QSettings>
 #include <QPropertyAnimation>
+#include <QFileInfo>
 #include "src/Style/style.h"
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
@@ -49,9 +50,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void setFrameStyle();//设置QFrame样式
-    bool checkIfFullScreen();//检查是否全屏
-    void setDefaultWidget();
-    void setFullScreenWidget();
+    bool loadMainWindow();
 
 private:
     Ui::MainWindow *ui;

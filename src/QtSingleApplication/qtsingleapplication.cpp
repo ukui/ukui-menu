@@ -331,11 +331,7 @@ void QtSingleApplication::activateWindow()
         if(this->applicationState() & Qt::ApplicationInactive)
         {
             MainWindow* w=qobject_cast<MainWindow*>(actWin);
-            bool ret=w->checkIfFullScreen();
-            if(ret)
-                w->setFullScreenWidget();
-            else
-                w->setDefaultWidget();
+            w->loadMainWindow();
             actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
             actWin->raise();
             actWin->showNormal();

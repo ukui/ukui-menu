@@ -134,9 +134,9 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     cmdProc=new QProcess(this);
     connect(cmdProc , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutput()));
 
-//    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
-//            QMenu::separator{height:4px;background:transparent;}",
-//            RightClickMenuBorder ,RightClickMenuBackground);
+    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
+            QMenu::separator{height:4px;background:transparent;}",
+            RightClickMenuBorder ,RightClickMenuBackground);
 
     addShutdownAction();
 //    addOtherAction();
@@ -284,7 +284,7 @@ void RightClickMenu::addCommonUseAppBtnAction()
 
     cuappbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    cuappbtnmenu->setWindowOpacity(RightClickMenuOpacity);
-//    cuappbtnmenu->setStyleSheet(style);
+    cuappbtnmenu->setStyleSheet(style);
 }
 
 //普通应用按钮右键菜单
@@ -356,7 +356,7 @@ void RightClickMenu::addAppBtnAction()
 
     appbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    appbtnmenu->setWindowOpacity(RightClickMenuOpacity);
-//    appbtnmenu->setStyleSheet(style);
+    appbtnmenu->setStyleSheet(style);
 }
 
 //关机按钮右键菜单
@@ -389,7 +389,7 @@ void RightClickMenu::addShutdownAction()
 
     shutdownmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    shutdownmenu->setWindowOpacity(RightClickMenuOpacity);
-//    shutdownmenu->setStyleSheet(style);
+    shutdownmenu->setStyleSheet(style);
 }
 
 //其它按钮右键菜单
@@ -422,7 +422,7 @@ void RightClickMenu::addOtherAction()
 
     othermenu->setAttribute(Qt::WA_TranslucentBackground);
 //    othermenu->setWindowOpacity(RightClickMenuOpacity);
-//    othermenu->setStyleSheet(style);
+    othermenu->setStyleSheet(style);
 }
 
 void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString textstr)

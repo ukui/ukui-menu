@@ -30,8 +30,9 @@
 #include <QButtonGroup>
 #include "src/Interface/ukuimenuinterface.h"
 #include <QBitmap>
+#include <QGSettings>
+#include <QPushButton>
 #include "src/Style/style.h"
-#include "src/MainViewWidget/mainviewwidget.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 
 namespace Ui {
@@ -91,23 +92,16 @@ private:
     QSpacerItem* verticalSpacer=nullptr;
     QList<QAbstractButton*> otherButtonList;
     QList<int> otherButtonListIndex;
-
-    MainViewWidget* mainviewwid=nullptr;
-
     bool is_fullscreen=false;
-
+    QGSettings* gsetting=nullptr;
     RightClickMenu* shutdownmenu;
     RightClickMenu* othermenu;
-
     QPropertyAnimation* pAnimation=nullptr;
-//    QPropertyAnimation* pEnterAnimation=nullptr;
-//    QPropertyAnimation* pLeaveAnimation=nullptr;
-    bool is_hover=false;
 
 protected:
     void initWidget();//初始化主界面
     void addSidebarBtn();//添加侧边栏按钮
-    void setBtnStyle(QPushButton *btn, QString btnicon, int num);//设置按钮样式
+    void initBtn(QPushButton *btn, QString btnicon,QLabel* label,QString text,int num);//设置按钮样式
 
     void setMinSidebarBtn(QPushButton *btn);//设置默认侧边栏按钮
     void setMaxSidebarBtn(QPushButton *btn);//设置全屏侧边栏按钮

@@ -406,11 +406,6 @@ void MainViewWidget::loadMaxMainView()
     is_fullscreen=true;
 }
 
-void MainViewWidget::changeIsFullscreenValue()
-{
-    is_fullscreen=false;
-}
-
 /**
  * 加载常用分类界面
  */
@@ -689,4 +684,5 @@ void MainViewWidget::widgetMakeZero()
     fullfunctionwid->widgetMakeZero();
     querylineEdit->clear();
     querylineEdit->clearFocus();
+    is_fullscreen=false;
 }

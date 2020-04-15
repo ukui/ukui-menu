@@ -98,20 +98,23 @@ void SideBarWidget::addSidebarBtn()
             MMBtnHoverBackground,MMBtnHoverBackground);
     minmaxbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
+    commonusebtnname=new QLabel;
+    letterbtnname=new QLabel;
+    functionbtnname=new QLabel;
     //分类按钮
     pBtnGroup=new QButtonGroup(pMainWidget);
     commonusebtn=new QPushButton();
 //    commonusebtn->setFocusPolicy(Qt::NoFocus);
 //    commonusebtn->installEventFilter(this);
-    setBtnStyle(commonusebtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),0);
+    initBtn(commonusebtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),commonusebtnname,tr("Common"),0);
     letterbtn=new QPushButton();
 //    letterbtn->setFocusPolicy(Qt::NoFocus);
 //    letterbtn->installEventFilter(this);
-    setBtnStyle(letterbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/letter.svg"),1);
+    initBtn(letterbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/letter.svg"),letterbtnname,tr("Letter"),1);
     functionbtn=new QPushButton();
 //    functionbtn->setFocusPolicy(Qt::NoFocus);
 //    functionbtn->installEventFilter(this);
-    setBtnStyle(functionbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/function.svg"),2);
+    initBtn(functionbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/function.svg"),functionbtnname,tr("Function"),2);
     buttonList.append(commonusebtn);
     buttonList.append(letterbtn);
     buttonList.append(functionbtn);
@@ -121,18 +124,25 @@ void SideBarWidget::addSidebarBtn()
     }
 
     QString usericon=pUkuiMenuInterface->getUserIcon();
+    QString username=pUkuiMenuInterface->getUserName();
+    usericonbtnname=new QLabel;
+    computerbtnname=new QLabel;
+    personalbtnname=new QLabel;
+    controlbtnname=new QLabel;
+    trashbtnname=new QLabel;
+    shutdownbtnname=new QLabel;
     usericonbtn=new QPushButton();
-    setBtnStyle(usericonbtn,usericon,3);
+    initBtn(usericonbtn,usericon,usericonbtnname,username,3);
     computerbtn=new QPushButton();
-    setBtnStyle(computerbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/computer.svg"),4);
+    initBtn(computerbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/computer.svg"),computerbtnname,tr("Computer"),4);
     personalbtn=new QPushButton();
-    setBtnStyle(personalbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/personal.svg"),5);
+    initBtn(personalbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/personal.svg"),personalbtnname,tr("Personal"),5);
     controlbtn=new QPushButton();
-    setBtnStyle(controlbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/control.svg"),6);
+    initBtn(controlbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/control.svg"),controlbtnname,tr("Settings"),6);
     trashbtn=new QPushButton();
-    setBtnStyle(trashbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),7);
+    initBtn(trashbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),trashbtnname,tr("Recycle Bin"),7);
     shutdownbtn=new QPushButton();
-    setBtnStyle(shutdownbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),8);
+    initBtn(shutdownbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),shutdownbtnname,tr("Power"),8);
     connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btnGroupClickedSlot(QAbstractButton*)));
     connect(computerbtn,SIGNAL(clicked()),this,SLOT(computerBtnClickedSlot()));
     connect(personalbtn,SIGNAL(clicked()),this,SLOT(personalBtnClickedSlot()));
@@ -146,7 +156,7 @@ void SideBarWidget::addSidebarBtn()
     QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
     if(fileInfo.exists())
     {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
+        gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
         if(gsetting->get("personal-icon-locking").toBool())
         {
                 otherButtonList.append(personalbtn);
@@ -171,61 +181,6 @@ void SideBarWidget::addSidebarBtn()
                 this,SLOT(resetSidebarBtnSlot()));
     }
     otherButtonList.append(shutdownbtn);
-
-    char textstyle[100];
-    sprintf(textstyle,"QLabel{background:transparent;color:#ffffff;}");
-    commonusebtnname=new QLabel;
-    commonusebtnname->setText(tr("Common"));
-    commonusebtnname->setStyleSheet(textstyle);
-    commonusebtnname->adjustSize();
-//    commonusebtn->layout()->addWidget(commonusebtnname);
-
-    letterbtnname=new QLabel;
-    letterbtnname->setText(tr("Letter"));
-    letterbtnname->setStyleSheet(textstyle);
-    letterbtnname->adjustSize();
-//    letterbtn->layout()->addWidget(letterbtnname);
-
-    functionbtnname=new QLabel;
-    functionbtnname->setText(tr("Function"));
-    functionbtnname->setStyleSheet(textstyle);
-    functionbtnname->adjustSize();
-//    functionbtn->layout()->addWidget(functionbtnname);
-
-    QString username=pUkuiMenuInterface->getUserName();
-    usericonbtnname=new QLabel;
-    usericonbtnname->setText(username);
-    usericonbtnname->setStyleSheet(textstyle);
-    usericonbtnname->adjustSize();
-
-    computerbtnname=new QLabel;
-    computerbtnname->setText(tr("Computer"));
-    computerbtnname->setStyleSheet(textstyle);
-    computerbtnname->adjustSize();
-//    computerbtn->layout()->addWidget(computerbtnname);
-
-    personalbtnname=new QLabel;
-    personalbtnname->setText(tr("Personal"));
-    personalbtnname->setStyleSheet(textstyle);
-    personalbtnname->adjustSize();
-
-    controlbtnname=new QLabel;
-    controlbtnname->setText(tr("Settings"));
-    controlbtnname->setStyleSheet(textstyle);
-    controlbtnname->adjustSize();
-//    controlbtn->layout()->addWidget(controlbtnname);
-
-    trashbtnname=new QLabel;
-    trashbtnname->setText(tr("Recycle Bin"));
-    trashbtnname->setStyleSheet(textstyle);
-    trashbtnname->adjustSize();
-
-    shutdownbtnname=new QLabel;
-    shutdownbtnname->setText(tr("Power"));
-    shutdownbtnname->setStyleSheet(textstyle);
-    shutdownbtnname->adjustSize();
-//    shutdownbtn->layout()->addWidget(shutdownbtnname);
-
 
     Q_FOREACH(QAbstractButton* button,otherButtonList)
     {
@@ -250,9 +205,8 @@ void SideBarWidget::addSidebarBtn()
                                          QString("Changed"),this,SLOT(userAccountsChanged()));
 
     pMainWidgetLayout->addWidget(minmaxWidget);
-    pMainWidgetLayout->addWidget(commonusebtn);
-    pMainWidgetLayout->addWidget(letterbtn);
-    pMainWidgetLayout->addWidget(functionbtn);
+    Q_FOREACH(QAbstractButton* button,buttonList)
+        pMainWidgetLayout->addWidget(button);
     verticalSpacer = new QSpacerItem(20,40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     pMainWidgetLayout->addItem(verticalSpacer);
     Q_FOREACH(QAbstractButton* button,otherButtonList)
@@ -271,11 +225,11 @@ void SideBarWidget::resetSidebarBtnSlot()
         delete child;
     }
     otherButtonList.clear();
+    otherButtonListIndex.clear();
     otherButtonList.append(usericonbtn);
     QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
     if(fileInfo.exists())
     {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
         if(gsetting->get("personal-icon-locking").toBool())
         {
                 otherButtonList.append(personalbtn);
@@ -296,9 +250,6 @@ void SideBarWidget::resetSidebarBtnSlot()
                 otherButtonList.append(controlbtn);
                 otherButtonListIndex.append(4);
         }
-
-        connect(gsetting,SIGNAL(changed(QString)),
-                this,SLOT(resetSidebarBtnSlot()));
     }
     otherButtonList.append(shutdownbtn);
     Q_FOREACH(QAbstractButton* button,otherButtonList)
@@ -313,7 +264,7 @@ void SideBarWidget::resetSidebarBtnSlot()
 /**
  * 设置按钮样式
  */
-void SideBarWidget::setBtnStyle(QPushButton *btn, QString btnicon, int num)
+void SideBarWidget::initBtn(QPushButton *btn, QString btnicon,QLabel* label,QString text,int num)
 {
     char btncolor[300];
     sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\
@@ -324,7 +275,7 @@ void SideBarWidget::setBtnStyle(QPushButton *btn, QString btnicon, int num)
     btnlayout=new QHBoxLayout;
     labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);
-    labelicon->setStyleSheet("background:transparent;");
+    labelicon->setStyleSheet("background:transparent;border:0px;");
 
     if(num!=3)
     {
@@ -377,7 +328,16 @@ void SideBarWidget::setBtnStyle(QPushButton *btn, QString btnicon, int num)
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
     }
 
+    label->setAlignment(Qt::AlignVCenter);
+//    label->setFixedHeight(labelicon->height());
+    label->setText(text);
+    label->setStyleSheet(QString("QLabel{background:transparent;color:#ffffff;}"));
+    label->adjustSize();
+
     btnlayout->addWidget(labelicon);
+    btnlayout->addWidget(label);
+    btnlayout->setAlignment(labelicon,Qt::AlignVCenter);
+    btnlayout->setAlignment(label,Qt::AlignVCenter);
     btn->setLayout(btnlayout);
     btn->setFocusPolicy(Qt::NoFocus);
 }
@@ -548,24 +508,52 @@ void SideBarWidget::loadMinSidebar()
 
     pMainWidgetLayout->setContentsMargins(8,0,10,0);
 
-    setMinSidebarBtn(commonusebtn);
-    setMinSidebarBtn(letterbtn);
-    setMinSidebarBtn(functionbtn);
+    Q_FOREACH(QAbstractButton* button,buttonList)
+    {
+        QPushButton* btn=qobject_cast<QPushButton*>(button);
+        setMinSidebarBtn(btn);
+        int index=buttonList.indexOf(button);
+        switch (index) {
+        case 0:
+            btn->setToolTip(tr("Common"));
+            break;
+        case 1:
+            btn->setToolTip(tr("Letter"));
+            break;
+        case 2:
+            btn->setToolTip(tr("Function"));
+            break;
+        default:
+            break;
+        }
+    }
 
     Q_FOREACH(QAbstractButton* button,otherButtonList)
     {
         QPushButton* btn=qobject_cast<QPushButton*>(button);
         setMinSidebarBtn(btn);
     }
-    commonusebtn->setToolTip(tr("Common"));
-    letterbtn->setToolTip(tr("Letter"));
-    functionbtn->setToolTip(tr("Function"));
+    Q_FOREACH(int index,otherButtonListIndex)
+    {
+        switch (index) {
+        case 1:
+            personalbtn->setToolTip(tr("Personal"));
+            break;
+        case 2:
+            trashbtn->setToolTip(tr("Recycle Bin"));
+            break;
+        case 3:
+            computerbtn->setToolTip(tr("Computer"));
+            break;
+        case 4:
+            controlbtn->setToolTip(tr("Settings"));
+            break;
+        default:
+            break;
+        }
+    }
     QString username=pUkuiMenuInterface->getUserName();
     usericonbtn->setToolTip(username);
-    computerbtn->setToolTip(tr("Computer"));
-    personalbtn->setToolTip(tr("Personal"));
-    controlbtn->setToolTip(tr("Settings"));
-    trashbtn->setToolTip(tr("Recycle Bin"));
     shutdownbtn->setToolTip(tr("Power"));
 
     disconnect(minmaxbtn,SIGNAL(clicked()),this, SIGNAL(sendDefaultBtnSignal()));
@@ -626,37 +614,39 @@ void SideBarWidget::loadMaxSidebar()
     pMainWidgetLayout->setContentsMargins(0,0,0,0);
 
     commonusebtn->layout()->addWidget(commonusebtnname);
+    commonusebtn->layout()->setAlignment(commonusebtnname,Qt::AlignVCenter);
     letterbtn->layout()->addWidget(letterbtnname);
     functionbtn->layout()->addWidget(functionbtnname);
-    usericonbtn->layout()->addWidget(usericonbtnname);
-//    computerbtn->layout()->addWidget(computerbtnname);
-//    controlbtn->layout()->addWidget(controlbtnname);
-    shutdownbtn->layout()->addWidget(shutdownbtnname);
-
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
-    if(fileInfo.exists())
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
-        if(gsetting->get("computer-icon-locking").toBool())
-                computerbtn->layout()->addWidget(computerbtnname);
-        if(gsetting->get("personal-icon-locking").toBool())
-                personalbtn->layout()->addWidget(personalbtnname);
-        if(gsetting->get("settings-icon-locking").toBool())
-                controlbtn->layout()->addWidget(controlbtnname);
-        if(gsetting->get("trash-icon-locking").toBool())
-                trashbtn->layout()->addWidget(trashbtnname);
-    }
-
-
     setMaxSidebarBtn(commonusebtn);
     setMaxSidebarBtn(letterbtn);
     setMaxSidebarBtn(functionbtn);
+    usericonbtn->layout()->addWidget(usericonbtnname);
+    shutdownbtn->layout()->addWidget(shutdownbtnname);
+    setMaxSidebarBtn(usericonbtn);
+    setMaxSidebarBtn(shutdownbtn);
 
-    Q_FOREACH(QAbstractButton* button,otherButtonList)
+    Q_FOREACH(int index,otherButtonListIndex)
     {
-        QPushButton* btn=qobject_cast<QPushButton*>(button);
-        setMaxSidebarBtn(btn);
-        button->setToolTip("");
+        switch (index) {
+        case 1:
+            personalbtn->layout()->addWidget(personalbtnname);
+            setMaxSidebarBtn(personalbtn);
+            break;
+        case 2:
+            trashbtn->layout()->addWidget(trashbtnname);
+            setMaxSidebarBtn(trashbtn);
+            break;
+        case 3:
+            computerbtn->layout()->addWidget(computerbtnname);
+            setMaxSidebarBtn(computerbtn);
+            break;
+       case 4:
+            controlbtn->layout()->addWidget(controlbtnname);
+            setMaxSidebarBtn(controlbtn);
+            break;
+        default:
+            break;
+        }
     }
 
     disconnect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendFullScreenBtnSignal()));
@@ -689,6 +679,7 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
                                       0,
                                       0);
     btn->layout()->setSpacing(Style::SideBarSpaceIconText);
+    btn->setToolTip("");
 }
 
 void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
