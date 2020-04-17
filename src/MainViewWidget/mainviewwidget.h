@@ -101,6 +101,7 @@ private:
     QFileSystemWatcher* fileWatcher;//监控/usr/share/applications文件夹状态
 
     QSettings* setting=nullptr;
+    QGSettings* gsetting=nullptr;
 
 protected:
     void initWidget();//初始化界面
@@ -120,6 +121,7 @@ private Q_SLOTS:
     void ViewOpenedSlot(QDBusMessage msg);//监控进程开启
     void directoryChangedSlot();//desktop文件目录改变信号槽
     void recvSearchResult(QStringList desktopfplist);//接收搜索结果
+    void iconThemeChangeSlot(QString key);
 
 Q_SIGNALS:
     void sendHideMainWindowSignal();//向MainWindow发送隐藏主窗口信号

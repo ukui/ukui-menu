@@ -137,6 +137,9 @@ void MainViewWidget::initWidget()
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
+
+    gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+    connect(gsetting,SIGNAL(changed(QString)),this,SLOT(iconThemeChangeSlot(QString)));
 }
 
 /**
@@ -672,6 +675,12 @@ void MainViewWidget::directoryChangedSlot()
         UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
         Q_EMIT directoryChangedSignal();
     }
+}
+
+void MainViewWidget::iconThemeChangeSlot(QString key)
+{
+    if(key=="iconThemeName" || key=="icon-theme-name")
+        Q_EMIT directoryChangedSignal();
 }
 
 void MainViewWidget::widgetMakeZero()
