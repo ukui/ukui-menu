@@ -50,7 +50,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void setFrameStyle();//设置QFrame样式
-    bool loadMainWindow();
+    void loadMainWindow();
 
 private:
     Ui::MainWindow *ui;
@@ -84,7 +84,7 @@ private Q_SLOTS:
     void recvHideMainWindowSlot();//接收隐藏主窗口信号
     void monitorResolutionChange(QRect rect);//监控屏幕分辨率
     void primaryScreenChangedSlot(QScreen *screen);
-    void panelShangedSlot(QString key);
+    void panelChangedSlot(QString key);
     void stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
 };
 

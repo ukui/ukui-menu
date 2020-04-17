@@ -178,7 +178,7 @@ void MainWindow::initMainWindow()
             SLOT(primaryScreenChangedSlot(QScreen*)));
 
     connect(gsetting,SIGNAL(changed(QString)),
-            this,SLOT(panelShangedSlot(QString)));
+            this,SLOT(panelChangedSlot(QString)));
 }
 
 /**
@@ -390,8 +390,6 @@ void MainWindow::stateChangedSlot(QAbstractAnimation::State newState, QAbstractA
         mainlayout->addWidget(mainviewwid);
         mainlayout->addWidget(line);
         mainlayout->addWidget(sidebarwid);
-        mainviewwid->setVisible(true);
-        sidebarwid->setVisible(true);
         sidebarwid->loadMinSidebar();
         mainviewwid->loadMinMainView();
     //    this->repaint();
@@ -426,7 +424,7 @@ void MainWindow::recvHideMainWindowSlot()
     sidebarwid->widgetMakeZero();
 }
 
-bool MainWindow::loadMainWindow()
+void MainWindow::loadMainWindow()
 {
     QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
     int position=0;
@@ -459,8 +457,8 @@ bool MainWindow::loadMainWindow()
                 this->setGeometry(QRect(panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
             else
                 this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
-            mainlayout->addWidget(mainviewwid);
-            mainlayout->addWidget(sidebarwid);
+            mainlayout->removeWidget(line);
+            line->setParent(nullptr);
             sidebarwid->loadMaxSidebar();
             mainviewwid->loadMaxMainView();
             sidebarwid->enterAnimation();
@@ -479,11 +477,7 @@ bool MainWindow::loadMainWindow()
             else
                 this->setGeometry(QRect(QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
                                           376,590));
-            mainlayout->addWidget(mainviewwid);
-            mainlayout->addWidget(line);
-            mainlayout->addWidget(sidebarwid);
-            mainviewwid->setVisible(true);
-            sidebarwid->setVisible(true);
+            mainlayout->insertWidget(1,line);
             sidebarwid->loadMinSidebar();
             mainviewwid->loadMinMainView();
             setFrameStyle();
@@ -502,9 +496,6 @@ bool MainWindow::loadMainWindow()
         else
             this->setGeometry(QRect(QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
                                       376,590));
-        mainlayout->addWidget(mainviewwid);
-        mainlayout->addWidget(line);
-        mainlayout->addWidget(sidebarwid);
         mainviewwid->setVisible(true);
         sidebarwid->setVisible(true);
         sidebarwid->loadMinSidebar();
@@ -528,7 +519,7 @@ void MainWindow::primaryScreenChangedSlot(QScreen *screen)
     QProcess::startDetached(QString("/usr/bin/ukui-menu"));
 }
 
-void MainWindow::panelShangedSlot(QString key)
+void MainWindow::panelChangedSlot(QString key)
 {
     Q_UNUSED(key);
     qApp->quit();
