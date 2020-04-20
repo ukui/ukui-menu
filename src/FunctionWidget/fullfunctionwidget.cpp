@@ -290,7 +290,7 @@ void FullFunctionWidget::updateAppListView()
          QWidget* wid=child->widget();
          scrollareawidLayout->removeWidget(wid);
          wid->setParent(nullptr);
-         delete wid;
+//         delete wid;
          delete child;
      }
      fillAppList();

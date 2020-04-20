@@ -55,7 +55,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     //常用应用按钮右键菜单
     cuappbtnmenu=new QMenu(this);
     cuappbtnmenu->setLayoutDirection(Qt::LeftToRight);
-    cuappbtnmenu->setFixedSize(250+2,36*7+4*3+9*3+12+2);
+    cuappbtnmenu->setFixedSize(250+2,36*6+4*3+9*2+12+2);
     CuFix2CommonUseAction=new QWidgetAction(cuappbtnmenu);
     CuFix2CommonUseWid=new QWidget();
     CuUnfixed4CommonUseAction=new QWidgetAction(cuappbtnmenu);
@@ -78,7 +78,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     //普通应用按钮右键菜单
     appbtnmenu=new QMenu(this);
     appbtnmenu->setLayoutDirection(Qt::LeftToRight);
-    appbtnmenu->setFixedSize(250+2,36*5+4*2+9*2+12+2);
+    appbtnmenu->setFixedSize(250+2,36*4+4*2+9*1+12+2);
     Fix2CommonUseAction=new QWidgetAction(appbtnmenu);
     Fix2CommonUseWid=new QWidget();
     Unfixed4CommonUseAction=new QWidgetAction(appbtnmenu);
@@ -275,12 +275,12 @@ void RightClickMenu::addCommonUseAppBtnAction()
     cuappbtnmenu->addAction(CuUninstallAction);
     connect(CuUninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 
-    cuappbtnmenu->addAction(separatorAction_3);
+//    cuappbtnmenu->addAction(separatorAction_3);
 
-    initWidgetAction(CuAttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
-    CuAttributeAction->setDefaultWidget(CuAttributeWid);
-    cuappbtnmenu->addAction(CuAttributeAction);
-    connect(CuAttributeAction, SIGNAL(triggered()),this,SLOT(attributeActionTriggerSlot()));
+//    initWidgetAction(CuAttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
+//    CuAttributeAction->setDefaultWidget(CuAttributeWid);
+//    cuappbtnmenu->addAction(CuAttributeAction);
+//    connect(CuAttributeAction, SIGNAL(triggered()),this,SLOT(attributeActionTriggerSlot()));
 
     cuappbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    cuappbtnmenu->setWindowOpacity(RightClickMenuOpacity);
@@ -347,12 +347,12 @@ void RightClickMenu::addAppBtnAction()
     appbtnmenu->addAction(UninstallAction);
     connect(UninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 
-    appbtnmenu->addAction(separatorAction_5);
+//    appbtnmenu->addAction(separatorAction_5);
 
-    initWidgetAction(AttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
-    AttributeAction->setDefaultWidget(AttributeWid);
-    appbtnmenu->addAction(AttributeAction);
-    connect(AttributeAction, SIGNAL(triggered()),this,SLOT(attributeActionTriggerSlot()));
+//    initWidgetAction(AttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
+//    AttributeAction->setDefaultWidget(AttributeWid);
+//    appbtnmenu->addAction(AttributeAction);
+//    connect(AttributeAction, SIGNAL(triggered()),this,SLOT(attributeActionTriggerSlot()));
 
     appbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
 //    appbtnmenu->setWindowOpacity(RightClickMenuOpacity);
@@ -683,7 +683,6 @@ void RightClickMenu::shutdownActionTriggerSlot()
 void RightClickMenu::otherListActionTriggerSlot()
 {
     action_number=15;
-    qDebug()<<"---2---";
 }
 
 int RightClickMenu::showCommonUseAppBtnMenu(QString desktopfp)
@@ -711,10 +710,11 @@ int RightClickMenu::showShutdownMenu()
 
 }
 
-void RightClickMenu::showOtherMenu(QString desktopfp)
+int RightClickMenu::showOtherMenu(QString desktopfp)
 {
     this->desktopfp.clear();
     this->desktopfp=desktopfp;
     addOtherAction();
     othermenu->exec(QCursor::pos());
+    return action_number;
 }

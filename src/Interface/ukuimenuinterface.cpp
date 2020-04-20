@@ -76,6 +76,16 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
             QByteArray fpbyte=filePathStr.toLocal8Bit();
             char* filepath=fpbyte.data();
             g_key_file_load_from_file(keyfile,filepath,flags,error);
+            char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","NoDisplay", nullptr, nullptr);
+            if(ret_1!=nullptr)
+            {
+                QString str=QString::fromLocal8Bit(ret_1);
+                if(QString::compare(str, "true")==0)
+                {
+                    i++;
+                    continue;
+                }
+            }
             //过滤LXQt、KDE
             char* ret=g_key_file_get_locale_string(keyfile,"Desktop Entry","OnlyShowIn", nullptr, nullptr);
             if(ret!=nullptr)

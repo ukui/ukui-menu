@@ -85,14 +85,19 @@ void Style::initWidStyle()
     QStringList valstr=value.split(" ");
     int fontSize=valstr.at(valstr.count()-1).toInt();
 
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
     int position=0;
     int panelSize=0;
-    if(fileInfo.exists())
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        position=gsetting->get("panelposition").toInt();
-        panelSize=gsetting->get("panelsize").toInt();
+        if(gsetting->keys().contains(QString("panelposition")))
+            position=gsetting->get("panelposition").toInt();
+        else
+            position=0;
+        if(gsetting->keys().contains(QString("panelsize")))
+            panelSize=gsetting->get("panelsize").toInt();
+        else
+            panelSize=46;
     }
     else
     {

@@ -131,17 +131,27 @@ void MainWindow::initMainWindow()
     mainlayout->setContentsMargins(0,0,0,0);
     mainlayout->setSpacing(0);
     centralWidget()->setLayout(mainlayout);
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
     int position=0;
-    QGSettings* gsetting=nullptr;
-    if(fileInfo.exists())
+    int panelSize=0;
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
-        gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        position=gsetting->get("panelposition").toInt();
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        if(gsetting->keys().contains(QString("panelposition")))
+            position=gsetting->get("panelposition").toInt();
+        else
+            position=0;
+        if(gsetting->keys().contains(QString("panelsize")))
+            panelSize=gsetting->get("panelsize").toInt();
+        else
+            panelSize=46;
+
+        connect(gsetting,SIGNAL(changed(QString)),
+                this,SLOT(panelChangedSlot(QString)));
     }
     else
     {
         position=0;
+        panelSize=46;
     }
     char style[100];
     if(position==0)
@@ -176,9 +186,6 @@ void MainWindow::initMainWindow()
             this,SLOT(monitorResolutionChange(QRect)));
     connect(qApp,SIGNAL(primaryScreenChanged(QScreen*)),this,
             SLOT(primaryScreenChangedSlot(QScreen*)));
-
-    connect(gsetting,SIGNAL(changed(QString)),
-            this,SLOT(panelChangedSlot(QString)));
 }
 
 /**
@@ -258,14 +265,19 @@ void MainWindow::showFullScreenWidget()
 {
     is_fullscreen=true;
     this->setContentsMargins(0,0,0,0);
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
     int position=0;
     int panelSize=0;
-    if(fileInfo.exists())
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        position=gsetting->get("panelposition").toInt();
-        panelSize=gsetting->get("panelsize").toInt();
+        if(gsetting->keys().contains(QString("panelposition")))
+            position=gsetting->get("panelposition").toInt();
+        else
+            position=0;
+        if(gsetting->keys().contains(QString("panelsize")))
+            panelSize=gsetting->get("panelsize").toInt();
+        else
+            panelSize=46;
     }
     else
     {
@@ -318,14 +330,19 @@ void MainWindow::showDefaultWidget()
 {
     is_fullscreen=false;
     this->setContentsMargins(0,0,0,0);
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
     int position=0;
     int panelSize=0;
-    if(fileInfo.exists())
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        position=gsetting->get("panelposition").toInt();
-        panelSize=gsetting->get("panelsize").toInt();
+        if(gsetting->keys().contains(QString("panelposition")))
+            position=gsetting->get("panelposition").toInt();
+        else
+            position=0;
+        if(gsetting->keys().contains(QString("panelsize")))
+            panelSize=gsetting->get("panelsize").toInt();
+        else
+            panelSize=46;
     }
     else
     {
@@ -367,7 +384,7 @@ void MainWindow::showDefaultWidget()
     mainlayout->removeWidget(sidebarwid);
     sidebarwid->setParent(nullptr);
 
-    pAnimation->setDuration(100);//动画总时间
+    pAnimation->setDuration(50);//动画总时间
     pAnimation->setStartValue(startRect);
     pAnimation->setEndValue(endRect);
     pAnimation->setEasingCurve(QEasingCurve::InQuart);
@@ -426,14 +443,19 @@ void MainWindow::recvHideMainWindowSlot()
 
 void MainWindow::loadMainWindow()
 {
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
     int position=0;
     int panelSize=0;
-    if(fileInfo.exists())
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        position=gsetting->get("panelposition").toInt();
-        panelSize=gsetting->get("panelsize").toInt();
+        if(gsetting->keys().contains(QString("panelposition")))
+            position=gsetting->get("panelposition").toInt();
+        else
+            position=0;
+        if(gsetting->keys().contains(QString("panelsize")))
+            panelSize=gsetting->get("panelsize").toInt();
+        else
+            panelSize=46;
     }
     else
     {
@@ -443,11 +465,13 @@ void MainWindow::loadMainWindow()
     int x=QApplication::primaryScreen()->geometry().x();
     int y=QApplication::primaryScreen()->geometry().y();
     //默认开启默认态
-    QFileInfo m_fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
-    if(m_fileInfo.exists())
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.desktop").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
-        if(gsetting->get("menufull-screen").toBool())
+        bool ret=false;
+        if(gsetting->keys().contains(QString("menufullScreen")))
+            ret=gsetting->get("menufull-screen").toBool();
+        if(ret)
         {
             if(position==0)
                 this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
@@ -528,16 +552,24 @@ void MainWindow::panelChangedSlot(QString key)
 
 void MainWindow::setFrameStyle()
 {
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.panel.settings.gschema.xml"));
     int position=0;
-    if(fileInfo.exists())
+    int panelSize=0;
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        position=gsetting->get("panelposition").toInt();
+        if(gsetting->keys().contains(QString("panelposition")))
+            position=gsetting->get("panelposition").toInt();
+        else
+            position=0;
+        if(gsetting->keys().contains(QString("panelsize")))
+            panelSize=gsetting->get("panelsize").toInt();
+        else
+            panelSize=46;
     }
     else
     {
         position=0;
+        panelSize=46;
     }
     char style[100];
     if(!is_fullscreen)

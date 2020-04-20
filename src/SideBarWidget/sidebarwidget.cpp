@@ -153,26 +153,25 @@ void SideBarWidget::addSidebarBtn()
 
     otherButtonList.clear();
     otherButtonList.append(usericonbtn);
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
-    if(fileInfo.exists())
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.desktop").toLocal8Bit()))
     {
         gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
-        if(gsetting->get("personal-icon-locking").toBool())
+        if(gsetting->keys().contains(QString("personalIconLocking")) && gsetting->get("personal-icon-locking").toBool())
         {
                 otherButtonList.append(personalbtn);
                 otherButtonListIndex.append(1);
         }
-        if(gsetting->get("trash-icon-locking").toBool())
+        if(gsetting->keys().contains(QString("trashIconLocking")) && gsetting->get("trash-icon-locking").toBool())
         {
                 otherButtonList.append(trashbtn);
                 otherButtonListIndex.append(2);
         }
-        if(gsetting->get("computer-icon-locking").toBool())
+        if(gsetting->keys().contains(QString("computerIconLocking")) && gsetting->get("computer-icon-locking").toBool())
         {
                 otherButtonList.append(computerbtn);
                 otherButtonListIndex.append(3);
         }
-        if(gsetting->get("settings-icon-locking").toBool())
+        if(gsetting->keys().contains(QString("settingsIconLocking")) && gsetting->get("settings-icon-locking").toBool())
         {
                 otherButtonList.append(controlbtn);
                 otherButtonListIndex.append(4);
@@ -227,33 +226,42 @@ void SideBarWidget::resetSidebarBtnSlot()
     otherButtonList.clear();
     otherButtonListIndex.clear();
     otherButtonList.append(usericonbtn);
-    QFileInfo fileInfo(QString("/usr/share/glib-2.0/schemas/org.ukui.control-center.desktop.gschema.xml"));
-    if(fileInfo.exists())
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.desktop").toLocal8Bit()))
     {
-        if(gsetting->get("personal-icon-locking").toBool())
+        gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
+        if(gsetting->keys().contains(QString("personalIconLocking")) && gsetting->get("personal-icon-locking").toBool())
         {
                 otherButtonList.append(personalbtn);
                 otherButtonListIndex.append(1);
         }
-        if(gsetting->get("trash-icon-locking").toBool())
+        if(gsetting->keys().contains(QString("trashIconLocking")) && gsetting->get("trash-icon-locking").toBool())
         {
                 otherButtonList.append(trashbtn);
                 otherButtonListIndex.append(2);
         }
-        if(gsetting->get("computer-icon-locking").toBool())
+        if(gsetting->keys().contains(QString("computerIconLocking")) && gsetting->get("computer-icon-locking").toBool())
         {
                 otherButtonList.append(computerbtn);
                 otherButtonListIndex.append(3);
         }
-        if(gsetting->get("settings-icon-locking").toBool())
+        if(gsetting->keys().contains(QString("settingsIconLocking")) && gsetting->get("settings-icon-locking").toBool())
         {
                 otherButtonList.append(controlbtn);
                 otherButtonListIndex.append(4);
         }
+        connect(gsetting,SIGNAL(changed(QString)),
+                this,SLOT(resetSidebarBtnSlot()));
     }
     otherButtonList.append(shutdownbtn);
     Q_FOREACH(QAbstractButton* button,otherButtonList)
         pMainWidgetLayout->addWidget(button);
+
+    Q_FOREACH(QAbstractButton* button,otherButtonList)
+    {
+        QPushButton* btn=qobject_cast<QPushButton*>(button);
+        if(otherButtonList.indexOf(button)!=0 && otherButtonList.indexOf(button)!=otherButtonList.count()-1)
+            addRightClickMenu(btn);
+    }
 
     if(!is_fullscreen)
         loadMinSidebar();
@@ -378,6 +386,7 @@ void SideBarWidget::shutdownBtnRightClickSlot()
 void SideBarWidget::addRightClickMenu(QPushButton *btn)
 {
     btn->setContextMenuPolicy(Qt::CustomContextMenu);
+    disconnect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(otherBtnRightClickSlot()));
     connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(otherBtnRightClickSlot()));
 }
 
@@ -403,7 +412,12 @@ void SideBarWidget::otherBtnRightClickSlot()
     default:
         break;
     }
-    othermenu->showOtherMenu(desktopfp);
+    int ret=othermenu->showOtherMenu(desktopfp);
+    if(ret==15)
+    {
+        Q_EMIT sendHideMainWindowSignal();
+        QProcess::startDetached(QString("ukui-control-center -d"));
+    }
 }
 
 void SideBarWidget::computerBtnClickedSlot()

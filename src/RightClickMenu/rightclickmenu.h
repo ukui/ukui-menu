@@ -46,7 +46,7 @@ public:
     int showCommonUseAppBtnMenu(QString desktopfp);
     int showAppBtnMenu(QString desktopfp);
     int showShutdownMenu();
-    void showOtherMenu(QString desktopfp);
+    int showOtherMenu(QString desktopfp);
 
 private:
     QString desktopfp;
