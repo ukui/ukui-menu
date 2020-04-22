@@ -47,6 +47,7 @@ public:
     explicit FullCommonUseWidget(QWidget *parent = nullptr);
     ~FullCommonUseWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    void updateListView();
 
 private:
     Ui::FullCommonUseWidget *ui;

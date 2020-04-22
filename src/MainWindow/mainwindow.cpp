@@ -22,6 +22,8 @@
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QtSingleApplication>
+#include <QtX11Extras/QX11Info>
+#include "src/XEventMonitor/xeventmonitor.h"
 #include "src/Style/style.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -31,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     pUkuiMenuInterface=new UkuiMenuInterface;
     UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
+    UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
+    UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
+    UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -78,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    XEventMonitor::instance()->quit();
     delete ui;
     delete pUkuiMenuInterface;
 }
@@ -186,6 +192,11 @@ void MainWindow::initMainWindow()
             this,SLOT(monitorResolutionChange(QRect)));
     connect(qApp,SIGNAL(primaryScreenChanged(QScreen*)),this,
             SLOT(primaryScreenChangedSlot(QScreen*)));
+
+    XEventMonitor::instance()->start();
+    connect(XEventMonitor::instance(), SIGNAL(keyRelease(const QString &)),
+            this, SLOT(XkbEventsFilter(const QString &)));
+
 }
 
 /**
@@ -319,7 +330,7 @@ void MainWindow::showFullScreenWidget()
     pAnimation->setDuration(100);//动画总时间
     pAnimation->setStartValue(startRect);
     pAnimation->setEndValue(endRect);
-    pAnimation->setEasingCurve(QEasingCurve::InQuart);
+    pAnimation->setEasingCurve(QEasingCurve::Linear);
     pAnimation->start();
 }
 
@@ -384,15 +395,16 @@ void MainWindow::showDefaultWidget()
     mainlayout->removeWidget(sidebarwid);
     sidebarwid->setParent(nullptr);
 
-    pAnimation->setDuration(50);//动画总时间
+    pAnimation->setDuration(100);//动画总时间
     pAnimation->setStartValue(startRect);
     pAnimation->setEndValue(endRect);
-    pAnimation->setEasingCurve(QEasingCurve::InQuart);
+    pAnimation->setEasingCurve(QEasingCurve::Linear);
     pAnimation->start();
 }
 
 void MainWindow::stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
+    Q_UNUSED(oldState);
     if(is_fullscreen && newState==QAbstractAnimation::Stopped)
     {
         mainlayout->addWidget(mainviewwid);
@@ -429,6 +441,25 @@ bool MainWindow::event ( QEvent * event )
         }
    }
    return QWidget::event(event);
+}
+
+void MainWindow::XkbEventsFilter(const QString &keyCode)
+{
+    if((keyCode == "Super_L") || (keyCode == "Super_R"))
+    {
+        if(QApplication::activeWindow() == this)
+        {
+            this->hide();
+            mainviewwid->widgetMakeZero();
+            sidebarwid->widgetMakeZero();
+        }
+        else{
+            this->loadMainWindow();
+            this->show();
+            this->raise();
+            this->activateWindow();
+        }
+    }
 }
 
 /**
@@ -599,7 +630,7 @@ void MainWindow::setFrameStyle()
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-    if(e->type()==QEvent::KeyPress)
+    if(e->type()==KeyPress+4)
     {
         QKeyEvent* ke=static_cast<QKeyEvent*>(e);
         if((ke->key()>=0x30 && ke->key()<=0x39) || (ke->key()>=0x41 && ke->key()<=0x5a))

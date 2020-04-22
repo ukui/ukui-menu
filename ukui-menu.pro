@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui svg dbus
+QT       += core gui svg dbus x11extras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 include(src/QtSingleApplication/qtsingleapplication.pri)
@@ -47,7 +47,8 @@ SOURCES += \
     src/UtilityFunction/toolbutton.cpp \
     src/Interface/ukuichineseletter.cpp \
     src/Interface/ukuimenuinterface.cpp \
-    main.cpp
+    main.cpp \
+    src/XEventMonitor/xeventmonitor.cpp
 
 HEADERS  += \
     src/CommonUseWidget/commonusewidget.h \
@@ -77,7 +78,8 @@ HEADERS  += \
     src/UtilityFunction/scrollarea.h \
     src/UtilityFunction/toolbutton.h \
     src/Interface/ukuichineseletter.h \
-    src/Interface/ukuimenuinterface.h
+    src/Interface/ukuimenuinterface.h \
+    src/XEventMonitor/xeventmonitor.h
 
 FORMS    += \
     src/CommonUseWidget/commonusewidget.ui \
@@ -97,7 +99,7 @@ FORMS    += \
 RESOURCES += \
     res.qrc
 
-PKGCONFIG+=glib-2.0 gsettings-qt libbamf3
+PKGCONFIG+=glib-2.0 gsettings-qt libbamf3 x11 xrandr xtst
 CONFIG += no_keywords link_pkgconfig
 
 desktop_file.files = ukui-menu.desktop

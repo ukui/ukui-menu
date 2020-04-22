@@ -54,6 +54,7 @@ public:
     ~FullFunctionWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
     void enterAnimation();
+    void updateRecentListView();//更新最近添加应用
 
 private:
     Ui::FullFunctionWidget *ui;
@@ -90,9 +91,7 @@ private:
     QButtonGroup* pBtnGroup=nullptr;
 
     QPropertyAnimation* pAnimation=nullptr;
-
-//    int btnPos=0;
-//    int beforebtnPos=0;
+    QSettings* setting=nullptr;
 
     //计时器
     QTimer* timer=nullptr;

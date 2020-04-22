@@ -128,6 +128,9 @@ void FullFunctionWidget::initWidget()
     timer=new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(timeOutSlot()));
 
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
+    setting=new QSettings(path,QSettings::IniFormat);
+
     initAppListWidget();
     initIconListWidget();
 }
@@ -163,8 +166,7 @@ void FullFunctionWidget::fillAppList()
 {
     classificationbtnlist.clear();
     classificationbtnrowlist.clear();
-
-    QVector<QStringList> vector=pUkuiMenuInterface->getFunctionalClassification();
+    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
     QStringList recentlist=vector.at(0);
     if(!recentlist.isEmpty())
     {
@@ -263,6 +265,87 @@ void FullFunctionWidget::insertAppList(QStringList appnamelist)
     connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 }
 
+void FullFunctionWidget::updateRecentListView()
+{
+    QDateTime dt=QDateTime::currentDateTime();
+    int currentDateTime=dt.toTime_t();
+    int nDaySec=24*60*60;
+    setting->beginGroup("recentapp");
+    QStringList recentAppKeys=setting->allKeys();
+    for(int i=0;i<recentAppKeys.count();i++)
+    {
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
+            setting->remove(recentAppKeys.at(i));
+    }
+    setting->sync();
+    QStringList recentlist;
+    recentlist.clear();
+    if(setting->allKeys().size()>0)
+    {
+        QStringList keys=setting->allKeys();
+        for(int i=0;i<keys.count();i++)
+        {
+            QString desktopfp=QString("/usr/share/applications/"+keys.at(i));
+            QFileInfo fileInfo(desktopfp);
+            if(!fileInfo.exists())
+                continue;
+            QString appname=pUkuiMenuInterface->getAppName(desktopfp);
+            recentlist.append(appname);
+        }
+    }
+    if(!recentlist.isEmpty())
+    {
+        QLayoutItem *child;
+        if((child = scrollareawidLayout->itemAt(1)) != 0)
+        {
+            QWidget* wid=child->widget();
+            FullListView* listview=qobject_cast<FullListView*>(wid);
+            data.clear();
+            for(int i=0;i<recentlist.count();i++)
+            {
+
+                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
+                data.append(desktopfp);
+            }
+            listview->updateData(data);
+        }
+    }
+    else{
+        if(classificationbtnlist.contains(tr("Recently")))
+        {
+            int num=0;
+            QLayoutItem *child;
+             while ((child = scrollareawidLayout->takeAt(0)) != 0) {
+                 QWidget* wid=child->widget();
+                 scrollareawidLayout->removeWidget(wid);
+                 wid->setParent(nullptr);
+                 delete wid;
+                 delete child;
+                 num++;
+                 if(num==2)
+                     break;
+             }
+             classificationbtnlist.removeAt(0);
+
+             //刷新图标列表界面
+             Q_FOREACH (QAbstractButton* button, buttonList){
+                 pBtnGroup->removeButton(button);
+             }
+             buttonList.clear();
+             while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
+                 QWidget* wid=child->widget();
+                 iconlistscrollareawidLayout->removeWidget(wid);
+                 wid->setParent(nullptr);
+                 delete wid;
+                 delete child;
+             }
+             initIconListScrollArea();
+        }
+    }
+    resizeScrollAreaControls();
+    setting->endGroup();
+}
+
 /**
  * 执行应用程序
  */
@@ -290,7 +373,7 @@ void FullFunctionWidget::updateAppListView()
          QWidget* wid=child->widget();
          scrollareawidLayout->removeWidget(wid);
          wid->setParent(nullptr);
-//         delete wid;
+         delete wid;
          delete child;
      }
      fillAppList();
@@ -316,6 +399,7 @@ void FullFunctionWidget::updateAppListView()
 void FullFunctionWidget::resizeScrollAreaControls()
 {
     int pos=0;
+    classificationbtnrowlist.clear();
     classificationbtnrowlist.append(QString::number(pos));
     int row=0;
     while(row<scrollareawidLayout->count()/2)

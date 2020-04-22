@@ -71,9 +71,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         }
 
         painter->setOpacity(1);
-//        QIcon icon=index.data(Qt::DecorationRole).value<QIcon>();
         QString desktopfp=index.data(Qt::DisplayRole).value<QString>();
-//        QString desktopfp=index.data().value<QString>();
         QString iconstr=pUkuiMenuInterface->getAppIcon(desktopfp);
         iconstr.remove(".png");
         iconstr.remove(".svg");
@@ -130,8 +128,6 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             {
                 QToolTip::showText(QCursor::pos(),appname);
             }
-//                QToolTip::showText(QPoint(QCursor::pos().x(),option.rect.bottom()),appname);
-
         }
         else {
             QToolTip::hideText();

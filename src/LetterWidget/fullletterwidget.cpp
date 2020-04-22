@@ -103,7 +103,7 @@ void FullLetterWidget::fillAppList()
     letterbtnlist.clear();
     letterbtnrowlist.clear();
 
-    QVector<QStringList> vector=pUkuiMenuInterface->getAlphabeticClassification();
+    QVector<QStringList> vector=UkuiMenuInterface::alphabeticVector;
     for(int i=0;i<vector.size();i++)
     {
         QStringList appList=vector.at(i);
@@ -171,7 +171,7 @@ void FullLetterWidget::updateAppListView()
          QWidget* wid=child->widget();
          scrollareawidLayout->removeWidget(wid);
          wid->setParent(nullptr);
-//         delete wid;
+         delete wid;
          delete child;
      }
      fillAppList();
@@ -266,8 +266,10 @@ void FullLetterWidget::initLetterListWidget()
  */
 void FullLetterWidget::initLetterListScrollArea()
 {
+//    letterlistscrollarea->setStyleSheet("border:1px solid #ff0000;");
 //    letterlistscrollarea->setFixedSize(Style::LeftLetterBtnHeight*2,
 //                                       (letterbtnlist.size()+1)*Style::LeftLetterBtnHeight);
+
     if(letterbtnlist.contains("&"))
         letterbtnlist.replace(letterbtnlist.indexOf("&"),"&&");
     for(int i=0;i<letterbtnlist.size();i++)

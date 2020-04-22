@@ -29,7 +29,7 @@ SideBarWidget::SideBarWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     initWidget();
-    letterbtn->click();
+    functionbtn->click();
 }
 
 SideBarWidget::~SideBarWidget()
@@ -355,7 +355,7 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon,QLabel* label,QStr
  */
 void SideBarWidget::shutdownBtnRightClickSlot()
 {
-    shutdownmenu=new RightClickMenu(this);
+    shutdownmenu=new RightClickMenu(this,2);
     int ret=shutdownmenu->showShutdownMenu();
     if(ret>=10 && ret<=14)
     {
@@ -392,7 +392,7 @@ void SideBarWidget::addRightClickMenu(QPushButton *btn)
 
 void SideBarWidget::otherBtnRightClickSlot()
 {
-    othermenu=new RightClickMenu(this);
+    othermenu=new RightClickMenu(this,3);
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
     int index=otherButtonListIndex.at(otherButtonList.indexOf(btn)-1);
     QString desktopfp;
@@ -756,5 +756,5 @@ void SideBarWidget::enterAnimation()
 
 void SideBarWidget::widgetMakeZero()
 {
-    letterbtn->click();
+    functionbtn->click();
 }

@@ -71,7 +71,11 @@ void FullCommonUseWidget::initAppListWidget()
 
 void FullCommonUseWidget::fillAppList()
 {
-    getCommonUseAppList();
+    data.clear();
+    Q_FOREACH(QString desktopfp,UkuiMenuInterface::commonUseVector)
+    {
+        data.append(desktopfp);
+    }
     listview->addData(data);
 }
 
@@ -117,9 +121,24 @@ void FullCommonUseWidget::updateListViewSlot(QString desktopfp, int type)
     setting->endGroup();
 }
 
+void FullCommonUseWidget::updateListView()
+{
+    data.clear();
+    UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
+    Q_FOREACH(QString desktopfp,UkuiMenuInterface::commonUseVector)
+    {
+        data.append(desktopfp);
+    }
+    listview->updateData(data);
+}
+
 void FullCommonUseWidget::updateListViewAllSlot()
 {
-    getCommonUseAppList();
+    data.clear();
+    Q_FOREACH(QString desktopfp,UkuiMenuInterface::commonUseVector)
+    {
+        data.append(desktopfp);
+    }
     listview->updateData(data);
 }
 

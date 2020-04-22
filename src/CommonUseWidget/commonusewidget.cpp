@@ -80,7 +80,11 @@ void CommonUseWidget::initAppListWidget()
  */
 void CommonUseWidget::fillAppList()
 {
-    getCommonUseAppList();
+    data.clear();
+    Q_FOREACH(QString desktopfp,UkuiMenuInterface::commonUseVector)
+    {
+        data.append(QStringList()<<desktopfp<<"1");
+    }
     listview->addData(data);
 }
 
@@ -127,9 +131,24 @@ void CommonUseWidget::updateListViewSlot(QString desktopfp, int type)
     setting->endGroup();
 }
 
+void CommonUseWidget::updateListView()
+{
+    data.clear();
+    UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
+    Q_FOREACH(QString desktopfp,UkuiMenuInterface::commonUseVector)
+    {
+        data.append(QStringList()<<desktopfp<<"1");
+    }
+    listview->updateData(data);
+}
+
 void CommonUseWidget::updateListViewAllSlot()
 {
-    getCommonUseAppList();
+    data.clear();
+    Q_FOREACH(QString desktopfp,UkuiMenuInterface::commonUseVector)
+    {
+        data.append(QStringList()<<desktopfp<<"1");
+    }
     listview->updateData(data);
 }
 
@@ -160,53 +179,6 @@ void CommonUseWidget::removeListAllItemSlot()
             listview->model()->removeRow(i);
     }
     setting->endGroup();
-}
-
-void CommonUseWidget::getCommonUseAppList()
-{
-    setting->beginGroup("lockapplication");
-    QStringList lockdesktopfnList=setting->allKeys();
-    for(int i=0;i<lockdesktopfnList.count()-1;i++)
-        for(int j=0;j<lockdesktopfnList.count()-1-i;j++)
-        {
-            int value_1=setting->value(lockdesktopfnList.at(j)).toInt();
-            int value_2=setting->value(lockdesktopfnList.at(j+1)).toInt();
-            if(value_1 > value_2)
-            {
-                QString tmp=lockdesktopfnList.at(j);
-                lockdesktopfnList.replace(j,lockdesktopfnList.at(j+1));
-                lockdesktopfnList.replace(j+1,tmp);
-
-            }
-        }
-    setting->endGroup();
-    setting->beginGroup("application");
-    QStringList desktopfnList=setting->allKeys();
-    for(int i=0;i<desktopfnList.count()-1;i++)
-        for(int j=0;j<desktopfnList.count()-1-i;j++)
-        {
-            int value_1=setting->value(desktopfnList.at(j)).toInt();
-            int value_2=setting->value(desktopfnList.at(j+1)).toInt();
-            if(value_1 < value_2)
-            {
-                QString tmp=desktopfnList.at(j);
-                desktopfnList.replace(j,desktopfnList.at(j+1));
-                desktopfnList.replace(j+1,tmp);
-
-            }
-        }
-    setting->endGroup();
-    data.clear();
-    Q_FOREACH(QString desktopfn,lockdesktopfnList)
-    {
-        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
-        data.append(QStringList()<<desktopfp<<"1");
-    }
-    Q_FOREACH(QString desktopfn,desktopfnList)
-    {
-        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
-        data.append(QStringList()<<desktopfp<<"1");
-    }
 }
 
 void CommonUseWidget::widgetMakeZero()

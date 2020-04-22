@@ -43,6 +43,7 @@ public:
     explicit FunctionWidget(QWidget *parent=nullptr);
     ~FunctionWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    void updateListView();//更新应用列表
 
 private:
     Ui::FunctionWidget *ui;

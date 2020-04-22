@@ -81,10 +81,6 @@ void MainViewWidget::initWidget()
 
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    //进程开启，刷新常用软件界面
-    connect(this,SIGNAL(viewOpenedSignal()),fullcommonusewid,SLOT(updateListViewAllSlot()));
-    connect(this,SIGNAL(viewOpenedSignal()),commonusewid,SLOT(updateListViewAllSlot()));
-
     //常用软件界面删除操作，刷新界面
     connect(commonusewid,SIGNAL(sendUpdateAppListSignal(QString,int)),fullcommonusewid,SLOT(updateListViewSlot(QString,int)));
     connect(fullcommonusewid,SIGNAL(sendUpdateAppListSignal(QString,int)),commonusewid,SLOT(updateListViewSlot(QString,int)));
@@ -128,15 +124,27 @@ void MainViewWidget::initWidget()
 
     addTopControl();
     loadMinMainView();
-    loadLetterWidget();
 
     //监控应用进程开启
     bamf_matcher_get_default();
     QDBusConnection::sessionBus().connect("org.ayatana.bamf","/org/ayatana/bamf/matcher","org.ayatana.bamf.matcher",
                                          QString("ViewOpened"),this,SLOT(ViewOpenedSlot(QDBusMessage)));
+    //进程开启，刷新常用软件界面
+    connect(this,SIGNAL(viewOpenedSignal()),fullcommonusewid,SLOT(updateListViewAllSlot()));
+    connect(this,SIGNAL(viewOpenedSignal()),commonusewid,SLOT(updateListViewAllSlot()));
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
+
+    setting=new QSettings(path,QSettings::IniFormat);
+    fileWatcherIni=new QFileSystemWatcher(this);
+    fileWatcherIni->addPath(path);
+    connect(fileWatcherIni,SIGNAL(fileChanged(QString)),this,SLOT(fileChangedSlot(QString)));
+//    connect(this,SIGNAL(fileChangedSignal()),functionwid,SLOT(updateAppListView()));
+//    connect(this,SIGNAL(fileChangedSignal()),fullfunctionwid,SLOT(updateAppListView()));
+//    connect(this,SIGNAL(fileChangedSignal()),commonusewid,SLOT(updateListViewAllSlot()));
+//    connect(this,SIGNAL(fileChangedSignal()),fullcommonusewid,SLOT(updateListViewAllSlot()));
+
 
     gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
     connect(gsetting,SIGNAL(changed(QString)),this,SLOT(iconThemeChangeSlot(QString)));
@@ -430,6 +438,7 @@ void MainViewWidget::loadCommonUseWidget()
 
     }
     mainLayout->addWidget(commonusewid);
+    commonusewid->updateListView();
     widgetState=1;
     saveCurrentWidState=1;
 }
@@ -480,6 +489,8 @@ void MainViewWidget::loadFunctionWidget()
 
     }
     mainLayout->addWidget(functionwid);
+    if(is_fullscreen || (!is_fullscreen && saveCurrentWidState!=2))
+        functionwid->updateListView();
     widgetState=3;
     saveCurrentWidState=3;
 }
@@ -506,6 +517,7 @@ void MainViewWidget::loadFullCommonUseWidget()
 
     }
     mainLayout->addWidget(fullcommonusewid);
+    fullcommonusewid->updateListView();
     widgetState=1;
     saveCurrentWidState=1;
 }
@@ -558,7 +570,10 @@ void MainViewWidget::loadFullFunctionWidget()
     }
     mainLayout->addWidget(fullfunctionwid);
     if(!is_fullscreen || (is_fullscreen && saveCurrentWidState!=3))
+    {
+        fullfunctionwid->updateRecentListView();
         fullfunctionwid->enterAnimation();
+    }
     widgetState=3;
     saveCurrentWidState=3;
 }
@@ -640,7 +655,13 @@ void MainViewWidget::directoryChangedSlot()
         }
         setting->endGroup();
         UkuiMenuInterface::appInfoVector.clear();
+        UkuiMenuInterface::alphabeticVector.clear();
+        UkuiMenuInterface::functionalVector.clear();
+        UkuiMenuInterface::commonUseVector.clear();
         UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
+        UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
+        UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
+        UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
         Q_EMIT directoryChangedSignal();
     }
     else//软件卸载
@@ -672,8 +693,28 @@ void MainViewWidget::directoryChangedSlot()
                 break;
             }
         }
+        UkuiMenuInterface::appInfoVector.clear();
+        UkuiMenuInterface::alphabeticVector.clear();
+        UkuiMenuInterface::functionalVector.clear();
+        UkuiMenuInterface::commonUseVector.clear();
         UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
+        UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
+        UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
+        UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
         Q_EMIT directoryChangedSignal();
+    }
+}
+
+void MainViewWidget::fileChangedSlot(QString path)
+{
+    QString iniPath=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
+    if(QString::compare(iniPath,path)==0)
+    {
+        UkuiMenuInterface::functionalVector.clear();
+        UkuiMenuInterface::commonUseVector.clear();
+        UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
+        UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
+        Q_EMIT fileChangedSignal();
     }
 }
 

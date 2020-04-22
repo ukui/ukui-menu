@@ -98,7 +98,8 @@ private:
     QString letterbtnname;
     QString functionbtnname;
 
-    QFileSystemWatcher* fileWatcher;//监控/usr/share/applications文件夹状态
+    QFileSystemWatcher* fileWatcher=nullptr;//监控/usr/share/applications文件夹状态
+    QFileSystemWatcher* fileWatcherIni=nullptr;
 
     QSettings* setting=nullptr;
     QGSettings* gsetting=nullptr;
@@ -120,6 +121,7 @@ private Q_SLOTS:
     void searchAppSlot(QString arg);//搜索程序和文件槽函数
     void ViewOpenedSlot(QDBusMessage msg);//监控进程开启
     void directoryChangedSlot();//desktop文件目录改变信号槽
+    void fileChangedSlot(QString path);//ukui-menu.ini文件改变信号槽
     void recvSearchResult(QStringList desktopfplist);//接收搜索结果
     void iconThemeChangeSlot(QString key);
 
@@ -127,6 +129,7 @@ Q_SIGNALS:
     void sendHideMainWindowSignal();//向MainWindow发送隐藏主窗口信号
     void viewOpenedSignal();//向常用软件模块发送刷新信号
     void directoryChangedSignal();//desktop文件目录改变信号
+    void fileChangedSignal();//ini文件改变信号
     void sendSearchKeyword(QString);//向SearchAppThread发送搜索关键字
 };
 

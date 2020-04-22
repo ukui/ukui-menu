@@ -43,6 +43,9 @@ public:
     QVector<QStringList> createAppInfoVector();//创建应用信息容器
     static QVector<QStringList> appInfoVector;
     static QVector<QString> desktopfpVector;
+    static QVector<QStringList> alphabeticVector;
+    static QVector<QStringList> functionalVector;
+    static QVector<QString> commonUseVector;
 
     /**
      * 获取系统应用名称
@@ -65,6 +68,7 @@ public:
     QStringList sortAppName();//应用排序
     QVector<QStringList> getAlphabeticClassification();//获取字母分类
     QVector<QStringList> getFunctionalClassification();//获取功能分类
+    QVector<QString> getCommonUseApp();//获取常用App
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
 
     QString getAppNamePinyin(QString appname);//获取应用名拼音

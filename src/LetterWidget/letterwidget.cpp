@@ -99,7 +99,7 @@ void LetterWidget::initAppListWidget()
 void LetterWidget::fillAppListView()
 {
     int row=0;
-    QVector<QStringList> vector=pUkuiMenuInterface->getAlphabeticClassification();
+    QVector<QStringList> vector=UkuiMenuInterface::alphabeticVector;
     for(int i=0;i<vector.size();i++)
     {
         QStringList appList=vector.at(i);
@@ -165,7 +165,7 @@ void LetterWidget::updateAppListView()
     data.clear();
     letterbtnlist.clear();
     letterbtnrowlist.clear();
-    QVector<QStringList> vector=pUkuiMenuInterface->getAlphabeticClassification();
+    QVector<QStringList> vector=UkuiMenuInterface::alphabeticVector;
     for(int i=0;i<vector.size();i++)
     {
         QStringList appList=vector.at(i);

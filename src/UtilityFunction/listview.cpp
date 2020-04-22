@@ -28,6 +28,10 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
+    if(module==0)
+        menu=new RightClickMenu(this,0);
+    else
+        menu=new RightClickMenu(this,1);
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -110,7 +114,7 @@ void ListView::rightClickedSlot()
 {
     if(!this->selectionModel()->selectedIndexes().isEmpty())
     {
-        menu=new RightClickMenu(this);
+//        menu=new RightClickMenu(this);
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QStringList strlist=var.value<QStringList>();

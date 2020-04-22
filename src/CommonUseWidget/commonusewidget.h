@@ -47,6 +47,7 @@ public:
     explicit CommonUseWidget(QWidget *parent = nullptr);
     ~CommonUseWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    void updateListView();
 
 private:
     Ui::CommonUseWidget *ui;
@@ -65,7 +66,6 @@ protected:
     void initWidget();
     void initAppListWidget();//初始化应用列表界面
     void fillAppList();//填充应用列表
-    void getCommonUseAppList();//获取常用应用列表
 
 private Q_SLOTS:
     /**

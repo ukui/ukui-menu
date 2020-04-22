@@ -19,7 +19,7 @@
 #include "rightclickmenu.h"
 #include <QDebug>
 
-RightClickMenu::RightClickMenu(QWidget *parent):
+RightClickMenu::RightClickMenu(QWidget *parent, int module):
     QWidget (parent)
 
 {
@@ -27,119 +27,139 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     setting=new QSettings(path,QSettings::IniFormat);
 
     //其它按钮右键菜单项
-    othermenu=new QMenu(this);
-    othermenu->setLayoutDirection(Qt::LeftToRight);
-    othermenu->setFixedSize(250+2,36*2+12+2);
-    OtherFix2TaskBarAction=new QWidgetAction(othermenu);
-    OtherFix2TaskBarWid=new QWidget();
-    OtherUnfix2TaskBarAction=new QWidgetAction(othermenu);
-    OtherUnfix2TaskBarWid=new QWidget();
-    OtherListAction=new QWidgetAction(othermenu);
-    OtherListWid=new QWidget();
+//    othermenu=new QMenu(this);
+//    othermenu->setLayoutDirection(Qt::LeftToRight);
+//    othermenu->setFixedSize(250+2,36*2+12+2);
+//    OtherFix2TaskBarAction=new QWidgetAction(othermenu);
+//    OtherFix2TaskBarWid=new QWidget();
+//    OtherUnfix2TaskBarAction=new QWidgetAction(othermenu);
+//    OtherUnfix2TaskBarWid=new QWidget();
+//    OtherListAction=new QWidgetAction(othermenu);
+//    OtherListWid=new QWidget();
 
-    //关机按钮右键菜单
-    shutdownmenu=new QMenu(this);
-    shutdownmenu->setLayoutDirection(Qt::LeftToRight);
-    shutdownmenu->setFixedSize(250+2,36*5+12+2);
-    LockScreenAction=new QWidgetAction(shutdownmenu);
-    LockScreenWid=new QWidget();
-    SwitchUserAction=new QWidgetAction(shutdownmenu);
-    SwitchUserWid=new QWidget();
-    LogOutAction=new QWidgetAction(shutdownmenu);
-    LogOutWid=new QWidget();
-    RebootAction=new QWidgetAction(shutdownmenu);
-    RebootWid=new QWidget();
-    ShutDownAction=new QWidgetAction(shutdownmenu);
-    ShutDownWid=new QWidget();
+//    //关机按钮右键菜单
+//    shutdownmenu=new QMenu(this);
+//    shutdownmenu->setLayoutDirection(Qt::LeftToRight);
+//    shutdownmenu->setFixedSize(250+2,36*5+12+2);
+//    LockScreenAction=new QWidgetAction(shutdownmenu);
+//    LockScreenWid=new QWidget();
+//    SwitchUserAction=new QWidgetAction(shutdownmenu);
+//    SwitchUserWid=new QWidget();
+//    LogOutAction=new QWidgetAction(shutdownmenu);
+//    LogOutWid=new QWidget();
+//    RebootAction=new QWidgetAction(shutdownmenu);
+//    RebootWid=new QWidget();
+//    ShutDownAction=new QWidgetAction(shutdownmenu);
+//    ShutDownWid=new QWidget();
 
     //常用应用按钮右键菜单
-    cuappbtnmenu=new QMenu(this);
-    cuappbtnmenu->setLayoutDirection(Qt::LeftToRight);
-    cuappbtnmenu->setFixedSize(250+2,36*6+4*3+9*2+12+2);
-    CuFix2CommonUseAction=new QWidgetAction(cuappbtnmenu);
-    CuFix2CommonUseWid=new QWidget();
-    CuUnfixed4CommonUseAction=new QWidgetAction(cuappbtnmenu);
-    CuUnfixed4CommonUseWid=new QWidget();
-    CuFix2TaskBarAction=new QWidgetAction(cuappbtnmenu);
-    CuFix2TaskBarWid=new QWidget();
-    CuUnfixed4TaskBarAction=new QWidgetAction(cuappbtnmenu);
-    CuUnfixed4TaskBarWid=new QWidget();
-    CuAdd2DesktopAction=new QWidgetAction(cuappbtnmenu);
-    CuAdd2DesktopWid=new QWidget();
-    CuDeleteAction=new QWidgetAction(cuappbtnmenu);
-    CuDeleteWid=new QWidget();
-    CuDeleteAllAction=new QWidgetAction(cuappbtnmenu);
-    CuDeleteAllWid=new QWidget();
-    CuUninstallAction=new QWidgetAction(cuappbtnmenu);
-    CuUninstallWid=new QWidget();
-    CuAttributeAction=new QWidgetAction(cuappbtnmenu);
-    CuAttributeWid=new QWidget();
+//    cuappbtnmenu=new QMenu(this);
+//    cuappbtnmenu->setLayoutDirection(Qt::LeftToRight);
+//    cuappbtnmenu->setFixedSize(250+2,36*6+4*3+9*2+12+2);
+//    CuFix2CommonUseAction=new QWidgetAction(cuappbtnmenu);
+//    CuFix2CommonUseWid=new QWidget();
+//    CuUnfixed4CommonUseAction=new QWidgetAction(cuappbtnmenu);
+//    CuUnfixed4CommonUseWid=new QWidget();
+//    CuFix2TaskBarAction=new QWidgetAction(cuappbtnmenu);
+//    CuFix2TaskBarWid=new QWidget();
+//    CuUnfixed4TaskBarAction=new QWidgetAction(cuappbtnmenu);
+//    CuUnfixed4TaskBarWid=new QWidget();
+//    CuAdd2DesktopAction=new QWidgetAction(cuappbtnmenu);
+//    CuAdd2DesktopWid=new QWidget();
+//    CuDeleteAction=new QWidgetAction(cuappbtnmenu);
+//    CuDeleteWid=new QWidget();
+//    CuDeleteAllAction=new QWidgetAction(cuappbtnmenu);
+//    CuDeleteAllWid=new QWidget();
+//    CuUninstallAction=new QWidgetAction(cuappbtnmenu);
+//    CuUninstallWid=new QWidget();
+//    CuAttributeAction=new QWidgetAction(cuappbtnmenu);
+//    CuAttributeWid=new QWidget();
 
-    //普通应用按钮右键菜单
-    appbtnmenu=new QMenu(this);
-    appbtnmenu->setLayoutDirection(Qt::LeftToRight);
-    appbtnmenu->setFixedSize(250+2,36*4+4*2+9*1+12+2);
-    Fix2CommonUseAction=new QWidgetAction(appbtnmenu);
-    Fix2CommonUseWid=new QWidget();
-    Unfixed4CommonUseAction=new QWidgetAction(appbtnmenu);
-    Unfixed4CommonUseWid=new QWidget();
-    Fix2TaskBarAction=new QWidgetAction(appbtnmenu);
-    Fix2TaskBarWid=new QWidget();
-    Unfixed4TaskBarAction=new QWidgetAction(appbtnmenu);
-    Unfixed4TaskBarWid=new QWidget();
-    Add2DesktopAction=new QWidgetAction(appbtnmenu);
-    Add2DesktopWid=new QWidget();
-    UninstallAction=new QWidgetAction(appbtnmenu);
-    UninstallWid=new QWidget();
-    AttributeAction=new QWidgetAction(appbtnmenu);
-    AttributeWid=new QWidget();
+//    //普通应用按钮右键菜单
+//    appbtnmenu=new QMenu(this);
+//    appbtnmenu->setLayoutDirection(Qt::LeftToRight);
+//    appbtnmenu->setFixedSize(250+2,36*4+4*2+9*1+12+2);
+//    Fix2CommonUseAction=new QWidgetAction(appbtnmenu);
+//    Fix2CommonUseWid=new QWidget();
+//    Unfixed4CommonUseAction=new QWidgetAction(appbtnmenu);
+//    Unfixed4CommonUseWid=new QWidget();
+//    Fix2TaskBarAction=new QWidgetAction(appbtnmenu);
+//    Fix2TaskBarWid=new QWidget();
+//    Unfixed4TaskBarAction=new QWidgetAction(appbtnmenu);
+//    Unfixed4TaskBarWid=new QWidget();
+//    Add2DesktopAction=new QWidgetAction(appbtnmenu);
+//    Add2DesktopWid=new QWidget();
+//    UninstallAction=new QWidgetAction(appbtnmenu);
+//    UninstallWid=new QWidget();
+//    AttributeAction=new QWidgetAction(appbtnmenu);
+//    AttributeWid=new QWidget();
 
     //间隔线
-    char lineStyle[100];
-    sprintf(lineStyle,"QLabel{background-color:%s;}",
-            RightClickMenuSeparator);
-    separatorLabel=new QLabel[5];
-    separatorWid=new QWidget[5];
-    for(int i=0;i<5;i++)
-    {
-        separatorLabel[i].setStyleSheet(lineStyle);
-        separatorWid[i].setStyleSheet("background:transparent;");
-        QHBoxLayout* layout=new QHBoxLayout(&separatorWid[i]);
-        separatorWid[i].setLayout(layout);
-        layout->setContentsMargins(8,0,8,0);
-        separatorWid[i].setFixedSize(246,9);
-        separatorWid[i].setFocusPolicy(Qt::NoFocus);
-        separatorLabel[i].setFixedSize(separatorWid->width()-16,1);
-        layout->addWidget(&separatorLabel[i]);
-        layout->setAlignment(&separatorLabel[i],Qt::AlignCenter);
-    }
+//    char lineStyle[100];
+//    sprintf(lineStyle,"QLabel{background-color:%s;}",
+//            RightClickMenuSeparator);
+//    separatorLabel=new QLabel[5];
+//    separatorWid=new QWidget[5];
+//    for(int i=0;i<5;i++)
+//    {
+//        separatorLabel[i].setStyleSheet(lineStyle);
+//        separatorWid[i].setStyleSheet("background:transparent;");
+//        QHBoxLayout* layout=new QHBoxLayout(&separatorWid[i]);
+//        separatorWid[i].setLayout(layout);
+//        layout->setContentsMargins(8,0,8,0);
+//        separatorWid[i].setFixedSize(246,9);
+//        separatorWid[i].setFocusPolicy(Qt::NoFocus);
+//        separatorLabel[i].setFixedSize(separatorWid->width()-16,1);
+//        layout->addWidget(&separatorLabel[i]);
+//        layout->setAlignment(&separatorLabel[i],Qt::AlignCenter);
+//    }
 
-    separatorAction_1=new QWidgetAction(cuappbtnmenu);
-    separatorAction_2=new QWidgetAction(cuappbtnmenu);
-    separatorAction_3=new QWidgetAction(cuappbtnmenu);
-    separatorAction_4=new QWidgetAction(appbtnmenu);
-    separatorAction_5=new QWidgetAction(appbtnmenu);
-    separatorAction_1->setDefaultWidget(&separatorWid[0]);
-    separatorAction_2->setDefaultWidget(&separatorWid[1]);
-    separatorAction_3->setDefaultWidget(&separatorWid[2]);
-    separatorAction_4->setDefaultWidget(&separatorWid[3]);
-    separatorAction_5->setDefaultWidget(&separatorWid[4]);
-    separatorAction_1->setDisabled(true);
-    separatorAction_2->setDisabled(true);
-    separatorAction_3->setDisabled(true);
-    separatorAction_4->setDisabled(true);
-    separatorAction_5->setDisabled(true);
+//    separatorAction_1=new QWidgetAction(cuappbtnmenu);
+//    separatorAction_2=new QWidgetAction(cuappbtnmenu);
+//    separatorAction_3=new QWidgetAction(cuappbtnmenu);
+//    separatorAction_4=new QWidgetAction(appbtnmenu);
+//    separatorAction_5=new QWidgetAction(appbtnmenu);
+//    separatorAction_1->setDefaultWidget(&separatorWid[0]);
+//    separatorAction_2->setDefaultWidget(&separatorWid[1]);
+//    separatorAction_3->setDefaultWidget(&separatorWid[2]);
+//    separatorAction_4->setDefaultWidget(&separatorWid[3]);
+//    separatorAction_5->setDefaultWidget(&separatorWid[4]);
+//    separatorAction_1->setDisabled(true);
+//    separatorAction_2->setDisabled(true);
+//    separatorAction_3->setDisabled(true);
+//    separatorAction_4->setDisabled(true);
+//    separatorAction_5->setDisabled(true);
 
     pUkuiMenuInterface=new UkuiMenuInterface;
     cmdProc=new QProcess(this);
     connect(cmdProc , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutput()));
 
-    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
-            QMenu::separator{height:4px;background:transparent;}",
-            RightClickMenuBorder ,RightClickMenuBackground);
+//    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
+//            QMenu::separator{height:4px;background:transparent;}",
+//            RightClickMenuBorder ,RightClickMenuBackground);
 
-    addShutdownAction();
-//    addOtherAction();
+    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
+            QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
+            RightClickMenuBorder ,RightClickMenuBackground,RightClickMenuSeparator);
+
+
+
+    switch (module) {
+    case 0:
+        addCommonUseAppBtnAction();
+        break;
+    case 1:
+        addAppBtnAction();
+        break;
+    case 2:
+        addShutdownAction();
+        break;
+    case 3:
+        addOtherAction();
+        break;
+    default:
+        break;
+    }
 }
 
 RightClickMenu::~RightClickMenu()
@@ -180,188 +200,152 @@ RightClickMenu::~RightClickMenu()
 }
 
 //常用应用按钮右键菜单
-void RightClickMenu::addCommonUseAppBtnAction()
+void RightClickMenu::initCommonUseAppBtnAction()
 {
-    setting->beginGroup("lockapplication");
-    QFileInfo fileInfo(desktopfp);
-    QString desktopfn=fileInfo.fileName();
-    if(!setting->contains(desktopfn))
-    {
-        initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
-        CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
-        cuappbtnmenu->addAction(CuFix2CommonUseAction);
-        connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
-    }
-    else
-    {
-        initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
-        CuUnfixed4CommonUseAction->setDefaultWidget(CuUnfixed4CommonUseWid);
-        cuappbtnmenu->addAction(CuUnfixed4CommonUseAction);
-        connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
-    }
-    setting->endGroup();
+    cuappbtnmenu=new QMenu(this);
+    cuappbtnmenu->setLayoutDirection(Qt::LeftToRight);
+    cuappbtnmenu->setFixedSize(250+2,36*6+5*2+12+2);
+    CuFix2CommonUseAction=new QWidgetAction(cuappbtnmenu);
+    CuFix2CommonUseWid=new QWidget();
+    CuUnfixed4CommonUseAction=new QWidgetAction(cuappbtnmenu);
+    CuUnfixed4CommonUseWid=new QWidget();
+    CuFix2TaskBarAction=new QWidgetAction(cuappbtnmenu);
+    CuFix2TaskBarWid=new QWidget();
+    CuUnfixed4TaskBarAction=new QWidgetAction(cuappbtnmenu);
+    CuUnfixed4TaskBarWid=new QWidget();
+    CuAdd2DesktopAction=new QWidgetAction(cuappbtnmenu);
+    CuAdd2DesktopWid=new QWidget();
+    CuDeleteAction=new QWidgetAction(cuappbtnmenu);
+    CuDeleteWid=new QWidget();
+    CuDeleteAllAction=new QWidgetAction(cuappbtnmenu);
+    CuDeleteAllWid=new QWidget();
+    CuUninstallAction=new QWidgetAction(cuappbtnmenu);
+    CuUninstallWid=new QWidget();
+    CuAttributeAction=new QWidgetAction(cuappbtnmenu);
+    CuAttributeWid=new QWidget();
 
-    cuappbtnmenu->addSeparator();
+    initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
+    CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
+    connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
 
-//    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appname);
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
+    initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
+    CuUnfixed4CommonUseAction->setDefaultWidget(CuUnfixed4CommonUseWid);
+    connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
 
-    QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
-    if(!ret)
-    {
-        initWidgetAction(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
-        CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
-        cuappbtnmenu->addAction(CuFix2TaskBarAction);
-        connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
-    }
-    else {
-        initWidgetAction(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
-        CuUnfixed4TaskBarAction->setDefaultWidget(CuUnfixed4TaskBarWid);
-        cuappbtnmenu->addAction(CuUnfixed4TaskBarAction);
-        connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
-    }
+    initWidgetAction(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
+    CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
+    connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
 
-    cuappbtnmenu->addSeparator();
+    initWidgetAction(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
+    CuUnfixed4TaskBarAction->setDefaultWidget(CuUnfixed4TaskBarWid);
+    connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
 
     initWidgetAction(CuAdd2DesktopWid,"",tr("Add to desktop shortcuts"));
     CuAdd2DesktopAction->setDefaultWidget(CuAdd2DesktopWid);
-    cuappbtnmenu->addAction(CuAdd2DesktopAction);
     connect(CuAdd2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
-
-//    cuappbtnmenu->addSeparator();
-    cuappbtnmenu->addAction(separatorAction_1);
-//    cuappbtnmenu->addSeparator();
-
 
     initWidgetAction(CuDeleteWid,"",tr("Remove from list"));
     CuDeleteAction->setDefaultWidget(CuDeleteWid);
-    cuappbtnmenu->addAction(CuDeleteAction);
     connect(CuDeleteAction,SIGNAL(triggered()),this,SLOT(commonUseDeleteActionTriggerSlot()));
-    setting->beginGroup("lockapplication");
-    if(setting->contains(desktopfn))
-    {
-        QLayoutItem* item=CuDeleteWid->layout()->itemAt(0);
-        QWidget* wid=item->widget();
-        QLabel* label=qobject_cast<QLabel*>(wid);
-        label->setStyleSheet("QLabel{background:transparent;border:0px;color:#4Dffffff;font-size:14px;}");
-        CuDeleteAction->setDisabled(true);
-    }
-    setting->endGroup();
-
-    cuappbtnmenu->addSeparator();
 
     initWidgetAction(CuDeleteAllWid,"",tr("Remove all"));
     CuDeleteAllAction->setDefaultWidget(CuDeleteAllWid);
-    cuappbtnmenu->addAction(CuDeleteAllAction);
     connect(CuDeleteAllAction,SIGNAL(triggered()),this,SLOT(commonUseDeleteAllActionTriggerSlot()));
-    setting->beginGroup("application");
-    if(setting->allKeys().size()==0)
-    {
-        QLayoutItem* item=CuDeleteAllWid->layout()->itemAt(0);
-        QWidget* wid=item->widget();
-        QLabel* label=qobject_cast<QLabel*>(wid);
-        label->setStyleSheet("QLabel{background:transparent;border:0px;color:#4Dffffff;font-size:14px;}");
-        CuDeleteAllAction->setDisabled(true);
-    }
-    setting->endGroup();
-
-    cuappbtnmenu->addAction(separatorAction_2);
 
     initWidgetAction(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
     CuUninstallAction->setDefaultWidget(CuUninstallWid);
-    cuappbtnmenu->addAction(CuUninstallAction);
     connect(CuUninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 
-//    cuappbtnmenu->addAction(separatorAction_3);
+}
 
-//    initWidgetAction(CuAttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
-//    CuAttributeAction->setDefaultWidget(CuAttributeWid);
-//    cuappbtnmenu->addAction(CuAttributeAction);
-//    connect(CuAttributeAction, SIGNAL(triggered()),this,SLOT(attributeActionTriggerSlot()));
-
+void RightClickMenu::addCommonUseAppBtnAction()
+{
+    initCommonUseAppBtnAction();
+    cuappbtnmenu->addAction(CuAdd2DesktopAction);
+    cuappbtnmenu->addSeparator();
+    cuappbtnmenu->addAction(CuDeleteAction);
+    cuappbtnmenu->addAction(CuDeleteAllAction);
+    cuappbtnmenu->addSeparator();
+    cuappbtnmenu->addAction(CuUninstallAction);
     cuappbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
-//    cuappbtnmenu->setWindowOpacity(RightClickMenuOpacity);
     cuappbtnmenu->setStyleSheet(style);
 }
 
 //普通应用按钮右键菜单
-void RightClickMenu::addAppBtnAction()
+void RightClickMenu::initAppBtnAction()
 {
-    setting->beginGroup("lockapplication");
-    QFileInfo fileInfo(desktopfp);
-    QString desktopfn=fileInfo.fileName();
-    if(!setting->contains(desktopfn))
-    {
-        initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
-        Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
-        appbtnmenu->addAction(Fix2CommonUseAction);
-        connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
-    }
-    else
-    {
-        initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
-        Unfixed4CommonUseAction->setDefaultWidget(Unfixed4CommonUseWid);
-        appbtnmenu->addAction(Unfixed4CommonUseAction);
-        connect(Unfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
-    }
-    setting->endGroup();
+    //普通应用按钮右键菜单
+    appbtnmenu=new QMenu(this);
+    appbtnmenu->setLayoutDirection(Qt::LeftToRight);
+    appbtnmenu->setFixedSize(250+2,36*4+5+12+2);
+    Fix2CommonUseAction=new QWidgetAction(appbtnmenu);
+    Fix2CommonUseWid=new QWidget();
+    Unfixed4CommonUseAction=new QWidgetAction(appbtnmenu);
+    Unfixed4CommonUseWid=new QWidget();
+    Fix2TaskBarAction=new QWidgetAction(appbtnmenu);
+    Fix2TaskBarWid=new QWidget();
+    Unfixed4TaskBarAction=new QWidgetAction(appbtnmenu);
+    Unfixed4TaskBarWid=new QWidget();
+    Add2DesktopAction=new QWidgetAction(appbtnmenu);
+    Add2DesktopWid=new QWidget();
+    UninstallAction=new QWidgetAction(appbtnmenu);
+    UninstallWid=new QWidget();
+    AttributeAction=new QWidgetAction(appbtnmenu);
+    AttributeWid=new QWidget();
 
-    appbtnmenu->addSeparator();
+    initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
+    Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
+    connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
 
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
+    initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
+    Unfixed4CommonUseAction->setDefaultWidget(Unfixed4CommonUseWid);
+    connect(Unfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
 
-    QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
-    if(!ret)
-    {
-        initWidgetAction(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
-        Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
-        appbtnmenu->addAction(Fix2TaskBarAction);
-        connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
+    initWidgetAction(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
+    Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
+    connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
 
-    }
-    else{
-        initWidgetAction(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
-        Unfixed4TaskBarAction->setDefaultWidget(Unfixed4TaskBarWid);
-        appbtnmenu->addAction(Unfixed4TaskBarAction);
-        connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
-    }
-
-    appbtnmenu->addSeparator();
+    initWidgetAction(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
+    Unfixed4TaskBarAction->setDefaultWidget(Unfixed4TaskBarWid);
+    connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
 
     initWidgetAction(Add2DesktopWid,"",tr("Add to desktop shortcuts"));
     Add2DesktopAction->setDefaultWidget(Add2DesktopWid);
-    appbtnmenu->addAction(Add2DesktopAction);
     connect(Add2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
-
-
-    appbtnmenu->addAction(separatorAction_4);
 
     initWidgetAction(UninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
     UninstallAction->setDefaultWidget(UninstallWid);
-    appbtnmenu->addAction(UninstallAction);
     connect(UninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
+}
 
-//    appbtnmenu->addAction(separatorAction_5);
-
-//    initWidgetAction(AttributeWid,":/data/img/mainviewwidget/attributeaction.svg",tr("Attribute"));
-//    AttributeAction->setDefaultWidget(AttributeWid);
-//    appbtnmenu->addAction(AttributeAction);
-//    connect(AttributeAction, SIGNAL(triggered()),this,SLOT(attributeActionTriggerSlot()));
-
+void RightClickMenu::addAppBtnAction()
+{
+    initAppBtnAction();
+    appbtnmenu->addAction(Add2DesktopAction);
+    appbtnmenu->addSeparator();
+    appbtnmenu->addAction(UninstallAction);
     appbtnmenu->setAttribute(Qt::WA_TranslucentBackground);
-//    appbtnmenu->setWindowOpacity(RightClickMenuOpacity);
     appbtnmenu->setStyleSheet(style);
 }
 
 //关机按钮右键菜单
 void RightClickMenu::addShutdownAction()
 {
+    //关机按钮右键菜单
+    shutdownmenu=new QMenu(this);
+    shutdownmenu->setLayoutDirection(Qt::LeftToRight);
+    shutdownmenu->setFixedSize(250+2,36*5+12+2);
+    LockScreenAction=new QWidgetAction(shutdownmenu);
+    LockScreenWid=new QWidget();
+    SwitchUserAction=new QWidgetAction(shutdownmenu);
+    SwitchUserWid=new QWidget();
+    LogOutAction=new QWidgetAction(shutdownmenu);
+    LogOutWid=new QWidget();
+    RebootAction=new QWidgetAction(shutdownmenu);
+    RebootWid=new QWidget();
+    ShutDownAction=new QWidgetAction(shutdownmenu);
+    ShutDownWid=new QWidget();
+
     initWidgetAction(LockScreenWid,":/data/img/sidebarwidget/lock.svg",tr("Lock Screen"));
     LockScreenAction->setDefaultWidget(LockScreenWid);
     shutdownmenu->addAction(LockScreenAction);
@@ -388,40 +372,36 @@ void RightClickMenu::addShutdownAction()
     connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownActionTriggerSlot()));
 
     shutdownmenu->setAttribute(Qt::WA_TranslucentBackground);
-//    shutdownmenu->setWindowOpacity(RightClickMenuOpacity);
     shutdownmenu->setStyleSheet(style);
 }
 
 //其它按钮右键菜单
 void RightClickMenu::addOtherAction()
 {
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
+    othermenu=new QMenu(this);
+    othermenu->setLayoutDirection(Qt::LeftToRight);
+    othermenu->setFixedSize(250+2,36*2+12+2);
+    OtherFix2TaskBarAction=new QWidgetAction(othermenu);
+    OtherFix2TaskBarWid=new QWidget();
+    OtherUnfix2TaskBarAction=new QWidgetAction(othermenu);
+    OtherUnfix2TaskBarWid=new QWidget();
+    OtherListAction=new QWidgetAction(othermenu);
+    OtherListWid=new QWidget();
 
-    QDBusReply<bool> ret=iface.call("CheckIfExist",this->desktopfp);
-    if(!ret)
-    {
-        initWidgetAction(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"));
-        OtherFix2TaskBarAction->setDefaultWidget(OtherFix2TaskBarWid);
-        othermenu->addAction(OtherFix2TaskBarAction);
-        connect(OtherFix2TaskBarAction,SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
-    }
-    else {
-        initWidgetAction(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"));
-        OtherUnfix2TaskBarAction->setDefaultWidget(OtherUnfix2TaskBarWid);
-        othermenu->addAction(OtherUnfix2TaskBarAction);
-        connect(OtherUnfix2TaskBarAction,SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
-    }
+    initWidgetAction(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"));
+    OtherFix2TaskBarAction->setDefaultWidget(OtherFix2TaskBarWid);
+    connect(OtherFix2TaskBarAction,SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
+
+    initWidgetAction(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"));
+    OtherUnfix2TaskBarAction->setDefaultWidget(OtherUnfix2TaskBarWid);
+    connect(OtherUnfix2TaskBarAction,SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
 
     initWidgetAction(OtherListWid,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"));
     OtherListAction->setDefaultWidget(OtherListWid);
-    othermenu->addAction(OtherListAction);
     connect(OtherListAction,SIGNAL(triggered()),this,SLOT(otherListActionTriggerSlot()));
 
+    othermenu->addAction(OtherListAction);
     othermenu->setAttribute(Qt::WA_TranslucentBackground);
-//    othermenu->setWindowOpacity(RightClickMenuOpacity);
     othermenu->setStyleSheet(style);
 }
 
@@ -461,8 +441,6 @@ void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString tex
 
     QLabel* labeltext=new QLabel(wid);
     labeltext->setStyleSheet(labelstyle);
-//    QByteArray textbyte=textstr.toLocal8Bit();
-//    char* text=textbyte.data();
     labeltext->setText(textstr);
     labeltext->adjustSize();
     layout->addWidget(labeltext);
@@ -537,7 +515,6 @@ void RightClickMenu::fixToTaskbarActionTriggerSlot()
                          "com.ukui.panel.desktop",
                          QDBusConnection::sessionBus());
     QDBusReply<QVariant> ret=iface.call("AddToTaskbar",desktopfp);
-    //    qDebug()<<desktopfp<<ret.value().toBool();
     action_number=3;
 }
 
@@ -563,7 +540,6 @@ void RightClickMenu::addToDesktopActionTriggerSlot()
     {
         char command[200];
         sprintf(command,"chmod a+x %s",newname.toLocal8Bit().data());
-//        system(command);
         QProcess::startDetached(QString::fromLocal8Bit(command));
     }
     action_number=5;
@@ -687,24 +663,106 @@ void RightClickMenu::otherListActionTriggerSlot()
 
 int RightClickMenu::showCommonUseAppBtnMenu(QString desktopfp)
 {
+    action_number=0;
     this->desktopfp.clear();
     this->desktopfp=desktopfp;
-    addCommonUseAppBtnAction();
+    cuappbtnmenu->removeAction(CuFix2CommonUseAction);
+    cuappbtnmenu->removeAction(CuUnfixed4CommonUseAction);
+    cuappbtnmenu->removeAction(CuFix2TaskBarAction);
+    cuappbtnmenu->removeAction(CuUnfixed4TaskBarAction);
+    setting->beginGroup("lockapplication");
+    QFileInfo fileInfo(desktopfp);
+    QString desktopfn=fileInfo.fileName();
+    if(!setting->contains(desktopfn))
+        cuappbtnmenu->insertAction(CuAdd2DesktopAction,CuFix2CommonUseAction);
+    else
+        cuappbtnmenu->insertAction(CuAdd2DesktopAction,CuUnfixed4CommonUseAction);
+    setting->endGroup();
+
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
+
+    QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
+    if(!ret)
+        cuappbtnmenu->insertAction(CuAdd2DesktopAction,CuFix2TaskBarAction);
+    else
+        cuappbtnmenu->insertAction(CuAdd2DesktopAction,CuUnfixed4TaskBarAction);
+
+    char labelstyle[100];
+    sprintf(labelstyle,"background:transparent;border:0px;color:%s;font-size:14px;",
+            RightClickMenuFont);
+    setting->beginGroup("lockapplication");
+    QLayoutItem* delItem=CuDeleteWid->layout()->itemAt(0);
+    QWidget* delLabelWid=delItem->widget();
+    QLabel* delLabel=qobject_cast<QLabel*>(delLabelWid);
+    if(setting->contains(desktopfn))
+    {
+        delLabel->setStyleSheet("QLabel{background:transparent;border:0px;color:#4Dffffff;font-size:14px;}");
+        CuDeleteAction->setDisabled(true);
+    }
+    else
+    {
+        delLabel->setStyleSheet(labelstyle);
+        CuDeleteAction->setDisabled(false);
+    }
+    setting->endGroup();
+
+    setting->beginGroup("application");
+    QLayoutItem* delAllItem=CuDeleteAllWid->layout()->itemAt(0);
+    QWidget* delAllWid=delAllItem->widget();
+    QLabel* delAllLabel=qobject_cast<QLabel*>(delAllWid);
+    if(setting->allKeys().size()==0)
+    {
+        delAllLabel->setStyleSheet("QLabel{background:transparent;border:0px;color:#4Dffffff;font-size:14px;}");
+        CuDeleteAllAction->setDisabled(true);
+    }
+    else{
+        delAllLabel->setStyleSheet(labelstyle);
+        CuDeleteAllAction->setDisabled(false);
+    }
+    setting->endGroup();
+
     cuappbtnmenu->exec(QCursor::pos());
     return action_number;
 }
 
 int RightClickMenu::showAppBtnMenu(QString desktopfp)
 {
+    action_number=0;
     this->desktopfp.clear();
     this->desktopfp=desktopfp;
-    addAppBtnAction();
+    appbtnmenu->removeAction(Fix2CommonUseAction);
+    appbtnmenu->removeAction(Unfixed4CommonUseAction);
+    appbtnmenu->removeAction(Fix2TaskBarAction);
+    appbtnmenu->removeAction(Unfixed4TaskBarAction);
+    setting->beginGroup("lockapplication");
+    QFileInfo fileInfo(desktopfp);
+    QString desktopfn=fileInfo.fileName();
+    if(!setting->contains(desktopfn))
+        appbtnmenu->insertAction(Add2DesktopAction,Fix2CommonUseAction);
+    else
+        appbtnmenu->insertAction(Add2DesktopAction,Unfixed4CommonUseAction);
+    setting->endGroup();
+
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
+
+    QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
+    if(!ret)
+        appbtnmenu->insertAction(Add2DesktopAction,Fix2TaskBarAction);
+    else
+        appbtnmenu->insertAction(Add2DesktopAction,Unfixed4TaskBarAction);
     appbtnmenu->exec(QCursor::pos());
     return action_number;
 }
 
 int RightClickMenu::showShutdownMenu()
 {
+    action_number=0;
     shutdownmenu->exec(QCursor::pos());
     return action_number;
 
@@ -712,9 +770,21 @@ int RightClickMenu::showShutdownMenu()
 
 int RightClickMenu::showOtherMenu(QString desktopfp)
 {
+    action_number=0;
     this->desktopfp.clear();
     this->desktopfp=desktopfp;
-    addOtherAction();
+    othermenu->removeAction(OtherFix2TaskBarAction);
+    othermenu->removeAction(OtherUnfix2TaskBarAction);
+    QDBusInterface iface("com.ukui.panel.desktop",
+                         "/",
+                         "com.ukui.panel.desktop",
+                         QDBusConnection::sessionBus());
+
+    QDBusReply<bool> ret=iface.call("CheckIfExist",this->desktopfp);
+    if(!ret)
+        othermenu->insertAction(OtherListAction,OtherFix2TaskBarAction);
+    else
+        othermenu->insertAction(OtherListAction,OtherUnfix2TaskBarAction);
     othermenu->exec(QCursor::pos());
     return action_number;
 }

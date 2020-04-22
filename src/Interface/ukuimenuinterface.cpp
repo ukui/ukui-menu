@@ -27,6 +27,8 @@
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
+    setting=new QSettings(path,QSettings::IniFormat);
 }
 
 UkuiMenuInterface::~UkuiMenuInterface()
@@ -222,6 +224,9 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
 
 QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
+QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
+QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
+QVector<QString> UkuiMenuInterface::commonUseVector=QVector<QString>();
 
 //创建应用信息容器
 QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
@@ -578,7 +583,7 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
                 list[1].append(appInfoVector.at(index).at(2));
                 break;
             case 2:
-                list[3].append(appInfoVector.at(index).at(2));
+                list[2].append(appInfoVector.at(index).at(2));
                 break;
             case 3:
                 list[3].append(appInfoVector.at(index).at(2));
@@ -611,17 +616,20 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
         index++;
     }
 
-//    QStringList recentList=get_recent_app_list();//最近添加
-//    for(int i=0;i<10;i++)
-//        list[0].append(recentList.at(i));
-
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
+    QDateTime dt=QDateTime::currentDateTime();
+    int currentDateTime=dt.toTime_t();
+    int nDaySec=24*60*60;
     setting->beginGroup("recentapp");
-    QStringList keys=setting->allKeys();
-    for(int i=0;i<keys.count();i++)
+    QStringList recentAppKeys=setting->allKeys();
+    for(int i=0;i<recentAppKeys.count();i++)
     {
-        QString desktopfp=QString("/usr/share/applications/"+keys.at(i));
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
+            setting->remove(recentAppKeys.at(i));
+    }
+    setting->sync();
+    for(int i=0;i<setting->allKeys().size();i++)
+    {
+        QString desktopfp=QString("/usr/share/applications/"+setting->allKeys().at(i));
         QString appname=getAppName(desktopfp);
         list[0].append(appname);
     }
@@ -659,6 +667,62 @@ bool UkuiMenuInterface::matchingAppCategories(QString desktopfp, QStringList cat
         return false;
 
     return false;
+}
+
+QVector<QString> UkuiMenuInterface::getCommonUseApp()
+{
+    setting->beginGroup("lockapplication");
+    QStringList lockdesktopfnList=setting->allKeys();
+    for(int i=0;i<lockdesktopfnList.count()-1;i++)
+        for(int j=0;j<lockdesktopfnList.count()-1-i;j++)
+        {
+            int value_1=setting->value(lockdesktopfnList.at(j)).toInt();
+            int value_2=setting->value(lockdesktopfnList.at(j+1)).toInt();
+            if(value_1 > value_2)
+            {
+                QString tmp=lockdesktopfnList.at(j);
+                lockdesktopfnList.replace(j,lockdesktopfnList.at(j+1));
+                lockdesktopfnList.replace(j+1,tmp);
+
+            }
+        }
+    setting->endGroup();
+    setting->beginGroup("application");
+    QStringList desktopfnList=setting->allKeys();
+    for(int i=0;i<desktopfnList.count()-1;i++)
+        for(int j=0;j<desktopfnList.count()-1-i;j++)
+        {
+            int value_1=setting->value(desktopfnList.at(j)).toInt();
+            int value_2=setting->value(desktopfnList.at(j+1)).toInt();
+            if(value_1 < value_2)
+            {
+                QString tmp=desktopfnList.at(j);
+                desktopfnList.replace(j,desktopfnList.at(j+1));
+                desktopfnList.replace(j+1,tmp);
+
+            }
+        }
+    setting->endGroup();
+
+    QVector<QString> data;
+    Q_FOREACH(QString desktopfn,lockdesktopfnList)
+    {
+        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
+        QFileInfo fileInfo(desktopfp);
+        if(!fileInfo.exists())
+            continue;
+        data.append(desktopfp);
+    }
+    Q_FOREACH(QString desktopfn,desktopfnList)
+    {
+        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
+        QFileInfo fileInfo(desktopfp);
+        if(!fileInfo.exists())
+            continue;
+        data.append(desktopfp);
+    }
+
+    return data;
 }
 
 //应用排序

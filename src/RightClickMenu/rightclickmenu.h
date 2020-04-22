@@ -41,7 +41,12 @@ class RightClickMenu: public QWidget
 {
     Q_OBJECT
 public:
-    RightClickMenu(QWidget *parent);
+    /**
+     * @brief RightClickMenu
+     * @param parent
+     * @param module为0表示常用应用，1表示普通应用，2表示关机，3表示其他
+     */
+    RightClickMenu(QWidget *parent,int module);
     virtual ~RightClickMenu();
     int showCommonUseAppBtnMenu(QString desktopfp);
     int showAppBtnMenu(QString desktopfp);
@@ -126,7 +131,9 @@ private:
 
 protected:
     void addCommonUseAppBtnAction();
+    void initCommonUseAppBtnAction();
     void addAppBtnAction();
+    void initAppBtnAction();
     void addShutdownAction();
     void addOtherAction();
     void initWidgetAction(QWidget* wid, QString iconstr, QString textstr);

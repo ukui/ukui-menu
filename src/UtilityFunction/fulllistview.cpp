@@ -26,6 +26,10 @@ FullListView::FullListView(QWidget *parent, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
+    if(module==0)
+        menu=new RightClickMenu(this,0);
+    else
+        menu=new RightClickMenu(this,1);
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -121,7 +125,7 @@ void FullListView::rightClickedSlot()
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
-        menu=new RightClickMenu(this);
+//        menu=new RightClickMenu(this);
         if(module>0)
         {
             int ret=menu->showAppBtnMenu(desktopfp);

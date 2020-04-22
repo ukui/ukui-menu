@@ -23,7 +23,6 @@
 #include <QScreen>
 #include <QTranslator>
 #include <QLocale>
-//#include "ukuimenuinterface.h"
 
 int main(int argc, char *argv[])
 {

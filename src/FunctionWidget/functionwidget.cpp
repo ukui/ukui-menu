@@ -80,7 +80,7 @@ void FunctionWidget::fillAppListView()
     classificationbtnlist.clear();
     classificationbtnrowlist.clear();
 
-    QVector<QStringList> vector=pUkuiMenuInterface->getFunctionalClassification();
+    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
     QStringList recentlist=vector.at(0);
     if(!recentlist.isEmpty())
     {
@@ -210,7 +210,7 @@ void FunctionWidget::updateAppListView()
     row=0;
     data.clear();
 
-    QVector<QStringList> vector=pUkuiMenuInterface->getFunctionalClassification();
+    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
     QStringList recentlist=vector.at(0);
     if(!recentlist.isEmpty())
     {
@@ -281,6 +281,12 @@ void FunctionWidget::updateAppListView()
         insertAppList(otherlist);
     }
     applistview->updateData(data);
+}
+
+void FunctionWidget::updateListView()
+{
+    UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
+    updateAppListView();
 }
 
 /**
