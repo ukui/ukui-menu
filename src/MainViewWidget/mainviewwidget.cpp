@@ -724,6 +724,14 @@ void MainViewWidget::iconThemeChangeSlot(QString key)
         Q_EMIT directoryChangedSignal();
 }
 
+void MainViewWidget::repaintWidget()
+{
+    fullcommonusewid->repaintWidget();
+    fullletterwid->repaintWidget();
+    fullfunctionwid->repaintWidget();
+    fullsearchresultwid->repaintWidget();
+}
+
 void MainViewWidget::widgetMakeZero()
 {
     commonusewid->widgetMakeZero();
@@ -734,6 +742,13 @@ void MainViewWidget::widgetMakeZero()
     fullfunctionwid->widgetMakeZero();
     querylineEdit->clear();
     querylineEdit->clearFocus();
+    char style[100];
+    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
+    querylineEdit->setStyleSheet(style);
+    querylineEdit->setTextMargins(0,1,0,1);
+    pIconTextWidLayout->addWidget(pQueryText);
+    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
+    queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     is_fullscreen=false;
     widgetState=3;
 }

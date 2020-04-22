@@ -633,6 +633,16 @@ void FullFunctionWidget::enterAnimation()
     pAnimation->start();
 }
 
+void FullFunctionWidget::repaintWidget()
+{
+    this->setFixedSize(Style::MainViewWidWidth,
+                       Style::AppListWidHeight);
+    applistWid->setFixedSize(Style::AppListWidWidth,this->height());
+    iconlistWid->setFixedSize(Style::LeftWidWidth,this->height());
+    scrollarea->setFixedSize(applistWid->width(),applistWid->height());
+    updateAppListView();
+}
+
 void FullFunctionWidget::widgetMakeZero()
 {
     Q_FOREACH (QAbstractButton* button, buttonList) {

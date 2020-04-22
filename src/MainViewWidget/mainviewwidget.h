@@ -57,6 +57,7 @@ public:
     void loadMaxMainView();//加载全屏主视图
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
     void setLineEditFocus(QString arg);//设置搜索框焦点
+    void repaintWidget();
 
 private:
     Ui::MainViewWidget *ui;

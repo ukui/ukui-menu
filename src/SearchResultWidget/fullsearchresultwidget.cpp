@@ -82,3 +82,20 @@ void FullSearchResultWidget::updateAppListView(QStringList desktopfplist)
     data=desktopfplist;
     listview->updateData(data);
 }
+
+void FullSearchResultWidget::repaintWidget()
+{
+    this->setFixedSize(Style::MainViewWidWidth,
+                       Style::AppListWidHeight);
+    mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
+    mainLayout->removeWidget(listview);
+    listview->setParent(nullptr);
+    listview=new FullListView(this,3);
+    mainLayout->addWidget(listview);
+    data.clear();
+    listview->addData(data);
+    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
+    connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
+    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+
+}

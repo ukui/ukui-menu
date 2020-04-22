@@ -61,6 +61,7 @@ public:
     ~FullLetterWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
     void enterAnimation();
+    void repaintWidget();
 
 private:
     Ui::FullLetterWidget *ui;

@@ -517,8 +517,8 @@ void MainWindow::loadMainWindow()
             sidebarwid->loadMaxSidebar();
             mainviewwid->loadMaxMainView();
             sidebarwid->enterAnimation();
-            setFrameStyle();
             is_fullscreen=true;
+            setFrameStyle();
         }
         else
         {
@@ -535,8 +535,8 @@ void MainWindow::loadMainWindow()
             mainlayout->insertWidget(1,line);
             sidebarwid->loadMinSidebar();
             mainviewwid->loadMinMainView();
-            setFrameStyle();
             is_fullscreen=false;
+            setFrameStyle();
         }
     }
     else
@@ -555,30 +555,30 @@ void MainWindow::loadMainWindow()
         sidebarwid->setVisible(true);
         sidebarwid->loadMinSidebar();
         mainviewwid->loadMinMainView();
-        setFrameStyle();
         is_fullscreen=false;
+        setFrameStyle();
     }
 }
 
 void MainWindow::monitorResolutionChange(QRect rect)
 {
     Q_UNUSED(rect);
-    qApp->quit();
-    QProcess::startDetached(QString("/usr/bin/ukui-menu"));
+    Style::initWidStyle();
+    mainviewwid->repaintWidget();
 }
 
 void MainWindow::primaryScreenChangedSlot(QScreen *screen)
 {
     Q_UNUSED(screen);
-    qApp->quit();
-    QProcess::startDetached(QString("/usr/bin/ukui-menu"));
+    Style::initWidStyle();
+    mainviewwid->repaintWidget();
 }
 
 void MainWindow::panelChangedSlot(QString key)
 {
     Q_UNUSED(key);
-    qApp->quit();
-    QProcess::startDetached(QString("/usr/bin/ukui-menu"));
+    Style::initWidStyle();
+    mainviewwid->repaintWidget();
 }
 
 void MainWindow::setFrameStyle()

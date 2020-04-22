@@ -218,6 +218,16 @@ void FullCommonUseWidget::getCommonUseAppList()
     }
 }
 
+void FullCommonUseWidget::repaintWidget()
+{
+    this->setFixedSize(Style::MainViewWidWidth,
+                       Style::AppListWidHeight);
+    mainLayout->removeWidget(listview);
+    listview->setParent(nullptr);
+    initAppListWidget();
+    fillAppList();
+}
+
 void FullCommonUseWidget::widgetMakeZero()
 {
     listview->verticalScrollBar()->setSliderPosition(0);

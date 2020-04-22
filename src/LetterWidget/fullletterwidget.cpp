@@ -422,6 +422,16 @@ void FullLetterWidget::enterAnimation()
     pAnimation->start();
 }
 
+void FullLetterWidget::repaintWidget()
+{
+    this->setFixedSize(Style::MainViewWidWidth,
+                       Style::AppListWidHeight);
+    applistWid->setFixedSize(Style::AppListWidWidth,this->height());
+    letterlistWid->setFixedSize(Style::LeftWidWidth,this->height());
+    scrollarea->setFixedSize(applistWid->width(),applistWid->height());
+    updateAppListView();
+}
+
 void FullLetterWidget::widgetMakeZero()
 {
     Q_FOREACH (QAbstractButton* button, buttonList) {

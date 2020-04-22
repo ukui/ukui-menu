@@ -32,6 +32,7 @@
 #include <QBitmap>
 #include <QGSettings>
 #include <QPushButton>
+#include <QToolTip>
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 
@@ -102,19 +103,11 @@ protected:
     void initWidget();//初始化主界面
     void addSidebarBtn();//添加侧边栏按钮
     void initBtn(QPushButton *btn, QString btnicon,QLabel* label,QString text,int num);//设置按钮样式
-
     void setMinSidebarBtn(QPushButton *btn);//设置默认侧边栏按钮
     void setMaxSidebarBtn(QPushButton *btn);//设置全屏侧边栏按钮
-
     void addRightClickMenu(QPushButton* btn);
-
     void setMinBtn();//设置还原按钮
     void setMaxBtn();//设置全屏按钮
-
-//    void enterEvent(QEvent* e);
-//    void leaveEvent(QEvent* e);
-
-//    void mousePressEvent(QMouseEvent* e);
 
 private Q_SLOTS:
 //    bool eventFilter(QObject *watched, QEvent *event);

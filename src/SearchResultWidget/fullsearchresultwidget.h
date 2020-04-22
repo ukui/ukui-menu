@@ -42,6 +42,7 @@ public:
     explicit FullSearchResultWidget(QWidget *parent = nullptr);
     ~FullSearchResultWidget();
     void updateAppListView(QStringList desktopfplist);
+    void repaintWidget();
 
 private:
     Ui::FullSearchResultWidget *ui;
