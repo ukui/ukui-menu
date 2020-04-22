@@ -193,9 +193,11 @@ void MainWindow::initMainWindow()
     connect(qApp,SIGNAL(primaryScreenChanged(QScreen*)),this,
             SLOT(primaryScreenChangedSlot(QScreen*)));
 
-//    XEventMonitor::instance()->start();
-//    connect(XEventMonitor::instance(), SIGNAL(keyRelease(const QString &)),
-//            this, SLOT(XkbEventsFilter(const QString &)));
+    XEventMonitor::instance()->start();
+    connect(XEventMonitor::instance(), SIGNAL(keyRelease(const QString &)),
+            this, SLOT(XkbEventsRelease(const QString &)));
+    connect(XEventMonitor::instance(), SIGNAL(keyPress(const QString &)),
+            this, SLOT(XkbEventsPress(const QString &)));
 
 }
 
@@ -443,8 +445,39 @@ bool MainWindow::event ( QEvent * event )
    return QWidget::event(event);
 }
 
-void MainWindow::XkbEventsFilter(const QString &keyCode)
+void MainWindow::XkbEventsPress(const QString &keycode)
 {
+    QString KeyName;
+    if (keycode.length() >= 8){
+        KeyName = keycode.left(8);
+    }
+    if(KeyName.compare("Super_L+")==0){
+        WinFlag = true;
+    }
+    if(WinFlag && keycode == "Super_L"){
+        WinFlag = false;
+        return;
+    }
+
+}
+
+void MainWindow::XkbEventsRelease(const QString &keyCode)
+{
+    QString KeyName;
+    static bool winFlag=false;
+    if (keyCode.length() >= 8){
+        KeyName = keyCode.left(8);
+    }
+    if(KeyName.compare("Super_L+")==0){
+        winFlag = true;
+    }
+
+    if(winFlag && keyCode == "Super_L"){
+        winFlag = false;
+        return;
+    }else if(WinFlag && keyCode == "Super_L")
+        return;
+
     if((keyCode == "Super_L") || (keyCode == "Super_R"))
     {
         if(QApplication::activeWindow() == this)
