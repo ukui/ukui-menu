@@ -714,13 +714,9 @@ void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
             if(pBtnGroup->id(btn)==0)
             {
                 if(is_fullscreen)
-                {
                     Q_EMIT sendFullScreenCommonUseBtnSignal();
-                }
                 else
-                {
                     Q_EMIT sendCommonUseBtnSignal();
-                }
             }
             else if(pBtnGroup->id(btn)==1)
             {
@@ -756,5 +752,10 @@ void SideBarWidget::enterAnimation()
 
 void SideBarWidget::widgetMakeZero()
 {
-    functionbtn->click();
+//    functionbtn->click();
+    commonusebtn->setStyleSheet("background:transparent;");
+    letterbtn->setStyleSheet("background:transparent;");
+    char pressstyle[200];
+    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:2px;}",SBClassifyBtnSelectedBackground);
+    functionbtn->setStyleSheet(pressstyle);
 }

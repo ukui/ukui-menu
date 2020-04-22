@@ -735,4 +735,5 @@ void MainViewWidget::widgetMakeZero()
     querylineEdit->clear();
     querylineEdit->clearFocus();
     is_fullscreen=false;
+    widgetState=3;
 }
