@@ -1,3 +1,9 @@
+ukui-menu (2.0.6-1) focal; urgency=medium
+
+  * New release.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 22 Apr 2020 23:50:58 +0800
+
 ukui-menu (2.0.5-1) unstable; urgency=medium
 
   * New upstream bugfix release.
@@ -6,7 +12,7 @@ ukui-menu (2.0.5-1) unstable; urgency=medium
     - Fix that right-click menu popup abnormally.
     - Fix the wrong position when switch from fullscreen to normal mode.
   * debian/watch:
-    - Update to monitor  upstream org.tar.gz file.
+    - Update to monitor upstream org.tar.gz file.
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 07 Apr 2020 10:54:28 +0800
 

@@ -193,9 +193,9 @@ void MainWindow::initMainWindow()
     connect(qApp,SIGNAL(primaryScreenChanged(QScreen*)),this,
             SLOT(primaryScreenChangedSlot(QScreen*)));
 
-    XEventMonitor::instance()->start();
-    connect(XEventMonitor::instance(), SIGNAL(keyRelease(const QString &)),
-            this, SLOT(XkbEventsFilter(const QString &)));
+//    XEventMonitor::instance()->start();
+//    connect(XEventMonitor::instance(), SIGNAL(keyRelease(const QString &)),
+//            this, SLOT(XkbEventsFilter(const QString &)));
 
 }
 
