@@ -442,3 +442,12 @@ void FullLetterWidget::widgetMakeZero()
     }
     scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
+
+void FullLetterWidget::moveScrollBar(int type)
+{
+    int height=QApplication::primaryScreen()->geometry().height();
+    if(type==0)
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-height*100/1080);
+    else
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+height*100/1080);
+}

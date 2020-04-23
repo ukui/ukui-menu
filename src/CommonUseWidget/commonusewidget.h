@@ -48,6 +48,11 @@ public:
     ~CommonUseWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
     void updateListView();
+    /**
+     * @brief moveScrollBar移动滚动条
+     * @param type为0时表示向上移动，为1时表示向下移动
+     */
+    void moveScrollBar(int type);
 
 private:
     Ui::CommonUseWidget *ui;

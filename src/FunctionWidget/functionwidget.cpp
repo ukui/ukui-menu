@@ -341,3 +341,11 @@ void FunctionWidget::widgetMakeZero()
     }
     applistview->verticalScrollBar()->setValue(0);
 }
+
+void FunctionWidget::moveScrollBar(int type)
+{
+    if(type==0)
+        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()-1);
+    else
+        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()+1);
+}

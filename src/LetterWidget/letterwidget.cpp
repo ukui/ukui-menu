@@ -248,3 +248,11 @@ void LetterWidget::widgetMakeZero()
     }
     applistview->verticalScrollBar()->setValue(0);
 }
+
+void LetterWidget::moveScrollBar(int type)
+{
+    if(type==0)
+        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()-1);
+    else
+        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()+1);
+}

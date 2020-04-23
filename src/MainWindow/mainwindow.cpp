@@ -23,6 +23,7 @@
 #include <QDesktopWidget>
 #include <QtSingleApplication>
 #include <QtX11Extras/QX11Info>
+#include <syslog.h>
 #include "src/XEventMonitor/xeventmonitor.h"
 #include "src/Style/style.h"
 
@@ -666,8 +667,18 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
         QKeyEvent* ke=static_cast<QKeyEvent*>(e);
         if((ke->key()>=0x30 && ke->key()<=0x39) || (ke->key()>=0x41 && ke->key()<=0x5a))
         {
-//            qDebug()<<ke->key()<<QKeySequence(ke->key()).toString()<<e->text();
             mainviewwid->setLineEditFocus(e->text());
+        }
+
+        switch(e->key()){
+        case Qt::Key_Up:
+            mainviewwid->moveScrollBar(0);
+            break;
+        case Qt::Key_Down:
+            mainviewwid->moveScrollBar(1);
+            break;
+        default:
+            break;
         }
     }
 }

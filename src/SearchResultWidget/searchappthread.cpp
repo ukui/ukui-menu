@@ -21,7 +21,7 @@
 SearchAppThread::SearchAppThread()
 {
     pUkuiMenuInterface=new UkuiMenuInterface;
-    appInfoVector=UkuiMenuInterface::appInfoVector;
+//    appInfoVector=UkuiMenuInterface::appInfoVector;
 }
 
 SearchAppThread::~SearchAppThread()
@@ -31,6 +31,8 @@ SearchAppThread::~SearchAppThread()
 
 void SearchAppThread::run()
 {
+    appInfoVector.clear();
+    appInfoVector=UkuiMenuInterface::appInfoVector;
     searchResultList.clear();
     if(!this->keyword.isEmpty())
     {

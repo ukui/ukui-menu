@@ -295,11 +295,20 @@ void FullFunctionWidget::updateRecentListView()
     }
     if(!recentlist.isEmpty())
     {
+        QLocale local;
+        QString language=local.languageToString(local.language());
+        if(QString::compare(language,"Chinese")==0)
+            local=QLocale(QLocale::Chinese);
+        else
+            local=QLocale(QLocale::English);
+        QCollator collator(local);
+
         QLayoutItem *child;
         if((child = scrollareawidLayout->itemAt(1)) != 0)
         {
             QWidget* wid=child->widget();
             FullListView* listview=qobject_cast<FullListView*>(wid);
+            std::sort(recentlist.begin(),recentlist.end(),collator);
             data.clear();
             for(int i=0;i<recentlist.count();i++)
             {
@@ -655,4 +664,13 @@ void FullFunctionWidget::widgetMakeZero()
         }
     }
     scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+}
+
+void FullFunctionWidget::moveScrollBar(int type)
+{
+    int height=QApplication::primaryScreen()->geometry().height();
+    if(type==0)
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-height*100/1080);
+    else
+        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+height*100/1080);
 }

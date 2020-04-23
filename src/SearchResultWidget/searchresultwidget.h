@@ -44,6 +44,11 @@ public:
     explicit SearchResultWidget(QWidget *parent = nullptr);
     ~SearchResultWidget();
     void updateAppListView(QStringList desktopfplist);
+    /**
+     * @brief moveScrollBar移动滚动条
+     * @param type为0时表示向上移动，为1时表示向下移动
+     */
+    void moveScrollBar(int type);
 
 private:
     Ui::SearchResultWidget *ui;

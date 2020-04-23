@@ -757,3 +757,35 @@ void MainViewWidget::widgetMakeZero()
     is_fullscreen=false;
     widgetState=3;
 }
+
+void MainViewWidget::moveScrollBar(int type)
+{
+    if(widgetState==0)
+    {
+        if(is_fullscreen)
+            fullsearchresultwid->moveScrollBar(type);
+        else
+            searchresultwid->moveScrollBar(type);
+    }
+    if(widgetState==1)
+    {
+        if(is_fullscreen)
+            fullcommonusewid->moveScrollBar(type);
+        else
+            commonusewid->moveScrollBar(type);
+    }
+    if(widgetState==2)
+    {
+        if(is_fullscreen)
+            fullletterwid->moveScrollBar(type);
+        else
+            letterwid->moveScrollBar(type);
+    }
+    if(widgetState==3)
+    {
+        if(is_fullscreen)
+            fullfunctionwid->moveScrollBar(type);
+        else
+            functionwid->moveScrollBar(type);
+    }
+}

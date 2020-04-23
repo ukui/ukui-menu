@@ -26,6 +26,8 @@
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include <QSettings>
+#include <QEvent>
+#include <QKeyEvent>
 #include "src/Interface/ukuimenuinterface.h"
 #include "itemdelegate.h"
 

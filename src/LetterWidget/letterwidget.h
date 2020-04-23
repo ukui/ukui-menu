@@ -39,6 +39,11 @@ public:
      explicit LetterWidget(QWidget *parent=nullptr);
     ~LetterWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    /**
+     * @brief moveScrollBar移动滚动条
+     * @param type为0时表示向上移动，为1时表示向下移动
+     */
+    void moveScrollBar(int type);
 
 private:
     Ui::LetterWidget *ui;

@@ -232,3 +232,12 @@ void FullCommonUseWidget::widgetMakeZero()
 {
     listview->verticalScrollBar()->setSliderPosition(0);
 }
+
+void FullCommonUseWidget::moveScrollBar(int type)
+{
+    int height=QApplication::primaryScreen()->geometry().height();
+    if(type==0)
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-height*100/1080);
+    else
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+height*100/1080);
+}

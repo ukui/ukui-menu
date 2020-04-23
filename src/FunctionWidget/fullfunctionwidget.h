@@ -56,6 +56,11 @@ public:
     void enterAnimation();
     void updateRecentListView();//更新最近添加应用
     void repaintWidget();
+    /**
+     * @brief moveScrollBar移动滚动条
+     * @param type为0时表示向上移动，为1时表示向下移动
+     */
+    void moveScrollBar(int type);
 
 private:
     Ui::FullFunctionWidget *ui;

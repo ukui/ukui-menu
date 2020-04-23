@@ -83,3 +83,11 @@ void SearchResultWidget::updateAppListView(QStringList desktopfplist)
     }
     listview->updateData(data);
 }
+
+void SearchResultWidget::moveScrollBar(int type)
+{
+    if(type==0)
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-1);
+    else
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+1);
+}

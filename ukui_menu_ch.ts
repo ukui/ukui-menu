@@ -26,67 +26,68 @@
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="116"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="171"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="173"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="314"/>
         <source>Recently</source>
         <translation>最近</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="117"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="178"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="180"/>
         <source>Internet</source>
         <translation>网络</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="118"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="184"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="186"/>
         <source>Social</source>
         <translation>社交</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="119"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="190"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="192"/>
         <source>Video</source>
         <translation>影音</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="120"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="196"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="198"/>
         <source>Development</source>
         <translation>开发</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="121"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="202"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="204"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="122"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="208"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="210"/>
         <source>Game</source>
         <translation>游戏</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="123"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="214"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="216"/>
         <source>Office</source>
         <translation>办公</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="124"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="220"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="222"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="125"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="227"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="229"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="126"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="233"/>
+        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="235"/>
         <source>Others</source>
         <translation>其它</translation>
     </message>
@@ -268,7 +269,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="src/MainViewWidget/mainviewwidget.cpp" line="191"/>
+        <location filename="src/MainViewWidget/mainviewwidget.cpp" line="203"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
@@ -284,86 +285,80 @@
 <context>
     <name>RightClickMenu</name>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="194"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="302"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="227"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="296"/>
         <source>Pin to common</source>
-        <translation>固定到&quot;常用软件&quot;</translation>
+        <translation>固定到“常用软件”</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="201"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="309"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="231"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="300"/>
         <source>Unpin from common</source>
-        <translation>从&quot;常用软件&quot;取消固定</translation>
+        <translation>从“常用软件”取消固定</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="219"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="326"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="410"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="235"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="304"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="391"/>
         <source>Pin to taskbar</source>
         <translation>固定到任务栏</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="225"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="333"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="416"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="239"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="308"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="395"/>
         <source>Unpin from taskbar</source>
         <translation>从任务栏取消固定</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="233"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="341"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="243"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="312"/>
         <source>Add to desktop shortcuts</source>
         <translation>添加到桌面快捷方式</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="243"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="247"/>
         <source>Remove from list</source>
         <translation>从列表中删除</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="260"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="251"/>
         <source>Remove all</source>
         <translation>删除所有</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="277"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="349"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="255"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="316"/>
         <source>Uninstall</source>
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="284"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="356"/>
-        <source>Attribute</source>
-        <translation>属性</translation>
-    </message>
-    <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="369"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="349"/>
         <source>Lock Screen</source>
         <translation>锁定屏幕</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="374"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="354"/>
         <source>Switch User</source>
         <translation>切换用户</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="379"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="359"/>
         <source>Log Out</source>
         <translation>注销</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="384"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="364"/>
         <source>Restart</source>
         <translation>重启计算机</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="389"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="369"/>
         <source>Power Off</source>
         <translation>关闭计算机</translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="422"/>
+        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="399"/>
         <source>Personalize this list</source>
         <translation>设置开始菜单显示列表</translation>
     </message>
@@ -384,50 +379,50 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="178"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="558"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="109"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="532"/>
         <source>Common</source>
         <translation>常用软件</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="184"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="559"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="113"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="535"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="190"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="560"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="117"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="538"/>
         <source>Function</source>
         <translation>功能分类</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="202"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="563"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="137"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="560"/>
         <source>Computer</source>
         <translation>计算机</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="208"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="564"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="139"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="554"/>
         <source>Personal</source>
         <translation>个人</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="213"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="565"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="141"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="563"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="219"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="566"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="143"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="557"/>
         <source>Recycle Bin</source>
         <translation>回收站</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="224"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="567"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="145"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="571"/>
         <source>Power</source>
         <translation>电源</translation>
     </message>

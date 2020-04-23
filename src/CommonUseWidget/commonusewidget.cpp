@@ -185,3 +185,11 @@ void CommonUseWidget::widgetMakeZero()
 {
     listview->verticalScrollBar()->setSliderPosition(0);
 }
+
+void CommonUseWidget::moveScrollBar(int type)
+{
+    if(type==0)
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-1);
+    else
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+1);
+}
