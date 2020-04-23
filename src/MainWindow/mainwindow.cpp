@@ -461,24 +461,23 @@ void MainWindow::XkbEventsPress(const QString &keycode)
 
 }
 
-void MainWindow::XkbEventsRelease(const QString &keyCode)
+void MainWindow::XkbEventsRelease(const QString &keycode)
 {
     QString KeyName;
     static bool winFlag=false;
-    if (keyCode.length() >= 8){
-        KeyName = keyCode.left(8);
+    if (keycode.length() >= 8){
+        KeyName = keycode.left(8);
     }
     if(KeyName.compare("Super_L+")==0){
         winFlag = true;
     }
-
-    if(winFlag && keyCode == "Super_L"){
+    if(winFlag && keycode == "Super_L"){
         winFlag = false;
         return;
-    }else if(WinFlag && keyCode == "Super_L")
+    }else if(WinFlag && keycode == "Super_L")
         return;
 
-    if((keyCode == "Super_L") || (keyCode == "Super_R"))
+    if((keycode == "Super_L") || (keycode == "Super_R"))
     {
         if(QApplication::activeWindow() == this)
         {
@@ -584,8 +583,7 @@ void MainWindow::loadMainWindow()
         else
             this->setGeometry(QRect(QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
                                       376,590));
-        mainviewwid->setVisible(true);
-        sidebarwid->setVisible(true);
+        mainlayout->insertWidget(1,line);
         sidebarwid->loadMinSidebar();
         mainviewwid->loadMinMainView();
         is_fullscreen=false;

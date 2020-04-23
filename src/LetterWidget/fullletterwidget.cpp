@@ -181,6 +181,7 @@ void FullLetterWidget::updateAppListView()
         pBtnGroup->removeButton(button);
     }
     buttonList.clear();
+    letterlistscrollareawidLayout->removeItem(pLetterListBottomSpacer);
     while ((child = letterlistscrollareawidLayout->takeAt(0)) != 0) {
         QWidget* wid=child->widget();
         letterlistscrollareawidLayout->removeWidget(wid);
@@ -237,11 +238,6 @@ void FullLetterWidget::resizeScrollAreaControls()
  */
 void FullLetterWidget::initLetterListWidget()
 {
-//    letterlistLayout=new QHBoxLayout;
-//    letterlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
-//    letterlistLayout->setSpacing(0);
-//    letterlistWid->setLayout(letterlistLayout);
-
     letterlistscrollarea=new ClassifyScrollArea(letterlistWid);
     letterlistscrollareaWid=new QWidget(letterlistscrollarea);
     letterlistscrollareawidLayout=new QVBoxLayout;
@@ -253,9 +249,6 @@ void FullLetterWidget::initLetterListWidget()
 
     pLetterListTopSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     pLetterListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-//    letterlistLayout->addItem(pLetterListTopSpacer);
-//    letterlistLayout->addWidget(letterlistscrollarea);
-//    letterlistLayout->addItem(pLetterListBottomSpacer);
     pBtnGroup=new QButtonGroup(letterlistscrollareaWid);
     pAnimation = new QPropertyAnimation(letterlistscrollarea, "geometry");
     initLetterListScrollArea();
@@ -270,6 +263,7 @@ void FullLetterWidget::initLetterListScrollArea()
 //    letterlistscrollarea->setFixedSize(Style::LeftLetterBtnHeight*2,
 //                                       (letterbtnlist.size()+1)*Style::LeftLetterBtnHeight);
 
+//    letterlistscrollarea->setStyleSheet("border:1px solid #ff0000;");
     if(letterbtnlist.contains("&"))
         letterbtnlist.replace(letterbtnlist.indexOf("&"),"&&");
     for(int i=0;i<letterbtnlist.size();i++)
@@ -283,6 +277,8 @@ void FullLetterWidget::initLetterListScrollArea()
         letterlistscrollareawidLayout->setAlignment(letterbtn,Qt::AlignHCenter);
         connect(letterbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
     }
+    letterlistscrollareawidLayout->addItem(pLetterListBottomSpacer);
+
     int id=0;
     Q_FOREACH (QAbstractButton* btn, buttonList) {
         pBtnGroup->addButton(btn,id++);

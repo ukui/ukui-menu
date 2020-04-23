@@ -93,6 +93,7 @@ private:
     int saveCurrentWidState=-1;//存放当前分类窗口编号
 
     bool is_fullscreen=false;
+    bool is_hiden=false;
 
     int letterwid_state=0;
     int functionwid_state=0;

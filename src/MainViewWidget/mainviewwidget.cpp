@@ -22,6 +22,7 @@
 #include <QSvgRenderer>
 #include <QPainter>
 #include <libbamf/bamf-matcher.h>
+#include <syslog.h>
 #include <QDebug>
 
 MainViewWidget::MainViewWidget(QWidget *parent) :
@@ -279,10 +280,33 @@ void MainViewWidget::setLineEditFocus(QString arg)
  */
 void MainViewWidget::searchAppSlot(QString arg)
 {
-    if(!arg.isEmpty())
+    if(!is_hiden)
     {
-        if(widgetState!=0)
+        if(!arg.isEmpty())
         {
+            if(widgetState!=0)
+            {
+                QLayoutItem* child;
+                if((child=mainLayout->takeAt(1))!=nullptr)
+                {
+                    QWidget* childWid=child->widget();
+                    if(childWid!=nullptr)
+                    {
+                        mainLayout->removeWidget(childWid);
+                        childWid->setParent(nullptr);
+                    }
+                }
+                widgetState=0;
+                if(is_fullscreen==false)
+                {
+                    mainLayout->addWidget(searchresultwid);
+                }
+                else{
+                    mainLayout->addWidget(fullsearchresultwid);
+                }
+            }
+        }
+        else{
             QLayoutItem* child;
             if((child=mainLayout->takeAt(1))!=nullptr)
             {
@@ -293,48 +317,28 @@ void MainViewWidget::searchAppSlot(QString arg)
                     childWid->setParent(nullptr);
                 }
             }
-            widgetState=0;
-            if(is_fullscreen==false)
+            if(is_fullscreen)
             {
-                mainLayout->addWidget(searchresultwid);
+                if(saveCurrentWidState==1)
+                    loadFullCommonUseWidget();
+                else if(saveCurrentWidState==2)
+                    loadFullLetterWidget();
+                else if(saveCurrentWidState==3)
+                    loadFullFunctionWidget();
             }
-            else{
-                mainLayout->addWidget(fullsearchresultwid);
-            }
-        }
-    }
-    else{
-        QLayoutItem* child;
-        if((child=mainLayout->takeAt(1))!=nullptr)
-        {
-            QWidget* childWid=child->widget();
-            if(childWid!=nullptr)
-            {
-                mainLayout->removeWidget(childWid);
-                childWid->setParent(nullptr);
+            else {
+                if(saveCurrentWidState==1)
+                    loadCommonUseWidget();
+                else if(saveCurrentWidState==2)
+                    loadLetterWidget();
+                else
+                    loadFunctionWidget();
             }
         }
-        if(is_fullscreen)
-        {
-            if(saveCurrentWidState==1)
-                loadFullCommonUseWidget();
-            else if(saveCurrentWidState==2)
-                loadFullLetterWidget();
-            else if(saveCurrentWidState==3)
-                loadFullFunctionWidget();
-        }
-        else {
-            if(saveCurrentWidState==1)
-                loadCommonUseWidget();
-            else if(saveCurrentWidState==2)
-                loadLetterWidget();
-            else
-                loadFunctionWidget();
-        }
-    }
 
-    Q_EMIT sendSearchKeyword(arg);
-    searchappthread->start();
+        Q_EMIT sendSearchKeyword(arg);
+        searchappthread->start();
+    }
 }
 
 void MainViewWidget::recvSearchResult(QStringList desktopfplist)
@@ -349,8 +353,7 @@ void MainViewWidget::recvSearchResult(QStringList desktopfplist)
  */
 void MainViewWidget::loadMinMainView()
 {
-//    this->setGeometry(60,QApplication::desktop()->availableGeometry().height()-532,330,532);
-//    this->setGeometry(0,QApplication::desktop()->availableGeometry().height()-532,330,532);
+    is_hiden=false;
     this->setFixedSize(320,590);
     topWidget->setFixedSize(320,54);
     topLayout->setContentsMargins(0,0,0,0);
@@ -385,6 +388,7 @@ void MainViewWidget::loadMinMainView()
  */
 void MainViewWidget::loadMaxMainView()
 {
+    is_hiden=false;
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::heightavailable);
     topWidget->setFixedSize(this->width(),Style::TopWidgetHeight);
@@ -734,6 +738,7 @@ void MainViewWidget::repaintWidget()
 
 void MainViewWidget::widgetMakeZero()
 {
+    is_hiden=true;
     commonusewid->widgetMakeZero();
     fullcommonusewid->widgetMakeZero();
     letterwid->widgetMakeZero();

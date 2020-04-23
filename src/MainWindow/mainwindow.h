@@ -56,7 +56,6 @@ private:
     Ui::MainWindow *ui;
 
     bool is_fullscreen=false;
-    bool WinFlag = false;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
     QSettings* setting=nullptr;
 
@@ -72,6 +71,7 @@ private:
     QPropertyAnimation* pLeaveAnimation=nullptr;
 
     QPropertyAnimation* pAnimation=nullptr;
+    bool WinFlag = false;
 
 protected:
     void initMainWindow();
@@ -80,8 +80,8 @@ protected:
     void keyPressEvent(QKeyEvent* e);//查询框响应键盘事件
 
 private Q_SLOTS:
-    void XkbEventsPress(const QString &keyCode);
-    void XkbEventsRelease(const QString &keyCode);
+    void XkbEventsPress(const QString &keycode);
+    void XkbEventsRelease(const QString &keycode);
     void showFullScreenWidget();//加载全屏窗口
     void showDefaultWidget();//显示默认窗口
     void recvHideMainWindowSlot();//接收隐藏主窗口信号
