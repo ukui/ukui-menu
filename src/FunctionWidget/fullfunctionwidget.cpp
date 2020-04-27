@@ -267,59 +267,65 @@ void FullFunctionWidget::insertAppList(QStringList appnamelist)
 
 void FullFunctionWidget::updateRecentListView()
 {
-    QDateTime dt=QDateTime::currentDateTime();
-    int currentDateTime=dt.toTime_t();
-    int nDaySec=24*60*60;
-    setting->beginGroup("recentapp");
-    QStringList recentAppKeys=setting->allKeys();
-    for(int i=0;i<recentAppKeys.count();i++)
-    {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
-            setting->remove(recentAppKeys.at(i));
-    }
-    setting->sync();
+    data.clear();
     QStringList recentlist;
     recentlist.clear();
-    if(setting->allKeys().size()>0)
+    recentlist=pUkuiMenuInterface->getRecentApp();
+    if(!recentlist.isEmpty())//最近添加非空
     {
-        QStringList keys=setting->allKeys();
-        for(int i=0;i<keys.count();i++)
+        if(classificationbtnlist.contains(tr("Recently")))//有最近添加分类
         {
-            QString desktopfp=QString("/usr/share/applications/"+keys.at(i));
-            QFileInfo fileInfo(desktopfp);
-            if(!fileInfo.exists())
-                continue;
-            QString appname=pUkuiMenuInterface->getAppName(desktopfp);
-            recentlist.append(appname);
+            QLayoutItem *child;
+            if((child = scrollareawidLayout->itemAt(1)) != 0)
+            {
+                QWidget* wid=child->widget();
+                FullListView* listview=qobject_cast<FullListView*>(wid);
+                for(int i=0;i<recentlist.count();i++)
+                {
+                    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
+                    data.append(desktopfp);
+                }
+                listview->updateData(data);
+            }
         }
-    }
-    if(!recentlist.isEmpty())
-    {
-        QLocale local;
-        QString language=local.languageToString(local.language());
-        if(QString::compare(language,"Chinese")==0)
-            local=QLocale(QLocale::Chinese);
-        else
-            local=QLocale(QLocale::English);
-        QCollator collator(local);
-
-        QLayoutItem *child;
-        if((child = scrollareawidLayout->itemAt(1)) != 0)
+        else//无最近添加分类
         {
-            QWidget* wid=child->widget();
-            FullListView* listview=qobject_cast<FullListView*>(wid);
-            std::sort(recentlist.begin(),recentlist.end(),collator);
-            data.clear();
+            PushButton* classificationbtn=new PushButton(this,tr("Recently"),scrollarea->width()-12,20);
+            classificationbtn->setFixedSize(scrollarea->width()-12,20);
+            scrollareawidLayout->insertWidget(0,classificationbtn);
+            classificationbtnlist.insert(0,tr("Recently"));
+
+            FullListView* listview=new FullListView(this,2);
+            scrollareawidLayout->insertWidget(1,listview);
             for(int i=0;i<recentlist.count();i++)
             {
 
                 QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
                 data.append(desktopfp);
             }
-            listview->updateData(data);
+            listview->addData(data);
+            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
+            connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
+            connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+
+            //刷新图标列表界面
+            Q_FOREACH (QAbstractButton* button, buttonList){
+                pBtnGroup->removeButton(button);
+            }
+            buttonList.clear();
+            QLayoutItem *child;
+            while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
+                QWidget* wid=child->widget();
+                iconlistscrollareawidLayout->removeWidget(wid);
+                wid->setParent(nullptr);
+                delete wid;
+                delete child;
+            }
+            initIconListScrollArea();
         }
     }
-    else{
+    else//最近添加为空
+    {
         if(classificationbtnlist.contains(tr("Recently")))
         {
             int num=0;

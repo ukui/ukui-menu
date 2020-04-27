@@ -322,14 +322,13 @@ void FullLetterWidget::timeOutSlot()
     if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()) <= height*300/1080)
         speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
     else
-        speed=height*170/1080;
+        speed=height*200/1080;
 
-    if(beginPos<endPos)
+    if(beginPos<endPos && endPos-scrollarea->verticalScrollBar()->sliderPosition() >= speed)
     {
-
         scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+speed);
     }
-    else
+    if(beginPos>endPos && scrollarea->verticalScrollBar()->sliderPosition()-endPos >= speed)
     {
         scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-speed);
     }

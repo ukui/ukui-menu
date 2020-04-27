@@ -616,26 +616,11 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
         index++;
     }
 
-    QDateTime dt=QDateTime::currentDateTime();
-    int currentDateTime=dt.toTime_t();
-    int nDaySec=24*60*60;
-    setting->beginGroup("recentapp");
-    QStringList recentAppKeys=setting->allKeys();
-    for(int i=0;i<recentAppKeys.count();i++)
-    {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
-            setting->remove(recentAppKeys.at(i));
-    }
-    setting->sync();
-    for(int i=0;i<setting->allKeys().size();i++)
-    {
-        QString desktopfp=QString("/usr/share/applications/"+setting->allKeys().at(i));
-        QString appname=getAppName(desktopfp);
-        list[0].append(appname);
-    }
-    setting->endGroup();
-
     QVector<QStringList> data;
+    data.clear();
+    list[0].clear();
+    list[0]=getRecentApp();
+    data.append(list[0]);
 
     QLocale local;
     QString language=local.languageToString(local.language());
@@ -644,14 +629,13 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     else
         local=QLocale(QLocale::English);
     QCollator collator(local);
-    for(int i=0;i<11;i++)
+    for(int i=1;i<11;i++)
     {
         std::sort(list[i].begin(),list[i].end(),collator);
         data.append(list[i]);
     }
 
     return data;
-
 }
 
 bool UkuiMenuInterface::matchingAppCategories(QString desktopfp, QStringList categorylist)
@@ -669,8 +653,72 @@ bool UkuiMenuInterface::matchingAppCategories(QString desktopfp, QStringList cat
     return false;
 }
 
+QStringList UkuiMenuInterface::getRecentApp()
+{
+    QStringList recentAppList;
+    recentAppList.clear();
+    QDateTime dt=QDateTime::currentDateTime();
+    int currentDateTime=dt.toTime_t();
+    int nDaySec=24*60*60;
+    setting->beginGroup("recentapp");
+    QStringList recentAppKeys=setting->allKeys();
+    for(int i=0;i<recentAppKeys.count();i++)
+    {
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
+            setting->remove(recentAppKeys.at(i));
+    }
+    setting->sync();
+    for(int i=0;i<setting->allKeys().size();i++)
+    {
+        QString desktopfp=QString("/usr/share/applications/"+setting->allKeys().at(i));
+        QFileInfo fileInfo(desktopfp);
+        if(!fileInfo.exists())
+            continue;
+        QString appname=getAppName(desktopfp);
+        recentAppList.append(appname);
+    }
+    setting->endGroup();
+    QLocale local;
+    QString language=local.languageToString(local.language());
+    if(QString::compare(language,"Chinese")==0)
+        local=QLocale(QLocale::Chinese);
+    else
+        local=QLocale(QLocale::English);
+    QCollator collator(local);
+    std::sort(recentAppList.begin(),recentAppList.end(),collator);
+    return recentAppList;
+}
+
 QVector<QString> UkuiMenuInterface::getCommonUseApp()
 {
+    QDateTime dt=QDateTime::currentDateTime();
+    int currentDateTime=dt.toTime_t();
+    int nDaySec=24*60*60;
+    setting->beginGroup("datetime");
+    QStringList dateTimeKeys=setting->allKeys();
+    QStringList timeOutKeys;
+    timeOutKeys.clear();
+    for(int i=0;i<dateTimeKeys.count();i++)
+    {
+        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 4)
+        {
+            timeOutKeys.append(dateTimeKeys.at(i));
+        }
+
+    }
+    setting->endGroup();
+    for(int i=0;i<timeOutKeys.count();i++)
+    {
+        setting->beginGroup("application");
+        setting->remove(timeOutKeys.at(i));
+        setting->sync();
+        setting->endGroup();
+        setting->beginGroup("datetime");
+        setting->remove(timeOutKeys.at(i));
+        setting->sync();
+        setting->endGroup();
+    }
+
     setting->beginGroup("lockapplication");
     QStringList lockdesktopfnList=setting->allKeys();
     for(int i=0;i<lockdesktopfnList.count()-1;i++)
@@ -723,151 +771,6 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
     }
 
     return data;
-}
-
-//应用排序
-QStringList UkuiMenuInterface::sortAppName()
-{
-    QStringList desktopfpList=getDesktopFilePath();
-    QStringList appnameList;
-    appnameList.clear();
-    for(int i=0;i<desktopfpList.count();i++)
-    {
-        QString appname=getAppName(desktopfpList.at(i));
-        appnameList.append(appname);
-    }
-
-    //从appnameList中将应用名首字符为非字母的移除
-    QStringList otherappname;//不是26个字母开头
-    QStringList numberappname;//以数字开头
-    otherappname.clear();
-    numberappname.clear();
-    for(int i=0;i<appnameList.count();i++)
-    {
-        QString appname=UkuiChineseLetter::getPinyins(appnameList.at(i));
-        QChar c=appname.at(0);
-        if( c<48 || (c>57 && c<65) || c>90 )
-        {
-            otherappname.append(appnameList.at(i));
-            appnameList.removeAt(i);
-            i--;
-
-        }
-
-        if(c>=48 && c<=57)
-        {
-            numberappname.append(appnameList.at(i));
-            appnameList.removeAt(i);
-            i--;
-        }
-
-
-    }
-
-
-    //判断语言环境
-    QLocale cn;
-    QString language=cn.languageToString(cn.language());
-    if(QString::compare(language,"Chinese")==0)
-    {
-//        //中文环境
-//        //执行sort后，appnameList前半部分为已按字母排序好的中文，后半部分为英文
-//        QLocale cn(QLocale::Chinese);
-//        QCollator collator(cn);
-//        std::sort(appnameList.begin(), appnameList.end(), collator);
-
-//        //找到appnameList中第一个首字母为英文的应用名，记住位置为index
-//        int index=0;
-//        for(int i=0;i<appnameList.count();i++)
-//        {
-//            QString appnamestr=appnameList.at(i);
-//            QChar c=appnamestr.at(0);
-//            if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
-//            {
-//                index=i;
-//                break;
-//            }
-//        }
-
-//        //将应用名首字母为非英文的插入到已排序好的中文序列中
-//        while(index<appnameList.count())
-//        {
-//            int i=0;
-//            for(i=0;i<index;i++)
-//            {
-//                QString indexstr=appnameList.at(index);
-//                QString letter=ChineseLetterHelper::GetPinyins(appnameList.at(i));
-//                QString indexletter=ChineseLetterHelper::GetPinyins(indexstr);
-//                if(QString::compare(letter,indexletter)>0)
-//                {
-//                    appnameList.removeAt(index);
-//                    appnameList.insert(i,indexstr);
-//                    index++;
-//                    break;
-//                }
-//            }
-//            if(i==index)index++;
-
-//        }
-//选择排序法
-//        int index=0;
-//        while(index<appnameList.count())
-//        {
-//            int min=index;
-//            QString indexstr=ChineseLetterHelper::GetPinyins(appnameList.at(index));
-//            int i;
-//            for(i=index;i<appnameList.count();i++)
-//            {
-//                QString appname=ChineseLetterHelper::GetPinyins(appnameList.at(i));
-//                if(QString ::compare(appname,indexstr)<0)
-//                {
-//                    indexstr=appname;
-//                    min=i;
-//                }
-//            }
-
-
-//            QString tmp=appnameList.at(min);
-//            appnameList.removeAt(min);
-//            appnameList.insert(index,tmp);
-//            index++;
-//        }
-
-//起泡排序法
-        for(int i=0;i<appnameList.count()-1;i++)
-            for(int j=0;j<appnameList.count()-1-i;j++)
-            {
-                QString appname_1=UkuiChineseLetter::getPinyins(appnameList.at(j));
-                QString appname_2=UkuiChineseLetter::getPinyins(appnameList.at(j+1));
-                if(QString::compare(appname_1,appname_2)>0)
-                {
-                    QString tmp=appnameList.at(j);
-                    appnameList.replace(j,appnameList.at(j+1));
-                    appnameList.replace(j+1,tmp);
-
-                }
-            }
-
-    }
-    else{
-        //英文环境
-        QLocale cn(QLocale::English);
-        QCollator collator(cn);
-        std::sort(appnameList.begin(), appnameList.end(), collator);
-    }
-
-    for(int i=0;i<otherappname.count();i++)
-    {
-        appnameList.append(otherappname.at(i));
-    }
-
-    for(int i=0;i<numberappname.count();i++)
-    {
-        appnameList.append(numberappname.at(i));
-    }
-
-//    qDebug()<<appnameList.count();
-    return appnameList;
 }
 
 //获取应用拼音

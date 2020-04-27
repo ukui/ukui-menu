@@ -40,45 +40,6 @@ MainWindow::MainWindow(QWidget *parent) :
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
-    //获取当前时间戳
-    QDateTime dt=QDateTime::currentDateTime();
-    int currentDateTime=dt.toTime_t();
-    int nDaySec=24*60*60;
-    setting->beginGroup("datetime");
-    QStringList dateTimeKeys=setting->allKeys();
-    QStringList timeOutKeys;
-    timeOutKeys.clear();
-    for(int i=0;i<dateTimeKeys.count();i++)
-    {
-        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 4)
-        {
-            timeOutKeys.append(dateTimeKeys.at(i));
-        }
-
-    }
-    setting->endGroup();
-    for(int i=0;i<timeOutKeys.count();i++)
-    {
-        setting->beginGroup("application");
-        setting->remove(timeOutKeys.at(i));
-        setting->sync();
-        setting->endGroup();
-        setting->beginGroup("datetime");
-        setting->remove(timeOutKeys.at(i));
-        setting->sync();
-        setting->endGroup();
-    }
-
-    setting->beginGroup("recentapp");
-    QStringList recentAppKeys=setting->allKeys();
-    for(int i=0;i<recentAppKeys.count();i++)
-    {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
-            setting->remove(recentAppKeys.at(i));
-    }
-    setting->sync();
-    setting->endGroup();
-
     initMainWindow();
 }
 
@@ -91,14 +52,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initMainWindow()
 {
-//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::SplashScreen);
-//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::Popup);
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-//    this->setStyleSheet("background:transparent;");
-//    char style[100];
-//    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
-//    this->setStyleSheet(QString::fromLocal8Bit(style));
-//    this->setWindowOpacity(0.95);//设置总体透明度
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::StrongFocus);
@@ -112,8 +66,6 @@ void MainWindow::initMainWindow()
     ui->menubar->hide();
     ui->statusbar->hide();
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-//    this->setMinimumSize(390+20+2,532+20+2);
-//    this->setContentsMargins(1,21,21,1);
     this->setMinimumSize(376,590);
     this->setContentsMargins(0,0,0,0);
 

@@ -84,8 +84,9 @@ void SideBarWidget::addSidebarBtn()
     minmaxWidget->setStyleSheet("QWidget{background:transparent;border:0px;}");
     minmaxLayout=new QHBoxLayout(minmaxWidget);
     minmaxbtn=new QToolButton(minmaxWidget);
-    minmaxbtn->setShortcut(QKeySequence::InsertParagraphSeparator);
-//    minmaxbtn->setShortcut(Qt::Key_Return);
+//    minmaxbtn->setShortcut(QKeySequence::InsertParagraphSeparator);
+//    minmaxbtn->setShortcut(Qt::Key_Enter);
+    minmaxbtn->setShortcut(Qt::Key_Return);
 //    horizontalSpacer=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
 //    minmaxLayout->addItem(horizontalSpacer);
     minmaxLayout->addWidget(minmaxbtn);
