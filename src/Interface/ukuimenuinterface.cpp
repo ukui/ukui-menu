@@ -778,7 +778,11 @@ QString UkuiMenuInterface::getAppNamePinyin(QString appname)
 {
     return UkuiChineseLetter::getPinyins(appname);
 }
-
+//获取应用首字母
+QString UkuiMenuInterface::getAppNameInitials(QString appname)
+{
+    return UkuiChineseLetter::getFirstLettersAll(appname);
+}
 //获取指定类型应用列表
 QStringList UkuiMenuInterface::getSpecifiedCategoryAppList(QString categorystr)
 {

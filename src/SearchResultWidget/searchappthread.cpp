@@ -41,7 +41,8 @@ void SearchAppThread::run()
         while(index<appInfoVector.size())
         {
             QString appNamePy=pUkuiMenuInterface->getAppNamePinyin(appInfoVector.at(index).at(2));
-            if(appNamePy.contains(str,Qt::CaseInsensitive))
+            QString appNameFl=pUkuiMenuInterface->getAppNameInitials(appInfoVector.at(index).at(2));
+            if(appNamePy.contains(str,Qt::CaseInsensitive) || appNameFl.contains(str,Qt::CaseInsensitive))
             {
                 searchResultList.append(appInfoVector.at(index).at(0));
             }

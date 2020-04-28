@@ -72,6 +72,7 @@ public:
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
 
     QString getAppNamePinyin(QString appname);//获取应用名拼音
+    QString getAppNameInitials(QString appname);//获取应用首字母
 
     //获取用户图像
     QString getUserIcon();
