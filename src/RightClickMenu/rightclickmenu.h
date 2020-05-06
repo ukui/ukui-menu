@@ -82,10 +82,6 @@ private:
     QWidget* CuUnfixed4TaskBarWid=nullptr;
     QWidgetAction* CuAdd2DesktopAction=nullptr;
     QWidget* CuAdd2DesktopWid=nullptr;
-    QWidgetAction* CuDeleteAction=nullptr;
-    QWidget* CuDeleteWid=nullptr;
-    QWidgetAction* CuDeleteAllAction;
-    QWidget* CuDeleteAllWid=nullptr;
     QWidgetAction* CuUninstallAction=nullptr;
     QWidget* CuUninstallWid=nullptr;
     QWidgetAction* CuAttributeAction=nullptr;
@@ -139,9 +135,6 @@ protected:
     void initWidgetAction(QWidget* wid, QString iconstr, QString textstr);
 
 private Q_SLOTS:
-    void commonUseDeleteActionTriggerSlot();
-    void commonUseDeleteAllActionTriggerSlot();
-
     void fixToCommonUseActionTriggerSlot();
     void unfixedFromCommonUseActionTriggerSlot();
     void fixToTaskbarActionTriggerSlot();

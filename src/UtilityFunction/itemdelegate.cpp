@@ -41,10 +41,22 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         painter->save();
         QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
-        rect.setX(option.rect.x());
-        rect.setY(option.rect.y());
-        rect.setWidth(option.rect.width());
-        rect.setHeight(option.rect.height()-10);
+        QStringList strlist1=index.model()->data(index,Qt::DisplayRole).toStringList();
+        if(strlist1.at(1).toInt()==1)
+        {
+            rect.setX(option.rect.x());
+            rect.setY(option.rect.y());
+            rect.setWidth(option.rect.width());
+            rect.setHeight(option.rect.height()-2);
+        }
+        else
+        {
+            rect.setX(option.rect.x());
+            rect.setY(option.rect.y()+2);
+            rect.setWidth(option.rect.width());
+            rect.setHeight(option.rect.height()-6);
+        }
+
         //QPainterPath画圆角矩形
         const qreal radius = 2;
         QPainterPath path;
@@ -94,7 +106,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 QIcon icon=QIcon::fromTheme(iconstr);
                 if(icon.isNull())
                     icon=QIcon::fromTheme(QString("application-x-desktop"));
-                icon.paint(painter,iconRect);
+                icon.paint(painter,iconRect,Qt::AlignLeft);
                 painter->setPen(QPen(Qt::white));
                 QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
                 painter->drawText(QRect(iconRect.right()+15,rect.y(),
@@ -105,8 +117,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             {
                 painter->setPen(QPen(Qt::white));
 //                QRect textRect=QRect(rect.x()+11,rect.y()+(rect.height()-14)/2,strlist.at(0).size()*14,14);
-                QRect textRect=QRect(rect.x()+11,rect.y(),rect.width(),rect.height());
-                painter->drawText(textRect,Qt::AlignVCenter,strlist.at(0));
+                QRect textRect=QRect(rect.x()+11,rect.y()+12,rect.width(),rect.height());
+                painter->drawText(textRect,Qt::AlignLeft,strlist.at(0));
                 painter->setRenderHint(QPainter::Antialiasing, true);
                 painter->setPen(QPen(QColor("#FFFFFF"),1));
                 painter->setOpacity(0.06);
@@ -124,7 +136,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             QIcon icon=QIcon::fromTheme(iconstr);
             if(icon.isNull())
                 icon=QIcon::fromTheme(QString("application-x-desktop"));
-            icon.paint(painter,iconRect);
+            icon.paint(painter,iconRect,Qt::AlignLeft);
             QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
             QFileInfo fileInfo(strlist.at(0));
             QString desktopfn=fileInfo.fileName();
@@ -147,5 +159,10 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
 QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    return QSize(296,48);
+    QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
+    if(strlist.at(1).toInt()==1)
+        return QSize(296,44);
+    else
+        return QSize(296,48);
+
 }

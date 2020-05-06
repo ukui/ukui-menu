@@ -22,6 +22,9 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QTableWidget>
+#include <QPropertyAnimation>
+#include <QSequentialAnimationGroup>
+#include <QParallelAnimationGroup>
 #include "src/Interface/ukuimenuinterface.h"
 #include "letterbuttonwidget.h"
 #include "src/UtilityFunction/listview.h"
@@ -50,11 +53,10 @@ private:
 
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
-    QVBoxLayout* mainLayout=nullptr;
+//    QVBoxLayout* mainLayout=nullptr;
 
     LetterButtonWidget* letterbtnwid=nullptr;//分类按钮界面
 
-    QLabel* line=nullptr;
     ListView* applistview=nullptr;
     QVector<QStringList> data;
 
@@ -63,6 +65,10 @@ private:
     QStringList letterposlist;//存放分类字符位置列表
     QStringList appsortlist;//存放应用排序列表
 
+    QPropertyAnimation* enterAnimation=nullptr;
+    QPropertyAnimation* leaveAnimation=nullptr;
+    QSequentialAnimationGroup* sGroup=nullptr;
+
 protected:
     void initWidget();
     void initAppListWidget();//初始化应用列表界面
@@ -70,7 +76,7 @@ protected:
 
 private Q_SLOTS:
     void appClassificationBtnClickedSlot();//应用列表字母分类按钮槽函数
-    void recvLetterBtnSignal(QString btnname);//接收LetterButtonWidget界面按钮信号
+    void recvLetterBtnSlot(QString btnname);//接收LetterButtonWidget界面按钮信号
     void execApplication(QString exec);//执行应用程序
     void updateAppListView();//更新应用列表
 

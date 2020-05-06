@@ -55,27 +55,31 @@ void LetterWidget::initWidget()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(320,535);
 
-    mainLayout=new QVBoxLayout(this);
-    mainLayout->setContentsMargins(2,0,2,0);
-    mainLayout->setSpacing(0);
-    this->setLayout(mainLayout);
+//    mainLayout=new QVBoxLayout(this);
+//    mainLayout->setContentsMargins(2,0,2,0);
+//    mainLayout->setSpacing(0);
+//    this->setLayout(mainLayout);
     pUkuiMenuInterface=new UkuiMenuInterface;
-
-//    line=new QLabel(this);
-//    line->setFixedSize(this->width(),2);
-//    char linestyle[100];
-//    sprintf(linestyle, "border:none;background-color:%s;","rgba(0, 0, 0, 0.20)");
-//    line->setStyleSheet(linestyle);
-//    QGraphicsDropShadowEffect *shadow_effect = new QGraphicsDropShadowEffect(line);
-//    shadow_effect->setOffset(0, 2);
-//    shadow_effect->setColor(QColor("rgba(0, 0, 0, 0.35)"));
-//    shadow_effect->setBlurRadius(10);
-//    line->setGraphicsEffect(shadow_effect);
-
-//    mainLayout->addWidget(line);
-
     initAppListWidget();
 
+    letterbtnwid=new LetterButtonWidget(this);
+    connect(this,SIGNAL(sendLetterBtnList(QStringList)),letterbtnwid,SLOT(recvLetterBtnList(QStringList)));
+    connect(letterbtnwid, SIGNAL(sendLetterBtnSignal(QString)),this,SLOT(recvLetterBtnSlot(QString)));
+    letterbtnwid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
+
+    enterAnimation=new QPropertyAnimation;
+    enterAnimation->setDuration(200);
+    enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
+    enterAnimation->setStartValue(QRect((this->width()-4)/2,(this->height())/2,0,0));
+    enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+    leaveAnimation=new QPropertyAnimation;
+    leaveAnimation->setDuration(200);
+    leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
+    leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
+    leaveAnimation->setEndValue(QRect((this->width()-4)/2,(this->height())/2,0,0));
+    sGroup=new QSequentialAnimationGroup;
+    sGroup->addAnimation(leaveAnimation);
+    sGroup->addAnimation(enterAnimation);
 }
 
 /**
@@ -84,7 +88,8 @@ void LetterWidget::initWidget()
 void LetterWidget::initAppListWidget()
 {
     applistview=new ListView(this,this->width()-4,this->height(),1);
-    mainLayout->addWidget(applistview);
+    applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
+//    mainLayout->addWidget(applistview);
     fillAppListView();
     connect(applistview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(recvItemClickedSlot(QStringList)));
     connect(applistview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
@@ -199,32 +204,42 @@ void LetterWidget::updateAppListView()
 void LetterWidget::appClassificationBtnClickedSlot()
 {
     //加载LetterBUttonWidget界面
-    letterbtnwid=new LetterButtonWidget(this);
-    connect(this,SIGNAL(sendLetterBtnList(QStringList)),letterbtnwid,SLOT(recvLetterBtnList(QStringList)));
+//    letterbtnwid=new LetterButtonWidget(this);
+//    connect(this,SIGNAL(sendLetterBtnList(QStringList)),letterbtnwid,SLOT(recvLetterBtnList(QStringList)));
     Q_EMIT sendLetterBtnList(letterbtnlist);
-//    mainLayout->removeWidget(line);
-//    line->setParent(nullptr);
-    mainLayout->removeWidget(applistview);
-    applistview->setParent(nullptr);
-    mainLayout->addWidget(letterbtnwid);
+//    mainLayout->removeWidget(applistview);
+//    applistview->setParent(nullptr);
+//    mainLayout->addWidget(letterbtnwid);
 
-    connect(letterbtnwid, SIGNAL(sendLetterBtnSignal(QString)),this,SLOT(recvLetterBtnSignal(QString)));
+//    connect(letterbtnwid, SIGNAL(sendLetterBtnSignal(QString)),this,SLOT(recvLetterBtnSlot(QString)));
+//    leaveAnimation->setTargetObject(applistview);
+//    enterAnimation->setTargetObject(applistview);
+    leaveAnimation->setTargetObject(applistview);
+    enterAnimation->setTargetObject(letterbtnwid);
+    sGroup->start();
+//    leaveAnimation->start();
+//    enterAnimation->start();
+//    letterbtnwid->setGeometry(QRect(0,0,this->width()-4,this->height()));
+
 }
 
 /**
  * 接收LetterButtonWidget界面按钮信号
  */
-void LetterWidget::recvLetterBtnSignal(QString btnname)
+void LetterWidget::recvLetterBtnSlot(QString btnname)
 {
-    mainLayout->removeWidget(letterbtnwid);
-    letterbtnwid->setParent(nullptr);
-    if(letterbtnwid!=nullptr)
-    {
-        delete letterbtnwid;
-        letterbtnwid=nullptr;
-    }
-//    mainLayout->addWidget(line);
-    mainLayout->addWidget(applistview);
+    leaveAnimation->setTargetObject(letterbtnwid);
+    enterAnimation->setTargetObject(applistview);
+    sGroup->start();
+
+//    mainLayout->removeWidget(letterbtnwid);
+//    letterbtnwid->setParent(nullptr);
+//    if(letterbtnwid!=nullptr)
+//    {
+//        delete letterbtnwid;
+//        letterbtnwid=nullptr;
+//    }
+//    mainLayout->addWidget(applistview);
 
     //此处需实现将字母为btnname的应用列表移动到applistWid界面最顶端
     int num=letterbtnlist.indexOf(QString(QChar(btnname.at(0))));
@@ -238,14 +253,14 @@ void LetterWidget::recvLetterBtnSignal(QString btnname)
 
 void LetterWidget::widgetMakeZero()
 {
-    if(letterbtnwid!=nullptr)
-    {
-        mainLayout->removeWidget(letterbtnwid);
-        letterbtnwid->setParent(nullptr);
-        delete letterbtnwid;
-        letterbtnwid=nullptr;
-        mainLayout->addWidget(applistview);
-    }
+//    if(letterbtnwid!=nullptr)
+//    {
+//        mainLayout->removeWidget(letterbtnwid);
+//        letterbtnwid->setParent(nullptr);
+//        delete letterbtnwid;
+//        letterbtnwid=nullptr;
+//        mainLayout->addWidget(applistview);
+//    }
     applistview->verticalScrollBar()->setValue(0);
 }
 

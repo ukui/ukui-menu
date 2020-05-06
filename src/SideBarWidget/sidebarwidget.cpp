@@ -29,7 +29,7 @@ SideBarWidget::SideBarWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     initWidget();
-    functionbtn->click();
+    commonusebtn->click();
 }
 
 SideBarWidget::~SideBarWidget()
@@ -754,9 +754,9 @@ void SideBarWidget::enterAnimation()
 void SideBarWidget::widgetMakeZero()
 {
 //    functionbtn->click();
-    commonusebtn->setStyleSheet("background:transparent;");
-    letterbtn->setStyleSheet("background:transparent;");
     char pressstyle[200];
     sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:2px;}",SBClassifyBtnSelectedBackground);
-    functionbtn->setStyleSheet(pressstyle);
+    commonusebtn->setStyleSheet(pressstyle);
+    letterbtn->setStyleSheet("background:transparent;");
+    functionbtn->setStyleSheet("background:transparent;");
 }

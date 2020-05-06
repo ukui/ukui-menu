@@ -40,8 +40,9 @@ void LetterButtonWidget::initWidget()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
-    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(320,500);
+//    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+//    this->setFixedSize(320,500);
+    this->resize(320,500);
 
     gridLayout=new QGridLayout(this);
     gridLayout->setContentsMargins(15,0,6,this->height()-48*6);
@@ -66,8 +67,6 @@ void LetterButtonWidget::initWidget()
     letterlist.append("&&");
     letterlist.append("#");
 
-//    QFont font;
-//    font.setPixelSize(Style::LeftFontSize);
     for(int row=0;row<6;row++)
     {
         for(int col=0;col<5;col++)

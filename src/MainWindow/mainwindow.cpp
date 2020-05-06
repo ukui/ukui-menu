@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
     UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
     UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
+    UkuiMenuInterface::desktopAllVector=pUkuiMenuInterface->getDesktopAll();
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -70,8 +71,8 @@ void MainWindow::initMainWindow()
     this->setContentsMargins(0,0,0,0);
 
     frame=new QFrame(this);
-    sidebarwid=new SideBarWidget(this);
     mainviewwid=new MainViewWidget(this);
+    sidebarwid=new SideBarWidget(this);
 
     this->setCentralWidget(frame);
     mainlayout=new QHBoxLayout;

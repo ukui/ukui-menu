@@ -46,6 +46,7 @@ public:
     static QVector<QStringList> alphabeticVector;
     static QVector<QStringList> functionalVector;
     static QVector<QString> commonUseVector;
+    static QVector<QString> desktopAllVector;
 
     /**
      * 获取系统应用名称
@@ -68,6 +69,7 @@ public:
     QVector<QStringList> getAlphabeticClassification();//获取字母分类
     QVector<QStringList> getFunctionalClassification();//获取功能分类
     QVector<QString> getCommonUseApp();//获取常用App
+    QVector<QString> getDesktopAll();
     QStringList getRecentApp();//获取最近添加App
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
 

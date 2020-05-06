@@ -62,10 +62,11 @@ private Q_SLOTS:
 Q_SIGNALS:
     void sendItemClickedSignal(QString arg);//向字母排序或功能分类模块发送item点击信号
     void sendFixedOrUnfixedSignal(QString desktopfp,int type);//向字母排序、功能分类发送固定或者取消固定信号
-    void sendUpdateAppListSignal(QString desktopfp,int type);//向FullCommonUseWidget发送更新应用列表信号
+//    void sendUpdateAppListSignal(QString desktopfp,int type);//向FullCommonUseWidget发送更新应用列表信号
     void removeListItemSignal(QString desktopfp);
     void removeListAllItemSignal();
     void sendHideMainWindowSignal();
+    void sendUpdateAppListSignal();
 };
 
 #endif // FULLLISTVIEW_H

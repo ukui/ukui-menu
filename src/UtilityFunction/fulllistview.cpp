@@ -125,69 +125,38 @@ void FullListView::rightClickedSlot()
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
-//        menu=new RightClickMenu(this);
         if(module>0)
         {
             int ret=menu->showAppBtnMenu(desktopfp);
-            if(ret==1)
-                Q_EMIT sendFixedOrUnfixedSignal(desktopfp,0);
-            if(ret==2)
-                Q_EMIT sendFixedOrUnfixedSignal(desktopfp,1);
-            if(ret==6)
+            switch (ret) {
+            case 6:
                 Q_EMIT sendHideMainWindowSignal();
-            if(ret==7)
+                break;
+            case 7:
                 Q_EMIT sendHideMainWindowSignal();
+                break;
+            default:
+                break;
+            }
         }
         else{
             int ret=menu->showCommonUseAppBtnMenu(desktopfp);
-            if(ret==1)
-            {
-                this->setCurrentIndex(index);
-                listmodel->removeRow(index.row());
-                setting->beginGroup("lockapplication");
-                QStandardItem* item=new QStandardItem;
-                item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-                listmodel->insertRow(setting->allKeys().size()-1,item);
-                setting->endGroup();
-                Q_EMIT sendUpdateAppListSignal(desktopfp,0);
-            }
-            if(ret==2)
-            {
-                listmodel->removeRow(index.row());
-                setting->beginGroup("lockapplication");
-                QStandardItem* item=new QStandardItem;
-                item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-                listmodel->insertRow(setting->allKeys().size(),item);
-                setting->endGroup();
-                Q_EMIT sendUpdateAppListSignal(desktopfp,1);
-            }
-
-            if(ret==7)
+            switch (ret) {
+            case 1:
+                Q_EMIT sendUpdateAppListSignal();
+                break;
+            case 2:
+                Q_EMIT sendUpdateAppListSignal();
+                break;
+            case 6:
                 Q_EMIT sendHideMainWindowSignal();
-
-            if(ret==8)
-            {
-                listmodel->removeRow(index.row());
-                Q_EMIT removeListItemSignal(desktopfp);
-            }
-
-            if(ret==9)
-            {
-                setting->beginGroup("lockapplication");
-                for(int i=listmodel->rowCount()-1;i>=0;i--)
-                {
-                    QVariant var=listmodel->index(i,0).data(Qt::DisplayRole);
-                    QString desktopfp=var.value<QString>();
-                    QFileInfo fileInfo(desktopfp);
-                    QString desktopfn=fileInfo.fileName();
-                    if(!setting->contains(desktopfn))
-                        listmodel->removeRow(i);
-                }
-                setting->endGroup();
-                Q_EMIT removeListAllItemSignal();
-            }
-            if(ret==6)
+                break;
+            case 7:
                 Q_EMIT sendHideMainWindowSignal();
+                break;
+            default:
+                break;
+            }
         }
 
         this->selectionModel()->clear();

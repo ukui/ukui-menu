@@ -126,13 +126,13 @@ void Style::initWidStyle()
 
     if(widthavailable>=2000 && widthavailable<=4000)
     {
-        MainViewWidWidth=widthavailable-round((widthavailable-1440)/2);
+        MainViewWidWidth=widthavailable-round((widthavailable-1644)/2);
         TopWidgetHeight=107;
         QueryLineEditWidth=350;
         QueryLineEditHeight=30;
         QueryLineEditFontSize=fontSize;
         QueryLineEditIconSize=16;
-        LeftWidWidth=round((widthavailable-1440)/2);
+        LeftWidWidth=round((widthavailable-1644)/2);
         LeftWidHeight=heightavailable-TopWidgetHeight;
         LeftMargin=20;
         LeftBtnWidth=100+5*len;
@@ -145,7 +145,7 @@ void Style::initWidStyle()
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=15;
-        AppListWidWidth=1440;
+        AppListWidWidth=1644;
         AppListWidHeight=heightavailable-TopWidgetHeight;
         AppListFontSize=fontSize;
         AppListIconSize=96;
@@ -157,7 +157,7 @@ void Style::initWidStyle()
 //        AppBottomSpace=27;
         SliderSize=12;
 
-        SideBarWidWidth=round((widthavailable-1440)/2);
+        SideBarWidWidth=round((widthavailable-1644)/2);
         SideBarMargin=20;
         MinMaxWidWidth=110;
         MinMaxWidHeight=TopWidgetHeight;

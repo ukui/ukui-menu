@@ -31,6 +31,13 @@ UkuiMenuInterface::UkuiMenuInterface()
     setting=new QSettings(path,QSettings::IniFormat);
 }
 
+QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
+QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
+QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
+QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
+QVector<QString> UkuiMenuInterface::desktopAllVector=QVector<QString>();
+QVector<QString> UkuiMenuInterface::commonUseVector=QVector<QString>();
+
 UkuiMenuInterface::~UkuiMenuInterface()
 {
 //    delete[] pAppInfo;
@@ -221,12 +228,6 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/peony.desktop");
     return filePathList;
 }
-
-QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
-QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
-QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
-QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
-QVector<QString> UkuiMenuInterface::commonUseVector=QVector<QString>();
 
 //创建应用信息容器
 QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
@@ -687,6 +688,38 @@ QStringList UkuiMenuInterface::getRecentApp()
     QCollator collator(local);
     std::sort(recentAppList.begin(),recentAppList.end(),collator);
     return recentAppList;
+}
+
+QVector<QString> UkuiMenuInterface::getDesktopAll()
+{
+    QVector<QString> desktopAllVector;
+    QVector<QString> commonVector;
+    QStringList appNameList;
+    desktopAllVector.clear();
+    commonVector.clear();
+    appNameList.clear();
+//    desktopAllVector=desktopfpVector;
+    commonVector=getCommonUseApp();
+    Q_FOREACH(QString desktopfp, desktopfpVector)
+    {
+        if(!commonVector.contains(desktopfp))
+            appNameList.append(getAppName(desktopfp));
+    }
+    QLocale local;
+    QString language=local.languageToString(local.language());
+    if(QString::compare(language,"Chinese")==0)
+        local=QLocale(QLocale::Chinese);
+    else
+        local=QLocale(QLocale::English);
+    QCollator collator(local);
+    std::sort(appNameList.begin(),appNameList.end(),collator);
+    Q_FOREACH(QString desktopfp, commonVector)
+        desktopAllVector.append(desktopfp);
+
+    Q_FOREACH(QString appName, appNameList)
+        desktopAllVector.append(getDesktopPathByAppName(appName));
+
+    return desktopAllVector;
 }
 
 QVector<QString> UkuiMenuInterface::getCommonUseApp()

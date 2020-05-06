@@ -26,6 +26,7 @@
 
 int main(int argc, char *argv[])
 {
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QtSingleApplication app("ukui-start-menu",argc,argv);
     app.setQuitOnLastWindowClosed(false);
 
