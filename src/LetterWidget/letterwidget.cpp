@@ -68,18 +68,16 @@ void LetterWidget::initWidget()
     letterbtnwid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
 
     enterAnimation=new QPropertyAnimation;
-    enterAnimation->setDuration(200);
+    enterAnimation->setDuration(50);
     enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
-    enterAnimation->setStartValue(QRect((this->width()-4)/2,(this->height())/2,0,0));
-    enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
     leaveAnimation=new QPropertyAnimation;
-    leaveAnimation->setDuration(200);
+    leaveAnimation->setDuration(50);
     leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
-    leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
-    leaveAnimation->setEndValue(QRect((this->width()-4)/2,(this->height())/2,0,0));
-    sGroup=new QSequentialAnimationGroup;
-    sGroup->addAnimation(leaveAnimation);
-    sGroup->addAnimation(enterAnimation);
+//    sGroup=new QSequentialAnimationGroup;
+//    sGroup->addAnimation(leaveAnimation);
+//    sGroup->addAnimation(enterAnimation);
+    connect(leaveAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
+    connect(enterAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
 }
 
 /**
@@ -203,6 +201,11 @@ void LetterWidget::updateAppListView()
  */
 void LetterWidget::appClassificationBtnClickedSlot()
 {
+    leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
+    leaveAnimation->setEndValue(QRect(21,42,this->width()-42,this->height()-84));
+    enterAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
+    enterAnimation->setEndValue(QRect(42.5,84.5,235,366));
+
     //加载LetterBUttonWidget界面
 //    letterbtnwid=new LetterButtonWidget(this);
 //    connect(this,SIGNAL(sendLetterBtnList(QStringList)),letterbtnwid,SLOT(recvLetterBtnList(QStringList)));
@@ -216,7 +219,10 @@ void LetterWidget::appClassificationBtnClickedSlot()
 //    enterAnimation->setTargetObject(applistview);
     leaveAnimation->setTargetObject(applistview);
     enterAnimation->setTargetObject(letterbtnwid);
-    sGroup->start();
+    leaveAnimation->start();
+//    enterAnimation->start();
+    widgetState=1;
+//    sGroup->start();
 //    leaveAnimation->start();
 //    enterAnimation->start();
 //    letterbtnwid->setGeometry(QRect(0,0,this->width()-4,this->height()));
@@ -228,9 +234,7 @@ void LetterWidget::appClassificationBtnClickedSlot()
  */
 void LetterWidget::recvLetterBtnSlot(QString btnname)
 {
-    leaveAnimation->setTargetObject(letterbtnwid);
-    enterAnimation->setTargetObject(applistview);
-    sGroup->start();
+//    sGroup->start();
 
 //    mainLayout->removeWidget(letterbtnwid);
 //    letterbtnwid->setParent(nullptr);
@@ -249,6 +253,34 @@ void LetterWidget::recvLetterBtnSlot(QString btnname)
         applistview->verticalScrollBar()->setValue(row);
 
     }
+
+    leaveAnimation->setStartValue(QRect(42.5,84.5,235,366));
+    leaveAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+    enterAnimation->setStartValue(QRect(20,20,this->width()-44,this->height()-40));
+    enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+
+    leaveAnimation->setTargetObject(letterbtnwid);
+    enterAnimation->setTargetObject(applistview);
+    leaveAnimation->start();
+    widgetState=0;
+}
+
+void LetterWidget::animationFinishedSLot()
+{
+    if(widgetState==1)
+    {
+        applistview->setVisible(false);
+        letterbtnwid->setVisible(true);
+        enterAnimation->start();
+        widgetState=-1;
+    }
+    if(widgetState==0)
+    {
+        letterbtnwid->setVisible(false);
+        applistview->setVisible(true);
+        enterAnimation->start();
+        widgetState=-1;
+    }
 }
 
 void LetterWidget::widgetMakeZero()
@@ -261,6 +293,10 @@ void LetterWidget::widgetMakeZero()
 //        letterbtnwid=nullptr;
 //        mainLayout->addWidget(applistview);
 //    }
+
+    letterbtnwid->setVisible(false);
+    applistview->setVisible(true);
+    applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
     applistview->verticalScrollBar()->setValue(0);
 }
 

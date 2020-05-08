@@ -287,14 +287,14 @@
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="227"/>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="296"/>
-        <source>Pin to common</source>
-        <translation>固定到“常用软件”</translation>
+        <source>Pin to all</source>
+        <translation>固定到“所有软件”</translation>
     </message>
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="231"/>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="300"/>
-        <source>Unpin from common</source>
-        <translation>从“常用软件”取消固定</translation>
+        <source>Unpin from all</source>
+        <translation>从“所有软件”取消固定</translation>
     </message>
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="235"/>
@@ -381,8 +381,8 @@
     <message>
         <location filename="src/SideBarWidget/sidebarwidget.cpp" line="109"/>
         <location filename="src/SideBarWidget/sidebarwidget.cpp" line="532"/>
-        <source>Common</source>
-        <translation>常用软件</translation>
+        <source>All</source>
+        <translation>所有软件</translation>
     </message>
     <message>
         <location filename="src/SideBarWidget/sidebarwidget.cpp" line="113"/>

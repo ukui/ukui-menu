@@ -42,10 +42,10 @@ void LetterButtonWidget::initWidget()
     this->setStyleSheet("border:0px;background:transparent;");
 //    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 //    this->setFixedSize(320,500);
-    this->resize(320,500);
+    this->resize(235,366);
 
     gridLayout=new QGridLayout(this);
-    gridLayout->setContentsMargins(15,0,6,this->height()-48*6);
+    gridLayout->setContentsMargins(0,0,0,0);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
 
@@ -67,17 +67,17 @@ void LetterButtonWidget::initWidget()
     letterlist.append("&&");
     letterlist.append("#");
 
-    for(int row=0;row<6;row++)
+    for(int row=0;row<7;row++)
     {
-        for(int col=0;col<5;col++)
+        for(int col=0;col<4;col++)
         {
-            if(row*5+col<letterlist.size())
+            if(row*4+col<letterlist.size())
             {
                 QToolButton* btn=new QToolButton(this);
                 btn->setFixedSize(55,48);
                 btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 //                btn->setFont(font);
-                btn->setText(letterlist.at(row*5+col));
+                btn->setText(letterlist.at(row*4+col));
                 gridLayout->addWidget(btn,row,col);
                 connect(btn, SIGNAL(clicked()), this, SLOT(letterBtnClickedSlot()));
             }
@@ -103,17 +103,17 @@ void LetterButtonWidget::letterBtnClickedSlot()
  */
 void LetterButtonWidget::recvLetterBtnList(QStringList list)
 {
-    for(int row=0;row<6;row++)
+    for(int row=0;row<7;row++)
     {
-        for(int col=0;col<5;col++)
+        for(int col=0;col<4;col++)
         {
-            QLayoutItem* item=gridLayout->itemAt(row*5+col);
+            QLayoutItem* item=gridLayout->itemAt(row*4+col);
             QToolButton* btn=static_cast<QToolButton*>(item->widget());
             QString letterstr=btn->text();
             if(list.indexOf(letterstr.at(0))==-1)
                 btn->setEnabled(false);
 
-            if(row*5+col==27) break;
+            if(row*4+col==27) break;
         }
     }
 }

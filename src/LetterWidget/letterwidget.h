@@ -68,6 +68,7 @@ private:
     QPropertyAnimation* enterAnimation=nullptr;
     QPropertyAnimation* leaveAnimation=nullptr;
     QSequentialAnimationGroup* sGroup=nullptr;
+    int widgetState=-1;
 
 protected:
     void initWidget();
@@ -79,9 +80,8 @@ private Q_SLOTS:
     void recvLetterBtnSlot(QString btnname);//接收LetterButtonWidget界面按钮信号
     void execApplication(QString exec);//执行应用程序
     void updateAppListView();//更新应用列表
-
     void recvItemClickedSlot(QStringList arg);
-
+    void animationFinishedSLot();
 
 Q_SIGNALS:
     void sendLetterBtnList(QStringList list);//向LetterButtonWidget发送字母按钮列表

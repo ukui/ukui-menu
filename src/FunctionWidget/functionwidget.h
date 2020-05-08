@@ -56,7 +56,7 @@ private:
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     //主界面
-    QHBoxLayout* mainLayout=nullptr;
+//    QHBoxLayout* mainLayout=nullptr;
     FunctionButtonWidget* functionbtnwid=nullptr;//分类列表界面
 
     ListView* applistview=nullptr;
@@ -66,7 +66,10 @@ private:
     QStringList classificationbtnrowlist;//存放分类按钮所在行
     int row=0;
 
-    RightClickMenu* menu;//右键菜单
+    QPropertyAnimation* enterAnimation=nullptr;
+    QPropertyAnimation* leaveAnimation=nullptr;
+    QSequentialAnimationGroup* sGroup=nullptr;
+    int widgetState=-1;
 
 protected:
     void initWidget();
@@ -80,8 +83,8 @@ private Q_SLOTS:
     void recvFunctionBtnSignal(QString btnname);//接收FunctionButtonWidget界面按钮信号
     void execApplication(QString exec);//执行应用程序
     void updateAppListView();//更新应用列表
-
     void recvItemClickedSlot(QStringList arg);
+    void animationFinishedSLot();
 
 Q_SIGNALS:
     void sendClassificationbtnList(QStringList list);//向FunctionButtonWidget界面发送分类按钮列表

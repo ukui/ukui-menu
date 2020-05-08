@@ -41,11 +41,12 @@ void FunctionButtonWidget::initWidget()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
-    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(320,500);
+//    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+//    this->setFixedSize(320,500);
+    this->resize(Style::LeftBtnWidth*2+5,Style::LeftBtnHeight*6+25);
 
     gridLayout=new QGridLayout(this);
-    gridLayout->setContentsMargins(15,0,6,this->height()-48*6);
+    gridLayout->setContentsMargins(0,0,0,0);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
 
@@ -180,15 +181,15 @@ void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
                                                    true);
                 connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
             }
-            QLayoutItem* item=gridLayout->itemAt(row*2+col);
-            if(item!=nullptr)
-            {
-                QWidget* wid=item->widget();
-                gridLayout->replaceWidget(wid,iconbtn);
-            }
-            else {
+//            QLayoutItem* item=gridLayout->itemAt(row*2+col);
+//            if(item!=nullptr)
+//            {
+//                QWidget* wid=item->widget();
+//                gridLayout->replaceWidget(wid,iconbtn);
+//            }
+//            else {
                 gridLayout->addWidget(iconbtn,row,col);
-            }
+//            }
 
             if(row*2+col==10)break;
         }

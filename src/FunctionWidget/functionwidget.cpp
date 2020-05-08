@@ -47,13 +47,29 @@ void FunctionWidget::initWidget()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(320,535);
 
-    mainLayout=new QHBoxLayout(this);
-    mainLayout->setContentsMargins(2,0,2,0);
-    mainLayout->setSpacing(0);
-    this->setLayout(mainLayout);
+//    mainLayout=new QHBoxLayout(this);
+//    mainLayout->setContentsMargins(2,0,2,0);
+//    mainLayout->setSpacing(0);
+//    this->setLayout(mainLayout);
     pUkuiMenuInterface=new UkuiMenuInterface;
-
     initAppListWidget();
+
+    functionbtnwid=new FunctionButtonWidget(this);
+    connect(this,SIGNAL(sendClassificationbtnList(QStringList)),functionbtnwid,SLOT(recvClassificationBtnList(QStringList)));
+    connect(functionbtnwid, SIGNAL(sendFunctionBtnSignal(QString)),this,SLOT(recvFunctionBtnSignal(QString)));
+    functionbtnwid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
+
+    enterAnimation=new QPropertyAnimation;
+    enterAnimation->setDuration(50);
+    enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
+    leaveAnimation=new QPropertyAnimation;
+    leaveAnimation->setDuration(50);
+    leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
+//    sGroup=new QSequentialAnimationGroup;
+//    sGroup->addAnimation(leaveAnimation);
+//    sGroup->addAnimation(enterAnimation);
+    connect(leaveAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
+    connect(enterAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
 
 }
 
@@ -63,7 +79,8 @@ void FunctionWidget::initWidget()
 void FunctionWidget::initAppListWidget()
 {
     applistview=new ListView(this,this->width()-4,this->height(),2);
-    mainLayout->addWidget(applistview);
+    applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
+//    mainLayout->addWidget(applistview);
     fillAppListView();
     connect(applistview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(recvItemClickedSlot(QStringList)));
     connect(applistview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
@@ -294,15 +311,35 @@ void FunctionWidget::updateListView()
  */
 void FunctionWidget::appClassificationBtnClickedSlot()
 {
-    //加载FunctionButtonWidget界面
-    functionbtnwid=new FunctionButtonWidget(this);
-    connect(this,SIGNAL(sendClassificationbtnList(QStringList)),functionbtnwid,SLOT(recvClassificationBtnList(QStringList)));
-    Q_EMIT sendClassificationbtnList(classificationbtnlist);
-    mainLayout->removeWidget(applistview);
-    applistview->setParent(nullptr);
-    mainLayout->addWidget(functionbtnwid);
+    leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
+    leaveAnimation->setEndValue(QRect(21,42,this->width()-42,this->height()-84));
+    enterAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
+    enterAnimation->setEndValue(QRect((this->width()-Style::LeftBtnWidth*2-5)/2,
+                                      (this->height()-Style::LeftBtnHeight*6-25)/2,
+                                      Style::LeftBtnWidth*2+5,
+                                      Style::LeftBtnHeight*6+25));
 
-    connect(functionbtnwid, SIGNAL(sendFunctionBtnSignal(QString)),this,SLOT(recvFunctionBtnSignal(QString)));
+    //加载FunctionButtonWidget界面
+//    functionbtnwid=new FunctionButtonWidget(this);
+//    connect(this,SIGNAL(sendClassificationbtnList(QStringList)),functionbtnwid,SLOT(recvClassificationBtnList(QStringList)));
+    QLayoutItem *child=nullptr;
+    while ((child = functionbtnwid->layout()->takeAt(0)) != 0) {
+        QWidget* wid=child->widget();
+        functionbtnwid->layout()->removeWidget(wid);
+        wid->setParent(nullptr);
+        delete wid;
+        delete child;
+    }
+    Q_EMIT sendClassificationbtnList(classificationbtnlist);
+    leaveAnimation->setTargetObject(applistview);
+    enterAnimation->setTargetObject(functionbtnwid);
+    leaveAnimation->start();
+    widgetState=1;
+//    mainLayout->removeWidget(applistview);
+//    applistview->setParent(nullptr);
+//    mainLayout->addWidget(functionbtnwid);
+
+//    connect(functionbtnwid, SIGNAL(sendFunctionBtnSignal(QString)),this,SLOT(recvFunctionBtnSignal(QString)));
 }
 
 /**
@@ -310,15 +347,15 @@ void FunctionWidget::appClassificationBtnClickedSlot()
  */
 void FunctionWidget::recvFunctionBtnSignal(QString btnname)
 {
-    mainLayout->removeWidget(functionbtnwid);
-    functionbtnwid->setParent(nullptr);
-    if(functionbtnwid!=nullptr)
-    {
+//    mainLayout->removeWidget(functionbtnwid);
+//    functionbtnwid->setParent(nullptr);
+//    if(functionbtnwid!=nullptr)
+//    {
 
-        delete functionbtnwid;
-        functionbtnwid=nullptr;
-    }
-    mainLayout->addWidget(applistview);
+//        delete functionbtnwid;
+//        functionbtnwid=nullptr;
+//    }
+//    mainLayout->addWidget(applistview);
 
     //此处需实现将功能为btnname的应用列表移动到applistWid界面最顶端
     int index=classificationbtnlist.indexOf(btnname);
@@ -327,18 +364,53 @@ void FunctionWidget::recvFunctionBtnSignal(QString btnname)
         int row=classificationbtnrowlist.at(index).toInt();
         applistview->verticalScrollBar()->setValue(row);
     }
+
+    leaveAnimation->setStartValue(QRect((this->width()-Style::LeftBtnWidth*2-5)/2,
+                                        (this->height()-Style::LeftBtnHeight*6-25)/2,
+                                        Style::LeftBtnWidth*2+5,
+                                        Style::LeftBtnHeight*6+25));
+    leaveAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+    enterAnimation->setStartValue(QRect(20,20,this->width()-44,this->height()-40));
+    enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+
+    leaveAnimation->setTargetObject(functionbtnwid);
+    enterAnimation->setTargetObject(applistview);
+    leaveAnimation->start();
+    widgetState=0;
+}
+
+void FunctionWidget::animationFinishedSLot()
+{
+    if(widgetState==1)
+    {
+        applistview->setVisible(false);
+        functionbtnwid->setVisible(true);
+        enterAnimation->start();
+        widgetState=-1;
+    }
+    if(widgetState==0)
+    {
+        functionbtnwid->setVisible(false);
+        applistview->setVisible(true);
+        enterAnimation->start();
+        widgetState=-1;
+    }
 }
 
 void FunctionWidget::widgetMakeZero()
 {
-    if(functionbtnwid!=nullptr)
-    {
-        mainLayout->removeWidget(functionbtnwid);
-        functionbtnwid->setParent(nullptr);
-        delete functionbtnwid;
-        functionbtnwid=nullptr;
-        mainLayout->addWidget(applistview);
-    }
+//    if(functionbtnwid!=nullptr)
+//    {
+//        mainLayout->removeWidget(functionbtnwid);
+//        functionbtnwid->setParent(nullptr);
+//        delete functionbtnwid;
+//        functionbtnwid=nullptr;
+//        mainLayout->addWidget(applistview);
+//    }
+
+    functionbtnwid->setVisible(false);
+    applistview->setVisible(true);
+    applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
     applistview->verticalScrollBar()->setValue(0);
 }
 

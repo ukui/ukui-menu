@@ -114,11 +114,11 @@ void RightClickMenu::initCommonUseAppBtnAction()
     CuAttributeAction=new QWidgetAction(cuappbtnmenu);
     CuAttributeWid=new QWidget();
 
-    initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
+    initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"));
     CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
     connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
 
-    initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
+    initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"));
     CuUnfixed4CommonUseAction->setDefaultWidget(CuUnfixed4CommonUseWid);
     connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
 
@@ -172,11 +172,11 @@ void RightClickMenu::initAppBtnAction()
     AttributeAction=new QWidgetAction(appbtnmenu);
     AttributeWid=new QWidget();
 
-    initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to common"));
+    initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"));
     Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
     connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
 
-    initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from common"));
+    initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"));
     Unfixed4CommonUseAction->setDefaultWidget(Unfixed4CommonUseWid);
     connect(Unfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
 

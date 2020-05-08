@@ -107,7 +107,7 @@ void SideBarWidget::addSidebarBtn()
     commonusebtn=new QPushButton();
 //    commonusebtn->setFocusPolicy(Qt::NoFocus);
 //    commonusebtn->installEventFilter(this);
-    initBtn(commonusebtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),commonusebtnname,tr("Common"),0);
+    initBtn(commonusebtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),commonusebtnname,tr("All"),0);
     letterbtn=new QPushButton();
 //    letterbtn->setFocusPolicy(Qt::NoFocus);
 //    letterbtn->installEventFilter(this);
@@ -530,7 +530,7 @@ void SideBarWidget::loadMinSidebar()
         int index=buttonList.indexOf(button);
         switch (index) {
         case 0:
-            btn->setToolTip(tr("Common"));
+            btn->setToolTip(tr("All"));
             break;
         case 1:
             btn->setToolTip(tr("Letter"));
