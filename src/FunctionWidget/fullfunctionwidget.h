@@ -54,7 +54,7 @@ public:
     ~FullFunctionWidget();
     void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
     void enterAnimation();
-    void updateRecentListView();//更新最近添加应用
+//    void updateRecentListView();//更新最近添加应用
     void repaintWidget();
     /**
      * @brief moveScrollBar移动滚动条

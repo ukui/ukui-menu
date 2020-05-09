@@ -40,8 +40,6 @@ void LetterButtonWidget::initWidget()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
-//    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-//    this->setFixedSize(320,500);
     this->resize(235,366);
 
     gridLayout=new QGridLayout(this);
@@ -51,8 +49,8 @@ void LetterButtonWidget::initWidget()
 
     char btncolor[400];
     sprintf(btncolor,"QToolButton{background:transparent;color:#ffffff;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;border-radius:2px;}\
-            QToolButton:pressed{background-color:%s;color:#ffffff;border-radius:2px;}\
+            QToolButton:hover{background-color:%s;color:#ffffff;border-radius:4px;}\
+            QToolButton:pressed{background-color:%s;color:#ffffff;border-radius:4px;}\
             QToolButton:disabled{color:rgba(255, 255, 255, 0.25);}",
             ClassifyBtnHoverBackground,
             ClassifyBtnHoverBackground);
@@ -76,7 +74,6 @@ void LetterButtonWidget::initWidget()
                 QToolButton* btn=new QToolButton(this);
                 btn->setFixedSize(55,48);
                 btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-//                btn->setFont(font);
                 btn->setText(letterlist.at(row*4+col));
                 gridLayout->addWidget(btn,row,col);
                 connect(btn, SIGNAL(clicked()), this, SLOT(letterBtnClickedSlot()));

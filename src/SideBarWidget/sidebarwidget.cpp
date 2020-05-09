@@ -93,9 +93,9 @@ void SideBarWidget::addSidebarBtn()
 //    minmaxLayout->setAlignment(minmaxbtn,Qt::AlignCenter);
     minmaxWidget->setLayout(minmaxLayout);
     char btncolor[300];
-    sprintf(btncolor,"QToolButton{background:transparent;border:0px;padding-left:0px;border-radius:2px;}\
-            QToolButton:hover{background-color:%s;border:0px;border-radius:2px;}\
-            QToolButton:pressed{background-color:%s;border:0px;border-radius:2px;}",
+    sprintf(btncolor,"QToolButton{background:transparent;border:0px;padding-left:0px;border-radius:4px;}\
+            QToolButton:hover{background-color:%s;border:0px;border-radius:4px;}\
+            QToolButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
             MMBtnHoverBackground,MMBtnHoverBackground);
     minmaxbtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
@@ -700,13 +700,13 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
 void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
 {
     char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:2px;}\
-            QPushButton:hover{background-color:%s;border:0px;border-radius:2px;}\
-            QPushButton:pressed{background-color:%s;border:0px;border-radius:2px;}",
+    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\
+            QPushButton:hover{background-color:%s;border:0px;border-radius:4px;}\
+            QPushButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
             SBFunBtnHoverBackground,SBFunBtnHoverBackground);
 
     char pressstyle[200];
-    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:2px;}",SBClassifyBtnSelectedBackground);
+    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:4px;}",SBClassifyBtnSelectedBackground);
 
     Q_FOREACH (QAbstractButton* button, buttonList) {
         if(pBtnGroup->id(btn)==buttonList.indexOf(button))
@@ -732,7 +732,8 @@ void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
             }
         }
         else{
-            button->setStyleSheet("background:transparent;");
+//            button->setStyleSheet("background:transparent;");
+            button->setStyleSheet(btncolor);
         }
     }
 }

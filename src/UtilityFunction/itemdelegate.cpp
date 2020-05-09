@@ -18,6 +18,7 @@
 
 #include "itemdelegate.h"
 #include <QPushButton>
+#include <syslog.h>
 
 ItemDelegate::ItemDelegate(QObject* parent, int module):
     QStyledItemDelegate(parent)
@@ -46,19 +47,19 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         {
             rect.setX(option.rect.x());
             rect.setY(option.rect.y());
-            rect.setWidth(option.rect.width());
+            rect.setWidth(option.rect.width()-6);
             rect.setHeight(option.rect.height()-2);
         }
         else
         {
             rect.setX(option.rect.x());
             rect.setY(option.rect.y()+2);
-            rect.setWidth(option.rect.width());
+            rect.setWidth(option.rect.width()-6);
             rect.setHeight(option.rect.height()-6);
         }
 
         //QPainterPath画圆角矩形
-        const qreal radius = 2;
+        const qreal radius = 4;
         QPainterPath path;
         path.moveTo(rect.topRight() - QPointF(radius, 0));
         path.lineTo(rect.topLeft() + QPointF(radius, 0));
@@ -70,18 +71,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         path.lineTo(rect.topRight() + QPointF(0, radius));
         path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
-
-//        QFont font;
-//        font.setFamily("Microsoft YaHei");
-
-//        font.setPixelSize(Style::AppListFontSize);
-//        painter->setFont(font);
-
-//        QIcon icon=index.model()->data(index,Qt::DecorationRole).value<QIcon>();
         QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
-//        if(!icon.isNull())
-//            painter->fillRect(QRect(rect.x(),rect.y(),40,40),QColor(Qt::blue));//图片加背景
-
         painter->setRenderHint(QPainter::Antialiasing);
         if(option.state & QStyle::State_MouseOver)
         {
@@ -111,12 +101,20 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
                 painter->drawText(QRect(iconRect.right()+15,rect.y(),
                                         rect.width()-62,rect.height()),Qt::AlignVCenter,appname);
-
+                setting->beginGroup("recentapp");
+                QFileInfo fileInfo(strlist.at(0));
+                QString desktopfn=fileInfo.fileName();
+                if(setting->contains(desktopfn))
+                {
+                    painter->setPen(QPen(Qt::NoPen));
+                    painter->setBrush(QColor("#4d94ff"));
+                    painter->drawEllipse(QPoint(rect.topRight().x()-22,rect.y()+(rect.height()-8)/2+4),4,4);
+                }
+                setting->endGroup();
             }
             else
             {
                 painter->setPen(QPen(Qt::white));
-//                QRect textRect=QRect(rect.x()+11,rect.y()+(rect.height()-14)/2,strlist.at(0).size()*14,14);
                 QRect textRect=QRect(rect.x()+11,rect.y()+12,rect.width(),rect.height());
                 painter->drawText(textRect,Qt::AlignLeft,strlist.at(0));
                 painter->setRenderHint(QPainter::Antialiasing, true);
@@ -128,7 +126,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         }
         else
         {
-            setting->beginGroup("lockapplication");
+            painter->setOpacity(1);
             QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
             QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
             iconstr.remove(".png");
@@ -140,17 +138,27 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
             QFileInfo fileInfo(strlist.at(0));
             QString desktopfn=fileInfo.fileName();
+            bool is_locked=false;
+            setting->beginGroup("lockapplication");
             if(setting->contains(desktopfn))
             {
+                is_locked=true;
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
                 icon.paint(painter,QRect(rect.topRight().x()-22,rect.y()+(rect.height()-16)/2,16,16));
             }
+            setting->endGroup();
+            setting->beginGroup("recentapp");
+            if(setting->contains(desktopfn) && !is_locked)
+            {
+                painter->setPen(QPen(Qt::NoPen));
+                painter->setBrush(QColor("#4d94ff"));
+                painter->drawEllipse(QPoint(rect.topRight().x()-22,rect.y()+(rect.height()-8)/2+4),4,4);
+            }
+            setting->endGroup();
             painter->setOpacity(1);
             painter->setPen(QPen(Qt::white));
             painter->drawText(QRect(iconRect.right()+15,rect.y(),
                                     rect.width()-62,rect.height()),Qt::AlignVCenter,appname);
-
-            setting->endGroup();
         }
         painter->restore();
     }
@@ -161,8 +169,8 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 {
     QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
     if(strlist.at(1).toInt()==1)
-        return QSize(296,44);
+        return QSize(310,44);
     else
-        return QSize(296,48);
+        return QSize(310,48);
 
 }

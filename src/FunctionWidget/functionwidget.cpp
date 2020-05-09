@@ -47,10 +47,6 @@ void FunctionWidget::initWidget()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(320,535);
 
-//    mainLayout=new QHBoxLayout(this);
-//    mainLayout->setContentsMargins(2,0,2,0);
-//    mainLayout->setSpacing(0);
-//    this->setLayout(mainLayout);
     pUkuiMenuInterface=new UkuiMenuInterface;
     initAppListWidget();
 
@@ -65,9 +61,6 @@ void FunctionWidget::initWidget()
     leaveAnimation=new QPropertyAnimation;
     leaveAnimation->setDuration(50);
     leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
-//    sGroup=new QSequentialAnimationGroup;
-//    sGroup->addAnimation(leaveAnimation);
-//    sGroup->addAnimation(enterAnimation);
     connect(leaveAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
     connect(enterAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
 
@@ -80,7 +73,6 @@ void FunctionWidget::initAppListWidget()
 {
     applistview=new ListView(this,this->width()-4,this->height(),2);
     applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
-//    mainLayout->addWidget(applistview);
     fillAppListView();
     connect(applistview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(recvItemClickedSlot(QStringList)));
     connect(applistview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
@@ -98,56 +90,49 @@ void FunctionWidget::fillAppListView()
     classificationbtnrowlist.clear();
 
     QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-    QStringList recentlist=vector.at(0);
-    if(!recentlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Recently"));
-        insertAppList(recentlist);
-    }
-
-    QStringList netlist=vector.at(1);
+    QStringList netlist=vector.at(0);
     if(!netlist.isEmpty())
     {
         insertClassificationBtn(tr("Internet"));
         insertAppList(netlist);
     }
-    QStringList sociallist=vector.at(2);
+    QStringList sociallist=vector.at(1);
     if(!sociallist.isEmpty())
     {
         insertClassificationBtn(tr("Social"));
         insertAppList(sociallist);
     }
-    QStringList avlist=vector.at(3);
+    QStringList avlist=vector.at(2);
     if(!avlist.isEmpty())
     {
         insertClassificationBtn(tr("Video"));
         insertAppList(avlist);
     }
-    QStringList developlist=vector.at(4);
+    QStringList developlist=vector.at(3);
     if(!developlist.isEmpty())
     {
         insertClassificationBtn(tr("Development"));
         insertAppList(developlist);
     }
-    QStringList graphicslist=vector.at(5);
+    QStringList graphicslist=vector.at(4);
     if(!graphicslist.isEmpty())
     {
         insertClassificationBtn(tr("Image"));
         insertAppList(graphicslist);
     }
-    QStringList gamelist=vector.at(6);
+    QStringList gamelist=vector.at(5);
     if(!gamelist.isEmpty())
     {
         insertClassificationBtn(tr("Game"));
         insertAppList(gamelist);
     }
-    QStringList officelist=vector.at(7);
+    QStringList officelist=vector.at(6);
     if(!officelist.isEmpty())
     {
         insertClassificationBtn(tr("Office"));
         insertAppList(officelist);
     }
-    QStringList educationlist=vector.at(8);
+    QStringList educationlist=vector.at(7);
     if(!educationlist.isEmpty())
     {
         insertClassificationBtn(tr("Education"));
@@ -155,13 +140,13 @@ void FunctionWidget::fillAppListView()
         insertAppList(educationlist);
     }
 
-    QStringList systemadminlist=vector.at(9);
+    QStringList systemadminlist=vector.at(8);
     if(!systemadminlist.isEmpty())
     {
         insertClassificationBtn(tr("System"));
         insertAppList(systemadminlist);
     }
-    QStringList otherlist=vector.at(10);
+    QStringList otherlist=vector.at(9);
     if(!otherlist.isEmpty())
     {
         insertClassificationBtn(tr("Others"));
@@ -228,56 +213,49 @@ void FunctionWidget::updateAppListView()
     data.clear();
 
     QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-    QStringList recentlist=vector.at(0);
-    if(!recentlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Recently"));
-        insertAppList(recentlist);
-    }
-
-    QStringList netlist=vector.at(1);
+    QStringList netlist=vector.at(0);
     if(!netlist.isEmpty())
     {
         insertClassificationBtn(tr("Internet"));
         insertAppList(netlist);
     }
-    QStringList sociallist=vector.at(2);
+    QStringList sociallist=vector.at(1);
     if(!sociallist.isEmpty())
     {
         insertClassificationBtn(tr("Social"));
         insertAppList(sociallist);
     }
-    QStringList avlist=vector.at(3);
+    QStringList avlist=vector.at(2);
     if(!avlist.isEmpty())
     {
         insertClassificationBtn(tr("Video"));
         insertAppList(avlist);
     }
-    QStringList developlist=vector.at(4);
+    QStringList developlist=vector.at(3);
     if(!developlist.isEmpty())
     {
         insertClassificationBtn(tr("Development"));
         insertAppList(developlist);
     }
-    QStringList graphicslist=vector.at(5);
+    QStringList graphicslist=vector.at(4);
     if(!graphicslist.isEmpty())
     {
         insertClassificationBtn(tr("Image"));
         insertAppList(graphicslist);
     }
-    QStringList gamelist=vector.at(6);
+    QStringList gamelist=vector.at(5);
     if(!gamelist.isEmpty())
     {
         insertClassificationBtn(tr("Game"));
         insertAppList(gamelist);
     }
-    QStringList officelist=vector.at(7);
+    QStringList officelist=vector.at(6);
     if(!officelist.isEmpty())
     {
         insertClassificationBtn(tr("Office"));
         insertAppList(officelist);
     }
-    QStringList educationlist=vector.at(8);
+    QStringList educationlist=vector.at(7);
     if(!educationlist.isEmpty())
     {
         insertClassificationBtn(tr("Education"));
@@ -285,13 +263,13 @@ void FunctionWidget::updateAppListView()
         insertAppList(educationlist);
     }
 
-    QStringList systemadminlist=vector.at(9);
+    QStringList systemadminlist=vector.at(8);
     if(!systemadminlist.isEmpty())
     {
         insertClassificationBtn(tr("System"));
         insertAppList(systemadminlist);
     }
-    QStringList otherlist=vector.at(10);
+    QStringList otherlist=vector.at(9);
     if(!otherlist.isEmpty())
     {
         insertClassificationBtn(tr("Others"));
@@ -320,8 +298,6 @@ void FunctionWidget::appClassificationBtnClickedSlot()
                                       Style::LeftBtnHeight*6+25));
 
     //加载FunctionButtonWidget界面
-//    functionbtnwid=new FunctionButtonWidget(this);
-//    connect(this,SIGNAL(sendClassificationbtnList(QStringList)),functionbtnwid,SLOT(recvClassificationBtnList(QStringList)));
     QLayoutItem *child=nullptr;
     while ((child = functionbtnwid->layout()->takeAt(0)) != 0) {
         QWidget* wid=child->widget();
@@ -335,11 +311,6 @@ void FunctionWidget::appClassificationBtnClickedSlot()
     enterAnimation->setTargetObject(functionbtnwid);
     leaveAnimation->start();
     widgetState=1;
-//    mainLayout->removeWidget(applistview);
-//    applistview->setParent(nullptr);
-//    mainLayout->addWidget(functionbtnwid);
-
-//    connect(functionbtnwid, SIGNAL(sendFunctionBtnSignal(QString)),this,SLOT(recvFunctionBtnSignal(QString)));
 }
 
 /**
@@ -347,16 +318,6 @@ void FunctionWidget::appClassificationBtnClickedSlot()
  */
 void FunctionWidget::recvFunctionBtnSignal(QString btnname)
 {
-//    mainLayout->removeWidget(functionbtnwid);
-//    functionbtnwid->setParent(nullptr);
-//    if(functionbtnwid!=nullptr)
-//    {
-
-//        delete functionbtnwid;
-//        functionbtnwid=nullptr;
-//    }
-//    mainLayout->addWidget(applistview);
-
     //此处需实现将功能为btnname的应用列表移动到applistWid界面最顶端
     int index=classificationbtnlist.indexOf(btnname);
     if(index!=-1)
@@ -399,15 +360,6 @@ void FunctionWidget::animationFinishedSLot()
 
 void FunctionWidget::widgetMakeZero()
 {
-//    if(functionbtnwid!=nullptr)
-//    {
-//        mainLayout->removeWidget(functionbtnwid);
-//        functionbtnwid->setParent(nullptr);
-//        delete functionbtnwid;
-//        functionbtnwid=nullptr;
-//        mainLayout->addWidget(applistview);
-//    }
-
     functionbtnwid->setVisible(false);
     applistview->setVisible(true);
     applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));

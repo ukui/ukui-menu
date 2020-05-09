@@ -62,9 +62,9 @@ void ListView::initWidget()
     this->setStyleSheet(style);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    this->setIconSize(QSize(28,28));
-//    this->setSpacing(10);
-//    this->setGridSize(QSize(300,44));
+//    this->setGridSize(QSize(310,48));
+    this->setResizeMode(QListView::Adjust);
+    this->setTextElideMode(Qt::ElideRight);
     this->setViewMode(QListView::ListMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setFocusPolicy(Qt::NoFocus);
@@ -105,9 +105,18 @@ void ListView::onClicked(QModelIndex index)
      QVariant var = listmodel->data(index, Qt::DisplayRole);
      if(var.isValid())
      {
-//         qDebug()<<var.value<QStringList>()<<index.row();
+         QString valstr=var.value<QStringList>().at(1);
+         if(valstr.toInt()==1)
+         {
+             QString desktopfp=var.value<QStringList>().at(0);
+             QFileInfo fileInfo(desktopfp);
+             QString desktopfn=fileInfo.fileName();
+             setting->beginGroup("recentapp");
+             setting->remove(desktopfn);
+             setting->sync();
+             setting->endGroup();
+         }
          Q_EMIT sendItemClickedSignal(var.value<QStringList>());
-
      }
 }
 

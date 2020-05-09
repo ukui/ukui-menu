@@ -56,7 +56,6 @@ private:
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     //主界面
-//    QHBoxLayout* mainLayout=nullptr;
     FunctionButtonWidget* functionbtnwid=nullptr;//分类列表界面
 
     ListView* applistview=nullptr;
@@ -68,7 +67,6 @@ private:
 
     QPropertyAnimation* enterAnimation=nullptr;
     QPropertyAnimation* leaveAnimation=nullptr;
-    QSequentialAnimationGroup* sGroup=nullptr;
     int widgetState=-1;
 
 protected:

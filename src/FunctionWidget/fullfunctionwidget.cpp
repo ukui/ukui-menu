@@ -65,55 +65,30 @@ void FullFunctionWidget::initWidget()
     pUkuiMenuInterface=new UkuiMenuInterface;
 
     iconlist.clear();
-    QString recentstr=":/data/img/mainviewwidget/recent-gray.svg";
-    QString netstr=":/data/img/mainviewwidget/net-gray.svg";
-    QString socialstr=":/data/img/mainviewwidget/social-gray.svg";
-    QString avstr=":/data/img/mainviewwidget/video-gray.svg";
-    QString developstr=":/data/img/mainviewwidget/develop-gray.svg";
-    QString imgstr=":/data/img/mainviewwidget/img-gray.svg";
-    QString gamestr=":/data/img/mainviewwidget/game-gray.svg";
-    QString officestr=":/data/img/mainviewwidget/office-gray.svg";
-    QString readingstr=":/data/img/mainviewwidget/reading-gray.svg";
-    QString systemstr=":/data/img/mainviewwidget/system-gray.svg";
-    QString otherstr=":/data/img/mainviewwidget/other-gray.svg";
-    iconlist.append(recentstr);
-    iconlist.append(netstr);
-    iconlist.append(socialstr);
-    iconlist.append(avstr);
-    iconlist.append(developstr);
-    iconlist.append(imgstr);
-    iconlist.append(gamestr);
-    iconlist.append(officestr);
-    iconlist.append(readingstr);
-    iconlist.append(systemstr);
-    iconlist.append(otherstr);
+    iconlist.append(":/data/img/mainviewwidget/net-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/social-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/video-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/develop-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/img-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/game-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/office-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/reading-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/system-gray.svg");
+    iconlist.append(":/data/img/mainviewwidget/other-gray.svg");
 
     iconlightlist.clear();
-    QString recentlightstr=":/data/img/mainviewwidget/recent.svg";
-    QString netlightstr=":/data/img/mainviewwidget/net.svg";
-    QString sociallightstr=":/data/img/mainviewwidget/social.svg";
-    QString avlightstr=":/data/img/mainviewwidget/video.svg";
-    QString developlightstr=":/data/img/mainviewwidget/develop.svg";
-    QString imglightstr=":/data/img/mainviewwidget/img.svg";
-    QString gamelightstr=":/data/img/mainviewwidget/game.svg";
-    QString officelightstr=":/data/img/mainviewwidget/office.svg";
-    QString readinglightstr=":/data/img/mainviewwidget/reading.svg";
-    QString systemlightstr=":/data/img/mainviewwidget/system.svg";
-    QString otherlightstr=":/data/img/mainviewwidget/other.svg";
-    iconlightlist.append(recentlightstr);
-    iconlightlist.append(netlightstr);
-    iconlightlist.append(sociallightstr);
-    iconlightlist.append(avlightstr);
-    iconlightlist.append(developlightstr);
-    iconlightlist.append(imglightstr);
-    iconlightlist.append(gamelightstr);
-    iconlightlist.append(officelightstr);
-    iconlightlist.append(readinglightstr);
-    iconlightlist.append(systemlightstr);
-    iconlightlist.append(otherlightstr);
+    iconlightlist.append(":/data/img/mainviewwidget/net.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/social.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/video.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/develop.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/img.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/game.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/office.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/reading.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/system.svg");
+    iconlightlist.append(":/data/img/mainviewwidget/other.svg");
 
     functionnamelist.clear();
-    functionnamelist.append(tr("Recently"));
     functionnamelist.append(tr("Internet"));
     functionnamelist.append(tr("Social"));
     functionnamelist.append(tr("Video"));
@@ -167,69 +142,69 @@ void FullFunctionWidget::fillAppList()
     classificationbtnlist.clear();
     classificationbtnrowlist.clear();
     QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-    QStringList recentlist=vector.at(0);
-    if(!recentlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Recently"));
-        insertAppList(recentlist);
-    }
+//    QStringList recentlist=vector.at(0);
+//    if(!recentlist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Recently"));
+//        insertAppList(recentlist);
+//    }
 
-    QStringList netlist=vector.at(1);
+    QStringList netlist=vector.at(0);
     if(!netlist.isEmpty())
     {
         insertClassificationBtn(tr("Internet"));
         insertAppList(netlist);
     }
-    QStringList sociallist=vector.at(2);
+    QStringList sociallist=vector.at(1);
     if(!sociallist.isEmpty())
     {
         insertClassificationBtn(tr("Social"));
         insertAppList(sociallist);
     }
-    QStringList avlist=vector.at(3);
+    QStringList avlist=vector.at(2);
     if(!avlist.isEmpty())
     {
         insertClassificationBtn(tr("Video"));
         insertAppList(avlist);
     }
-    QStringList developlist=vector.at(4);
+    QStringList developlist=vector.at(3);
     if(!developlist.isEmpty())
     {
         insertClassificationBtn(tr("Development"));
         insertAppList(developlist);
     }
-    QStringList graphicslist=vector.at(5);
+    QStringList graphicslist=vector.at(4);
     if(!graphicslist.isEmpty())
     {
         insertClassificationBtn(tr("Image"));
         insertAppList(graphicslist);
     }
-    QStringList gamelist=vector.at(6);
+    QStringList gamelist=vector.at(5);
     if(!gamelist.isEmpty())
     {
         insertClassificationBtn(tr("Game"));
         insertAppList(gamelist);
     }
-    QStringList officelist=vector.at(7);
+    QStringList officelist=vector.at(6);
     if(!officelist.isEmpty())
     {
         insertClassificationBtn(tr("Office"));
         insertAppList(officelist);
     }
-    QStringList educationlist=vector.at(8);
+    QStringList educationlist=vector.at(7);
     if(!educationlist.isEmpty())
     {
         insertClassificationBtn(tr("Education"));
         insertAppList(educationlist);
     }
 
-    QStringList systemadminlist=vector.at(9);
+    QStringList systemadminlist=vector.at(8);
     if(!systemadminlist.isEmpty())
     {
         insertClassificationBtn(tr("System"));
         insertAppList(systemadminlist);
     }
-    QStringList otherlist=vector.at(10);
+    QStringList otherlist=vector.at(9);
     if(!otherlist.isEmpty())
     {
         insertClassificationBtn(tr("Others"));
@@ -265,101 +240,101 @@ void FullFunctionWidget::insertAppList(QStringList appnamelist)
     connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 }
 
-void FullFunctionWidget::updateRecentListView()
-{
-    data.clear();
-    QStringList recentlist;
-    recentlist.clear();
-    recentlist=pUkuiMenuInterface->getRecentApp();
-    if(!recentlist.isEmpty())//最近添加非空
-    {
-        if(classificationbtnlist.contains(tr("Recently")))//有最近添加分类
-        {
-            QLayoutItem *child;
-            if((child = scrollareawidLayout->itemAt(1)) != 0)
-            {
-                QWidget* wid=child->widget();
-                FullListView* listview=qobject_cast<FullListView*>(wid);
-                for(int i=0;i<recentlist.count();i++)
-                {
-                    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
-                    data.append(desktopfp);
-                }
-                listview->updateData(data);
-            }
-        }
-        else//无最近添加分类
-        {
-            PushButton* classificationbtn=new PushButton(this,tr("Recently"),scrollarea->width()-12,20);
-            classificationbtn->setFixedSize(scrollarea->width()-12,20);
-            scrollareawidLayout->insertWidget(0,classificationbtn);
-            classificationbtnlist.insert(0,tr("Recently"));
+//void FullFunctionWidget::updateRecentListView()
+//{
+//    data.clear();
+//    QStringList recentlist;
+//    recentlist.clear();
+//    recentlist=pUkuiMenuInterface->getRecentApp();
+//    if(!recentlist.isEmpty())//最近添加非空
+//    {
+//        if(classificationbtnlist.contains(tr("Recently")))//有最近添加分类
+//        {
+//            QLayoutItem *child;
+//            if((child = scrollareawidLayout->itemAt(1)) != 0)
+//            {
+//                QWidget* wid=child->widget();
+//                FullListView* listview=qobject_cast<FullListView*>(wid);
+//                for(int i=0;i<recentlist.count();i++)
+//                {
+//                    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
+//                    data.append(desktopfp);
+//                }
+//                listview->updateData(data);
+//            }
+//        }
+//        else//无最近添加分类
+//        {
+//            PushButton* classificationbtn=new PushButton(this,tr("Recently"),scrollarea->width()-12,20);
+//            classificationbtn->setFixedSize(scrollarea->width()-12,20);
+//            scrollareawidLayout->insertWidget(0,classificationbtn);
+//            classificationbtnlist.insert(0,tr("Recently"));
 
-            FullListView* listview=new FullListView(this,2);
-            scrollareawidLayout->insertWidget(1,listview);
-            for(int i=0;i<recentlist.count();i++)
-            {
+//            FullListView* listview=new FullListView(this,2);
+//            scrollareawidLayout->insertWidget(1,listview);
+//            for(int i=0;i<recentlist.count();i++)
+//            {
 
-                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
-                data.append(desktopfp);
-            }
-            listview->addData(data);
-            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-            connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-            connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+//                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
+//                data.append(desktopfp);
+//            }
+//            listview->addData(data);
+//            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
+//            connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
+//            connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
 
-            //刷新图标列表界面
-            Q_FOREACH (QAbstractButton* button, buttonList){
-                pBtnGroup->removeButton(button);
-            }
-            buttonList.clear();
-            QLayoutItem *child;
-            while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
-                QWidget* wid=child->widget();
-                iconlistscrollareawidLayout->removeWidget(wid);
-                wid->setParent(nullptr);
-                delete wid;
-                delete child;
-            }
-            initIconListScrollArea();
-        }
-    }
-    else//最近添加为空
-    {
-        if(classificationbtnlist.contains(tr("Recently")))
-        {
-            int num=0;
-            QLayoutItem *child;
-             while ((child = scrollareawidLayout->takeAt(0)) != 0) {
-                 QWidget* wid=child->widget();
-                 scrollareawidLayout->removeWidget(wid);
-                 wid->setParent(nullptr);
-                 delete wid;
-                 delete child;
-                 num++;
-                 if(num==2)
-                     break;
-             }
-             classificationbtnlist.removeAt(0);
+//            //刷新图标列表界面
+//            Q_FOREACH (QAbstractButton* button, buttonList){
+//                pBtnGroup->removeButton(button);
+//            }
+//            buttonList.clear();
+//            QLayoutItem *child;
+//            while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
+//                QWidget* wid=child->widget();
+//                iconlistscrollareawidLayout->removeWidget(wid);
+//                wid->setParent(nullptr);
+//                delete wid;
+//                delete child;
+//            }
+//            initIconListScrollArea();
+//        }
+//    }
+//    else//最近添加为空
+//    {
+//        if(classificationbtnlist.contains(tr("Recently")))
+//        {
+//            int num=0;
+//            QLayoutItem *child;
+//             while ((child = scrollareawidLayout->takeAt(0)) != 0) {
+//                 QWidget* wid=child->widget();
+//                 scrollareawidLayout->removeWidget(wid);
+//                 wid->setParent(nullptr);
+//                 delete wid;
+//                 delete child;
+//                 num++;
+//                 if(num==2)
+//                     break;
+//             }
+//             classificationbtnlist.removeAt(0);
 
-             //刷新图标列表界面
-             Q_FOREACH (QAbstractButton* button, buttonList){
-                 pBtnGroup->removeButton(button);
-             }
-             buttonList.clear();
-             while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
-                 QWidget* wid=child->widget();
-                 iconlistscrollareawidLayout->removeWidget(wid);
-                 wid->setParent(nullptr);
-                 delete wid;
-                 delete child;
-             }
-             initIconListScrollArea();
-        }
-    }
-    resizeScrollAreaControls();
-    setting->endGroup();
-}
+//             //刷新图标列表界面
+//             Q_FOREACH (QAbstractButton* button, buttonList){
+//                 pBtnGroup->removeButton(button);
+//             }
+//             buttonList.clear();
+//             while ((child = iconlistscrollareawidLayout->takeAt(0)) != 0) {
+//                 QWidget* wid=child->widget();
+//                 iconlistscrollareawidLayout->removeWidget(wid);
+//                 wid->setParent(nullptr);
+//                 delete wid;
+//                 delete child;
+//             }
+//             initIconListScrollArea();
+//        }
+//    }
+//    resizeScrollAreaControls();
+//    setting->endGroup();
+//}
 
 /**
  * 执行应用程序

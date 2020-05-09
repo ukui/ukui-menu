@@ -64,18 +64,13 @@ void FullListView::initWidget()
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     if(module==1 || module==2)
         this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    this->setIconSize(QSize(80,80));
     this->setViewMode(QListView::IconMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setResizeMode(QListView::Adjust);
     this->setTextElideMode(Qt::ElideRight);
     this->setMouseTracking(true);
     this->setFocusPolicy(Qt::NoFocus);
-//    this->setAcceptDrops(false);
     this->setMovement(QListView::Static);
-//    this->setUpdatesEnabled(true);
-
-//    this->setSpacing(32);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
@@ -112,6 +107,12 @@ void FullListView::onClicked(QModelIndex index)
      if(var.isValid())
      {
          QString desktopfp=var.value<QString>();
+         QFileInfo fileInfo(desktopfp);
+         QString desktopfn=fileInfo.fileName();
+         setting->beginGroup("recentapp");
+         setting->remove(desktopfn);
+         setting->sync();
+         setting->endGroup();
          QString appname=pUkuiMenuInterface->getAppName(desktopfp);
          Q_EMIT sendItemClickedSignal(appname);
 

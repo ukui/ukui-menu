@@ -571,7 +571,7 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
 
 QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
 {
-    QStringList list[11];
+    QStringList list[10];
     int index=0;
     while(index<appInfoVector.size())
     {
@@ -581,34 +581,34 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
             int category=appInfoVector.at(index).at(5+i).toInt();
             switch (category) {
             case 1:
-                list[1].append(appInfoVector.at(index).at(2));
+                list[0].append(appInfoVector.at(index).at(2));
                 break;
             case 2:
-                list[2].append(appInfoVector.at(index).at(2));
+                list[1].append(appInfoVector.at(index).at(2));
                 break;
             case 3:
-                list[3].append(appInfoVector.at(index).at(2));
+                list[2].append(appInfoVector.at(index).at(2));
                 break;
             case 4:
-                list[4].append(appInfoVector.at(index).at(2));
+                list[3].append(appInfoVector.at(index).at(2));
                 break;
             case 5:
-                list[5].append(appInfoVector.at(index).at(2));
+                list[4].append(appInfoVector.at(index).at(2));
                 break;
             case 6:
-                list[6].append(appInfoVector.at(index).at(2));
+                list[5].append(appInfoVector.at(index).at(2));
                 break;
             case 7:
-                list[7].append(appInfoVector.at(index).at(2));
+                list[6].append(appInfoVector.at(index).at(2));
                 break;
             case 8:
-                list[8].append(appInfoVector.at(index).at(2));
+                list[7].append(appInfoVector.at(index).at(2));
                 break;
             case 9:
-                list[9].append(appInfoVector.at(index).at(2));
+                list[8].append(appInfoVector.at(index).at(2));
                 break;
             case 10:
-                list[10].append(appInfoVector.at(index).at(2));
+                list[9].append(appInfoVector.at(index).at(2));
                 break;
             default:
                 break;
@@ -619,9 +619,9 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
 
     QVector<QStringList> data;
     data.clear();
-    list[0].clear();
-    list[0]=getRecentApp();
-    data.append(list[0]);
+//    list[0].clear();
+//    list[0]=getRecentApp();
+//    data.append(list[0]);
 
     QLocale local;
     QString language=local.languageToString(local.language());
@@ -630,7 +630,7 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     else
         local=QLocale(QLocale::English);
     QCollator collator(local);
-    for(int i=1;i<11;i++)
+    for(int i=0;i<10;i++)
     {
         std::sort(list[i].begin(),list[i].end(),collator);
         data.append(list[i]);

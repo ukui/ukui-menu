@@ -80,51 +80,74 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             icon=QIcon::fromTheme(QString("application-x-desktop"));
         QString appname=pUkuiMenuInterface->getAppName(desktopfp);
 
-//        QFont font;
         QRect iconRect;
-//        font.setPixelSize(Style::AppListFontSize);
+        QRect textRect;
         iconRect=QRect(rect.x()+Style::AppLeftSpace ,
                        rect.y()+Style::AppTopSpace,
                        Style::AppListIconSize,
                        Style::AppListIconSize);
-//        painter->setFont(font);
         icon.paint(painter,iconRect);
+
+        textRect=QRect(rect.x()+5,
+                       iconRect.bottom()+Style::AppSpaceBetweenIconText,
+                       rect.width()-10,
+                       rect.height()-iconRect.height()-Style::AppSpaceBetweenIconText);
+
+        bool is_locked=false;
+        bool is_recentapp=false;
+        QFileInfo fileInfo(desktopfp);
+        QString desktopfn=fileInfo.fileName();
+        QFontMetrics fm=painter->fontMetrics();
+        QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-10,Qt::TextShowMnemonic);
+
         if(module==0)
         {
             setting->beginGroup("lockapplication");
-            QFileInfo fileInfo(desktopfp);
-            QString desktopfn=fileInfo.fileName();
             if(setting->contains(desktopfn))
             {
+                is_locked=true;
                 QIcon icon(QString(":/data/img/mainviewwidget/lock-fs.svg"));
                 icon.paint(painter,QRect(iconRect.topRight().x()-14,iconRect.topRight().y()-2,16,16));
-//                icon.paint(painter,QRect(rect.topRight().x()-18,rect.topRight().y()+6,12,12));
             }
             setting->endGroup();
         }
+        setting->beginGroup("recentapp");
+        if(setting->contains(desktopfn) && !is_locked)
+        {
+            is_recentapp=true;
+            appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-23,Qt::TextShowMnemonic);
+            textRect=QRect(rect.x()+18,
+                           iconRect.bottom()+Style::AppSpaceBetweenIconText,
+                           rect.width()-23,
+                           rect.height()-iconRect.height()-Style::AppSpaceBetweenIconText);
+
+            painter->setPen(QPen(Qt::NoPen));
+            painter->setBrush(QColor("#4d94ff"));
+            int x=0;
+            if(rect.width()<(23+fm.boundingRect(appname).width()))
+                x=rect.x()+9;
+            else
+                x=rect.x()+(rect.width()-13-fm.boundingRect(appname).width())/2+4;
+
+            painter->drawEllipse(QPoint(x,
+                                        textRect.y()+(fm.boundingRect(appname).height()-8)/2+4),
+                                 4,
+                                 4);
+
+        }
+        setting->endGroup();
 
         painter->setPen(QPen(Qt::white));
-        QRect textRect;
-
-        textRect=QRect(rect.x(),
-                       iconRect.bottom()+Style::AppSpaceBetweenIconText,
-                       rect.width(),
-                       rect.height()-iconRect.height()-Style::AppSpaceBetweenIconText);
-        QFontMetrics fm=painter->fontMetrics();
-        QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width(),Qt::TextShowMnemonic);
         painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
 
         if(option.state & QStyle::State_MouseOver)
         {
-//            painter->setPen(QPen(Qt::NoPen));
-//            QColor color;
-//            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
-//            painter->setBrush(QBrush(color));
-
-//            painter->setOpacity(0.14);
-//            painter->drawPath(path);
-
-            if(fm.boundingRect(appname).width()>rect.width())
+            int len=0;
+            if(!is_locked && is_recentapp)
+                len=fm.boundingRect(appname).width()+23;
+            else
+                len=fm.boundingRect(appname).width()+10;
+            if(len>rect.width())
             {
                 QToolTip::showText(QCursor::pos(),appname);
             }
@@ -141,14 +164,3 @@ QSize FullItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMode
 {
     return QSize(Style::AppListItemSizeWidth, Style::AppListItemSizeWidth);
 }
-
-//bool FullItemDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index)
-//{
-//    if(event->type()==QEvent::ToolTip)
-//    {
-//    }
-//    else if(event->type()==QEvent::Leave)
-//    {
-//    }
-//    return true;
-//}

@@ -43,7 +43,7 @@
 #define ToolTipBackground "rgba(26, 26, 26, 0.7)"
 #define DefaultBackground "rgba(19, 19, 20, 0.7)" //默认态背景色
 #define LineBackground "rgba(255,255,255,0.06)" //分割线背景色
-#define SBClassifyBtnSelectedBackground "rgba(65, 95, 196, 1)" //侧边栏上部分类按钮选择背景
+#define SBClassifyBtnSelectedBackground "#3D6BE5" //侧边栏上部分类按钮选择背景
 #define SBFunBtnHoverBackground "rgba(255, 255, 255, 0.14)" //侧边栏目下部功能按钮悬浮背景
 #define ClassifyBtnHoverBackground "rgba(255, 255, 255, 0.14)" //分类按钮悬浮背景
 #define MMBtnHoverBackground "rgba(255, 255, 255, 0.14)" //最大化最小化按钮悬浮背景

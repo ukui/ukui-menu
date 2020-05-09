@@ -50,24 +50,16 @@ public:
 
 private:
     Ui::LetterWidget *ui;
-
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-
-//    QVBoxLayout* mainLayout=nullptr;
-
     LetterButtonWidget* letterbtnwid=nullptr;//分类按钮界面
-
     ListView* applistview=nullptr;
     QVector<QStringList> data;
-
     QStringList letterbtnlist;//存放字母按钮
     QStringList letterbtnrowlist;//存放字母按钮所在行
     QStringList letterposlist;//存放分类字符位置列表
     QStringList appsortlist;//存放应用排序列表
-
     QPropertyAnimation* enterAnimation=nullptr;
     QPropertyAnimation* leaveAnimation=nullptr;
-    QSequentialAnimationGroup* sGroup=nullptr;
     int widgetState=-1;
 
 protected:

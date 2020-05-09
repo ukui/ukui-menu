@@ -368,7 +368,7 @@ void MainWindow::stateChangedSlot(QAbstractAnimation::State newState, QAbstractA
         sidebarwid->loadMaxSidebar();
         mainviewwid->loadMaxMainView();
         sidebarwid->enterAnimation();
-//        this->repaint();
+        setFrameStyle();
     }
     if(!is_fullscreen && newState==QAbstractAnimation::Stopped)
     {
@@ -377,9 +377,8 @@ void MainWindow::stateChangedSlot(QAbstractAnimation::State newState, QAbstractA
         mainlayout->addWidget(sidebarwid);
         sidebarwid->loadMinSidebar();
         mainviewwid->loadMinMainView();
-    //    this->repaint();
+        setFrameStyle();
     }
-    setFrameStyle();
 }
 
 /**
@@ -460,6 +459,19 @@ void MainWindow::recvHideMainWindowSlot()
 
 void MainWindow::loadMainWindow()
 {
+    QDateTime dt=QDateTime::currentDateTime();
+    int currentDateTime=dt.toTime_t();
+    int nDaySec=24*60*60;
+    setting->beginGroup("recentapp");
+    QStringList recentAppKeys=setting->allKeys();
+    for(int i=0;i<recentAppKeys.count();i++)
+    {
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
+            setting->remove(recentAppKeys.at(i));
+    }
+    setting->sync();
+    setting->endGroup();
+
     int position=0;
     int panelSize=0;
     if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))

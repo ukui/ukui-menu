@@ -41,8 +41,6 @@ void FunctionButtonWidget::initWidget()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
-//    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-//    this->setFixedSize(320,500);
     this->resize(Style::LeftBtnWidth*2+5,Style::LeftBtnHeight*6+25);
 
     gridLayout=new QGridLayout(this);
@@ -51,7 +49,6 @@ void FunctionButtonWidget::initWidget()
     this->setLayout(gridLayout);
 
     icondisabledlist.clear();
-    icondisabledlist.append(":/data/img/mainviewwidget/recent-disabled.svg");
     icondisabledlist.append(":/data/img/mainviewwidget/net-disabled.svg");
     icondisabledlist.append(":/data/img/mainviewwidget/social-disabled.svg");
     icondisabledlist.append(":/data/img/mainviewwidget/video-disabled.svg");
@@ -64,7 +61,6 @@ void FunctionButtonWidget::initWidget()
     icondisabledlist.append(":/data/img/mainviewwidget/other-disabled.svg");
 
     iconlist.clear();
-    iconlist.append(":/data/img/mainviewwidget/recent-enabled.svg");
     iconlist.append(":/data/img/mainviewwidget/net-enabled.svg");
     iconlist.append(":/data/img/mainviewwidget/social-enabled.svg");
     iconlist.append(":/data/img/mainviewwidget/video-enabled.svg");
@@ -77,7 +73,6 @@ void FunctionButtonWidget::initWidget()
     iconlist.append(":/data/img/mainviewwidget/other-enabled.svg");
 
     iconlightlist.clear();
-    iconlightlist.append(":/data/img/mainviewwidget/recent.svg");
     iconlightlist.append(":/data/img/mainviewwidget/net.svg");
     iconlightlist.append(":/data/img/mainviewwidget/social.svg");
     iconlightlist.append(":/data/img/mainviewwidget/video.svg");
@@ -90,7 +85,6 @@ void FunctionButtonWidget::initWidget()
     iconlightlist.append(":/data/img/mainviewwidget/other.svg");
 
     functionnamelist.clear();
-    functionnamelist.append(tr("Recently"));
     functionnamelist.append(tr("Internet"));
     functionnamelist.append(tr("Social"));
     functionnamelist.append(tr("Video"));
@@ -101,30 +95,6 @@ void FunctionButtonWidget::initWidget()
     functionnamelist.append(tr("Education"));
     functionnamelist.append(tr("System"));
     functionnamelist.append(tr("Others"));
-
-//    for(int i=0;i<11;i++)
-//    {
-//        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
-//                                                                   106,
-//                                                                   48,
-//                                                                   iconlist.at(i),
-//                                                                   iconlightlist.at(i),
-//                                                                   ClassifyBtnHoverBackground,
-//                                                                   ClassifyBtnHoverBackground,
-//                                                                   2,
-//                                                                   functionnamelist.at(i));
-//        vector.append(iconbtn);
-//        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
-//    }
-
-//    for(int row=0;row<6;row++)
-//        for(int col=0;col<2;col++)
-//        {
-//            if(row*2+col < vector.size())
-//                gridLayout->addWidget(vector.at(row*2+col),row,col);
-//            else
-//                break;
-//        }
 }
 
 /**
@@ -144,7 +114,7 @@ void FunctionButtonWidget::functionBtnClickedSlot()
  */
 void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
 {
-    for(int row=0;row<6;row++)
+    for(int row=0;row<5;row++)
         for(int col=0;col<2;col++)
         {
             FunctionClassifyButton* iconbtn=nullptr;
@@ -181,41 +151,7 @@ void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
                                                    true);
                 connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
             }
-//            QLayoutItem* item=gridLayout->itemAt(row*2+col);
-//            if(item!=nullptr)
-//            {
-//                QWidget* wid=item->widget();
-//                gridLayout->replaceWidget(wid,iconbtn);
-//            }
-//            else {
-                gridLayout->addWidget(iconbtn,row,col);
-//            }
-
-            if(row*2+col==10)break;
+            gridLayout->addWidget(iconbtn,row,col);
+            if(row*2+col==9)break;
         }
-
-
-//    for(int i=0;i<list.size();i++)
-//    {
-//        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
-//                                                                   106,
-//                                                                   48,
-//                                                                   iconlist.at(functionnamelist.indexOf(list.at(i))),
-//                                                                   iconlightlist.at(functionnamelist.indexOf(list.at(i))),
-//                                                                   ClassifyBtnHoverBackground,
-//                                                                   ClassifyBtnHoverBackground,
-//                                                                   2,
-//                                                                   list.at(i));
-//        vector.append(iconbtn);
-//        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
-//    }
-
-//    for(int row=0;row<6;row++)
-//        for(int col=0;col<2;col++)
-//        {
-//            if(row*2+col < vector.size())
-//                gridLayout->addWidget(vector.at(row*2+col),row,col);
-//            else
-//                break;
-//        }
 }

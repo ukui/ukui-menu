@@ -53,9 +53,6 @@ void MainViewWidget::initWidget()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
-//    char style[100];
-//    sprintf(style, "border:0px;background-color:%s;",DefaultBackground);
-//    this->setStyleSheet(QString::fromLocal8Bit(style));
 
     mainLayout=new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
@@ -112,8 +109,12 @@ void MainViewWidget::initWidget()
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
-    gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
-    connect(gsetting,SIGNAL(changed(QString)),this,SLOT(iconThemeChangeSlot(QString)));
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit()))
+    {
+        gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+        connect(gsetting,SIGNAL(changed(QString)),this,SLOT(iconThemeChangeSlot(QString)));
+    }
+
 }
 
 /**
@@ -129,7 +130,7 @@ void MainViewWidget::addTopControl()
     queryLayout->setSpacing(0);
     querylineEdit->setLayout(queryLayout);
     char style[100];
-    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
+    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;}",QueryLineEditBackground);
     querylineEdit->setStyleSheet(style);
     topLayout->addWidget(querylineEdit);
 //    topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
@@ -199,7 +200,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             queryLayout->setAlignment(pIconTextWid,Qt::AlignLeft);
 
              char style[200];
-             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:2px;color:#ffffff;}",
+             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                      QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              querylineEdit->setStyleSheet(style);
              querylineEdit->setTextMargins(20,1,0,1);
@@ -212,7 +213,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             if(querylineEdit->text().isEmpty())
             {
                 char style[100];
-                sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
+                sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;}",QueryLineEditBackground);
                 querylineEdit->setStyleSheet(style);
                 querylineEdit->setTextMargins(0,1,0,1);
                 pIconTextWidLayout->addWidget(pQueryText);
@@ -221,7 +222,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             }
             else {
                 char style[100];
-                sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;color:#ffffff;}",
+                sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
                         QueryLineEditBackground);
                 querylineEdit->setStyleSheet(style);
             }
@@ -553,7 +554,7 @@ void MainViewWidget::loadFullFunctionWidget()
     mainLayout->addWidget(fullfunctionwid);
     if(!is_fullscreen || (is_fullscreen && saveCurrentWidState!=3))
     {
-        fullfunctionwid->updateRecentListView();
+//        fullfunctionwid->updateRecentListView();
         fullfunctionwid->enterAnimation();
     }
     widgetState=3;

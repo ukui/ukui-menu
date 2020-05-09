@@ -351,6 +351,10 @@ void RightClickMenu::fixToCommonUseActionTriggerSlot()
     setting->remove(desktopfn);
     setting->sync();
     setting->endGroup();
+    setting->beginGroup("recentapp");
+    setting->remove(desktopfn);
+    setting->sync();
+    setting->endGroup();
 }
 
 void RightClickMenu::unfixedFromCommonUseActionTriggerSlot()
@@ -374,9 +378,7 @@ void RightClickMenu::unfixedFromCommonUseActionTriggerSlot()
     setting->sync();
     setting->endGroup();
     setting->beginGroup("datetime");
-    QDateTime dt=QDateTime::currentDateTime();
-    int dateTime=dt.toTime_t();
-    setting->setValue(desktopfn,dateTime);
+    setting->remove(desktopfn);
     setting->sync();
     setting->endGroup();
 }

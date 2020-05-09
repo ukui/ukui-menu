@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 24.1.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="最近文件" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
 	 y="0px" viewBox="0 0 19 19" style="enable-background:new 0 0 19 19;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
 </style>
-<title>画板 1</title>
-<g>
-	<g>
-		<g>
-			<path class="st0" d="M9.5,2C13.6,2,17,5.4,17,9.5S13.6,17,9.5,17S2,13.6,2,9.5S5.4,2,9.5,2 M9.5,1C4.8,1,1,4.8,1,9.5
-				S4.8,18,9.5,18S18,14.2,18,9.5S14.2,1,9.5,1L9.5,1z"/>
-		</g>
-	</g>
-</g>
-<g>
-	<polygon class="st0" points="14,11 9,11 9,4 10,4 10,10 14,10 	"/>
-</g>
+<path class="st0" d="M7,2c0.6,0,1,0.4,1,1v4c0,0.6-0.4,1-1,1H3C2.4,8,2,7.6,2,7V3c0-0.6,0.4-1,1-1H7 M7,1H3C1.9,1,1,1.9,1,3v4
+	c0,1.1,0.9,2,2,2h4c1.1,0,2-0.9,2-2V3C9,1.9,8.1,1,7,1L7,1z"/>
+<path class="st0" d="M16,2c0.6,0,1,0.4,1,1v4c0,0.6-0.4,1-1,1h-4c-0.6,0-1-0.4-1-1V3c0-0.6,0.4-1,1-1H16 M16,1h-4c-1.1,0-2,0.9-2,2
+	v4c0,1.1,0.9,2,2,2h4c1.1,0,2-0.9,2-2V3C18,1.9,17.1,1,16,1L16,1z"/>
+<path class="st0" d="M7,11c0.6,0,1,0.4,1,1v4c0,0.6-0.4,1-1,1H3c-0.6,0-1-0.4-1-1v-4c0-0.6,0.4-1,1-1H7 M7,10H3c-1.1,0-2,0.9-2,2v4
+	c0,1.1,0.9,2,2,2h4c1.1,0,2-0.9,2-2v-4C9,10.9,8.1,10,7,10L7,10z"/>
+<path class="st0" d="M16,11c0.6,0,1,0.4,1,1v4c0,0.6-0.4,1-1,1h-4c-0.6,0-1-0.4-1-1v-4c0-0.6,0.4-1,1-1H16 M16,10h-4
+	c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h4c1.1,0,2-0.9,2-2v-4C18,10.9,17.1,10,16,10L16,10z"/>
 </svg>
