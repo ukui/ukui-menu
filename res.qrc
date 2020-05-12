@@ -78,5 +78,9 @@
         <file>ukui_menu_ch.qm</file>
         <file>data/img/sidebarwidget/personal.svg</file>
         <file>data/img/sidebarwidget/trash.svg</file>
+        <file>data/img/mainviewwidget/android-disabled.svg</file>
+        <file>data/img/mainviewwidget/android-enabled.svg</file>
+        <file>data/img/mainviewwidget/android-gray.svg</file>
+        <file>data/img/mainviewwidget/android.svg</file>
     </qresource>
 </RCC>

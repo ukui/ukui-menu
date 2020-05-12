@@ -29,9 +29,9 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
 
     pUkuiMenuInterface=new UkuiMenuInterface;
     if(module==0)
-        menu=new RightClickMenu(this,0);
+        menu=new RightClickMenu(nullptr,0);
     else
-        menu=new RightClickMenu(this,1);
+        menu=new RightClickMenu(nullptr,1);
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -39,13 +39,14 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
 }
 ListView::~ListView()
 {
+    delete menu;
     delete pUkuiMenuInterface;
 }
 
 void ListView::initWidget()
 {
-//    this->setFixedSize(w,h);
-    this->resize(w,h);
+    this->setFixedSize(w,h);
+//    this->resize(w,h);
     char style[400];
     sprintf(style,"QListView{border:0px;}\
             QListView:Item{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;}\
@@ -69,6 +70,8 @@ void ListView::initWidget()
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setFocusPolicy(Qt::NoFocus);
     this->setMovement(QListView::Static);
+    this->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    this->setUpdatesEnabled(true);
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
 
@@ -97,7 +100,7 @@ void ListView::updateData(QVector<QStringList> data)
         item->setData(QVariant::fromValue<QStringList>(desktopfp),Qt::DisplayRole);
         listmodel->appendRow(item);
     }
-
+//    Q_EMIT dataChanged(createIndex(0,0), createIndex(listmodel->rowCount()-1,0));
 }
 
 void ListView::onClicked(QModelIndex index)

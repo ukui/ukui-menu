@@ -65,6 +65,7 @@ void FullFunctionWidget::initWidget()
     pUkuiMenuInterface=new UkuiMenuInterface;
 
     iconlist.clear();
+    iconlist.append(":/data/img/mainviewwidget/android-gray.svg");
     iconlist.append(":/data/img/mainviewwidget/net-gray.svg");
     iconlist.append(":/data/img/mainviewwidget/social-gray.svg");
     iconlist.append(":/data/img/mainviewwidget/video-gray.svg");
@@ -77,6 +78,7 @@ void FullFunctionWidget::initWidget()
     iconlist.append(":/data/img/mainviewwidget/other-gray.svg");
 
     iconlightlist.clear();
+    iconlightlist.append(":/data/img/mainviewwidget/android.svg");
     iconlightlist.append(":/data/img/mainviewwidget/net.svg");
     iconlightlist.append(":/data/img/mainviewwidget/social.svg");
     iconlightlist.append(":/data/img/mainviewwidget/video.svg");
@@ -89,6 +91,7 @@ void FullFunctionWidget::initWidget()
     iconlightlist.append(":/data/img/mainviewwidget/other.svg");
 
     functionnamelist.clear();
+    functionnamelist.append(tr("Android"));
     functionnamelist.append(tr("Internet"));
     functionnamelist.append(tr("Social"));
     functionnamelist.append(tr("Video"));
@@ -142,69 +145,69 @@ void FullFunctionWidget::fillAppList()
     classificationbtnlist.clear();
     classificationbtnrowlist.clear();
     QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-//    QStringList recentlist=vector.at(0);
-//    if(!recentlist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Recently"));
-//        insertAppList(recentlist);
-//    }
+    QStringList androidlist=vector.at(0);
+    if(!androidlist.isEmpty())
+    {
+        insertClassificationBtn(tr("Android"));
+        insertAppList(androidlist);
+    }
 
-    QStringList netlist=vector.at(0);
+    QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
         insertClassificationBtn(tr("Internet"));
         insertAppList(netlist);
     }
-    QStringList sociallist=vector.at(1);
+    QStringList sociallist=vector.at(2);
     if(!sociallist.isEmpty())
     {
         insertClassificationBtn(tr("Social"));
         insertAppList(sociallist);
     }
-    QStringList avlist=vector.at(2);
+    QStringList avlist=vector.at(3);
     if(!avlist.isEmpty())
     {
         insertClassificationBtn(tr("Video"));
         insertAppList(avlist);
     }
-    QStringList developlist=vector.at(3);
+    QStringList developlist=vector.at(4);
     if(!developlist.isEmpty())
     {
         insertClassificationBtn(tr("Development"));
         insertAppList(developlist);
     }
-    QStringList graphicslist=vector.at(4);
+    QStringList graphicslist=vector.at(5);
     if(!graphicslist.isEmpty())
     {
         insertClassificationBtn(tr("Image"));
         insertAppList(graphicslist);
     }
-    QStringList gamelist=vector.at(5);
+    QStringList gamelist=vector.at(6);
     if(!gamelist.isEmpty())
     {
         insertClassificationBtn(tr("Game"));
         insertAppList(gamelist);
     }
-    QStringList officelist=vector.at(6);
+    QStringList officelist=vector.at(7);
     if(!officelist.isEmpty())
     {
         insertClassificationBtn(tr("Office"));
         insertAppList(officelist);
     }
-    QStringList educationlist=vector.at(7);
+    QStringList educationlist=vector.at(8);
     if(!educationlist.isEmpty())
     {
         insertClassificationBtn(tr("Education"));
         insertAppList(educationlist);
     }
 
-    QStringList systemadminlist=vector.at(8);
+    QStringList systemadminlist=vector.at(9);
     if(!systemadminlist.isEmpty())
     {
         insertClassificationBtn(tr("System"));
         insertAppList(systemadminlist);
     }
-    QStringList otherlist=vector.at(9);
+    QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
         insertClassificationBtn(tr("Others"));
@@ -427,13 +430,7 @@ void FullFunctionWidget::resizeScrollAreaControls()
  */
 void FullFunctionWidget::initIconListWidget()
 {
-//    iconlistLayout=new QHBoxLayout(iconlistWid);
-//    iconlistLayout->setContentsMargins(Style::LeftMargin,0,Style::RightMargin,0);
-//    iconlistLayout->setSpacing(0);
-//    iconlistWid->setLayout(iconlistLayout);
-
     iconlistscrollarea=new ClassifyScrollArea(iconlistWid);
-//    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,iconlistWid->height());
     iconlistscrollareaWid=new QWidget;
     iconlistscrollareawidLayout=new QVBoxLayout;
     iconlistscrollareawidLayout->setContentsMargins(0,0,0,0);
@@ -443,9 +440,6 @@ void FullFunctionWidget::initIconListWidget()
 
     pIconListTopSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     pIconListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-//    iconlistLayout->addItem(pIconListTopSpacer);
-//    iconlistLayout->addWidget(iconlistscrollarea);
-//    iconlistLayout->addItem(pIconListBottomSpacer);
     pBtnGroup=new QButtonGroup(iconlistscrollareaWid);
     pAnimation = new QPropertyAnimation(iconlistscrollarea, "geometry");
     initIconListScrollArea();
@@ -456,8 +450,6 @@ void FullFunctionWidget::initIconListWidget()
  */
 void FullFunctionWidget::initIconListScrollArea()
 {
-//    iconlistscrollarea->setFixedSize(Style::LeftBtnWidth,
-//                                     classificationbtnlist.size()*Style::LeftBtnHeight+(classificationbtnlist.size()-1)*Style::LeftSpaceBetweenItem);
     for(int i=0;i<classificationbtnlist.size();i++)
     {
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
@@ -492,10 +484,7 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
     disconnect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(valueChangedSlot(int)));
     Q_FOREACH (QAbstractButton* button, buttonList) {
-
         FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-//        QLayoutItem* iconitem=fcbutton->layout()->itemAt(0);
-//        QLabel* iconlabel=qobject_cast<QLabel*>(iconitem->widget());
         QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
         QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
 

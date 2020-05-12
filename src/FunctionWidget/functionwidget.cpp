@@ -88,65 +88,70 @@ void FunctionWidget::fillAppListView()
 {
     classificationbtnlist.clear();
     classificationbtnrowlist.clear();
-
     QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-    QStringList netlist=vector.at(0);
+    QStringList androidlist=vector.at(0);
+    if(!androidlist.isEmpty())
+    {
+        insertClassificationBtn(tr("Android"));
+        insertAppList(androidlist);
+    }
+
+    QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
         insertClassificationBtn(tr("Internet"));
         insertAppList(netlist);
     }
-    QStringList sociallist=vector.at(1);
+    QStringList sociallist=vector.at(2);
     if(!sociallist.isEmpty())
     {
         insertClassificationBtn(tr("Social"));
         insertAppList(sociallist);
     }
-    QStringList avlist=vector.at(2);
+    QStringList avlist=vector.at(3);
     if(!avlist.isEmpty())
     {
         insertClassificationBtn(tr("Video"));
         insertAppList(avlist);
     }
-    QStringList developlist=vector.at(3);
+    QStringList developlist=vector.at(4);
     if(!developlist.isEmpty())
     {
         insertClassificationBtn(tr("Development"));
         insertAppList(developlist);
     }
-    QStringList graphicslist=vector.at(4);
+    QStringList graphicslist=vector.at(5);
     if(!graphicslist.isEmpty())
     {
         insertClassificationBtn(tr("Image"));
         insertAppList(graphicslist);
     }
-    QStringList gamelist=vector.at(5);
+    QStringList gamelist=vector.at(6);
     if(!gamelist.isEmpty())
     {
         insertClassificationBtn(tr("Game"));
         insertAppList(gamelist);
     }
-    QStringList officelist=vector.at(6);
+    QStringList officelist=vector.at(7);
     if(!officelist.isEmpty())
     {
         insertClassificationBtn(tr("Office"));
         insertAppList(officelist);
     }
-    QStringList educationlist=vector.at(7);
+    QStringList educationlist=vector.at(8);
     if(!educationlist.isEmpty())
     {
         insertClassificationBtn(tr("Education"));
-
         insertAppList(educationlist);
     }
 
-    QStringList systemadminlist=vector.at(8);
+    QStringList systemadminlist=vector.at(9);
     if(!systemadminlist.isEmpty())
     {
         insertClassificationBtn(tr("System"));
         insertAppList(systemadminlist);
     }
-    QStringList otherlist=vector.at(9);
+    QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
         insertClassificationBtn(tr("Others"));
@@ -211,65 +216,70 @@ void FunctionWidget::updateAppListView()
     classificationbtnrowlist.clear();
     row=0;
     data.clear();
-
     QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-    QStringList netlist=vector.at(0);
+    QStringList androidlist=vector.at(0);
+    if(!androidlist.isEmpty())
+    {
+        insertClassificationBtn(tr("Android"));
+        insertAppList(androidlist);
+    }
+
+    QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
         insertClassificationBtn(tr("Internet"));
         insertAppList(netlist);
     }
-    QStringList sociallist=vector.at(1);
+    QStringList sociallist=vector.at(2);
     if(!sociallist.isEmpty())
     {
         insertClassificationBtn(tr("Social"));
         insertAppList(sociallist);
     }
-    QStringList avlist=vector.at(2);
+    QStringList avlist=vector.at(3);
     if(!avlist.isEmpty())
     {
         insertClassificationBtn(tr("Video"));
         insertAppList(avlist);
     }
-    QStringList developlist=vector.at(3);
+    QStringList developlist=vector.at(4);
     if(!developlist.isEmpty())
     {
         insertClassificationBtn(tr("Development"));
         insertAppList(developlist);
     }
-    QStringList graphicslist=vector.at(4);
+    QStringList graphicslist=vector.at(5);
     if(!graphicslist.isEmpty())
     {
         insertClassificationBtn(tr("Image"));
         insertAppList(graphicslist);
     }
-    QStringList gamelist=vector.at(5);
+    QStringList gamelist=vector.at(6);
     if(!gamelist.isEmpty())
     {
         insertClassificationBtn(tr("Game"));
         insertAppList(gamelist);
     }
-    QStringList officelist=vector.at(6);
+    QStringList officelist=vector.at(7);
     if(!officelist.isEmpty())
     {
         insertClassificationBtn(tr("Office"));
         insertAppList(officelist);
     }
-    QStringList educationlist=vector.at(7);
+    QStringList educationlist=vector.at(8);
     if(!educationlist.isEmpty())
     {
         insertClassificationBtn(tr("Education"));
-
         insertAppList(educationlist);
     }
 
-    QStringList systemadminlist=vector.at(8);
+    QStringList systemadminlist=vector.at(9);
     if(!systemadminlist.isEmpty())
     {
         insertClassificationBtn(tr("System"));
         insertAppList(systemadminlist);
     }
-    QStringList otherlist=vector.at(9);
+    QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
         insertClassificationBtn(tr("Others"));
@@ -278,19 +288,13 @@ void FunctionWidget::updateAppListView()
     applistview->updateData(data);
 }
 
-void FunctionWidget::updateListView()
-{
-    UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
-    updateAppListView();
-}
-
 /**
  * 应用列表功能分类按钮槽函数
  */
 void FunctionWidget::appClassificationBtnClickedSlot()
 {
     leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
-    leaveAnimation->setEndValue(QRect(21,42,this->width()-42,this->height()-84));
+    leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
     enterAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
     enterAnimation->setEndValue(QRect((this->width()-Style::LeftBtnWidth*2-5)/2,
                                       (this->height()-Style::LeftBtnHeight*6-25)/2,
@@ -331,7 +335,7 @@ void FunctionWidget::recvFunctionBtnSignal(QString btnname)
                                         Style::LeftBtnWidth*2+5,
                                         Style::LeftBtnHeight*6+25));
     leaveAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
-    enterAnimation->setStartValue(QRect(20,20,this->width()-44,this->height()-40));
+    enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
     enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
 
     leaveAnimation->setTargetObject(functionbtnwid);

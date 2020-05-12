@@ -27,9 +27,9 @@ FullListView::FullListView(QWidget *parent, int module):
 
     pUkuiMenuInterface=new UkuiMenuInterface;
     if(module==0)
-        menu=new RightClickMenu(this,0);
+        menu=new RightClickMenu(nullptr,0);
     else
-        menu=new RightClickMenu(this,1);
+        menu=new RightClickMenu(nullptr,1);
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -38,6 +38,7 @@ FullListView::FullListView(QWidget *parent, int module):
 
 FullListView::~FullListView()
 {
+    delete menu;
     delete pUkuiMenuInterface;
 }
 
@@ -71,6 +72,7 @@ void FullListView::initWidget()
     this->setMouseTracking(true);
     this->setFocusPolicy(Qt::NoFocus);
     this->setMovement(QListView::Static);
+    this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));

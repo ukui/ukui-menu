@@ -64,6 +64,7 @@ public:
     QStringList getDesktopFilePath();//获取系统deskyop文件路径
 
     QString getDesktopPathByAppName(QString appname);//根据应用名获取deskyop文件路径
+    QString getDesktopPathByCommand(QString command);//根据命令获取deskyop文件路径
     QString getDesktopPathByAppEnglishName(QString appname);//根据应用英文名获取deskyop文件路径
 
     QVector<QStringList> getAlphabeticClassification();//获取字母分类
@@ -71,6 +72,7 @@ public:
     QVector<QString> getCommonUseApp();//获取常用App
     QVector<QString> getDesktopAll();
     QStringList getRecentApp();//获取最近添加App
+    QStringList getAndroidApp();//获取安卓应用
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
 
     QString getAppNamePinyin(QString appname);//获取应用名拼音

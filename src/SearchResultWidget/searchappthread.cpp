@@ -21,7 +21,6 @@
 SearchAppThread::SearchAppThread()
 {
     pUkuiMenuInterface=new UkuiMenuInterface;
-//    appInfoVector=UkuiMenuInterface::appInfoVector;
 }
 
 SearchAppThread::~SearchAppThread()

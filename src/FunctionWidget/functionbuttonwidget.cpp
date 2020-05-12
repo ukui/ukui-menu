@@ -49,6 +49,7 @@ void FunctionButtonWidget::initWidget()
     this->setLayout(gridLayout);
 
     icondisabledlist.clear();
+    icondisabledlist.append(":/data/img/mainviewwidget/android-disabled.svg");
     icondisabledlist.append(":/data/img/mainviewwidget/net-disabled.svg");
     icondisabledlist.append(":/data/img/mainviewwidget/social-disabled.svg");
     icondisabledlist.append(":/data/img/mainviewwidget/video-disabled.svg");
@@ -61,6 +62,7 @@ void FunctionButtonWidget::initWidget()
     icondisabledlist.append(":/data/img/mainviewwidget/other-disabled.svg");
 
     iconlist.clear();
+    iconlist.append(":/data/img/mainviewwidget/android-enabled.svg");
     iconlist.append(":/data/img/mainviewwidget/net-enabled.svg");
     iconlist.append(":/data/img/mainviewwidget/social-enabled.svg");
     iconlist.append(":/data/img/mainviewwidget/video-enabled.svg");
@@ -73,6 +75,7 @@ void FunctionButtonWidget::initWidget()
     iconlist.append(":/data/img/mainviewwidget/other-enabled.svg");
 
     iconlightlist.clear();
+    iconlightlist.append(":/data/img/mainviewwidget/android.svg");
     iconlightlist.append(":/data/img/mainviewwidget/net.svg");
     iconlightlist.append(":/data/img/mainviewwidget/social.svg");
     iconlightlist.append(":/data/img/mainviewwidget/video.svg");
@@ -85,6 +88,7 @@ void FunctionButtonWidget::initWidget()
     iconlightlist.append(":/data/img/mainviewwidget/other.svg");
 
     functionnamelist.clear();
+    functionnamelist.append(tr("Android"));
     functionnamelist.append(tr("Internet"));
     functionnamelist.append(tr("Social"));
     functionnamelist.append(tr("Video"));
@@ -114,7 +118,7 @@ void FunctionButtonWidget::functionBtnClickedSlot()
  */
 void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
 {
-    for(int row=0;row<5;row++)
+    for(int row=0;row<6;row++)
         for(int col=0;col<2;col++)
         {
             FunctionClassifyButton* iconbtn=nullptr;
@@ -152,6 +156,6 @@ void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
                 connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
             }
             gridLayout->addWidget(iconbtn,row,col);
-            if(row*2+col==9)break;
+            if(row*2+col==10)break;
         }
 }

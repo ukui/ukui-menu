@@ -40,6 +40,7 @@
 #include "src/SearchResultWidget/fullsearchresultwidget.h"
 #include "src/SearchResultWidget/searchresultwidget.h"
 #include "src/SearchResultWidget/searchappthread.h"
+#include "directorychangedthread.h"
 #include "src/Style/style.h"
 
 namespace Ui {
@@ -94,6 +95,8 @@ private:
     FullLetterWidget* fullletterwid=nullptr;
     FullFunctionWidget* fullfunctionwid=nullptr;
 
+    DirectoryChangedThread* directoryChangedThread=nullptr;
+
     int widgetState=1;//分类窗口编号
     int saveCurrentWidState=-1;//存放当前分类窗口编号
 
@@ -130,11 +133,13 @@ private Q_SLOTS:
     void directoryChangedSlot();//desktop文件目录改变信号槽
     void recvSearchResult(QStringList desktopfplist);//接收搜索结果
     void iconThemeChangeSlot(QString key);
+    void requestUpdateSlot();
 
 Q_SIGNALS:
     void sendHideMainWindowSignal();//向MainWindow发送隐藏主窗口信号
     void directoryChangedSignal();//desktop文件目录改变信号
     void sendSearchKeyword(QString);//向SearchAppThread发送搜索关键字
+    void sendDirectoryPath(QString arg);
 };
 
 #endif // MAINVIEWWIDGET_H

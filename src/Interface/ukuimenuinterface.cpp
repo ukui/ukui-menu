@@ -421,6 +421,25 @@ QString UkuiMenuInterface::getDesktopPathByAppName(QString appname)
     return desktopfp;
 }
 
+//根据命令获取deskyop文件路径
+QString UkuiMenuInterface::getDesktopPathByCommand(QString command)
+{
+    QString desktopfp;
+    int index=0;
+    while(index<appInfoVector.size())
+    {
+        if(QString::compare(appInfoVector.at(index).at(3),command)==0)
+        {
+            desktopfp=appInfoVector.at(index).at(0);
+            break;
+        }
+
+        index++;
+    }
+
+    return desktopfp;
+}
+
 //根据应用英文名获取desktop文件路径
 QString UkuiMenuInterface::getDesktopPathByAppEnglishName(QString appname)
 {
@@ -571,7 +590,7 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
 
 QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
 {
-    QStringList list[10];
+    QStringList list[11];
     int index=0;
     while(index<appInfoVector.size())
     {
@@ -581,34 +600,34 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
             int category=appInfoVector.at(index).at(5+i).toInt();
             switch (category) {
             case 1:
-                list[0].append(appInfoVector.at(index).at(2));
-                break;
-            case 2:
                 list[1].append(appInfoVector.at(index).at(2));
                 break;
-            case 3:
+            case 2:
                 list[2].append(appInfoVector.at(index).at(2));
                 break;
-            case 4:
+            case 3:
                 list[3].append(appInfoVector.at(index).at(2));
                 break;
-            case 5:
+            case 4:
                 list[4].append(appInfoVector.at(index).at(2));
                 break;
-            case 6:
+            case 5:
                 list[5].append(appInfoVector.at(index).at(2));
                 break;
-            case 7:
+            case 6:
                 list[6].append(appInfoVector.at(index).at(2));
                 break;
-            case 8:
+            case 7:
                 list[7].append(appInfoVector.at(index).at(2));
                 break;
-            case 9:
+            case 8:
                 list[8].append(appInfoVector.at(index).at(2));
                 break;
-            case 10:
+            case 9:
                 list[9].append(appInfoVector.at(index).at(2));
+                break;
+            case 10:
+                list[10].append(appInfoVector.at(index).at(2));
                 break;
             default:
                 break;
@@ -619,9 +638,9 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
 
     QVector<QStringList> data;
     data.clear();
-//    list[0].clear();
-//    list[0]=getRecentApp();
-//    data.append(list[0]);
+    list[0].clear();
+    list[0]=getAndroidApp();
+    data.append(list[0]);
 
     QLocale local;
     QString language=local.languageToString(local.language());
@@ -630,12 +649,12 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     else
         local=QLocale(QLocale::English);
     QCollator collator(local);
-    for(int i=0;i<10;i++)
+    for(int i=0;i<11;i++)
     {
-        std::sort(list[i].begin(),list[i].end(),collator);
+        if(!list[i].isEmpty())
+            std::sort(list[i].begin(),list[i].end(),collator);
         data.append(list[i]);
     }
-
     return data;
 }
 
@@ -690,6 +709,13 @@ QStringList UkuiMenuInterface::getRecentApp()
     return recentAppList;
 }
 
+QStringList UkuiMenuInterface::getAndroidApp()
+{
+    QStringList androidAppList;
+    androidAppList.clear();
+    return androidAppList;
+}
+
 QVector<QString> UkuiMenuInterface::getDesktopAll()
 {
     QVector<QString> desktopAllVector;
@@ -698,7 +724,6 @@ QVector<QString> UkuiMenuInterface::getDesktopAll()
     desktopAllVector.clear();
     commonVector.clear();
     appNameList.clear();
-//    desktopAllVector=desktopfpVector;
     commonVector=getCommonUseApp();
     Q_FOREACH(QString desktopfp, desktopfpVector)
     {

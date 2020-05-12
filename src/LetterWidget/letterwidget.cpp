@@ -27,6 +27,7 @@
 #include <QFrame>
 #include <QSlider>
 #include <QGraphicsDropShadowEffect>
+#include <syslog.h>
 #include "src/UtilityFunction/itemdelegate.h"
 
 LetterWidget::LetterWidget(QWidget *parent) :
@@ -148,7 +149,11 @@ void LetterWidget::execApplication(QString exec)
         int index=exec.indexOf(QString("%").at(0));
         exec.remove(index-1,3);
     }
-    QProcess::startDetached(exec);
+    bool ret=QProcess::startDetached(exec);
+    syslog(LOG_LOCAL0 | LOG_DEBUG ,"执行应用程序 %s:%d:%s",
+           exec.toLocal8Bit().data(),
+           ret,
+           pUkuiMenuInterface->getDesktopPathByCommand(exec).toLocal8Bit().data());
 }
 
 /**
