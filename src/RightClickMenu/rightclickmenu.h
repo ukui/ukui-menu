@@ -132,7 +132,7 @@ protected:
     void initAppBtnAction();
     void addShutdownAction();
     void addOtherAction();
-    void initWidgetAction(QWidget* wid, QString iconstr, QString textstr);
+    void initWidgetAction(QWidget* wid, QString iconstr, QString textstr,int type);
 
 private Q_SLOTS:
     void fixToCommonUseActionTriggerSlot();

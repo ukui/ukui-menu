@@ -32,6 +32,7 @@
 #include <QButtonGroup>
 #include <QTimer>
 #include <QPropertyAnimation>
+#include <gio/gdesktopappinfo.h>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
@@ -116,7 +117,7 @@ protected:
     void resizeScrollAreaControls();//设置scrollarea填充控件大小
 
 private Q_SLOTS:
-    void execApplication(QString appname);//执行应用程序
+    void execApplication(QString desktopfp);//执行应用程序
     void btnGroupClickedSlot(QAbstractButton *btn);
     void updateAppListView();//更新应用列表
     void timeOutSlot();//计时器槽函数

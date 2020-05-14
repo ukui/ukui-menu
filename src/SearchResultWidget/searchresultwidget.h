@@ -27,6 +27,7 @@
 #include <QToolButton>
 #include <QScrollBar>
 #include <QPushButton>
+#include <gio/gdesktopappinfo.h>
 #include "src/Interface/ukuimenuinterface.h"
 //#include "searchappthread.h"
 #include "src/UtilityFunction/listview.h"

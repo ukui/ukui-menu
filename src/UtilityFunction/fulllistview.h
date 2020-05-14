@@ -60,7 +60,7 @@ private Q_SLOTS:
     void rightClickedSlot();//右键菜单
 
 Q_SIGNALS:
-    void sendItemClickedSignal(QString arg);//向字母排序或功能分类模块发送item点击信号
+    void sendItemClickedSignal(QString arg);//发送item点击信号
     void sendFixedOrUnfixedSignal(QString desktopfp,int type);//向字母排序、功能分类发送固定或者取消固定信号
 //    void sendUpdateAppListSignal(QString desktopfp,int type);//向FullCommonUseWidget发送更新应用列表信号
     void removeListItemSignal(QString desktopfp);

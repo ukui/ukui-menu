@@ -101,7 +101,7 @@ FORMS    += \
 RESOURCES += \
     res.qrc
 
-PKGCONFIG+=glib-2.0 gsettings-qt libbamf3 x11 xrandr xtst
+PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt libbamf3 x11 xrandr xtst
 CONFIG += no_keywords link_pkgconfig
 
 desktop_file.files = ukui-menu.desktop

@@ -50,11 +50,9 @@ void DirectoryChangedThread::run()
             UkuiMenuInterface::appInfoVector.clear();
             UkuiMenuInterface::alphabeticVector.clear();
             UkuiMenuInterface::functionalVector.clear();
-            UkuiMenuInterface::commonUseVector.clear();
             UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
             UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
             UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
-            UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
             Q_EMIT requestUpdateSignal();
         }
         else//软件卸载
@@ -89,11 +87,9 @@ void DirectoryChangedThread::run()
             UkuiMenuInterface::appInfoVector.clear();
             UkuiMenuInterface::alphabeticVector.clear();
             UkuiMenuInterface::functionalVector.clear();
-            UkuiMenuInterface::commonUseVector.clear();
             UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
             UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
             UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
-            UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
             Q_EMIT requestUpdateSignal();
         }
     }

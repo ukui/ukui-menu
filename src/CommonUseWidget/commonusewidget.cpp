@@ -69,9 +69,6 @@ void CommonUseWidget::initAppListWidget()
     listview=new ListView(this,this->width()-4,this->height(),0);
     mainLayout->addWidget(listview);
     connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(execApplication(QStringList)));
-//    connect(listview,SIGNAL(sendUpdateAppListSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-//    connect(listview,SIGNAL(removeListItemSignal(QString)),this,SIGNAL(removeListItemSignal(QString)));
-//    connect(listview,SIGNAL(removeListAllItemSignal()),this,SIGNAL(removeListAllItemSignal()));
     connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
     connect(listview,SIGNAL(sendUpdateAppListSignal()),this,SLOT(updateListViewSlot()));
 }
@@ -82,7 +79,7 @@ void CommonUseWidget::initAppListWidget()
 void CommonUseWidget::fillAppList()
 {
     data.clear();
-    Q_FOREACH(QString desktopfp,UkuiMenuInterface::desktopAllVector)
+    Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
     {
         data.append(QStringList()<<desktopfp<<"1");
     }
@@ -95,14 +92,10 @@ void CommonUseWidget::fillAppList()
 void CommonUseWidget::execApplication(QStringList arg)
 {
     Q_EMIT sendHideMainWindowSignal();
-    QString execpath=pUkuiMenuInterface->getAppExec(arg.at(0));
-    //移除启动参数%u或者%U
-    if(execpath.contains("%"))
-    {
-        int index=execpath.indexOf(QString("%").at(0));
-        execpath.remove(index-1,3);
-    }
-    QProcess::startDetached(execpath);
+    QString desktopfp=arg.at(0);
+    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
+    g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
+    g_object_unref(desktopAppInfo);
 }
 
 
@@ -111,78 +104,18 @@ void CommonUseWidget::execApplication(QStringList arg)
  */
 void CommonUseWidget::updateListViewSlot()
 {
-//    for(int i=0;i<listview->model()->rowCount();i++)
-//    {
-//        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
-//        QString path=var.value<QStringList>().at(0);
-//        if(QString::compare(path,desktopfp)==0)
-//        {
-//            listview->model()->removeRow(i);
-//            break;
-//        }
-//    }
-//    setting->beginGroup("lockapplication");
-//    QStandardItem* item=new QStandardItem;
-//    item->setData(QVariant::fromValue<QStringList>(QStringList()<<desktopfp<<"1"),Qt::DisplayRole);
-//    QStandardItemModel* listmodel=qobject_cast<QStandardItemModel*>(listview->model());
-//    if(type==0)
-//        listmodel->insertRow(setting->allKeys().size()-1,item);
-//    else
-//        listmodel->insertRow(setting->allKeys().size(),item);
-//    setting->endGroup();
-
     updateListView();
 }
 
 void CommonUseWidget::updateListView()
 {
     data.clear();
-//    UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getDesktopAll();
-    Q_FOREACH(QString desktopfp,pUkuiMenuInterface->getDesktopAll())
+    Q_FOREACH(QString desktopfp,pUkuiMenuInterface->getAllApp())
     {
         data.append(QStringList()<<desktopfp<<"1");
     }
     listview->updateData(data);
 }
-
-//void CommonUseWidget::updateListViewAllSlot()
-//{
-//    data.clear();
-//    Q_FOREACH(QString desktopfp,UkuiMenuInterface::commonUseVector)
-//    {
-//        data.append(QStringList()<<desktopfp<<"1");
-//    }
-//    listview->updateData(data);
-//}
-
-//void CommonUseWidget::removeListItemSlot(QString desktopfp)
-//{
-//    for(int i=0;i<listview->model()->rowCount();i++)
-//    {
-//        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
-//        QString path=var.value<QStringList>().at(0);
-//        if(QString::compare(path,desktopfp)==0)
-//        {
-//            listview->model()->removeRow(i);
-//            break;
-//        }
-//    }
-//}
-
-//void CommonUseWidget::removeListAllItemSlot()
-//{
-//    setting->beginGroup("lockapplication");
-//    for(int i=listview->model()->rowCount()-1;i>=0;i--)
-//    {
-//        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
-//        QString desktopfp=var.value<QStringList>().at(0);
-//        QFileInfo fileInfo(desktopfp);
-//        QString desktopfn=fileInfo.fileName();
-//        if(!setting->contains(desktopfn))
-//            listview->model()->removeRow(i);
-//    }
-//    setting->endGroup();
-//}
 
 void CommonUseWidget::widgetMakeZero()
 {

@@ -127,33 +127,24 @@ void LetterWidget::fillAppListView()
 void LetterWidget::recvItemClickedSlot(QStringList arg)
 {
     if(arg.at(1).toInt()==0)
-    {
         appClassificationBtnClickedSlot();
-    }
-    else{
-        QString exec=pUkuiMenuInterface->getAppExec(arg.at(0));
-        execApplication(exec);
-    }
-
+    else
+        execApplication(arg.at(0));
 }
 
 /**
  * 执行应用程序
  */
-void LetterWidget::execApplication(QString exec)
+void LetterWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
-    //移除启动参数%u或者%U
-    if(exec.contains("%"))
-    {
-        int index=exec.indexOf(QString("%").at(0));
-        exec.remove(index-1,3);
-    }
-    bool ret=QProcess::startDetached(exec);
+    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
+    bool ret=g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
+    g_object_unref(desktopAppInfo);
     syslog(LOG_LOCAL0 | LOG_DEBUG ,"执行应用程序 %s:%d:%s",
-           exec.toLocal8Bit().data(),
+           desktopfp.toLocal8Bit().data(),
            ret,
-           pUkuiMenuInterface->getDesktopPathByCommand(exec).toLocal8Bit().data());
+           pUkuiMenuInterface->getAppExec(desktopfp).toLocal8Bit().data());
 }
 
 /**

@@ -146,18 +146,12 @@ void FullLetterWidget::fillAppList()
 /**
  * 执行应用程序
  */
-void FullLetterWidget::execApplication(QString appname)
+void FullLetterWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
-    QString execpath=pUkuiMenuInterface->getAppExec(pUkuiMenuInterface->getDesktopPathByAppName(appname));
-    //移除启动参数%u或者%U
-    if(execpath.contains("%"))
-    {
-        int index=execpath.indexOf(QString("%").at(0));
-        execpath.remove(index-1,3);
-    }
-    QProcess::startDetached(execpath);
-
+    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
+    g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
+    g_object_unref(desktopAppInfo);
 }
 
 /**

@@ -114,27 +114,27 @@ void RightClickMenu::initCommonUseAppBtnAction()
     CuAttributeAction=new QWidgetAction(cuappbtnmenu);
     CuAttributeWid=new QWidget();
 
-    initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"));
+    initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"),0);
     CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
     connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
 
-    initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"));
+    initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"),0);
     CuUnfixed4CommonUseAction->setDefaultWidget(CuUnfixed4CommonUseWid);
     connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
 
-    initWidgetAction(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
+    initWidgetAction(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"),0);
     CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
     connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
 
-    initWidgetAction(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
+    initWidgetAction(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"),0);
     CuUnfixed4TaskBarAction->setDefaultWidget(CuUnfixed4TaskBarWid);
     connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
 
-    initWidgetAction(CuAdd2DesktopWid,"",tr("Add to desktop shortcuts"));
+    initWidgetAction(CuAdd2DesktopWid,"",tr("Add to desktop shortcuts"),0);
     CuAdd2DesktopAction->setDefaultWidget(CuAdd2DesktopWid);
     connect(CuAdd2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
 
-    initWidgetAction(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
+    initWidgetAction(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"),0);
     CuUninstallAction->setDefaultWidget(CuUninstallWid);
     connect(CuUninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 
@@ -172,27 +172,27 @@ void RightClickMenu::initAppBtnAction()
     AttributeAction=new QWidgetAction(appbtnmenu);
     AttributeWid=new QWidget();
 
-    initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"));
+    initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"),0);
     Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
     connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
 
-    initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"));
+    initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"),0);
     Unfixed4CommonUseAction->setDefaultWidget(Unfixed4CommonUseWid);
     connect(Unfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
 
-    initWidgetAction(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"));
+    initWidgetAction(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"),0);
     Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
     connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
 
-    initWidgetAction(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"));
+    initWidgetAction(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"),0);
     Unfixed4TaskBarAction->setDefaultWidget(Unfixed4TaskBarWid);
     connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
 
-    initWidgetAction(Add2DesktopWid,"",tr("Add to desktop shortcuts"));
+    initWidgetAction(Add2DesktopWid,"",tr("Add to desktop shortcuts"),0);
     Add2DesktopAction->setDefaultWidget(Add2DesktopWid);
     connect(Add2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
 
-    initWidgetAction(UninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"));
+    initWidgetAction(UninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"),0);
     UninstallAction->setDefaultWidget(UninstallWid);
     connect(UninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
 }
@@ -225,27 +225,27 @@ void RightClickMenu::addShutdownAction()
     ShutDownAction=new QWidgetAction(shutdownmenu);
     ShutDownWid=new QWidget();
 
-    initWidgetAction(LockScreenWid,":/data/img/sidebarwidget/lock.svg",tr("Lock Screen"));
+    initWidgetAction(LockScreenWid,"system-lock-screen-symbolic",tr("Lock Screen"),1);
     LockScreenAction->setDefaultWidget(LockScreenWid);
     shutdownmenu->addAction(LockScreenAction);
     connect(LockScreenAction,SIGNAL(triggered()),this,SLOT(lockScreenActionTriggerSlot()));
 
-    initWidgetAction(SwitchUserWid,"",tr("Switch User"));
+    initWidgetAction(SwitchUserWid,"stock-people-symbolic",tr("Switch User"),1);
     SwitchUserAction->setDefaultWidget(SwitchUserWid);
     shutdownmenu->addAction(SwitchUserAction);
     connect(SwitchUserAction,SIGNAL(triggered()),this,SLOT(switchUserActionTriggerSlot()));
 
-    initWidgetAction(LogOutWid,"",tr("Log Out"));
+    initWidgetAction(LogOutWid,"system-logout-symbolic",tr("Log Out"),1);
     LogOutAction->setDefaultWidget(LogOutWid);
     shutdownmenu->addAction(LogOutAction);
     connect(LogOutAction,SIGNAL(triggered()),this,SLOT(logoutActionTriggerSlot()));
 
-    initWidgetAction(RebootWid,"",tr("Restart"));
+    initWidgetAction(RebootWid," system-restart-symbolic",tr("Restart"),1);
     RebootAction->setDefaultWidget(RebootWid);
     shutdownmenu->addAction(RebootAction);
     connect(RebootAction,SIGNAL(triggered()),this,SLOT(rebootActionTriggerSlot()));
 
-    initWidgetAction(ShutDownWid,":/data/img/sidebarwidget/shutdown.svg",tr("Power Off"));
+    initWidgetAction(ShutDownWid,"exit-symbolic",tr("Power Off"),1);
     ShutDownAction->setDefaultWidget(ShutDownWid);
     shutdownmenu->addAction(ShutDownAction);
     connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownActionTriggerSlot()));
@@ -267,15 +267,15 @@ void RightClickMenu::addOtherAction()
     OtherListAction=new QWidgetAction(othermenu);
     OtherListWid=new QWidget();
 
-    initWidgetAction(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"));
+    initWidgetAction(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"),0);
     OtherFix2TaskBarAction->setDefaultWidget(OtherFix2TaskBarWid);
     connect(OtherFix2TaskBarAction,SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
 
-    initWidgetAction(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"));
+    initWidgetAction(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"),0);
     OtherUnfix2TaskBarAction->setDefaultWidget(OtherUnfix2TaskBarWid);
     connect(OtherUnfix2TaskBarAction,SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
 
-    initWidgetAction(OtherListWid,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"));
+    initWidgetAction(OtherListWid,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"),0);
     OtherListAction->setDefaultWidget(OtherListWid);
     connect(OtherListAction,SIGNAL(triggered()),this,SLOT(otherListActionTriggerSlot()));
 
@@ -284,7 +284,7 @@ void RightClickMenu::addOtherAction()
     othermenu->setStyleSheet(style);
 }
 
-void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString textstr)
+void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString textstr,int type)
 {
     char style[200];
     sprintf(style,"QWidget{background:transparent;border:0px;border-radius:2px;}\
@@ -304,18 +304,26 @@ void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString tex
     if(!iconstr.isEmpty())
     {
         QLabel* labelicon=new QLabel(wid);
-        QSvgRenderer* svg=new QSvgRenderer(wid);
-        svg->load(iconstr);
-        QPixmap* pixmap=new QPixmap(16,16);
-        pixmap->fill(Qt::transparent);
-        QPainter p(pixmap);
-        svg->render(&p);
-        labelicon->setPixmap(*pixmap);
-        labelicon->setFixedSize(pixmap->size());
+        if(type==0)
+        {
+            QSvgRenderer* svg=new QSvgRenderer(wid);
+            svg->load(iconstr);
+            QPixmap* pixmap=new QPixmap(16,16);
+            pixmap->fill(Qt::transparent);
+            QPainter p(pixmap);
+            svg->render(&p);
+            labelicon->setPixmap(*pixmap);
+        }
+        else
+        {
+            QIcon icon=QIcon::fromTheme(iconstr);
+            QPixmap pixmap=icon.pixmap(QSize(16,16));
+            labelicon->setPixmap(pixmap);
+        }
+        labelicon->setFixedSize(QSize(16,16));
         labelicon->setAlignment(Qt::AlignCenter);
         labelicon->setStyleSheet(labelstyle);
         layout->addWidget(labelicon);
-
     }
 
     QLabel* labeltext=new QLabel(wid);

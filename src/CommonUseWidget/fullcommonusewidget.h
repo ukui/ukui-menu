@@ -30,6 +30,7 @@
 #include <QProcess>
 #include <QSvgRenderer>
 #include <QHeaderView>
+#include <gio/gdesktopappinfo.h>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/fulllistview.h"
@@ -77,16 +78,7 @@ protected:
 //    void getCommonUseAppList();//获取常用应用列表
 
 private Q_SLOTS:
-    /**
-     * @brief 更新单个item槽函数
-     * @param desktopfp为desktop文件路径
-     * @param type为0时表示固定，为1时表示取消固定
-     */
-//    void updateListViewSlot(QString desktopfp,int type);
-    void execApplication(QString appname);//执行应用程序
-//    void removeListItemSlot(QString desktopfp);//删除单个item
-//    void removeListAllItemSlot();//删除所有非固定item
-//    void updateListViewAllSlot();//更新应用列表槽函数
+    void execApplication(QString desktopfp);//执行应用程序
     void updateListViewSlot();
 
 Q_SIGNALS:

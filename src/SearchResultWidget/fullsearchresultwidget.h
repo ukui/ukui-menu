@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QScrollBar>
+#include <gio/gdesktopappinfo.h>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/fulllistview.h"
 #include "src/Style/style.h"
@@ -62,7 +63,7 @@ protected:
     void initWidget();
 
 private Q_SLOTS:
-    void execApplication(QString appname);//执行应用程序
+    void execApplication(QString desktopfp);//执行应用程序
 
 Q_SIGNALS:
     void sendUpdateAppListSignal(QString desktopfp,int type);//向CommonUseWidget发送更新应用列表信号

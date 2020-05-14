@@ -35,12 +35,10 @@ QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
 QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
 QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
-QVector<QString> UkuiMenuInterface::desktopAllVector=QVector<QString>();
-QVector<QString> UkuiMenuInterface::commonUseVector=QVector<QString>();
+QVector<QString> UkuiMenuInterface::allAppVector=QVector<QString>();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
-//    delete[] pAppInfo;
 }
 
 //文件递归查询
@@ -75,9 +73,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
         else{
             //过滤后缀不是.desktop的文件
             QString filePathStr=fileInfo.filePath();
-            QFileInfo fileinfo(filePathStr);
-            QString file_suffix=fileinfo.suffix();
-            if(QString::compare(file_suffix,"desktop")!=0)
+            if(!filePathStr.endsWith(".desktop"))
             {
                 i++;
                 continue;
@@ -89,7 +85,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
             if(ret_1!=nullptr)
             {
                 QString str=QString::fromLocal8Bit(ret_1);
-                if(QString::compare(str, "true")==0)
+                if(str.contains("true"))
                 {
                     i++;
                     continue;
@@ -100,7 +96,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
             if(ret!=nullptr)
             {
                 QString str=QString::fromLocal8Bit(ret);
-                if(QString::compare(str, "LXQt;")==0 || QString::compare(str, "KDE;")==0)
+                if(str.contains("LXQt") || str.contains("KDE"))
                 {
                     i++;
                     continue;
@@ -144,83 +140,32 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.clear();
     recursiveSearchFile("/usr/share/applications/");
 
-    filePathList.removeAll("/usr/share/applications/peony-folder-handler.desktop");
-    filePathList.removeAll("/usr/share/applications/gnome-software-local-file.desktop");
-    filePathList.removeAll("/usr/share/applications/org.gnome.Software.Editor.desktop");
-    filePathList.removeAll("/usr/share/applications/apport-gtk.desktop");
     filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
-    filePathList.removeAll("/usr/share/applications/snap-handle-link.desktop");
-    filePathList.removeAll("/usr/share/applications/python3.7.desktop");
-    filePathList.removeAll("/usr/share/applications/rhythmbox-device.desktop");
-    filePathList.removeAll("/usr/share/applications/smplayer_enqueue.desktop");
-    filePathList.removeAll("/usr/share/applications/python2.7.desktop");
     filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
-    filePathList.removeAll("/usr/share/applications/shotwell-viewer.desktop");
-    filePathList.removeAll("/usr/share/applications/burner-nautilus.desktop");
-    filePathList.removeAll("/usr/share/applications/gnome-system-monitor-kde.desktop");
-    filePathList.removeAll("/usr/share/applications/hplj1020.desktop");
-    filePathList.removeAll("/usr/share/applications/ukui-network-scheme.desktop");
-    filePathList.removeAll("/usr/share/applications/ukui-panel.desktop");
-    filePathList.removeAll("/usr/share/applications/unity-activity-log-manager-panel.desktop");
     filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
-    filePathList.removeAll("/usr/share/applications/fcitx-config-gtk3.desktop");
-    filePathList.removeAll("/usr/share/applications/im-config.desktop");
-    filePathList.removeAll("/usr/share/applications/fcitx-skin-installer.desktop");
-    filePathList.removeAll("/usr/share/applications/gcr-prompter.desktop");
-    filePathList.removeAll("/usr/share/applications/gcr-viewer.desktop");
-    filePathList.removeAll("/usr/share/applications/geoclue-demo-agent.desktop");
-    filePathList.removeAll("/usr/share/applications/gnome-disk-image-mounter.desktop");
-    filePathList.removeAll("/usr/share/applications/gnome-disk-image-writer.desktop");
-    filePathList.removeAll("/usr/share/applications/libreoffice-xsltfilter.desktop");
-    filePathList.removeAll("/usr/share/applications/peony-autorun-software.desktop");
-    filePathList.removeAll("/usr/share/applications/remmina-file.desktop");
-    filePathList.removeAll("/usr/share/applications/remmina-gnome.desktop");
-    filePathList.removeAll("/usr/share/applications/ukwm.desktop");
-    filePathList.removeAll("/usr/share/applications/nm-applet.desktop");
+    filePathList.removeAll("/usr/share/applications/blueman-manager.desktop");
     filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
     filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
-    filePathList.removeAll("/usr/share/applications/pavucontrol-qt.desktop");
-    filePathList.removeAll("/usr/share/applications/ukui-volume-control.desktop");
-    filePathList.removeAll("/usr/share/applications/lximage-qt-screenshot.desktop");
-    filePathList.removeAll("/usr/share/applications/lximage-qt.desktop");
-    filePathList.removeAll("/usr/share/applications/appurl.desktop");
     filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
     filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
-    filePathList.removeAll("/usr/share/applications/fcitx-ui-sogou-qimpanel.desktop");
+    filePathList.removeAll("/usr/share/applications/im-config.desktop");
     filePathList.removeAll("/usr/share/applications/fcitx.desktop");
     filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
-    filePathList.removeAll("/usr/share/applications/fcitx-qimpanel-configtool.desktop");
-    filePathList.removeAll("/usr/share/applications/peony-computer.desktop");
     filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
-    filePathList.removeAll("/usr/share/applications/xscreensaver-properties.desktop");
     filePathList.removeAll("/usr/share/applications/info.desktop");
-    filePathList.removeAll("/usr/share/applications/mate-about.desktop");
-    filePathList.removeAll("/usr/share/applications/pcmanfm-qt.desktop");
-    filePathList.removeAll("/usr/share/applications/qlipper.desktop");
-    filePathList.removeAll("/usr/share/applications/ktelnetservice5.desktop");
     filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
     filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
     filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
     filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
-    filePathList.removeAll("/usr/share/applications/galternatives.desktop");
     filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
-    filePathList.removeAll("/usr/share/applications/pcmanfm-qt-desktop-pref.desktop");
     filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
-    filePathList.removeAll("/usr/share/applications/gucharmap.desktop");
     filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
     filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
-    filePathList.removeAll("/usr/share/applications/indicator-china-weather.desktop");
     filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
     filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
     filePathList.removeAll("/usr/share/applications/mpv.desktop");
-    filePathList.removeAll("/usr/share/applications/atril.desktop");
-    filePathList.removeAll("/usr/share/applications/org.kde.kwalletmanager5.desktop");
     filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
-    filePathList.removeAll("/usr/share/applications/vim.desktop");
-    filePathList.removeAll("/usr/share/applications/kwalletmanager5-kwalletd.desktop");
     filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
-    filePathList.removeAll("/usr/share/applications/redshift.desktop");
-    filePathList.removeAll("/usr/share/applications/python3.8.desktop");
     filePathList.removeAll("/usr/share/applications/yelp.desktop");
     filePathList.removeAll("/usr/share/applications/peony-computer.desktop");
     filePathList.removeAll("/usr/share/applications/peony-home.desktop");
@@ -716,12 +661,12 @@ QStringList UkuiMenuInterface::getAndroidApp()
     return androidAppList;
 }
 
-QVector<QString> UkuiMenuInterface::getDesktopAll()
+QVector<QString> UkuiMenuInterface::getAllApp()
 {
-    QVector<QString> desktopAllVector;
+    QVector<QString> allAppVector;
     QVector<QString> commonVector;
     QStringList appNameList;
-    desktopAllVector.clear();
+    allAppVector.clear();
     commonVector.clear();
     appNameList.clear();
     commonVector=getCommonUseApp();
@@ -739,12 +684,12 @@ QVector<QString> UkuiMenuInterface::getDesktopAll()
     QCollator collator(local);
     std::sort(appNameList.begin(),appNameList.end(),collator);
     Q_FOREACH(QString desktopfp, commonVector)
-        desktopAllVector.append(desktopfp);
+        allAppVector.append(desktopfp);
 
     Q_FOREACH(QString appName, appNameList)
-        desktopAllVector.append(getDesktopPathByAppName(appName));
+        allAppVector.append(getDesktopPathByAppName(appName));
 
-    return desktopAllVector;
+    return allAppVector;
 }
 
 QVector<QString> UkuiMenuInterface::getCommonUseApp()
@@ -823,7 +768,7 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
     {
         QString desktopfp=QString("/usr/share/applications/"+desktopfn);
         QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.exists())
+        if(!fileInfo.exists() || !desktopfpVector.contains(desktopfp))
             continue;
         data.append(desktopfp);
     }
@@ -860,7 +805,6 @@ QStringList UkuiMenuInterface::getSpecifiedCategoryAppList(QString categorystr)
                 {
                     QString appname=getAppName(desktopfpList.at(index));
                     if(QString::compare(appname,"访问提示")==0)
-//                        qDebug()<<desktopfpList.at(index);
                     appnameList.append(appname);
                     break;
                 }
@@ -894,7 +838,6 @@ QString UkuiMenuInterface::getUserIcon()
 QString UkuiMenuInterface::getUserName()
 {
     qint64 uid=static_cast<qint64>(getuid());
-//    QString name=QDir::homePath();
     QDBusInterface iface("org.freedesktop.Accounts",
                          "/org/freedesktop/Accounts",
                          "org.freedesktop.Accounts",

@@ -115,8 +115,7 @@ void FullListView::onClicked(QModelIndex index)
          setting->remove(desktopfn);
          setting->sync();
          setting->endGroup();
-         QString appname=pUkuiMenuInterface->getAppName(desktopfp);
-         Q_EMIT sendItemClickedSignal(appname);
+         Q_EMIT sendItemClickedSignal(desktopfp);
 
      }
 }

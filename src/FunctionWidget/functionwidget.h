@@ -25,6 +25,7 @@
 #include <QHeaderView>
 #include <QScrollBar>
 #include <QPushButton>
+#include <gio/gdesktopappinfo.h>
 #include "src/Interface/ukuimenuinterface.h"
 #include "functionbuttonwidget.h"
 #include "src/RightClickMenu/rightclickmenu.h"
@@ -78,7 +79,7 @@ protected:
 private Q_SLOTS:
     void appClassificationBtnClickedSlot();//应用列表功能分类按钮槽函数
     void recvFunctionBtnSignal(QString btnname);//接收FunctionButtonWidget界面按钮信号
-    void execApplication(QString exec);//执行应用程序
+    void execApplication(QString desktopfp);//执行应用程序
     void updateAppListView();//更新应用列表
     void recvItemClickedSlot(QStringList arg);
     void animationFinishedSLot();

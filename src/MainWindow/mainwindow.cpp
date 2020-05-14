@@ -36,8 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
     UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
     UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
-    UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
-    UkuiMenuInterface::desktopAllVector=pUkuiMenuInterface->getDesktopAll();
+    UkuiMenuInterface::allAppVector=pUkuiMenuInterface->getAllApp();
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);

@@ -40,6 +40,7 @@
 #include <QButtonGroup>
 #include <QTimer>
 #include <QPropertyAnimation>
+#include <gio/gdesktopappinfo.h>
 #include "src/UtilityFunction/letterclassifybutton.h"
 #include "src/UtilityFunction/scrollarea.h"
 #include "src/UtilityFunction/pushbutton.h"
@@ -119,7 +120,7 @@ protected:
 
 private Q_SLOTS:
     void btnGroupClickedSlot(QAbstractButton *btn);
-    void execApplication(QString appname);//执行应用程序
+    void execApplication(QString desktopfp);//执行应用程序
     void updateAppListView();//更新应用列表
     void timeOutSlot();//计时器槽函数
     void valueChangedSlot(int value);//滑动条滚动槽函数

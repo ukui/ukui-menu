@@ -73,7 +73,7 @@ void FullCommonUseWidget::initAppListWidget()
 void FullCommonUseWidget::fillAppList()
 {
     data.clear();
-    Q_FOREACH(QString desktopfp,UkuiMenuInterface::desktopAllVector)
+    Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
     {
         data.append(desktopfp);
     }
@@ -83,143 +83,30 @@ void FullCommonUseWidget::fillAppList()
 /**
  * 执行应用程序
  */
-void FullCommonUseWidget::execApplication(QString appname)
+void FullCommonUseWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
-    QString execpath=pUkuiMenuInterface->getAppExec(pUkuiMenuInterface->getDesktopPathByAppName(appname));
-    //移除启动参数%u或者%U
-    if(execpath.contains("%"))
-    {
-        int index=execpath.indexOf(QString("%").at(0));
-        execpath.remove(index-1,3);
-    }
-    QProcess::startDetached(execpath);
-}
+    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
+    g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
+    g_object_unref(desktopAppInfo);}
 
 /**
  * 更新应用列表
  */
 void FullCommonUseWidget::updateListViewSlot()
 {
-//    for(int i=0;i<listview->model()->rowCount();i++)
-//    {
-//        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
-//        QString path=var.value<QString>();
-//        if(QString::compare(path,desktopfp)==0)
-//        {
-//            listview->model()->removeRow(i);
-//            break;
-//        }
-//    }
-//    setting->beginGroup("lockapplication");
-//    QStandardItem* item=new QStandardItem;
-//    item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-//    QStandardItemModel* listmodel=qobject_cast<QStandardItemModel*>(listview->model());
-//    if(type==0)
-//        listmodel->insertRow(setting->allKeys().size()-1,item);
-//    else
-//        listmodel->insertRow(setting->allKeys().size(),item);
-//    setting->endGroup();
     updateListView();
-
 }
 
 void FullCommonUseWidget::updateListView()
 {
     data.clear();
-//    UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
-    Q_FOREACH(QString desktopfp,pUkuiMenuInterface->getDesktopAll())
+    Q_FOREACH(QString desktopfp,pUkuiMenuInterface->getAllApp())
     {
         data.append(desktopfp);
     }
     listview->updateData(data);
 }
-
-//void FullCommonUseWidget::updateListViewAllSlot()
-//{
-//    data.clear();
-//    Q_FOREACH(QString desktopfp,UkuiMenuInterface::commonUseVector)
-//    {
-//        data.append(desktopfp);
-//    }
-//    listview->updateData(data);
-//}
-
-//void FullCommonUseWidget::removeListItemSlot(QString desktopfp)
-//{
-//    for(int i=0;i<listview->model()->rowCount();i++)
-//    {
-//        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
-//        QString path=var.value<QString>();
-//        if(QString::compare(path,desktopfp)==0)
-//        {
-//            listview->model()->removeRow(i);
-//            break;
-//        }
-//    }
-//}
-
-//void FullCommonUseWidget::removeListAllItemSlot()
-//{
-//    setting->beginGroup("lockapplication");
-//    for(int i=listview->model()->rowCount()-1;i>=0;i--)
-//    {
-//        QVariant var=listview->model()->index(i,0).data(Qt::DisplayRole);
-//        QString desktopfp=var.value<QString>();
-//        QFileInfo fileInfo(desktopfp);
-//        QString desktopfn=fileInfo.fileName();
-//        if(!setting->contains(desktopfn))
-//            listview->model()->removeRow(i);
-//    }
-//    setting->endGroup();
-//}
-
-//void FullCommonUseWidget::getCommonUseAppList()
-//{
-//    setting->beginGroup("lockapplication");
-//    QStringList lockdesktopfnList=setting->allKeys();
-//    for(int i=0;i<lockdesktopfnList.count()-1;i++)
-//        for(int j=0;j<lockdesktopfnList.count()-1-i;j++)
-//        {
-//            int value_1=setting->value(lockdesktopfnList.at(j)).toInt();
-//            int value_2=setting->value(lockdesktopfnList.at(j+1)).toInt();
-//            if(value_1 > value_2)
-//            {
-//                QString tmp=lockdesktopfnList.at(j);
-//                lockdesktopfnList.replace(j,lockdesktopfnList.at(j+1));
-//                lockdesktopfnList.replace(j+1,tmp);
-
-//            }
-//        }
-//    setting->endGroup();
-//    setting->beginGroup("application");
-//    QStringList desktopfnList=setting->allKeys();
-//    for(int i=0;i<desktopfnList.count()-1;i++)
-//        for(int j=0;j<desktopfnList.count()-1-i;j++)
-//        {
-//            int value_1=setting->value(desktopfnList.at(j)).toInt();
-//            int value_2=setting->value(desktopfnList.at(j+1)).toInt();
-//            if(value_1 < value_2)
-//            {
-//                QString tmp=desktopfnList.at(j);
-//                desktopfnList.replace(j,desktopfnList.at(j+1));
-//                desktopfnList.replace(j+1,tmp);
-
-//            }
-//        }
-//    setting->endGroup();
-//    data.clear();
-//    Q_FOREACH(QString desktopfn,lockdesktopfnList)
-//    {
-//        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
-//        data.append(desktopfp);
-//    }
-//    Q_FOREACH(QString desktopfn,desktopfnList)
-//    {
-//        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
-//        data.append(desktopfp);
-//    }
-//}
 
 void FullCommonUseWidget::repaintWidget()
 {

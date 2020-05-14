@@ -45,8 +45,7 @@ public:
     static QVector<QString> desktopfpVector;
     static QVector<QStringList> alphabeticVector;
     static QVector<QStringList> functionalVector;
-    static QVector<QString> commonUseVector;
-    static QVector<QString> desktopAllVector;
+    static QVector<QString> allAppVector;
 
     /**
      * 获取系统应用名称
@@ -70,7 +69,7 @@ public:
     QVector<QStringList> getAlphabeticClassification();//获取字母分类
     QVector<QStringList> getFunctionalClassification();//获取功能分类
     QVector<QString> getCommonUseApp();//获取常用App
-    QVector<QString> getDesktopAll();
+    QVector<QString> getAllApp();
     QStringList getRecentApp();//获取最近添加App
     QStringList getAndroidApp();//获取安卓应用
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
