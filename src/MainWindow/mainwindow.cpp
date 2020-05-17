@@ -444,6 +444,13 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
             this->activateWindow();
         }
     }
+
+    if(keycode == "Escape")
+    {
+        this->hide();
+        mainviewwid->widgetMakeZero();
+        sidebarwid->widgetMakeZero();
+    }
 }
 
 /**

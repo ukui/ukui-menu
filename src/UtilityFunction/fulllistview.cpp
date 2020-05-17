@@ -18,6 +18,7 @@
 
 #include "fulllistview.h"
 #include <QDebug>
+#include <syslog.h>
 
 FullListView::FullListView(QWidget *parent, int module):
     QListView(parent)
@@ -74,7 +75,7 @@ void FullListView::initWidget()
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
-    connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
+    connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot(QPoint)));
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
 }
 
@@ -120,11 +121,12 @@ void FullListView::onClicked(QModelIndex index)
      }
 }
 
-void FullListView::rightClickedSlot()
+void FullListView::rightClickedSlot(const QPoint &pos)
 {
     if(!(this->selectionModel()->selectedIndexes().isEmpty()))
     {
         QModelIndex index=this->currentIndex();
+//        QModelIndex index=this->indexAt(pos);
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
         if(module>0)
@@ -176,3 +178,18 @@ void FullListView::leaveEvent(QEvent *e)
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
 }
+
+//void FullListView::mousePressEvent(QMouseEvent *event)
+//{
+//    if(!(this->indexAt(event->pos()).isValid()))
+//        Q_EMIT sendHideMainWindowSignal();
+//    else{
+//        if(event->button()==Qt::LeftButton)
+//            Q_EMIT clicked(this->indexAt(event->pos()));
+//        if(event->button()==Qt::RightButton)
+//        {
+//             this->selectionModel()->setCurrentIndex(this->indexAt(event->pos()),QItemSelectionModel::SelectCurrent);
+//            Q_EMIT customContextMenuRequested(event->pos());
+//        }
+//    }
+//}

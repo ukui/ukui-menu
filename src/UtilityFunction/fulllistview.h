@@ -43,6 +43,7 @@ protected:
     void initWidget();
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
+//    void mousePressEvent(QMouseEvent *event);
 
 private:
     FullItemDelegate* m_delegate=nullptr;
@@ -57,7 +58,7 @@ private:
 
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
-    void rightClickedSlot();//右键菜单
+    void rightClickedSlot(const QPoint &pos);//右键菜单
 
 Q_SIGNALS:
     void sendItemClickedSignal(QString arg);//发送item点击信号

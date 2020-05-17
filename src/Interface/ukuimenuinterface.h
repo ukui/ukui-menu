@@ -71,7 +71,8 @@ public:
     QVector<QString> getCommonUseApp();//获取常用App
     QVector<QString> getAllApp();
     QStringList getRecentApp();//获取最近添加App
-    QStringList getAndroidApp();//获取安卓应用
+    QVector<QStringList> getAndroidApp();//获取安卓应用
+    static bool cmpApp(QStringList &arg_1,QStringList &arg_2);
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
 
     QString getAppNamePinyin(QString appname);//获取应用名拼音

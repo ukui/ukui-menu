@@ -236,22 +236,6 @@ QString UkuiMenuInterface::getAppName(QString desktopfp)
     char* name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name", nullptr, nullptr);
     QString namestr=QString::fromLocal8Bit(name);
 
-//    QString namestr;
-//    QLocale cn;
-//    QString language=cn.languageToString(cn.language());
-//    if(QString::compare(language,"Chinese")==0)
-//    {
-//        char* name;
-//        name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name[zh_CN]", nullptr, nullptr);
-//        if(QString::fromLocal8Bit(name).isEmpty())
-//            name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name", nullptr, nullptr);
-//        namestr=QString::fromLocal8Bit(name);
-//    }
-//    else {
-//        char* name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Name", nullptr, nullptr);
-//        namestr=QString::fromLocal8Bit(name);
-//    }
-
     g_key_file_free(keyfile);
     return namestr;
 }
@@ -402,105 +386,8 @@ QString UkuiMenuInterface::getDesktopPathByAppEnglishName(QString appname)
     return desktopfilepath;
 }
 
-QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
+bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
 {
-    QVector<QStringList> data;
-    QStringList appnameList;
-    appnameList.clear();
-    QStringList list[27];
-    int index=0;
-    while(index<appInfoVector.size())
-    {
-        QString appname=appInfoVector.at(index).at(2);
-        QString appnamepy=UkuiChineseLetter::getPinyins(appname);
-        char c=appnamepy.at(0).toLatin1();
-        switch (c) {
-        case 'A':
-            list[0].append(appname);
-            break;
-        case 'B':
-            list[1].append(appname);
-            break;
-        case 'C':
-            list[2].append(appname);
-            break;
-        case 'D':
-            list[3].append(appname);
-            break;
-        case 'E':
-            list[4].append(appname);
-            break;
-        case 'F':
-            list[5].append(appname);
-            break;
-        case 'G':
-            list[6].append(appname);
-            break;
-        case 'H':
-            list[7].append(appname);
-            break;
-        case 'I':
-            list[8].append(appname);
-            break;
-        case 'J':
-            list[9].append(appname);
-            break;
-        case 'K':
-            list[10].append(appname);
-            break;
-        case 'L':
-            list[11].append(appname);
-            break;
-        case 'M':
-            list[12].append(appname);
-            break;
-        case 'N':
-            list[13].append(appname);
-            break;
-        case 'O':
-            list[14].append(appname);
-            break;
-        case 'P':
-            list[15].append(appname);
-            break;
-        case 'Q':
-            list[16].append(appname);
-            break;
-        case 'R':
-            list[17].append(appname);
-            break;
-        case 'S':
-            list[18].append(appname);
-            break;
-        case 'T':
-            list[19].append(appname);
-            break;
-        case 'U':
-            list[20].append(appname);
-            break;
-        case 'V':
-            list[21].append(appname);
-            break;
-        case 'W':
-            list[22].append(appname);
-            break;
-        case 'X':
-            list[23].append(appname);
-            break;
-        case 'Y':
-            list[24].append(appname);
-            break;
-        case 'Z':
-            list[25].append(appname);
-            break;
-        default:
-            list[26].append(appname);
-            break;
-        }
-
-        index++;
-    }
-
     QLocale local;
     QString language=local.languageToString(local.language());
     if(QString::compare(language,"Chinese")==0)
@@ -508,186 +395,35 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
     else
         local=QLocale(QLocale::English);
     QCollator collator(local);
-
-    for(int i=0;i<26;i++)
-    {
-        std::sort(list[i].begin(),list[i].end(),collator);
-        data.append(list[i]);
-    }
-
-    QStringList otherList;
-    QStringList numberList;
-    for(int i=0;i<list[26].count();i++)
-    {
-        QChar c=list[26].at(i).at(0);
-        if(c<48 || (c>57 && c<65) || c>90)
-            otherList.append(list[26].at(i));
-        else
-            numberList.append(list[26].at(i));
-    }
-    std::sort(otherList.begin(),otherList.end(),collator);
-    std::sort(numberList.begin(),numberList.end(),collator);
-    data.append(otherList);
-    data.append(numberList);
-
-    return data;
-}
-
-QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
-{
-    QStringList list[11];
-    int index=0;
-    while(index<appInfoVector.size())
-    {
-        int count=appInfoVector.at(index).size()-5;
-        for(int i=0;i<count;i++)
-        {
-            int category=appInfoVector.at(index).at(5+i).toInt();
-            switch (category) {
-            case 1:
-                list[1].append(appInfoVector.at(index).at(2));
-                break;
-            case 2:
-                list[2].append(appInfoVector.at(index).at(2));
-                break;
-            case 3:
-                list[3].append(appInfoVector.at(index).at(2));
-                break;
-            case 4:
-                list[4].append(appInfoVector.at(index).at(2));
-                break;
-            case 5:
-                list[5].append(appInfoVector.at(index).at(2));
-                break;
-            case 6:
-                list[6].append(appInfoVector.at(index).at(2));
-                break;
-            case 7:
-                list[7].append(appInfoVector.at(index).at(2));
-                break;
-            case 8:
-                list[8].append(appInfoVector.at(index).at(2));
-                break;
-            case 9:
-                list[9].append(appInfoVector.at(index).at(2));
-                break;
-            case 10:
-                list[10].append(appInfoVector.at(index).at(2));
-                break;
-            default:
-                break;
-            }
-        }
-        index++;
-    }
-
-    QVector<QStringList> data;
-    data.clear();
-    list[0].clear();
-    list[0]=getAndroidApp();
-    data.append(list[0]);
-
-    QLocale local;
-    QString language=local.languageToString(local.language());
-    if(QString::compare(language,"Chinese")==0)
-        local=QLocale(QLocale::Chinese);
+    if(collator.compare(arg_1.at(2),arg_2.at(2))<0)
+        return true;
     else
-        local=QLocale(QLocale::English);
-    QCollator collator(local);
-    for(int i=0;i<11;i++)
-    {
-        if(!list[i].isEmpty())
-            std::sort(list[i].begin(),list[i].end(),collator);
-        data.append(list[i]);
-    }
-    return data;
-}
-
-bool UkuiMenuInterface::matchingAppCategories(QString desktopfp, QStringList categorylist)
-{
-    QString category=getAppCategories(desktopfp);
-    int index;
-    for(index=0;index<categorylist.count();index++)
-    {
-        if(category.contains(categorylist.at(index),Qt::CaseInsensitive))
-            return true;
-    }
-    if(index==categorylist.count())
         return false;
 
-    return false;
-}
-
-QStringList UkuiMenuInterface::getRecentApp()
-{
-    QStringList recentAppList;
-    recentAppList.clear();
-    QDateTime dt=QDateTime::currentDateTime();
-    int currentDateTime=dt.toTime_t();
-    int nDaySec=24*60*60;
-    setting->beginGroup("recentapp");
-    QStringList recentAppKeys=setting->allKeys();
-    for(int i=0;i<recentAppKeys.count();i++)
-    {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
-            setting->remove(recentAppKeys.at(i));
-    }
-    setting->sync();
-    for(int i=0;i<setting->allKeys().size();i++)
-    {
-        QString desktopfp=QString("/usr/share/applications/"+setting->allKeys().at(i));
-        QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.exists())
-            continue;
-        QString appname=getAppName(desktopfp);
-        recentAppList.append(appname);
-    }
-    setting->endGroup();
-    QLocale local;
-    QString language=local.languageToString(local.language());
-    if(QString::compare(language,"Chinese")==0)
-        local=QLocale(QLocale::Chinese);
-    else
-        local=QLocale(QLocale::English);
-    QCollator collator(local);
-    std::sort(recentAppList.begin(),recentAppList.end(),collator);
-    return recentAppList;
-}
-
-QStringList UkuiMenuInterface::getAndroidApp()
-{
-    QStringList androidAppList;
-    androidAppList.clear();
-    return androidAppList;
 }
 
 QVector<QString> UkuiMenuInterface::getAllApp()
 {
     QVector<QString> allAppVector;
     QVector<QString> commonVector;
-    QStringList appNameList;
+    QVector<QStringList> appVector;
     allAppVector.clear();
     commonVector.clear();
-    appNameList.clear();
+    appVector.clear();
     commonVector=getCommonUseApp();
+    int index=0;
     Q_FOREACH(QString desktopfp, desktopfpVector)
     {
         if(!commonVector.contains(desktopfp))
-            appNameList.append(getAppName(desktopfp));
+            appVector.append(appInfoVector.at(index));
+        index++;
     }
-    QLocale local;
-    QString language=local.languageToString(local.language());
-    if(QString::compare(language,"Chinese")==0)
-        local=QLocale(QLocale::Chinese);
-    else
-        local=QLocale(QLocale::English);
-    QCollator collator(local);
-    std::sort(appNameList.begin(),appNameList.end(),collator);
+    qSort(appVector.begin(),appVector.end(),cmpApp);
     Q_FOREACH(QString desktopfp, commonVector)
         allAppVector.append(desktopfp);
 
-    Q_FOREACH(QString appName, appNameList)
-        allAppVector.append(getDesktopPathByAppName(appName));
+    for(int index=0;index<appVector.size();index++)
+        allAppVector.append(appVector.at(index).at(0));
 
     return allAppVector;
 }
@@ -774,6 +510,265 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
     }
 
     return data;
+}
+
+QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
+{
+    QVector<QStringList> data;
+    QStringList appnameList;
+    appnameList.clear();
+    QVector<QStringList> appVector[27];
+    int index=0;
+    while(index<appInfoVector.size())
+    {
+        QString appname=appInfoVector.at(index).at(2);
+        QString appnamepy=UkuiChineseLetter::getPinyins(appname);
+        char c=appnamepy.at(0).toLatin1();
+        switch (c) {
+        case 'A':
+            appVector[0].append(appInfoVector.at(index));
+            break;
+        case 'B':
+            appVector[1].append(appInfoVector.at(index));
+            break;
+        case 'C':
+            appVector[2].append(appInfoVector.at(index));
+            break;
+        case 'D':
+            appVector[3].append(appInfoVector.at(index));
+            break;
+        case 'E':
+            appVector[4].append(appInfoVector.at(index));
+            break;
+        case 'F':
+            appVector[5].append(appInfoVector.at(index));
+            break;
+        case 'G':
+            appVector[6].append(appInfoVector.at(index));
+            break;
+        case 'H':
+            appVector[7].append(appInfoVector.at(index));
+            break;
+        case 'I':
+            appVector[8].append(appInfoVector.at(index));
+            break;
+        case 'J':
+            appVector[9].append(appInfoVector.at(index));
+            break;
+        case 'K':
+            appVector[10].append(appInfoVector.at(index));
+            break;
+        case 'L':
+            appVector[11].append(appInfoVector.at(index));
+            break;
+        case 'M':
+            appVector[12].append(appInfoVector.at(index));
+            break;
+        case 'N':
+            appVector[13].append(appInfoVector.at(index));
+            break;
+        case 'O':
+            appVector[14].append(appInfoVector.at(index));
+            break;
+        case 'P':
+            appVector[15].append(appInfoVector.at(index));
+            break;
+        case 'Q':
+            appVector[16].append(appInfoVector.at(index));
+            break;
+        case 'R':
+            appVector[17].append(appInfoVector.at(index));
+            break;
+        case 'S':
+            appVector[18].append(appInfoVector.at(index));
+            break;
+        case 'T':
+            appVector[19].append(appInfoVector.at(index));
+            break;
+        case 'U':
+            appVector[20].append(appInfoVector.at(index));
+            break;
+        case 'V':
+            appVector[21].append(appInfoVector.at(index));
+            break;
+        case 'W':
+            appVector[22].append(appInfoVector.at(index));
+            break;
+        case 'X':
+            appVector[23].append(appInfoVector.at(index));
+            break;
+        case 'Y':
+            appVector[24].append(appInfoVector.at(index));
+            break;
+        case 'Z':
+            appVector[25].append(appInfoVector.at(index));
+            break;
+        default:
+            appVector[26].append(appInfoVector.at(index));
+            break;
+        }
+
+        index++;
+    }
+
+    for(int i=0;i<26;i++)
+    {
+        QStringList desktopfpList;
+        desktopfpList.clear();
+        qSort(appVector[i].begin(),appVector[i].end(),cmpApp);
+        for(int j=0;j<appVector[i].size();j++)
+            desktopfpList.append(appVector[i].at(j).at(0));
+        data.append(desktopfpList);
+    }
+
+     QVector<QStringList> otherVector;
+     QVector<QStringList> numberVector;
+    for(int i=0;i<appVector[26].count();i++)
+    {
+        QString appname=appVector[26].at(i).at(2);
+        QChar c=appname.at(0);
+        if(c<48 || (c>57 && c<65) || c>90)
+            otherVector.append(appVector[26].at(i));
+        else
+            numberVector.append(appVector[26].at(i));
+    }
+    qSort(otherVector.begin(),otherVector.end(),cmpApp);
+    qSort(numberVector.begin(),numberVector.end(),cmpApp);
+    QStringList otherfpList;
+    otherfpList.clear();
+    for(int i=0;i<otherVector.size();i++)
+        otherfpList.append(otherVector.at(i).at(0));
+    QStringList numberfpList;
+    numberfpList.clear();
+    for(int i=0;i<numberVector.size();i++)
+        numberfpList.append(numberVector.at(i).at(0));
+    data.append(otherfpList);
+    data.append(numberfpList);
+
+    return data;
+}
+
+QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
+{
+    QVector<QStringList> appVector[11];
+    int index=0;
+    while(index<appInfoVector.size())
+    {
+        int count=appInfoVector.at(index).size()-5;
+        for(int i=0;i<count;i++)
+        {
+            int category=appInfoVector.at(index).at(5+i).toInt();
+            switch (category) {
+            case 1:
+                appVector[1].append(appInfoVector.at(index));
+                break;
+            case 2:
+                appVector[2].append(appInfoVector.at(index));
+                break;
+            case 3:
+                appVector[3].append(appInfoVector.at(index));
+                break;
+            case 4:
+                appVector[4].append(appInfoVector.at(index));
+                break;
+            case 5:
+                appVector[5].append(appInfoVector.at(index));
+                break;
+            case 6:
+                appVector[6].append(appInfoVector.at(index));
+                break;
+            case 7:
+                appVector[7].append(appInfoVector.at(index));
+                break;
+            case 8:
+                appVector[8].append(appInfoVector.at(index));
+                break;
+            case 9:
+                appVector[9].append(appInfoVector.at(index));
+                break;
+            case 10:
+                appVector[10].append(appInfoVector.at(index));
+                break;
+            default:
+                break;
+            }
+        }
+        index++;
+    }
+
+    QVector<QStringList> data;
+    data.clear();
+    appVector[0].clear();
+    appVector[0]=getAndroidApp();
+
+    for(int i=0;i<11;i++)
+    {
+        QStringList desktopfpList;
+        desktopfpList.clear();
+        qSort(appVector[i].begin(),appVector[i].end(),cmpApp);
+        for(int j=0;j<appVector[i].size();j++)
+            desktopfpList.append(appVector[i].at(j).at(0));
+        data.append(desktopfpList);
+    }
+    return data;
+}
+
+bool UkuiMenuInterface::matchingAppCategories(QString desktopfp, QStringList categorylist)
+{
+    QString category=getAppCategories(desktopfp);
+    int index;
+    for(index=0;index<categorylist.count();index++)
+    {
+        if(category.contains(categorylist.at(index),Qt::CaseInsensitive))
+            return true;
+    }
+    if(index==categorylist.count())
+        return false;
+
+    return false;
+}
+
+QStringList UkuiMenuInterface::getRecentApp()
+{
+    QStringList recentAppList;
+    recentAppList.clear();
+    QDateTime dt=QDateTime::currentDateTime();
+    int currentDateTime=dt.toTime_t();
+    int nDaySec=24*60*60;
+    setting->beginGroup("recentapp");
+    QStringList recentAppKeys=setting->allKeys();
+    for(int i=0;i<recentAppKeys.count();i++)
+    {
+        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
+            setting->remove(recentAppKeys.at(i));
+    }
+    setting->sync();
+    for(int i=0;i<setting->allKeys().size();i++)
+    {
+        QString desktopfp=QString("/usr/share/applications/"+setting->allKeys().at(i));
+        QFileInfo fileInfo(desktopfp);
+        if(!fileInfo.exists())
+            continue;
+        QString appname=getAppName(desktopfp);
+        recentAppList.append(appname);
+    }
+    setting->endGroup();
+    QLocale local;
+    QString language=local.languageToString(local.language());
+    if(QString::compare(language,"Chinese")==0)
+        local=QLocale(QLocale::Chinese);
+    else
+        local=QLocale(QLocale::English);
+    QCollator collator(local);
+    std::sort(recentAppList.begin(),recentAppList.end(),collator);
+    return recentAppList;
+}
+
+QVector<QStringList> UkuiMenuInterface::getAndroidApp()
+{
+    QVector<QStringList> androidVector;
+    androidVector.clear();
+    return androidVector;
 }
 
 //获取应用拼音

@@ -172,11 +172,7 @@ void FunctionWidget::insertAppList(QStringList appnamelist)
 {
     row+=(appnamelist.count()+1);
     for(int i=0;i<appnamelist.count();i++)
-    {
-
-        QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appnamelist.at(i));
-        data.append(QStringList()<<desktopfp<<"1");
-    }
+        data.append(QStringList()<<appnamelist.at(i)<<"1");
 }
 
 void FunctionWidget::recvItemClickedSlot(QStringList arg)

@@ -232,11 +232,7 @@ void FullFunctionWidget::insertAppList(QStringList appnamelist)
     scrollareawidLayout->addWidget(listview);
     data.clear();
     for(int i=0;i<appnamelist.count();i++)
-    {
-
-        QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appnamelist.at(i));
-        data.append(desktopfp);
-    }
+        data.append(appnamelist.at(i));
     listview->addData(data);
     connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
     connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));

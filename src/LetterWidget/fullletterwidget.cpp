@@ -127,11 +127,8 @@ void FullLetterWidget::fillAppList()
             scrollareawidLayout->addWidget(listview);
             data.clear();
             for(int i=0;i<appList.count();i++)
-            {
-                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
-                data.append(desktopfp);
+                data.append(appList.at(i));
 
-            }
             listview->addData(data);
 
             connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));

@@ -754,7 +754,6 @@ void SideBarWidget::enterAnimation()
 
 void SideBarWidget::widgetMakeZero()
 {
-//    functionbtn->click();
     char pressstyle[200];
     sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:2px;}",SBClassifyBtnSelectedBackground);
     commonusebtn->setStyleSheet(pressstyle);

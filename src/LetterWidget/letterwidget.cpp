@@ -112,10 +112,7 @@ void LetterWidget::fillAppListView()
             letterbtnrowlist.append(QString::number(row));//存储分类字符所在行
             data.append(QStringList()<<letterstr<<"0");
             for(int i=0;i<appList.count();i++)
-            {
-                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
-                data.append(QStringList()<<desktopfp<<"1");
-            }
+                data.append(QStringList()<<appList.at(i)<<"1");
             row+=(appList.count()+1);
 
         }
@@ -173,10 +170,7 @@ void LetterWidget::updateAppListView()
             letterbtnrowlist.append(QString::number(row));//存储分类字符所在行
             data.append(QStringList()<<letterstr<<"0");
             for(int i=0;i<appList.count();i++)
-            {
-                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(appList.at(i));
-                data.append(QStringList()<<desktopfp<<"1");
-            }
+                data.append(QStringList()<<appList.at(i)<<"1");
             row+=(appList.count()+1);
 
         }
