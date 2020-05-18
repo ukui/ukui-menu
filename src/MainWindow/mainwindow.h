@@ -89,6 +89,7 @@ private Q_SLOTS:
     void primaryScreenChangedSlot(QScreen *screen);
     void panelChangedSlot(QString key);
     void stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+    void recvStartMenuSlot();
 };
 
 #endif // MAINWINDOW_H

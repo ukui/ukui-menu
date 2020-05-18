@@ -108,6 +108,7 @@ protected:
     void addRightClickMenu(QPushButton* btn);
     void setMinBtn();//设置还原按钮
     void setMaxBtn();//设置全屏按钮
+    void mousePressEvent(QMouseEvent* event);
 
 private Q_SLOTS:
 //    bool eventFilter(QObject *watched, QEvent *event);

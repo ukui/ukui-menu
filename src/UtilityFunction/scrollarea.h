@@ -22,6 +22,7 @@
 #include <QEvent>
 #include <QScrollBar>
 #include <QMouseEvent>
+#include <QMouseEvent>
 
 class ScrollArea : public QScrollArea
 {
@@ -31,7 +32,6 @@ public:
 protected:
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-
 };
 
 #endif // SCROLLAREA_H

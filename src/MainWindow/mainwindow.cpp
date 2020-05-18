@@ -52,7 +52,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initMainWindow()
 {
-    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::Popup);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::StrongFocus);
@@ -151,6 +151,10 @@ void MainWindow::initMainWindow()
             this, SLOT(XkbEventsRelease(const QString &)));
     connect(XEventMonitor::instance(), SIGNAL(keyPress(const QString &)),
             this, SLOT(XkbEventsPress(const QString &)));
+
+    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
+                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
+
 
 }
 
@@ -431,7 +435,8 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
 
     if((keycode == "Super_L") || (keycode == "Super_R"))
     {
-        if(QApplication::activeWindow() == this)
+//        if(QApplication::activeWindow() == this)
+        if(this->isVisible())
         {
             this->hide();
             mainviewwid->widgetMakeZero();
@@ -450,6 +455,24 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
         this->hide();
         mainviewwid->widgetMakeZero();
         sidebarwid->widgetMakeZero();
+    }
+}
+
+void MainWindow::recvStartMenuSlot()
+{
+    if(this->isVisible())
+    {
+        this->hide();
+        mainviewwid->widgetMakeZero();
+        sidebarwid->widgetMakeZero();
+    }
+    else{
+        mainviewwid->widgetMakeZero();
+        sidebarwid->widgetMakeZero();
+        this->loadMainWindow();
+        this->show();
+        this->raise();
+        this->activateWindow();
     }
 }
 

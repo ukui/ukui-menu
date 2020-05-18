@@ -179,17 +179,17 @@ void FullListView::leaveEvent(QEvent *e)
     this->verticalScrollBar()->setVisible(false);
 }
 
-//void FullListView::mousePressEvent(QMouseEvent *event)
-//{
-//    if(!(this->indexAt(event->pos()).isValid()))
-//        Q_EMIT sendHideMainWindowSignal();
-//    else{
-//        if(event->button()==Qt::LeftButton)
-//            Q_EMIT clicked(this->indexAt(event->pos()));
-//        if(event->button()==Qt::RightButton)
-//        {
-//             this->selectionModel()->setCurrentIndex(this->indexAt(event->pos()),QItemSelectionModel::SelectCurrent);
-//            Q_EMIT customContextMenuRequested(event->pos());
-//        }
-//    }
-//}
+void FullListView::mousePressEvent(QMouseEvent *event)
+{
+    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
+        Q_EMIT sendHideMainWindowSignal();
+    else{
+        if(event->button()==Qt::LeftButton)
+            Q_EMIT clicked(this->indexAt(event->pos()));
+        if(event->button()==Qt::RightButton)
+        {
+             this->selectionModel()->setCurrentIndex(this->indexAt(event->pos()),QItemSelectionModel::SelectCurrent);
+            Q_EMIT customContextMenuRequested(event->pos());
+        }
+    }
+}

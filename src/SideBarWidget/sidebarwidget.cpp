@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QPainter>
+#include <syslog.h>
 #include "src/Style/style.h"
 
 SideBarWidget::SideBarWidget(QWidget *parent) :
@@ -757,6 +758,28 @@ void SideBarWidget::widgetMakeZero()
     char pressstyle[200];
     sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:2px;}",SBClassifyBtnSelectedBackground);
     commonusebtn->setStyleSheet(pressstyle);
-    letterbtn->setStyleSheet("background:transparent;");
-    functionbtn->setStyleSheet("background:transparent;");
+    char btncolor[300];
+    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\
+            QPushButton:hover{background-color:%s;border:0px;border-radius:4px;}\
+            QPushButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
+            SBFunBtnHoverBackground,SBFunBtnHoverBackground);
+    letterbtn->setStyleSheet(btncolor);
+    functionbtn->setStyleSheet(btncolor);
+}
+
+void SideBarWidget::mousePressEvent(QMouseEvent *event)
+{
+    if(is_fullscreen && event->button()==Qt::LeftButton)
+    {
+        int x=event->x();
+        int y=event->y();
+        QRect rect_1(0,0,this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,this->height());
+        QRect rect_2(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,Style::MinMaxWidWidth,Style::MinMaxWidHeight);
+        QRect rect_3(rect_1.width()+functionbtn->x(),functionbtn->y()+functionbtn->height(),Style::SideBarBtnWidth,otherButtonList.at(0)->y()-functionbtn->y()-functionbtn->height());
+        syslog(LOG_LOCAL0 | LOG_DEBUG ,"坐标：%d:%d:%d",x,rect_1.x(),rect_3.x());
+        if((x>=rect_1.x() && x<=rect_1.x()+rect_1.width() && y>=rect_1.y() && y<=rect_1.y()+rect_1.height()) ||
+           (x>=rect_2.x() && x<=rect_2.x()+rect_2.width() && y>=rect_2.y() && y<=rect_2.y()+rect_2.height()) ||
+           (x>=rect_3.x() && x<=rect_3.x()+rect_3.width() && y>=rect_3.y() && y<=rect_3.y()+rect_3.height()))
+            Q_EMIT sendHideMainWindowSignal();
+    }
 }

@@ -43,7 +43,7 @@ protected:
     void initWidget();
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-//    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     FullItemDelegate* m_delegate=nullptr;
