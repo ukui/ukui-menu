@@ -35,6 +35,12 @@ FullListView::FullListView(QWidget *parent, int module):
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
+    m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
+    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
+    m_scrollAnimation->setDuration(800);
+    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullListView::animationValueChangedSlot);
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullListView::animationFinishSlot);
+
 }
 
 FullListView::~FullListView()
@@ -74,9 +80,10 @@ void FullListView::initWidget()
     this->setFocusPolicy(Qt::NoFocus);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
-    connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot(QPoint)));
-    connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
+    connect(this,&FullListView::customContextMenuRequested,this,&FullListView::rightClickedSlot);
+    connect(this,&FullListView::clicked,this,&FullListView::onClicked);
 }
 
 void FullListView::addData(QStringList data)
@@ -179,17 +186,47 @@ void FullListView::leaveEvent(QEvent *e)
     this->verticalScrollBar()->setVisible(false);
 }
 
-void FullListView::mousePressEvent(QMouseEvent *event)
+void FullListView::animationValueChangedSlot()
 {
-    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
-        Q_EMIT sendHideMainWindowSignal();
-    else{
-        if(event->button()==Qt::LeftButton)
-            Q_EMIT clicked(this->indexAt(event->pos()));
-        if(event->button()==Qt::RightButton)
-        {
-             this->selectionModel()->setCurrentIndex(this->indexAt(event->pos()),QItemSelectionModel::SelectCurrent);
-            Q_EMIT customContextMenuRequested(event->pos());
-        }
+    QScrollBar *vscroll = verticalScrollBar();
+
+    if (vscroll->value() == vscroll->maximum() ||
+        vscroll->value() == vscroll->minimum()) {
+        blockSignals(false);
+    } else {
+        blockSignals(true);
     }
 }
+
+void FullListView::animationFinishSlot()
+{
+    blockSignals(false);
+//    this->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+
+//    QPoint pos = mapFromGlobal(QCursor::pos());
+//    emit entered(indexAt(pos));
+}
+
+void FullListView::wheelEvent(QWheelEvent *e)
+{
+    int offset = -e->angleDelta().y();
+    m_scrollAnimation->stop();
+    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
+    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+    m_scrollAnimation->start();
+}
+
+//void FullListView::mousePressEvent(QMouseEvent *event)
+//{
+//    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
+//        Q_EMIT sendHideMainWindowSignal();
+//    else{
+//        if(event->button()==Qt::LeftButton)
+//            Q_EMIT clicked(this->indexAt(event->pos()));
+//        if(event->button()==Qt::RightButton)
+//        {
+//             this->selectionModel()->setCurrentIndex(this->indexAt(event->pos()),QItemSelectionModel::SelectCurrent);
+//            Q_EMIT customContextMenuRequested(event->pos());
+//        }
+//    }
+//}

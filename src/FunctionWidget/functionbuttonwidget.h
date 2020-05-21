@@ -56,7 +56,7 @@ Q_SIGNALS:
      */
     void sendFunctionBtnSignal(QString btnname);
 
-private Q_SLOTS:
+public Q_SLOTS:
     void functionBtnClickedSlot();//功能分类按钮槽函数
     void recvClassificationBtnList(QStringList list);//接收FunctionWidget界面分类按钮列表
 };

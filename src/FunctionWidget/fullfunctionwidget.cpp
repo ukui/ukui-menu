@@ -103,9 +103,6 @@ void FullFunctionWidget::initWidget()
     functionnamelist.append(tr("System"));
     functionnamelist.append(tr("Others"));
 
-    timer=new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(timeOutSlot()));
-
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
@@ -132,8 +129,8 @@ void FullFunctionWidget::initAppListWidget()
     scrollareawidLayout->setSpacing(10);
     scrollareawid->setLayout(scrollareawidLayout);
     layout->addWidget(scrollarea);
-    connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
-            this,SLOT(valueChangedSlot(int)));
+    connect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&FullFunctionWidget::valueChangedSlot);
     fillAppList();
 }
 
@@ -234,9 +231,8 @@ void FullFunctionWidget::insertAppList(QStringList appnamelist)
     for(int i=0;i<appnamelist.count();i++)
         data.append(appnamelist.at(i));
     listview->addData(data);
-    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+    connect(listview,&FullListView::sendItemClickedSignal,this,&FullFunctionWidget::execApplication);
+    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullFunctionWidget::sendHideMainWindowSignal);
 }
 
 //void FullFunctionWidget::updateRecentListView()
@@ -432,6 +428,12 @@ void FullFunctionWidget::initIconListWidget()
     pIconListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     pBtnGroup=new QButtonGroup(iconlistscrollareaWid);
     pAnimation = new QPropertyAnimation(iconlistscrollarea, "geometry");
+
+    m_scrollAnimation = new QPropertyAnimation(scrollarea->verticalScrollBar(), "value");
+    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullFunctionWidget::animationFinishSlot);
+    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullFunctionWidget::animationValueChangedSlot);
+
     initIconListScrollArea();
 }
 
@@ -457,22 +459,22 @@ void FullFunctionWidget::initIconListScrollArea()
                                                                    true);
         buttonList.append(iconbtn);
         iconlistscrollareawidLayout->addWidget(iconbtn);
-        connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
+        connect(iconbtn,&FunctionClassifyButton::buttonClicked,pBtnGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked));
     }
 
     int id=0;
     Q_FOREACH (QAbstractButton* btn, buttonList) {
         pBtnGroup->addButton(btn,id++);
     }
-    connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btnGroupClickedSlot(QAbstractButton*)));
+    connect(pBtnGroup,QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked),this,&FullFunctionWidget::btnGroupClickedSlot);
     iconlistscrollarea->widget()->adjustSize();
     pBtnGroup->button(0)->click();
 }
 
 void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
 {
-    disconnect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
-            this,SLOT(valueChangedSlot(int)));
+    disconnect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,
+               this,&FullFunctionWidget::valueChangedSlot);
     Q_FOREACH (QAbstractButton* button, buttonList) {
         FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
         QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
@@ -486,7 +488,10 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
                 beginPos=scrollarea->verticalScrollBar()->sliderPosition();
                 endPos=classificationbtnrowlist.at(num).toInt();
                 scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-                timer->start(1);
+                m_scrollAnimation->stop();
+                m_scrollAnimation->setStartValue(beginPos);
+                m_scrollAnimation->setEndValue(endPos);
+                m_scrollAnimation->start();
             }
             fcbutton->setChecked(true);
         }
@@ -496,32 +501,26 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
     }
 }
 
-void FullFunctionWidget::timeOutSlot()
+void FullFunctionWidget::animationFinishSlot()
 {
-    int speed=0;
-    int height=QApplication::primaryScreen()->geometry().height();
-    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()) <= height*300/1080)
-        speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
-    else
-        speed=height*170/1080;
-
-    if(beginPos<endPos)
+    if(scrollarea->verticalScrollBar()->value()==endPos)
     {
-        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+speed);
-    }
-    else
-    {
-        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-speed);
-    }
-    if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
-            scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
-    {
-        timer->stop();
         scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
-                this,SLOT(valueChangedSlot(int)));
+        connect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,
+                this,&FullFunctionWidget::valueChangedSlot);
     }
+}
 
+void FullFunctionWidget::animationValueChangedSlot(const QVariant &value)
+{
+    Q_UNUSED(value);
+    if (sender() != m_scrollAnimation)
+        return;
+
+    QPropertyAnimation *ani = qobject_cast<QPropertyAnimation *>(sender());
+
+    if (endPos != ani->endValue())
+        ani->setEndValue(endPos);
 }
 
 void FullFunctionWidget::valueChangedSlot(int value)

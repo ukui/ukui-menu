@@ -118,9 +118,9 @@ protected:
     void initWidget();//初始化界面
     void addTopControl();//添加顶部窗口控件
     void initQueryLineEdit();//初始化查询框
-    void mousePressEvent(QMouseEvent* event);
+//    void mousePressEvent(QMouseEvent* event);
 
-private Q_SLOTS:
+public Q_SLOTS:
     bool eventFilter(QObject *watched, QEvent *event);
     void loadCommonUseWidget();//加载常用分类界面
     void loadLetterWidget();//加载字母分类界面

@@ -79,7 +79,7 @@ protected:
 //    void paintEvent(QPaintEvent*);//添加阴影
     void keyPressEvent(QKeyEvent* e);//查询框响应键盘事件
 
-private Q_SLOTS:
+public Q_SLOTS:
     void XkbEventsPress(const QString &keycode);
     void XkbEventsRelease(const QString &keycode);
     void showFullScreenWidget();//加载全屏窗口
@@ -89,7 +89,7 @@ private Q_SLOTS:
     void primaryScreenChangedSlot(QScreen *screen);
     void panelChangedSlot(QString key);
     void stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void recvStartMenuSlot();
+    void recvStartMenuSlot();//测试通过发信号的方式开启开始菜单
 };
 
 #endif // MAINWINDOW_H

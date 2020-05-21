@@ -60,8 +60,8 @@ void LetterWidget::initWidget()
     initAppListWidget();
 
     letterbtnwid=new LetterButtonWidget(this);
-    connect(this,SIGNAL(sendLetterBtnList(QStringList)),letterbtnwid,SLOT(recvLetterBtnList(QStringList)));
-    connect(letterbtnwid, SIGNAL(sendLetterBtnSignal(QString)),this,SLOT(recvLetterBtnSlot(QString)));
+    connect(this,&LetterWidget::sendLetterBtnList,letterbtnwid,&LetterButtonWidget::recvLetterBtnList);
+    connect(letterbtnwid, &LetterButtonWidget::sendLetterBtnSignal,this,&LetterWidget::recvLetterBtnSlot);
     letterbtnwid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
 
     enterAnimation=new QPropertyAnimation;
@@ -70,8 +70,8 @@ void LetterWidget::initWidget()
     leaveAnimation=new QPropertyAnimation;
     leaveAnimation->setDuration(50);
     leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
-    connect(leaveAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
-    connect(enterAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
+    connect(leaveAnimation,&QPropertyAnimation::finished,this,&LetterWidget::animationFinishedSLot);
+    connect(enterAnimation,&QPropertyAnimation::finished,this,&LetterWidget::animationFinishedSLot);
 }
 
 /**
@@ -82,9 +82,8 @@ void LetterWidget::initAppListWidget()
     applistview=new ListView(this,this->width()-4,this->height(),1);
     applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
     fillAppListView();
-    connect(applistview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(recvItemClickedSlot(QStringList)));
-    connect(applistview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-    connect(applistview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+    connect(applistview,&ListView::sendItemClickedSignal,this,&LetterWidget::recvItemClickedSlot);
+    connect(applistview,&ListView::sendHideMainWindowSignal,this,&LetterWidget::sendHideMainWindowSignal);
 
 }
 
@@ -207,7 +206,6 @@ void LetterWidget::recvLetterBtnSlot(QString btnname)
     {
         int row=letterbtnrowlist.at(num).toInt();
         applistview->verticalScrollBar()->setValue(row);
-
     }
 
     leaveAnimation->setStartValue(QRect(42.5,84.5,235,366));
@@ -225,6 +223,7 @@ void LetterWidget::animationFinishedSLot()
 {
     if(widgetState==1)
     {
+        applistview->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
         applistview->setVisible(false);
         letterbtnwid->setVisible(true);
         enterAnimation->start();
@@ -232,6 +231,7 @@ void LetterWidget::animationFinishedSLot()
     }
     if(widgetState==0)
     {
+        applistview->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         letterbtnwid->setVisible(false);
         applistview->setVisible(true);
         enterAnimation->start();
@@ -250,7 +250,7 @@ void LetterWidget::widgetMakeZero()
 void LetterWidget::moveScrollBar(int type)
 {
     if(type==0)
-        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()-1);
+        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()-100);
     else
-        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()+1);
+        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()+100);
 }

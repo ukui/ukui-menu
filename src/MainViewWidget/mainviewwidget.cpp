@@ -83,26 +83,26 @@ void MainViewWidget::initWidget()
     //监控.desktop文件目录
     fileWatcher=new QFileSystemWatcher(this);
     fileWatcher->addPath("/usr/share/applications");
-    connect(fileWatcher,SIGNAL(directoryChanged(const QString &)),this,SLOT(directoryChangedSlot()));
+    connect(fileWatcher,&QFileSystemWatcher::directoryChanged,this,&MainViewWidget::directoryChangedSlot);
     directoryChangedThread=new DirectoryChangedThread;
-    connect(this,SIGNAL(sendDirectoryPath(QString)),directoryChangedThread,SLOT(recvDirectoryPath(QString)));
-    connect(directoryChangedThread,SIGNAL(requestUpdateSignal()),this,SLOT(requestUpdateSlot()));
-    connect(this,SIGNAL(directoryChangedSignal()),letterwid,SLOT(updateAppListView()));
-    connect(this,SIGNAL(directoryChangedSignal()),fullletterwid,SLOT(updateAppListView()));
-    connect(this,SIGNAL(directoryChangedSignal()),functionwid,SLOT(updateAppListView()));
-    connect(this,SIGNAL(directoryChangedSignal()),fullfunctionwid,SLOT(updateAppListView()));
-    connect(this,SIGNAL(directoryChangedSignal()),commonusewid,SLOT(updateListViewSlot()));
-    connect(this,SIGNAL(directoryChangedSignal()),fullcommonusewid,SLOT(updateListViewSlot()));
+    connect(this,&MainViewWidget::sendDirectoryPath,directoryChangedThread,&DirectoryChangedThread::recvDirectoryPath);
+    connect(directoryChangedThread,&DirectoryChangedThread::requestUpdateSignal,this,&MainViewWidget::requestUpdateSlot);
+    connect(this,&MainViewWidget::directoryChangedSignal,letterwid,&LetterWidget::updateAppListView);
+    connect(this,&MainViewWidget::directoryChangedSignal,fullletterwid,&FullLetterWidget::updateAppListView);
+    connect(this,&MainViewWidget::directoryChangedSignal,functionwid,&FunctionWidget::updateAppListView);
+    connect(this,&MainViewWidget::directoryChangedSignal,fullfunctionwid,&FullFunctionWidget::updateAppListView);
+    connect(this,&MainViewWidget::directoryChangedSignal,commonusewid,&CommonUseWidget::updateListViewSlot);
+    connect(this,&MainViewWidget::directoryChangedSignal,fullcommonusewid,&FullCommonUseWidget::updateListViewSlot);
 
     //发送隐藏主界面信号
-    connect(commonusewid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(fullcommonusewid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(letterwid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(fullletterwid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(functionwid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(fullfunctionwid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(searchresultwid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(fullsearchresultwid,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+    connect(commonusewid,&CommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(fullcommonusewid,&FullCommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(letterwid,&LetterWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(fullletterwid,&FullLetterWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(functionwid,&FunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(fullfunctionwid,&FullFunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(searchresultwid,&SearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(fullsearchresultwid,&FullSearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
 
     addTopControl();
     loadMinMainView();
@@ -118,7 +118,7 @@ void MainViewWidget::initWidget()
     if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit()))
     {
         gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
-        connect(gsetting,SIGNAL(changed(QString)),this,SLOT(iconThemeChangeSlot(QString)));
+        connect(gsetting,&QGSettings::changed,this,&MainViewWidget::iconThemeChangeSlot);
     }
 }
 
@@ -184,11 +184,11 @@ void MainViewWidget::initQueryLineEdit()
     querylineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
     searchappthread=new SearchAppThread;
-    connect(this,SIGNAL(sendSearchKeyword(QString)),
-            searchappthread,SLOT(recvSearchKeyword(QString)));
-    connect(searchappthread,SIGNAL(sendSearchResult(QStringList)),
-            this,SLOT(recvSearchResult(QStringList)));
-    connect(querylineEdit, SIGNAL(textChanged(QString)), this, SLOT(searchAppSlot(QString)));
+    connect(this,&MainViewWidget::sendSearchKeyword,
+            searchappthread,&SearchAppThread::recvSearchKeyword);
+    connect(searchappthread,&SearchAppThread::sendSearchResult,
+            this,&MainViewWidget::recvSearchResult);
+    connect(querylineEdit, &QLineEdit::textChanged, this, &MainViewWidget::searchAppSlot);
 }
 
 bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
@@ -764,8 +764,8 @@ void MainViewWidget::moveScrollBar(int type)
     }
 }
 
-void MainViewWidget::mousePressEvent(QMouseEvent *event)
-{
-    if(is_fullscreen && event->button()==Qt::LeftButton)
-        Q_EMIT sendHideMainWindowSignal();
-}
+//void MainViewWidget::mousePressEvent(QMouseEvent *event)
+//{
+//    if(is_fullscreen && event->button()==Qt::LeftButton)
+//        Q_EMIT sendHideMainWindowSignal();
+//}

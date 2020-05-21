@@ -100,10 +100,9 @@ private:
     QPropertyAnimation* pAnimation=nullptr;
     QSettings* setting=nullptr;
 
-    //计时器
-    QTimer* timer=nullptr;
     int beginPos=0;//滑动条起始位置
     int endPos=0;//滑动条终止位置
+    QPropertyAnimation* m_scrollAnimation=nullptr;
 
 protected:
     void initWidget();
@@ -116,12 +115,13 @@ protected:
     void insertAppList(QStringList appnamelist);//插入应用列表
     void resizeScrollAreaControls();//设置scrollarea填充控件大小
 
-private Q_SLOTS:
+public Q_SLOTS:
     void execApplication(QString desktopfp);//执行应用程序
     void btnGroupClickedSlot(QAbstractButton *btn);
     void updateAppListView();//更新应用列表
-    void timeOutSlot();//计时器槽函数
     void valueChangedSlot(int value);//滑动条滚动槽函数
+    void animationFinishSlot();
+    void animationValueChangedSlot(const QVariant &value);
 
 Q_SIGNALS:
     void sendUpdateAppListSignal(QString desktopfp,int type);//向常用软件模块发送更新应用列表信号

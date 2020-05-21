@@ -54,7 +54,7 @@ Q_SIGNALS:
      */
     void sendLetterBtnSignal(QString btnname);
 
-private Q_SLOTS:
+public Q_SLOTS:
     void letterBtnClickedSlot();//字母分类按钮槽函数
     void recvLetterBtnList(QStringList list);//接收LetterWidget字母按钮列表
 };

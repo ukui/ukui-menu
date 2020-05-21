@@ -53,9 +53,8 @@ void SearchResultWidget::initWidget()
     listview->addData(data);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(execApplication(QStringList)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+    connect(listview,&ListView::sendItemClickedSignal,this,&SearchResultWidget::execApplication);
+    connect(listview,&ListView::sendHideMainWindowSignal,this,&SearchResultWidget::sendHideMainWindowSignal);
 }
 
 /**
@@ -83,7 +82,7 @@ void SearchResultWidget::updateAppListView(QStringList desktopfplist)
 void SearchResultWidget::moveScrollBar(int type)
 {
     if(type==0)
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-1);
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-100);
     else
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+1);
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+100);
 }

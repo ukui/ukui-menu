@@ -55,9 +55,8 @@ void FullSearchResultWidget::initWidget()
     listview->addData(data);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+    connect(listview,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
+    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullSearchResultWidget::sendHideMainWindowSignal);
 }
 
 /**
@@ -90,9 +89,8 @@ void FullSearchResultWidget::repaintWidget()
     mainLayout->addWidget(listview);
     data.clear();
     listview->addData(data);
-    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-    connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+    connect(listview,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
+    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullSearchResultWidget::sendHideMainWindowSignal);
 
 }
 

@@ -62,9 +62,6 @@ void FullLetterWidget::initWidget()
     this->setLayout(mainLayout);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    timer=new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(timeOutSlot()));
-
     initAppListWidget();
     initLetterListWidget();
 }
@@ -88,8 +85,8 @@ void FullLetterWidget::initAppListWidget()
     scrollareawidLayout->setSpacing(10);
     scrollareawid->setLayout(scrollareawidLayout);
     layout->addWidget(scrollarea);
-    connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
-            this,SLOT(valueChangedSlot(int)));
+    connect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&FullLetterWidget::valueChangedSlot);
 
     fillAppList();
 
@@ -132,7 +129,6 @@ void FullLetterWidget::fillAppList()
             listview->addData(data);
 
             connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-            connect(listview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
             connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
         }
     }
@@ -242,6 +238,12 @@ void FullLetterWidget::initLetterListWidget()
     pLetterListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     pBtnGroup=new QButtonGroup(letterlistscrollareaWid);
     pAnimation = new QPropertyAnimation(letterlistscrollarea, "geometry");
+
+    m_scrollAnimation = new QPropertyAnimation(scrollarea->verticalScrollBar(), "value");
+    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullLetterWidget::animationFinishSlot);
+    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullLetterWidget::animationValueChangedSlot);
+
     initLetterListScrollArea();
 }
 
@@ -266,7 +268,7 @@ void FullLetterWidget::initLetterListScrollArea()
         buttonList.append(letterbtn);
         letterlistscrollareawidLayout->addWidget(letterbtn);
         letterlistscrollareawidLayout->setAlignment(letterbtn,Qt::AlignHCenter);
-        connect(letterbtn,SIGNAL(buttonClicked(QAbstractButton*)),pBtnGroup, SIGNAL(buttonClicked(QAbstractButton*)));
+        connect(letterbtn,&LetterClassifyButton::buttonClicked,pBtnGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked));
     }
     letterlistscrollareawidLayout->addItem(pLetterListBottomSpacer);
 
@@ -275,15 +277,15 @@ void FullLetterWidget::initLetterListScrollArea()
         pBtnGroup->addButton(btn,id++);
     }
 
-    connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btnGroupClickedSlot(QAbstractButton*)));
+    connect(pBtnGroup,QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked),this,&FullLetterWidget::btnGroupClickedSlot);
     letterlistscrollarea->widget()->adjustSize();
     pBtnGroup->button(0)->click();
 }
 
 void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
 {
-    disconnect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
-            this,SLOT(valueChangedSlot(int)));
+    disconnect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&FullLetterWidget::valueChangedSlot);
     Q_FOREACH (QAbstractButton* button, buttonList) {
         LetterClassifyButton* letterbtn=qobject_cast<LetterClassifyButton*>(button);
         if(pBtnGroup->id(btn)==buttonList.indexOf(button))
@@ -297,7 +299,11 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
                 beginPos=scrollarea->verticalScrollBar()->sliderPosition();
                 endPos=letterbtnrowlist.at(num).toInt();
                 scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-                timer->start(1);
+                m_scrollAnimation->stop();
+                m_scrollAnimation->setStartValue(beginPos);
+                m_scrollAnimation->setEndValue(endPos);
+                m_scrollAnimation->start();
+
             }
         }
         else{
@@ -306,31 +312,26 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
     }
 }
 
-void FullLetterWidget::timeOutSlot()
+void FullLetterWidget::animationFinishSlot()
 {
-    int height=QApplication::primaryScreen()->geometry().height();
-    int speed=0;
-    if(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()) <= height*300/1080)
-        speed=sqrt(qAbs(endPos-scrollarea->verticalScrollBar()->sliderPosition()));
-    else
-        speed=height*200/1080;
-
-    if(beginPos<endPos && endPos-scrollarea->verticalScrollBar()->sliderPosition() >= speed)
+    if(scrollarea->verticalScrollBar()->value()==endPos)
     {
-        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()+speed);
-    }
-    if(beginPos>endPos && scrollarea->verticalScrollBar()->sliderPosition()-endPos >= speed)
-    {
-        scrollarea->verticalScrollBar()->setSliderPosition(scrollarea->verticalScrollBar()->sliderPosition()-speed);
-    }
-    if(scrollarea->verticalScrollBar()->sliderPosition()==endPos ||
-            scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
-    {
-        timer->stop();
         scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        connect(scrollarea->verticalScrollBar(),SIGNAL(valueChanged(int)),
-                this,SLOT(valueChangedSlot(int)));
+        connect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,
+                this,&FullLetterWidget::valueChangedSlot);
     }
+}
+
+void FullLetterWidget::animationValueChangedSlot(const QVariant &value)
+{
+    Q_UNUSED(value);
+    if (sender() != m_scrollAnimation)
+        return;
+
+    QPropertyAnimation *ani = qobject_cast<QPropertyAnimation *>(sender());
+
+    if (endPos != ani->endValue())
+        ani->setEndValue(endPos);
 }
 
 void FullLetterWidget::valueChangedSlot(int value)
@@ -404,7 +405,6 @@ void FullLetterWidget::enterAnimation()
                                   Style::LeftLetterBtnHeight*2,
                             (letterbtnlist.size()+1)*Style::LeftLetterBtnHeight));
     pAnimation->setEasingCurve(QEasingCurve::InQuart);
-//    pAnimation->setEasingCurve(QEasingCurve::Linear);
     pAnimation->start();
 }
 

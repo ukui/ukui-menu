@@ -83,7 +83,7 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     this->setLayout(mainlayout);
     mainlayout->addWidget(iconlabel);
     mainlayout->addWidget(textlabel);
-    connect(this,SIGNAL(toggled(bool)),this,SLOT(reactToToggle(bool)));
+    connect(this,&FunctionClassifyButton::toggled,this,&FunctionClassifyButton::reactToToggle);
 }
 
 void FunctionClassifyButton::enterEvent(QEvent *e)

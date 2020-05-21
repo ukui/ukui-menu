@@ -62,12 +62,9 @@ void FullCommonUseWidget::initAppListWidget()
     mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
     listview=new FullListView(this,0);
     mainLayout->addWidget(listview);
-    connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-//    connect(listview,SIGNAL(sendUpdateAppListSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-    connect(listview,SIGNAL(removeListItemSignal(QString)),this,SIGNAL(removeListItemSignal(QString)));
-    connect(listview,SIGNAL(removeListAllItemSignal()),this,SIGNAL(removeListAllItemSignal()));
-    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(listview,SIGNAL(sendUpdateAppListSignal()),this,SLOT(updateListViewSlot()));
+    connect(listview,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
+    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
+    connect(listview,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
 }
 
 void FullCommonUseWidget::fillAppList()

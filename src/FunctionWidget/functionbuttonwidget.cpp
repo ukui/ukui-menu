@@ -153,7 +153,7 @@ void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
                                                    functionnamelist.at(row*2+col),
                                                    false,
                                                    true);
-                connect(iconbtn,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(functionBtnClickedSlot()));
+                connect(iconbtn,&FunctionClassifyButton::buttonClicked,this, &FunctionButtonWidget::functionBtnClickedSlot);
             }
             gridLayout->addWidget(iconbtn,row,col);
             if(row*2+col==10)break;

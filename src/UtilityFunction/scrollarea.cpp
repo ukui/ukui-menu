@@ -31,6 +31,13 @@ ScrollArea::ScrollArea()
                                              );
       installEventFilter(this);
       this->setFocusPolicy(Qt::NoFocus);
+
+      m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
+      m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
+      m_scrollAnimation->setDuration(800);
+      connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &ScrollArea::handleScrollValueChanged);
+      connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &ScrollArea::handleScrollFinished);
+
 }
 
 void ScrollArea::enterEvent(QEvent *e)
@@ -43,4 +50,33 @@ void ScrollArea::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
+}
+
+void ScrollArea::wheelEvent(QWheelEvent *e)
+{
+    int offset = -e->angleDelta().y();
+    m_scrollAnimation->stop();
+    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
+    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+    m_scrollAnimation->start();
+}
+
+void ScrollArea::handleScrollValueChanged()
+{
+    QScrollBar *vscroll = verticalScrollBar();
+
+    if (vscroll->value() == vscroll->maximum() ||
+        vscroll->value() == vscroll->minimum()) {
+        blockSignals(false);
+    } else {
+        blockSignals(true);
+    }
+}
+
+void ScrollArea::handleScrollFinished()
+{
+    blockSignals(false);
+
+//    QPoint pos = mapFromGlobal(QCursor::pos());
+//    emit entered(indexAt(pos));
 }

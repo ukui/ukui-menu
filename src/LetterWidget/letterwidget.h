@@ -68,7 +68,7 @@ protected:
     void initAppListWidget();//初始化应用列表界面
     void fillAppListView();//填充应用列表
 
-private Q_SLOTS:
+public Q_SLOTS:
     void appClassificationBtnClickedSlot();//应用列表字母分类按钮槽函数
     void recvLetterBtnSlot(QString btnname);//接收LetterButtonWidget界面按钮信号
     void execApplication(QString desktopfp);//执行应用程序

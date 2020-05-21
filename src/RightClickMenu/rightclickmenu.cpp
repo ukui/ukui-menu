@@ -28,7 +28,7 @@ RightClickMenu::RightClickMenu(QWidget *parent, int module):
 
     pUkuiMenuInterface=new UkuiMenuInterface;
     cmdProc=new QProcess(this);
-    connect(cmdProc , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutput()));
+    connect(cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
 
 //    sprintf(style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
 //            QMenu::separator{height:4px;background:transparent;}",
@@ -116,27 +116,27 @@ void RightClickMenu::initCommonUseAppBtnAction()
 
     initWidgetAction(CuFix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"),0);
     CuFix2CommonUseAction->setDefaultWidget(CuFix2CommonUseWid);
-    connect(CuFix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
+    connect(CuFix2CommonUseAction, &QWidgetAction::triggered,this,&RightClickMenu::fixToCommonUseActionTriggerSlot);
 
     initWidgetAction(CuUnfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"),0);
     CuUnfixed4CommonUseAction->setDefaultWidget(CuUnfixed4CommonUseWid);
-    connect(CuUnfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
+    connect(CuUnfixed4CommonUseAction, &QWidgetAction::triggered,this,&RightClickMenu::unfixedFromCommonUseActionTriggerSlot);
 
     initWidgetAction(CuFix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"),0);
     CuFix2TaskBarAction->setDefaultWidget(CuFix2TaskBarWid);
-    connect(CuFix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
+    connect(CuFix2TaskBarAction, &QWidgetAction::triggered,this,&RightClickMenu::fixToTaskbarActionTriggerSlot);
 
     initWidgetAction(CuUnfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"),0);
     CuUnfixed4TaskBarAction->setDefaultWidget(CuUnfixed4TaskBarWid);
-    connect(CuUnfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
+    connect(CuUnfixed4TaskBarAction, &QWidgetAction::triggered,this,&RightClickMenu::unfixedFromTaskbarActionTriggerSlot);
 
     initWidgetAction(CuAdd2DesktopWid,"",tr("Add to desktop shortcuts"),0);
     CuAdd2DesktopAction->setDefaultWidget(CuAdd2DesktopWid);
-    connect(CuAdd2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
+    connect(CuAdd2DesktopAction, &QWidgetAction::triggered,this,&RightClickMenu::addToDesktopActionTriggerSlot);
 
     initWidgetAction(CuUninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"),0);
     CuUninstallAction->setDefaultWidget(CuUninstallWid);
-    connect(CuUninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
+    connect(CuUninstallAction, &QWidgetAction::triggered,this,&RightClickMenu::uninstallActionTriggerSlot);
 
 }
 
@@ -174,27 +174,27 @@ void RightClickMenu::initAppBtnAction()
 
     initWidgetAction(Fix2CommonUseWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"),0);
     Fix2CommonUseAction->setDefaultWidget(Fix2CommonUseWid);
-    connect(Fix2CommonUseAction, SIGNAL(triggered()),this,SLOT(fixToCommonUseActionTriggerSlot()));
+    connect(Fix2CommonUseAction, &QWidgetAction::triggered,this,&RightClickMenu::fixToCommonUseActionTriggerSlot);
 
     initWidgetAction(Unfixed4CommonUseWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"),0);
     Unfixed4CommonUseAction->setDefaultWidget(Unfixed4CommonUseWid);
-    connect(Unfixed4CommonUseAction, SIGNAL(triggered()),this,SLOT(unfixedFromCommonUseActionTriggerSlot()));
+    connect(Unfixed4CommonUseAction, &QWidgetAction::triggered,this,&RightClickMenu::unfixedFromCommonUseActionTriggerSlot);
 
     initWidgetAction(Fix2TaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"),0);
     Fix2TaskBarAction->setDefaultWidget(Fix2TaskBarWid);
-    connect(Fix2TaskBarAction, SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
+    connect(Fix2TaskBarAction, &QWidgetAction::triggered,this,&RightClickMenu::fixToTaskbarActionTriggerSlot);
 
     initWidgetAction(Unfixed4TaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"),0);
     Unfixed4TaskBarAction->setDefaultWidget(Unfixed4TaskBarWid);
-    connect(Unfixed4TaskBarAction, SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
+    connect(Unfixed4TaskBarAction, &QWidgetAction::triggered,this,&RightClickMenu::unfixedFromTaskbarActionTriggerSlot);
 
     initWidgetAction(Add2DesktopWid,"",tr("Add to desktop shortcuts"),0);
     Add2DesktopAction->setDefaultWidget(Add2DesktopWid);
-    connect(Add2DesktopAction, SIGNAL(triggered()),this,SLOT(addToDesktopActionTriggerSlot()));
+    connect(Add2DesktopAction, &QWidgetAction::triggered,this,&RightClickMenu::addToDesktopActionTriggerSlot);
 
     initWidgetAction(UninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"),0);
     UninstallAction->setDefaultWidget(UninstallWid);
-    connect(UninstallAction, SIGNAL(triggered()),this,SLOT(uninstallActionTriggerSlot()));
+    connect(UninstallAction, &QWidgetAction::triggered,this,&RightClickMenu::uninstallActionTriggerSlot);
 }
 
 void RightClickMenu::addAppBtnAction()
@@ -228,27 +228,27 @@ void RightClickMenu::addShutdownAction()
     initWidgetAction(LockScreenWid,"system-lock-screen-symbolic",tr("Lock Screen"),1);
     LockScreenAction->setDefaultWidget(LockScreenWid);
     shutdownmenu->addAction(LockScreenAction);
-    connect(LockScreenAction,SIGNAL(triggered()),this,SLOT(lockScreenActionTriggerSlot()));
+    connect(LockScreenAction,&QWidgetAction::triggered,this,&RightClickMenu::lockScreenActionTriggerSlot);
 
     initWidgetAction(SwitchUserWid,"stock-people-symbolic",tr("Switch User"),1);
     SwitchUserAction->setDefaultWidget(SwitchUserWid);
     shutdownmenu->addAction(SwitchUserAction);
-    connect(SwitchUserAction,SIGNAL(triggered()),this,SLOT(switchUserActionTriggerSlot()));
+    connect(SwitchUserAction,&QWidgetAction::triggered,this,&RightClickMenu::switchUserActionTriggerSlot);
 
     initWidgetAction(LogOutWid,"system-logout-symbolic",tr("Log Out"),1);
     LogOutAction->setDefaultWidget(LogOutWid);
     shutdownmenu->addAction(LogOutAction);
-    connect(LogOutAction,SIGNAL(triggered()),this,SLOT(logoutActionTriggerSlot()));
+    connect(LogOutAction,&QWidgetAction::triggered,this,&RightClickMenu::logoutActionTriggerSlot);
 
-    initWidgetAction(RebootWid," system-restart-symbolic",tr("Restart"),1);
+    initWidgetAction(RebootWid,"system-restart-symbolic",tr("Restart"),1);
     RebootAction->setDefaultWidget(RebootWid);
     shutdownmenu->addAction(RebootAction);
-    connect(RebootAction,SIGNAL(triggered()),this,SLOT(rebootActionTriggerSlot()));
+    connect(RebootAction,&QWidgetAction::triggered,this,&RightClickMenu::rebootActionTriggerSlot);
 
     initWidgetAction(ShutDownWid,"exit-symbolic",tr("Power Off"),1);
     ShutDownAction->setDefaultWidget(ShutDownWid);
     shutdownmenu->addAction(ShutDownAction);
-    connect(ShutDownAction,SIGNAL(triggered()),this,SLOT(shutdownActionTriggerSlot()));
+    connect(ShutDownAction,&QWidgetAction::triggered,this,&RightClickMenu::shutdownActionTriggerSlot);
 
     shutdownmenu->setAttribute(Qt::WA_TranslucentBackground);
     shutdownmenu->setStyleSheet(style);
@@ -269,15 +269,15 @@ void RightClickMenu::addOtherAction()
 
     initWidgetAction(OtherFix2TaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"),0);
     OtherFix2TaskBarAction->setDefaultWidget(OtherFix2TaskBarWid);
-    connect(OtherFix2TaskBarAction,SIGNAL(triggered()),this,SLOT(fixToTaskbarActionTriggerSlot()));
+    connect(OtherFix2TaskBarAction,&QWidgetAction::triggered,this,&RightClickMenu::fixToTaskbarActionTriggerSlot);
 
     initWidgetAction(OtherUnfix2TaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"),0);
     OtherUnfix2TaskBarAction->setDefaultWidget(OtherUnfix2TaskBarWid);
-    connect(OtherUnfix2TaskBarAction,SIGNAL(triggered()),this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
+    connect(OtherUnfix2TaskBarAction,&QWidgetAction::triggered,this,&RightClickMenu::unfixedFromTaskbarActionTriggerSlot);
 
     initWidgetAction(OtherListWid,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"),0);
     OtherListAction->setDefaultWidget(OtherListWid);
-    connect(OtherListAction,SIGNAL(triggered()),this,SLOT(otherListActionTriggerSlot()));
+    connect(OtherListAction,&QWidgetAction::triggered,this,&RightClickMenu::otherListActionTriggerSlot);
 
     othermenu->addAction(OtherListAction);
     othermenu->setAttribute(Qt::WA_TranslucentBackground);

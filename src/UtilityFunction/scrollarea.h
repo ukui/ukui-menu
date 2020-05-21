@@ -23,6 +23,7 @@
 #include <QScrollBar>
 #include <QMouseEvent>
 #include <QMouseEvent>
+#include <QPropertyAnimation>
 
 class ScrollArea : public QScrollArea
 {
@@ -32,6 +33,15 @@ public:
 protected:
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *e);
+
+private:
+    QPropertyAnimation *m_scrollAnimation;
+    double m_speedTime = 3;
+
+private Q_SLOTS:
+    void handleScrollValueChanged();
+    void handleScrollFinished();
 };
 
 #endif // SCROLLAREA_H

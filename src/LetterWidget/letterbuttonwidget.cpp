@@ -76,7 +76,7 @@ void LetterButtonWidget::initWidget()
                 btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
                 btn->setText(letterlist.at(row*4+col));
                 gridLayout->addWidget(btn,row,col);
-                connect(btn, SIGNAL(clicked()), this, SLOT(letterBtnClickedSlot()));
+                connect(btn, &QToolButton::clicked, this, &LetterButtonWidget::letterBtnClickedSlot);
             }
             else {
                 break;

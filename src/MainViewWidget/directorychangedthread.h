@@ -18,7 +18,7 @@ private:
     QString path;
     QSettings* setting=nullptr;
 
-private Q_SLOTS:
+public Q_SLOTS:
     void recvDirectoryPath(QString arg);
 
 Q_SIGNALS:

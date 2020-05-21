@@ -33,6 +33,12 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     else
         menu=new RightClickMenu(nullptr,1);
 
+    m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
+    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
+    m_scrollAnimation->setDuration(800);
+    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &ListView::animationValueChangedSlot);
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &ListView::animationFinishSlot);
+
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
@@ -62,6 +68,7 @@ void ListView::initWidget()
                                              );
     this->setStyleSheet(style);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    this->setGridSize(QSize(310,48));
     this->setResizeMode(QListView::Adjust);
@@ -72,8 +79,9 @@ void ListView::initWidget()
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setUpdatesEnabled(true);
-    connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(rightClickedSlot()));
-    connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onClicked(QModelIndex)));
+    this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
+    connect(this,&ListView::clicked,this,&ListView::onClicked);
 
 }
 
@@ -181,4 +189,34 @@ void ListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
+}
+
+void ListView::wheelEvent(QWheelEvent *e)
+{
+    int offset = -e->angleDelta().y();
+    m_scrollAnimation->stop();
+    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
+    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+    m_scrollAnimation->start();
+}
+
+void ListView::animationValueChangedSlot()
+{
+    QScrollBar *vscroll = verticalScrollBar();
+
+    if (vscroll->value() == vscroll->maximum() ||
+        vscroll->value() == vscroll->minimum()) {
+        blockSignals(false);
+    } else {
+        blockSignals(true);
+    }
+}
+
+void ListView::animationFinishSlot()
+{
+    blockSignals(false);
+//    this->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+
+//    QPoint pos = mapFromGlobal(QCursor::pos());
+//    emit entered(indexAt(pos));
 }

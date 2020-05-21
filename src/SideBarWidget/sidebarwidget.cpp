@@ -145,13 +145,13 @@ void SideBarWidget::addSidebarBtn()
     initBtn(trashbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),trashbtnname,tr("Recycle Bin"),7);
     shutdownbtn=new QPushButton();
     initBtn(shutdownbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),shutdownbtnname,tr("Power"),8);
-    connect(pBtnGroup,SIGNAL(buttonClicked(QAbstractButton*)),this,SLOT(btnGroupClickedSlot(QAbstractButton*)));
-    connect(computerbtn,SIGNAL(clicked()),this,SLOT(computerBtnClickedSlot()));
-    connect(personalbtn,SIGNAL(clicked()),this,SLOT(personalBtnClickedSlot()));
-    connect(controlbtn,SIGNAL(clicked()),this,SLOT(controlBtnClickedSlot()));
-    connect(trashbtn,SIGNAL(clicked()),this,SLOT(trashBtnClickedSlot()));
-    connect(shutdownbtn,SIGNAL(clicked()),this,SLOT(shutdownBtnClickedSlot()));
-    connect(usericonbtn,SIGNAL(clicked()),this,SLOT(userIconBtnClickedSlot()));
+    connect(pBtnGroup,QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked),this,&SideBarWidget::btnGroupClickedSlot);
+    connect(computerbtn,&QPushButton::clicked,this,&SideBarWidget::computerBtnClickedSlot);
+    connect(personalbtn,&QPushButton::clicked,this,&SideBarWidget::personalBtnClickedSlot);
+    connect(controlbtn,&QPushButton::clicked,this,&SideBarWidget::controlBtnClickedSlot);
+    connect(trashbtn,&QPushButton::clicked,this,&SideBarWidget::trashBtnClickedSlot);
+    connect(shutdownbtn,&QPushButton::clicked,this,&SideBarWidget::shutdownBtnClickedSlot);
+    connect(usericonbtn,&QPushButton::clicked,this,&SideBarWidget::userIconBtnClickedSlot);
 
     otherButtonList.clear();
     otherButtonList.append(usericonbtn);
@@ -178,8 +178,8 @@ void SideBarWidget::addSidebarBtn()
                 otherButtonList.append(controlbtn);
                 otherButtonListIndex.append(4);
         }
-        connect(gsetting,SIGNAL(changed(QString)),
-                this,SLOT(resetSidebarBtnSlot()));
+        connect(gsetting,&QGSettings::changed,
+                this,&SideBarWidget::resetSidebarBtnSlot);
     }
     otherButtonList.append(shutdownbtn);
 
@@ -190,8 +190,8 @@ void SideBarWidget::addSidebarBtn()
             addRightClickMenu(btn);
     }
     shutdownbtn->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(shutdownbtn,SIGNAL(customContextMenuRequested(const QPoint&)),this,
-            SLOT(shutdownBtnRightClickSlot()));
+    connect(shutdownbtn,&QPushButton::customContextMenuRequested,this,
+            &SideBarWidget::shutdownBtnRightClickSlot);
 
     //监控用户账户信息更改
     qint64 uid=static_cast<qint64>(getuid());
@@ -251,8 +251,8 @@ void SideBarWidget::resetSidebarBtnSlot()
                 otherButtonList.append(controlbtn);
                 otherButtonListIndex.append(4);
         }
-        connect(gsetting,SIGNAL(changed(QString)),
-                this,SLOT(resetSidebarBtnSlot()));
+        connect(gsetting,&QGSettings::changed,
+                this,&SideBarWidget::resetSidebarBtnSlot);
     }
     otherButtonList.append(shutdownbtn);
     Q_FOREACH(QAbstractButton* button,otherButtonList)
@@ -388,8 +388,8 @@ void SideBarWidget::shutdownBtnRightClickSlot()
 void SideBarWidget::addRightClickMenu(QPushButton *btn)
 {
     btn->setContextMenuPolicy(Qt::CustomContextMenu);
-    disconnect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(otherBtnRightClickSlot()));
-    connect(btn,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(otherBtnRightClickSlot()));
+    disconnect(btn,&QPushButton::customContextMenuRequested,this,&SideBarWidget::otherBtnRightClickSlot);
+    connect(btn,&QPushButton::customContextMenuRequested,this,&SideBarWidget::otherBtnRightClickSlot);
 }
 
 void SideBarWidget::otherBtnRightClickSlot()
@@ -572,8 +572,8 @@ void SideBarWidget::loadMinSidebar()
     usericonbtn->setToolTip(username);
     shutdownbtn->setToolTip(tr("Power"));
 
-    disconnect(minmaxbtn,SIGNAL(clicked()),this, SIGNAL(sendDefaultBtnSignal()));
-    connect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendFullScreenBtnSignal()));
+    disconnect(minmaxbtn,&QToolButton::clicked,this, &SideBarWidget::sendDefaultBtnSignal);
+    connect(minmaxbtn, &QToolButton::clicked,this,&SideBarWidget::sendFullScreenBtnSignal);
 }
 
 /**
@@ -665,8 +665,8 @@ void SideBarWidget::loadMaxSidebar()
         }
     }
 
-    disconnect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendFullScreenBtnSignal()));
-    connect(minmaxbtn, SIGNAL(clicked()),this,SIGNAL(sendDefaultBtnSignal()));
+    disconnect(minmaxbtn, &QToolButton::clicked,this,&SideBarWidget::sendFullScreenBtnSignal);
+    connect(minmaxbtn, &QToolButton::clicked,this,&SideBarWidget::sendDefaultBtnSignal);
 }
 
 /**
@@ -767,19 +767,19 @@ void SideBarWidget::widgetMakeZero()
     functionbtn->setStyleSheet(btncolor);
 }
 
-void SideBarWidget::mousePressEvent(QMouseEvent *event)
-{
-    if(is_fullscreen && event->button()==Qt::LeftButton)
-    {
-        int x=event->x();
-        int y=event->y();
-        QRect rect_1(0,0,this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,this->height());
-        QRect rect_2(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,Style::MinMaxWidWidth,Style::MinMaxWidHeight);
-        QRect rect_3(rect_1.width()+functionbtn->x(),functionbtn->y()+functionbtn->height(),Style::SideBarBtnWidth,otherButtonList.at(0)->y()-functionbtn->y()-functionbtn->height());
-        syslog(LOG_LOCAL0 | LOG_DEBUG ,"坐标：%d:%d:%d",x,rect_1.x(),rect_3.x());
-        if((x>=rect_1.x() && x<=rect_1.x()+rect_1.width() && y>=rect_1.y() && y<=rect_1.y()+rect_1.height()) ||
-           (x>=rect_2.x() && x<=rect_2.x()+rect_2.width() && y>=rect_2.y() && y<=rect_2.y()+rect_2.height()) ||
-           (x>=rect_3.x() && x<=rect_3.x()+rect_3.width() && y>=rect_3.y() && y<=rect_3.y()+rect_3.height()))
-            Q_EMIT sendHideMainWindowSignal();
-    }
-}
+//void SideBarWidget::mousePressEvent(QMouseEvent *event)
+//{
+//    if(is_fullscreen && event->button()==Qt::LeftButton)
+//    {
+//        int x=event->x();
+//        int y=event->y();
+//        QRect rect_1(0,0,this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,this->height());
+//        QRect rect_2(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,Style::MinMaxWidWidth,Style::MinMaxWidHeight);
+//        QRect rect_3(rect_1.width()+functionbtn->x(),functionbtn->y()+functionbtn->height(),Style::SideBarBtnWidth,otherButtonList.at(0)->y()-functionbtn->y()-functionbtn->height());
+//        syslog(LOG_LOCAL0 | LOG_DEBUG ,"坐标：%d:%d:%d",x,rect_1.x(),rect_3.x());
+//        if((x>=rect_1.x() && x<=rect_1.x()+rect_1.width() && y>=rect_1.y() && y<=rect_1.y()+rect_1.height()) ||
+//           (x>=rect_2.x() && x<=rect_2.x()+rect_2.width() && y>=rect_2.y() && y<=rect_2.y()+rect_2.height()) ||
+//           (x>=rect_3.x() && x<=rect_3.x()+rect_3.width() && y>=rect_3.y() && y<=rect_3.y()+rect_3.height()))
+//            Q_EMIT sendHideMainWindowSignal();
+//    }
+//}

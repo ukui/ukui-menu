@@ -73,15 +73,12 @@ protected:
     void initAppListWidget();//初始化应用列表界面
     void fillAppList();//填充应用列表
 
-private Q_SLOTS:
+public Q_SLOTS:
     void execApplication(QStringList arg);//执行应用程序
     void updateListViewSlot();
 
 Q_SIGNALS:
     void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
-    void sendUpdateAppListSignal(QString desktopfp,int type);//向FullCommonUseWidget发送更新应用列表信号
-    void removeListItemSignal(QString desktopfp);
-    void removeListAllItemSignal();
 };
 
 #endif // COMMONUSEWIDGET_H

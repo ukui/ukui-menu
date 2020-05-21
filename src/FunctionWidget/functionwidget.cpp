@@ -51,8 +51,8 @@ void FunctionWidget::initWidget()
     initAppListWidget();
 
     functionbtnwid=new FunctionButtonWidget(this);
-    connect(this,SIGNAL(sendClassificationbtnList(QStringList)),functionbtnwid,SLOT(recvClassificationBtnList(QStringList)));
-    connect(functionbtnwid, SIGNAL(sendFunctionBtnSignal(QString)),this,SLOT(recvFunctionBtnSignal(QString)));
+    connect(this,&FunctionWidget::sendClassificationbtnList,functionbtnwid,&FunctionButtonWidget::recvClassificationBtnList);
+    connect(functionbtnwid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&FunctionWidget::recvFunctionBtnSignal);
     functionbtnwid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
 
     enterAnimation=new QPropertyAnimation;
@@ -61,8 +61,8 @@ void FunctionWidget::initWidget()
     leaveAnimation=new QPropertyAnimation;
     leaveAnimation->setDuration(50);
     leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
-    connect(leaveAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
-    connect(enterAnimation,SIGNAL(finished()),this,SLOT(animationFinishedSLot()));
+    connect(leaveAnimation,&QPropertyAnimation::finished,this,&FunctionWidget::animationFinishedSLot);
+    connect(enterAnimation,&QPropertyAnimation::finished,this,&FunctionWidget::animationFinishedSLot);
 
 }
 
@@ -74,9 +74,8 @@ void FunctionWidget::initAppListWidget()
     applistview=new ListView(this,this->width()-4,this->height(),2);
     applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
     fillAppListView();
-    connect(applistview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(recvItemClickedSlot(QStringList)));
-    connect(applistview,SIGNAL(sendFixedOrUnfixedSignal(QString,int)),this,SIGNAL(sendUpdateAppListSignal(QString,int)));
-    connect(applistview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
+    connect(applistview,&ListView::sendItemClickedSignal,this,&FunctionWidget::recvItemClickedSlot);
+    connect(applistview,&ListView::sendHideMainWindowSignal,this,&FunctionWidget::sendHideMainWindowSignal);
 
 }
 
@@ -335,6 +334,7 @@ void FunctionWidget::animationFinishedSLot()
 {
     if(widgetState==1)
     {
+        applistview->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
         applistview->setVisible(false);
         functionbtnwid->setVisible(true);
         enterAnimation->start();
@@ -342,6 +342,7 @@ void FunctionWidget::animationFinishedSLot()
     }
     if(widgetState==0)
     {
+        applistview->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         functionbtnwid->setVisible(false);
         applistview->setVisible(true);
         enterAnimation->start();
@@ -360,7 +361,7 @@ void FunctionWidget::widgetMakeZero()
 void FunctionWidget::moveScrollBar(int type)
 {
     if(type==0)
-        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()-1);
+        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()-100);
     else
-        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()+1);
+        applistview->verticalScrollBar()->setSliderPosition(applistview->verticalScrollBar()->sliderPosition()+100);
 }

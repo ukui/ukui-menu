@@ -52,7 +52,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initMainWindow()
 {
-    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::Popup);
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::StrongFocus);
@@ -104,8 +104,8 @@ void MainWindow::initMainWindow()
         else
             panelSize=46;
 
-        connect(gsetting,SIGNAL(changed(QString)),
-                this,SLOT(panelChangedSlot(QString)));
+        connect(gsetting,&QGSettings::changed,
+                this,&MainWindow::panelChangedSlot);
     }
     else
     {
@@ -122,38 +122,38 @@ void MainWindow::initMainWindow()
     frame->setStyleSheet(style);
 
     pAnimation = new QPropertyAnimation(this, "geometry");
-    connect(pAnimation,SIGNAL(stateChanged(QAbstractAnimation::State, QAbstractAnimation::State)),
-            this,SLOT(stateChangedSlot(QAbstractAnimation::State,QAbstractAnimation::State)));
+    connect(pAnimation,&QPropertyAnimation::stateChanged,
+            this,&MainWindow::stateChangedSlot);
 
-    connect(sidebarwid, SIGNAL(sendCommonUseBtnSignal()), mainviewwid, SLOT(loadCommonUseWidget()));
-    connect(sidebarwid,SIGNAL(sendLetterBtnSignal()), mainviewwid, SLOT(loadLetterWidget()));
-    connect(sidebarwid, SIGNAL(sendFunctionBtnSignal()), mainviewwid, SLOT(loadFunctionWidget()));
+    connect(sidebarwid, &SideBarWidget::sendCommonUseBtnSignal, mainviewwid, &MainViewWidget::loadCommonUseWidget);
+    connect(sidebarwid,&SideBarWidget::sendLetterBtnSignal, mainviewwid, &MainViewWidget::loadLetterWidget);
+    connect(sidebarwid, &SideBarWidget::sendFunctionBtnSignal, mainviewwid, &MainViewWidget::loadFunctionWidget);
 
-    connect(sidebarwid,SIGNAL(sendFullScreenCommonUseBtnSignal()),
-            mainviewwid,SLOT(loadFullCommonUseWidget()));
-    connect(sidebarwid,SIGNAL(sendFullScreenLetterBtnSignal()),
-            mainviewwid,SLOT(loadFullLetterWidget()));
-    connect(sidebarwid, SIGNAL(sendFullScreenFunctionBtnSignal()),
-            mainviewwid, SLOT(loadFullFunctionWidget()));
+    connect(sidebarwid,&SideBarWidget::sendFullScreenCommonUseBtnSignal,
+            mainviewwid,&MainViewWidget::loadFullCommonUseWidget);
+    connect(sidebarwid,&SideBarWidget::sendFullScreenLetterBtnSignal,
+            mainviewwid,&MainViewWidget::loadFullLetterWidget);
+    connect(sidebarwid,&SideBarWidget::sendFullScreenFunctionBtnSignal,
+            mainviewwid,&MainViewWidget::loadFullFunctionWidget);
 
-    connect(sidebarwid,SIGNAL(sendFullScreenBtnSignal()),this,SLOT(showFullScreenWidget()));
-    connect(sidebarwid, SIGNAL(sendDefaultBtnSignal()),this,SLOT(showDefaultWidget()));
-    connect(mainviewwid,SIGNAL(sendHideMainWindowSignal()),this,SLOT(recvHideMainWindowSlot()));
-    connect(sidebarwid,SIGNAL(sendHideMainWindowSignal()),this,SLOT(recvHideMainWindowSlot()));
+    connect(sidebarwid,&SideBarWidget::sendFullScreenBtnSignal,this,&MainWindow::showFullScreenWidget);
+    connect(sidebarwid,&SideBarWidget::sendDefaultBtnSignal,this,&MainWindow::showDefaultWidget);
+    connect(mainviewwid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
+    connect(sidebarwid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
-    connect(QApplication::primaryScreen(),SIGNAL(geometryChanged(QRect)),
-            this,SLOT(monitorResolutionChange(QRect)));
-    connect(qApp,SIGNAL(primaryScreenChanged(QScreen*)),this,
-            SLOT(primaryScreenChangedSlot(QScreen*)));
+    connect(QApplication::primaryScreen(),&QScreen::geometryChanged,
+            this,&MainWindow::monitorResolutionChange);
+    connect(qApp,&QApplication::primaryScreenChanged,this,
+            &MainWindow::primaryScreenChangedSlot);
 
     XEventMonitor::instance()->start();
-    connect(XEventMonitor::instance(), SIGNAL(keyRelease(const QString &)),
-            this, SLOT(XkbEventsRelease(const QString &)));
-    connect(XEventMonitor::instance(), SIGNAL(keyPress(const QString &)),
-            this, SLOT(XkbEventsPress(const QString &)));
+    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+            this,SLOT(XkbEventsRelease(QString)));
+    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+            this,SLOT(XkbEventsPress(QString)));
 
-    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
-                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
+//    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
+//                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
 
 
 }
@@ -435,8 +435,8 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
 
     if((keycode == "Super_L") || (keycode == "Super_R"))
     {
-//        if(QApplication::activeWindow() == this)
-        if(this->isVisible())
+//        if(this->isVisible())
+        if(QApplication::activeWindow() == this)
         {
             this->hide();
             mainviewwid->widgetMakeZero();

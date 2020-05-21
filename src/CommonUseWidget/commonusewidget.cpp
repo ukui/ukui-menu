@@ -68,9 +68,9 @@ void CommonUseWidget::initAppListWidget()
 {
     listview=new ListView(this,this->width()-4,this->height(),0);
     mainLayout->addWidget(listview);
-    connect(listview,SIGNAL(sendItemClickedSignal(QStringList)),this,SLOT(execApplication(QStringList)));
-    connect(listview,SIGNAL(sendHideMainWindowSignal()),this,SIGNAL(sendHideMainWindowSignal()));
-    connect(listview,SIGNAL(sendUpdateAppListSignal()),this,SLOT(updateListViewSlot()));
+    connect(listview,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
+    connect(listview,&ListView::sendHideMainWindowSignal,this,&CommonUseWidget::sendHideMainWindowSignal);
+    connect(listview,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);
 }
 
 /**
@@ -125,7 +125,7 @@ void CommonUseWidget::widgetMakeZero()
 void CommonUseWidget::moveScrollBar(int type)
 {
     if(type==0)
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-1);
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-100);
     else
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+1);
+        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+100);
 }

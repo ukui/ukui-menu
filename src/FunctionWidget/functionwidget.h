@@ -76,7 +76,7 @@ protected:
     void insertClassificationBtn(QString btnname);//插入分类按钮
     void insertAppList(QStringList appnamelist);//插入应用列表
 
-private Q_SLOTS:
+public Q_SLOTS:
     void appClassificationBtnClickedSlot();//应用列表功能分类按钮槽函数
     void recvFunctionBtnSignal(QString btnname);//接收FunctionButtonWidget界面按钮信号
     void execApplication(QString desktopfp);//执行应用程序

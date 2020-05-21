@@ -15,7 +15,7 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
     this->setText(letter);
     this->setFixedSize(Style::LeftLetterBtnHeight,Style::LeftLetterBtnHeight);
     this->setCheckable(true);
-    connect(this,SIGNAL(toggled(bool)),this,SLOT(reactToToggle(bool)));
+    connect(this,&LetterClassifyButton::toggled,this,&LetterClassifyButton::reactToToggle);
 }
 
 void LetterClassifyButton::enterEvent(QEvent *e)
