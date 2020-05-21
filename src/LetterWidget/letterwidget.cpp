@@ -243,6 +243,7 @@ void LetterWidget::widgetMakeZero()
 {
     letterbtnwid->setVisible(false);
     applistview->setVisible(true);
+    applistview->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
     applistview->verticalScrollBar()->setValue(0);
 }
