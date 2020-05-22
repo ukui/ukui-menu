@@ -44,7 +44,7 @@ private:
     Ui::FunctionButtonWidget *ui;
     QGridLayout* gridLayout=nullptr;
     QVector<QAbstractButton*> vector;
-    QStringList icondisabledlist, iconlist,iconlightlist,functionnamelist;
+    QStringList functionnamelist, categorylist;
 
 protected:
     void initWidget();
@@ -57,7 +57,7 @@ Q_SIGNALS:
     void sendFunctionBtnSignal(QString btnname);
 
 public Q_SLOTS:
-    void functionBtnClickedSlot();//功能分类按钮槽函数
+    void functionBtnClickedSlot(QString category);//功能分类按钮槽函数
     void recvClassificationBtnList(QStringList list);//接收FunctionWidget界面分类按钮列表
 };
 

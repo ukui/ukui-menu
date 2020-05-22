@@ -27,8 +27,8 @@
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="94"/>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="151"/>
-        <source>Android</source>
-        <translation>安卓</translation>
+        <source>Mobile</source>
+        <translation>移动</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="95"/>
@@ -116,8 +116,8 @@
     </message>
     <message>
         <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="91"/>
-        <source>Android</source>
-        <translation>安卓</translation>
+        <source>Mobile</source>
+        <translation>移动</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="92"/>
@@ -180,8 +180,8 @@
     <message>
         <location filename="src/FunctionWidget/functionwidget.cpp" line="95"/>
         <location filename="src/FunctionWidget/functionwidget.cpp" line="223"/>
-        <source>Android</source>
-        <translation>安卓</translation>
+        <source>Mobile</source>
+        <translation>移动</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/functionwidget.cpp" line="102"/>

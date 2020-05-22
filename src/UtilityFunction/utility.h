@@ -16,32 +16,11 @@
  *
  */
 
-#ifndef SCROLLAREA_H
-#define SCROLLAREA_H
-#include <QScrollArea>
-#include <QEvent>
-#include <QScrollBar>
-#include <QMouseEvent>
-#include <QMouseEvent>
-#include <QPropertyAnimation>
+#ifndef UTILITY_H
+#define UTILITY_H
 
-class ScrollArea : public QScrollArea
-{
-public:
-    ScrollArea();
+#include <QtCore>
 
-protected:
-    void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-    void wheelEvent(QWheelEvent *e);
+const QPixmap loadSvg(const QString &fileName, const int size);
 
-private:
-    QPropertyAnimation *m_scrollAnimation;
-    double m_speedTime = 3;
-
-private Q_SLOTS:
-    void animationFinishSlot();//动画停止监控
-    void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
-};
-
-#endif // SCROLLAREA_H
+#endif // UTILITY_H

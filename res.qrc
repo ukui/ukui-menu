@@ -1,41 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>data/img/mainviewwidget/attributeaction.svg</file>
-        <file>data/img/mainviewwidget/develop-disabled.svg</file>
-        <file>data/img/mainviewwidget/develop-enabled.svg</file>
-        <file>data/img/mainviewwidget/develop-gray.svg</file>
-        <file>data/img/mainviewwidget/develop.svg</file>
         <file>data/img/mainviewwidget/downarrow-pressed.svg</file>
         <file>data/img/mainviewwidget/downarrow.svg</file>
         <file>data/img/mainviewwidget/fixed.svg</file>
-        <file>data/img/mainviewwidget/game-disabled.svg</file>
-        <file>data/img/mainviewwidget/game-enabled.svg</file>
-        <file>data/img/mainviewwidget/game-gray.svg</file>
-        <file>data/img/mainviewwidget/game.svg</file>
-        <file>data/img/mainviewwidget/img-disabled.svg</file>
-        <file>data/img/mainviewwidget/img-enabled.svg</file>
-        <file>data/img/mainviewwidget/img-gray.svg</file>
-        <file>data/img/mainviewwidget/img.svg</file>
         <file>data/img/mainviewwidget/leftarrow-hover.svg</file>
         <file>data/img/mainviewwidget/leftarrow.svg</file>
         <file>data/img/mainviewwidget/lock-fs.svg</file>
         <file>data/img/mainviewwidget/lock.svg</file>
-        <file>data/img/mainviewwidget/net-disabled.svg</file>
-        <file>data/img/mainviewwidget/net-enabled.svg</file>
-        <file>data/img/mainviewwidget/net-gray.svg</file>
-        <file>data/img/mainviewwidget/net.svg</file>
-        <file>data/img/mainviewwidget/office-disabled.svg</file>
-        <file>data/img/mainviewwidget/office-enabled.svg</file>
-        <file>data/img/mainviewwidget/office-gray.svg</file>
-        <file>data/img/mainviewwidget/office.svg</file>
-        <file>data/img/mainviewwidget/other-disabled.svg</file>
-        <file>data/img/mainviewwidget/other-enabled.svg</file>
-        <file>data/img/mainviewwidget/other-gray.svg</file>
-        <file>data/img/mainviewwidget/other.svg</file>
-        <file>data/img/mainviewwidget/reading-disabled.svg</file>
-        <file>data/img/mainviewwidget/reading-enabled.svg</file>
-        <file>data/img/mainviewwidget/reading-gray.svg</file>
-        <file>data/img/mainviewwidget/reading.svg</file>
         <file>data/img/mainviewwidget/recent-disabled.svg</file>
         <file>data/img/mainviewwidget/recent-enabled.svg</file>
         <file>data/img/mainviewwidget/recent-gray.svg</file>
@@ -43,22 +15,10 @@
         <file>data/img/mainviewwidget/rightarrow-hover.svg</file>
         <file>data/img/mainviewwidget/rightarrow.svg</file>
         <file>data/img/mainviewwidget/search.svg</file>
-        <file>data/img/mainviewwidget/social-disabled.svg</file>
-        <file>data/img/mainviewwidget/social-enabled.svg</file>
-        <file>data/img/mainviewwidget/social-gray.svg</file>
-        <file>data/img/mainviewwidget/social.svg</file>
-        <file>data/img/mainviewwidget/system-disabled.svg</file>
-        <file>data/img/mainviewwidget/system-enabled.svg</file>
-        <file>data/img/mainviewwidget/system-gray.svg</file>
-        <file>data/img/mainviewwidget/system.svg</file>
         <file>data/img/mainviewwidget/unfixed.svg</file>
         <file>data/img/mainviewwidget/uninstall.svg</file>
         <file>data/img/mainviewwidget/uparrow-pressed.svg</file>
         <file>data/img/mainviewwidget/uparrow.svg</file>
-        <file>data/img/mainviewwidget/video-disabled.svg</file>
-        <file>data/img/mainviewwidget/video-enabled.svg</file>
-        <file>data/img/mainviewwidget/video-gray.svg</file>
-        <file>data/img/mainviewwidget/video.svg</file>
         <file>data/img/sidebarwidget/commonuse.svg</file>
         <file>data/img/sidebarwidget/computer.svg</file>
         <file>data/img/sidebarwidget/control.svg</file>
@@ -78,9 +38,49 @@
         <file>ukui_menu_ch.qm</file>
         <file>data/img/sidebarwidget/personal.svg</file>
         <file>data/img/sidebarwidget/trash.svg</file>
-        <file>data/img/mainviewwidget/android-disabled.svg</file>
-        <file>data/img/mainviewwidget/android-enabled.svg</file>
-        <file>data/img/mainviewwidget/android-gray.svg</file>
-        <file>data/img/mainviewwidget/android.svg</file>
+        <file>data/img/mainviewwidget/Development-Checked.svg</file>
+        <file>data/img/mainviewwidget/Development-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Development-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Development-Normal.svg</file>
+        <file>data/img/mainviewwidget/Education-Checked.svg</file>
+        <file>data/img/mainviewwidget/Education-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Education-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Education-Normal.svg</file>
+        <file>data/img/mainviewwidget/Game-Checked.svg</file>
+        <file>data/img/mainviewwidget/Game-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Game-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Game-Normal.svg</file>
+        <file>data/img/mainviewwidget/Image-Checked.svg</file>
+        <file>data/img/mainviewwidget/Image-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Image-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Image-Normal.svg</file>
+        <file>data/img/mainviewwidget/Internet-Checked.svg</file>
+        <file>data/img/mainviewwidget/Internet-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Internet-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Internet-Normal.svg</file>
+        <file>data/img/mainviewwidget/Office-Checked.svg</file>
+        <file>data/img/mainviewwidget/Office-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Office-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Office-Normal.svg</file>
+        <file>data/img/mainviewwidget/Others-Checked.svg</file>
+        <file>data/img/mainviewwidget/Others-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Others-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Others-Normal.svg</file>
+        <file>data/img/mainviewwidget/Social-Checked.svg</file>
+        <file>data/img/mainviewwidget/Social-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Social-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Social-Normal.svg</file>
+        <file>data/img/mainviewwidget/System-Checked.svg</file>
+        <file>data/img/mainviewwidget/System-Disabled.svg</file>
+        <file>data/img/mainviewwidget/System-Enabled.svg</file>
+        <file>data/img/mainviewwidget/System-Normal.svg</file>
+        <file>data/img/mainviewwidget/Video-Checked.svg</file>
+        <file>data/img/mainviewwidget/Video-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Video-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Video-Normal.svg</file>
+        <file>data/img/mainviewwidget/Mobile-Checked.svg</file>
+        <file>data/img/mainviewwidget/Mobile-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Mobile-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Mobile-Normal.svg</file>
     </qresource>
 </RCC>

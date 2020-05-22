@@ -49,6 +49,7 @@ SOURCES += \
     src/Interface/ukuichineseletter.cpp \
     src/Interface/ukuimenuinterface.cpp \
     main.cpp \
+    src/UtilityFunction/utility.cpp \
     src/XEventMonitor/xeventmonitor.cpp
 
 HEADERS  += \
@@ -81,6 +82,7 @@ HEADERS  += \
     src/UtilityFunction/toolbutton.h \
     src/Interface/ukuichineseletter.h \
     src/Interface/ukuimenuinterface.h \
+    src/UtilityFunction/utility.h \
     src/XEventMonitor/xeventmonitor.h
 
 FORMS    += \

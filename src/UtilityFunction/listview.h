@@ -65,8 +65,8 @@ private:
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
     void rightClickedSlot();//右键菜单
-    void animationValueChangedSlot();
-    void animationFinishSlot();
+    void animationFinishSlot();//动画停止监控
+    void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
 Q_SIGNALS:
     void sendItemClickedSignal(QStringList arg);//发送item点击信号
     void sendHideMainWindowSignal();

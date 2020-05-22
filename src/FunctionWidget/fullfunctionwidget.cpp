@@ -64,34 +64,8 @@ void FullFunctionWidget::initWidget()
 
     pUkuiMenuInterface=new UkuiMenuInterface;
 
-    iconlist.clear();
-    iconlist.append(":/data/img/mainviewwidget/android-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/net-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/social-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/video-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/develop-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/img-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/game-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/office-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/reading-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/system-gray.svg");
-    iconlist.append(":/data/img/mainviewwidget/other-gray.svg");
-
-    iconlightlist.clear();
-    iconlightlist.append(":/data/img/mainviewwidget/android.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/net.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/social.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/video.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/develop.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/img.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/game.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/office.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/reading.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/system.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/other.svg");
-
     functionnamelist.clear();
-    functionnamelist.append(tr("Android"));
+    functionnamelist.append(tr("Mobile"));
     functionnamelist.append(tr("Internet"));
     functionnamelist.append(tr("Social"));
     functionnamelist.append(tr("Video"));
@@ -102,6 +76,19 @@ void FullFunctionWidget::initWidget()
     functionnamelist.append(tr("Education"));
     functionnamelist.append(tr("System"));
     functionnamelist.append(tr("Others"));
+
+    categorylist.clear();
+    categorylist.append("Mobile");
+    categorylist.append("Internet");
+    categorylist.append("Social");
+    categorylist.append("Video");
+    categorylist.append("Development");
+    categorylist.append("Image");
+    categorylist.append("Game");
+    categorylist.append("Office");
+    categorylist.append("Education");
+    categorylist.append("System");
+    categorylist.append("Others");
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -145,7 +132,7 @@ void FullFunctionWidget::fillAppList()
     QStringList androidlist=vector.at(0);
     if(!androidlist.isEmpty())
     {
-        insertClassificationBtn(tr("Android"));
+        insertClassificationBtn(tr("Mobile"));
         insertAppList(androidlist);
     }
 
@@ -448,25 +435,20 @@ void FullFunctionWidget::initIconListScrollArea()
                                                                    Style::LeftBtnWidth,
                                                                    Style::LeftBtnHeight,
                                                                    Style::LeftIconSize,
-                                                                   Style::LeftFontSize,
-                                                                   iconlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
-                                                                   iconlightlist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
-                                                                   ClassifyBtnHoverBackground,
-                                                                   ClassifyBtnHoverBackground,
-                                                                   2,
+                                                                   categorylist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
                                                                    classificationbtnlist.at(i),
                                                                    true,
                                                                    true);
+        iconbtn->setChecked(false);
         buttonList.append(iconbtn);
         iconlistscrollareawidLayout->addWidget(iconbtn);
-        connect(iconbtn,&FunctionClassifyButton::buttonClicked,pBtnGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked));
     }
 
     int id=0;
     Q_FOREACH (QAbstractButton* btn, buttonList) {
         pBtnGroup->addButton(btn,id++);
     }
-    connect(pBtnGroup,QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked),this,&FullFunctionWidget::btnGroupClickedSlot);
+    connect(pBtnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&FullFunctionWidget::btnGroupClickedSlot);
     iconlistscrollarea->widget()->adjustSize();
     pBtnGroup->button(0)->click();
 }
@@ -476,34 +458,27 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
     disconnect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,
                this,&FullFunctionWidget::valueChangedSlot);
     Q_FOREACH (QAbstractButton* button, buttonList) {
-        FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-        QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
-        QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
-
         if(pBtnGroup->id(btn)==buttonList.indexOf(button))
         {
-            int num=classificationbtnlist.indexOf(textlabel->text());
-            if(num!=-1)
-            {
-                beginPos=scrollarea->verticalScrollBar()->sliderPosition();
-                endPos=classificationbtnrowlist.at(num).toInt();
-                scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-                m_scrollAnimation->stop();
-                m_scrollAnimation->setStartValue(beginPos);
-                m_scrollAnimation->setEndValue(endPos);
-                m_scrollAnimation->start();
-            }
-            fcbutton->setChecked(true);
+            beginPos=scrollarea->verticalScrollBar()->sliderPosition();
+            endPos=classificationbtnrowlist.at(pBtnGroup->id(btn)).toInt();
+            scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            m_scrollAnimation->stop();
+            m_scrollAnimation->setStartValue(beginPos);
+            m_scrollAnimation->setEndValue(endPos);
+            m_scrollAnimation->start();
+            button->setChecked(true);
         }
         else{
-            fcbutton->setChecked(false);
+            button->setChecked(false);
         }
     }
 }
 
 void FullFunctionWidget::animationFinishSlot()
 {
-    if(scrollarea->verticalScrollBar()->value()==endPos)
+    if(scrollarea->verticalScrollBar()->value()==endPos ||
+            scrollarea->verticalScrollBar()->value()==scrollarea->verticalScrollBar()->maximum())
     {
         scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         connect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,
@@ -546,44 +521,6 @@ void FullFunctionWidget::valueChangedSlot(int value)
         else
             count++;
     }
-//    if(count==classificationbtnrowlist.count()-1 ||
-//            scrollarea->verticalScrollBar()->sliderPosition()>=scrollarea->verticalScrollBar()->maximum())
-//    {
-//        Q_FOREACH (QAbstractButton* button, buttonList) {
-
-//            FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-//            QLayoutItem* iconitem=fcbutton->layout()->itemAt(0);
-//            QLabel* iconlabel=qobject_cast<QLabel*>(iconitem->widget());
-//            QLayoutItem* textitem=fcbutton->layout()->itemAt(1);
-//            QLabel* textlabel=qobject_cast<QLabel*>(textitem->widget());
-
-//            if(classificationbtnrowlist.count()-1==buttonList.indexOf(button))
-//            {
-//                QSvgRenderer* svgRender = new QSvgRenderer;
-//                svgRender->load(iconlightlist.at(functionnamelist.indexOf(textlabel->text())));
-//                QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
-//                pixmap->fill(Qt::transparent);
-//                QPainter p(pixmap);
-//                svgRender->render(&p);
-//                iconlabel->setPixmap(*pixmap);
-//                textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
-//                fcbutton->is_pressed=true;
-
-//            }
-//            else{
-//                QSvgRenderer* svgRender = new QSvgRenderer;
-//                svgRender->load(iconlist.at(functionnamelist.indexOf(textlabel->text())));
-//                QPixmap* pixmap = new QPixmap(Style::LeftIconSize,Style::LeftIconSize);
-//                pixmap->fill(Qt::transparent);
-//                QPainter p(pixmap);
-//                svgRender->render(&p);
-//                iconlabel->setPixmap(*pixmap);
-//                textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);");
-//                fcbutton->is_pressed=false;
-//            }
-//        }
-//    }
-//    iconlistscrollarea->verticalScrollBar()->setSliderPosition(buttonList.at(count)->pos().y());
 }
 
 void FullFunctionWidget::enterAnimation()
@@ -597,7 +534,6 @@ void FullFunctionWidget::enterAnimation()
                                   Style::LeftBtnWidth,
                                   height));
     pAnimation->setEasingCurve(QEasingCurve::InQuart);
-//    pAnimation->setEasingCurve(QEasingCurve::Linear);
     pAnimation->start();
 }
 
@@ -613,15 +549,17 @@ void FullFunctionWidget::repaintWidget()
 
 void FullFunctionWidget::widgetMakeZero()
 {
-    Q_FOREACH (QAbstractButton* button, buttonList) {
-        int num=classificationbtnlist.indexOf(functionnamelist.at(buttonList.indexOf(button)));
-        if(num!=-1)
-        {
-            pBtnGroup->button(num)->click();
-            iconlistscrollarea->verticalScrollBar()->setSliderPosition(0);
-            break;
-        }
-    }
+//    Q_FOREACH (QAbstractButton* button, buttonList) {
+//        int num=classificationbtnlist.indexOf(functionnamelist.at(buttonList.indexOf(button)));
+//        if(num!=-1)
+//        {
+//            pBtnGroup->button(num)->setChecked(true);
+//            pBtnGroup->button(num)->click();
+//            iconlistscrollarea->verticalScrollBar()->setSliderPosition(0);
+//            break;
+//        }
+//    }
+    pBtnGroup->button(0)->click();
     scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 

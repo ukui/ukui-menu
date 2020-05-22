@@ -186,12 +186,11 @@ void FullListView::leaveEvent(QEvent *e)
     this->verticalScrollBar()->setVisible(false);
 }
 
-void FullListView::animationValueChangedSlot()
+void FullListView::animationValueChangedSlot(const QVariant &value)
 {
-    QScrollBar *vscroll = verticalScrollBar();
-
-    if (vscroll->value() == vscroll->maximum() ||
-        vscroll->value() == vscroll->minimum()) {
+    Q_UNUSED(value);
+    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
+        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
         blockSignals(false);
     } else {
         blockSignals(true);

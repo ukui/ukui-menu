@@ -145,7 +145,7 @@ void SideBarWidget::addSidebarBtn()
     initBtn(trashbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),trashbtnname,tr("Recycle Bin"),7);
     shutdownbtn=new QPushButton();
     initBtn(shutdownbtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),shutdownbtnname,tr("Power"),8);
-    connect(pBtnGroup,QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked),this,&SideBarWidget::btnGroupClickedSlot);
+    connect(pBtnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&SideBarWidget::btnGroupClickedSlot);
     connect(computerbtn,&QPushButton::clicked,this,&SideBarWidget::computerBtnClickedSlot);
     connect(personalbtn,&QPushButton::clicked,this,&SideBarWidget::personalBtnClickedSlot);
     connect(controlbtn,&QPushButton::clicked,this,&SideBarWidget::controlBtnClickedSlot);

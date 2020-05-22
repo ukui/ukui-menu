@@ -19,6 +19,7 @@
 #include "fullletterwidget.h"
 #include "ui_fullletterwidget.h"
 #include <QDebug>
+#include <syslog.h>
 
 FullLetterWidget::FullLetterWidget(QWidget *parent) :
     QWidget(parent),
@@ -268,7 +269,7 @@ void FullLetterWidget::initLetterListScrollArea()
         buttonList.append(letterbtn);
         letterlistscrollareawidLayout->addWidget(letterbtn);
         letterlistscrollareawidLayout->setAlignment(letterbtn,Qt::AlignHCenter);
-        connect(letterbtn,&LetterClassifyButton::buttonClicked,pBtnGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked));
+        connect(letterbtn,&LetterClassifyButton::buttonClicked,pBtnGroup, static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked));
     }
     letterlistscrollareawidLayout->addItem(pLetterListBottomSpacer);
 
@@ -277,7 +278,7 @@ void FullLetterWidget::initLetterListScrollArea()
         pBtnGroup->addButton(btn,id++);
     }
 
-    connect(pBtnGroup,QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked),this,&FullLetterWidget::btnGroupClickedSlot);
+    connect(pBtnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&FullLetterWidget::btnGroupClickedSlot);
     letterlistscrollarea->widget()->adjustSize();
     pBtnGroup->button(0)->click();
 }
@@ -314,7 +315,8 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
 
 void FullLetterWidget::animationFinishSlot()
 {
-    if(scrollarea->verticalScrollBar()->value()==endPos)
+    if(scrollarea->verticalScrollBar()->value()==endPos ||
+            scrollarea->verticalScrollBar()->value()==scrollarea->verticalScrollBar()->maximum())
     {
         scrollarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         connect(scrollarea->verticalScrollBar(),&QScrollBar::valueChanged,

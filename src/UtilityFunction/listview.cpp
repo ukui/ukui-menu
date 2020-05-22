@@ -200,12 +200,11 @@ void ListView::wheelEvent(QWheelEvent *e)
     m_scrollAnimation->start();
 }
 
-void ListView::animationValueChangedSlot()
+void ListView::animationValueChangedSlot(const QVariant &value)
 {
-    QScrollBar *vscroll = verticalScrollBar();
-
-    if (vscroll->value() == vscroll->maximum() ||
-        vscroll->value() == vscroll->minimum()) {
+    Q_UNUSED(value);
+    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
+        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
         blockSignals(false);
     } else {
         blockSignals(true);

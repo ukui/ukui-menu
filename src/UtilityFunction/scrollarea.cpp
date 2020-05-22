@@ -35,8 +35,8 @@ ScrollArea::ScrollArea()
       m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
       m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
       m_scrollAnimation->setDuration(800);
-      connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &ScrollArea::handleScrollValueChanged);
-      connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &ScrollArea::handleScrollFinished);
+      connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &ScrollArea::animationValueChangedSlot);
+      connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &ScrollArea::animationFinishSlot);
 
 }
 
@@ -61,19 +61,18 @@ void ScrollArea::wheelEvent(QWheelEvent *e)
     m_scrollAnimation->start();
 }
 
-void ScrollArea::handleScrollValueChanged()
+void ScrollArea::animationValueChangedSlot(const QVariant &value)
 {
-    QScrollBar *vscroll = verticalScrollBar();
-
-    if (vscroll->value() == vscroll->maximum() ||
-        vscroll->value() == vscroll->minimum()) {
+    Q_UNUSED(value);
+    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
+        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
         blockSignals(false);
     } else {
         blockSignals(true);
     }
 }
 
-void ScrollArea::handleScrollFinished()
+void ScrollArea::animationFinishSlot()
 {
     blockSignals(false);
 

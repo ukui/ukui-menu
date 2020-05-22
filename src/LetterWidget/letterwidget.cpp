@@ -65,10 +65,8 @@ void LetterWidget::initWidget()
     letterbtnwid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
 
     enterAnimation=new QPropertyAnimation;
-    enterAnimation->setDuration(50);
     enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
     leaveAnimation=new QPropertyAnimation;
-    leaveAnimation->setDuration(50);
     leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
     connect(leaveAnimation,&QPropertyAnimation::finished,this,&LetterWidget::animationFinishedSLot);
     connect(enterAnimation,&QPropertyAnimation::finished,this,&LetterWidget::animationFinishedSLot);
@@ -186,11 +184,14 @@ void LetterWidget::appClassificationBtnClickedSlot()
     leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
     enterAnimation->setStartValue(QRect(-40,-40,this->width()+80,this->height()+80));
     enterAnimation->setEndValue(QRect(42.5,84.5,235,366));
+    leaveAnimation->setDuration(10);
+    enterAnimation->setDuration(80);
 
     //加载LetterBUttonWidget界面
     Q_EMIT sendLetterBtnList(letterbtnlist);
     leaveAnimation->setTargetObject(applistview);
     enterAnimation->setTargetObject(letterbtnwid);
+    letterbtnwid->setWindowOpacity(0.1);
     leaveAnimation->start();
     widgetState=1;
 }
@@ -212,6 +213,8 @@ void LetterWidget::recvLetterBtnSlot(QString btnname)
     leaveAnimation->setEndValue(QRect(-40,-40,this->width()+80,this->height()+80));
     enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
     enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+    leaveAnimation->setDuration(80);
+    enterAnimation->setDuration(10);
 
     leaveAnimation->setTargetObject(letterbtnwid);
     enterAnimation->setTargetObject(applistview);

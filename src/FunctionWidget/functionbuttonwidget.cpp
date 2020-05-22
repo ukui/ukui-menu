@@ -48,47 +48,8 @@ void FunctionButtonWidget::initWidget()
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
 
-    icondisabledlist.clear();
-    icondisabledlist.append(":/data/img/mainviewwidget/android-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/net-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/social-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/video-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/develop-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/img-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/game-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/office-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/reading-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/system-disabled.svg");
-    icondisabledlist.append(":/data/img/mainviewwidget/other-disabled.svg");
-
-    iconlist.clear();
-    iconlist.append(":/data/img/mainviewwidget/android-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/net-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/social-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/video-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/develop-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/img-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/game-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/office-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/reading-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/system-enabled.svg");
-    iconlist.append(":/data/img/mainviewwidget/other-enabled.svg");
-
-    iconlightlist.clear();
-    iconlightlist.append(":/data/img/mainviewwidget/android.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/net.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/social.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/video.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/develop.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/img.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/game.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/office.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/reading.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/system.svg");
-    iconlightlist.append(":/data/img/mainviewwidget/other.svg");
-
     functionnamelist.clear();
-    functionnamelist.append(tr("Android"));
+    functionnamelist.append(tr("Mobile"));
     functionnamelist.append(tr("Internet"));
     functionnamelist.append(tr("Social"));
     functionnamelist.append(tr("Video"));
@@ -99,18 +60,27 @@ void FunctionButtonWidget::initWidget()
     functionnamelist.append(tr("Education"));
     functionnamelist.append(tr("System"));
     functionnamelist.append(tr("Others"));
+
+    categorylist.clear();
+    categorylist.append("Mobile");
+    categorylist.append("Internet");
+    categorylist.append("Social");
+    categorylist.append("Video");
+    categorylist.append("Development");
+    categorylist.append("Image");
+    categorylist.append("Game");
+    categorylist.append("Office");
+    categorylist.append("Education");
+    categorylist.append("System");
+    categorylist.append("Others");
 }
 
 /**
  * 功能分类按钮槽函数
  */
-void FunctionButtonWidget::functionBtnClickedSlot()
+void FunctionButtonWidget::functionBtnClickedSlot(QString category)
 {
-    FunctionClassifyButton* btn=dynamic_cast<FunctionClassifyButton *>(QObject::sender());
-    QWidget* wid=btn->layout()->itemAt(1)->widget();
-    QLabel* label=qobject_cast<QLabel *>(wid);
-    QString btnname=label->text();
-    Q_EMIT sendFunctionBtnSignal(btnname);
+    Q_EMIT sendFunctionBtnSignal(functionnamelist.at(categorylist.indexOf(category)));
 }
 
 /**
@@ -128,12 +98,7 @@ void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
                                                    Style::LeftBtnWidth,
                                                    Style::LeftBtnHeight,
                                                    Style::LeftIconSize,
-                                                   Style::LeftFontSize,
-                                                   icondisabledlist.at(row*2+col),
-                                                   icondisabledlist.at(row*2+col),
-                                                   ClassifyBtnHoverBackground,
-                                                   ClassifyBtnHoverBackground,
-                                                   2,
+                                                   categorylist.at(row*2+col),
                                                    functionnamelist.at(row*2+col),
                                                    false,
                                                    false);
@@ -144,12 +109,7 @@ void FunctionButtonWidget::recvClassificationBtnList(QStringList list)
                                                    Style::LeftBtnWidth,
                                                    Style::LeftBtnHeight,
                                                    Style::LeftIconSize,
-                                                   Style::LeftFontSize,
-                                                   iconlist.at(row*2+col),
-                                                   iconlightlist.at(row*2+col),
-                                                   ClassifyBtnHoverBackground,
-                                                   ClassifyBtnHoverBackground,
-                                                   2,
+                                                   categorylist.at(row*2+col),
                                                    functionnamelist.at(row*2+col),
                                                    false,
                                                    true);

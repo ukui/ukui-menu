@@ -17,232 +17,150 @@
  */
 
 #include "functionclassifybutton.h"
+#include "utility.h"
 #include <QDebug>
+#include <syslog.h>
 
 FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
                        int width,
                        int height,
                        int iconSize,
-                       int textSize,
-                       QString iconstr,
-                       QString piconstr,
-                       QString hoverbg,
-                       QString pressedbg,
-                       int module,
+                       QString category,
                        QString text,
-                       bool is_fullscreen,
+                       bool fullscreen,
                        bool enabled):
-    QPushButton (parent)
+    QPushButton (parent),
+    m_width(width),
+    m_height(height),
+    m_iconSize(iconSize),
+    m_category(category),
+    m_text(text),
+    m_fullscreen(fullscreen),
+    m_enabled(enabled),
+    m_iconLabel(new QLabel),
+    m_textLabel(new QLabel)
 {
-    this->width=width;
-    this->height=height;
-    this->iconSize=iconSize;
-    this->textSize=textSize;
-    this->setFixedSize(width,height);
-    this->iconstr=iconstr;
-    this->piconstr=piconstr;
-    this->hoverbg=hoverbg;
-    this->pressedbg=pressedbg;
-    this->module=module;
-    this->text=text;
-    this->is_fullscreen=is_fullscreen;
-    this->enabled=enabled;
+    m_textLabel->setAutoFillBackground(true);
+    this->setFixedSize(m_width,m_height);
     this->setCheckable(true);
-
     this->setFocusPolicy(Qt::NoFocus);
-    svgRender=new QSvgRenderer(this);
-    svgRender->load(iconstr);
-    pixmap=new QPixmap(iconSize,iconSize);
-    pixmap->fill(Qt::transparent);
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    iconlabel=new QLabel(this);
-    iconlabel->setFixedSize(pixmap->size());
-    iconlabel->setPixmap(*pixmap);
-    iconlabel->setStyleSheet("background:transparent;");
-
-    textlabel=new QLabel(this);
-    textlabel->setText(this->text);
-//    QFont font;
-//    font.setPixelSize(textSize);
-//    textlabel->setFont(font);
-    if(is_fullscreen)
-        textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
+    m_iconLabel->setFixedSize(19,19);
+    m_textLabel->setText(m_text);
+    m_textLabel->adjustSize();
+    m_iconLabel->setStyleSheet("background:transparent;");
+    if(m_fullscreen)
+        updateIconState(Normal);
     else
     {
-        if(enabled)
-            textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255);");
+        if(m_enabled)
+            updateIconState(Enabled);
         else
-            textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 25%);");
+            updateIconState(Disabled);
     }
-    textlabel->adjustSize();
 
-    mainlayout=new QHBoxLayout;
+    QHBoxLayout* mainlayout=new QHBoxLayout;
     mainlayout->setContentsMargins(Style::LeftSpaceIconLeft,0,0,0);
     mainlayout->setSpacing(Style::LeftSpaceIconText);
     this->setLayout(mainlayout);
-    mainlayout->addWidget(iconlabel);
-    mainlayout->addWidget(textlabel);
+    mainlayout->addWidget(m_iconLabel);
+    mainlayout->addWidget(m_textLabel);
     connect(this,&FunctionClassifyButton::toggled,this,&FunctionClassifyButton::reactToToggle);
+    connect(this,&FunctionClassifyButton::clicked,this,&FunctionClassifyButton::buttonClickedSlot);
 }
 
 void FunctionClassifyButton::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    this->setFixedSize(width,height);
-    QByteArray byte=hoverbg.toLocal8Bit();
+    QByteArray byte=QString(ClassifyBtnHoverBackground).toLocal8Bit();
     char* hover=byte.data();
     char style[100];
-    if(enabled)
+    if(m_enabled)
+    {
+        updateIconState(Checked);
         sprintf(style,"border:0px;border-radius:4px;padding-left:0px;background-color:%s;",hover);
-    else
-        sprintf(style,"border:0px;border-radius:4px;padding-left:0px;background:transparent");
-    this->setStyleSheet(QString::fromLocal8Bit(style));
-    delete svgRender;
-    svgRender=new QSvgRenderer(this);
-    svgRender->load(piconstr);
-    pixmap=new QPixmap(iconSize,iconSize);
-    pixmap->fill(Qt::transparent);
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    iconlabel->setPixmap(*pixmap);
-    iconlabel->setFixedSize(pixmap->size());
-//    QFont font;
-//    font.setPixelSize(textSize);
-//    textlabel->setFont(font);
-    if(enabled)
-        textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
-    textlabel->adjustSize();
+        this->setStyleSheet(QString::fromLocal8Bit(style));
+    }
 }
 
 void FunctionClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->setStyleSheet("border:0px;border-radius:4px;padding-left:0px;background:transparent;");
-    delete svgRender;
-    svgRender=new QSvgRenderer(this);
-    if(module==2 && is_pressed)
+    if(m_fullscreen)
     {
-        this->setFixedSize(width,height);
-        svgRender->load(piconstr);
-        pixmap=new QPixmap(iconSize,iconSize);
-//        QFont font;
-//        font.setPixelSize(textSize);
-//        textlabel->setFont(font);
-
+        if(!isChecked())
+            updateIconState(Normal);
     }
     else
     {
-        this->setFixedSize(width,height);
-        svgRender->load(iconstr);
-        pixmap=new QPixmap(iconSize,iconSize);
-//        QFont font;
-//        font.setPixelSize(textSize);
-//        textlabel->setFont(font);
-
-    }
-//    pixmap=new QPixmap(iconSize,iconSize);
-    pixmap->fill(Qt::transparent);
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    iconlabel->setPixmap(*pixmap);
-    iconlabel->setFixedSize(pixmap->size());
-    if(is_fullscreen)
-    {
-        if(is_pressed)
-            textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
-        else
-            textlabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
-    }
-    textlabel->adjustSize();
-}
-
-void FunctionClassifyButton::mousePressEvent(QMouseEvent *event)
-{
-    this->setFixedSize(width,height);
-    QByteArray byte=pressedbg.toLocal8Bit();
-    char* pressed=byte.data();
-    char style[100];
-    if(enabled)
-        sprintf(style,"border:0px;border-radius:4px;padding-left:0px;background-color:%s;",pressed);
-    if(event->button()==Qt::LeftButton)
-    {
-        this->setStyleSheet(QString::fromLocal8Bit(style));
-        delete svgRender;
-        svgRender=new QSvgRenderer(this);
-        svgRender->load(piconstr);
-        pixmap=new QPixmap(iconSize,iconSize);
-        pixmap->fill(Qt::transparent);
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        iconlabel->setPixmap(*pixmap);
-        iconlabel->setFixedSize(pixmap->size());
-//        QFont font;
-//        font.setPixelSize(textSize);
-//        textlabel->setFont(font);
-        textlabel->setStyleSheet("background:transparent;color:#ffffff;");
-        textlabel->adjustSize();
-        is_pressed=true;
-    }
-}
-
-void FunctionClassifyButton::mouseReleaseEvent(QMouseEvent *event)
-{
-    QByteArray byte=hoverbg.toLocal8Bit();
-    char* hover=byte.data();
-    char style[100];
-    if(enabled)
-        sprintf(style,"border:0px;border-radius:4px;padding-left:0px;background-color:%s;",hover);
-    if(event->button()==Qt::LeftButton)
-    {
-        this->setStyleSheet(QString::fromLocal8Bit(style));
-        delete svgRender;
-        svgRender=new QSvgRenderer(this);
-        svgRender->load(piconstr);
-        pixmap=new QPixmap(iconSize,iconSize);
-        pixmap->fill(Qt::transparent);
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        iconlabel->setPixmap(*pixmap);
-        iconlabel->setFixedSize(pixmap->size());
-//        QFont font;
-//        font.setPixelSize(textSize);
-//        textlabel->setFont(font);
-        textlabel->setStyleSheet("background:transparent;color:#ffffff;");
-        textlabel->adjustSize();
-        Q_EMIT buttonClicked(this);
+        if(m_enabled)
+            updateIconState(Enabled);
     }
 }
 
 void FunctionClassifyButton::reactToToggle(bool checked)
 {
-    if(checked)
+    if(m_fullscreen)
     {
-        delete svgRender;
-        svgRender=new QSvgRenderer(this);
-        svgRender->load(piconstr);
-        pixmap=new QPixmap(iconSize,iconSize);
-        pixmap->fill(Qt::transparent);
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        iconlabel->setPixmap(*pixmap);
-        iconlabel->setFixedSize(pixmap->size());
-        textlabel->setStyleSheet("background:transparent;color:#ffffff;");
-        textlabel->adjustSize();
-        is_pressed=true;
+        if(checked)
+            updateIconState(Checked);
+        else
+            updateIconState(Normal);
     }
-    else{
-        delete svgRender;
-        svgRender = new QSvgRenderer(this);
-        svgRender->load(iconstr);
-        pixmap=new QPixmap(iconSize,iconSize);
-        pixmap->fill(Qt::transparent);
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        iconlabel->setPixmap(*pixmap);
-        iconlabel->setFixedSize(pixmap->size());
-        textlabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255,50%);");
-        textlabel->adjustSize();
-        is_pressed=false;
+}
+
+void FunctionClassifyButton::buttonClickedSlot()
+{
+    Q_EMIT buttonClicked(m_category);
+}
+
+void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State state)
+{
+    if (state == m_state)
+        return;
+    m_state = state;
+
+    QString picState;
+    switch (state)
+    {
+    case Enabled:   picState="Enabled"; break;
+    case Disabled:  picState="Disabled"; break;
+    case Normal:    picState="Normal"; break;
+    case Checked:   picState="Checked"; break;
+    default:        break;
     }
+
+//    const auto ratio = devicePixelRatioF();
+    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize);
+//    categoryPix.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_iconLabel->setPixmap(pixmap);
+    updateTextState(state);
+}
+
+void FunctionClassifyButton::updateTextState(const FunctionClassifyButton::State state)
+{
+//    QPalette p= m_textLabel->palette();
+    switch (state)
+    {
+    case Enabled:
+//        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1));
+        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255);");
+        break;
+    case Disabled:
+//        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1, 0.25));
+        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 25%);");
+        break;
+    case Normal:
+//        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1, 0.50));
+        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
+        break;
+    case Checked:
+//        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1));
+        m_textLabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
+        break;
+    default:
+        break;
+    }
+//    p.setColor(QPalette::Window,Qt::transparent);
+//    m_textLabel->setPalette(p);
 }

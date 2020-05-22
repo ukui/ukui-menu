@@ -56,10 +56,8 @@ void FunctionWidget::initWidget()
     functionbtnwid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
 
     enterAnimation=new QPropertyAnimation;
-    enterAnimation->setDuration(50);
     enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
     leaveAnimation=new QPropertyAnimation;
-    leaveAnimation->setDuration(50);
     leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
     connect(leaveAnimation,&QPropertyAnimation::finished,this,&FunctionWidget::animationFinishedSLot);
     connect(enterAnimation,&QPropertyAnimation::finished,this,&FunctionWidget::animationFinishedSLot);
@@ -91,7 +89,7 @@ void FunctionWidget::fillAppListView()
     QStringList androidlist=vector.at(0);
     if(!androidlist.isEmpty())
     {
-        insertClassificationBtn(tr("Android"));
+        insertClassificationBtn(tr("Mobile"));
         insertAppList(androidlist);
     }
 
@@ -206,7 +204,7 @@ void FunctionWidget::updateAppListView()
     QStringList androidlist=vector.at(0);
     if(!androidlist.isEmpty())
     {
-        insertClassificationBtn(tr("Android"));
+        insertClassificationBtn(tr("Mobile"));
         insertAppList(androidlist);
     }
 
@@ -281,11 +279,13 @@ void FunctionWidget::appClassificationBtnClickedSlot()
 {
     leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
     leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
-    enterAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
+    enterAnimation->setStartValue(QRect(-40,-40,this->width()+80,this->height()+80));
     enterAnimation->setEndValue(QRect((this->width()-Style::LeftBtnWidth*2-5)/2,
                                       (this->height()-Style::LeftBtnHeight*6-25)/2,
                                       Style::LeftBtnWidth*2+5,
                                       Style::LeftBtnHeight*6+25));
+    leaveAnimation->setDuration(10);
+    enterAnimation->setDuration(80);
 
     //加载FunctionButtonWidget界面
     QLayoutItem *child=nullptr;
@@ -320,9 +320,11 @@ void FunctionWidget::recvFunctionBtnSignal(QString btnname)
                                         (this->height()-Style::LeftBtnHeight*6-25)/2,
                                         Style::LeftBtnWidth*2+5,
                                         Style::LeftBtnHeight*6+25));
-    leaveAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+    leaveAnimation->setEndValue(QRect(-40,-40,this->width()+80,this->height()+80));
     enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
     enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+    leaveAnimation->setDuration(80);
+    enterAnimation->setDuration(10);
 
     leaveAnimation->setTargetObject(functionbtnwid);
     enterAnimation->setTargetObject(applistview);

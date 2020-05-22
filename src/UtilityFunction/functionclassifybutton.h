@@ -35,58 +35,47 @@ class FunctionClassifyButton : public QPushButton
 public:
     /**
      * @param iconstr正常图片
-     * @param piconstr点击图片
-     * @param hoverbg悬浮背景色
-     * @param pressedbg点击后背景色
-     * @param module为0时为常用模块，1为字母模块、2为功能模块,3为属性模块
      */
     FunctionClassifyButton(QWidget *parent,
                int width,
                int height,
                int iconSize,
-               int textSize,
-               QString iconstr,
-               QString piconstr,
-               QString hoverbg,
-               QString pressedbg,
-               int module,
+               QString category,
                QString text,
-               bool is_fullscreen,
+               bool fullscreen,
                bool enabled);
 
-    bool is_pressed=false;//记录功能分类模块点击状态
-
 private:
-    int width;
-    int height;
-    int iconSize;
-    int textSize;
-    QString iconstr;
-    QString piconstr;
-    QString hoverbg;
-    QString pressedbg;
-    int module;
-    QHBoxLayout* mainlayout=nullptr;
-    QLabel* iconlabel=nullptr;
-    QLabel* textlabel=nullptr;
-    QPixmap* pixmap;
-    QSvgRenderer* svgRender;
-    QString text;
-    bool is_fullscreen;
-    bool enabled;
+    enum State {
+        Enabled,
+        Disabled,
+        Normal,
+        Checked
+    };
+
+    int m_width;
+    int m_height;
+    int m_iconSize;
+    QString m_category;
+    QString m_text;
+    bool m_fullscreen;
+    bool m_enabled;
+    QLabel* m_iconLabel=nullptr;
+    QLabel* m_textLabel=nullptr;
+    State m_state=Checked;
 
 protected:
     void enterEvent(QEvent* e);
     void leaveEvent(QEvent* e);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-
+    void updateIconState(const State state);
+    void updateTextState(const State state);
 
 Q_SIGNALS:
-    void buttonClicked(QAbstractButton* btn);
+    void buttonClicked(QString category);
 
 private Q_SLOTS:
     void reactToToggle(bool checked);
+    void buttonClickedSlot();
 };
 
 #endif // FUNCTIONCLASSIFYBUTTON_H
