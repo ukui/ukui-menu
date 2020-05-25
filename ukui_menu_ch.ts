@@ -2,170 +2,59 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>CommonUseWidget</name>
+    <name>FunctionClassifyButton</name>
     <message>
-        <location filename="src/CommonUseWidget/commonusewidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>FullCommonUseWidget</name>
-    <message>
-        <location filename="src/CommonUseWidget/fullcommonusewidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>FullFunctionWidget</name>
-    <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="94"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="151"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="177"/>
         <source>Mobile</source>
         <translation>移动</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="95"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="158"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="180"/>
         <source>Internet</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="96"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="164"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="183"/>
         <source>Social</source>
         <translation>社交</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="97"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="170"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="186"/>
         <source>Video</source>
         <translation>影音</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="98"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="176"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="189"/>
         <source>Development</source>
         <translation>开发</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="99"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="182"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="192"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="100"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="188"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="195"/>
         <source>Game</source>
         <translation>游戏</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="101"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="194"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="198"/>
         <source>Office</source>
         <translation>办公</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="102"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="200"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="201"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="103"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="207"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="204"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="104"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="213"/>
-        <source>Others</source>
-        <translation>其它</translation>
-    </message>
-</context>
-<context>
-    <name>FullLetterWidget</name>
-    <message>
-        <location filename="src/LetterWidget/fullletterwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>FullSearchResultWidget</name>
-    <message>
-        <location filename="src/SearchResultWidget/fullsearchresultwidget.ui" line="16"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>FunctionButtonWidget</name>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.ui" line="16"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="91"/>
-        <source>Mobile</source>
-        <translation>移动</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="92"/>
-        <source>Internet</source>
-        <translation>网络</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="93"/>
-        <source>Social</source>
-        <translation>社交</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="94"/>
-        <source>Video</source>
-        <translation>影音</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="95"/>
-        <source>Development</source>
-        <translation>开发</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="96"/>
-        <source>Image</source>
-        <translation>图像</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="97"/>
-        <source>Game</source>
-        <translation>游戏</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="98"/>
-        <source>Office</source>
-        <translation>办公</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="99"/>
-        <source>Education</source>
-        <translation>教育</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="100"/>
-        <source>System</source>
-        <translation>系统</translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="101"/>
+        <location filename="src/UtilityFunction/functionclassifybutton.cpp" line="207"/>
         <source>Others</source>
         <translation>其它</translation>
     </message>
@@ -173,112 +62,125 @@
 <context>
     <name>FunctionWidget</name>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="95"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="223"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="89"/>
         <source>Mobile</source>
         <translation>移动</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="102"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="230"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="95"/>
         <source>Internet</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="108"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="236"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="101"/>
         <source>Social</source>
         <translation>社交</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="114"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="242"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="107"/>
         <source>Video</source>
         <translation>影音</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="120"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="248"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="113"/>
         <source>Development</source>
         <translation>开发</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="126"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="254"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="119"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="132"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="260"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="125"/>
         <source>Game</source>
         <translation>游戏</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="138"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="266"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="131"/>
         <source>Office</source>
         <translation>办公</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="144"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="272"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="137"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="151"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="279"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="144"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="157"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="285"/>
+        <location filename="src/FunctionWidget/functionwidget.cpp" line="150"/>
         <source>Others</source>
         <translation>其它</translation>
     </message>
 </context>
 <context>
-    <name>LetterButtonWidget</name>
-    <message>
-        <location filename="src/LetterWidget/letterbuttonwidget.ui" line="16"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>LetterWidget</name>
-    <message>
-        <location filename="src/LetterWidget/letterwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>MainViewWidget</name>
     <message>
-        <location filename="src/MainViewWidget/mainviewwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="src/MainViewWidget/mainviewwidget.cpp" line="174"/>
+        <location filename="src/MainViewWidget/mainviewwidget.cpp" line="170"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
+    <name>PushButton</name>
     <message>
-        <location filename="src/MainWindow/mainwindow.ui" line="14"/>
-        <source>MainWindow</source>
-        <translation></translation>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="77"/>
+        <source>Mobile</source>
+        <translation>移动</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="80"/>
+        <source>Internet</source>
+        <translation>网络</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="83"/>
+        <source>Social</source>
+        <translation>社交</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="86"/>
+        <source>Video</source>
+        <translation>影音</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="89"/>
+        <source>Development</source>
+        <translation>开发</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="92"/>
+        <source>Image</source>
+        <translation>图像</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="95"/>
+        <source>Game</source>
+        <translation>游戏</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="98"/>
+        <source>Office</source>
+        <translation>办公</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="101"/>
+        <source>Education</source>
+        <translation>教育</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="104"/>
+        <source>System</source>
+        <translation>系统</translation>
+    </message>
+    <message>
+        <location filename="src/UtilityFunction/pushbutton.cpp" line="107"/>
+        <source>Others</source>
+        <translation>其它</translation>
     </message>
 </context>
 <context>
@@ -353,65 +255,52 @@
     </message>
 </context>
 <context>
-    <name>SearchResultWidget</name>
-    <message>
-        <location filename="src/SearchResultWidget/searchresultwidget.ui" line="16"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>SideBarWidget</name>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="110"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="533"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="107"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="530"/>
         <source>All</source>
         <translation>所有软件</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="114"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="536"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="111"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="533"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="118"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="539"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="115"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="536"/>
         <source>Function</source>
         <translation>功能分类</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="138"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="561"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="135"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="558"/>
         <source>Computer</source>
         <translation>计算机</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="140"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="555"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="137"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="552"/>
         <source>Personal</source>
         <translation>个人</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="142"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="564"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="139"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="561"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="144"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="558"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="141"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="555"/>
         <source>Recycle Bin</source>
         <translation>回收站</translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="146"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="572"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="143"/>
+        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="569"/>
         <source>Power</source>
         <translation>电源</translation>
     </message>

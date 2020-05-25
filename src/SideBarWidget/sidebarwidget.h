@@ -36,10 +36,6 @@
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 
-namespace Ui {
-class SideBarWidget;
-}
-
 class SideBarWidget : public QWidget
 {
     Q_OBJECT
@@ -53,7 +49,6 @@ public:
     void enterAnimation();
 
 private:
-    Ui::SideBarWidget *ui;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     QHBoxLayout* layout=nullptr;

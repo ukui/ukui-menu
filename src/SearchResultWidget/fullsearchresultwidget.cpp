@@ -17,22 +17,18 @@
  */
 
 #include "fullsearchresultwidget.h"
-#include "ui_fullsearchresultwidget.h"
 #include <QHeaderView>
 #include "src/Style/style.h"
 #include <QDebug>
 
 FullSearchResultWidget::FullSearchResultWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FullSearchResultWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
     initWidget();
 }
 
 FullSearchResultWidget::~FullSearchResultWidget()
 {
-    delete ui;
     delete pUkuiMenuInterface;
 }
 
@@ -70,10 +66,11 @@ void FullSearchResultWidget::execApplication(QString desktopfp)
     g_object_unref(desktopAppInfo);
 }
 
-void FullSearchResultWidget::updateAppListView(QStringList desktopfplist)
+void FullSearchResultWidget::updateAppListView(QVector<QStringList> arg)
 {
     data.clear();
-    data=desktopfplist;
+    Q_FOREACH(QStringList appinfo,arg)
+        data.append(appinfo.at(0));
     listview->updateData(data);
 }
 

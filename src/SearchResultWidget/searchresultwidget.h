@@ -33,10 +33,6 @@
 #include "src/UtilityFunction/listview.h"
 #include "src/UtilityFunction/itemdelegate.h"
 
-namespace Ui {
-class SearchResultWidget;
-}
-
 class SearchResultWidget : public QWidget
 {
     Q_OBJECT
@@ -44,7 +40,7 @@ class SearchResultWidget : public QWidget
 public:
     explicit SearchResultWidget(QWidget *parent = nullptr);
     ~SearchResultWidget();
-    void updateAppListView(QStringList desktopfplist);
+    void updateAppListView(QVector<QStringList> arg);
     /**
      * @brief moveScrollBar移动滚动条
      * @param type为0时表示向上移动，为1时表示向下移动
@@ -52,8 +48,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::SearchResultWidget *ui;
-
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     QHBoxLayout* mainLayout=nullptr;

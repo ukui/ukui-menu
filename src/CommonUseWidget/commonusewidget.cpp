@@ -17,7 +17,6 @@
  */
 
 #include "commonusewidget.h"
-#include "ui_commonusewidget.h"
 #include "src/Style/style.h"
 #include <QDBusInterface>
 #include <QDBusReply>
@@ -25,17 +24,14 @@
 #include <QDebug>
 
 CommonUseWidget::CommonUseWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::CommonUseWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
     initWidget();
 
 }
 
 CommonUseWidget::~CommonUseWidget()
 {
-    delete ui;
     delete pUkuiMenuInterface;
 }
 

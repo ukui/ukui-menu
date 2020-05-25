@@ -17,22 +17,17 @@
  */
 
 #include "functionwidget.h"
-#include "ui_functionwidget.h"
 #include "src/Style/style.h"
 #include <QDebug>
 
 FunctionWidget::FunctionWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FunctionWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
-
     initWidget();
 }
 
 FunctionWidget::~FunctionWidget()
 {
-    delete ui;
     delete pUkuiMenuInterface;
 }
 
@@ -71,7 +66,7 @@ void FunctionWidget::initAppListWidget()
 {
     applistview=new ListView(this,this->width()-4,this->height(),2);
     applistview->setGeometry(QRect(0,0,this->width()-4,this->height()));
-    fillAppListView();
+    fillAppListView(0);
     connect(applistview,&ListView::sendItemClickedSignal,this,&FunctionWidget::recvItemClickedSlot);
     connect(applistview,&ListView::sendHideMainWindowSignal,this,&FunctionWidget::sendHideMainWindowSignal);
 
@@ -81,8 +76,10 @@ void FunctionWidget::initAppListWidget()
 /**
  * 填充应用列表
  */
-void FunctionWidget::fillAppListView()
+void FunctionWidget::fillAppListView(int type)
 {
+    row=0;
+    data.clear();
     classificationbtnlist.clear();
     classificationbtnrowlist.clear();
     QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
@@ -92,7 +89,6 @@ void FunctionWidget::fillAppListView()
         insertClassificationBtn(tr("Mobile"));
         insertAppList(androidlist);
     }
-
     QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
@@ -155,7 +151,10 @@ void FunctionWidget::fillAppListView()
         insertAppList(otherlist);
     }
 
-    applistview->addData(data);
+    if(type==0)
+        applistview->addData(data);
+    else
+        applistview->updateData(data);
 }
 
 void FunctionWidget::insertClassificationBtn(QString btnname)
@@ -196,80 +195,82 @@ void FunctionWidget::execApplication(QString desktopfp)
  */
 void FunctionWidget::updateAppListView()
 {
-    classificationbtnlist.clear();
-    classificationbtnrowlist.clear();
-    row=0;
-    data.clear();
-    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-    QStringList androidlist=vector.at(0);
-    if(!androidlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Mobile"));
-        insertAppList(androidlist);
-    }
+    fillAppListView(1);
 
-    QStringList netlist=vector.at(1);
-    if(!netlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Internet"));
-        insertAppList(netlist);
-    }
-    QStringList sociallist=vector.at(2);
-    if(!sociallist.isEmpty())
-    {
-        insertClassificationBtn(tr("Social"));
-        insertAppList(sociallist);
-    }
-    QStringList avlist=vector.at(3);
-    if(!avlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Video"));
-        insertAppList(avlist);
-    }
-    QStringList developlist=vector.at(4);
-    if(!developlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Development"));
-        insertAppList(developlist);
-    }
-    QStringList graphicslist=vector.at(5);
-    if(!graphicslist.isEmpty())
-    {
-        insertClassificationBtn(tr("Image"));
-        insertAppList(graphicslist);
-    }
-    QStringList gamelist=vector.at(6);
-    if(!gamelist.isEmpty())
-    {
-        insertClassificationBtn(tr("Game"));
-        insertAppList(gamelist);
-    }
-    QStringList officelist=vector.at(7);
-    if(!officelist.isEmpty())
-    {
-        insertClassificationBtn(tr("Office"));
-        insertAppList(officelist);
-    }
-    QStringList educationlist=vector.at(8);
-    if(!educationlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Education"));
-        insertAppList(educationlist);
-    }
+//    row=0;
+//    data.clear();
+//    classificationbtnlist.clear();
+//    classificationbtnrowlist.clear();
+//    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
+//    QStringList androidlist=vector.at(0);
+//    if(!androidlist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Mobile"));
+//        insertAppList(androidlist);
+//    }
 
-    QStringList systemadminlist=vector.at(9);
-    if(!systemadminlist.isEmpty())
-    {
-        insertClassificationBtn(tr("System"));
-        insertAppList(systemadminlist);
-    }
-    QStringList otherlist=vector.at(10);
-    if(!otherlist.isEmpty())
-    {
-        insertClassificationBtn(tr("Others"));
-        insertAppList(otherlist);
-    }
-    applistview->updateData(data);
+//    QStringList netlist=vector.at(1);
+//    if(!netlist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Internet"));
+//        insertAppList(netlist);
+//    }
+//    QStringList sociallist=vector.at(2);
+//    if(!sociallist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Social"));
+//        insertAppList(sociallist);
+//    }
+//    QStringList avlist=vector.at(3);
+//    if(!avlist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Video"));
+//        insertAppList(avlist);
+//    }
+//    QStringList developlist=vector.at(4);
+//    if(!developlist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Development"));
+//        insertAppList(developlist);
+//    }
+//    QStringList graphicslist=vector.at(5);
+//    if(!graphicslist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Image"));
+//        insertAppList(graphicslist);
+//    }
+//    QStringList gamelist=vector.at(6);
+//    if(!gamelist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Game"));
+//        insertAppList(gamelist);
+//    }
+//    QStringList officelist=vector.at(7);
+//    if(!officelist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Office"));
+//        insertAppList(officelist);
+//    }
+//    QStringList educationlist=vector.at(8);
+//    if(!educationlist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Education"));
+//        insertAppList(educationlist);
+//    }
+
+//    QStringList systemadminlist=vector.at(9);
+//    if(!systemadminlist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("System"));
+//        insertAppList(systemadminlist);
+//    }
+//    QStringList otherlist=vector.at(10);
+//    if(!otherlist.isEmpty())
+//    {
+//        insertClassificationBtn(tr("Others"));
+//        insertAppList(otherlist);
+//    }
+//    applistview->updateData(data);
 }
 
 /**
@@ -296,7 +297,7 @@ void FunctionWidget::appClassificationBtnClickedSlot()
         delete wid;
         delete child;
     }
-    Q_EMIT sendClassificationbtnList(classificationbtnlist);
+    Q_EMIT sendClassificationbtnList();
     leaveAnimation->setTargetObject(applistview);
     enterAnimation->setTargetObject(functionbtnwid);
     leaveAnimation->start();

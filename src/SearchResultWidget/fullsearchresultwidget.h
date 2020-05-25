@@ -31,10 +31,6 @@
 #include "src/UtilityFunction/fulllistview.h"
 #include "src/Style/style.h"
 
-namespace Ui {
-class FullSearchResultWidget;
-}
-
 class FullSearchResultWidget : public QWidget
 {
     Q_OBJECT
@@ -42,7 +38,7 @@ class FullSearchResultWidget : public QWidget
 public:
     explicit FullSearchResultWidget(QWidget *parent = nullptr);
     ~FullSearchResultWidget();
-    void updateAppListView(QStringList desktopfplist);
+    void updateAppListView(QVector<QStringList> arg);
     void repaintWidget();
     /**
      * @brief moveScrollBar移动滚动条
@@ -51,8 +47,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::FullSearchResultWidget *ui;
-
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     QHBoxLayout* mainLayout=nullptr;

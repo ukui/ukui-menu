@@ -26,6 +26,7 @@
 
 int main(int argc, char *argv[])
 {
+    qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QtSingleApplication app("ukui-start-menu",argc,argv);

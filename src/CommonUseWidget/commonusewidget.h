@@ -36,10 +36,6 @@
 #include "src/UtilityFunction/listview.h"
 #include "src/UtilityFunction/itemdelegate.h"
 
-namespace Ui {
-class CommonUseWidget;
-}
-
 class CommonUseWidget : public QWidget
 {
     Q_OBJECT
@@ -56,7 +52,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::CommonUseWidget *ui;
     QSettings *setting=nullptr;
 
     QHBoxLayout* mainLayout=nullptr;

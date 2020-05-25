@@ -32,10 +32,6 @@
 #include "src/UtilityFunction/listview.h"
 #include "src/UtilityFunction/itemdelegate.h"
 
-namespace Ui {
-class FunctionWidget;
-}
-
 class FunctionWidget : public QWidget
 {
     Q_OBJECT
@@ -51,8 +47,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::FunctionWidget *ui;
-
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     //主界面
@@ -72,7 +66,7 @@ private:
 protected:
     void initWidget();
     void initAppListWidget();//初始化应用列表界面
-    void fillAppListView();//填充应用列表
+    void fillAppListView(int type);//填充应用列表
     void insertClassificationBtn(QString btnname);//插入分类按钮
     void insertAppList(QStringList appnamelist);//插入应用列表
 
@@ -85,7 +79,7 @@ public Q_SLOTS:
     void animationFinishedSLot();
 
 Q_SIGNALS:
-    void sendClassificationbtnList(QStringList list);//向FunctionButtonWidget界面发送分类按钮列表
+    void sendClassificationbtnList();//向FunctionButtonWidget界面发送分类按钮列表
     void sendUpdateAppListSignal(QString desktopfp,int type);//向常用软件模块发送更新应用列表信号
     void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 };

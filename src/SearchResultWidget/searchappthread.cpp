@@ -17,6 +17,7 @@
  */
 
 #include "searchappthread.h"
+#include <syslog.h>
 
 SearchAppThread::SearchAppThread()
 {
@@ -32,23 +33,75 @@ void SearchAppThread::run()
 {
     appInfoVector.clear();
     appInfoVector=UkuiMenuInterface::appInfoVector;
-    searchResultList.clear();
+    searchResultVector.clear();
     if(!this->keyword.isEmpty())
     {
         QString str=pUkuiMenuInterface->getAppNamePinyin(keyword);
         int index=0;
-        while(index<appInfoVector.size())
+        if(str.size()==1)
         {
-            QString appNamePy=pUkuiMenuInterface->getAppNamePinyin(appInfoVector.at(index).at(2));
-            if(appNamePy.contains(str,Qt::CaseInsensitive))
+            int num=static_cast<int>(str.toLocal8Bit().at(0));
+            if(str.at(0)>=65 && str.at(0)<=90)
             {
-                searchResultList.append(appInfoVector.at(index).at(0));
+                searchResultVector.append(UkuiMenuInterface::alphabeticVector.at(num-65));
+
+//                while(index<appInfoVector.size())
+//                {
+//                    QString appNamePys=appInfoVector.at(index).at(5);
+//                    if(appNamePys.contains(str))
+//                    {
+//                        searchResultList.append(appInfoVector.at(index).at(0));
+//                    }
+//                    index++;
+//                }
             }
-            index++;
+            else if(str.at(0)<48 || (str.at(0)>57 && str.at(0)<65) || str.at(0)>90)
+                searchResultVector.append(UkuiMenuInterface::alphabeticVector.at(26));
+            else
+                searchResultVector.append(UkuiMenuInterface::alphabeticVector.at(27));
+        }
+//        else if(QString::compare("Mobile",keyword,Qt::CaseInsensitive)==0 || QString::compare("移动",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(0);
+//        else if(QString::compare("Internet",keyword,Qt::CaseInsensitive)==0 || QString::compare("网络",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(1);
+//        else if(QString::compare("Social",keyword,Qt::CaseInsensitive)==0 || QString::compare("社交",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(2);
+//        else if(QString::compare("Video",keyword,Qt::CaseInsensitive)==0 || QString::compare("影音",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(3);
+//        else if(QString::compare("Development",keyword,Qt::CaseInsensitive)==0 || QString::compare("开发",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(4);
+//        else if(QString::compare("Image",keyword,Qt::CaseInsensitive)==0 || QString::compare("图像",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(5);
+//        else if(QString::compare("Game",keyword,Qt::CaseInsensitive)==0 || QString::compare("游戏",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(6);
+//        else if(QString::compare("Office",keyword,Qt::CaseInsensitive)==0 || QString::compare("办公",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(7);
+//        else if(QString::compare("Education",keyword,Qt::CaseInsensitive)==0 || QString::compare("教育",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(8);
+//        else if(QString::compare("System",keyword,Qt::CaseInsensitive)==0 || QString::compare("系统",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(9);
+//        else if(QString::compare("Others",keyword,Qt::CaseInsensitive)==0 || QString::compare("其它",keyword,Qt::CaseInsensitive)==0)
+//            searchResultList=UkuiMenuInterface::functionalVector.at(10);
+        else
+        {
+            while(index<appInfoVector.size())
+            {
+                QString appNamePy=pUkuiMenuInterface->getAppNamePinyin(appInfoVector.at(index).at(2));
+                QString appEnglishName=appInfoVector.at(index).at(3);
+                QString appNameFls=appInfoVector.at(index).at(6);
+                if(appNamePy.contains(str,Qt::CaseInsensitive) ||
+                        appNameFls.contains(str,Qt::CaseInsensitive) ||
+                        appEnglishName.contains(str,Qt::CaseInsensitive))
+                {
+                    searchResultVector.append(appInfoVector.at(index));
+                }
+                index++;
+            }
         }
     }
 
-    Q_EMIT sendSearchResult(searchResultList);
+    qSort(searchResultVector.begin(),searchResultVector.end(),UkuiMenuInterface::cmpApp);
+    Q_EMIT sendSearchResult(searchResultVector);
 }
 
 void SearchAppThread::recvSearchKeyword(QString arg)

@@ -43,10 +43,6 @@
 #include "directorychangedthread.h"
 #include "src/Style/style.h"
 
-namespace Ui {
-class MainViewWidget;
-}
-
 class MainViewWidget : public QWidget
 {
     Q_OBJECT
@@ -66,8 +62,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::MainViewWidget *ui;
-
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     QVBoxLayout* mainLayout=nullptr;
@@ -132,7 +126,7 @@ public Q_SLOTS:
     void searchAppSlot(QString arg);//搜索程序和文件槽函数
     void ViewOpenedSlot(QDBusMessage msg);//监控进程开启
     void directoryChangedSlot();//desktop文件目录改变信号槽
-    void recvSearchResult(QStringList desktopfplist);//接收搜索结果
+    void recvSearchResult(QVector<QStringList> arg);//接收搜索结果
     void iconThemeChangeSlot(QString key);
     void requestUpdateSlot();
 

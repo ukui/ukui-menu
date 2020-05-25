@@ -36,10 +36,6 @@
 #include "src/UtilityFunction/fulllistview.h"
 #include "src/Style/style.h"
 
-namespace Ui {
-class FullCommonUseWidget;
-}
-
 class FullCommonUseWidget : public QWidget
 {
     Q_OBJECT
@@ -57,8 +53,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::FullCommonUseWidget *ui;
-
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     QSettings *setting=nullptr;

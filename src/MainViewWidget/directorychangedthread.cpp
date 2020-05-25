@@ -81,6 +81,12 @@ void DirectoryChangedThread::run()
                     setting->sync();
                     setting->endGroup();
                     syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件卸载desktop文件名：%s",desktopfn.toLocal8Bit().data());
+
+                    QDBusInterface iface("com.ukui.panel.desktop",
+                                         "/",
+                                         "com.ukui.panel.desktop",
+                                         QDBusConnection::sessionBus());
+                    iface.call("RemoveFromTaskbar",desktopfp);
                     break;
                 }
             }

@@ -17,7 +17,6 @@
  */
 
 #include "mainviewwidget.h"
-#include "ui_mainviewwidget.h"
 #include "src/Style/style.h"
 #include <QSvgRenderer>
 #include <QPainter>
@@ -26,16 +25,13 @@
 #include <QDebug>
 
 MainViewWidget::MainViewWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::MainViewWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
     initWidget();
 }
 
 MainViewWidget::~MainViewWidget()
 {
-    delete ui;
     delete commonusewid;
     delete fullcommonusewid;
     delete letterwid;
@@ -325,11 +321,11 @@ void MainViewWidget::searchAppSlot(QString arg)
     }
 }
 
-void MainViewWidget::recvSearchResult(QStringList desktopfplist)
+void MainViewWidget::recvSearchResult(QVector<QStringList> arg)
 {
     searchappthread->quit();
-    fullsearchresultwid->updateAppListView(desktopfplist);
-    searchresultwid->updateAppListView(desktopfplist);
+    fullsearchresultwid->updateAppListView(arg);
+    searchresultwid->updateAppListView(arg);
 }
 
 /**

@@ -81,36 +81,39 @@ char UkuiChineseLetter::Convert(int n)//此方法有缺陷，只能识别一级�
 
 QString UkuiChineseLetter::getFirstLetter(const QString &src)
 {
-    wchar_t wchr = 0;
-    QString firstLetter;
-    if(src.size() > 0)
-    {
-        QString str = src.at(0);
-        QTextCodec* pCodec = QTextCodec::codecForName("gb2312");
-        if(!pCodec) return QChar(' ');
-        QByteArray arr = pCodec->fromUnicode(str);
-        if(arr.size() == 1)
-        {
-            wchr = arr.at(0) & 0xff;
-        }
-        else if(arr.size() == 2)
-        {
-            wchr = (arr.at(0) & 0xff) << 8;
-            wchr |= (arr.at(1) & 0xff);
-        }
-        else
-        {
-//            qDebug() << "unknown word";
-        }
+//    wchar_t wchr = 0;
+//    QString firstLetter;
+//    if(src.size() > 0)
+//    {
+//        QString str = src.at(0);
+//        QTextCodec* pCodec = QTextCodec::codecForName("gb2312");
+//        if(!pCodec) return QChar(' ');
+//        QByteArray arr = pCodec->fromUnicode(str);
 
-        char c = Convert(wchr);
-        if(c != 0)
-        {
-            firstLetter.append(c);
-        }
-    }
+//        if(arr.size() == 1)
+//        {
+//            wchr = arr.at(0) & 0xff;
+//        }
+//        else if(arr.size() == 2)
+//        {
+//            wchr = (arr.at(0) & 0xff) << 8;
+//            wchr |= (arr.at(1) & 0xff);
+//        }
+//        else
+//        {
+////            qDebug() << "unknown word";
+//        }
 
-    return firstLetter;
+//        char c = Convert(wchr);
+//        if(c != 0)
+//        {
+//            firstLetter.append(c);
+//        }
+//    }
+
+    QString appnamePy=getPinyins(src);
+
+    return QString(appnamePy.at(0));
 }
 
 QString UkuiChineseLetter::getFirstLetters(const QString &src)

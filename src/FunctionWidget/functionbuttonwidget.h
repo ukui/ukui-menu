@@ -27,10 +27,7 @@
 #include <QVBoxLayout>
 #include <QSpacerItem>
 #include "src/UtilityFunction/functionclassifybutton.h"
-
-namespace Ui {
-class FunctionButtonWidget;
-}
+#include "src/Interface/ukuimenuinterface.h"
 
 class FunctionButtonWidget : public QWidget
 {
@@ -41,10 +38,9 @@ public:
     ~FunctionButtonWidget();
 
 private:
-    Ui::FunctionButtonWidget *ui;
     QGridLayout* gridLayout=nullptr;
     QVector<QAbstractButton*> vector;
-    QStringList functionnamelist, categorylist;
+    QStringList categoryList;
 
 protected:
     void initWidget();
@@ -57,8 +53,8 @@ Q_SIGNALS:
     void sendFunctionBtnSignal(QString btnname);
 
 public Q_SLOTS:
-    void functionBtnClickedSlot(QString category);//功能分类按钮槽函数
-    void recvClassificationBtnList(QStringList list);//接收FunctionWidget界面分类按钮列表
+    void functionBtnClickedSlot();//功能分类按钮槽函数
+    void recvClassificationBtnList();//接收FunctionWidget界面分类按钮列表
 };
 
 #endif // FUNCTIONBUTTONWIDGET_H

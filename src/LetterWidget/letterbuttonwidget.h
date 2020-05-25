@@ -28,10 +28,6 @@
 #include <QSpacerItem>
 #include "src/UtilityFunction/functionclassifybutton.h"
 
-namespace Ui {
-class LetterButtonWidget;
-}
-
 class LetterButtonWidget : public QWidget
 {
     Q_OBJECT
@@ -41,7 +37,6 @@ public:
     ~LetterButtonWidget();
 
 private:
-    Ui::LetterButtonWidget *ui;
     QGridLayout* gridLayout=nullptr;
 
 protected:

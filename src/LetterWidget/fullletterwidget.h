@@ -49,10 +49,6 @@
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/Style/style.h"
 
-namespace Ui {
-class FullLetterWidget;
-}
-
 class FullLetterWidget : public QWidget
 {
     Q_OBJECT
@@ -70,8 +66,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::FullLetterWidget *ui;
-
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     //主界面

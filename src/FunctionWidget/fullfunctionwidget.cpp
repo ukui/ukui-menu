@@ -17,7 +17,6 @@
  */
 
 #include "fullfunctionwidget.h"
-#include "ui_fullfunctionwidget.h"
 #include <QDesktopWidget>
 #include <QHeaderView>
 #include "src/Style/style.h"
@@ -26,17 +25,13 @@
 #include <QPainter>
 
 FullFunctionWidget::FullFunctionWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FullFunctionWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
-
     initWidget();
 }
 
 FullFunctionWidget::~FullFunctionWidget()
 {
-    delete ui;
     delete pUkuiMenuInterface;
 }
 
@@ -63,32 +58,6 @@ void FullFunctionWidget::initWidget()
     this->setLayout(mainLayout);
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-
-    functionnamelist.clear();
-    functionnamelist.append(tr("Mobile"));
-    functionnamelist.append(tr("Internet"));
-    functionnamelist.append(tr("Social"));
-    functionnamelist.append(tr("Video"));
-    functionnamelist.append(tr("Development"));
-    functionnamelist.append(tr("Image"));
-    functionnamelist.append(tr("Game"));
-    functionnamelist.append(tr("Office"));
-    functionnamelist.append(tr("Education"));
-    functionnamelist.append(tr("System"));
-    functionnamelist.append(tr("Others"));
-
-    categorylist.clear();
-    categorylist.append("Mobile");
-    categorylist.append("Internet");
-    categorylist.append("Social");
-    categorylist.append("Video");
-    categorylist.append("Development");
-    categorylist.append("Image");
-    categorylist.append("Game");
-    categorylist.append("Office");
-    categorylist.append("Education");
-    categorylist.append("System");
-    categorylist.append("Others");
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -132,81 +101,81 @@ void FullFunctionWidget::fillAppList()
     QStringList androidlist=vector.at(0);
     if(!androidlist.isEmpty())
     {
-        insertClassificationBtn(tr("Mobile"));
+        insertClassificationBtn("Mobile");
         insertAppList(androidlist);
     }
 
     QStringList netlist=vector.at(1);
     if(!netlist.isEmpty())
     {
-        insertClassificationBtn(tr("Internet"));
+        insertClassificationBtn("Internet");
         insertAppList(netlist);
     }
     QStringList sociallist=vector.at(2);
     if(!sociallist.isEmpty())
     {
-        insertClassificationBtn(tr("Social"));
+        insertClassificationBtn("Social");
         insertAppList(sociallist);
     }
     QStringList avlist=vector.at(3);
     if(!avlist.isEmpty())
     {
-        insertClassificationBtn(tr("Video"));
+        insertClassificationBtn("Video");
         insertAppList(avlist);
     }
     QStringList developlist=vector.at(4);
     if(!developlist.isEmpty())
     {
-        insertClassificationBtn(tr("Development"));
+        insertClassificationBtn("Development");
         insertAppList(developlist);
     }
     QStringList graphicslist=vector.at(5);
     if(!graphicslist.isEmpty())
     {
-        insertClassificationBtn(tr("Image"));
+        insertClassificationBtn("Image");
         insertAppList(graphicslist);
     }
     QStringList gamelist=vector.at(6);
     if(!gamelist.isEmpty())
     {
-        insertClassificationBtn(tr("Game"));
+        insertClassificationBtn("Game");
         insertAppList(gamelist);
     }
     QStringList officelist=vector.at(7);
     if(!officelist.isEmpty())
     {
-        insertClassificationBtn(tr("Office"));
+        insertClassificationBtn("Office");
         insertAppList(officelist);
     }
     QStringList educationlist=vector.at(8);
     if(!educationlist.isEmpty())
     {
-        insertClassificationBtn(tr("Education"));
+        insertClassificationBtn("Education");
         insertAppList(educationlist);
     }
 
     QStringList systemadminlist=vector.at(9);
     if(!systemadminlist.isEmpty())
     {
-        insertClassificationBtn(tr("System"));
+        insertClassificationBtn("System");
         insertAppList(systemadminlist);
     }
     QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
-        insertClassificationBtn(tr("Others"));
+        insertClassificationBtn("Others");
         insertAppList(otherlist);
     }
 
     resizeScrollAreaControls();
 }
 
-void FullFunctionWidget::insertClassificationBtn(QString btnname)
+void FullFunctionWidget::insertClassificationBtn(QString category)
 {
-    PushButton* classificationbtn=new PushButton(this,btnname,scrollarea->width()-12,20);
+    PushButton* classificationbtn=new PushButton(this,category,scrollarea->width()-12,20,2);
     classificationbtn->setFixedSize(scrollarea->width()-12,20);
     scrollareawidLayout->addWidget(classificationbtn);
-    classificationbtnlist.append(btnname);
+    classificationbtnlist.append(category);
 
 }
 
@@ -430,18 +399,24 @@ void FullFunctionWidget::initIconListWidget()
 void FullFunctionWidget::initIconListScrollArea()
 {
     for(int i=0;i<classificationbtnlist.size();i++)
+//    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
+//    QStringList androidlist=vector.at(0);
+//    for(int index=0;index<vector.size();index++)
     {
-        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
-                                                                   Style::LeftBtnWidth,
-                                                                   Style::LeftBtnHeight,
-                                                                   Style::LeftIconSize,
-                                                                   categorylist.at(functionnamelist.indexOf(classificationbtnlist.at(i))),
-                                                                   classificationbtnlist.at(i),
-                                                                   true,
-                                                                   true);
-        iconbtn->setChecked(false);
-        buttonList.append(iconbtn);
-        iconlistscrollareawidLayout->addWidget(iconbtn);
+//        if(!vector.at(index).isEmpty())
+//        {
+            FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
+                                                                       Style::LeftBtnWidth,
+                                                                       Style::LeftBtnHeight,
+                                                                       Style::LeftIconSize,
+                                                                       classificationbtnlist.at(i),
+                                                                       true,
+                                                                       true);
+            iconbtn->setChecked(false);
+            buttonList.append(iconbtn);
+            iconlistscrollareawidLayout->addWidget(iconbtn);
+//        }
+
     }
 
     int id=0;

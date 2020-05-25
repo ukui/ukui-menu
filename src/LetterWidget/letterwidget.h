@@ -31,10 +31,6 @@
 #include "src/UtilityFunction/listview.h"
 #include "src/UtilityFunction/itemdelegate.h"
 
-namespace Ui {
-class LetterWidget;
-}
-
 class LetterWidget : public QWidget
 {
     Q_OBJECT
@@ -50,7 +46,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::LetterWidget *ui;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
     LetterButtonWidget* letterbtnwid=nullptr;//分类按钮界面
     ListView* applistview=nullptr;

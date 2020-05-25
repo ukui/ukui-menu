@@ -17,22 +17,17 @@
  */
 
 #include "fullletterwidget.h"
-#include "ui_fullletterwidget.h"
 #include <QDebug>
 #include <syslog.h>
 
 FullLetterWidget::FullLetterWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FullLetterWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
-
     initWidget();
 }
 
 FullLetterWidget::~FullLetterWidget()
 {
-    delete ui;
     delete pUkuiMenuInterface;
 }
 
@@ -116,7 +111,7 @@ void FullLetterWidget::fillAppList()
                 letterstr="#";
             letterbtnlist.append(letterstr);//存储分类字符
             //插入字母分类按钮
-            PushButton* letterbtn=new PushButton(this,letterstr,scrollarea->width()-12,20);
+            PushButton* letterbtn=new PushButton(this,letterstr,scrollarea->width()-12,20,1);
 //            letterbtn->setFixedSize(scrollarea->width(),20);
             scrollareawidLayout->addWidget(letterbtn);
 

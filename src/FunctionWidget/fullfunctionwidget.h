@@ -42,10 +42,6 @@
 #include "src/UtilityFunction/functionclassifybutton.h"
 #include "src/Style/style.h"
 
-namespace Ui {
-class FullFunctionWidget;
-}
-
 class FullFunctionWidget : public QWidget
 {
     Q_OBJECT
@@ -64,8 +60,6 @@ public:
     void moveScrollBar(int type);
 
 private:
-    Ui::FullFunctionWidget *ui;
-
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     //主界面
@@ -79,7 +73,6 @@ private:
     QVBoxLayout* scrollareawidLayout=nullptr;
     QStringList classificationbtnlist;//存放分类按钮
     QStringList classificationbtnrowlist;//存放分类按钮所在行
-    QStringList categorylist;
     QStringList data;
 
     //图标列表界面
@@ -109,7 +102,7 @@ protected:
 
     void initAppListWidget();//初始化应用列表界面
     void fillAppList();//填充应用列表
-    void insertClassificationBtn(QString btnname);//插入分类按钮
+    void insertClassificationBtn(QString category);//插入分类按钮
     void insertAppList(QStringList appnamelist);//插入应用列表
     void resizeScrollAreaControls();//设置scrollarea填充控件大小
 

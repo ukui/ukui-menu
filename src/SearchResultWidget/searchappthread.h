@@ -32,7 +32,7 @@ public:
 
 private:
     QString keyword;
-    QStringList searchResultList;
+    QVector<QStringList> searchResultVector;
 
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
     QVector<QStringList> appInfoVector;
@@ -41,7 +41,7 @@ public Q_SLOTS:
     void recvSearchKeyword(QString arg);
 
 Q_SIGNALS:
-    void sendSearchResult(QStringList list);
+    void sendSearchResult(QVector<QStringList> vector);
 
 };
 

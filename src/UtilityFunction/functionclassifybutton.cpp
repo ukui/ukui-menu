@@ -26,7 +26,6 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
                        int height,
                        int iconSize,
                        QString category,
-                       QString text,
                        bool fullscreen,
                        bool enabled):
     QPushButton (parent),
@@ -34,7 +33,6 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     m_height(height),
     m_iconSize(iconSize),
     m_category(category),
-    m_text(text),
     m_fullscreen(fullscreen),
     m_enabled(enabled),
     m_iconLabel(new QLabel),
@@ -45,9 +43,10 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     this->setCheckable(true);
     this->setFocusPolicy(Qt::NoFocus);
     m_iconLabel->setFixedSize(19,19);
-    m_textLabel->setText(m_text);
+//    m_textLabel->setText(m_text);
     m_textLabel->adjustSize();
     m_iconLabel->setStyleSheet("background:transparent;");
+    setLabelText();
     if(m_fullscreen)
         updateIconState(Normal);
     else
@@ -77,8 +76,13 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
     if(m_enabled)
     {
         updateIconState(Checked);
-        sprintf(style,"border:0px;border-radius:4px;padding-left:0px;background-color:%s;",hover);
-        this->setStyleSheet(QString::fromLocal8Bit(style));
+        if(!m_fullscreen)
+        {
+            sprintf(style,"border:0px;border-radius:4px;padding-left:0px;background-color:%s;",hover);
+            this->setStyleSheet(QString::fromLocal8Bit(style));
+        }
+        else
+            this->setStyleSheet("border:0px;border-radius:4px;padding-left:0px;background:transparent;");
     }
 }
 
@@ -111,7 +115,7 @@ void FunctionClassifyButton::reactToToggle(bool checked)
 
 void FunctionClassifyButton::buttonClickedSlot()
 {
-    Q_EMIT buttonClicked(m_category);
+    Q_EMIT buttonClicked();
 }
 
 void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State state)
@@ -163,4 +167,44 @@ void FunctionClassifyButton::updateTextState(const FunctionClassifyButton::State
     }
 //    p.setColor(QPalette::Window,Qt::transparent);
 //    m_textLabel->setPalette(p);
+}
+
+void FunctionClassifyButton::setLabelText()
+{
+    QMetaEnum metaEnum=QMetaEnum::fromType<FunctionClassifyButton::Category>();
+    switch (metaEnum.keyToValue(m_category.toLocal8Bit().data())) {
+    case Mobile:
+        m_textLabel->setText(tr("Mobile"));
+        break;
+    case Internet:
+        m_textLabel->setText(tr("Internet"));
+        break;
+    case Social:
+        m_textLabel->setText(tr("Social"));
+        break;
+    case Video:
+        m_textLabel->setText(tr("Video"));
+        break;
+    case Development:
+        m_textLabel->setText(tr("Development"));
+        break;
+    case Image:
+        m_textLabel->setText(tr("Image"));
+        break;
+    case Game:
+        m_textLabel->setText(tr("Game"));
+        break;
+    case Office:
+        m_textLabel->setText(tr("Office"));
+        break;
+    case Education:
+        m_textLabel->setText(tr("Education"));
+        break;
+    case System:
+        m_textLabel->setText(tr("System"));
+        break;
+    default:
+        m_textLabel->setText(tr("Others"));
+        break;
+    }
 }

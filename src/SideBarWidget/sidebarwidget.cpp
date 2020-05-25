@@ -17,7 +17,6 @@
  */
 
 #include "sidebarwidget.h"
-#include "ui_sidebarwidget.h"
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QPainter>
@@ -25,17 +24,14 @@
 #include "src/Style/style.h"
 
 SideBarWidget::SideBarWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::SideBarWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
     initWidget();
     commonusebtn->click();
 }
 
 SideBarWidget::~SideBarWidget()
 {
-    delete ui;
     delete pUkuiMenuInterface;
 }
 

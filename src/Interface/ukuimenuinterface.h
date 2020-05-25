@@ -46,6 +46,7 @@ public:
     static QVector<QStringList> alphabeticVector;
     static QVector<QStringList> functionalVector;
     static QVector<QString> allAppVector;
+    static QVector<QStringList> appInfoSearchVector;
 
     /**
      * 获取系统应用名称
@@ -59,12 +60,7 @@ public:
     QString getAppExec(QString desktopfp);//获取应用命令
     QString getAppType(QString desktopfp);//获取应用类型
     QString getAppComment(QString desktopfp);//获取应用注释
-
     QStringList getDesktopFilePath();//获取系统deskyop文件路径
-
-    QString getDesktopPathByAppName(QString appname);//根据应用名获取deskyop文件路径
-    QString getDesktopPathByCommand(QString command);//根据命令获取deskyop文件路径
-    QString getDesktopPathByAppEnglishName(QString appname);//根据应用英文名获取deskyop文件路径
 
     QVector<QStringList> getAlphabeticClassification();//获取字母分类
     QVector<QStringList> getFunctionalClassification();//获取功能分类
@@ -72,9 +68,11 @@ public:
     QVector<QString> getAllApp();
     QStringList getRecentApp();//获取最近添加App
     QVector<QStringList> getAndroidApp();//获取安卓应用
+    QVector<QStringList> getSearchApp();
     static bool cmpApp(QStringList &arg_1,QStringList &arg_2);
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
-
+    QString getAppNameInitials(QString desktopfp);//获取应用名所有首字母
+    QString getAppNameInitial(QString desktopfp);//获取应用名所有首字母
     QString getAppNamePinyin(QString appname);//获取应用名拼音
 
     //获取用户图像

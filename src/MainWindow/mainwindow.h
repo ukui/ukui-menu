@@ -38,10 +38,6 @@
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
 
-namespace Ui {
-class MainWindow;
-}
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -53,7 +49,6 @@ public:
     void loadMainWindow();
 
 private:
-    Ui::MainWindow *ui;
 
     bool is_fullscreen=false;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;

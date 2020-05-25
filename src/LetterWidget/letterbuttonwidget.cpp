@@ -17,22 +17,18 @@
  */
 
 #include "letterbuttonwidget.h"
-#include "ui_letterbuttonwidget.h"
 #include "src/Style/style.h"
 #include "letterwidget.h"
 #include <QDebug>
 
 LetterButtonWidget::LetterButtonWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::LetterButtonWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
     initWidget();
 }
 
 LetterButtonWidget::~LetterButtonWidget()
 {
-    delete ui;
 }
 
 void LetterButtonWidget::initWidget()

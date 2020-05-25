@@ -17,7 +17,6 @@
  */
 
 #include "letterwidget.h"
-#include "ui_letterwidget.h"
 #include "src/Style/style.h"
 #include <QDebug>
 #include <QHeaderView>
@@ -31,17 +30,13 @@
 #include "src/UtilityFunction/itemdelegate.h"
 
 LetterWidget::LetterWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::LetterWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
-
     initWidget();
 }
 
 LetterWidget::~LetterWidget()
 {
-    delete ui;
     delete pUkuiMenuInterface;
 }
 

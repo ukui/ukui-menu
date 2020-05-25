@@ -85,20 +85,7 @@ HEADERS  += \
     src/UtilityFunction/utility.h \
     src/XEventMonitor/xeventmonitor.h
 
-FORMS    += \
-    src/CommonUseWidget/commonusewidget.ui \
-    src/CommonUseWidget/fullcommonusewidget.ui \
-    src/FunctionWidget/fullfunctionwidget.ui \
-    src/FunctionWidget/functionbuttonwidget.ui \
-    src/FunctionWidget/functionwidget.ui \
-    src/LetterWidget/fullletterwidget.ui \
-    src/LetterWidget/letterbuttonwidget.ui \
-    src/LetterWidget/letterwidget.ui \
-    src/MainViewWidget/mainviewwidget.ui \
-    src/MainWindow/mainwindow.ui \
-    src/SearchResultWidget/fullsearchresultwidget.ui \
-    src/SearchResultWidget/searchresultwidget.ui \
-    src/SideBarWidget/sidebarwidget.ui
+FORMS    +=
 
 RESOURCES += \
     res.qrc

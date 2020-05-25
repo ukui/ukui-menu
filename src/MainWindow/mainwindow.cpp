@@ -17,7 +17,6 @@
  */
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QDesktopWidget>
@@ -28,10 +27,8 @@
 #include "src/Style/style.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent)
 {
-    ui->setupUi(this);
     pUkuiMenuInterface=new UkuiMenuInterface;
     UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
     UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
@@ -46,7 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     XEventMonitor::instance()->quit();
-    delete ui;
     delete pUkuiMenuInterface;
 }
 
@@ -63,8 +59,6 @@ void MainWindow::initMainWindow()
 //    path.addRoundedRect(rect, 6, 6);
 //    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    ui->menubar->hide();
-    ui->statusbar->hide();
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
     this->setMinimumSize(376,590);
     this->setContentsMargins(0,0,0,0);

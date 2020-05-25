@@ -36,6 +36,7 @@ QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
 QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
 QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::allAppVector=QVector<QString>();
+QVector<QStringList> UkuiMenuInterface::appInfoSearchVector=QVector<QStringList>();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
@@ -198,12 +199,15 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
         QString desktopfp=desktopfpList.at(i);
         QString icon=getAppIcon(desktopfpList.at(i));
         QString name=getAppName(desktopfpList.at(i));
-        QString exec=getAppExec(desktopfpList.at(i));
+        QString englishName=getAppEnglishName(desktopfpList.at(i));
         QString comment=getAppComment(desktopfpList.at(i));
+//        QString englishName=getAppEnglishName(desktopfpList.at(i));
+        QString letter=getAppNameInitial(desktopfpList.at(i));
+        QString letters=getAppNameInitials(desktopfpList.at(i));
 
         desktopfpVector.append(desktopfp);
 
-        appInfoList<<desktopfp<<icon<<name<<exec<<comment;
+        appInfoList<<desktopfp<<icon<<name<<englishName<<comment<<letter<<letters;
         bool is_owned=false;
         for(int j=0;j<vector.size();j++)
         {
@@ -331,61 +335,6 @@ QString UkuiMenuInterface::getAppType(QString desktopfp)
     return QString::fromLocal8Bit(type);
 }
 
-//根据应用名获取deskyop文件路径
-QString UkuiMenuInterface::getDesktopPathByAppName(QString appname)
-{
-    QString desktopfp;
-    int index=0;
-    while(index<appInfoVector.size())
-    {
-        if(QString::compare(appInfoVector.at(index).at(2),appname)==0)
-        {
-            desktopfp=appInfoVector.at(index).at(0);
-            break;
-        }
-
-        index++;
-    }
-
-    return desktopfp;
-}
-
-//根据命令获取deskyop文件路径
-QString UkuiMenuInterface::getDesktopPathByCommand(QString command)
-{
-    QString desktopfp;
-    int index=0;
-    while(index<appInfoVector.size())
-    {
-        if(QString::compare(appInfoVector.at(index).at(3),command)==0)
-        {
-            desktopfp=appInfoVector.at(index).at(0);
-            break;
-        }
-
-        index++;
-    }
-
-    return desktopfp;
-}
-
-//根据应用英文名获取desktop文件路径
-QString UkuiMenuInterface::getDesktopPathByAppEnglishName(QString appname)
-{
-    int i=0;
-    QString desktopfilepath;
-    QStringList desktopfpList=getDesktopFilePath();
-    for(i=0;i<desktopfpList.count();i++)
-    {
-        QString name=getAppEnglishName(desktopfpList.at(i));
-        if(QString::compare(name,appname)==0)
-        {
-            desktopfilepath=desktopfpList.at(i);
-        }
-    }
-    return desktopfilepath;
-}
-
 bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
 {
     QLocale local;
@@ -399,7 +348,6 @@ bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
         return true;
     else
         return false;
-
 }
 
 QVector<QString> UkuiMenuInterface::getAllApp()
@@ -654,10 +602,10 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     int index=0;
     while(index<appInfoVector.size())
     {
-        int count=appInfoVector.at(index).size()-5;
+        int count=appInfoVector.at(index).size()-7;
         for(int i=0;i<count;i++)
         {
-            int category=appInfoVector.at(index).at(5+i).toInt();
+            int category=appInfoVector.at(index).at(7+i).toInt();
             switch (category) {
             case 1:
                 appVector[1].append(appInfoVector.at(index));
@@ -769,6 +717,34 @@ QVector<QStringList> UkuiMenuInterface::getAndroidApp()
     QVector<QStringList> androidVector;
     androidVector.clear();
     return androidVector;
+}
+
+QVector<QStringList> UkuiMenuInterface::getSearchApp()
+{
+    return appInfoSearchVector;
+}
+
+QString UkuiMenuInterface::getAppNameInitials(QString desktopfp)
+{
+    QString firstLetters;
+    QString appname=getAppName(desktopfp);
+    QStringList appnamestr=appname.split(" ");
+    QString letters;
+    Q_FOREACH(QString name,appnamestr)
+    {
+        letters.clear();
+        letters=UkuiChineseLetter::getFirstLettersAll(name);
+        if(letters.isEmpty())
+            letters=UkuiChineseLetter::getFirstLetter(name);
+        firstLetters.append(letters);
+    }
+
+    return firstLetters;
+}
+
+QString UkuiMenuInterface::getAppNameInitial(QString desktopfp)
+{
+    return UkuiChineseLetter::getFirstLetter(getAppName(desktopfp));
 }
 
 //获取应用拼音

@@ -27,6 +27,7 @@
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
+#include "utility.h"
 
 class PushButton : public QPushButton
 {
@@ -36,16 +37,35 @@ public:
      * @param classify为0时为分类按钮、1为应用按钮
      * @param module为0时为常用模块，1为字母模块、2为功能模块
      */
-    PushButton(QWidget *parent,QString name,int width,int height);
+    PushButton(QWidget *parent,QString category,int width,int height,int module);
     ~PushButton();
 
+    enum Category{
+        Mobile,
+        Internet,
+        Social,
+        Video,
+        Development,
+        Image,
+        Game,
+        Office,
+        Education,
+        System,
+        Others,
+    };
+    Q_ENUM(Category)
+
 private:
-    QString name;
-    int width;
-    int height;
+    QString m_category;
+    int m_width;
+    int m_height;
+    int m_module;
+    QLabel* m_textLabel=nullptr;
+    QFrame* m_line=nullptr;
 
 protected:
     void initAppBtn();
+    void setLabelText();
 
 };
 

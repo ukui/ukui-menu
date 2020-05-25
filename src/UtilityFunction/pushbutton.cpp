@@ -18,12 +18,15 @@
 
 #include "pushbutton.h"
 
-PushButton::PushButton(QWidget *parent, QString name, int width, int height):
-    QPushButton(parent)
+PushButton::PushButton(QWidget *parent, QString category, int width, int height, int module):
+    QPushButton(parent),
+    m_category(category),
+    m_width(width),
+    m_height(height),
+    m_module(module),
+    m_textLabel(new QLabel),
+    m_line(new QFrame)
 {
-    this->name=name;
-    this->width=width;
-    this->height=height;
     initAppBtn();
 }
 
@@ -38,7 +41,7 @@ void PushButton::initAppBtn()
             QPushButton:hover{background-color:%s;}\
             QPushButton:pressed{background-color:%s;}", ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
 
-    this->setFixedSize(this->width,this->height);
+    this->setFixedSize(m_width,m_height);
     this->setStyleSheet(btnstyle);
     this->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* layout=new QHBoxLayout(this);
@@ -47,23 +50,61 @@ void PushButton::initAppBtn()
 
     char style[100];
     sprintf(style,"color:#ffffff;");
-//    QFont font;
-//    font.setPixelSize(Style::LeftFontSize);
-    QLabel* textlabel=new QLabel(this);
-//    textlabel->setFont(font);
-    textlabel->setAlignment(Qt::AlignCenter);
-    textlabel->setStyleSheet(style);
-    textlabel->setText(name);
-    textlabel->adjustSize();
+    m_textLabel->setAlignment(Qt::AlignCenter);
+    m_textLabel->setStyleSheet(style);
+    if(m_module==1)
+        m_textLabel->setText(m_category);
+    else
+        setLabelText();
+    m_textLabel->adjustSize();
+    m_line->setFrameShape(QFrame::HLine);
+    m_line->setFixedHeight(1);
+    m_line->setStyleSheet("background-color:rgba(255, 255, 255, 0.06)");
+    m_line->setFixedSize(m_width-m_textLabel->width()-15,1);
 
-    QFrame* line=new QFrame(this);
-    line->setFrameShape(QFrame::HLine);
-    line->setFixedHeight(1);
-    line->setStyleSheet("background-color:rgba(255, 255, 255, 0.06)");
-    line->setFixedSize(this->width-textlabel->width()-15,1);
-
-    layout->addWidget(textlabel);
-    layout->addWidget(line);
+    layout->addWidget(m_textLabel);
+    layout->addWidget(m_line);
     this->setLayout(layout);
     this->setEnabled(false);
+}
+
+void PushButton::setLabelText()
+{
+    QMetaEnum metaEnum=QMetaEnum::fromType<PushButton::Category>();
+    switch (metaEnum.keyToValue(m_category.toLocal8Bit().data()))
+    {
+    case Mobile:
+        m_textLabel->setText(tr("Mobile"));
+        break;
+    case Internet:
+        m_textLabel->setText(tr("Internet"));
+        break;
+    case Social:
+        m_textLabel->setText(tr("Social"));
+        break;
+    case Video:
+        m_textLabel->setText(tr("Video"));
+        break;
+    case Development:
+        m_textLabel->setText(tr("Development"));
+        break;
+    case Image:
+        m_textLabel->setText(tr("Image"));
+        break;
+    case Game:
+        m_textLabel->setText(tr("Game"));
+        break;
+    case Office:
+        m_textLabel->setText(tr("Office"));
+        break;
+    case Education:
+        m_textLabel->setText(tr("Education"));
+        break;
+    case System:
+        m_textLabel->setText(tr("System"));
+        break;
+    default:
+        m_textLabel->setText(tr("Others"));
+        break;
+    }
 }

@@ -28,8 +28,9 @@
 #include <QPainter>
 #include <QHBoxLayout>
 #include "src/Style/style.h"
+#include "src/UtilityFunction/utility.h"
 
-class FunctionClassifyButton : public QPushButton
+class FunctionClassifyButton :public QPushButton
 {
     Q_OBJECT
 public:
@@ -41,23 +42,35 @@ public:
                int height,
                int iconSize,
                QString category,
-               QString text,
                bool fullscreen,
                bool enabled);
 
-private:
     enum State {
         Enabled,
         Disabled,
         Normal,
-        Checked
+        Checked,
     };
+
+    enum Category{
+        Mobile,
+        Internet,
+        Social,
+        Video,
+        Development,
+        Image,
+        Game,
+        Office,
+        Education,
+        System,
+        Others,
+    };
+    Q_ENUM(Category)
 
     int m_width;
     int m_height;
     int m_iconSize;
     QString m_category;
-    QString m_text;
     bool m_fullscreen;
     bool m_enabled;
     QLabel* m_iconLabel=nullptr;
@@ -69,9 +82,10 @@ protected:
     void leaveEvent(QEvent* e);
     void updateIconState(const State state);
     void updateTextState(const State state);
+    void setLabelText();
 
 Q_SIGNALS:
-    void buttonClicked(QString category);
+    void buttonClicked();
 
 private Q_SLOTS:
     void reactToToggle(bool checked);

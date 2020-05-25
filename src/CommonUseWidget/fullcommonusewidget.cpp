@@ -17,22 +17,18 @@
  */
 
 #include "fullcommonusewidget.h"
-#include "ui_fullcommonusewidget.h"
 #include <QDesktopWidget>
 #include "src/Style/style.h"
 #include <QDebug>
 
 FullCommonUseWidget::FullCommonUseWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FullCommonUseWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
     initWidget();
 }
 
 FullCommonUseWidget::~FullCommonUseWidget()
 {
-    delete ui;
     delete pUkuiMenuInterface;
 }
 
