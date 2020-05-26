@@ -71,12 +71,12 @@ private:
     QSpacerItem* verticalSpacer=nullptr;
 
     QLineEdit* querylineEdit=nullptr;
-    QHBoxLayout* queryLayout=nullptr;
-    QWidget* pIconTextWid=nullptr;
-    QHBoxLayout* pIconTextWidLayout=nullptr;
-    QLabel* pQueryIcon=nullptr;
-    QLabel* pQueryText=nullptr;
-//    QWidgetAction *searchAction=nullptr;
+    QWidget* m_queryWid=nullptr;
+    QLabel* m_queryIcon=nullptr;
+    QLabel* m_queryText=nullptr;
+    bool m_isSearching;
+    QString m_searchKeyWords;
+    QPropertyAnimation *animation=nullptr;
 
     FullSearchResultWidget* fullsearchresultwid=nullptr;
     SearchResultWidget* searchresultwid=nullptr;
@@ -124,6 +124,7 @@ public Q_SLOTS:
     void loadFullFunctionWidget();//加载全屏功能分类界面
 
     void searchAppSlot(QString arg);//搜索程序和文件槽函数
+    void animationFinishedSlot();//搜索框图标动画结束槽函数
     void ViewOpenedSlot(QDBusMessage msg);//监控进程开启
     void directoryChangedSlot();//desktop文件目录改变信号槽
     void recvSearchResult(QVector<QStringList> arg);//接收搜索结果

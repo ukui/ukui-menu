@@ -197,17 +197,14 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
     {
         QStringList appInfoList;
         QString desktopfp=desktopfpList.at(i);
-        QString icon=getAppIcon(desktopfpList.at(i));
         QString name=getAppName(desktopfpList.at(i));
         QString englishName=getAppEnglishName(desktopfpList.at(i));
-        QString comment=getAppComment(desktopfpList.at(i));
-//        QString englishName=getAppEnglishName(desktopfpList.at(i));
         QString letter=getAppNameInitial(desktopfpList.at(i));
         QString letters=getAppNameInitials(desktopfpList.at(i));
 
         desktopfpVector.append(desktopfp);
 
-        appInfoList<<desktopfp<<icon<<name<<englishName<<comment<<letter<<letters;
+        appInfoList<<desktopfp<<name<<englishName<<letter<<letters;
         bool is_owned=false;
         for(int j=0;j<vector.size();j++)
         {
@@ -344,7 +341,7 @@ bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
     else
         local=QLocale(QLocale::English);
     QCollator collator(local);
-    if(collator.compare(arg_1.at(2),arg_2.at(2))<0)
+    if(collator.compare(arg_1.at(1),arg_2.at(1))<0)
         return true;
     else
         return false;
@@ -469,7 +466,7 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
     int index=0;
     while(index<appInfoVector.size())
     {
-        QString appname=appInfoVector.at(index).at(2);
+        QString appname=appInfoVector.at(index).at(1);
         QString appnamepy=UkuiChineseLetter::getPinyins(appname);
         char c=appnamepy.at(0).toLatin1();
         switch (c) {
@@ -602,10 +599,10 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     int index=0;
     while(index<appInfoVector.size())
     {
-        int count=appInfoVector.at(index).size()-7;
+        int count=appInfoVector.at(index).size()-5;
         for(int i=0;i<count;i++)
         {
-            int category=appInfoVector.at(index).at(7+i).toInt();
+            int category=appInfoVector.at(index).at(5+i).toInt();
             switch (category) {
             case 1:
                 appVector[1].append(appInfoVector.at(index));

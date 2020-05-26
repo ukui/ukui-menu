@@ -126,15 +126,10 @@ void MainViewWidget::addTopControl()
     topLayout=new QHBoxLayout(topWidget);
     topLayout->setSpacing(0);
     querylineEdit=new QLineEdit(topWidget);
-    queryLayout=new QHBoxLayout;
-    queryLayout->setContentsMargins(0,0,0,0);
-    queryLayout->setSpacing(0);
-    querylineEdit->setLayout(queryLayout);
     char style[100];
     sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;}",QueryLineEditBackground);
     querylineEdit->setStyleSheet(style);
     topLayout->addWidget(querylineEdit);
-//    topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
     topWidget->setLayout(topLayout);
 
     initQueryLineEdit();
@@ -146,38 +141,31 @@ void MainViewWidget::addTopControl()
  */
 void MainViewWidget::initQueryLineEdit()
 {
-    pIconTextWid=new QWidget(querylineEdit);
-    pIconTextWid->setFocusPolicy(Qt::NoFocus);
-    pIconTextWid->setStyleSheet("background:transparent");
-    pIconTextWidLayout=new QHBoxLayout;
-    pIconTextWidLayout->setContentsMargins(5,0,0,0);
-    pIconTextWidLayout->setSpacing(5);
-    pIconTextWid->setLayout(pIconTextWidLayout);
-    QSvgRenderer* svgRender = new QSvgRenderer();
-    svgRender->load(QString(":/data/img/mainviewwidget/search.svg"));
-    QPixmap* pixmap = new QPixmap(Style::QueryLineEditIconSize,Style::QueryLineEditIconSize);
-    pixmap->fill(Qt::transparent);//设置背景透明
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    pQueryIcon=new QLabel(pIconTextWid);
-    pQueryIcon->setStyleSheet("background:transparent");
-    pQueryIcon->setFixedSize(pixmap->size());
-    pQueryIcon->setPixmap(*pixmap);
-//    QFont font;
-//    font.setPixelSize(Style::QueryLineEditFontSize);
-    pQueryText=new QLabel(pIconTextWid);
-//    pQueryText->setFont(font);
-    pQueryText->setText(tr("Search"));
-    pQueryText->setStyleSheet("background:transparent;color:#626c6e;");
-    pQueryText->adjustSize();
-    pIconTextWidLayout->addWidget(pQueryIcon);
-    pIconTextWidLayout->addWidget(pQueryText);
-//    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+5,Style::QueryLineEditHeight);
-    queryLayout->addWidget(pIconTextWid);
-    queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
+    m_queryWid=new QWidget(querylineEdit);
+    m_queryWid->setFocusPolicy(Qt::NoFocus);
+    m_queryWid->setStyleSheet("background:transparent");
+    QHBoxLayout* queryWidLayout=new QHBoxLayout;
+    queryWidLayout->setContentsMargins(5,0,0,0);
+    queryWidLayout->setSpacing(5);
+    m_queryWid->setLayout(queryWidLayout);
+    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+    m_queryIcon=new QLabel(m_queryWid);
+    m_queryIcon->setStyleSheet("background:transparent");
+    m_queryIcon->setFixedSize(pixmap.size());
+    m_queryIcon->setPixmap(pixmap);
+    m_queryText=new QLabel(m_queryWid);
+    m_queryText->setText(tr("Search"));
+    m_queryText->setStyleSheet("background:transparent;color:#626c6e;");
+    m_queryText->adjustSize();
+    queryWidLayout->addWidget(m_queryIcon);
+    queryWidLayout->addWidget(m_queryText);
+    m_queryWid->resize(m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight);
     querylineEdit->setFocusPolicy(Qt::ClickFocus);
     querylineEdit->installEventFilter(this);
     querylineEdit->setContextMenuPolicy(Qt::NoContextMenu);
+
+    animation= new QPropertyAnimation(m_queryWid,"geometry");
+    connect(animation,&QPropertyAnimation::finished,this,&MainViewWidget::animationFinishedSlot);
 
     searchappthread=new SearchAppThread;
     connect(this,&MainViewWidget::sendSearchKeyword,
@@ -189,25 +177,30 @@ void MainViewWidget::initQueryLineEdit()
 
 bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
 {
-//    QFont font;
-//    font.setPixelSize(Style::QueryLineEditFontSize);
     if(watched==querylineEdit)
     {
         if(event->type()==QEvent::FocusIn)
         {   
-            pIconTextWidLayout->removeWidget(pQueryText);
-            pQueryText->setParent(nullptr);
-            pIconTextWid->setFixedSize(pQueryIcon->width()+5,Style::QueryLineEditHeight);
-            queryLayout->setAlignment(pIconTextWid,Qt::AlignLeft);
-
              char style[200];
              sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                      QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              querylineEdit->setStyleSheet(style);
-             querylineEdit->setTextMargins(20,1,0,1);
-//             querylineEdit->setFont(font);
              if(!querylineEdit->text().isEmpty())
                  searchAppSlot(querylineEdit->text());
+             else
+             {
+                 animation->stop();
+                 animation->setStartValue(QRect((querylineEdit->width()-m_queryWid->width())/2,0,
+                                                m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+                 animation->setEndValue(QRect(0,0,
+                                               m_queryIcon->width()+5,Style::QueryLineEditHeight));
+                 animation->setEasingCurve(QEasingCurve::OutQuad);
+                 m_queryWid->layout()->removeWidget(m_queryText);
+                 m_queryText->setParent(nullptr);
+                 m_isSearching=true;
+                 animation->start();
+                 querylineEdit->setReadOnly(true);
+             }
         }
         else if(event->type()==QEvent::FocusOut)
         {
@@ -215,11 +208,17 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             {
                 char style[100];
                 sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;}",QueryLineEditBackground);
+                animation->stop();
                 querylineEdit->setStyleSheet(style);
                 querylineEdit->setTextMargins(0,1,0,1);
-                pIconTextWidLayout->addWidget(pQueryText);
-                pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
-                queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
+                animation->setStartValue(QRect(0,0,
+                                                m_queryIcon->width()+5,Style::QueryLineEditHeight));
+                animation->setEndValue(QRect((querylineEdit->width()-m_queryWid->width())/2,0,
+                                             m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+                animation->setEasingCurve(QEasingCurve::InQuad);
+                m_queryWid->layout()->addWidget(m_queryText);
+                m_isSearching=false;
+                animation->start();
             }
             else {
                 char style[100];
@@ -237,8 +236,10 @@ void MainViewWidget::setLineEditFocus(QString arg)
 {
     if(!querylineEdit->hasFocus())
     {
+        m_searchKeyWords=arg;
         querylineEdit->setFocus();
-        querylineEdit->setText(arg);
+//        querylineEdit->setText(arg);
+        animation->start();
     }
 }
 
@@ -328,6 +329,16 @@ void MainViewWidget::recvSearchResult(QVector<QStringList> arg)
     searchresultwid->updateAppListView(arg);
 }
 
+void MainViewWidget::animationFinishedSlot()
+{
+    if(m_isSearching)
+    {
+        querylineEdit->setReadOnly(false);
+        querylineEdit->setTextMargins(20,1,0,1);
+        querylineEdit->setText(m_searchKeyWords);
+    }
+}
+
 /**
  * 加载默认主视图
  */
@@ -339,6 +350,11 @@ void MainViewWidget::loadMinMainView()
     topLayout->setContentsMargins(0,0,0,0);
     topLayout->setAlignment(querylineEdit,Qt::AlignCenter);
     querylineEdit->setFixedSize(288,30);
+    if(querylineEdit->text().isEmpty())
+        m_queryWid->setGeometry(QRect((querylineEdit->width()-m_queryWid->width())/2,0,
+                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+    syslog(LOG_LOCAL0|LOG_DEBUG,"%d:%d:%d",(querylineEdit->width()-m_queryWid->width())/2,
+           (m_queryIcon->width()+m_queryText->width()+10),m_queryWid->x());
 
     if(widgetState==0)
     {
@@ -378,6 +394,11 @@ void MainViewWidget::loadMaxMainView()
                                   0,
                                   (topWidget->width()-Style::LeftWidWidth-querylineEdit->width())/2,
                                   0);
+
+    if(querylineEdit->text().isEmpty())
+        m_queryWid->setGeometry(QRect((querylineEdit->width()-m_queryWid->width())/2,0,
+                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+
     if(widgetState==0)
     {
         QLayoutItem* child;
@@ -721,9 +742,9 @@ void MainViewWidget::widgetMakeZero()
     sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
     querylineEdit->setStyleSheet(style);
     querylineEdit->setTextMargins(0,1,0,1);
-    pIconTextWidLayout->addWidget(pQueryText);
-    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
-    queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
+//    pIconTextWidLayout->addWidget(pQueryText);
+//    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
+//    queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     is_fullscreen=false;
     widgetState=1;
 }
