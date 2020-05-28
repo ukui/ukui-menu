@@ -43,37 +43,51 @@ class CommonUseWidget : public QWidget
 public:
     explicit CommonUseWidget(QWidget *parent = nullptr);
     ~CommonUseWidget();
-    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    /**
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief Update application list
+     */
     void updateListView();
     /**
-     * @brief moveScrollBar移动滚动条
-     * @param type为0时表示向上移动，为1时表示向下移动
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
      */
     void moveScrollBar(int type);
 
 private:
-    QSettings *setting=nullptr;
-
-    QHBoxLayout* mainLayout=nullptr;
-
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-    //应用列表界面
-    ListView* listview=nullptr;
-    QVector<QStringList> data;
-
-    RightClickMenu* menu=nullptr;
+    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    ListView* m_listview=nullptr;
+    QVector<QStringList> m_data;
 
 protected:
-    void initWidget();
-    void initAppListWidget();//初始化应用列表界面
-    void fillAppList();//填充应用列表
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
+    /**
+     * @brief Initialize the application list interface
+     */
+    void initAppListWidget();
+    /**
+     * @brief fill application list
+     */
+    void fillAppList();
 
 public Q_SLOTS:
-    void execApplication(QStringList arg);//执行应用程序
+    /**
+     * @brief Open the application
+     * @param arg: The desktop file information that the application contains
+     */
+    void execApplication(QStringList arg);
+    /**
+     * @brief Update the application list slot function
+     */
     void updateListViewSlot();
-
-Q_SIGNALS:
-    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 };
 
 #endif // COMMONUSEWIDGET_H

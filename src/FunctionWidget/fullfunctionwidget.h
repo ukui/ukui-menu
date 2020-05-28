@@ -49,74 +49,113 @@ class FullFunctionWidget : public QWidget
 public:
     explicit FullFunctionWidget(QWidget *parent=nullptr);
     ~FullFunctionWidget();
-    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    /**
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief The function category button uses animation to enter
+     */
     void enterAnimation();
-//    void updateRecentListView();//更新最近添加应用
+    /**
+     * @brief Repaint window
+     */
     void repaintWidget();
     /**
-     * @brief moveScrollBar移动滚动条
-     * @param type为0时表示向上移动，为1时表示向下移动
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
      */
     void moveScrollBar(int type);
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    /*Application list interface*/
+    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    QWidget* m_applistWid=nullptr;
+    ScrollArea* m_scrollArea=nullptr;
+    QWidget* m_scrollAreaWid=nullptr;
+    QVBoxLayout* m_scrollAreaWidLayout=nullptr;
+    QStringList m_classificationList;//Store the list of category buttons
+    QStringList m_data;
 
-    //主界面
-    QHBoxLayout* mainLayout=nullptr;
+    /*Function classification list interface*/
+    QWidget* m_iconListWid=nullptr;
+    ClassifyScrollArea* m_iconListScrollArea=nullptr;
+    QWidget* m_iconListScrollAreaWid=nullptr;
+    QVBoxLayout* m_iconListScrollAreaWidLayout=nullptr;
+    QList<QAbstractButton*> m_buttonList;
+    QButtonGroup* m_btnGroup=nullptr;
 
-    //应用列表界面
-    QWidget* applistWid=nullptr;
-
-    ScrollArea* scrollarea=nullptr;
-    QWidget* scrollareawid=nullptr;
-    QVBoxLayout* scrollareawidLayout=nullptr;
-    QStringList classificationbtnlist;//存放分类按钮
-    QStringList classificationbtnrowlist;//存放分类按钮所在行
-    QStringList data;
-
-    //图标列表界面
-    QStringList functionnamelist;
-    QWidget* iconlistWid=nullptr;
-    QHBoxLayout* iconlistLayout=nullptr;
-    QSpacerItem* pIconListTopSpacer=nullptr;
-    QSpacerItem* pIconListBottomSpacer=nullptr;
-
-    ClassifyScrollArea* iconlistscrollarea=nullptr;
-    QWidget* iconlistscrollareaWid=nullptr;
-    QVBoxLayout* iconlistscrollareawidLayout=nullptr;
-    QList<QAbstractButton*> buttonList;
-    QButtonGroup* pBtnGroup=nullptr;
-
-    QPropertyAnimation* pAnimation=nullptr;
-    QSettings* setting=nullptr;
-
-    int beginPos=0;//滑动条起始位置
-    int endPos=0;//滑动条终止位置
-    QPropertyAnimation* m_scrollAnimation=nullptr;
+    /*Animation*/
+    QPropertyAnimation* m_animation=nullptr;//Function category button animation
+    QPropertyAnimation* m_scrollAnimation=nullptr;//Application list animation
+    int m_beginPos=0;//Application list scrollbar starting value
+    int m_endPos=0;//Application list scrollbar end value
 
 protected:
-    void initWidget();
-    void initIconListWidget();//初始化图标列表界面
-    void initIconListScrollArea();//初始化图标列表界面数据表格iconlisttableWid
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
+    /**
+     * @brief Initializes the icon list interface
+     */
+    void initIconListWidget();
+    void initIconListScrollArea();
 
-    void initAppListWidget();//初始化应用列表界面
-    void fillAppList();//填充应用列表
-    void insertClassificationBtn(QString category);//插入分类按钮
-    void insertAppList(QStringList appnamelist);//插入应用列表
-    void resizeScrollAreaControls();//设置scrollarea填充控件大小
+    /**
+     * @brief Initialize the application list interface
+     */
+    void initAppListWidget();
+    /**
+     * @brief fill application list
+     */
+    void fillAppList();
+    /**
+     * @brief Insert category button
+     * @param category: Functional classification name
+     */
+    void insertClassificationBtn(QString category);
+    /**
+     * @brief Insert application list
+     * @param desktopfplist: Desktop file path list
+     */
+    void insertAppList(QStringList desktopfplist);
+    /**
+     * @brief Set the control size in qscrollarea
+     */
+    void resizeScrollAreaControls();
 
 public Q_SLOTS:
-    void execApplication(QString desktopfp);//执行应用程序
+    /**
+     * @brief Open the application
+     * @param arg: Desktop file path
+     */
+    void execApplication(QString desktopfp);
+    /**
+     * @brief Respond to button click
+     * @param btn: QButtonGroup button
+     */
     void btnGroupClickedSlot(QAbstractButton *btn);
-    void updateAppListView();//更新应用列表
-    void valueChangedSlot(int value);//滑动条滚动槽函数
-    void animationFinishSlot();//动画停止监控
-    void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
-
-Q_SIGNALS:
-    void sendUpdateAppListSignal(QString desktopfp,int type);//向常用软件模块发送更新应用列表信号
-    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
+    /**
+     * @brief Update application list slot function
+     */
+    void updateAppListView();
+    /**
+     * @brief Respond to application list scrolling
+     * @param value: Scrollbar current value
+     */
+    void valueChangedSlot(int value);
+    /**
+     * @brief Respond to animation finish
+     */
+    void animationFinishSlot();
+    /**
+     * @brief Respond to animation current value change
+     * @param value: animation current value
+     */
+    void animationValueChangedSlot(const QVariant &value);
 };
 
 #endif // FULLFUNCTIONWIDGET_H

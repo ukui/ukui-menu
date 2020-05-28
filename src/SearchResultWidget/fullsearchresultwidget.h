@@ -38,30 +38,39 @@ class FullSearchResultWidget : public QWidget
 public:
     explicit FullSearchResultWidget(QWidget *parent = nullptr);
     ~FullSearchResultWidget();
+    /**
+     * @brief Update application list
+     */
     void updateAppListView(QVector<QStringList> arg);
+    /**
+     * @brief Repaint window
+     */
     void repaintWidget();
     /**
-     * @brief moveScrollBar移动滚动条
-     * @param type为0时表示向上移动，为1时表示向下移动
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
      */
     void moveScrollBar(int type);
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-
-    QHBoxLayout* mainLayout=nullptr;
-    FullListView* listview=nullptr;
-    QStringList data;
+    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    FullListView* m_listView=nullptr;
+    QStringList m_data;
 
 protected:
-    void initWidget();
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
 
 private Q_SLOTS:
-    void execApplication(QString desktopfp);//执行应用程序
-
-Q_SIGNALS:
-    void sendUpdateAppListSignal(QString desktopfp,int type);//向CommonUseWidget发送更新应用列表信号
-    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
+    /**
+     * @brief Open the application
+     * @param arg: Desktop file path
+     */
+    void execApplication(QString desktopfp);
 };
 
 #endif // FULLSEARCHRESULTWIDGET_H

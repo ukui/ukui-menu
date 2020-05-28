@@ -36,22 +36,29 @@ public:
     explicit LetterButtonWidget(QWidget *parent = nullptr);
     ~LetterButtonWidget();
 
-private:
-    QGridLayout* gridLayout=nullptr;
-
 protected:
-    void initWidget();
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
 
 Q_SIGNALS:
     /**
-     * 向LetterWidget界面发送字母分类按钮被点击信号
-     * @param btnname存放按钮名称
+     * @brief Send button click signal to letterwidget interface
+     * @param btnname: Category button name
      */
     void sendLetterBtnSignal(QString btnname);
 
 public Q_SLOTS:
-    void letterBtnClickedSlot();//字母分类按钮槽函数
-    void recvLetterBtnList(QStringList list);//接收LetterWidget字母按钮列表
+    /**
+     * @brief Respond to button click
+     */
+    void letterBtnClickedSlot();
+    /**
+     * @brief Receive letters classification list
+     * @param list: Letters classification list
+     */
+    void recvLetterBtnList(QStringList list);
 };
 
 #endif // LETTERBUTTONWIDGET_H

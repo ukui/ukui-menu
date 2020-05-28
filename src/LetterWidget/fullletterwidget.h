@@ -56,72 +56,103 @@ class FullLetterWidget : public QWidget
 public:
     explicit FullLetterWidget(QWidget *parent=nullptr);
     ~FullLetterWidget();
-    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    /**
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief The letter category button uses animation to enter
+     */
     void enterAnimation();
+    /**
+     * @brief Repaint window
+     */
     void repaintWidget();
     /**
-     * @brief moveScrollBar移动滚动条
-     * @param type为0时表示向上移动，为1时表示向下移动
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
      */
     void moveScrollBar(int type);
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    /*Application list interface*/
+    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    QWidget* m_applistWid=nullptr;
+    ScrollArea* m_scrollArea=nullptr;
+    QWidget* m_scrollAreaWid=nullptr;
+    QVBoxLayout* m_scrollAreaWidLayout=nullptr;
+    QStringList m_letterList;//Store the list of letter buttons
+    QStringList m_data;
 
-    //主界面
-    QHBoxLayout* mainLayout=nullptr;
+    /*Alphabetic classification list interface*/
+    QWidget* m_letterListWid=nullptr;
+    ClassifyScrollArea* m_letterListScrollArea=nullptr;
+    QWidget* m_letterListScrollAreaWid=nullptr;
+    QVBoxLayout* m_letterListScrollAreaWidLayout=nullptr;
+    QList<QAbstractButton*> m_buttonList;
+    QButtonGroup* m_btnGroup=nullptr;
+    QSpacerItem* m_letterListBottomSpacer=nullptr;
 
-    //应用列表界面
-    QWidget* applistWid=nullptr;
-
-    ScrollArea* scrollarea=nullptr;
-    QWidget* scrollareawid=nullptr;
-    QVBoxLayout* scrollareawidLayout=nullptr;
-    QStringList letterbtnlist;//存放字母按钮
-    QStringList letterbtnrowlist;//存放字母按钮所在行
-    QStringList letterposlist;//存放分类字符位置列表
-    QStringList appsortlist;//存放应用排序列表
-    QStringList data;
-
-    //字母列表界面
-    QWidget* letterlistWid=nullptr;
-    QHBoxLayout* letterlistLayout=nullptr;
-
-    ClassifyScrollArea* letterlistscrollarea=nullptr;
-    QWidget* letterlistscrollareaWid=nullptr;
-    QVBoxLayout* letterlistscrollareawidLayout=nullptr;
-    QList<QAbstractButton*> buttonList;
-    QButtonGroup* pBtnGroup=nullptr;
-    QSpacerItem* pLetterListTopSpacer=nullptr;
-    QSpacerItem* pLetterListBottomSpacer=nullptr;
-
-    QPropertyAnimation* pAnimation=nullptr;
-
-    int beginPos=0;//滑动条起始位置
-    int endPos=0;//滑动条终止位置
-    QPropertyAnimation* m_scrollAnimation=nullptr;
-
-    int btnPos=0;//记住分类按钮位置
+    /*Animation*/
+    QPropertyAnimation* m_animation=nullptr;//Letter category button animation
+    int m_beginPos=0;//Application list scrollbar starting value
+    int m_endPos=0;//Application list scrollbar end value
+    QPropertyAnimation* m_scrollAnimation=nullptr;//Application list animation
 
 protected:
-    void initWidget();
-    void fillAppList();//填充应用列表
-    void initLetterListWidget();//初始化字母列表界面
-    void initLetterListScrollArea();//初始化字母列表
-    void initAppListWidget();//初始化应用列表界面
-    void resizeScrollAreaControls();//设置scrollarea填充控件大小
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
+    /**
+     * @brief fill application list
+     */
+    void fillAppList();
+    /**
+     * @brief Initializes the letter list interface
+     */
+    void initLetterListWidget();
+    void initLetterListScrollArea();
+    /**
+     * @brief Initialize the application list interface
+     */
+    void initAppListWidget();
+    /**
+     * @brief Set the control size in qscrollarea
+     */
+    void resizeScrollAreaControls();
 
 public Q_SLOTS:
+    /**
+     * @brief Respond to button click
+     * @param btn: QButtonGroup button
+     */
     void btnGroupClickedSlot(QAbstractButton *btn);
-    void execApplication(QString desktopfp);//执行应用程序
-    void updateAppListView();//更新应用列表
-    void valueChangedSlot(int value);//滑动条滚动槽函数
-    void animationFinishSlot();//动画停止监控
-    void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
-
-Q_SIGNALS:
-    void sendUpdateAppListSignal(QString desktopfp,int type);//向常用软件模块发送更新应用列表信号
-    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
+    /**
+     * @brief Open the application
+     * @param arg: Desktop file path
+     */
+    void execApplication(QString desktopfp);
+    /**
+     * @brief Update application list slot function
+     */
+    void updateAppListView();
+    /**
+     * @brief Respond to application list scrolling
+     * @param value: Scrollbar current value
+     */
+    void valueChangedSlot(int value);
+    /**
+     * @brief Respond to animation finish
+     */
+    void animationFinishSlot();
+    /**
+     * @brief Respond to animation current value change
+     * @param value: animation current value
+     */
+    void animationValueChangedSlot(const QVariant &value);
 };
 
 #endif // FULLLETTERWIDGET_H

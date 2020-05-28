@@ -24,21 +24,21 @@
 LetterButtonWidget::LetterButtonWidget(QWidget *parent) :
     QWidget(parent)
 {
-    initWidget();
+    initUi();
 }
 
 LetterButtonWidget::~LetterButtonWidget()
 {
 }
 
-void LetterButtonWidget::initWidget()
+void LetterButtonWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->resize(235,366);
 
-    gridLayout=new QGridLayout(this);
+    QGridLayout* gridLayout=new QGridLayout;
     gridLayout->setContentsMargins(0,0,0,0);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
@@ -96,6 +96,7 @@ void LetterButtonWidget::letterBtnClickedSlot()
  */
 void LetterButtonWidget::recvLetterBtnList(QStringList list)
 {
+    QGridLayout* gridLayout=qobject_cast<QGridLayout*>(this->layout());
     for(int row=0;row<7;row++)
     {
         for(int col=0;col<4;col++)

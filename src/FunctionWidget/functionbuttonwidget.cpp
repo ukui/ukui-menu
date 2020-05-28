@@ -25,33 +25,33 @@
 FunctionButtonWidget::FunctionButtonWidget(QWidget *parent) :
     QWidget(parent)
 {
-    categoryList.append("Mobile");
-    categoryList.append("Internet");
-    categoryList.append("Social");
-    categoryList.append("Video");
-    categoryList.append("Development");
-    categoryList.append("Image");
-    categoryList.append("Game");
-    categoryList.append("Office");
-    categoryList.append("Education");
-    categoryList.append("System");
-    categoryList.append("Others");
+    m_categoryList.append("Mobile");
+    m_categoryList.append("Internet");
+    m_categoryList.append("Social");
+    m_categoryList.append("Video");
+    m_categoryList.append("Development");
+    m_categoryList.append("Image");
+    m_categoryList.append("Game");
+    m_categoryList.append("Office");
+    m_categoryList.append("Education");
+    m_categoryList.append("System");
+    m_categoryList.append("Others");
 
-    initWidget();
+    initUi();
 }
 
 FunctionButtonWidget::~FunctionButtonWidget()
 {
 }
 
-void FunctionButtonWidget::initWidget()
+void FunctionButtonWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->resize(Style::LeftBtnWidth*2+5,Style::LeftBtnHeight*6+25);
 
-    gridLayout=new QGridLayout(this);
+    QGridLayout* gridLayout=new QGridLayout;
     gridLayout->setContentsMargins(0,0,0,0);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
@@ -84,7 +84,7 @@ void FunctionButtonWidget::recvClassificationBtnList()
                                                    Style::LeftBtnWidth,
                                                    Style::LeftBtnHeight,
                                                    Style::LeftIconSize,
-                                                   categoryList.at(row*2+col),
+                                                   m_categoryList.at(row*2+col),
                                                    false,
                                                    false);
                 iconbtn->setEnabled(false);
@@ -94,11 +94,12 @@ void FunctionButtonWidget::recvClassificationBtnList()
                                                    Style::LeftBtnWidth,
                                                    Style::LeftBtnHeight,
                                                    Style::LeftIconSize,
-                                                   categoryList.at(row*2+col),
+                                                   m_categoryList.at(row*2+col),
                                                    false,
                                                    true);
                 connect(iconbtn,&FunctionClassifyButton::buttonClicked,this, &FunctionButtonWidget::functionBtnClickedSlot);
             }
+            QGridLayout* gridLayout=qobject_cast<QGridLayout*>(this->layout());
             gridLayout->addWidget(iconbtn,row,col);
             if(row*2+col==10)break;
         }

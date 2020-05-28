@@ -39,49 +39,89 @@ class FunctionWidget : public QWidget
 public:
     explicit FunctionWidget(QWidget *parent=nullptr);
     ~FunctionWidget();
-    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
     /**
-     * @brief moveScrollBar移动滚动条
-     * @param type为0时表示向上移动，为1时表示向下移动
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
      */
     void moveScrollBar(int type);
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-
-    //主界面
-    FunctionButtonWidget* functionbtnwid=nullptr;//分类列表界面
-
-    ListView* applistview=nullptr;
-    QVector<QStringList> data;
-
-    QStringList classificationbtnlist;//存放分类按钮
-    QStringList classificationbtnrowlist;//存放分类按钮所在行
+    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    FunctionButtonWidget* m_functionBtnWid=nullptr;//Classification list interface
+    ListView* m_appListView=nullptr;
+    QVector<QStringList> m_data;
+    QStringList m_classificationList;//Store the list of category buttons
+    QStringList m_classificationBtnRowList;//Store the row in which the category button is located
     int row=0;
-
-    QPropertyAnimation* enterAnimation=nullptr;
-    QPropertyAnimation* leaveAnimation=nullptr;
-    int widgetState=-1;
+    /*Interface switching animation*/
+    QPropertyAnimation* m_enterAnimation=nullptr;
+    QPropertyAnimation* m_leaveAnimation=nullptr;
+    int m_widgetState=-1;
 
 protected:
-    void initWidget();
-    void initAppListWidget();//初始化应用列表界面
-    void fillAppListView(int type);//填充应用列表
-    void insertClassificationBtn(QString btnname);//插入分类按钮
-    void insertAppList(QStringList appnamelist);//插入应用列表
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
+    /**
+     * @brief Initialize the application list interface
+     */
+    void initAppListWidget();
+    /**
+     * @brief fill application list
+     */
+    void fillAppListView(int type);
+    /**
+     * @brief Insert category button
+     * @param category: Functional classification name
+     */
+    void insertClassificationBtn(QString btnname);
+    /**
+     * @brief Insert application list
+     * @param desktopfplist: Desktop file path list
+     */
+    void insertAppList(QStringList appnamelist);
 
 public Q_SLOTS:
-    void appClassificationBtnClickedSlot();//应用列表功能分类按钮槽函数
-    void recvFunctionBtnSignal(QString btnname);//接收FunctionButtonWidget界面按钮信号
-    void execApplication(QString desktopfp);//执行应用程序
-    void updateAppListView();//更新应用列表
+    /**
+     * @brief Switch to the function classification button interface
+     */
+    void appClassificationBtnClickedSlot();
+    /**
+     * @brief Receive function classification button interface signal
+     * @param Category button name
+     */
+    void recvFunctionBtnSignal(QString btnname);
+    /**
+     * @brief Open the application
+     * @param arg: Desktop file path
+     */
+    void execApplication(QString desktopfp);
+    /**
+     * @brief Update application list slot function
+     */
+    void updateAppListView();
+    /**
+     * @brief Respond to the list item click
+     * @param arg: The desktop file information that the application contains
+     */
     void recvItemClickedSlot(QStringList arg);
+    /**
+     * @brief Respond to animation finish
+     */
     void animationFinishedSLot();
 
 Q_SIGNALS:
-    void sendClassificationbtnList();//向FunctionButtonWidget界面发送分类按钮列表
-    void sendUpdateAppListSignal(QString desktopfp,int type);//向常用软件模块发送更新应用列表信号
-    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
+    /**
+     * @brief Send the classification button click signal to functionbuttonwidget
+     */
+    void sendClassificationbtnList();
 };
 
 #endif // FUNCTIONWIDGET_H

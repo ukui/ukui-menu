@@ -24,15 +24,15 @@
 SearchResultWidget::SearchResultWidget(QWidget *parent) :
     QWidget(parent)
 {
-    initWidget();
+    initUi();
 }
 
 SearchResultWidget::~SearchResultWidget()
 {
-    delete pUkuiMenuInterface;
+    delete m_ukuiMenuInterface;
 }
 
-void SearchResultWidget::initWidget()
+void SearchResultWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -40,17 +40,16 @@ void SearchResultWidget::initWidget()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(320,535);
 
-    mainLayout=new QHBoxLayout(this);
+    QHBoxLayout* mainLayout=new QHBoxLayout;
     mainLayout->setContentsMargins(2,0,2,0);
-    listview=new ListView(this,this->width()-4,this->height(),3);
-    mainLayout->addWidget(listview);
+    m_listView=new ListView(this,this->width()-4,this->height(),3);
+    mainLayout->addWidget(m_listView);
     this->setLayout(mainLayout);
-    data.clear();
-    listview->addData(data);
-    pUkuiMenuInterface=new UkuiMenuInterface;
+    m_data.clear();
+    m_listView->addData(m_data);
+    m_ukuiMenuInterface=new UkuiMenuInterface;
 
-    connect(listview,&ListView::sendItemClickedSignal,this,&SearchResultWidget::execApplication);
-    connect(listview,&ListView::sendHideMainWindowSignal,this,&SearchResultWidget::sendHideMainWindowSignal);
+    connect(m_listView,&ListView::sendItemClickedSignal,this,&SearchResultWidget::execApplication);
 }
 
 /**
@@ -58,7 +57,7 @@ void SearchResultWidget::initWidget()
  */
 void SearchResultWidget::execApplication(QStringList arg)
 {
-    Q_EMIT sendHideMainWindowSignal();
+    this->parentWidget()->parentWidget()->parentWidget()->hide();
     QString desktopfp=arg.at(0);
     GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
     g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
@@ -67,18 +66,16 @@ void SearchResultWidget::execApplication(QStringList arg)
 
 void SearchResultWidget::updateAppListView(QVector<QStringList> arg)
 {
-    data.clear();
+    m_data.clear();
     Q_FOREACH(QStringList appinfo,arg)
-    {
-        data.append(QStringList()<<appinfo.at(0)<<"1");
-    }
-    listview->updateData(data);
+        m_data.append(QStringList()<<appinfo.at(0)<<"1");
+    m_listView->updateData(m_data);
 }
 
 void SearchResultWidget::moveScrollBar(int type)
 {
     if(type==0)
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-100);
+        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-100);
     else
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+100);
+        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+100);
 }

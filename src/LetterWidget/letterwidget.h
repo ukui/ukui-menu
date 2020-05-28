@@ -38,43 +38,80 @@ class LetterWidget : public QWidget
 public:
      explicit LetterWidget(QWidget *parent=nullptr);
     ~LetterWidget();
-    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
     /**
-     * @brief moveScrollBar移动滚动条
-     * @param type为0时表示向上移动，为1时表示向下移动
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
      */
     void moveScrollBar(int type);
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-    LetterButtonWidget* letterbtnwid=nullptr;//分类按钮界面
-    ListView* applistview=nullptr;
-    QVector<QStringList> data;
-    QStringList letterbtnlist;//存放字母按钮
-    QStringList letterbtnrowlist;//存放字母按钮所在行
-    QStringList letterposlist;//存放分类字符位置列表
-    QStringList appsortlist;//存放应用排序列表
-    QPropertyAnimation* enterAnimation=nullptr;
-    QPropertyAnimation* leaveAnimation=nullptr;
-    int widgetState=-1;
+    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    LetterButtonWidget* m_letterBtnWid=nullptr;
+    ListView* m_appListView=nullptr;
+    QVector<QStringList> m_data;
+    QStringList m_letterList;
+    QStringList m_letterBtnRowList;
+
+    /*Interface switching animation*/
+    QPropertyAnimation* m_enterAnimation=nullptr;
+    QPropertyAnimation* m_leaveAnimation=nullptr;
+    int m_widgetState=-1;
 
 protected:
-    void initWidget();
-    void initAppListWidget();//初始化应用列表界面
-    void fillAppListView();//填充应用列表
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
+    /**
+     * @brief Initialize the application list interface
+     */
+    void initAppListWidget();
+    /**
+     * @brief fill application list
+     */
+    void fillAppListView();
 
 public Q_SLOTS:
-    void appClassificationBtnClickedSlot();//应用列表字母分类按钮槽函数
-    void recvLetterBtnSlot(QString btnname);//接收LetterButtonWidget界面按钮信号
-    void execApplication(QString desktopfp);//执行应用程序
-    void updateAppListView();//更新应用列表
+    /**
+     * @brief Switch to the alphabetic classification button interface
+     */
+    void appClassificationBtnClickedSlot();
+    /**
+     * @brief Receive alphabetic classification button interface signal
+     * @param Category button name
+     */
+    void recvLetterBtnSlot(QString btnname);
+    /**
+     * @brief Open the application
+     * @param arg: Desktop file path
+     */
+    void execApplication(QString desktopfp);
+    /**
+     * @brief Update application list slot function
+     */
+    void updateAppListView();
+    /**
+     * @brief Respond to the list item click
+     * @param arg: The desktop file information that the application contains
+     */
     void recvItemClickedSlot(QStringList arg);
+    /**
+     * @brief Respond to animation finish
+     */
     void animationFinishedSLot();
 
 Q_SIGNALS:
-    void sendLetterBtnList(QStringList list);//向LetterButtonWidget发送字母按钮列表
-    void sendUpdateAppListSignal(QString desktopfp,int type);//向常用软件模块发送更新应用列表信号
-    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
+    /**
+     * @brief Send alphabetic classification list to the letterbuttonwidget
+     * @param list: Alphabetic classification list
+     */
+    void sendLetterBtnList(QStringList list);
 };
 
 #endif // LETTERWIDGET_H

@@ -172,6 +172,17 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/peony-home.desktop");
     filePathList.removeAll("/usr/share/applications/peony-trash.desktop");
     filePathList.removeAll("/usr/share/applications/peony.desktop");
+
+    //v10
+    filePathList.removeAll("/usr/share/applications/mate-about.desktop");
+    filePathList.removeAll("/usr/share/applications/time.desktop");
+    filePathList.removeAll("/usr/share/applications/network.desktop");
+    filePathList.removeAll("/usr/share/applications/shares.desktop");
+    filePathList.removeAll("/usr/share/applications/mate-power-statistics.desktop");
+    filePathList.removeAll("/usr/share/applications/display-im6.desktop");
+    filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
+    filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
+
     return filePathList;
 }
 

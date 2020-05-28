@@ -38,23 +38,30 @@ public:
     ~FunctionButtonWidget();
 
 private:
-    QGridLayout* gridLayout=nullptr;
-    QVector<QAbstractButton*> vector;
-    QStringList categoryList;
+    QStringList m_categoryList;
 
 protected:
-    void initWidget();
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
 
 Q_SIGNALS:
     /**
-     * 向FunctionWidget界面发送功能分类按钮被点击信号
-     * @param btnname存放被点击按钮名称
+     * @brief Send button click signal to functionwidget interface
+     * @param btnname: Category button name
      */
     void sendFunctionBtnSignal(QString btnname);
 
 public Q_SLOTS:
-    void functionBtnClickedSlot();//功能分类按钮槽函数
-    void recvClassificationBtnList();//接收FunctionWidget界面分类按钮列表
+    /**
+     * @brief Respond to button click
+     */
+    void functionBtnClickedSlot();
+    /**
+     * @brief Receive function classification list
+     */
+    void recvClassificationBtnList();
 };
 
 #endif // FUNCTIONBUTTONWIDGET_H

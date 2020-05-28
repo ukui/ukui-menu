@@ -24,15 +24,15 @@
 FullCommonUseWidget::FullCommonUseWidget(QWidget *parent) :
     QWidget(parent)
 {
-    initWidget();
+    initUi();
 }
 
 FullCommonUseWidget::~FullCommonUseWidget()
 {
-    delete pUkuiMenuInterface;
+    delete m_ukuiMenuInterface;
 }
 
-void FullCommonUseWidget::initWidget()
+void FullCommonUseWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -41,13 +41,11 @@ void FullCommonUseWidget::initWidget()
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
 
-    mainLayout=new QVBoxLayout(this);
+    QVBoxLayout* mainLayout=new QVBoxLayout;
+    mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
     this->setLayout(mainLayout);
 
-    pUkuiMenuInterface=new UkuiMenuInterface;
-
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
+    m_ukuiMenuInterface=new UkuiMenuInterface;
 
     initAppListWidget();
     fillAppList();
@@ -55,22 +53,18 @@ void FullCommonUseWidget::initWidget()
 
 void FullCommonUseWidget::initAppListWidget()
 {
-    mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
     listview=new FullListView(this,0);
-    mainLayout->addWidget(listview);
+    this->layout()->addWidget(listview);
     connect(listview,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
-    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
     connect(listview,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
 }
 
 void FullCommonUseWidget::fillAppList()
 {
-    data.clear();
+    m_data.clear();
     Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
-    {
-        data.append(desktopfp);
-    }
-    listview->addData(data);
+        m_data.append(desktopfp);
+    listview->addData(m_data);
 }
 
 /**
@@ -78,7 +72,7 @@ void FullCommonUseWidget::fillAppList()
  */
 void FullCommonUseWidget::execApplication(QString desktopfp)
 {
-    Q_EMIT sendHideMainWindowSignal();
+    this->parentWidget()->parentWidget()->parentWidget()->hide();
     GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
     g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
     g_object_unref(desktopAppInfo);}
@@ -93,19 +87,17 @@ void FullCommonUseWidget::updateListViewSlot()
 
 void FullCommonUseWidget::updateListView()
 {
-    data.clear();
-    Q_FOREACH(QString desktopfp,pUkuiMenuInterface->getAllApp())
-    {
-        data.append(desktopfp);
-    }
-    listview->updateData(data);
+    m_data.clear();
+    Q_FOREACH(QString desktopfp,m_ukuiMenuInterface->getAllApp())
+        m_data.append(desktopfp);
+    listview->updateData(m_data);
 }
 
 void FullCommonUseWidget::repaintWidget()
 {
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
-    mainLayout->removeWidget(listview);
+    this->layout()->removeWidget(listview);
     listview->setParent(nullptr);
     initAppListWidget();
     fillAppList();

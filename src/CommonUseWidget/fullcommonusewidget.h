@@ -43,40 +43,55 @@ class FullCommonUseWidget : public QWidget
 public:
     explicit FullCommonUseWidget(QWidget *parent = nullptr);
     ~FullCommonUseWidget();
-    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    /**
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief Update application list
+     */
     void updateListView();
+    /**
+     * @brief Repaint window
+     */
     void repaintWidget();
     /**
-     * @brief moveScrollBar移动滚动条
-     * @param type为0时表示向上移动，为1时表示向下移动
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
      */
     void moveScrollBar(int type);
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-
-    QSettings *setting=nullptr;
-    //主界面
-    QVBoxLayout* mainLayout=nullptr;
-
+    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     FullListView* listview=nullptr;
-    QStringList data;
-
-    QFileSystemWatcher* fileWatcher=nullptr;//监控文件夹状态
-    RightClickMenu* menu=nullptr;
+    QStringList m_data;
 
 protected:
-    void initWidget();
-    void initAppListWidget();//初始化应用列表界面
-    void fillAppList();//填充应用列表
-//    void getCommonUseAppList();//获取常用应用列表
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
+    /**
+     * @brief Initialize the application list interface
+     */
+    void initAppListWidget();
+    /**
+     * @brief fill application list
+     */
+    void fillAppList();
 
 public Q_SLOTS:
-    void execApplication(QString desktopfp);//执行应用程序
+    /**
+     * @brief Open the application
+     * @param arg: Desktop file path
+     */
+    void execApplication(QString desktopfp);
+    /**
+     * @brief Update the application list slot function
+     */
     void updateListViewSlot();
-
-Q_SIGNALS:
-    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
 };
 
 #endif // FULLCOMMONUSEWIDGET_H

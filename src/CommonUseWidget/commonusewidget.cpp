@@ -26,16 +26,16 @@
 CommonUseWidget::CommonUseWidget(QWidget *parent) :
     QWidget(parent)
 {
-    initWidget();
+    initUi();
 
 }
 
 CommonUseWidget::~CommonUseWidget()
 {
-    delete pUkuiMenuInterface;
+    delete m_ukuiMenuInterface;
 }
 
-void CommonUseWidget::initWidget()
+void CommonUseWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -43,15 +43,12 @@ void CommonUseWidget::initWidget()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(320,535);
 
-    mainLayout=new  QHBoxLayout(this);
+    QHBoxLayout* mainLayout=new  QHBoxLayout;
     mainLayout->setContentsMargins(2,0,2,0);
     mainLayout->setSpacing(0);
     this->setLayout(mainLayout);
 
-    pUkuiMenuInterface=new UkuiMenuInterface;
-
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
+    m_ukuiMenuInterface=new UkuiMenuInterface;
 
     initAppListWidget();
     fillAppList();
@@ -62,11 +59,10 @@ void CommonUseWidget::initWidget()
  */
 void CommonUseWidget::initAppListWidget()
 {
-    listview=new ListView(this,this->width()-4,this->height(),0);
-    mainLayout->addWidget(listview);
-    connect(listview,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
-    connect(listview,&ListView::sendHideMainWindowSignal,this,&CommonUseWidget::sendHideMainWindowSignal);
-    connect(listview,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);
+    m_listview=new ListView(this,this->width()-4,this->height(),0);
+    this->layout()->addWidget(m_listview);
+    connect(m_listview,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
+    connect(m_listview,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);
 }
 
 /**
@@ -74,12 +70,10 @@ void CommonUseWidget::initAppListWidget()
  */
 void CommonUseWidget::fillAppList()
 {
-    data.clear();
+    m_data.clear();
     Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
-    {
-        data.append(QStringList()<<desktopfp<<"1");
-    }
-    listview->addData(data);
+        m_data.append(QStringList()<<desktopfp<<"1");
+    m_listview->addData(m_data);
 }
 
 /**
@@ -87,7 +81,7 @@ void CommonUseWidget::fillAppList()
  */
 void CommonUseWidget::execApplication(QStringList arg)
 {
-    Q_EMIT sendHideMainWindowSignal();
+    this->parentWidget()->parentWidget()->parentWidget()->hide();
     QString desktopfp=arg.at(0);
     GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
     g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
@@ -105,23 +99,21 @@ void CommonUseWidget::updateListViewSlot()
 
 void CommonUseWidget::updateListView()
 {
-    data.clear();
-    Q_FOREACH(QString desktopfp,pUkuiMenuInterface->getAllApp())
-    {
-        data.append(QStringList()<<desktopfp<<"1");
-    }
-    listview->updateData(data);
+    m_data.clear();
+    Q_FOREACH(QString desktopfp,m_ukuiMenuInterface->getAllApp())
+        m_data.append(QStringList()<<desktopfp<<"1");
+    m_listview->updateData(m_data);
 }
 
 void CommonUseWidget::widgetMakeZero()
 {
-    listview->verticalScrollBar()->setSliderPosition(0);
+    m_listview->verticalScrollBar()->setSliderPosition(0);
 }
 
 void CommonUseWidget::moveScrollBar(int type)
 {
     if(type==0)
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-100);
+        m_listview->verticalScrollBar()->setSliderPosition(m_listview->verticalScrollBar()->sliderPosition()-100);
     else
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+100);
+        m_listview->verticalScrollBar()->setSliderPosition(m_listview->verticalScrollBar()->sliderPosition()+100);
 }

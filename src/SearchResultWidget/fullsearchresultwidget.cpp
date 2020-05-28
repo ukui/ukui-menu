@@ -24,15 +24,15 @@
 FullSearchResultWidget::FullSearchResultWidget(QWidget *parent) :
     QWidget(parent)
 {
-    initWidget();
+    initUi();
 }
 
 FullSearchResultWidget::~FullSearchResultWidget()
 {
-    delete pUkuiMenuInterface;
+    delete m_ukuiMenuInterface;
 }
 
-void FullSearchResultWidget::initWidget()
+void FullSearchResultWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
@@ -41,18 +41,17 @@ void FullSearchResultWidget::initWidget()
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
 
-    mainLayout=new QHBoxLayout(this);
+    QHBoxLayout* mainLayout=new QHBoxLayout;
     mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
-    listview=new FullListView(this,3);
-    mainLayout->addWidget(listview);
+    m_listView=new FullListView(this,3);
+    mainLayout->addWidget(m_listView);
     this->setLayout(mainLayout);
 
-    data.clear();
-    listview->addData(data);
-    pUkuiMenuInterface=new UkuiMenuInterface;
+    m_data.clear();
+    m_listView->addData(m_data);
+    m_ukuiMenuInterface=new UkuiMenuInterface;
 
-    connect(listview,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
-    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullSearchResultWidget::sendHideMainWindowSignal);
+    connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
 }
 
 /**
@@ -60,7 +59,7 @@ void FullSearchResultWidget::initWidget()
  */
 void FullSearchResultWidget::execApplication(QString desktopfp)
 {
-    Q_EMIT sendHideMainWindowSignal();
+    this->parentWidget()->parentWidget()->parentWidget()->hide();
     GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
     g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
     g_object_unref(desktopAppInfo);
@@ -68,34 +67,32 @@ void FullSearchResultWidget::execApplication(QString desktopfp)
 
 void FullSearchResultWidget::updateAppListView(QVector<QStringList> arg)
 {
-    data.clear();
+    m_data.clear();
     Q_FOREACH(QStringList appinfo,arg)
-        data.append(appinfo.at(0));
-    listview->updateData(data);
+        m_data.append(appinfo.at(0));
+    m_listView->updateData(m_data);
 }
 
 void FullSearchResultWidget::repaintWidget()
 {
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
-    mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
-    mainLayout->removeWidget(listview);
-    listview->setParent(nullptr);
-    delete listview;
-    listview=new FullListView(this,3);
-    mainLayout->addWidget(listview);
-    data.clear();
-    listview->addData(data);
-    connect(listview,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
-    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullSearchResultWidget::sendHideMainWindowSignal);
-
+    this->layout()->setContentsMargins(Style::LeftWidWidth,0,0,0);
+    this->layout()->removeWidget(m_listView);
+    m_listView->setParent(nullptr);
+    delete m_listView;
+    m_listView=new FullListView(this,3);
+    this->layout()->addWidget(m_listView);
+    m_data.clear();
+    m_listView->addData(m_data);
+    connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
 }
 
 void FullSearchResultWidget::moveScrollBar(int type)
 {
     int height=QApplication::primaryScreen()->geometry().height();
     if(type==0)
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()-height*100/1080);
+        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-height*100/1080);
     else
-        listview->verticalScrollBar()->setSliderPosition(listview->verticalScrollBar()->sliderPosition()+height*100/1080);
+        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+height*100/1080);
 }

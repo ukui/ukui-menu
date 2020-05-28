@@ -524,20 +524,20 @@ void SideBarWidget::loadMinSidebar()
     {
         QPushButton* btn=qobject_cast<QPushButton*>(button);
         setMinSidebarBtn(btn);
-        int index=buttonList.indexOf(button);
-        switch (index) {
-        case 0:
-            btn->setToolTip(tr("All"));
-            break;
-        case 1:
-            btn->setToolTip(tr("Letter"));
-            break;
-        case 2:
-            btn->setToolTip(tr("Function"));
-            break;
-        default:
-            break;
-        }
+//        int index=buttonList.indexOf(button);
+//        switch (index) {
+//        case 0:
+//            btn->setToolTip(tr("All"));
+//            break;
+//        case 1:
+//            btn->setToolTip(tr("Letter"));
+//            break;
+//        case 2:
+//            btn->setToolTip(tr("Function"));
+//            break;
+//        default:
+//            break;
+//        }
     }
 
     Q_FOREACH(QAbstractButton* button,otherButtonList)
@@ -545,28 +545,28 @@ void SideBarWidget::loadMinSidebar()
         QPushButton* btn=qobject_cast<QPushButton*>(button);
         setMinSidebarBtn(btn);
     }
-    Q_FOREACH(int index,otherButtonListIndex)
-    {
-        switch (index) {
-        case 1:
-            personalbtn->setToolTip(tr("Personal"));
-            break;
-        case 2:
-            trashbtn->setToolTip(tr("Recycle Bin"));
-            break;
-        case 3:
-            computerbtn->setToolTip(tr("Computer"));
-            break;
-        case 4:
-            controlbtn->setToolTip(tr("Settings"));
-            break;
-        default:
-            break;
-        }
-    }
-    QString username=pUkuiMenuInterface->getUserName();
-    usericonbtn->setToolTip(username);
-    shutdownbtn->setToolTip(tr("Power"));
+//    Q_FOREACH(int index,otherButtonListIndex)
+//    {
+//        switch (index) {
+//        case 1:
+//            personalbtn->setToolTip(tr("Personal"));
+//            break;
+//        case 2:
+//            trashbtn->setToolTip(tr("Recycle Bin"));
+//            break;
+//        case 3:
+//            computerbtn->setToolTip(tr("Computer"));
+//            break;
+//        case 4:
+//            controlbtn->setToolTip(tr("Settings"));
+//            break;
+//        default:
+//            break;
+//        }
+//    }
+//    QString username=pUkuiMenuInterface->getUserName();
+//    usericonbtn->setToolTip(username);
+//    shutdownbtn->setToolTip(tr("Power"));
 
     disconnect(minmaxbtn,&QToolButton::clicked,this, &SideBarWidget::sendDefaultBtnSignal);
     connect(minmaxbtn, &QToolButton::clicked,this,&SideBarWidget::sendFullScreenBtnSignal);
@@ -691,7 +691,7 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
                                       0,
                                       0);
     btn->layout()->setSpacing(Style::SideBarSpaceIconText);
-    btn->setToolTip("");
+//    btn->setToolTip("");
 }
 
 void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)

@@ -91,14 +91,14 @@ void MainViewWidget::initWidget()
     connect(this,&MainViewWidget::directoryChangedSignal,fullcommonusewid,&FullCommonUseWidget::updateListViewSlot);
 
     //发送隐藏主界面信号
-    connect(commonusewid,&CommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(fullcommonusewid,&FullCommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(letterwid,&LetterWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(fullletterwid,&FullLetterWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(functionwid,&FunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(fullfunctionwid,&FullFunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(searchresultwid,&SearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(fullsearchresultwid,&FullSearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+//    connect(commonusewid,&CommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+//    connect(fullcommonusewid,&FullCommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+//    connect(letterwid,&LetterWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+//    connect(fullletterwid,&FullLetterWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+//    connect(functionwid,&FunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+//    connect(fullfunctionwid,&FullFunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+//    connect(searchresultwid,&SearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+//    connect(fullsearchresultwid,&FullSearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
 
     addTopControl();
     loadMinMainView();
@@ -165,6 +165,7 @@ void MainViewWidget::initQueryLineEdit()
     querylineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
     animation= new QPropertyAnimation(m_queryWid,"geometry");
+    animation->setDuration(100);
     connect(animation,&QPropertyAnimation::finished,this,&MainViewWidget::animationFinishedSlot);
 
     searchappthread=new SearchAppThread;
@@ -335,7 +336,11 @@ void MainViewWidget::animationFinishedSlot()
     {
         querylineEdit->setReadOnly(false);
         querylineEdit->setTextMargins(20,1,0,1);
-        querylineEdit->setText(m_searchKeyWords);
+        if(!m_searchKeyWords.isEmpty())
+        {
+            querylineEdit->setText(m_searchKeyWords);
+            m_searchKeyWords.clear();
+        }
     }
 }
 
@@ -353,8 +358,6 @@ void MainViewWidget::loadMinMainView()
     if(querylineEdit->text().isEmpty())
         m_queryWid->setGeometry(QRect((querylineEdit->width()-m_queryWid->width())/2,0,
                                       m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-    syslog(LOG_LOCAL0|LOG_DEBUG,"%d:%d:%d",(querylineEdit->width()-m_queryWid->width())/2,
-           (m_queryIcon->width()+m_queryText->width()+10),m_queryWid->x());
 
     if(widgetState==0)
     {
@@ -736,15 +739,18 @@ void MainViewWidget::widgetMakeZero()
     fullletterwid->widgetMakeZero();
     functionwid->widgetMakeZero();
     fullfunctionwid->widgetMakeZero();
+    if(!querylineEdit->text().isEmpty() ||querylineEdit->hasFocus())
+    {
+        m_queryWid->layout()->addWidget(m_queryText);
+        m_queryWid->setGeometry(QRect((querylineEdit->width()-m_queryWid->width())/2,0,
+                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+    }
     querylineEdit->clear();
     querylineEdit->clearFocus();
     char style[100];
     sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
     querylineEdit->setStyleSheet(style);
     querylineEdit->setTextMargins(0,1,0,1);
-//    pIconTextWidLayout->addWidget(pQueryText);
-//    pIconTextWid->setFixedSize(pQueryIcon->width()+pQueryText->width()+10,Style::QueryLineEditHeight);
-//    queryLayout->setAlignment(pIconTextWid,Qt::AlignCenter);
     is_fullscreen=false;
     widgetState=1;
 }

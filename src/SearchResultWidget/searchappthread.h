@@ -31,16 +31,24 @@ public:
     void run();
 
 private:
-    QString keyword;
-    QVector<QStringList> searchResultVector;
+    QString m_keyWord;
+    QVector<QStringList> m_searchResultVector;
 
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-    QVector<QStringList> appInfoVector;
+    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    QVector<QStringList> m_appInfoVector;
 
 public Q_SLOTS:
+    /**
+     * @brief Receive search keywords
+     * @param arg: Search keywords
+     */
     void recvSearchKeyword(QString arg);
 
 Q_SIGNALS:
+    /**
+     * @brief Send search results
+     * @param vector: Search results
+     */
     void sendSearchResult(QVector<QStringList> vector);
 
 };
