@@ -45,46 +45,79 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void setFrameStyle();//设置QFrame样式
+    /**
+     * @brief Set the QFrame style
+     */
+    void setFrameStyle();
+    /**
+     * @brief Load the main window
+     */
     void loadMainWindow();
 
 private:
 
-    bool is_fullscreen=false;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-    QSettings* setting=nullptr;
+    bool m_isFullScreen=false;
+    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
+    QSettings *m_setting=nullptr;
 
-    QFrame* line=nullptr;//垂直分割线
-    //主窗口样式
-    QFrame* frame=nullptr;
-    QHBoxLayout* mainlayout=nullptr;
-    //侧边栏
-    SideBarWidget* sidebarwid=nullptr;
-    //主视图
-    MainViewWidget* mainviewwid=nullptr;
-    QPropertyAnimation* pEnterAnimation=nullptr;
-    QPropertyAnimation* pLeaveAnimation=nullptr;
+    QFrame *m_line=nullptr;//Vertical dividing line
+    QFrame *m_frame=nullptr;
+    SideBarWidget *m_sideBarWid=nullptr;
+    MainViewWidget *m_mainViewWid=nullptr;
 
-    QPropertyAnimation* pAnimation=nullptr;
-    bool WinFlag = false;
+    QPropertyAnimation *m_animation=nullptr;
+    bool m_winFlag = false;
 
 protected:
-    void initMainWindow();
-    bool event(QEvent *event);//鼠标点击窗口外部事件
-//    void paintEvent(QPaintEvent*);//添加阴影
-    void keyPressEvent(QKeyEvent* e);//查询框响应键盘事件
+    void initUi();
+    /**
+     * @brief Handle events clicking on the outside of the window
+     */
+    bool event(QEvent *event);
+//    void paintEvent(QPaintEvent*);
+    /**
+     * @brief The query box responds to keyboard events
+     */
+    void keyPressEvent(QKeyEvent* e);
 
 public Q_SLOTS:
+    /**
+     * @brief Monitor win key events
+     */
     void XkbEventsPress(const QString &keycode);
     void XkbEventsRelease(const QString &keycode);
-    void showFullScreenWidget();//加载全屏窗口
-    void showDefaultWidget();//显示默认窗口
+    /**
+     * @brief Load the full screen window
+     */
+    void showFullScreenWidget();
+    /**
+     * @brief Load the default window
+     */
+    void showDefaultWidget();
     void recvHideMainWindowSlot();//接收隐藏主窗口信号
-    void monitorResolutionChange(QRect rect);//监控屏幕分辨率
+    /**
+     * @brief Monitor screen resolution
+     * @param rect: Screen resolution
+     */
+    void monitorResolutionChange(QRect rect);
+    /**
+     * @brief Monitor primary screen changes
+     * @param screen: Primary screen
+     */
     void primaryScreenChangedSlot(QScreen *screen);
+    /**
+     * @brief Monitor taskbar key changes
+     * @param key: Key
+     */
     void panelChangedSlot(QString key);
+    /**
+     * @brief Monitor the state change of the animation
+     */
     void stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-    void recvStartMenuSlot();//测试通过发信号的方式开启开始菜单
+    /**
+     * @brief Open the start menu by signaling
+     */
+    void recvStartMenuSlot();
 };
 
 #endif // MAINWINDOW_H

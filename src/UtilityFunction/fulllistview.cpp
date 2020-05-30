@@ -27,10 +27,7 @@ FullListView::FullListView(QWidget *parent, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-    if(module==0)
-        menu=new RightClickMenu(nullptr,0);
-    else
-        menu=new RightClickMenu(nullptr,1);
+    menu=new RightClickMenu(nullptr,0);
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -130,15 +127,17 @@ void FullListView::onClicked(QModelIndex index)
 
 void FullListView::rightClickedSlot(const QPoint &pos)
 {
+    Q_UNUSED(pos)
     if(!(this->selectionModel()->selectedIndexes().isEmpty()))
     {
         QModelIndex index=this->currentIndex();
 //        QModelIndex index=this->indexAt(pos);
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
+        int ret=menu->showAppBtnMenu(desktopfp);
         if(module>0)
         {
-            int ret=menu->showAppBtnMenu(desktopfp);
+//            int ret=menu->showAppBtnMenu(desktopfp);
             switch (ret) {
             case 6:
                 Q_EMIT sendHideMainWindowSignal();
@@ -151,7 +150,7 @@ void FullListView::rightClickedSlot(const QPoint &pos)
             }
         }
         else{
-            int ret=menu->showCommonUseAppBtnMenu(desktopfp);
+//            int ret=menu->showCommonUseAppBtnMenu(desktopfp);
             switch (ret) {
             case 1:
                 Q_EMIT sendUpdateAppListSignal();

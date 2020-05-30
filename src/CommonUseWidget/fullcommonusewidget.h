@@ -65,7 +65,7 @@ public:
 
 private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
-    FullListView* listview=nullptr;
+    FullListView* m_listView=nullptr;
     QStringList m_data;
 
 protected:
@@ -92,6 +92,12 @@ public Q_SLOTS:
      * @brief Update the application list slot function
      */
     void updateListViewSlot();
+
+Q_SIGNALS:
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // FULLCOMMONUSEWIDGET_H

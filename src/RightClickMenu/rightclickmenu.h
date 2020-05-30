@@ -42,115 +42,169 @@ class RightClickMenu: public QWidget
     Q_OBJECT
 public:
     /**
-     * @brief RightClickMenu
-     * @param parent
-     * @param module为0表示常用应用，1表示普通应用，2表示关机，3表示其他
+     * @brief Right-click menu
+     * @param module: Right-click menu type, Only the following parameters can be entered:
+     *  0: application
+     *  1: power
+     *  2: others
      */
     RightClickMenu(QWidget *parent,int module);
     virtual ~RightClickMenu();
-    int showCommonUseAppBtnMenu(QString desktopfp);
+    /**
+     * @brief Displays the application right-click menu
+     * @param desktopfp: Application desktop file
+     * @return return action number
+     */
     int showAppBtnMenu(QString desktopfp);
+    /**
+     * @brief Displays the power right-click menu
+     * @return return action number
+     */
     int showShutdownMenu();
+    /**
+     * @brief Displays other application right-click menus
+     * @param desktopfp: Application desktop file
+     * @return return action number
+     */
     int showOtherMenu(QString desktopfp);
 
 private:
-    QString desktopfp;
-    int action_number;//记录执行的action编号
-    QSettings* setting=nullptr;
+    QString m_desktopfp;
+    int m_actionNumber;
+    QSettings *m_setting=nullptr;
 
-    char style[300];
+    char m_style[300];
 
-    QProcess* cmdProc=nullptr;
+    QProcess *m_cmdProc=nullptr;
 
-    //间隔线
-    QLabel* separatorLabel=nullptr;
-    QWidget* separatorWid=nullptr;
-    QWidgetAction* separatorAction_1=nullptr;
-    QWidgetAction* separatorAction_2=nullptr;
-    QWidgetAction* separatorAction_3=nullptr;
-    QWidgetAction* separatorAction_4=nullptr;
-    QWidgetAction* separatorAction_5=nullptr;
+    QMenu *m_appBtnMenu=nullptr;
+    QWidgetAction *m_fixToAllAction=nullptr;
+    QWidget *m_fixToAllWid=nullptr;
+    QWidgetAction *m_unfixedFromAllAction=nullptr;
+    QWidget *m_unfixedFromAllWid=nullptr;
+    QWidgetAction *m_fixToTaskBarAction=nullptr;
+    QWidget *m_fixToTaskBarWid=nullptr;
+    QWidgetAction *m_unfixedFromTaskBarAction=nullptr;
+    QWidget *m_unfixedFromTaskBarWid=nullptr;
+    QWidgetAction *m_addToDesktopAction=nullptr;
+    QWidget *m_addToDesktopWid=nullptr;
+    QWidgetAction *m_uninstallAction=nullptr;
+    QWidget *m_uninstallWid=nullptr;
+    QWidgetAction *m_attributeAction=nullptr;
+    QWidget *m_attributeWid=nullptr;
 
-    QMenu* cuappbtnmenu=nullptr;
-    QWidgetAction* CuFix2CommonUseAction=nullptr;
-    QWidget* CuFix2CommonUseWid=nullptr;
-    QWidgetAction* CuUnfixed4CommonUseAction=nullptr;
-    QWidget* CuUnfixed4CommonUseWid=nullptr;
-    QWidgetAction* CuFix2TaskBarAction=nullptr;
-    QWidget* CuFix2TaskBarWid=nullptr;
-    QWidgetAction* CuUnfixed4TaskBarAction=nullptr;
-    QWidget* CuUnfixed4TaskBarWid=nullptr;
-    QWidgetAction* CuAdd2DesktopAction=nullptr;
-    QWidget* CuAdd2DesktopWid=nullptr;
-    QWidgetAction* CuUninstallAction=nullptr;
-    QWidget* CuUninstallWid=nullptr;
-    QWidgetAction* CuAttributeAction=nullptr;
-    QWidget* CuAttributeWid=nullptr;
+    QMenu *m_shutDownMenu=nullptr;
+    QWidgetAction *m_lockScreenAction=nullptr;
+    QWidget *m_lockScreenWid=nullptr;
+    QWidgetAction *m_switchUserAction=nullptr;
+    QWidget *m_switchUserWid=nullptr;
+    QWidgetAction *m_logOutAction=nullptr;
+    QWidget *m_logOutWid=nullptr;
+    QWidgetAction *m_rebootAction=nullptr;
+    QWidget *m_rebootWid=nullptr;
+    QWidgetAction *m_shutDownAction=nullptr;
+    QWidget *m_shutDownWid=nullptr;
 
-    QMenu* appbtnmenu=nullptr;
-    QWidgetAction* Fix2CommonUseAction=nullptr;
-    QWidget* Fix2CommonUseWid=nullptr;
-    QWidgetAction* Unfixed4CommonUseAction=nullptr;
-    QWidget* Unfixed4CommonUseWid=nullptr;
-    QWidgetAction* Fix2TaskBarAction=nullptr;
-    QWidget* Fix2TaskBarWid=nullptr;
-    QWidgetAction* Unfixed4TaskBarAction=nullptr;
-    QWidget* Unfixed4TaskBarWid=nullptr;
-    QWidgetAction* Add2DesktopAction=nullptr;
-    QWidget* Add2DesktopWid=nullptr;
-    QWidgetAction* UninstallAction=nullptr;
-    QWidget* UninstallWid=nullptr;
-    QWidgetAction* AttributeAction=nullptr;
-    QWidget* AttributeWid=nullptr;
+    QMenu *m_otherMenu=nullptr;
+    QWidgetAction *m_otherFixToTaskBarAction=nullptr;
+    QWidget *m_otherFixToTaskBarWid=nullptr;
+    QWidgetAction *m_otherUnfixedFromTaskBarAction=nullptr;
+    QWidget *m_otherUnfixedFromTaskBarWid=nullptr;
+    QWidgetAction *m_otherListAction=nullptr;
+    QWidget *m_otherListWid=nullptr;
 
-    QMenu* shutdownmenu=nullptr;
-    QWidgetAction* LockScreenAction=nullptr;
-    QWidget* LockScreenWid=nullptr;
-    QWidgetAction* SwitchUserAction=nullptr;
-    QWidget* SwitchUserWid=nullptr;
-    QWidgetAction* LogOutAction=nullptr;
-    QWidget* LogOutWid=nullptr;
-    QWidgetAction* RebootAction=nullptr;
-    QWidget* RebootWid=nullptr;
-    QWidgetAction* ShutDownAction=nullptr;
-    QWidget* ShutDownWid=nullptr;
-
-    QMenu* othermenu=nullptr;
-    QWidgetAction* OtherFix2TaskBarAction=nullptr;
-    QWidget* OtherFix2TaskBarWid=nullptr;
-    QWidgetAction* OtherUnfix2TaskBarAction=nullptr;
-    QWidget* OtherUnfix2TaskBarWid=nullptr;
-    QWidgetAction* OtherListAction=nullptr;
-    QWidget* OtherListWid=nullptr;
-
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
 
 protected:
-    void addCommonUseAppBtnAction();
-    void initCommonUseAppBtnAction();
+    /**
+     * @brief Add application right-click menu item
+     */
     void addAppBtnAction();
+    /**
+     * @brief Initialize the application right-click menu item
+     */
     void initAppBtnAction();
+    /**
+     * @brief Add power right-click menu item
+     */
     void addShutdownAction();
+    /**
+     * @brief Add other application right-click menu item
+     */
     void addOtherAction();
+    /**
+     * @brief Initialize widget action
+     * @param wid: Widget
+     * @param iconstr: Icon name
+     * @param textstr: Text
+     * @param type: Icon type, Only the following parameters can be entered:
+     *  0: Resource icon
+     *  1: System icon
+     */
     void initWidgetAction(QWidget* wid, QString iconstr, QString textstr,int type);
+    /**
+     * @brief Process image color
+     * @param source: QPixmap icon
+     * @return return QPixmap icon
+     */
+    QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
 
 private Q_SLOTS:
-    void fixToCommonUseActionTriggerSlot();
-    void unfixedFromCommonUseActionTriggerSlot();
+    /**
+     * @brief Fixed to all software
+     */
+    void fixToAllActionTriggerSlot();
+    /**
+     * @brief Unfix from all software
+     */
+    void unfixedFromAllActionTriggerSlot();
+    /**
+     * @brief Fixed to the taskbar
+     */
     void fixToTaskbarActionTriggerSlot();
+    /**
+     * @brief Unfix from the taskbar
+     */
     void unfixedFromTaskbarActionTriggerSlot();
+    /**
+     * @brief Add to the desktop shortcut
+     */
     void addToDesktopActionTriggerSlot();
+    /**
+     * @brief Uninstall
+     */
     void uninstallActionTriggerSlot();
+    /**
+     * @brief Attribute
+     */
     void attributeActionTriggerSlot();
-
+    /**
+     * @brief Lock Screen
+     */
     void lockScreenActionTriggerSlot();
+    /**
+     * @brief Switch user
+     */
     void switchUserActionTriggerSlot();
+    /**
+     * @brief Log out
+     */
     void logoutActionTriggerSlot();
+    /**
+     * @brief Reboot
+     */
     void rebootActionTriggerSlot();
+    /**
+     * @brief Shut down
+     */
     void shutdownActionTriggerSlot();
-
+    /**
+     * @brief Personalize this list
+     */
     void otherListActionTriggerSlot();
-
+    /**
+     * @brief Read command output
+     */
     void onReadOutput();
 };
 

@@ -68,7 +68,7 @@ void FunctionWidget::initAppListWidget()
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
     fillAppListView(0);
     connect(m_appListView,&ListView::sendItemClickedSignal,this,&FunctionWidget::recvItemClickedSlot);
-
+    connect(m_appListView,&ListView::sendHideMainWindowSignal,this,&FunctionWidget::sendHideMainWindowSignal);
 }
 
 

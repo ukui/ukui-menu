@@ -112,6 +112,10 @@ Q_SIGNALS:
      * @param list: Alphabetic classification list
      */
     void sendLetterBtnList(QStringList list);
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // LETTERWIDGET_H

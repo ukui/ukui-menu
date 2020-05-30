@@ -43,92 +43,175 @@ class SideBarWidget : public QWidget
 public:
     explicit SideBarWidget(QWidget *parent = nullptr);
     ~SideBarWidget();
-    void loadMinSidebar();//加载默认侧边栏
-    void loadMaxSidebar();//加载全屏侧边栏
-    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
+    /**
+     * @brief Load the default sidebar
+     */
+    void loadMinSidebar();
+    /**
+     * @brief Load the full-screen sidebar
+     */
+    void loadMaxSidebar();
+    /**
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief Sidebar animation
+     */
     void enterAnimation();
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
 
-    QHBoxLayout* layout=nullptr;
-    QSpacerItem* pHorizonSpacer=nullptr;
-    QWidget* pMainWidget=nullptr;
-    QVBoxLayout* pMainWidgetLayout=nullptr;
+    QWidget *m_mainWidget=nullptr;
+    QVBoxLayout *m_mainWidgetLayout=nullptr;
 
-    //放大缩小界面
-    QWidget* minmaxWidget=nullptr;
-    QHBoxLayout* minmaxLayout=nullptr;
-    QToolButton* minmaxbtn=nullptr;
-    QSpacerItem* horizontalSpacer=nullptr;
+    QWidget *m_minMaxWidget=nullptr;
+    QHBoxLayout *m_minMaxLayout=nullptr;
+    QToolButton *m_minMaxBtn=nullptr;
 
-    QButtonGroup* pBtnGroup=nullptr;
-    QList<QAbstractButton*> buttonList;
-    QHBoxLayout* btnlayout=nullptr;
-    QLabel* labelicon;
-    QPushButton* commonusebtn=nullptr;
-    QLabel* commonusebtnname=nullptr;
-    QPushButton* letterbtn=nullptr;
-    QLabel* letterbtnname=nullptr;
-    QPushButton* functionbtn=nullptr;
-    QLabel* functionbtnname=nullptr;
+    QButtonGroup *m_btnGroup=nullptr;
+    QList<QAbstractButton*> m_buttonList;
+    QList<QLabel*> m_buttonTextList;
+    QPushButton *m_allBtn=nullptr;
+    QPushButton *m_letterBtn=nullptr;
+    QPushButton *m_functionBtn=nullptr;
 
-    QPushButton* usericonbtn=nullptr;
-    QLabel* usericonbtnname=nullptr;
-    QPushButton* computerbtn=nullptr;
-    QLabel* computerbtnname=nullptr;
-    QPushButton* personalbtn=nullptr;
-    QLabel* personalbtnname=nullptr;
-    QPushButton* controlbtn=nullptr;
-    QLabel* controlbtnname=nullptr;
-    QPushButton* trashbtn=nullptr;
-    QLabel* trashbtnname=nullptr;
-    QPushButton* shutdownbtn=nullptr;
-    QLabel* shutdownbtnname=nullptr;
-    QSpacerItem* verticalSpacer=nullptr;
-    QList<QAbstractButton*> otherButtonList;
-    QList<int> otherButtonListIndex;
-    bool is_fullscreen=false;
-    QGSettings* gsetting=nullptr;
-    RightClickMenu* shutdownmenu;
-    RightClickMenu* othermenu;
-    QPropertyAnimation* pAnimation=nullptr;
+    QPushButton *m_userIconBtn=nullptr;
+    QPushButton *m_computerBtn=nullptr;
+    QPushButton *m_personalBtn=nullptr;
+    QPushButton *m_controlBtn=nullptr;
+    QPushButton *m_trashBtn=nullptr;
+    QPushButton *m_shutDownBtn=nullptr;
+    QSpacerItem *m_verticalSpacer=nullptr;
+    bool m_isFullScreen=false;
+    QGSettings *m_gsetting=nullptr;
+    RightClickMenu *m_shutDownMenu;
+    RightClickMenu *m_otherMenu;
+    QPropertyAnimation* m_animation=nullptr;
 
 protected:
-    void initWidget();//初始化主界面
-    void addSidebarBtn();//添加侧边栏按钮
-    void initBtn(QPushButton *btn, QString btnicon,QLabel* label,QString text,int num);//设置按钮样式
-    void setMinSidebarBtn(QPushButton *btn);//设置默认侧边栏按钮
-    void setMaxSidebarBtn(QPushButton *btn);//设置全屏侧边栏按钮
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
+    /**
+     * @brief Add a sidebar button
+     */
+    void addSidebarBtn();
+    /**
+     * @brief Set button style
+     * @param btn: QPushButton
+     * @param btnicon: Button icon
+     * @param label: QLabel
+     * @param text: Button text
+     * @param num: Button Number
+     */
+    void initBtn(QPushButton *btn, QString btnicon,QString text,int num);
+    /**
+     * @brief Set the default sidebar button
+     * @param btn: QPushButton
+     */
+    void setMinSidebarBtn(QPushButton *btn);
+    /**
+     * @brief Set the full-screen sidebar button
+     * @param btn: QPushButton
+     */
+    void setMaxSidebarBtn(QPushButton *btn);
+    /**
+     * @brief Add right-click menu
+     * @param btn: QPushButton
+     */
     void addRightClickMenu(QPushButton* btn);
-    void setMinBtn();//设置还原按钮
-    void setMaxBtn();//设置全屏按钮
+    /**
+     * @brief Set the minimize button
+     */
+    void setMinBtn();
+    /**
+     * @brief Set the maximize button
+     */
+    void setMaxBtn();
 //    void mousePressEvent(QMouseEvent* event);
 
 private Q_SLOTS:
-//    bool eventFilter(QObject *watched, QEvent *event);
+    /**
+     * @brief Respond to button click
+     * @param btn: QButtonGroup button
+     */
     void btnGroupClickedSlot(QAbstractButton *btn);
-    void shutdownBtnRightClickSlot();//加载关机按钮右键菜单
-    void otherBtnRightClickSlot();//加载载右键菜单
-//    void animation_finished_slot();
+    /**
+     * @brief Load power button right-click menu
+     */
+    void shutdownBtnRightClickSlot();
+    /**
+     * @brief Load other application right-click menu
+     */
+    void otherBtnRightClickSlot();
+    /**
+     * @brief Respond to computer btn
+     */
     void computerBtnClickedSlot();
+    /**
+     * @brief Respond to personal btn
+     */
     void personalBtnClickedSlot();
+    /**
+     * @brief Respond to control btn
+     */
     void controlBtnClickedSlot();
+    /**
+     * @brief Respond to trash btn
+     */
     void trashBtnClickedSlot();
+    /**
+     * @brief Respond to power btn
+     */
     void shutdownBtnClickedSlot();
+    /**
+     * @brief Respond to user icon btn
+     */
     void userIconBtnClickedSlot();
+    /**
+     * @brief Monitor user account changes
+     */
     void userAccountsChanged();
+    /**
+     * @brief Reset the sidebar button
+     */
     void resetSidebarBtnSlot();
 
 Q_SIGNALS:
-    void sendCommonUseBtnSignal();//发送常用分类按钮信号
-    void sendLetterBtnSignal();//发送字母分类按钮信号
-    void sendFunctionBtnSignal();//发送功能分类按钮信号
-    void sendFullScreenCommonUseBtnSignal();//发送常用分类按钮信号
-    void sendFullScreenLetterBtnSignal();//发送字母分类按钮信号
-    void sendFullScreenFunctionBtnSignal();//发送功能分类按钮信号
-    void sendHideMainWindowSignal();//向MainViewWidget发送隐藏主窗口信号
-    void sendFullScreenBtnSignal();//发送全屏按钮点击信号
+    /**
+     * @brief Send all category button signal
+     */
+    void sendCommonUseBtnSignal();
+    /**
+     * @brief Send the letter classification button signal
+     */
+    void sendLetterBtnSignal();
+    /**
+     * @brief Send function classification button signal
+     */
+    void sendFunctionBtnSignal();
+    /**
+     * @brief Send all category button signal of full screen
+     */
+    void sendFullScreenCommonUseBtnSignal();
+    /**
+     * @brief Send the letter classification button of full screen
+     */
+    void sendFullScreenLetterBtnSignal();
+    /**
+     * @brief Send function classification button signal of full screen
+     */
+    void sendFullScreenFunctionBtnSignal();
+    /**
+     * @brief Send a full-screen button click signal
+     */
+    void sendFullScreenBtnSignal();
+    /**
+     * @brief Send the default button click signal
+     */
     void sendDefaultBtnSignal();//发送默认(还原)按钮点击信号
 };
 

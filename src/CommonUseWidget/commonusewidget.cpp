@@ -59,10 +59,11 @@ void CommonUseWidget::initUi()
  */
 void CommonUseWidget::initAppListWidget()
 {
-    m_listview=new ListView(this,this->width()-4,this->height(),0);
-    this->layout()->addWidget(m_listview);
-    connect(m_listview,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
-    connect(m_listview,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);
+    m_listView=new ListView(this,this->width()-4,this->height(),0);
+    this->layout()->addWidget(m_listView);
+    connect(m_listView,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
+    connect(m_listView,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);
+    connect(m_listView,&ListView::sendHideMainWindowSignal,this,&CommonUseWidget::sendHideMainWindowSignal);
 }
 
 /**
@@ -73,7 +74,7 @@ void CommonUseWidget::fillAppList()
     m_data.clear();
     Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
         m_data.append(QStringList()<<desktopfp<<"1");
-    m_listview->addData(m_data);
+    m_listView->addData(m_data);
 }
 
 /**
@@ -102,18 +103,18 @@ void CommonUseWidget::updateListView()
     m_data.clear();
     Q_FOREACH(QString desktopfp,m_ukuiMenuInterface->getAllApp())
         m_data.append(QStringList()<<desktopfp<<"1");
-    m_listview->updateData(m_data);
+    m_listView->updateData(m_data);
 }
 
 void CommonUseWidget::widgetMakeZero()
 {
-    m_listview->verticalScrollBar()->setSliderPosition(0);
+    m_listView->verticalScrollBar()->setSliderPosition(0);
 }
 
 void CommonUseWidget::moveScrollBar(int type)
 {
     if(type==0)
-        m_listview->verticalScrollBar()->setSliderPosition(m_listview->verticalScrollBar()->sliderPosition()-100);
+        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-100);
     else
-        m_listview->verticalScrollBar()->setSliderPosition(m_listview->verticalScrollBar()->sliderPosition()+100);
+        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+100);
 }

@@ -73,11 +73,18 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->setOpacity(1);
         QString desktopfp=index.data(Qt::DisplayRole).value<QString>();
         QString iconstr=pUkuiMenuInterface->getAppIcon(desktopfp);
-        iconstr.remove(".png");
-        iconstr.remove(".svg");
-        QIcon icon=QIcon::fromTheme(iconstr);
-        if(icon.isNull())
-            icon=QIcon::fromTheme(QString("application-x-desktop"));
+        QIcon icon;
+        if(QFile::exists(iconstr))
+            icon=QIcon(iconstr);
+        else
+        {
+            iconstr.remove(".png");
+            iconstr.remove(".svg");
+            icon=QIcon::fromTheme(iconstr);
+            if(icon.isNull())
+                icon=QIcon::fromTheme(QString("application-x-desktop"));
+        }
+
         QString appname=pUkuiMenuInterface->getAppName(desktopfp);
 
         QRect iconRect;

@@ -61,7 +61,7 @@ public:
 
 private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
-    ListView* m_listview=nullptr;
+    ListView* m_listView=nullptr;
     QVector<QStringList> m_data;
 
 protected:
@@ -88,6 +88,13 @@ public Q_SLOTS:
      * @brief Update the application list slot function
      */
     void updateListViewSlot();
+
+Q_SIGNALS:
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
+
 };
 
 #endif // COMMONUSEWIDGET_H

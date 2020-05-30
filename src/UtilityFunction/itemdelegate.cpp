@@ -91,11 +91,17 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             {
                 QRect iconRect=QRect(rect.x()+11,rect.y()+(rect.height()-32)/2,32,32);
                 QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
-                iconstr.remove(".png");
-                iconstr.remove(".svg");
-                QIcon icon=QIcon::fromTheme(iconstr);
-                if(icon.isNull())
-                    icon=QIcon::fromTheme(QString("application-x-desktop"));
+                QIcon icon;
+                if(QFile::exists(iconstr))
+                    icon=QIcon(iconstr);
+                else
+                {
+                    iconstr.remove(".png");
+                    iconstr.remove(".svg");
+                    icon=QIcon::fromTheme(iconstr);
+                    if(icon.isNull())
+                        icon=QIcon::fromTheme(QString("application-x-desktop"));
+                }
                 icon.paint(painter,iconRect,Qt::AlignLeft);
                 painter->setPen(QPen(Qt::white));
                 QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));

@@ -153,6 +153,12 @@ public Q_SLOTS:
      * @param value: animation current value
      */
     void animationValueChangedSlot(const QVariant &value);
+
+Q_SIGNALS:
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // FULLLETTERWIDGET_H

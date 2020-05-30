@@ -28,10 +28,7 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-    if(module==0)
-        menu=new RightClickMenu(nullptr,0);
-    else
-        menu=new RightClickMenu(nullptr,1);
+    menu=new RightClickMenu(nullptr,0);
 
     m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
@@ -138,11 +135,12 @@ void ListView::rightClickedSlot()
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QStringList strlist=var.value<QStringList>();
+        int ret=menu->showAppBtnMenu(strlist.at(0));
         if(module>0)
         {
             if(strlist.at(1).toInt()==1)
             {
-                int ret=menu->showAppBtnMenu(strlist.at(0));
+//                int ret=menu->showAppBtnMenu(strlist.at(0));
                 switch (ret) {
                 case 6:
                     Q_EMIT sendHideMainWindowSignal();
@@ -156,7 +154,7 @@ void ListView::rightClickedSlot()
             }
         }
         else{
-            int ret=menu->showCommonUseAppBtnMenu(strlist.at(0));
+//            int ret=menu->showCommonUseAppBtnMenu(strlist.at(0));
             switch (ret) {
             case 1:
                 Q_EMIT sendUpdateAppListSignal();

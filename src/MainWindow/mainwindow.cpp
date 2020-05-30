@@ -29,24 +29,24 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    pUkuiMenuInterface=new UkuiMenuInterface;
-    UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
-    UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
-    UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
-    UkuiMenuInterface::allAppVector=pUkuiMenuInterface->getAllApp();
+    m_ukuiMenuInterface=new UkuiMenuInterface;
+    UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
+    UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
+    UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
+    UkuiMenuInterface::allAppVector=m_ukuiMenuInterface->getAllApp();
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
-    initMainWindow();
+    m_setting=new QSettings(path,QSettings::IniFormat);
+    initUi();
 }
 
 MainWindow::~MainWindow()
 {
     XEventMonitor::instance()->quit();
-    delete pUkuiMenuInterface;
+    delete m_ukuiMenuInterface;
 }
 
-void MainWindow::initMainWindow()
+void MainWindow::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
@@ -63,24 +63,24 @@ void MainWindow::initMainWindow()
     this->setMinimumSize(376,590);
     this->setContentsMargins(0,0,0,0);
 
-    frame=new QFrame(this);
-    mainviewwid=new MainViewWidget(this);
-    sidebarwid=new SideBarWidget(this);
+    m_frame=new QFrame(this);
+    m_mainViewWid=new MainViewWidget(this);
+    m_sideBarWid=new SideBarWidget(this);
 
-    this->setCentralWidget(frame);
-    mainlayout=new QHBoxLayout;
+    this->setCentralWidget(m_frame);
+    QHBoxLayout *mainlayout=new QHBoxLayout;
 
-    mainlayout->addWidget(mainviewwid);
+    mainlayout->addWidget(m_mainViewWid);
 
-    line=new QFrame(this);
-    line->setFrameShape(QFrame::VLine);
-    line->setFixedSize(1,this->height());
-    mainlayout->addWidget(line);
+    m_line=new QFrame(this);
+    m_line->setFrameShape(QFrame::VLine);
+    m_line->setFixedSize(1,this->height());
+    mainlayout->addWidget(m_line);
     char linestyle[100];
     sprintf(linestyle, "background-color:%s;",LineBackground);
-    line->setStyleSheet(linestyle);
+    m_line->setStyleSheet(linestyle);
 
-    mainlayout->addWidget(sidebarwid);
+    mainlayout->addWidget(m_sideBarWid);
     mainlayout->setContentsMargins(0,0,0,0);
     mainlayout->setSpacing(0);
     centralWidget()->setLayout(mainlayout);
@@ -113,27 +113,27 @@ void MainWindow::initMainWindow()
         sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
     else
         sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
-    frame->setStyleSheet(style);
+    m_frame->setStyleSheet(style);
 
-    pAnimation = new QPropertyAnimation(this, "geometry");
-    connect(pAnimation,&QPropertyAnimation::stateChanged,
+    m_animation = new QPropertyAnimation(this, "geometry");
+    connect(m_animation,&QPropertyAnimation::stateChanged,
             this,&MainWindow::stateChangedSlot);
 
-    connect(sidebarwid, &SideBarWidget::sendCommonUseBtnSignal, mainviewwid, &MainViewWidget::loadCommonUseWidget);
-    connect(sidebarwid,&SideBarWidget::sendLetterBtnSignal, mainviewwid, &MainViewWidget::loadLetterWidget);
-    connect(sidebarwid, &SideBarWidget::sendFunctionBtnSignal, mainviewwid, &MainViewWidget::loadFunctionWidget);
+    connect(m_sideBarWid, &SideBarWidget::sendCommonUseBtnSignal, m_mainViewWid, &MainViewWidget::loadCommonUseWidget);
+    connect(m_sideBarWid,&SideBarWidget::sendLetterBtnSignal, m_mainViewWid, &MainViewWidget::loadLetterWidget);
+    connect(m_sideBarWid, &SideBarWidget::sendFunctionBtnSignal, m_mainViewWid, &MainViewWidget::loadFunctionWidget);
 
-    connect(sidebarwid,&SideBarWidget::sendFullScreenCommonUseBtnSignal,
-            mainviewwid,&MainViewWidget::loadFullCommonUseWidget);
-    connect(sidebarwid,&SideBarWidget::sendFullScreenLetterBtnSignal,
-            mainviewwid,&MainViewWidget::loadFullLetterWidget);
-    connect(sidebarwid,&SideBarWidget::sendFullScreenFunctionBtnSignal,
-            mainviewwid,&MainViewWidget::loadFullFunctionWidget);
+    connect(m_sideBarWid,&SideBarWidget::sendFullScreenCommonUseBtnSignal,
+            m_mainViewWid,&MainViewWidget::loadFullCommonUseWidget);
+    connect(m_sideBarWid,&SideBarWidget::sendFullScreenLetterBtnSignal,
+            m_mainViewWid,&MainViewWidget::loadFullLetterWidget);
+    connect(m_sideBarWid,&SideBarWidget::sendFullScreenFunctionBtnSignal,
+            m_mainViewWid,&MainViewWidget::loadFullFunctionWidget);
 
-    connect(sidebarwid,&SideBarWidget::sendFullScreenBtnSignal,this,&MainWindow::showFullScreenWidget);
-    connect(sidebarwid,&SideBarWidget::sendDefaultBtnSignal,this,&MainWindow::showDefaultWidget);
-    connect(mainviewwid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
-    connect(sidebarwid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
+    connect(m_sideBarWid,&SideBarWidget::sendFullScreenBtnSignal,this,&MainWindow::showFullScreenWidget);
+    connect(m_sideBarWid,&SideBarWidget::sendDefaultBtnSignal,this,&MainWindow::showDefaultWidget);
+    connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
+//    connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
     connect(QApplication::primaryScreen(),&QScreen::geometryChanged,
             this,&MainWindow::monitorResolutionChange);
@@ -157,7 +157,7 @@ void MainWindow::initMainWindow()
  */
 //void MainWindow::paintEvent(QPaintEvent *)
 //{
-//    if(!is_fullscreen)
+//    if(!m_isFullScreen)
 //    {
 //        QPainter painter(this);
 //        const qreal radius =6;
@@ -227,7 +227,7 @@ void MainWindow::initMainWindow()
  */
 void MainWindow::showFullScreenWidget()
 {
-    is_fullscreen=true;
+    m_isFullScreen=true;
     this->setContentsMargins(0,0,0,0);
     int position=0;
     int panelSize=0;
@@ -273,18 +273,18 @@ void MainWindow::showFullScreenWidget()
         endRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
     }
 
-    mainlayout->removeWidget(mainviewwid);
-    mainviewwid->setParent(nullptr);
-    mainlayout->removeWidget(line);
-    line->setParent(nullptr);
-    mainlayout->removeWidget(sidebarwid);
-    sidebarwid->setParent(nullptr);
+    this->centralWidget()->layout()->removeWidget(m_mainViewWid);
+    m_mainViewWid->setParent(nullptr);
+    this->centralWidget()->layout()->removeWidget(m_line);
+    m_line->setParent(nullptr);
+    this->centralWidget()->layout()->removeWidget(m_sideBarWid);
+    m_sideBarWid->setParent(nullptr);
 
-    pAnimation->setDuration(100);//动画总时间
-    pAnimation->setStartValue(startRect);
-    pAnimation->setEndValue(endRect);
-    pAnimation->setEasingCurve(QEasingCurve::Linear);
-    pAnimation->start();
+    m_animation->setDuration(100);//动画总时间
+    m_animation->setStartValue(startRect);
+    m_animation->setEndValue(endRect);
+    m_animation->setEasingCurve(QEasingCurve::Linear);
+    m_animation->start();
 }
 
 /**
@@ -292,7 +292,7 @@ void MainWindow::showFullScreenWidget()
  */
 void MainWindow::showDefaultWidget()
 {
-    is_fullscreen=false;
+    m_isFullScreen=false;
     this->setContentsMargins(0,0,0,0);
     int position=0;
     int panelSize=0;
@@ -343,37 +343,37 @@ void MainWindow::showDefaultWidget()
         sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
     }
 
-    mainlayout->removeWidget(mainviewwid);
-    mainviewwid->setParent(nullptr);
-    mainlayout->removeWidget(sidebarwid);
-    sidebarwid->setParent(nullptr);
+    this->centralWidget()->layout()->removeWidget(m_mainViewWid);
+    m_mainViewWid->setParent(nullptr);
+    this->centralWidget()->layout()->removeWidget(m_sideBarWid);
+    m_sideBarWid->setParent(nullptr);
 
-    pAnimation->setDuration(100);//动画总时间
-    pAnimation->setStartValue(startRect);
-    pAnimation->setEndValue(endRect);
-    pAnimation->setEasingCurve(QEasingCurve::Linear);
-    pAnimation->start();
+    m_animation->setDuration(100);//动画总时间
+    m_animation->setStartValue(startRect);
+    m_animation->setEndValue(endRect);
+    m_animation->setEasingCurve(QEasingCurve::Linear);
+    m_animation->start();
 }
 
 void MainWindow::stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
     Q_UNUSED(oldState);
-    if(is_fullscreen && newState==QAbstractAnimation::Stopped)
+    if(m_isFullScreen && newState==QAbstractAnimation::Stopped)
     {
-        mainlayout->addWidget(mainviewwid);
-        mainlayout->addWidget(sidebarwid);
-        sidebarwid->loadMaxSidebar();
-        mainviewwid->loadMaxMainView();
-        sidebarwid->enterAnimation();
+        this->centralWidget()->layout()->addWidget(m_mainViewWid);
+        this->centralWidget()->layout()->addWidget(m_sideBarWid);
+        m_sideBarWid->loadMaxSidebar();
+        m_mainViewWid->loadMaxMainView();
+        m_sideBarWid->enterAnimation();
         setFrameStyle();
     }
-    if(!is_fullscreen && newState==QAbstractAnimation::Stopped)
+    if(!m_isFullScreen && newState==QAbstractAnimation::Stopped)
     {
-        mainlayout->addWidget(mainviewwid);
-        mainlayout->addWidget(line);
-        mainlayout->addWidget(sidebarwid);
-        sidebarwid->loadMinSidebar();
-        mainviewwid->loadMinMainView();
+        this->centralWidget()->layout()->addWidget(m_mainViewWid);
+        this->centralWidget()->layout()->addWidget(m_line);
+        this->centralWidget()->layout()->addWidget(m_sideBarWid);
+        m_sideBarWid->loadMinSidebar();
+        m_mainViewWid->loadMinMainView();
         setFrameStyle();
     }
 }
@@ -388,8 +388,8 @@ bool MainWindow::event ( QEvent * event )
         if(QApplication::activeWindow() != this)
         {
             this->hide();
-            mainviewwid->widgetMakeZero();
-            sidebarwid->widgetMakeZero();
+            m_mainViewWid->widgetMakeZero();
+            m_sideBarWid->widgetMakeZero();
         }
    }
    return QWidget::event(event);
@@ -402,10 +402,10 @@ void MainWindow::XkbEventsPress(const QString &keycode)
         KeyName = keycode.left(8);
     }
     if(KeyName.compare("Super_L+")==0){
-        WinFlag = true;
+        m_winFlag = true;
     }
-    if(WinFlag && keycode == "Super_L"){
-        WinFlag = false;
+    if(m_winFlag && keycode == "Super_L"){
+        m_winFlag = false;
         return;
     }
 
@@ -424,7 +424,7 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
     if(winFlag && keycode == "Super_L"){
         winFlag = false;
         return;
-    }else if(WinFlag && keycode == "Super_L")
+    }else if(m_winFlag && keycode == "Super_L")
         return;
 
     if((keycode == "Super_L") || (keycode == "Super_R"))
@@ -433,8 +433,8 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
         if(QApplication::activeWindow() == this)
         {
             this->hide();
-            mainviewwid->widgetMakeZero();
-            sidebarwid->widgetMakeZero();
+            m_mainViewWid->widgetMakeZero();
+            m_sideBarWid->widgetMakeZero();
         }
         else{
             this->loadMainWindow();
@@ -447,8 +447,8 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
     if(keycode == "Escape")
     {
         this->hide();
-        mainviewwid->widgetMakeZero();
-        sidebarwid->widgetMakeZero();
+        m_mainViewWid->widgetMakeZero();
+        m_sideBarWid->widgetMakeZero();
     }
 }
 
@@ -457,12 +457,12 @@ void MainWindow::recvStartMenuSlot()
     if(this->isVisible())
     {
         this->hide();
-        mainviewwid->widgetMakeZero();
-        sidebarwid->widgetMakeZero();
+        m_mainViewWid->widgetMakeZero();
+        m_sideBarWid->widgetMakeZero();
     }
     else{
-        mainviewwid->widgetMakeZero();
-        sidebarwid->widgetMakeZero();
+        m_mainViewWid->widgetMakeZero();
+        m_sideBarWid->widgetMakeZero();
         this->loadMainWindow();
         this->show();
         this->raise();
@@ -475,9 +475,10 @@ void MainWindow::recvStartMenuSlot()
  */
 void MainWindow::recvHideMainWindowSlot()
 {
+    syslog(LOG_LOCAL0 | LOG_DEBUG, "--1-卸载-1--");
     this->hide();
-    mainviewwid->widgetMakeZero();
-    sidebarwid->widgetMakeZero();
+    m_mainViewWid->widgetMakeZero();
+    m_sideBarWid->widgetMakeZero();
 }
 
 void MainWindow::loadMainWindow()
@@ -485,15 +486,15 @@ void MainWindow::loadMainWindow()
     QDateTime dt=QDateTime::currentDateTime();
     int currentDateTime=dt.toTime_t();
     int nDaySec=24*60*60;
-    setting->beginGroup("recentapp");
-    QStringList recentAppKeys=setting->allKeys();
+    m_setting->beginGroup("recentapp");
+    QStringList recentAppKeys=m_setting->allKeys();
     for(int i=0;i<recentAppKeys.count();i++)
     {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
-            setting->remove(recentAppKeys.at(i));
+        if((currentDateTime-m_setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
+            m_setting->remove(recentAppKeys.at(i));
     }
-    setting->sync();
-    setting->endGroup();
+    m_setting->sync();
+    m_setting->endGroup();
 
     int position=0;
     int panelSize=0;
@@ -533,12 +534,12 @@ void MainWindow::loadMainWindow()
                 this->setGeometry(QRect(panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
             else
                 this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
-            mainlayout->removeWidget(line);
-            line->setParent(nullptr);
-            sidebarwid->loadMaxSidebar();
-            mainviewwid->loadMaxMainView();
-            sidebarwid->enterAnimation();
-            is_fullscreen=true;
+            this->centralWidget()->layout()->removeWidget(m_line);
+            m_line->setParent(nullptr);
+            m_sideBarWid->loadMaxSidebar();
+            m_mainViewWid->loadMaxMainView();
+            m_sideBarWid->enterAnimation();
+            m_isFullScreen=true;
             setFrameStyle();
         }
         else
@@ -553,10 +554,11 @@ void MainWindow::loadMainWindow()
             else
                 this->setGeometry(QRect(QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
                                           376,590));
-            mainlayout->insertWidget(1,line);
-            sidebarwid->loadMinSidebar();
-            mainviewwid->loadMinMainView();
-            is_fullscreen=false;
+            QHBoxLayout* mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
+            mainLayout->insertWidget(1,m_line);
+            m_sideBarWid->loadMinSidebar();
+            m_mainViewWid->loadMinMainView();
+            m_isFullScreen=false;
             setFrameStyle();
         }
     }
@@ -572,10 +574,11 @@ void MainWindow::loadMainWindow()
         else
             this->setGeometry(QRect(QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
                                       376,590));
-        mainlayout->insertWidget(1,line);
-        sidebarwid->loadMinSidebar();
-        mainviewwid->loadMinMainView();
-        is_fullscreen=false;
+        QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
+        mainLayout->insertWidget(1,m_line);
+        m_sideBarWid->loadMinSidebar();
+        m_mainViewWid->loadMinMainView();
+        m_isFullScreen=false;
         setFrameStyle();
     }
 }
@@ -584,21 +587,21 @@ void MainWindow::monitorResolutionChange(QRect rect)
 {
     Q_UNUSED(rect);
     Style::initWidStyle();
-    mainviewwid->repaintWidget();
+    m_mainViewWid->repaintWidget();
 }
 
 void MainWindow::primaryScreenChangedSlot(QScreen *screen)
 {
     Q_UNUSED(screen);
     Style::initWidStyle();
-    mainviewwid->repaintWidget();
+    m_mainViewWid->repaintWidget();
 }
 
 void MainWindow::panelChangedSlot(QString key)
 {
     Q_UNUSED(key);
     Style::initWidStyle();
-    mainviewwid->repaintWidget();
+    m_mainViewWid->repaintWidget();
 }
 
 void MainWindow::setFrameStyle()
@@ -623,7 +626,7 @@ void MainWindow::setFrameStyle()
         panelSize=46;
     }
     char style[100];
-    if(!is_fullscreen)
+    if(!m_isFullScreen)
     {
         if(position==0)
         {
@@ -645,7 +648,7 @@ void MainWindow::setFrameStyle()
     else {
         sprintf(style, "border:0px;background-color:%s;border-top-right-radius:0px;",DefaultBackground);
     }
-    frame->setStyleSheet(style);
+    m_frame->setStyleSheet(style);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -655,15 +658,15 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
         QKeyEvent* ke=static_cast<QKeyEvent*>(e);
         if((ke->key()>=0x30 && ke->key()<=0x39) || (ke->key()>=0x41 && ke->key()<=0x5a))
         {
-            mainviewwid->setLineEditFocus(e->text());
+            m_mainViewWid->setLineEditFocus(e->text());
         }
 
         switch(e->key()){
         case Qt::Key_Up:
-            mainviewwid->moveScrollBar(0);
+            m_mainViewWid->moveScrollBar(0);
             break;
         case Qt::Key_Down:
-            mainviewwid->moveScrollBar(1);
+            m_mainViewWid->moveScrollBar(1);
             break;
         default:
             break;

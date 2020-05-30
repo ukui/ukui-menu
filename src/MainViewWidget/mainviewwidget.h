@@ -50,92 +50,168 @@ class MainViewWidget : public QWidget
 public:
     explicit MainViewWidget(QWidget *parent = nullptr);
     ~MainViewWidget();
-    void loadMinMainView();//加载默认主视图
-    void loadMaxMainView();//加载全屏主视图
-    void widgetMakeZero();//MainWindow隐藏时，此界面恢复至初始状态
-    void setLineEditFocus(QString arg);//设置搜索框焦点
+    /**
+     * @brief Load the default main view
+     */
+    void loadMinMainView();
+    /**
+     * @brief Load the full screen main view
+     */
+    void loadMaxMainView();
+    /**
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief Set the focus of the search box
+     * @param arg: Text
+     */
+    void setLineEditFocus(QString arg);
+    /**
+     * @brief Repaint window
+     */
     void repaintWidget();
     /**
-     * @brief moveScrollBar移动滚动条
-     * @param type为0时表示向上移动，为1时表示向下移动
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
      */
     void moveScrollBar(int type);
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
+    QWidget *m_topWidget=nullptr;
+    QHBoxLayout *m_topLayout=nullptr;
 
-    QVBoxLayout* mainLayout=nullptr;
-    QWidget* topWidget=nullptr;
-    QHBoxLayout* topLayout=nullptr;
+    QSpacerItem *m_verticalSpacer=nullptr;
 
-    QSpacerItem* verticalSpacer=nullptr;
-
-    QLineEdit* querylineEdit=nullptr;
-    QWidget* m_queryWid=nullptr;
-    QLabel* m_queryIcon=nullptr;
-    QLabel* m_queryText=nullptr;
+    QLineEdit *m_queryLineEdit=nullptr;
+    QWidget *m_queryWid=nullptr;
+    QLabel *m_queryIcon=nullptr;
+    QLabel *m_queryText=nullptr;
     bool m_isSearching;
     QString m_searchKeyWords;
-    QPropertyAnimation *animation=nullptr;
+    QPropertyAnimation *m_animation=nullptr;
 
-    FullSearchResultWidget* fullsearchresultwid=nullptr;
-    SearchResultWidget* searchresultwid=nullptr;
-    SearchAppThread* searchappthread=nullptr;
+    FullSearchResultWidget *m_fullSearchResultWid=nullptr;
+    SearchResultWidget *m_searchResultWid=nullptr;
+    SearchAppThread *m_searchAppThread=nullptr;
+    CommonUseWidget *m_commonUseWid=nullptr;
+    LetterWidget *m_letterWid=nullptr;
+    FunctionWidget *m_functionWid=nullptr;
+    FullCommonUseWidget *m_fullCommonUseWid=nullptr;
+    FullLetterWidget *m_fullLetterWid=nullptr;
+    FullFunctionWidget *m_fullFunctionWid=nullptr;
 
-    CommonUseWidget* commonusewid=nullptr;
-    LetterWidget* letterwid=nullptr;
-    FunctionWidget* functionwid=nullptr;
-    FullCommonUseWidget* fullcommonusewid=nullptr;
-    FullLetterWidget* fullletterwid=nullptr;
-    FullFunctionWidget* fullfunctionwid=nullptr;
+    DirectoryChangedThread *m_directoryChangedThread=nullptr;
 
-    DirectoryChangedThread* directoryChangedThread=nullptr;
+    int m_widgetState=1;//Classification window number
+    int m_saveCurrentWidState=-1;//Store the current category window number
 
-    int widgetState=1;//分类窗口编号
-    int saveCurrentWidState=-1;//存放当前分类窗口编号
+    bool m_isFullScreen=false;
+    bool m_isHiden=false;
 
-    bool is_fullscreen=false;
-    bool is_hiden=false;
+    QFileSystemWatcher *m_fileWatcher=nullptr;//Monitor desktop folder status
 
-    int letterwid_state=0;
-    int functionwid_state=0;
-    QString letterbtnname;
-    QString functionbtnname;
-
-    QFileSystemWatcher* fileWatcher=nullptr;//监控/usr/share/applications文件夹状态
-    QFileSystemWatcher* fileWatcherIni=nullptr;
-
-    QSettings* setting=nullptr;
-    QGSettings* gsetting=nullptr;
+    QSettings *m_setting=nullptr;
+    QGSettings *m_gsetting=nullptr;
 
 protected:
-    void initWidget();//初始化界面
-    void addTopControl();//添加顶部窗口控件
-    void initQueryLineEdit();//初始化查询框
-//    void mousePressEvent(QMouseEvent* event);
+    /**
+     * @brief Initializes UI
+     */
+    void initUi();
+    /**
+     * @brief Add a top window control
+     */
+    void addTopControl();
+    /**
+     * @brief Initializes the query box
+     */
+    void initQueryLineEdit();
 
 public Q_SLOTS:
+    /**
+     * @brief Search box focus event filtering
+     */
     bool eventFilter(QObject *watched, QEvent *event);
-    void loadCommonUseWidget();//加载常用分类界面
-    void loadLetterWidget();//加载字母分类界面
-    void loadFunctionWidget();//加载功能分类界面
-    void loadFullCommonUseWidget();//加载全屏常用分类界面
-    void loadFullLetterWidget();//加载全屏字母分类界面
-    void loadFullFunctionWidget();//加载全屏功能分类界面
-
-    void searchAppSlot(QString arg);//搜索程序和文件槽函数
-    void animationFinishedSlot();//搜索框图标动画结束槽函数
-    void ViewOpenedSlot(QDBusMessage msg);//监控进程开启
-    void directoryChangedSlot();//desktop文件目录改变信号槽
-    void recvSearchResult(QVector<QStringList> arg);//接收搜索结果
+    /**
+     * @brief Load the common classification interface
+     */
+    void loadCommonUseWidget();
+    /**
+     * @brief Load the letter classification interface
+     */
+    void loadLetterWidget();
+    /**
+     * @brief Load function classification interface
+     */
+    void loadFunctionWidget();
+    /**
+     * @brief Load full screen common classification interface
+     */
+    void loadFullCommonUseWidget();
+    /**
+     * @brief Load the full screen letter classification interface
+     */
+    void loadFullLetterWidget();
+    /**
+     * @brief Load the full screen function classification interface
+     */
+    void loadFullFunctionWidget();
+    /**
+     * @brief Respond to search box
+     * @param arg: Search keywords
+     */
+    void searchAppSlot(QString arg);
+    /**
+     * @brief Respond to search box animation finish
+     */
+    void animationFinishedSlot();
+    /**
+     * @brief Monitor application startup
+     * @param msg: Application information
+     */
+    void ViewOpenedSlot(QDBusMessage msg);
+    /**
+     * @brief Monitor desktop file directory changes
+     */
+    void directoryChangedSlot();
+    /**
+     * @brief Receive search results
+     * @param arg: Search results
+     */
+    void recvSearchResult(QVector<QStringList> arg);
+    /**
+     * @brief Monitor icon theme changes
+     * @param key: Key
+     */
     void iconThemeChangeSlot(QString key);
+    /**
+     * @brief Request for updating the application list
+     */
     void requestUpdateSlot();
 
 Q_SIGNALS:
-    void sendHideMainWindowSignal();//向MainWindow发送隐藏主窗口信号
-    void directoryChangedSignal();//desktop文件目录改变信号
-    void sendSearchKeyword(QString);//向SearchAppThread发送搜索关键字
+    /**
+     * @brief Desktop file directory change signal
+     */
+    void directoryChangedSignal();
+    /**
+     * @brief Send the search keyword to the SearchAppThread
+     * @param arg: Search keyword
+     */
+    void sendSearchKeyword(QString arg);
+    /**
+     * @brief Send the changed directory to DirectoryChangedThread
+     * @param arg: Desktop file directory
+     */
     void sendDirectoryPath(QString arg);
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // MAINVIEWWIDGET_H

@@ -184,6 +184,7 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
         m_data.append(desktopfplist.at(i));
     listview->addData(m_data);
     connect(listview,&FullListView::sendItemClickedSignal,this,&FullFunctionWidget::execApplication);
+    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullFunctionWidget::sendHideMainWindowSignal);
 }
 
 //void FullFunctionWidget::updateRecentListView()

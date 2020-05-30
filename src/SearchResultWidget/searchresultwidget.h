@@ -69,6 +69,12 @@ private Q_SLOTS:
      * @param arg: The desktop file information that the application contains
      */
     void execApplication(QStringList arg);
+
+Q_SIGNALS:
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // SEARCHRESULTWIDGET_H

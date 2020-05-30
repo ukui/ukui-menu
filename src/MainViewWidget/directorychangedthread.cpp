@@ -22,7 +22,7 @@
 
 DirectoryChangedThread::DirectoryChangedThread()
 {
-    pUkuiMenuInterface=new UkuiMenuInterface;
+    m_ukuiMenuInterface=new UkuiMenuInterface;
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
@@ -30,14 +30,14 @@ DirectoryChangedThread::DirectoryChangedThread()
 
 DirectoryChangedThread::~DirectoryChangedThread()
 {
-    delete pUkuiMenuInterface;
+    delete m_ukuiMenuInterface;
 }
 
 void DirectoryChangedThread::run()
 {
-    if(this->path=="/usr/share/applications")
+    if(this->m_path=="/usr/share/applications")
     {
-        QStringList desktopfpList=pUkuiMenuInterface->getDesktopFilePath();
+        QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
         if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
         {
             syslog(LOG_LOCAL0 | LOG_DEBUG ,"---111---");
@@ -55,7 +55,7 @@ void DirectoryChangedThread::run()
                     QString desktopfn=fileInfo.fileName();
                     setting->setValue(desktopfn,datetime);
 
-                    QString iconstr=pUkuiMenuInterface->getAppIcon(desktopfpList.at(i));
+                    QString iconstr=m_ukuiMenuInterface->getAppIcon(desktopfpList.at(i));
                     syslog(LOG_LOCAL0 | LOG_DEBUG ,"%s",iconstr.toLocal8Bit().data());
                     syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件安装desktop文件名：%s",desktopfn.toLocal8Bit().data());
                     Q_FOREACH(QString path,QIcon::themeSearchPaths())
@@ -68,9 +68,9 @@ void DirectoryChangedThread::run()
             UkuiMenuInterface::appInfoVector.clear();
             UkuiMenuInterface::alphabeticVector.clear();
             UkuiMenuInterface::functionalVector.clear();
-            UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
-            UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
-            UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
+            UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
+            UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
+            UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
             Q_EMIT requestUpdateSignal();
         }
         else//软件卸载
@@ -111,9 +111,9 @@ void DirectoryChangedThread::run()
             UkuiMenuInterface::appInfoVector.clear();
             UkuiMenuInterface::alphabeticVector.clear();
             UkuiMenuInterface::functionalVector.clear();
-            UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
-            UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
-            UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
+            UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
+            UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
+            UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
             Q_EMIT requestUpdateSignal();
         }
     }
@@ -121,6 +121,6 @@ void DirectoryChangedThread::run()
 
 void DirectoryChangedThread::recvDirectoryPath(QString arg)
 {
-    this->path.clear();
-    this->path=arg;
+    this->m_path.clear();
+    this->m_path=arg;
 }

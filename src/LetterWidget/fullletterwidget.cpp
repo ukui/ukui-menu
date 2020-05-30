@@ -122,7 +122,8 @@ void FullLetterWidget::fillAppList()
 
             listview->addData(m_data);
 
-            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
+            connect(listview,&FullListView::sendItemClickedSignal,this,&FullLetterWidget::execApplication);
+            connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullLetterWidget::sendHideMainWindowSignal);
         }
     }
 

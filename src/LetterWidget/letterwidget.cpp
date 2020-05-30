@@ -76,6 +76,7 @@ void LetterWidget::initAppListWidget()
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
     fillAppListView();
     connect(m_appListView,&ListView::sendItemClickedSignal,this,&LetterWidget::recvItemClickedSlot);
+    connect(m_appListView,&ListView::sendHideMainWindowSignal,this,&LetterWidget::sendHideMainWindowSignal);
 }
 
 

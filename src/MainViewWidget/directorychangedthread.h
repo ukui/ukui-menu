@@ -32,15 +32,22 @@ public:
     void run();
 
 private:
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-    QString path;
+    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
+    QString m_path;
     QSettings* setting=nullptr;
 
 public Q_SLOTS:
+    /**
+     * @brief Receive the changed directory
+     * @param arg: Desktop file directory
+     */
     void recvDirectoryPath(QString arg);
 
 Q_SIGNALS:
-    void requestUpdateSignal();//desktop文件目录改变信号
+    /**
+     * @brief Request update signal
+     */
+    void requestUpdateSignal();
 
 };
 

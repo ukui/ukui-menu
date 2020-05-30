@@ -52,6 +52,7 @@ void FullSearchResultWidget::initUi()
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
+    connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullSearchResultWidget::sendHideMainWindowSignal);
 }
 
 /**

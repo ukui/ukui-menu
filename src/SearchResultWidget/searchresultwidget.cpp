@@ -50,6 +50,7 @@ void SearchResultWidget::initUi()
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
     connect(m_listView,&ListView::sendItemClickedSignal,this,&SearchResultWidget::execApplication);
+    connect(m_listView,&ListView::sendHideMainWindowSignal,this,&SearchResultWidget::sendHideMainWindowSignal);
 }
 
 /**

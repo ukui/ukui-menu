@@ -122,6 +122,10 @@ Q_SIGNALS:
      * @brief Send the classification button click signal to functionbuttonwidget
      */
     void sendClassificationbtnList();
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // FUNCTIONWIDGET_H

@@ -71,6 +71,12 @@ private Q_SLOTS:
      * @param arg: Desktop file path
      */
     void execApplication(QString desktopfp);
+
+Q_SIGNALS:
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // FULLSEARCHRESULTWIDGET_H

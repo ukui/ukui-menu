@@ -148,14 +148,20 @@ public Q_SLOTS:
      */
     void valueChangedSlot(int value);
     /**
-     * @brief Respond to animation finish
+     * @brief Respond to application list animation finish
      */
     void animationFinishSlot();
     /**
-     * @brief Respond to animation current value change
+     * @brief Respond to application list animation current value change
      * @param value: animation current value
      */
     void animationValueChangedSlot(const QVariant &value);
+
+Q_SIGNALS:
+    /**
+     * @brief Send a hidden main window signal to the MainViewWidget
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // FULLFUNCTIONWIDGET_H
