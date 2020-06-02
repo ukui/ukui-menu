@@ -59,7 +59,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
         painter->setRenderHint(QPainter::Antialiasing);
-        if(option.state & QStyle::State_MouseOver)
+//        if(option.state & QStyle::State_MouseOver)
+        if(option.state.testFlag(QStyle::State_Selected))
         {
             painter->setPen(QPen(Qt::NoPen));
             QColor color;

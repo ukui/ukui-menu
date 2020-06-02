@@ -49,21 +49,14 @@ ListView::~ListView()
 void ListView::initWidget()
 {
     this->setFixedSize(w,h);
-//    this->resize(w,h);
-    char style[400];
-    sprintf(style,"QListView{border:0px;}\
-            QListView:Item{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;}\
-            QListView:Item:hover{background:transparent;}\
-            QListView:Item:pressed{background:transparent;}");
 
-    this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background:transparent;border-radius:6px;}"
+    this->verticalScrollBar()->setStyleSheet("QScrollBar{padding-top:0px;padding-bottom:0px;background:transparent;width:3px;border-radius:1.5px;}"
                                              "QScrollBar::handle{background-color:rgba(255,255,255,0.25); width:3px;border-radius:1.5px;}"
-                                             "QScrollBar::handle:hover{background-color:#697883;border-radius:1.5px;}"
-                                             "QScrollBar::handle:pressed{background-color:#8897a3;border-radius:1.5px;}"
+                                             "QScrollBar::handle:hover{background-color:#697883;width:3px;border-radius:1.5px;}"
+                                             "QScrollBar::handle:pressed{background-color:#8897a3;width:3px;border-radius:1.5px;}"
                                              "QScrollBar::sub-line{background-color:transparent;height:0px;width:0px;}"
                                              "QScrollBar::add-line{background-color:transparent;height:0px;width:0px;}"
                                              );
-    this->setStyleSheet(style);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -77,8 +70,13 @@ void ListView::initWidget()
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setUpdatesEnabled(true);
     this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    this->setSpacing(0);
+    this->setContentsMargins(0, 0, 0, 0);
+    this->setMouseTracking(true);
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
+    connect(this,&ListView::entered, this, &ListView::setCurrentIndex, Qt::QueuedConnection);
+
 
 }
 
@@ -140,7 +138,6 @@ void ListView::rightClickedSlot()
         {
             if(strlist.at(1).toInt()==1)
             {
-//                int ret=menu->showAppBtnMenu(strlist.at(0));
                 switch (ret) {
                 case 6:
                     Q_EMIT sendHideMainWindowSignal();
@@ -154,7 +151,6 @@ void ListView::rightClickedSlot()
             }
         }
         else{
-//            int ret=menu->showCommonUseAppBtnMenu(strlist.at(0));
             switch (ret) {
             case 1:
                 Q_EMIT sendUpdateAppListSignal();
@@ -180,6 +176,7 @@ void ListView::rightClickedSlot()
 void ListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
+    this->selectionModel()->clear();
     this->verticalScrollBar()->setVisible(true);
 }
 
@@ -187,10 +184,14 @@ void ListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
+    this->selectionModel()->clear();
 }
 
 void ListView::wheelEvent(QWheelEvent *e)
 {
+    if (this->verticalScrollBar()->value() < this->verticalScrollBar()->maximum() &&
+        this->verticalScrollBar()->value() > this->verticalScrollBar()->minimum())
+        this->selectionModel()->clear();
     int offset = -e->angleDelta().y();
     m_scrollAnimation->stop();
     m_scrollAnimation->setStartValue(verticalScrollBar()->value());
@@ -212,8 +213,6 @@ void ListView::animationValueChangedSlot(const QVariant &value)
 void ListView::animationFinishSlot()
 {
     blockSignals(false);
-//    this->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-
-//    QPoint pos = mapFromGlobal(QCursor::pos());
-//    emit entered(indexAt(pos));
+    QPoint pos = mapFromGlobal(QCursor::pos());
+    Q_EMIT entered(indexAt(pos));
 }

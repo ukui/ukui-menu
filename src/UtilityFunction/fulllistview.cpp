@@ -32,11 +32,11 @@ FullListView::FullListView(QWidget *parent, int module):
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
 
-    m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
-    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
-    m_scrollAnimation->setDuration(800);
-    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullListView::animationValueChangedSlot);
-    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullListView::animationFinishSlot);
+//    m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
+//    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
+//    m_scrollAnimation->setDuration(800);
+//    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullListView::animationValueChangedSlot);
+//    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullListView::animationFinishSlot);
 
 }
 
@@ -64,7 +64,7 @@ void FullListView::initWidget()
                                              );
 
 
-    this->setStyleSheet(style);
+//    this->setStyleSheet(style);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     if(module==1 || module==2)
@@ -81,6 +81,7 @@ void FullListView::initWidget()
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     connect(this,&FullListView::customContextMenuRequested,this,&FullListView::rightClickedSlot);
     connect(this,&FullListView::clicked,this,&FullListView::onClicked);
+    connect(this,&FullListView::entered, this, &FullListView::setCurrentIndex, Qt::QueuedConnection);
 }
 
 void FullListView::addData(QStringList data)
@@ -127,49 +128,49 @@ void FullListView::onClicked(QModelIndex index)
 
 void FullListView::rightClickedSlot(const QPoint &pos)
 {
-    Q_UNUSED(pos)
+//    Q_UNUSED(pos)
     if(!(this->selectionModel()->selectedIndexes().isEmpty()))
     {
-        QModelIndex index=this->currentIndex();
-//        QModelIndex index=this->indexAt(pos);
-        QVariant var=listmodel->data(index, Qt::DisplayRole);
-        QString desktopfp=var.value<QString>();
-        int ret=menu->showAppBtnMenu(desktopfp);
-        if(module>0)
+        if(this->indexAt(pos).isValid())
         {
-//            int ret=menu->showAppBtnMenu(desktopfp);
-            switch (ret) {
-            case 6:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            case 7:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            default:
-                break;
+            QModelIndex index=this->currentIndex();
+    //        QModelIndex index=this->indexAt(pos);
+            QVariant var=listmodel->data(index, Qt::DisplayRole);
+            QString desktopfp=var.value<QString>();
+            int ret=menu->showAppBtnMenu(desktopfp);
+            if(module>0)
+            {
+                switch (ret) {
+                case 6:
+                    Q_EMIT sendHideMainWindowSignal();
+                    break;
+                case 7:
+                    Q_EMIT sendHideMainWindowSignal();
+                    break;
+                default:
+                    break;
+                }
             }
-        }
-        else{
-//            int ret=menu->showCommonUseAppBtnMenu(desktopfp);
-            switch (ret) {
-            case 1:
-                Q_EMIT sendUpdateAppListSignal();
-                break;
-            case 2:
-                Q_EMIT sendUpdateAppListSignal();
-                break;
-            case 6:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            case 7:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            default:
-                break;
+            else{
+                switch (ret) {
+                case 1:
+                    Q_EMIT sendUpdateAppListSignal();
+                    break;
+                case 2:
+                    Q_EMIT sendUpdateAppListSignal();
+                    break;
+                case 6:
+                    Q_EMIT sendHideMainWindowSignal();
+                    break;
+                case 7:
+                    Q_EMIT sendHideMainWindowSignal();
+                    break;
+                default:
+                    break;
+                }
             }
+            this->selectionModel()->clear();
         }
-
-        this->selectionModel()->clear();
     }
 }
 
@@ -177,42 +178,45 @@ void FullListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(true);
+    QPoint pos = mapFromGlobal(QCursor::pos());
+    Q_EMIT entered(indexAt(pos));
 }
 
 void FullListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
+    this->selectionModel()->clear();
 }
 
-void FullListView::animationValueChangedSlot(const QVariant &value)
-{
-    Q_UNUSED(value);
-    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
-        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
-        blockSignals(false);
-    } else {
-        blockSignals(true);
-    }
-}
+//void FullListView::animationValueChangedSlot(const QVariant &value)
+//{
+//    Q_UNUSED(value);
+//    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
+//        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
+//        blockSignals(false);
+//    } else {
+//        blockSignals(true);
+//    }
+//}
 
-void FullListView::animationFinishSlot()
-{
-    blockSignals(false);
-//    this->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+//void FullListView::animationFinishSlot()
+//{
+//    blockSignals(false);
+////    this->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
 
 //    QPoint pos = mapFromGlobal(QCursor::pos());
-//    emit entered(indexAt(pos));
-}
+//    Q_EMIT entered(indexAt(pos));
+//}
 
-void FullListView::wheelEvent(QWheelEvent *e)
-{
-    int offset = -e->angleDelta().y();
-    m_scrollAnimation->stop();
-    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
-    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
-    m_scrollAnimation->start();
-}
+//void FullListView::wheelEvent(QWheelEvent *e)
+//{
+//    int offset = -e->angleDelta().y();
+//    m_scrollAnimation->stop();
+//    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
+//    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+//    m_scrollAnimation->start();
+//}
 
 //void FullListView::mousePressEvent(QMouseEvent *event)
 //{

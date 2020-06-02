@@ -129,10 +129,11 @@ void LetterWidget::execApplication(QString desktopfp)
     GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
     bool ret=g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
     g_object_unref(desktopAppInfo);
-    syslog(LOG_LOCAL0 | LOG_DEBUG ,"执行应用程序 %s:%d:%s",
+    syslog(LOG_LOCAL0 | LOG_DEBUG ,"执行应用程序 %s:%d:%s:%s",
            desktopfp.toLocal8Bit().data(),
            ret,
-           m_ukuiMenuInterface->getAppExec(desktopfp).toLocal8Bit().data());
+           m_ukuiMenuInterface->getAppExec(desktopfp).toLocal8Bit().data(),
+           m_ukuiMenuInterface->getAppIcon(desktopfp).toLocal8Bit().data());
 }
 
 /**

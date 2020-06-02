@@ -31,12 +31,13 @@ ScrollArea::ScrollArea()
                                              );
       installEventFilter(this);
       this->setFocusPolicy(Qt::NoFocus);
+      this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-      m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
-      m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
-      m_scrollAnimation->setDuration(800);
-      connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &ScrollArea::animationValueChangedSlot);
-      connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &ScrollArea::animationFinishSlot);
+//      m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
+//      m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
+//      m_scrollAnimation->setDuration(800);
+//      connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &ScrollArea::animationValueChangedSlot);
+//      connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &ScrollArea::animationFinishSlot);
 
 }
 
@@ -52,30 +53,30 @@ void ScrollArea::leaveEvent(QEvent *e)
     this->verticalScrollBar()->setVisible(false);
 }
 
-void ScrollArea::wheelEvent(QWheelEvent *e)
-{
-    int offset = -e->angleDelta().y();
-    m_scrollAnimation->stop();
-    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
-    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
-    m_scrollAnimation->start();
-}
+//void ScrollArea::wheelEvent(QWheelEvent *e)
+//{
+//    int offset = -e->angleDelta().y();
+//    m_scrollAnimation->stop();
+//    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
+//    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+//    m_scrollAnimation->start();
+//}
 
-void ScrollArea::animationValueChangedSlot(const QVariant &value)
-{
-    Q_UNUSED(value);
-    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
-        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
-        blockSignals(false);
-    } else {
-        blockSignals(true);
-    }
-}
+//void ScrollArea::animationValueChangedSlot(const QVariant &value)
+//{
+//    Q_UNUSED(value);
+//    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
+//        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
+//        blockSignals(false);
+//    } else {
+//        blockSignals(true);
+//    }
+//}
 
-void ScrollArea::animationFinishSlot()
-{
-    blockSignals(false);
+//void ScrollArea::animationFinishSlot()
+//{
+//    blockSignals(false);
 
 //    QPoint pos = mapFromGlobal(QCursor::pos());
-//    emit entered(indexAt(pos));
-}
+////    Q_EMIT entered(indexAt(pos));
+//}
