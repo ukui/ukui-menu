@@ -74,7 +74,6 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
         painter->setRenderHint(QPainter::Antialiasing);
 //        if(option.state & QStyle::State_MouseOver)
-
         if(option.state.testFlag(QStyle::State_Selected))
         {
             painter->setPen(QPen(Qt::NoPen));
@@ -102,7 +101,18 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                     iconstr.remove(".svg");
                     icon=QIcon::fromTheme(iconstr);
                     if(icon.isNull())
-                        icon=QIcon::fromTheme(QString("application-x-desktop"));
+                    {
+                        if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
+                            icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
+                        else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png")))
+                            icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
+                        else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg")))
+                            icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
+                        else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png")))
+                            icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
+                        else
+                            icon=QIcon::fromTheme(QString("application-x-desktop"));
+                    }
                 }
                 icon.paint(painter,iconRect,Qt::AlignLeft);
                 painter->setPen(QPen(Qt::white));
@@ -137,11 +147,28 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             painter->setOpacity(1);
             QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
             QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
-            iconstr.remove(".png");
-            iconstr.remove(".svg");
-            QIcon icon=QIcon::fromTheme(iconstr);
-            if(icon.isNull())
-                icon=QIcon::fromTheme(QString("application-x-desktop"));
+            QIcon icon;
+            if(QFile::exists(iconstr))
+                icon=QIcon(iconstr);
+            else
+            {
+                iconstr.remove(".png");
+                iconstr.remove(".svg");
+                icon=QIcon::fromTheme(iconstr);
+                if(icon.isNull())
+                {
+                    if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
+                        icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
+                    else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png")))
+                        icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
+                    else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png")))
+                        icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
+                    else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg")))
+                        icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
+                    else
+                        icon=QIcon::fromTheme(QString("application-x-desktop"));
+                }
+            }
             icon.paint(painter,iconRect,Qt::AlignLeft);
             QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
             QFileInfo fileInfo(strlist.at(0));

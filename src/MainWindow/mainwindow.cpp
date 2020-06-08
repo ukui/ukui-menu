@@ -475,7 +475,6 @@ void MainWindow::recvStartMenuSlot()
  */
 void MainWindow::recvHideMainWindowSlot()
 {
-    syslog(LOG_LOCAL0 | LOG_DEBUG, "--1-卸载-1--");
     this->hide();
     m_mainViewWid->widgetMakeZero();
     m_sideBarWid->widgetMakeZero();

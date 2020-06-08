@@ -43,11 +43,6 @@ void CommonUseWidget::initUi()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(320,535);
 
-    QHBoxLayout* mainLayout=new  QHBoxLayout;
-    mainLayout->setContentsMargins(2,0,2,0);
-    mainLayout->setSpacing(0);
-    this->setLayout(mainLayout);
-
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
     initAppListWidget();
@@ -60,7 +55,7 @@ void CommonUseWidget::initUi()
 void CommonUseWidget::initAppListWidget()
 {
     m_listView=new ListView(this,this->width()-4,this->height(),0);
-    this->layout()->addWidget(m_listView);
+    m_listView->setGeometry(QRect(0,0,this->width()-4,this->height()));
     connect(m_listView,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
     connect(m_listView,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);
     connect(m_listView,&ListView::sendHideMainWindowSignal,this,&CommonUseWidget::sendHideMainWindowSignal);

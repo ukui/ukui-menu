@@ -291,7 +291,7 @@ void Style::initWidStyle()
         AppListGridSizeWidth=140;
         AppLeftSpace=24;
         AppTopSpace=10;
-        AppSpaceBetweenIconText=14;
+        AppSpaceBetweenIconText=0;
 //        AppBottomSpace=static_cast<int>(round(27*0.74));
         SliderSize=10;
 
