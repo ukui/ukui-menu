@@ -253,13 +253,14 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
 //        color.setNamedColor(UserIconBackground);
 //        painter.setOpacity(UserIconOpacity);
 //        painter.setPen(Qt::NoPen);
-//        painter.setBrush(QBrush(color));
+//        painter.setBrush(Qt::transparent);
 //        painter.drawPath(path);
 
         //填充图片
         painter.setOpacity(1);
+//        painter.drawPath(path);
         painter.setClipPath(path);
-        painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa);
+        painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4));
 
         //画圈圈
 //        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
@@ -269,15 +270,20 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
 //        painter.setBrush(Qt::NoBrush);
 //        painter.drawPath(path);
 
-        labelicon->setPixmap(pixmap);
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+        labelicon->setScaledContents(true);
+        labelicon->setPixmap(pixmap);
     }
 
+    QFont ft;
+    QFontMetrics fm(ft);
+    QString text_1 = fm.elidedText(text, Qt::ElideRight, Style::SideBarBtnWidth-44);
     QLabel* labeltext=new QLabel;
     labeltext->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    labeltext->setText(text);
+    labeltext->setText(text_1);
+    labeltext->setFixedSize(Style::SideBarBtnWidth-44,Style::SideBarBtnHeight);
     labeltext->setStyleSheet(QString("QLabel{background:transparent;color:#ffffff;}"));
-    labeltext->adjustSize();
+//    labeltext->adjustSize();
 
     btnLayout->setSpacing(0);
     btnLayout->addWidget(labelicon);
@@ -430,6 +436,7 @@ void SideBarWidget::userAccountsChanged()
 
     //填充图片
     painter.setOpacity(1);
+//    painter.drawPath(path);
     painter.setClipPath(path);
     painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa);
 
@@ -443,8 +450,9 @@ void SideBarWidget::userAccountsChanged()
 
     QLayoutItem* item=m_userIconBtn->layout()->itemAt(0);
     QLabel* labelicon=qobject_cast<QLabel*>(item->widget());
+    labelicon->setScaledContents(true);
     labelicon->setPixmap(pixmap);
-    labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+//    labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
 }
 
 /**

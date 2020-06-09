@@ -336,7 +336,7 @@ void FunctionWidget::animationFinishedSLot()
 {
     if(m_widgetState==1)
     {
-        m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+//        m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
         m_appListView->setVisible(false);
         m_functionBtnWid->setVisible(true);
         m_enterAnimation->start();
@@ -344,7 +344,7 @@ void FunctionWidget::animationFinishedSLot()
     }
     if(m_widgetState==0)
     {
-        m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+//        m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         m_functionBtnWid->setVisible(false);
         m_appListView->setVisible(true);
         m_enterAnimation->start();
@@ -356,7 +356,7 @@ void FunctionWidget::widgetMakeZero()
 {
     m_functionBtnWid->setVisible(false);
     m_appListView->setVisible(true);
-    m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+//    m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
     m_appListView->verticalScrollBar()->setValue(0);
 }

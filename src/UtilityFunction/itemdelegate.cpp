@@ -73,8 +73,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
         QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
         painter->setRenderHint(QPainter::Antialiasing);
-//        if(option.state & QStyle::State_MouseOver)
-        if(option.state.testFlag(QStyle::State_Selected))
+//        if(option.state.testFlag(QStyle::State_Selected))
+        if(option.state & QStyle::State_MouseOver)
         {
             painter->setPen(QPen(Qt::NoPen));
             QColor color;

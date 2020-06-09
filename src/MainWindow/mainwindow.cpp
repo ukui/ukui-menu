@@ -254,23 +254,23 @@ void MainWindow::showFullScreenWidget()
     QRect endRect;
     if(position==0)
     {
-        startRect.setRect(x,Style::heightavailable-590,376,590);
-        endRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
+        startRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,376,590);
+        endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==1)
     {
-        startRect.setRect(x,panelSize,376,590);
-        endRect.setRect(x,panelSize,Style::widthavailable,Style::heightavailable);
+        startRect.setRect(x,y+panelSize,376,590);
+        endRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==2)
     {
-        startRect.setRect(panelSize,y,376,590);
-        endRect.setRect(panelSize,y,Style::widthavailable,Style::heightavailable);
+        startRect.setRect(x+panelSize,y,376,590);
+        endRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
     else
     {
-        startRect.setRect(Style::widthavailable-376,y,376,590);
-        endRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
+        startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,376,590);
+        endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
 
     this->centralWidget()->layout()->removeWidget(m_mainViewWid);
@@ -320,26 +320,26 @@ void MainWindow::showDefaultWidget()
     QRect endRect;
     if(position==0)
     {
-        endRect.setRect(x,Style::heightavailable-590,376,590);
-        startRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
+        endRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,376,590);
+        startRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
         sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
     }
     else if(position==1)
     {
-        endRect.setRect(x,panelSize,376,590);
-        startRect.setRect(x,panelSize,Style::widthavailable,Style::heightavailable);
+        endRect.setRect(x,y+panelSize,376,590);
+        startRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
         sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
     }
     else if(position==2)
     {
-        endRect.setRect(panelSize,y,376,590);
-        startRect.setRect(panelSize,y,Style::widthavailable,Style::heightavailable);
+        endRect.setRect(x+panelSize,y,376,590);
+        startRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
         sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
     }
     else
     {
-        endRect.setRect(Style::widthavailable-376,y,376,590);
-        startRect.setRect(x,y,Style::widthavailable,Style::heightavailable);
+        endRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,376,590);
+        startRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
         sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
     }
 
@@ -528,9 +528,9 @@ void MainWindow::loadMainWindow()
             if(position==0)
                 this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
             else if(position==1)
-                this->setGeometry(QRect(x,panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+                this->setGeometry(QRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
             else if(position==2)
-                this->setGeometry(QRect(panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+                this->setGeometry(QRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
             else
                 this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
             this->centralWidget()->layout()->removeWidget(m_line);
@@ -544,14 +544,14 @@ void MainWindow::loadMainWindow()
         else
         {
             if(position==0)
-                this->setGeometry(QRect(x,QApplication::primaryScreen()->geometry().height()-panelSize-590,
+                this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,
                                           376,590));
             else if(position==1)
-                this->setGeometry(QRect(x,panelSize,376,590));
+                this->setGeometry(QRect(x,y+panelSize,376,590));
             else if(position==2)
-                this->setGeometry(QRect(panelSize,y,376,590));
+                this->setGeometry(QRect(x+panelSize,y,376,590));
             else
-                this->setGeometry(QRect(QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
+                this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
                                           376,590));
             QHBoxLayout* mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
             mainLayout->insertWidget(1,m_line);
@@ -564,15 +564,16 @@ void MainWindow::loadMainWindow()
     else
     {
         if(position==0)
-            this->setGeometry(QRect(x,QApplication::primaryScreen()->geometry().height()-panelSize-590,
+            this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,
                                       376,590));
         else if(position==1)
-            this->setGeometry(QRect(x,panelSize,376,590));
+            this->setGeometry(QRect(x,y+panelSize,376,590));
         else if(position==2)
-            this->setGeometry(QRect(panelSize,y,376,590));
+            this->setGeometry(QRect(x+panelSize,y,376,590));
         else
-            this->setGeometry(QRect(QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
+            this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
                                       376,590));
+
         QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
         mainLayout->insertWidget(1,m_line);
         m_sideBarWid->loadMinSidebar();

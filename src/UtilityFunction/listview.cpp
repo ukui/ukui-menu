@@ -30,11 +30,11 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     pUkuiMenuInterface=new UkuiMenuInterface;
     menu=new RightClickMenu(nullptr,0);
 
-    m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
-    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
-    m_scrollAnimation->setDuration(800);
-    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &ListView::animationValueChangedSlot);
-    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &ListView::animationFinishSlot);
+//    m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
+//    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
+//    m_scrollAnimation->setDuration(800);
+//    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &ListView::animationValueChangedSlot);
+//    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &ListView::animationFinishSlot);
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
@@ -69,13 +69,13 @@ void ListView::initWidget()
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setUpdatesEnabled(true);
-    this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+//    this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     this->setSpacing(0);
     this->setContentsMargins(0, 0, 0, 0);
     this->setMouseTracking(true);
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
-    connect(this,&ListView::entered, this, &ListView::setCurrentIndex, Qt::QueuedConnection);
+//    connect(this,&ListView::entered, this, &ListView::setCurrentIndex, Qt::QueuedConnection);
 
 
 }
@@ -176,7 +176,6 @@ void ListView::rightClickedSlot()
 void ListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    this->selectionModel()->clear();
     this->verticalScrollBar()->setVisible(true);
 }
 
@@ -184,35 +183,34 @@ void ListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
-    this->selectionModel()->clear();
 }
 
-void ListView::wheelEvent(QWheelEvent *e)
-{
-    if (this->verticalScrollBar()->value() < this->verticalScrollBar()->maximum() &&
-        this->verticalScrollBar()->value() > this->verticalScrollBar()->minimum())
-        this->selectionModel()->clear();
-    int offset = -e->angleDelta().y();
-    m_scrollAnimation->stop();
-    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
-    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
-    m_scrollAnimation->start();
-}
+//void ListView::wheelEvent(QWheelEvent *e)
+//{
+//    if (this->verticalScrollBar()->value() < this->verticalScrollBar()->maximum() &&
+//        this->verticalScrollBar()->value() > this->verticalScrollBar()->minimum())
+//        this->selectionModel()->clear();
+//    int offset = -e->angleDelta().y();
+//    m_scrollAnimation->stop();
+//    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
+//    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+//    m_scrollAnimation->start();
+//}
 
-void ListView::animationValueChangedSlot(const QVariant &value)
-{
-    Q_UNUSED(value);
-    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
-        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
-        blockSignals(false);
-    } else {
-        blockSignals(true);
-    }
-}
+//void ListView::animationValueChangedSlot(const QVariant &value)
+//{
+//    Q_UNUSED(value);
+//    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
+//        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
+//        blockSignals(false);
+//    } else {
+//        blockSignals(true);
+//    }
+//}
 
-void ListView::animationFinishSlot()
-{
-    blockSignals(false);
-    QPoint pos = mapFromGlobal(QCursor::pos());
-    Q_EMIT entered(indexAt(pos));
-}
+//void ListView::animationFinishSlot()
+//{
+//    blockSignals(false);
+////    QPoint pos = mapFromGlobal(QCursor::pos());
+////    Q_EMIT entered(indexAt(pos));
+//}

@@ -37,6 +37,7 @@ SOURCES += \
     src/SideBarWidget/sidebarwidget.cpp \
     src/Style/style.cpp \
     src/UtilityFunction/classifyscrollarea.cpp \
+    src/UtilityFunction/elipsemaskwidget.cpp \
     src/UtilityFunction/fullitemdelegate.cpp \
     src/UtilityFunction/fulllistview.cpp \
     src/UtilityFunction/functionclassifybutton.cpp \
@@ -71,6 +72,7 @@ HEADERS  += \
     src/SideBarWidget/sidebarwidget.h \
     src/Style/style.h \
     src/UtilityFunction/classifyscrollarea.h \
+    src/UtilityFunction/elipsemaskwidget.h \
     src/UtilityFunction/fullitemdelegate.h \
     src/UtilityFunction/fulllistview.h \
     src/UtilityFunction/functionclassifybutton.h \

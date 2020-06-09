@@ -35,6 +35,7 @@
 #include <QToolTip>
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
+#include "src/UtilityFunction/elipsemaskwidget.h"
 
 class SideBarWidget : public QWidget
 {
@@ -89,6 +90,8 @@ private:
     RightClickMenu *m_shutDownMenu;
     RightClickMenu *m_otherMenu;
     QPropertyAnimation* m_animation=nullptr;
+
+    ElipseMaskWidget *m_elipseMaskWid=nullptr;
 
 protected:
     /**

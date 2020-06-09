@@ -72,13 +72,13 @@ int main(int argc, char *argv[])
     int y=QApplication::primaryScreen()->geometry().y();
 
     if(position==0)
-        w.setGeometry(QRect(x,Style::heightavailable-590,376,590));
+        w.setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,376,590));
     else if(position==1)
-        w.setGeometry(QRect(x,panelSize,376,590));
+        w.setGeometry(QRect(x,y+panelSize,376,590));
     else if(position==2)
-        w.setGeometry(QRect(panelSize,y,376,590));
+        w.setGeometry(QRect(x+panelSize,y,376,590));
     else
-        w.setGeometry(QRect(Style::widthavailable-376,y,376,590));
+        w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,376,590));
     app.setActivationWindow(&w);
 
     //注释掉，以保证自启动时不显示界面

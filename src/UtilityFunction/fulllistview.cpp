@@ -81,7 +81,6 @@ void FullListView::initWidget()
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     connect(this,&FullListView::customContextMenuRequested,this,&FullListView::rightClickedSlot);
     connect(this,&FullListView::clicked,this,&FullListView::onClicked);
-    connect(this,&FullListView::entered, this, &FullListView::setCurrentIndex, Qt::QueuedConnection);
 }
 
 void FullListView::addData(QStringList data)
@@ -128,49 +127,45 @@ void FullListView::onClicked(QModelIndex index)
 
 void FullListView::rightClickedSlot(const QPoint &pos)
 {
-//    Q_UNUSED(pos)
+    Q_UNUSED(pos)
     if(!(this->selectionModel()->selectedIndexes().isEmpty()))
     {
-        if(this->indexAt(pos).isValid())
+        QModelIndex index=this->currentIndex();
+        QVariant var=listmodel->data(index, Qt::DisplayRole);
+        QString desktopfp=var.value<QString>();
+        int ret=menu->showAppBtnMenu(desktopfp);
+        if(module>0)
         {
-            QModelIndex index=this->currentIndex();
-    //        QModelIndex index=this->indexAt(pos);
-            QVariant var=listmodel->data(index, Qt::DisplayRole);
-            QString desktopfp=var.value<QString>();
-            int ret=menu->showAppBtnMenu(desktopfp);
-            if(module>0)
-            {
-                switch (ret) {
-                case 6:
-                    Q_EMIT sendHideMainWindowSignal();
-                    break;
-                case 7:
-                    Q_EMIT sendHideMainWindowSignal();
-                    break;
-                default:
-                    break;
-                }
+            switch (ret) {
+            case 6:
+                Q_EMIT sendHideMainWindowSignal();
+                break;
+            case 7:
+                Q_EMIT sendHideMainWindowSignal();
+                break;
+            default:
+                break;
             }
-            else{
-                switch (ret) {
-                case 1:
-                    Q_EMIT sendUpdateAppListSignal();
-                    break;
-                case 2:
-                    Q_EMIT sendUpdateAppListSignal();
-                    break;
-                case 6:
-                    Q_EMIT sendHideMainWindowSignal();
-                    break;
-                case 7:
-                    Q_EMIT sendHideMainWindowSignal();
-                    break;
-                default:
-                    break;
-                }
-            }
-            this->selectionModel()->clear();
         }
+        else{
+            switch (ret) {
+            case 1:
+                Q_EMIT sendUpdateAppListSignal();
+                break;
+            case 2:
+                Q_EMIT sendUpdateAppListSignal();
+                break;
+            case 6:
+                Q_EMIT sendHideMainWindowSignal();
+                break;
+            case 7:
+                Q_EMIT sendHideMainWindowSignal();
+                break;
+            default:
+                break;
+            }
+        }
+        this->selectionModel()->clear();
     }
 }
 
@@ -178,15 +173,12 @@ void FullListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(true);
-    QPoint pos = mapFromGlobal(QCursor::pos());
-    Q_EMIT entered(indexAt(pos));
 }
 
 void FullListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
-    this->selectionModel()->clear();
 }
 
 //void FullListView::animationValueChangedSlot(const QVariant &value)
