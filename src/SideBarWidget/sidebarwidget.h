@@ -35,7 +35,6 @@
 #include <QToolTip>
 #include "src/Style/style.h"
 #include "src/RightClickMenu/rightclickmenu.h"
-#include "src/UtilityFunction/elipsemaskwidget.h"
 
 class SideBarWidget : public QWidget
 {
@@ -91,8 +90,6 @@ private:
     RightClickMenu *m_otherMenu;
     QPropertyAnimation* m_animation=nullptr;
 
-    ElipseMaskWidget *m_elipseMaskWid=nullptr;
-
 protected:
     /**
      * @brief Initializes UI
@@ -134,6 +131,7 @@ protected:
      * @brief Set the maximize button
      */
     void setMaxBtn();
+    QPixmap PixmapToRound(const QPixmap &src, int radius);
 //    void mousePressEvent(QMouseEvent* event);
 
 private Q_SLOTS:

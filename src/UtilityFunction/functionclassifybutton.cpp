@@ -38,12 +38,13 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     m_iconLabel(new QLabel),
     m_textLabel(new QLabel)
 {
+    const auto ratio=qApp->devicePixelRatio();
     m_textLabel->setAutoFillBackground(true);
     this->setFixedSize(m_width,m_height);
     this->setCheckable(true);
     this->setFocusPolicy(Qt::NoFocus);
-    m_iconLabel->setFixedSize(19,19);
-//    m_textLabel->setText(m_text);
+//    m_iconLabel->setFixedSize(m_iconSize*ratio,m_iconSize*ratio);
+    m_iconLabel->setFixedSize(m_iconSize,m_iconSize);
     m_textLabel->adjustSize();
     m_iconLabel->setStyleSheet("background:transparent;");
     setLabelText();
@@ -136,7 +137,7 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
 
 //    const auto ratio = devicePixelRatioF();
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize);
-//    categoryPix.setDevicePixelRatio(qApp->devicePixelRatio());
+//    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_iconLabel->setPixmap(pixmap);
     updateTextState(state);
 }

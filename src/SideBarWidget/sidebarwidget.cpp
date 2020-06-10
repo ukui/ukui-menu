@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <syslog.h>
 #include "src/Style/style.h"
+#include "src/UtilityFunction/utility.h"
 
 SideBarWidget::SideBarWidget(QWidget *parent) :
     QWidget(parent)
@@ -221,58 +222,51 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
     QLabel* labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);
     labelicon->setStyleSheet("background:transparent;border:0px;");
-
+    const auto ratio=devicePixelRatioF();
     if(num!=3)
     {
-        QSvgRenderer* svgRender = new QSvgRenderer(btn);
-        svgRender->load(btnicon);
-        QPixmap* pixmap = new QPixmap(Style::SideBarIconSize,Style::SideBarIconSize);
-        pixmap->fill(Qt::transparent);//设置背景透明
-        QPainter p(pixmap);
-        svgRender->render(&p);
-        labelicon->setPixmap(*pixmap);
-        labelicon->setFixedSize(pixmap->size());
+        QPixmap pixmap=loadSvg(btnicon,Style::SideBarIconSize);
+//        pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+        labelicon->setFixedSize(Style::SideBarIconSize,Style::SideBarIconSize);
+        labelicon->setPixmap(pixmap);
     }
     else {
-        QPixmap pixmapa;
-        QFileInfo fileInfo(btnicon);
-        if(fileInfo.isFile())
-            pixmapa=QPixmap(btnicon);
-        else
-            pixmapa=QPixmap(":/data/img/sidebarwidget/usericon-darkcolor.svg");
-        QPixmap pixmap(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-        pixmap.fill(Qt::transparent);
-        QPainter painter(&pixmap);
-        painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-
-        QPainterPath path;
-        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-
-        //画背景
-//        QColor color;
-//        color.setNamedColor(UserIconBackground);
-//        painter.setOpacity(UserIconOpacity);
-//        painter.setPen(Qt::NoPen);
-//        painter.setBrush(Qt::transparent);
-//        painter.drawPath(path);
-
-        //填充图片
-        painter.setOpacity(1);
-//        painter.drawPath(path);
-        painter.setClipPath(path);
-        painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4));
-
-        //画圈圈
-//        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-//        painter.setOpacity(1);
-//        color.setNamedColor("#d5d5d5");
-//        painter.setPen(QPen(color,2));
-//        painter.setBrush(Qt::NoBrush);
-//        painter.drawPath(path);
-
+        labelicon->setObjectName(QStringLiteral("faceLabel"));
+        labelicon->setFocusPolicy(Qt::NoFocus);
+        const QString SheetStyle = QString("border-radius: %1px;  border:0px solid white;").arg(12);
+        labelicon->setStyleSheet(SheetStyle);
+        labelicon->setAlignment(Qt::AlignCenter);
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-        labelicon->setScaledContents(true);
-        labelicon->setPixmap(pixmap);
+
+        QPixmap facePixmap(btnicon);
+        facePixmap = facePixmap.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)/2);
+//        facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+        labelicon->setPixmap(facePixmap);
+
+
+//        QPixmap pixmapa;
+//        QFileInfo fileInfo(btnicon);
+//        if(fileInfo.isFile())
+//            pixmapa=QPixmap(btnicon);
+//        else
+//            pixmapa=QPixmap(":/data/img/sidebarwidget/usericon-darkcolor.svg");
+
+//        QPixmap p(btnicon);
+//        QPixmap pixmapa(p.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+////        QPixmap pixmapa(p);
+//        QPixmap pixmap(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+//        pixmap.fill(Qt::transparent);
+//        QPainter painter(&pixmap);
+//        painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+//        QPainterPath path;
+//        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);    //绘制椭圆
+//        painter.setClipPath(path);
+//        painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa);
+
+//        labelicon->setScaledContents(true);
+//        labelicon->setPixmap(pixmap.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4));
+//        labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
     }
 
     QFont ft;
@@ -295,6 +289,25 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
     m_buttonList.append(btn);
     m_buttonTextList.append(labeltext);
 }
+
+QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
+{
+    if (src.isNull()) {
+        return QPixmap();
+    }
+
+    QPixmap pixmapa(src);
+    QPixmap pixmap(radius*2,radius*2);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    QPainterPath path;
+    path.addEllipse(0, 0, radius*2, radius*2);
+    painter.setClipPath(path);
+    painter.drawPixmap(0, 0, radius*2, radius*2, pixmapa);
+    return pixmap;
+}
+
 
 /**
  * 加载关机按钮右键菜单
@@ -411,48 +424,18 @@ void SideBarWidget::userIconBtnClickedSlot()
 
 void SideBarWidget::userAccountsChanged()
 {
+    const auto ratio=devicePixelRatioF();
     QString usericon=m_ukuiMenuInterface->getUserIcon();
-    QPixmap pixmapa;
-    QFileInfo fileInfo(usericon);
-    if(fileInfo.isFile())
-        pixmapa=QPixmap(usericon);
-    else
-        pixmapa=QPixmap(":/data/img/sidebarwidget/usericon-darkcolor.svg");
-    QPixmap pixmap(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-    pixmap.fill(Qt::transparent);
-    QPainter painter(&pixmap);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    QPixmap facePixmap(usericon);
+    facePixmap = facePixmap.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)/2);
 
-    QPainterPath path;
-    path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-
-    //画背景
-//    QColor color;
-//    color.setNamedColor(UserIconBackground);
-//    painter.setOpacity(UserIconOpacity);
-//    painter.setPen(Qt::NoPen);
-//    painter.setBrush(QBrush(color));
-//    painter.drawPath(path);
-
-    //填充图片
-    painter.setOpacity(1);
-//    painter.drawPath(path);
-    painter.setClipPath(path);
-    painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa);
-
-    //画圈圈
-//    path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-//    painter.setOpacity(1);
-//    color.setNamedColor("#d5d5d5");
-//    painter.setPen(QPen(color,2));
-//    painter.setBrush(Qt::NoBrush);
-//    painter.drawPath(path);
-
-    QLayoutItem* item=m_userIconBtn->layout()->itemAt(0);
-    QLabel* labelicon=qobject_cast<QLabel*>(item->widget());
-    labelicon->setScaledContents(true);
-    labelicon->setPixmap(pixmap);
-//    labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
+//    QLayoutItem* item=m_userIconBtn->layout()->itemAt(0);
+//    QLabel* labelicon=qobject_cast<QLabel*>(item->widget());
+//    labelicon->setScaledContents(true);
+    QLabel* labelicon=m_userIconBtn->findChild<QLabel*>("faceLabel");
+//    facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    labelicon->setPixmap(facePixmap);
 }
 
 /**
