@@ -27,6 +27,7 @@
 #include <X11/Xlibint.h>
 #include <X11/XKBlib.h>
 #include <X11/Xlib.h>
+#undef min
 
 class XEventMonitorPrivate;
 class XEventMonitor : public QThread
