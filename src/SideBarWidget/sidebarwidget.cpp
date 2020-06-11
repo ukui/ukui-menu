@@ -225,23 +225,25 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
     const auto ratio=devicePixelRatioF();
     if(num!=3)
     {
-        QPixmap pixmap=loadSvg(btnicon,Style::SideBarIconSize);
-//        pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+        QPixmap pixmap=loadSvg(btnicon,Style::SideBarIconSize*ratio);
+        pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
         labelicon->setFixedSize(Style::SideBarIconSize,Style::SideBarIconSize);
         labelicon->setPixmap(pixmap);
     }
     else {
+        if(!QFile::exists(btnicon))
+            btnicon=QString("/usr/share/ukui/faces/default.png");
         labelicon->setObjectName(QStringLiteral("faceLabel"));
         labelicon->setFocusPolicy(Qt::NoFocus);
-        const QString SheetStyle = QString("border-radius: %1px;  border:0px solid white;").arg(12);
-        labelicon->setStyleSheet(SheetStyle);
+//        const QString SheetStyle = QString("border-radius: %1px;  border:0px solid white;").arg(12);
+//        labelicon->setStyleSheet(SheetStyle);
         labelicon->setAlignment(Qt::AlignCenter);
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
 
         QPixmap facePixmap(btnicon);
-        facePixmap = facePixmap.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)/2);
-//        facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+        facePixmap = facePixmap.scaled((Style::SideBarIconSize+4)*ratio,(Style::SideBarIconSize+4)*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)*ratio/2);
+        facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
         labelicon->setPixmap(facePixmap);
 
 
@@ -427,14 +429,14 @@ void SideBarWidget::userAccountsChanged()
     const auto ratio=devicePixelRatioF();
     QString usericon=m_ukuiMenuInterface->getUserIcon();
     QPixmap facePixmap(usericon);
-    facePixmap = facePixmap.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)/2);
+    facePixmap = facePixmap.scaled((Style::SideBarIconSize+4)*ratio,(Style::SideBarIconSize+4)*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)*ratio/2);
 
 //    QLayoutItem* item=m_userIconBtn->layout()->itemAt(0);
 //    QLabel* labelicon=qobject_cast<QLabel*>(item->widget());
 //    labelicon->setScaledContents(true);
     QLabel* labelicon=m_userIconBtn->findChild<QLabel*>("faceLabel");
-//    facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     labelicon->setPixmap(facePixmap);
 }
 
@@ -483,11 +485,12 @@ void SideBarWidget::setMaxBtn()
  */
 void SideBarWidget::setMinSidebarBtn(QPushButton* btn)
 {
+    const auto ratio=devicePixelRatioF();
     btn->setFixedSize(37,37);
     if(m_buttonList.indexOf(btn)==3)
-        btn->layout()->setContentsMargins(7,0,7,0);
+        btn->layout()->setContentsMargins(7,0,17,0);
     else
-        btn->layout()->setContentsMargins(9,0,7,0);
+        btn->layout()->setContentsMargins(9,0,17,0);
     btn->layout()->setSpacing(0);
 
     //移除按钮文本
