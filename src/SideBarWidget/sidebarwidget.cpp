@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QPainter>
+#include <QPainterPath>
 #include <syslog.h>
 #include "src/Style/style.h"
 #include "src/UtilityFunction/utility.h"

@@ -21,6 +21,7 @@
 #include <QStyledItemDelegate>
 #include "src/Style/style.h"
 #include <QPainter>
+#include <QPainterPath>
 #include <QSettings>
 #include "src/Interface/ukuimenuinterface.h"
 
