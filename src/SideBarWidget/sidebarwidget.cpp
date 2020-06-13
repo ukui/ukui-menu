@@ -416,7 +416,8 @@ void SideBarWidget::trashBtnClickedSlot()
 
 void SideBarWidget::shutdownBtnClickedSlot()
 {
-    shutdownBtnRightClickSlot();
+    this->parentWidget()->parentWidget()->hide();
+    QProcess::startDetached(QString("ukui-session-tools"));
 }
 
 void SideBarWidget::userIconBtnClickedSlot()
@@ -625,7 +626,7 @@ void SideBarWidget::enterAnimation()
 void SideBarWidget::widgetMakeZero()
 {
     char pressstyle[200];
-    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:2px;}",SBClassifyBtnSelectedBackground);
+    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:4px;}",SBClassifyBtnSelectedBackground);
     m_allBtn->setStyleSheet(pressstyle);
     char btncolor[300];
     sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\

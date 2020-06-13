@@ -78,40 +78,25 @@ private:
     QProcess *m_cmdProc=nullptr;
 
     QMenu *m_appBtnMenu=nullptr;
-    QWidgetAction *m_fixToAllAction=nullptr;
-    QWidget *m_fixToAllWid=nullptr;
-    QWidgetAction *m_unfixedFromAllAction=nullptr;
-    QWidget *m_unfixedFromAllWid=nullptr;
-    QWidgetAction *m_fixToTaskBarAction=nullptr;
-    QWidget *m_fixToTaskBarWid=nullptr;
-    QWidgetAction *m_unfixedFromTaskBarAction=nullptr;
-    QWidget *m_unfixedFromTaskBarWid=nullptr;
-    QWidgetAction *m_addToDesktopAction=nullptr;
-    QWidget *m_addToDesktopWid=nullptr;
-    QWidgetAction *m_uninstallAction=nullptr;
-    QWidget *m_uninstallWid=nullptr;
-    QWidgetAction *m_attributeAction=nullptr;
-    QWidget *m_attributeWid=nullptr;
+    QAction *m_fixToAllAction=nullptr;
+    QAction *m_unfixedFromAllAction=nullptr;
+    QAction *m_fixToTaskBarAction=nullptr;
+    QAction *m_unfixedFromTaskBarAction=nullptr;
+    QAction *m_addToDesktopAction=nullptr;
+    QAction *m_uninstallAction=nullptr;
+    QAction *m_attributeAction=nullptr;
 
     QMenu *m_shutDownMenu=nullptr;
-    QWidgetAction *m_lockScreenAction=nullptr;
-    QWidget *m_lockScreenWid=nullptr;
-    QWidgetAction *m_switchUserAction=nullptr;
-    QWidget *m_switchUserWid=nullptr;
-    QWidgetAction *m_logOutAction=nullptr;
-    QWidget *m_logOutWid=nullptr;
-    QWidgetAction *m_rebootAction=nullptr;
-    QWidget *m_rebootWid=nullptr;
-    QWidgetAction *m_shutDownAction=nullptr;
-    QWidget *m_shutDownWid=nullptr;
+    QAction *m_lockScreenAction=nullptr;
+    QAction *m_switchUserAction=nullptr;
+    QAction *m_logOutAction=nullptr;
+    QAction *m_rebootAction=nullptr;
+    QAction *m_shutDownAction=nullptr;
 
     QMenu *m_otherMenu=nullptr;
-    QWidgetAction *m_otherFixToTaskBarAction=nullptr;
-    QWidget *m_otherFixToTaskBarWid=nullptr;
-    QWidgetAction *m_otherUnfixedFromTaskBarAction=nullptr;
-    QWidget *m_otherUnfixedFromTaskBarWid=nullptr;
-    QWidgetAction *m_otherListAction=nullptr;
-    QWidget *m_otherListWid=nullptr;
+    QAction *m_otherFixToTaskBarAction=nullptr;
+    QAction *m_otherUnfixedFromTaskBarAction=nullptr;
+    QAction *m_otherListAction=nullptr;
 
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
 
@@ -141,7 +126,7 @@ protected:
      *  0: Resource icon
      *  1: System icon
      */
-    void initWidgetAction(QWidget* wid, QString iconstr, QString textstr,int type);
+    void initWidgetAction(QAction* action, QString iconstr, QString textstr,int type);
     /**
      * @brief Process image color
      * @param source: QPixmap icon

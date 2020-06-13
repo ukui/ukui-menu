@@ -226,7 +226,7 @@
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="228"/>
         <source>Lock Screen</source>
-        <translation>锁定屏幕</translation>
+        <translation>锁屏</translation>
     </message>
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="233"/>
@@ -241,12 +241,12 @@
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="243"/>
         <source>Restart</source>
-        <translation>重启计算机</translation>
+        <translation>重启</translation>
     </message>
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="248"/>
         <source>Power Off</source>
-        <translation>关闭计算机</translation>
+        <translation>关机</translation>
     </message>
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="278"/>

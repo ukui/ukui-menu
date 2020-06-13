@@ -17,6 +17,7 @@
  */
 
 #include "rightclickmenu.h"
+#include "src/UtilityFunction/utility.h"
 #include <QDebug>
 
 RightClickMenu::RightClickMenu(QWidget *parent, int module):
@@ -30,9 +31,10 @@ RightClickMenu::RightClickMenu(QWidget *parent, int module):
     m_cmdProc=new QProcess(this);
     connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
 
-    sprintf(m_style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
-            QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
-            RightClickMenuBorder ,RightClickMenuBackground,RightClickMenuSeparator);
+//    sprintf(m_style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
+//            QMenu::item{width:246px;height:36px;}\
+//            QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
+//            RightClickMenuBorder ,RightClickMenuBackground,RightClickMenuSeparator);
 
     switch (module) {
     case 0:
@@ -61,44 +63,31 @@ void RightClickMenu::initAppBtnAction()
     //普通应用按钮右键菜单
     m_appBtnMenu=new QMenu(this);
     m_appBtnMenu->setLayoutDirection(Qt::LeftToRight);
-    m_appBtnMenu->setFixedSize(250+2,36*4+5+12+2);
-    m_fixToAllAction=new QWidgetAction(m_appBtnMenu);
-    m_fixToAllWid=new QWidget();
+//    m_appBtnMenu->setFixedSize(250+2,36*4+5+12+2);
+    m_fixToAllAction=new QAction(m_appBtnMenu);
     m_unfixedFromAllAction=new QWidgetAction(m_appBtnMenu);
-    m_unfixedFromAllWid=new QWidget();
     m_fixToTaskBarAction=new QWidgetAction(m_appBtnMenu);
-    m_fixToTaskBarWid=new QWidget();
     m_unfixedFromTaskBarAction=new QWidgetAction(m_appBtnMenu);
-    m_unfixedFromTaskBarWid=new QWidget();
     m_addToDesktopAction=new QWidgetAction(m_appBtnMenu);
-    m_addToDesktopWid=new QWidget();
     m_uninstallAction=new QWidgetAction(m_appBtnMenu);
-    m_uninstallWid=new QWidget();
     m_attributeAction=new QWidgetAction(m_appBtnMenu);
-    m_attributeWid=new QWidget();
 
-    initWidgetAction(m_fixToAllWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"),0);
-    m_fixToAllAction->setDefaultWidget(m_fixToAllWid);
+    initWidgetAction(m_fixToAllAction,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"),0);
     connect(m_fixToAllAction, &QWidgetAction::triggered,this,&RightClickMenu::fixToAllActionTriggerSlot);
 
-    initWidgetAction(m_unfixedFromAllWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"),0);
-    m_unfixedFromAllAction->setDefaultWidget(m_unfixedFromAllWid);
+    initWidgetAction(m_unfixedFromAllAction,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"),0);
     connect(m_unfixedFromAllAction, &QWidgetAction::triggered,this,&RightClickMenu::unfixedFromAllActionTriggerSlot);
 
-    initWidgetAction(m_fixToTaskBarWid,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"),0);
-    m_fixToTaskBarAction->setDefaultWidget(m_fixToTaskBarWid);
+    initWidgetAction(m_fixToTaskBarAction,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"),0);
     connect(m_fixToTaskBarAction, &QWidgetAction::triggered,this,&RightClickMenu::fixToTaskbarActionTriggerSlot);
 
-    initWidgetAction(m_unfixedFromTaskBarWid,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"),0);
-    m_unfixedFromTaskBarAction->setDefaultWidget(m_unfixedFromTaskBarWid);
+    initWidgetAction(m_unfixedFromTaskBarAction,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"),0);
     connect(m_unfixedFromTaskBarAction, &QWidgetAction::triggered,this,&RightClickMenu::unfixedFromTaskbarActionTriggerSlot);
 
-    initWidgetAction(m_addToDesktopWid,"",tr("Add to desktop shortcuts"),0);
-    m_addToDesktopAction->setDefaultWidget(m_addToDesktopWid);
+    initWidgetAction(m_addToDesktopAction,"",tr("Add to desktop shortcuts"),0);
     connect(m_addToDesktopAction, &QWidgetAction::triggered,this,&RightClickMenu::addToDesktopActionTriggerSlot);
 
-    initWidgetAction(m_uninstallWid,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"),0);
-    m_uninstallAction->setDefaultWidget(m_uninstallWid);
+    initWidgetAction(m_uninstallAction,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"),0);
     connect(m_uninstallAction, &QWidgetAction::triggered,this,&RightClickMenu::uninstallActionTriggerSlot);
 }
 
@@ -109,7 +98,6 @@ void RightClickMenu::addAppBtnAction()
     m_appBtnMenu->addSeparator();
     m_appBtnMenu->addAction(m_uninstallAction);
     m_appBtnMenu->setAttribute(Qt::WA_TranslucentBackground);
-    m_appBtnMenu->setStyleSheet(m_style);
 }
 
 //关机按钮右键菜单
@@ -118,46 +106,35 @@ void RightClickMenu::addShutdownAction()
     //关机按钮右键菜单
     m_shutDownMenu=new QMenu(this);
     m_shutDownMenu->setLayoutDirection(Qt::LeftToRight);
-    m_shutDownMenu->setFixedSize(250+2,36*5+12+2);
+//    m_shutDownMenu->setFixedSize(250+2,36*5+12+2);
 
-    m_lockScreenAction=new QWidgetAction(m_shutDownMenu);
-    m_lockScreenWid=new QWidget();
-    m_switchUserAction=new QWidgetAction(m_shutDownMenu);
-    m_switchUserWid=new QWidget();
-    m_logOutAction=new QWidgetAction(m_shutDownMenu);
-    m_logOutWid=new QWidget();
-    m_rebootAction=new QWidgetAction(m_shutDownMenu);
-    m_rebootWid=new QWidget();
-    m_shutDownAction=new QWidgetAction(m_shutDownMenu);
-    m_shutDownWid=new QWidget();
+    m_lockScreenAction=new QAction(m_shutDownMenu);
+    m_switchUserAction=new QAction(m_shutDownMenu);
+    m_logOutAction=new QAction(m_shutDownMenu);
+    m_rebootAction=new QAction(m_shutDownMenu);
+    m_shutDownAction=new QAction(m_shutDownMenu);
 
-    initWidgetAction(m_lockScreenWid,"system-lock-screen-symbolic",tr("Lock Screen"),1);
-    m_lockScreenAction->setDefaultWidget(m_lockScreenWid);
+    initWidgetAction(m_lockScreenAction,"system-lock-screen-symbolic",tr("Lock Screen"),1);
     m_shutDownMenu->addAction(m_lockScreenAction);
     connect(m_lockScreenAction,&QWidgetAction::triggered,this,&RightClickMenu::lockScreenActionTriggerSlot);
 
-    initWidgetAction(m_switchUserWid,"stock-people-symbolic",tr("Switch User"),1);
-    m_switchUserAction->setDefaultWidget(m_switchUserWid);
+    initWidgetAction(m_switchUserAction,"stock-people-symbolic",tr("Switch User"),1);
     m_shutDownMenu->addAction(m_switchUserAction);
     connect(m_switchUserAction,&QWidgetAction::triggered,this,&RightClickMenu::switchUserActionTriggerSlot);
 
-    initWidgetAction(m_logOutWid,"system-logout-symbolic",tr("Log Out"),1);
-    m_logOutAction->setDefaultWidget(m_logOutWid);
+    initWidgetAction(m_logOutAction,"system-logout-symbolic",tr("Log Out"),1);
     m_shutDownMenu->addAction(m_logOutAction);
     connect(m_logOutAction,&QWidgetAction::triggered,this,&RightClickMenu::logoutActionTriggerSlot);
 
-    initWidgetAction(m_rebootWid,"system-restart-symbolic",tr("Restart"),1);
-    m_rebootAction->setDefaultWidget(m_rebootWid);
+    initWidgetAction(m_rebootAction,"system-restart-symbolic",tr("Restart"),1);
     m_shutDownMenu->addAction(m_rebootAction);
     connect(m_rebootAction,&QWidgetAction::triggered,this,&RightClickMenu::rebootActionTriggerSlot);
 
-    initWidgetAction(m_shutDownWid,"exit-symbolic",tr("Power Off"),1);
-    m_shutDownAction->setDefaultWidget(m_shutDownWid);
+    initWidgetAction(m_shutDownAction,"exit-symbolic",tr("Power Off"),1);
     m_shutDownMenu->addAction(m_shutDownAction);
     connect(m_shutDownAction,&QWidgetAction::triggered,this,&RightClickMenu::shutdownActionTriggerSlot);
 
     m_shutDownMenu->setAttribute(Qt::WA_TranslucentBackground);
-    m_shutDownMenu->setStyleSheet(m_style);
 }
 
 //其它按钮右键菜单
@@ -165,87 +142,43 @@ void RightClickMenu::addOtherAction()
 {
     m_otherMenu=new QMenu(this);
     m_otherMenu->setLayoutDirection(Qt::LeftToRight);
-    m_otherMenu->setFixedSize(250+2,36*2+12+2);
-    m_otherFixToTaskBarAction=new QWidgetAction(m_otherMenu);
-    m_otherFixToTaskBarWid=new QWidget();
-    m_otherUnfixedFromTaskBarAction=new QWidgetAction(m_otherMenu);
-    m_otherUnfixedFromTaskBarWid=new QWidget();
-    m_otherListAction=new QWidgetAction(m_otherMenu);
-    m_otherListWid=new QWidget();
+//    m_otherMenu->setFixedSize(250+2,36*2+12+2);
+    m_otherFixToTaskBarAction=new QAction(m_otherMenu);
+    m_otherUnfixedFromTaskBarAction=new QAction(m_otherMenu);
+    m_otherListAction=new QAction(m_otherMenu);
 
-    initWidgetAction(m_otherFixToTaskBarWid,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"),0);
-    m_otherFixToTaskBarAction->setDefaultWidget(m_otherFixToTaskBarWid);
+    initWidgetAction(m_otherFixToTaskBarAction,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"),0);
     connect(m_otherFixToTaskBarAction,&QWidgetAction::triggered,this,&RightClickMenu::fixToTaskbarActionTriggerSlot);
 
-    initWidgetAction(m_otherUnfixedFromTaskBarWid,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"),0);
-    m_otherUnfixedFromTaskBarAction->setDefaultWidget(m_otherUnfixedFromTaskBarWid);
+    initWidgetAction(m_otherUnfixedFromTaskBarAction,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"),0);
     connect(m_otherUnfixedFromTaskBarAction,&QWidgetAction::triggered,this,&RightClickMenu::unfixedFromTaskbarActionTriggerSlot);
 
-    initWidgetAction(m_otherListWid,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"),0);
-    m_otherListAction->setDefaultWidget(m_otherListWid);
+    initWidgetAction(m_otherListAction,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"),0);
     connect(m_otherListAction,&QWidgetAction::triggered,this,&RightClickMenu::otherListActionTriggerSlot);
 
     m_otherMenu->addAction(m_otherListAction);
     m_otherMenu->setAttribute(Qt::WA_TranslucentBackground);
-    m_otherMenu->setStyleSheet(m_style);
 }
 
-void RightClickMenu::initWidgetAction(QWidget *wid, QString iconstr, QString textstr,int type)
+void RightClickMenu::initWidgetAction(QAction *action, QString iconstr, QString textstr, int type)
 {
-    char style[200];
-    sprintf(style,"QWidget{background:transparent;border:0px;border-radius:2px;}\
-            QWidget:hover{background-color:%s;}",
-            RightClickMenuHover);
+    const auto ratio=devicePixelRatioF();
+    QPixmap pixmap;
 
-    char labelstyle[100];
-    sprintf(labelstyle,"background:transparent;border:0px;color:%s;font-size:14px;",
-            RightClickMenuFont);
-
-    QHBoxLayout* layout=new QHBoxLayout(wid);
-    wid->setLayout(layout);
-    wid->setFixedSize(246,36);
-    wid->setStyleSheet(style);
-    wid->setFocusPolicy(Qt::NoFocus);
-
-    if(!iconstr.isEmpty())
+    if(type==0)
     {
-        QLabel* labelicon=new QLabel(wid);
-        if(type==0)
-        {
-            QSvgRenderer* svg=new QSvgRenderer(wid);
-            svg->load(iconstr);
-            QPixmap* pixmap=new QPixmap(16,16);
-            pixmap->fill(Qt::transparent);
-            QPainter p(pixmap);
-            svg->render(&p);
-            labelicon->setPixmap(*pixmap);
-        }
-        else
-        {
-            QIcon icon=QIcon::fromTheme(iconstr);
-            QPixmap pixmap=icon.pixmap(QSize(16,16));
-            labelicon->setPixmap(drawSymbolicColoredPixmap(pixmap));
-        }
-        labelicon->setFixedSize(QSize(16,16));
-        labelicon->setAlignment(Qt::AlignCenter);
-        labelicon->setStyleSheet(labelstyle);
-        layout->addWidget(labelicon);
+        pixmap=loadSvg(iconstr,16*ratio);
+        pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     }
-
-    QLabel* labeltext=new QLabel(wid);
-    labeltext->setStyleSheet(labelstyle);
-    labeltext->setText(textstr);
-    labeltext->adjustSize();
-    layout->addWidget(labeltext);
-
-    if(!iconstr.isEmpty())
+    else
     {
-        layout->setContentsMargins(10,0,wid->width()-16-labeltext->width()-20,0);
-        layout->setSpacing(10);
+        QIcon icon=QIcon::fromTheme(iconstr);
+        QPixmap pixmap_1=icon.pixmap(QSize(16*ratio,16*ratio));
+        pixmap=drawSymbolicColoredPixmap(pixmap_1);
     }
-    else {
-        layout->setContentsMargins(36,0,0,0);
-    }
+
+    action->setIcon(QIcon(pixmap));
+    action->setText(textstr);
 }
 
 QPixmap RightClickMenu::drawSymbolicColoredPixmap(const QPixmap &source)
