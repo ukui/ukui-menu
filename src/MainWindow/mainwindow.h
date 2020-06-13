@@ -114,6 +114,8 @@ public Q_SLOTS:
      * @brief Monitor the state change of the animation
      */
     void stateChangedSlot(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
+    void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
+
     /**
      * @brief Open the start menu by signaling
      */

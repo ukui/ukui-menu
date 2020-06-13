@@ -81,6 +81,49 @@ int main(int argc, char *argv[])
         w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,376,590));
     app.setActivationWindow(&w);
 
+//    QRectF rect;
+//    rect.setX(w.rect().x()+1);
+//    rect.setY(w.rect().y()+1);
+//    rect.setWidth(w.rect().width()-2);
+//    rect.setHeight(w.rect().height()-2);
+
+//    //QPainterPath画圆角矩形
+//    const qreal radius = 6;
+//    QPainterPath path;
+//    path.moveTo(rect.topRight() - QPointF(radius, 0));
+//    path.lineTo(rect.topLeft() + QPointF(radius, 0));
+//    path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
+//    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+//    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+//    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+//    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+//    path.lineTo(rect.topRight() + QPointF(0, radius));
+//    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
+
+    //右上角
+//    path.moveTo(rect.topRight() - QPointF(radius, 0));
+//    path.lineTo(rect.topLeft());
+//    path.lineTo(rect.bottomLeft());
+//    path.lineTo(rect.bottomRight());
+//    path.lineTo(rect.topRight() + QPointF(0, radius));
+//    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
+    //右下角
+//    path.moveTo(rect.topRight());
+//    path.lineTo(rect.topLeft());
+//    path.lineTo(rect.bottomLeft());
+//    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+//    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+//    path.lineTo(rect.topRight());
+    //左下角
+//    path.moveTo(rect.topRight());
+//    path.lineTo(rect.topLeft());
+//    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+//    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+//    path.lineTo(rect.bottomRight());
+//    path.lineTo(rect.topRight());
+    w.setFrameStyle();
+//    w.setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+
     //注释掉，以保证自启动时不显示界面
     w.show();
     w.raise();
