@@ -28,7 +28,7 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-    menu=new RightClickMenu(nullptr,0);
+    menu=new RightClickMenu(0);
 
 //    m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
 //    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);

@@ -34,10 +34,11 @@
 #include <QDBusInterface>
 #include <QProcess>
 #include <QEvent>
+//#include <QPaintDevice>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 
-class RightClickMenu: public QWidget
+class RightClickMenu : public QWidget
 {
     Q_OBJECT
 public:
@@ -48,7 +49,7 @@ public:
      *  1: power
      *  2: others
      */
-    RightClickMenu(QWidget *parent,int module);
+    RightClickMenu(int module);
     virtual ~RightClickMenu();
     /**
      * @brief Displays the application right-click menu

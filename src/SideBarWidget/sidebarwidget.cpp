@@ -35,6 +35,8 @@ SideBarWidget::SideBarWidget(QWidget *parent) :
 SideBarWidget::~SideBarWidget()
 {
     delete m_ukuiMenuInterface;
+    delete m_shutDownMenu;
+    delete m_otherMenu;
 }
 
 /**
@@ -51,7 +53,8 @@ void SideBarWidget::initUi()
     loadMinSidebar();
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
-
+    m_shutDownMenu=new RightClickMenu(1);
+    m_otherMenu=new RightClickMenu(2);
 }
 
 /**
@@ -301,7 +304,6 @@ QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
  */
 void SideBarWidget::shutdownBtnRightClickSlot()
 {
-    m_shutDownMenu=new RightClickMenu(this,1);
     int ret=m_shutDownMenu->showShutdownMenu();
     if(ret>=10 && ret<=14)
     {
@@ -338,7 +340,6 @@ void SideBarWidget::addRightClickMenu(QPushButton *btn)
 
 void SideBarWidget::otherBtnRightClickSlot()
 {
-    m_otherMenu=new RightClickMenu(this,2);
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
     int index=m_buttonList.indexOf(btn);
     QString desktopfp;

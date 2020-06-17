@@ -90,8 +90,8 @@ private:
     QSpacerItem *m_verticalSpacer=nullptr;
     bool m_isFullScreen=false;
     QGSettings *m_gsetting=nullptr;
-    RightClickMenu *m_shutDownMenu;
-    RightClickMenu *m_otherMenu;
+    RightClickMenu *m_shutDownMenu=nullptr;
+    RightClickMenu *m_otherMenu=nullptr;
     QPropertyAnimation* m_animation=nullptr;
 
 protected:

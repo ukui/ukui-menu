@@ -20,15 +20,14 @@
 #include "src/UtilityFunction/utility.h"
 #include <QDebug>
 
-RightClickMenu::RightClickMenu(QWidget *parent, int module):
-    QWidget (parent)
-
+RightClickMenu::RightClickMenu(int module):
+    QWidget(nullptr)
 {
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     m_setting=new QSettings(path,QSettings::IniFormat);
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
-    m_cmdProc=new QProcess(this);
+    m_cmdProc=new QProcess;
     connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
 
     sprintf(m_style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
@@ -54,6 +53,7 @@ RightClickMenu::RightClickMenu(QWidget *parent, int module):
 RightClickMenu::~RightClickMenu()
 {
     delete m_ukuiMenuInterface;
+    delete m_cmdProc;
 
 }
 
