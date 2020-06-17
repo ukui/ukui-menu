@@ -68,6 +68,10 @@ public:
      *  1: moving down
      */
     void moveScrollBar(int type);
+    /**
+     * @brief Adjust function classification button position
+     */
+    void setFunctionBtnGeometry();
 
 private:
     /*Application list interface*/

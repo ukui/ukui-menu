@@ -40,7 +40,7 @@ void FunctionWidget::initUi()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(320,535);
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
     initAppListWidget();
@@ -48,7 +48,6 @@ void FunctionWidget::initUi()
     m_functionBtnWid=new FunctionButtonWidget(this);
     connect(this,&FunctionWidget::sendClassificationbtnList,m_functionBtnWid,&FunctionButtonWidget::recvClassificationBtnList);
     connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&FunctionWidget::recvFunctionBtnSignal);
-    m_functionBtnWid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
 
     m_enterAnimation=new QPropertyAnimation;
     m_enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
@@ -66,6 +65,7 @@ void FunctionWidget::initAppListWidget()
 {
     m_appListView=new ListView(this,this->width()-4,this->height(),2);
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView->show();
     fillAppListView(0);
     connect(m_appListView,&ListView::sendItemClickedSignal,this,&FunctionWidget::recvItemClickedSlot);
     connect(m_appListView,&ListView::sendHideMainWindowSignal,this,&FunctionWidget::sendHideMainWindowSignal);
@@ -195,81 +195,6 @@ void FunctionWidget::execApplication(QString desktopfp)
 void FunctionWidget::updateAppListView()
 {
     fillAppListView(1);
-
-//    row=0;
-//    m_data.clear();
-//    classificationbtnlist.clear();
-//    classificationbtnrowlist.clear();
-//    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-//    QStringList androidlist=vector.at(0);
-//    if(!androidlist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Mobile"));
-//        insertAppList(androidlist);
-//    }
-
-//    QStringList netlist=vector.at(1);
-//    if(!netlist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Internet"));
-//        insertAppList(netlist);
-//    }
-//    QStringList sociallist=vector.at(2);
-//    if(!sociallist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Social"));
-//        insertAppList(sociallist);
-//    }
-//    QStringList avlist=vector.at(3);
-//    if(!avlist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Video"));
-//        insertAppList(avlist);
-//    }
-//    QStringList developlist=vector.at(4);
-//    if(!developlist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Development"));
-//        insertAppList(developlist);
-//    }
-//    QStringList graphicslist=vector.at(5);
-//    if(!graphicslist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Image"));
-//        insertAppList(graphicslist);
-//    }
-//    QStringList gamelist=vector.at(6);
-//    if(!gamelist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Game"));
-//        insertAppList(gamelist);
-//    }
-//    QStringList officelist=vector.at(7);
-//    if(!officelist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Office"));
-//        insertAppList(officelist);
-//    }
-//    QStringList educationlist=vector.at(8);
-//    if(!educationlist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Education"));
-//        insertAppList(educationlist);
-//    }
-
-//    QStringList systemadminlist=vector.at(9);
-//    if(!systemadminlist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("System"));
-//        insertAppList(systemadminlist);
-//    }
-//    QStringList otherlist=vector.at(10);
-//    if(!otherlist.isEmpty())
-//    {
-//        insertClassificationBtn(tr("Others"));
-//        insertAppList(otherlist);
-//    }
-//    m_appListView->updateData(m_data);
 }
 
 /**
@@ -336,19 +261,19 @@ void FunctionWidget::animationFinishedSLot()
 {
     if(m_widgetState==1)
     {
-//        m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
         m_appListView->setVisible(false);
         m_functionBtnWid->setVisible(true);
         m_enterAnimation->start();
         m_widgetState=-1;
+        m_functionBtnWid->show();
     }
     if(m_widgetState==0)
     {
-//        m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         m_functionBtnWid->setVisible(false);
         m_appListView->setVisible(true);
         m_enterAnimation->start();
         m_widgetState=-1;
+        m_appListView->show();
     }
 }
 
@@ -356,8 +281,8 @@ void FunctionWidget::widgetMakeZero()
 {
     m_functionBtnWid->setVisible(false);
     m_appListView->setVisible(true);
-//    m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView->show();
     m_appListView->verticalScrollBar()->setValue(0);
 }
 
@@ -367,4 +292,11 @@ void FunctionWidget::moveScrollBar(int type)
         m_appListView->verticalScrollBar()->setSliderPosition(m_appListView->verticalScrollBar()->sliderPosition()-100);
     else
         m_appListView->verticalScrollBar()->setSliderPosition(m_appListView->verticalScrollBar()->sliderPosition()+100);
+}
+
+void FunctionWidget::repaintWidget()
+{
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
+    m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView->show();
 }

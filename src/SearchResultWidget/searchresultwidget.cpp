@@ -38,13 +38,12 @@ void SearchResultWidget::initUi()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(320,535);
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
 
-    QHBoxLayout* mainLayout=new QHBoxLayout;
-    mainLayout->setContentsMargins(2,0,2,0);
     m_listView=new ListView(this,this->width()-4,this->height(),3);
-    mainLayout->addWidget(m_listView);
-    this->setLayout(mainLayout);
+    m_listView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_listView->show();
+
     m_data.clear();
     m_listView->addData(m_data);
     m_ukuiMenuInterface=new UkuiMenuInterface;
@@ -79,4 +78,11 @@ void SearchResultWidget::moveScrollBar(int type)
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-100);
     else
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+100);
+}
+
+void SearchResultWidget::repaintWidget()
+{
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
+    m_listView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_listView->show();
 }

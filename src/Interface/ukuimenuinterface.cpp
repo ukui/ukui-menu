@@ -182,6 +182,8 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/display-im6.desktop");
     filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
     filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
+    filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
+    filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
 
     return filePathList;
 }

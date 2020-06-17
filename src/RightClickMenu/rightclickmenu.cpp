@@ -31,10 +31,10 @@ RightClickMenu::RightClickMenu(QWidget *parent, int module):
     m_cmdProc=new QProcess(this);
     connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
 
-//    sprintf(m_style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
-//            QMenu::item{width:246px;height:36px;}\
-//            QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
-//            RightClickMenuBorder ,RightClickMenuBackground,RightClickMenuSeparator);
+    sprintf(m_style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
+            QMenu::item:selected{background-color:%s;border-radius:6px;}\
+            QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
+            RightClickMenuBorder ,RightClickMenuBackground,RightClickMenuSelected,RightClickMenuSeparator);
 
     switch (module) {
     case 0:
@@ -135,6 +135,7 @@ void RightClickMenu::addShutdownAction()
     connect(m_shutDownAction,&QWidgetAction::triggered,this,&RightClickMenu::shutdownActionTriggerSlot);
 
     m_shutDownMenu->setAttribute(Qt::WA_TranslucentBackground);
+    m_shutDownMenu->setStyleSheet(m_style);
 }
 
 //其它按钮右键菜单
@@ -158,6 +159,7 @@ void RightClickMenu::addOtherAction()
 
     m_otherMenu->addAction(m_otherListAction);
     m_otherMenu->setAttribute(Qt::WA_TranslucentBackground);
+    m_otherMenu->setStyleSheet(m_style);
 }
 
 void RightClickMenu::initWidgetAction(QAction *action, QString iconstr, QString textstr, int type)
@@ -167,8 +169,11 @@ void RightClickMenu::initWidgetAction(QAction *action, QString iconstr, QString 
 
     if(type==0)
     {
-        pixmap=loadSvg(iconstr,16*ratio);
-        pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+        if(!iconstr.isEmpty())
+        {
+            pixmap=loadSvg(iconstr,16*ratio);
+            pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+        }
     }
     else
     {
@@ -177,7 +182,8 @@ void RightClickMenu::initWidgetAction(QAction *action, QString iconstr, QString 
         pixmap=drawSymbolicColoredPixmap(pixmap_1);
     }
 
-    action->setIcon(QIcon(pixmap));
+    if(!pixmap.isNull())
+        action->setIcon(QIcon(pixmap));
     action->setText(textstr);
 }
 

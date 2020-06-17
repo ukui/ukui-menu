@@ -31,6 +31,7 @@
 #include <QSvgRenderer>
 #include <QHeaderView>
 #include <gio/gdesktopappinfo.h>
+#include <QSpacerItem>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/fulllistview.h"
@@ -67,6 +68,7 @@ private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     FullListView* m_listView=nullptr;
     QStringList m_data;
+    QSpacerItem *m_spaceItem=nullptr;
 
 protected:
     /**

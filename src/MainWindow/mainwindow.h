@@ -79,6 +79,10 @@ protected:
      * @brief The query box responds to keyboard events
      */
     void keyPressEvent(QKeyEvent* e);
+    /**
+     * @brief Repaint window
+     */
+    void repaintWidget();
 
 public Q_SLOTS:
     /**

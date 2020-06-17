@@ -133,12 +133,33 @@ void ListView::rightClickedSlot()
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QStringList strlist=var.value<QStringList>();
-        int ret=menu->showAppBtnMenu(strlist.at(0));
-        if(module>0)
+        if(strlist.at(1).toInt()==1)
         {
-            if(strlist.at(1).toInt()==1)
+            int ret=menu->showAppBtnMenu(strlist.at(0));
+            if(module>0)
             {
+                if(strlist.at(1).toInt()==1)
+                {
+                    switch (ret) {
+                    case 6:
+                        Q_EMIT sendHideMainWindowSignal();
+                        break;
+                    case 7:
+                        Q_EMIT sendHideMainWindowSignal();
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+            else{
                 switch (ret) {
+                case 1:
+                    Q_EMIT sendUpdateAppListSignal();
+                    break;
+                case 2:
+                    Q_EMIT sendUpdateAppListSignal();
+                    break;
                 case 6:
                     Q_EMIT sendHideMainWindowSignal();
                     break;
@@ -149,27 +170,9 @@ void ListView::rightClickedSlot()
                     break;
                 }
             }
-        }
-        else{
-            switch (ret) {
-            case 1:
-                Q_EMIT sendUpdateAppListSignal();
-                break;
-            case 2:
-                Q_EMIT sendUpdateAppListSignal();
-                break;
-            case 6:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            case 7:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            default:
-                break;
-            }
-        }
 
-        this->selectionModel()->clear();
+            this->selectionModel()->clear();
+        }
     }
 }
 

@@ -49,7 +49,7 @@ void LetterWidget::initUi()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(320,535);
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
     initAppListWidget();
@@ -57,7 +57,6 @@ void LetterWidget::initUi()
     m_letterBtnWid=new LetterButtonWidget(this);
     connect(this,&LetterWidget::sendLetterBtnList,m_letterBtnWid,&LetterButtonWidget::recvLetterBtnList);
     connect(m_letterBtnWid, &LetterButtonWidget::sendLetterBtnSignal,this,&LetterWidget::recvLetterBtnSlot);
-    m_letterBtnWid->setGeometry(QRect((this->width()-4)/2,(this->height())/2,0,0));
 
     m_enterAnimation=new QPropertyAnimation;
     m_enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
@@ -74,6 +73,7 @@ void LetterWidget::initAppListWidget()
 {
     m_appListView=new ListView(this,this->width()-4,this->height(),1);
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView->show();
     fillAppListView();
     connect(m_appListView,&ListView::sendItemClickedSignal,this,&LetterWidget::recvItemClickedSlot);
     connect(m_appListView,&ListView::sendHideMainWindowSignal,this,&LetterWidget::sendHideMainWindowSignal);
@@ -178,7 +178,7 @@ void LetterWidget::appClassificationBtnClickedSlot()
     m_leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
     m_leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
     m_enterAnimation->setStartValue(QRect(-40,-40,this->width()+80,this->height()+80));
-    m_enterAnimation->setEndValue(QRect(42.5,84.5,235,366));
+    m_enterAnimation->setEndValue(QRect((this->width()-235)/2,(this->height()-366)/2,235,366));
     m_leaveAnimation->setDuration(10);
     m_enterAnimation->setDuration(80);
 
@@ -204,7 +204,7 @@ void LetterWidget::recvLetterBtnSlot(QString btnname)
         m_appListView->verticalScrollBar()->setValue(row);
     }
 
-    m_leaveAnimation->setStartValue(QRect(42.5,84.5,235,366));
+    m_leaveAnimation->setStartValue(QRect((this->width()-235)/2,(this->height()-366)/2,235,366));
     m_leaveAnimation->setEndValue(QRect(-40,-40,this->width()+80,this->height()+80));
     m_enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
     m_enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
@@ -221,19 +221,19 @@ void LetterWidget::animationFinishedSLot()
 {
     if(m_widgetState==1)
     {
-//        m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
         m_appListView->setVisible(false);
         m_letterBtnWid->setVisible(true);
         m_enterAnimation->start();
         m_widgetState=-1;
+        m_letterBtnWid->show();
     }
     if(m_widgetState==0)
     {
-//        m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         m_letterBtnWid->setVisible(false);
         m_appListView->setVisible(true);
         m_enterAnimation->start();
         m_widgetState=-1;
+        m_appListView->show();
     }
 }
 
@@ -241,8 +241,8 @@ void LetterWidget::widgetMakeZero()
 {
     m_letterBtnWid->setVisible(false);
     m_appListView->setVisible(true);
-//    m_appListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView->show();
     m_appListView->verticalScrollBar()->setValue(0);
 }
 
@@ -252,4 +252,11 @@ void LetterWidget::moveScrollBar(int type)
         m_appListView->verticalScrollBar()->setSliderPosition(m_appListView->verticalScrollBar()->sliderPosition()-100);
     else
         m_appListView->verticalScrollBar()->setSliderPosition(m_appListView->verticalScrollBar()->sliderPosition()+100);
+}
+
+void LetterWidget::repaintWidget()
+{
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
+    m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView->show();
 }

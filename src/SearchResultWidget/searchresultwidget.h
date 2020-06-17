@@ -51,6 +51,10 @@ public:
      *  1: moving down
      */
     void moveScrollBar(int type);
+    /**
+     * @brief Repaint window
+     */
+    void repaintWidget();
 
 private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;

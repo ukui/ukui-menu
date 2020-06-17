@@ -24,6 +24,19 @@ Style::Style()
 
 }
 
+//默认窗口
+int Style::minw=0;
+int Style::minh=0;
+int Style::defaultMainViewWidWidth=0;
+int Style::defaultTopWidHeight=0;
+int Style::defaultQueryLineEditWidth=0;
+int Style::defaultQueryLineEditHeight=0;
+int Style::defaultQueryLineEditIconSize=0;
+int Style::defaultContentWidHeight=0;
+int Style::defaultSideBarWidWidth=0;
+/**
+  * 全屏窗口
+  */
 //主窗口
 int Style::widthavailable=0;
 int Style::heightavailable=0;
@@ -123,6 +136,30 @@ void Style::initWidStyle()
         len=0;
     else
         len=10;
+
+    if(QApplication::primaryScreen()->geometry().width()==800 &&
+            QApplication::primaryScreen()->geometry().height()==600)
+    {
+        minw=320;
+        minh=500;
+        defaultMainViewWidWidth=264;
+        defaultTopWidHeight=54;
+        defaultQueryLineEditWidth=245;
+        defaultQueryLineEditHeight=30;
+        defaultContentWidHeight=446;
+        defaultSideBarWidWidth=55;
+    }
+    else
+    {
+        minw=376;
+        minh=590;
+        defaultMainViewWidWidth=320;
+        defaultTopWidHeight=54;
+        defaultQueryLineEditWidth=288;
+        defaultQueryLineEditHeight=30;
+        defaultContentWidHeight=536;
+        defaultSideBarWidWidth=55;
+    }
 
     if(widthavailable>=2000 && widthavailable<=4000)
     {
@@ -401,7 +438,7 @@ void Style::initWidStyle()
         SideBarSpaceIconText=10;
         SideBarSpaceBetweenItem=16;
     }
-    else {
+    else if (widthavailable>800 && widthavailable<1152){
         MainViewWidWidth=widthavailable-round((widthavailable-572)/2);
         TopWidgetHeight=round(107*0.78);
         QueryLineEditWidth=350;
@@ -440,6 +477,52 @@ void Style::initWidStyle()
         MinMaxBtnWidth=49;
         MinMaxIconSize=19;
         SideBarBtnWidth=110+2*len;
+        SideBarBtnHeight=43;
+        SideBarFontSize=fontSize;
+        SideBarIconSize=19;
+        SideBarSpaceIconLeft=14;
+        SideBarSpaceIconText=10;
+        SideBarSpaceBetweenItem=16;
+    }
+    else{
+        MainViewWidWidth=widthavailable-round((widthavailable-560)/2);
+        TopWidgetHeight=round(107*0.78);
+        QueryLineEditWidth=350;
+        QueryLineEditHeight=30;
+        QueryLineEditFontSize=fontSize;
+        QueryLineEditIconSize=14;
+        LeftWidWidth=round((widthavailable-560)/2);
+        LeftWidHeight=heightavailable-TopWidgetHeight;
+        LeftMargin=10;
+        LeftBtnWidth=100+5*len;
+        LeftBtnHeight=43;
+        LeftLetterBtnHeight=20;
+        RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
+        LeftFontSize=fontSize;
+        LeftLetterFontSize=11;
+        LeftIconSize=19;
+        LeftSpaceIconLeft=15;
+        LeftSpaceIconText=14;
+        LeftSpaceBetweenItem=10;
+        AppListWidWidth=560;
+        AppListWidHeight=heightavailable-TopWidgetHeight;
+        AppListFontSize=fontSize;
+        AppListIconSize=64;
+        AppListItemSizeWidth=112;
+        AppListGridSizeWidth=138;
+        AppLeftSpace=25;
+        AppTopSpace=10;
+        AppSpaceBetweenIconText=14;
+//        AppBottomSpace=static_cast<int>(round(27*0.52));
+        SliderSize=8;
+
+        SideBarWidWidth=round((widthavailable-560)/2);
+        SideBarMargin=10;
+        MinMaxWidWidth=110;
+        MinMaxWidHeight=TopWidgetHeight;
+        MinMaxBtnWidth=49;
+        MinMaxIconSize=19;
+        SideBarBtnWidth=110;
         SideBarBtnHeight=43;
         SideBarFontSize=fontSize;
         SideBarIconSize=19;

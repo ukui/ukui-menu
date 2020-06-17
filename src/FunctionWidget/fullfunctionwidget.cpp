@@ -499,6 +499,18 @@ void FullFunctionWidget::enterAnimation()
                                   height));
     m_animation->setEasingCurve(QEasingCurve::InQuart);
     m_animation->start();
+    m_iconListScrollArea->show();
+}
+
+void FullFunctionWidget::setFunctionBtnGeometry()
+{
+    int height=m_classificationList.size()*Style::LeftBtnHeight+(m_classificationList.size()-1)*Style::LeftSpaceBetweenItem;
+    m_iconListScrollArea->setGeometry(QRect(Style::LeftMargin,
+                                            (m_iconListWid->height()-height)/2,
+                                            Style::LeftBtnWidth,
+                                            height));
+    m_iconListScrollArea->show();
+
 }
 
 void FullFunctionWidget::repaintWidget()

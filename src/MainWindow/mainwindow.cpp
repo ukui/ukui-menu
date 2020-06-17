@@ -54,7 +54,7 @@ void MainWindow::initUi()
     this->setFocusPolicy(Qt::StrongFocus);
 
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-    this->setMinimumSize(376,590);
+    this->setMinimumSize(Style::minw,Style::minh);
     this->setContentsMargins(0,0,0,0);
 
     m_frame=new QFrame(this);
@@ -110,6 +110,14 @@ void MainWindow::initUi()
             this,SLOT(XkbEventsRelease(QString)));
     connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
             this,SLOT(XkbEventsPress(QString)));
+
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        connect(gsetting,&QGSettings::changed,
+                this,&MainWindow::panelChangedSlot);
+    }
+
 
 //    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
 //                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
@@ -219,28 +227,29 @@ void MainWindow::showFullScreenWidget()
         position=0;
         panelSize=46;
     }
+
     int x=QApplication::primaryScreen()->geometry().x();
     int y=QApplication::primaryScreen()->geometry().y();
     QRect startRect;
     QRect endRect;
     if(position==0)
     {
-        startRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,376,590);
+        startRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,Style::minw,Style::minh);
         endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==1)
     {
-        startRect.setRect(x,y+panelSize,376,590);
+        startRect.setRect(x,y+panelSize,Style::minw,Style::minh);
         endRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==2)
     {
-        startRect.setRect(x+panelSize,y,376,590);
+        startRect.setRect(x+panelSize,y,Style::minw,Style::minh);
         endRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
     else
     {
-        startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,376,590);
+        startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh);
         endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
 
@@ -290,22 +299,22 @@ void MainWindow::showDefaultWidget()
     QRect endRect;
     if(position==0)
     {
-        endRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,376,590);
+        endRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,Style::minw,Style::minh);
         startRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==1)
     {
-        endRect.setRect(x,y+panelSize,376,590);
+        endRect.setRect(x,y+panelSize,Style::minw,Style::minh);
         startRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==2)
     {
-        endRect.setRect(x+panelSize,y,376,590);
+        endRect.setRect(x+panelSize,y,Style::minw,Style::minh);
         startRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
     else
     {
-        endRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,376,590);
+        endRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh);
         startRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
 
@@ -365,7 +374,7 @@ bool MainWindow::event ( QEvent * event )
         {
             this->hide();
             m_mainViewWid->widgetMakeZero();
-            m_sideBarWid->widgetMakeZero();
+//            m_sideBarWid->widgetMakeZero();
         }
    }
    return QWidget::event(event);
@@ -410,7 +419,7 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
         {
             this->hide();
             m_mainViewWid->widgetMakeZero();
-            m_sideBarWid->widgetMakeZero();
+//            m_sideBarWid->widgetMakeZero();
         }
         else{
             this->loadMainWindow();
@@ -424,7 +433,7 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
     {
         this->hide();
         m_mainViewWid->widgetMakeZero();
-        m_sideBarWid->widgetMakeZero();
+//        m_sideBarWid->widgetMakeZero();
     }
 }
 
@@ -434,11 +443,11 @@ void MainWindow::recvStartMenuSlot()
     {
         this->hide();
         m_mainViewWid->widgetMakeZero();
-        m_sideBarWid->widgetMakeZero();
+//        m_sideBarWid->widgetMakeZero();
     }
     else{
         m_mainViewWid->widgetMakeZero();
-        m_sideBarWid->widgetMakeZero();
+//        m_sideBarWid->widgetMakeZero();
         this->loadMainWindow();
         this->show();
         this->raise();
@@ -452,8 +461,8 @@ void MainWindow::recvStartMenuSlot()
 void MainWindow::recvHideMainWindowSlot()
 {
     this->hide();
-    m_mainViewWid->widgetMakeZero();
-    m_sideBarWid->widgetMakeZero();
+//    m_mainViewWid->widgetMakeZero();
+//    m_sideBarWid->widgetMakeZero();
 }
 
 void MainWindow::loadMainWindow()
@@ -492,14 +501,160 @@ void MainWindow::loadMainWindow()
     }
     int x=QApplication::primaryScreen()->geometry().x();
     int y=QApplication::primaryScreen()->geometry().y();
-    //默认开启默认态
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.desktop").toLocal8Bit()))
+    if(m_isFullScreen)
     {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
-        bool ret=false;
-        if(gsetting->keys().contains(QString("menufullScreen")))
-            ret=gsetting->get("menufull-screen").toBool();
-        if(ret)
+        if(position==0)
+            this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+        else if(position==1)
+            this->setGeometry(QRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+        else if(position==2)
+            this->setGeometry(QRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+        else
+            this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+        m_sideBarWid->loadMaxSidebar();
+        m_sideBarWid->setSideBarBtnGeometry();
+        m_mainViewWid->loadMaxMainView();
+        QPainterPath path;
+        path.addRect(this->rect());
+        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+    }
+    else
+    {
+        if(position==0)
+            this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,
+                                      Style::minw,Style::minh));
+        else if(position==1)
+            this->setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
+        else if(position==2)
+            this->setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
+        else
+            this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
+                                      Style::minw,Style::minh));
+
+        m_sideBarWid->loadMinSidebar();
+        m_mainViewWid->loadMinMainView();
+    }
+    setFrameStyle();
+
+    //默认开启默认态
+//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.desktop").toLocal8Bit()))
+//    {
+//        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
+//        bool ret=false;
+//        if(gsetting->keys().contains(QString("menufullScreen")))
+//            ret=gsetting->get("menufull-screen").toBool();
+//        if(ret)
+//        {
+//            if(position==0)
+//                this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+//            else if(position==1)
+//                this->setGeometry(QRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+//            else if(position==2)
+//                this->setGeometry(QRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+//            else
+//                this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+//            this->centralWidget()->layout()->removeWidget(m_line);
+//            m_line->setParent(nullptr);
+//            m_sideBarWid->loadMaxSidebar();
+//            m_mainViewWid->loadMaxMainView();
+//            m_sideBarWid->enterAnimation();
+//            QPainterPath path;
+//            path.addRect(this->rect());
+//            setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+//            m_isFullScreen=true;
+//        }
+//        else
+//        {
+//            if(position==0)
+//                this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,
+//                                          Style::minw,Style::minh));
+//            else if(position==1)
+//                this->setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
+//            else if(position==2)
+//                this->setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
+//            else
+//                this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
+//                                          Style::minw,Style::minh));
+//            QHBoxLayout* mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
+//            mainLayout->insertWidget(1,m_line);
+//            m_sideBarWid->loadMinSidebar();
+//            m_mainViewWid->loadMinMainView();
+//            m_isFullScreen=false;
+//        }
+//    }
+//    else
+//    {
+//        if(position==0)
+//            this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,
+//                                      Style::minw,Style::minh));
+//        else if(position==1)
+//            this->setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
+//        else if(position==2)
+//            this->setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
+//        else
+//            this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
+//                                      Style::minw,Style::minh));
+
+//        QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
+//        mainLayout->insertWidget(1,m_line);
+//        m_sideBarWid->loadMinSidebar();
+//        m_mainViewWid->loadMinMainView();
+//        m_isFullScreen=false;
+//    }
+
+//    setFrameStyle();
+}
+
+void MainWindow::monitorResolutionChange(QRect rect)
+{
+    Q_UNUSED(rect);
+    repaintWidget();
+}
+
+void MainWindow::primaryScreenChangedSlot(QScreen *screen)
+{
+    Q_UNUSED(screen);
+    repaintWidget();
+
+}
+
+void MainWindow::panelChangedSlot(QString key)
+{
+    Q_UNUSED(key);
+    repaintWidget();
+}
+
+void MainWindow::repaintWidget()
+{
+    Style::initWidStyle();
+    this->setMinimumSize(Style::minw,Style::minh);
+    m_line->setFixedSize(1,this->height());
+    m_mainViewWid->repaintWidget();
+
+    if(QApplication::activeWindow() == this)
+    {
+        int position=0;
+        int panelSize=0;
+        if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
+        {
+            QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+            if(gsetting->keys().contains(QString("panelposition")))
+                position=gsetting->get("panelposition").toInt();
+            else
+                position=0;
+            if(gsetting->keys().contains(QString("panelsize")))
+                panelSize=gsetting->get("panelsize").toInt();
+            else
+                panelSize=46;
+        }
+        else
+        {
+            position=0;
+            panelSize=46;
+        }
+        int x=QApplication::primaryScreen()->geometry().x();
+        int y=QApplication::primaryScreen()->geometry().y();
+        if(m_isFullScreen)
         {
             if(position==0)
                 this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
@@ -509,77 +664,33 @@ void MainWindow::loadMainWindow()
                 this->setGeometry(QRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
             else
                 this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
-            this->centralWidget()->layout()->removeWidget(m_line);
-            m_line->setParent(nullptr);
             m_sideBarWid->loadMaxSidebar();
-            m_mainViewWid->loadMaxMainView();
-            m_sideBarWid->enterAnimation();
+            m_sideBarWid->setSideBarBtnGeometry();
+            m_mainViewWid->resizeControl();
             QPainterPath path;
             path.addRect(this->rect());
             setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-            m_isFullScreen=true;
         }
         else
         {
             if(position==0)
-                this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,
-                                          376,590));
+                this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,
+                                          Style::minw,Style::minh));
             else if(position==1)
-                this->setGeometry(QRect(x,y+panelSize,376,590));
+                this->setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
             else if(position==2)
-                this->setGeometry(QRect(x+panelSize,y,376,590));
+                this->setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
             else
-                this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
-                                          376,590));
-            QHBoxLayout* mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
-            mainLayout->insertWidget(1,m_line);
+                this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
+                                          Style::minw,Style::minh));
+
+//            QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
+//            mainLayout->insertWidget(1,m_line);
             m_sideBarWid->loadMinSidebar();
-            m_mainViewWid->loadMinMainView();
-            m_isFullScreen=false;
+            m_mainViewWid->resizeControl();
         }
+        setFrameStyle();
     }
-    else
-    {
-        if(position==0)
-            this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,
-                                      376,590));
-        else if(position==1)
-            this->setGeometry(QRect(x,y+panelSize,376,590));
-        else if(position==2)
-            this->setGeometry(QRect(x+panelSize,y,376,590));
-        else
-            this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,
-                                      376,590));
-
-        QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
-        mainLayout->insertWidget(1,m_line);
-        m_sideBarWid->loadMinSidebar();
-        m_mainViewWid->loadMinMainView();
-        m_isFullScreen=false;
-    }
-
-    setFrameStyle();
-}
-
-void MainWindow::monitorResolutionChange(QRect rect)
-{
-    Q_UNUSED(rect);
-    Style::initWidStyle();
-    m_mainViewWid->repaintWidget();
-}
-
-void MainWindow::primaryScreenChangedSlot(QScreen *screen)
-{
-    Q_UNUSED(screen);
-    Style::initWidStyle();
-    m_mainViewWid->repaintWidget();
-}
-
-void MainWindow::panelChangedSlot(QString key)
-{
-    Q_UNUSED(key);
-    Style::initWidStyle();
-    m_mainViewWid->repaintWidget();
 }
 
 void MainWindow::setFrameStyle()

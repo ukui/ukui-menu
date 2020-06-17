@@ -41,9 +41,12 @@ void FullCommonUseWidget::initUi()
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
 
-    QVBoxLayout* mainLayout=new QVBoxLayout;
-    mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
+    QHBoxLayout* mainLayout=new QHBoxLayout;
+//    mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
+    mainLayout->setContentsMargins(0,0,0,0);
     this->setLayout(mainLayout);
+    m_spaceItem=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
+    mainLayout->addItem(m_spaceItem);
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
@@ -54,7 +57,9 @@ void FullCommonUseWidget::initUi()
 void FullCommonUseWidget::initAppListWidget()
 {
     m_listView=new FullListView(this,0);
-    this->layout()->addWidget(m_listView);
+    m_listView->setFixedSize(this->width()-Style::LeftWidWidth,this->height());
+    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
+    mainLayout->insertWidget(1,m_listView);
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
@@ -100,6 +105,7 @@ void FullCommonUseWidget::repaintWidget()
                        Style::AppListWidHeight);
     this->layout()->removeWidget(m_listView);
     m_listView->setParent(nullptr);
+    delete m_listView;
     initAppListWidget();
     fillAppList();
 }

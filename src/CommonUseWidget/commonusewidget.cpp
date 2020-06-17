@@ -41,7 +41,7 @@ void CommonUseWidget::initUi()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setFixedSize(320,535);
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
@@ -56,6 +56,7 @@ void CommonUseWidget::initAppListWidget()
 {
     m_listView=new ListView(this,this->width()-4,this->height(),0);
     m_listView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_listView->show();
     connect(m_listView,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
     connect(m_listView,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);
     connect(m_listView,&ListView::sendHideMainWindowSignal,this,&CommonUseWidget::sendHideMainWindowSignal);
@@ -112,4 +113,11 @@ void CommonUseWidget::moveScrollBar(int type)
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-100);
     else
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+100);
+}
+
+void CommonUseWidget::repaintWidget()
+{
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
+    m_listView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_listView->show();
 }

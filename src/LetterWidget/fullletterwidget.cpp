@@ -380,6 +380,16 @@ void FullLetterWidget::enterAnimation()
                             (m_letterList.size()+1)*Style::LeftLetterBtnHeight));
     m_animation->setEasingCurve(QEasingCurve::InQuart);
     m_animation->start();
+    m_letterListScrollArea->show();
+}
+
+void FullLetterWidget::setLetterBtnGeometry()
+{
+    m_letterListScrollArea->setGeometry(QRect(Style::LeftMargin,
+                                              (m_letterListWid->height()-(m_letterList.size()+1)*Style::LeftLetterBtnHeight)/2,
+                                              Style::LeftLetterBtnHeight*2,
+                                        (m_letterList.size()+1)*Style::LeftLetterBtnHeight));
+    m_letterListScrollArea->show();
 }
 
 void FullLetterWidget::repaintWidget()

@@ -180,7 +180,6 @@ void SideBarWidget::resetSidebarBtnSlot()
 
     if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.desktop").toLocal8Bit()))
     {
-//        m_gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
         if(m_gsetting->keys().contains(QString("personalIconLocking")) && m_gsetting->get("personal-icon-locking").toBool())
             m_mainWidgetLayout->addWidget(m_buttonList.at(4));
         if(m_gsetting->keys().contains(QString("trashIconLocking")) && m_gsetting->get("trash-icon-locking").toBool())
@@ -189,23 +188,8 @@ void SideBarWidget::resetSidebarBtnSlot()
             m_mainWidgetLayout->addWidget(m_buttonList.at(6));
         if(m_gsetting->keys().contains(QString("settingsIconLocking")) && m_gsetting->get("settings-icon-locking").toBool())
             m_mainWidgetLayout->addWidget(m_buttonList.at(7));
-//        connect(m_gsetting,&QGSettings::changed,
-//                this,&SideBarWidget::resetSidebarBtnSlot);
     }
     m_mainWidgetLayout->addWidget(m_buttonList.at(8));
-
-//    if(!m_isFullScreen)
-//        Q_FOREACH(QAbstractButton* button,m_buttonList)
-//        {
-//            QPushButton* btn=qobject_cast<QPushButton*>(button);
-//            setMinSidebarBtn(btn);
-//        }
-//    else
-//        Q_FOREACH(QAbstractButton* button,m_buttonList)
-//        {
-//            QPushButton* btn=qobject_cast<QPushButton*>(button);
-//            setMinSidebarBtn(btn);
-//        }
 }
 
 /**
@@ -450,8 +434,9 @@ void SideBarWidget::loadMinSidebar()
     m_isFullScreen=false;
     setMaxBtn();
 
-    this->setFixedSize(55,590);
+    this->setFixedSize(Style::defaultSideBarWidWidth,Style::minh);
     m_mainWidget->setGeometry(QRect(0,0,this->width(),this->height()));
+    m_mainWidget->show();
     m_minMaxWidget->setFixedSize(37,70);
     m_minMaxLayout->setContentsMargins(0,0,0,0);
 
@@ -618,9 +603,15 @@ void SideBarWidget::enterAnimation()
     m_animation->setEndValue(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
                                   Style::SideBarBtnWidth,this->height()));
     m_animation->setEasingCurve(QEasingCurve::InQuart);
-
     m_animation->start();
+    m_mainWidget->show();
+}
 
+void SideBarWidget::setSideBarBtnGeometry()
+{
+    m_mainWidget->setGeometry(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
+                                    Style::SideBarBtnWidth,this->height()));
+    m_mainWidget->show();
 }
 
 void SideBarWidget::widgetMakeZero()

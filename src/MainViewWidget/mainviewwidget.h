@@ -78,6 +78,10 @@ public:
      *  1: moving down
      */
     void moveScrollBar(int type);
+    /**
+     * @brief Resize the control
+     */
+    void resizeControl();
 
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;

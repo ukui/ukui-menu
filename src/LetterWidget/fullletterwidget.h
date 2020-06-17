@@ -75,6 +75,10 @@ public:
      *  1: moving down
      */
     void moveScrollBar(int type);
+    /**
+     * @brief Adjust the position of the alphabetical classification button
+     */
+    void setLetterBtnGeometry();
 
 private:
     /*Application list interface*/

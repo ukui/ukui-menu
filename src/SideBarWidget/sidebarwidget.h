@@ -59,6 +59,10 @@ public:
      * @brief Sidebar animation
      */
     void enterAnimation();
+    /**
+     * @brief Adjust the position of the sidebar buttons
+     */
+    void setSideBarBtnGeometry();
 
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;

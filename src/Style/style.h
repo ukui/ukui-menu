@@ -36,7 +36,7 @@
 #define UserIconOpacity 0.20
 #define RightClickMenuBackground "rgba(12, 12, 13, 0.7)"//右键菜单背景
 #define RightClickMenuSeparator "rgba(255, 255, 255, 0.08)"//右键菜单分割线
-#define RightClickMenuHover "rgba(255, 255, 255, 0.12)"//右键菜单悬浮
+#define RightClickMenuSelected "rgba(61, 107, 229, 1)"//右键菜单悬浮
 #define RightClickMenuBorder "rgba(255, 255, 255, 0.2)"//右键菜单边框
 #define RightClickMenuFont "rgba(255, 255, 255, 0.91)"
 #define RightClickMenuOpacity 0.95
@@ -85,7 +85,20 @@ class Style
 public:
     Style();
     static void initWidStyle();
+    //默认窗口
+    static int minw;
+    static int minh;
+    static int defaultMainViewWidWidth;
+    static int defaultTopWidHeight;
+    static int defaultQueryLineEditWidth;
+    static int defaultQueryLineEditHeight;
+    static int defaultQueryLineEditIconSize;
+    static int defaultContentWidHeight;
+    static int defaultSideBarWidWidth;
 
+    /**
+      * 全屏
+      */
     //主窗口
     static int widthavailable;
     static int heightavailable;

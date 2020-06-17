@@ -72,13 +72,13 @@ int main(int argc, char *argv[])
     int y=QApplication::primaryScreen()->geometry().y();
 
     if(position==0)
-        w.setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-590,376,590));
+        w.setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,Style::minw,Style::minh));
     else if(position==1)
-        w.setGeometry(QRect(x,y+panelSize,376,590));
+        w.setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
     else if(position==2)
-        w.setGeometry(QRect(x+panelSize,y,376,590));
+        w.setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
     else
-        w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-376,y,376,590));
+        w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh));
     app.setActivationWindow(&w);
 
 //    QRectF rect;
