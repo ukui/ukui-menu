@@ -53,8 +53,8 @@ void SideBarWidget::initUi()
     loadMinSidebar();
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
-    m_shutDownMenu=new RightClickMenu(1);
-    m_otherMenu=new RightClickMenu(2);
+    m_shutDownMenu=new RightClickMenu;
+    m_otherMenu=new RightClickMenu;
 }
 
 /**
@@ -62,7 +62,8 @@ void SideBarWidget::initUi()
  */
 void SideBarWidget::addSidebarBtn()
 {
-    m_mainWidget=new QWidget(this);
+    m_mainWidget=new QWidget;
+    m_mainWidget->setParent(this);
     m_mainWidgetLayout=new QVBoxLayout;
     m_mainWidgetLayout->setContentsMargins(0,0,0,0);
     m_mainWidgetLayout->setSpacing(10);
@@ -70,10 +71,10 @@ void SideBarWidget::addSidebarBtn()
     m_mainWidget->setStyleSheet("background:transparent;");
 
     //放大缩小按钮界面
-    m_minMaxWidget=new QWidget(m_mainWidget);
+    m_minMaxWidget=new QWidget;
     m_minMaxWidget->setStyleSheet("QWidget{background:transparent;border:0px;}");
-    m_minMaxLayout=new QHBoxLayout(m_minMaxWidget);
-    m_minMaxBtn=new QToolButton(m_minMaxWidget);
+    m_minMaxLayout=new QHBoxLayout;
+    m_minMaxBtn=new QToolButton;
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
 //    m_minMaxBtn->setShortcut(Qt::Key_Enter);
     m_minMaxBtn->setShortcut(Qt::Key_Return);

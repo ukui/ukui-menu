@@ -49,7 +49,7 @@ public:
      *  1: power
      *  2: others
      */
-    RightClickMenu(int module);
+    explicit RightClickMenu(QWidget *parent = nullptr);
     virtual ~RightClickMenu();
     /**
      * @brief Displays the application right-click menu
@@ -78,56 +78,16 @@ private:
 
     QProcess *m_cmdProc=nullptr;
 
-    QMenu *m_appBtnMenu=nullptr;
-    QAction *m_fixToAllAction=nullptr;
-    QAction *m_unfixedFromAllAction=nullptr;
-    QAction *m_fixToTaskBarAction=nullptr;
-    QAction *m_unfixedFromTaskBarAction=nullptr;
-    QAction *m_addToDesktopAction=nullptr;
-    QAction *m_uninstallAction=nullptr;
-    QAction *m_attributeAction=nullptr;
-
-    QMenu *m_shutDownMenu=nullptr;
-    QAction *m_lockScreenAction=nullptr;
-    QAction *m_switchUserAction=nullptr;
-    QAction *m_logOutAction=nullptr;
-    QAction *m_rebootAction=nullptr;
-    QAction *m_shutDownAction=nullptr;
-
-    QMenu *m_otherMenu=nullptr;
-    QAction *m_otherFixToTaskBarAction=nullptr;
-    QAction *m_otherUnfixedFromTaskBarAction=nullptr;
-    QAction *m_otherListAction=nullptr;
-
-    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
-
 protected:
     /**
-     * @brief Add application right-click menu item
-     */
-    void addAppBtnAction();
-    /**
-     * @brief Initialize the application right-click menu item
-     */
-    void initAppBtnAction();
-    /**
-     * @brief Add power right-click menu item
-     */
-    void addShutdownAction();
-    /**
-     * @brief Add other application right-click menu item
-     */
-    void addOtherAction();
-    /**
-     * @brief Initialize widget action
-     * @param wid: Widget
-     * @param iconstr: Icon name
-     * @param textstr: Text
+     * @brief Get icon pixmap
+     * @param iconstr: Icon names
      * @param type: Icon type, Only the following parameters can be entered:
      *  0: Resource icon
      *  1: System icon
+     * @return
      */
-    void initWidgetAction(QAction* action, QString iconstr, QString textstr,int type);
+    QPixmap getIconPixmap(QString iconstr, int type);
     /**
      * @brief Process image color
      * @param source: QPixmap icon

@@ -20,13 +20,12 @@
 #include "src/UtilityFunction/utility.h"
 #include <QDebug>
 
-RightClickMenu::RightClickMenu(int module):
-    QWidget(nullptr)
+RightClickMenu::RightClickMenu(QWidget *parent):
+    QWidget(parent)
 {
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     m_setting=new QSettings(path,QSettings::IniFormat);
 
-    m_ukuiMenuInterface=new UkuiMenuInterface;
     m_cmdProc=new QProcess;
     connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
 
@@ -34,146 +33,24 @@ RightClickMenu::RightClickMenu(int module):
             QMenu::item:selected{background-color:%s;border-radius:6px;}\
             QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
             RightClickMenuBorder ,RightClickMenuBackground,RightClickMenuSelected,RightClickMenuSeparator);
-
-    switch (module) {
-    case 0:
-        addAppBtnAction();
-        break;
-    case 1:
-        addShutdownAction();
-        break;
-    case 2:
-        addOtherAction();
-        break;
-    default:
-        break;
-    }
 }
 
 RightClickMenu::~RightClickMenu()
 {
-    delete m_ukuiMenuInterface;
     delete m_cmdProc;
+    delete m_setting;
 
 }
 
-//普通应用按钮右键菜单
-void RightClickMenu::initAppBtnAction()
-{
-    //普通应用按钮右键菜单
-    m_appBtnMenu=new QMenu(this);
-    m_appBtnMenu->setLayoutDirection(Qt::LeftToRight);
-//    m_appBtnMenu->setFixedSize(250+2,36*4+5+12+2);
-    m_fixToAllAction=new QAction(m_appBtnMenu);
-    m_unfixedFromAllAction=new QWidgetAction(m_appBtnMenu);
-    m_fixToTaskBarAction=new QWidgetAction(m_appBtnMenu);
-    m_unfixedFromTaskBarAction=new QWidgetAction(m_appBtnMenu);
-    m_addToDesktopAction=new QWidgetAction(m_appBtnMenu);
-    m_uninstallAction=new QWidgetAction(m_appBtnMenu);
-    m_attributeAction=new QWidgetAction(m_appBtnMenu);
-
-    initWidgetAction(m_fixToAllAction,":/data/img/mainviewwidget/fixed.svg",tr("Pin to all"),0);
-    connect(m_fixToAllAction, &QWidgetAction::triggered,this,&RightClickMenu::fixToAllActionTriggerSlot);
-
-    initWidgetAction(m_unfixedFromAllAction,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from all"),0);
-    connect(m_unfixedFromAllAction, &QWidgetAction::triggered,this,&RightClickMenu::unfixedFromAllActionTriggerSlot);
-
-    initWidgetAction(m_fixToTaskBarAction,":/data/img/mainviewwidget/fixed.svg",tr("Pin to taskbar"),0);
-    connect(m_fixToTaskBarAction, &QWidgetAction::triggered,this,&RightClickMenu::fixToTaskbarActionTriggerSlot);
-
-    initWidgetAction(m_unfixedFromTaskBarAction,":/data/img/mainviewwidget/unfixed.svg",tr("Unpin from taskbar"),0);
-    connect(m_unfixedFromTaskBarAction, &QWidgetAction::triggered,this,&RightClickMenu::unfixedFromTaskbarActionTriggerSlot);
-
-    initWidgetAction(m_addToDesktopAction,"",tr("Add to desktop shortcuts"),0);
-    connect(m_addToDesktopAction, &QWidgetAction::triggered,this,&RightClickMenu::addToDesktopActionTriggerSlot);
-
-    initWidgetAction(m_uninstallAction,":/data/img/mainviewwidget/uninstall.svg",tr("Uninstall"),0);
-    connect(m_uninstallAction, &QWidgetAction::triggered,this,&RightClickMenu::uninstallActionTriggerSlot);
-}
-
-void RightClickMenu::addAppBtnAction()
-{
-    initAppBtnAction();
-    m_appBtnMenu->addAction(m_addToDesktopAction);
-    m_appBtnMenu->addSeparator();
-    m_appBtnMenu->addAction(m_uninstallAction);
-    m_appBtnMenu->setAttribute(Qt::WA_TranslucentBackground);
-}
-
-//关机按钮右键菜单
-void RightClickMenu::addShutdownAction()
-{
-    //关机按钮右键菜单
-    m_shutDownMenu=new QMenu(this);
-    m_shutDownMenu->setLayoutDirection(Qt::LeftToRight);
-//    m_shutDownMenu->setFixedSize(250+2,36*5+12+2);
-
-    m_lockScreenAction=new QAction(m_shutDownMenu);
-    m_switchUserAction=new QAction(m_shutDownMenu);
-    m_logOutAction=new QAction(m_shutDownMenu);
-    m_rebootAction=new QAction(m_shutDownMenu);
-    m_shutDownAction=new QAction(m_shutDownMenu);
-
-    initWidgetAction(m_lockScreenAction,"system-lock-screen-symbolic",tr("Lock Screen"),1);
-    m_shutDownMenu->addAction(m_lockScreenAction);
-    connect(m_lockScreenAction,&QWidgetAction::triggered,this,&RightClickMenu::lockScreenActionTriggerSlot);
-
-    initWidgetAction(m_switchUserAction,"stock-people-symbolic",tr("Switch User"),1);
-    m_shutDownMenu->addAction(m_switchUserAction);
-    connect(m_switchUserAction,&QWidgetAction::triggered,this,&RightClickMenu::switchUserActionTriggerSlot);
-
-    initWidgetAction(m_logOutAction,"system-logout-symbolic",tr("Log Out"),1);
-    m_shutDownMenu->addAction(m_logOutAction);
-    connect(m_logOutAction,&QWidgetAction::triggered,this,&RightClickMenu::logoutActionTriggerSlot);
-
-    initWidgetAction(m_rebootAction,"system-restart-symbolic",tr("Restart"),1);
-    m_shutDownMenu->addAction(m_rebootAction);
-    connect(m_rebootAction,&QWidgetAction::triggered,this,&RightClickMenu::rebootActionTriggerSlot);
-
-    initWidgetAction(m_shutDownAction,"exit-symbolic",tr("Power Off"),1);
-    m_shutDownMenu->addAction(m_shutDownAction);
-    connect(m_shutDownAction,&QWidgetAction::triggered,this,&RightClickMenu::shutdownActionTriggerSlot);
-
-    m_shutDownMenu->setAttribute(Qt::WA_TranslucentBackground);
-    m_shutDownMenu->setStyleSheet(m_style);
-}
-
-//其它按钮右键菜单
-void RightClickMenu::addOtherAction()
-{
-    m_otherMenu=new QMenu(this);
-    m_otherMenu->setLayoutDirection(Qt::LeftToRight);
-//    m_otherMenu->setFixedSize(250+2,36*2+12+2);
-    m_otherFixToTaskBarAction=new QAction(m_otherMenu);
-    m_otherUnfixedFromTaskBarAction=new QAction(m_otherMenu);
-    m_otherListAction=new QAction(m_otherMenu);
-
-    initWidgetAction(m_otherFixToTaskBarAction,":/data/img/sidebarwidget/fixed.svg",tr("Pin to taskbar"),0);
-    connect(m_otherFixToTaskBarAction,&QWidgetAction::triggered,this,&RightClickMenu::fixToTaskbarActionTriggerSlot);
-
-    initWidgetAction(m_otherUnfixedFromTaskBarAction,":/data/img/sidebarwidget/unfixed.svg",tr("Unpin from taskbar"),0);
-    connect(m_otherUnfixedFromTaskBarAction,&QWidgetAction::triggered,this,&RightClickMenu::unfixedFromTaskbarActionTriggerSlot);
-
-    initWidgetAction(m_otherListAction,":/data/img/sidebarwidget/setting.svg",tr("Personalize this list"),0);
-    connect(m_otherListAction,&QWidgetAction::triggered,this,&RightClickMenu::otherListActionTriggerSlot);
-
-    m_otherMenu->addAction(m_otherListAction);
-    m_otherMenu->setAttribute(Qt::WA_TranslucentBackground);
-    m_otherMenu->setStyleSheet(m_style);
-}
-
-void RightClickMenu::initWidgetAction(QAction *action, QString iconstr, QString textstr, int type)
+QPixmap RightClickMenu::getIconPixmap(QString iconstr, int type)
 {
     const auto ratio=devicePixelRatioF();
     QPixmap pixmap;
 
     if(type==0)
     {
-        if(!iconstr.isEmpty())
-        {
-            pixmap=loadSvg(iconstr,16*ratio);
-            pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-        }
+        pixmap=loadSvg(iconstr,16*ratio);
+        pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     }
     else
     {
@@ -181,10 +58,7 @@ void RightClickMenu::initWidgetAction(QAction *action, QString iconstr, QString 
         QPixmap pixmap_1=icon.pixmap(QSize(16*ratio,16*ratio));
         pixmap=drawSymbolicColoredPixmap(pixmap_1);
     }
-
-    if(!pixmap.isNull())
-        action->setIcon(QIcon(pixmap));
-    action->setText(textstr);
+    return pixmap;
 }
 
 QPixmap RightClickMenu::drawSymbolicColoredPixmap(const QPixmap &source)
@@ -369,19 +243,18 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
     m_actionNumber=0;
     this->m_desktopfp.clear();
     this->m_desktopfp=desktopfp;
-    m_appBtnMenu->removeAction(m_fixToAllAction);
-    m_appBtnMenu->removeAction(m_unfixedFromAllAction);
-    m_appBtnMenu->removeAction(m_fixToTaskBarAction);
-    m_appBtnMenu->removeAction(m_unfixedFromTaskBarAction);
+    QMenu menu;
+    //添加菜单项，指定图标、名称、响应函数
     m_setting->beginGroup("lockapplication");
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
     if(!m_setting->contains(desktopfn))
-        m_appBtnMenu->insertAction(m_addToDesktopAction,m_fixToAllAction);
+        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg",0)),tr("Pin to all"),
+                       this,SLOT(fixToAllActionTriggerSlot()));
     else
-        m_appBtnMenu->insertAction(m_addToDesktopAction,m_unfixedFromAllAction);
+        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/unfixed.svg",0)),tr("Unpin from all"),
+                       this,SLOT(unfixedFromAllActionTriggerSlot()));
     m_setting->endGroup();
-
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -389,19 +262,41 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
 
     QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
     if(!ret)
-        m_appBtnMenu->insertAction(m_addToDesktopAction,m_fixToTaskBarAction);
+        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg",0)),tr("Pin to taskbar"),
+                       this,SLOT(fixToTaskbarActionTriggerSlot()));
     else
-        m_appBtnMenu->insertAction(m_addToDesktopAction,m_unfixedFromTaskBarAction);
-    m_appBtnMenu->exec(QCursor::pos());
+        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/unfixed.svg",0)),tr("Unpin from taskbar"),
+                       this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
+
+    menu.addAction(tr("Add to desktop shortcuts"),
+                   this,SLOT(addToDesktopActionTriggerSlot()));
+    menu.addSeparator();
+    menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
+                   this,SLOT(uninstallActionTriggerSlot()));
+
+    menu.setAttribute(Qt::WA_TranslucentBackground);
+    menu.exec(QCursor::pos());
     return m_actionNumber;
 }
 
 int RightClickMenu::showShutdownMenu()
 {
     m_actionNumber=0;
-    m_shutDownMenu->exec(QCursor::pos());
+    QMenu menu;
+    menu.addAction(QIcon(getIconPixmap("system-lock-screen-symbolic",1)),tr("Lock Screen"),
+                   this,SLOT(lockScreenActionTriggerSlot()));
+    menu.addAction(QIcon(getIconPixmap("stock-people-symbolic",1)),tr("Switch User"),
+                   this,SLOT(switchUserActionTriggerSlot()));
+    menu.addAction(QIcon(getIconPixmap("system-logout-symbolic",1)),tr("Log Out"),
+                   this,SLOT(logoutActionTriggerSlot()));
+    menu.addAction(QIcon(getIconPixmap("system-restart-symbolic",1)),tr("Restart"),
+                   this,SLOT(rebootActionTriggerSlot()));
+    menu.addAction(QIcon(getIconPixmap("exit-symbolic",1)),tr("Power Off"),
+                   this,SLOT(shutdownActionTriggerSlot()));
+    menu.setAttribute(Qt::WA_TranslucentBackground);
+    menu.setStyleSheet(m_style);
+    menu.exec(QCursor::pos());
     return m_actionNumber;
-
 }
 
 int RightClickMenu::showOtherMenu(QString desktopfp)
@@ -409,8 +304,8 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
     m_actionNumber=0;
     this->m_desktopfp.clear();
     this->m_desktopfp=desktopfp;
-    m_otherMenu->removeAction(m_otherFixToTaskBarAction);
-    m_otherMenu->removeAction(m_otherUnfixedFromTaskBarAction);
+
+    QMenu menu;
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -418,9 +313,15 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
 
     QDBusReply<bool> ret=iface.call("CheckIfExist",this->m_desktopfp);
     if(!ret)
-        m_otherMenu->insertAction(m_otherListAction,m_otherFixToTaskBarAction);
+        menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/fixed.svg",0)),tr("Pin to taskbar"),
+                       this,SLOT(fixToTaskbarActionTriggerSlot()));
     else
-        m_otherMenu->insertAction(m_otherListAction,m_otherUnfixedFromTaskBarAction);
-    m_otherMenu->exec(QCursor::pos());
+        menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/unfixed.svg",0)),tr("Unpin from taskbar"),
+                       this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
+    menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/setting.svg",0)),tr("Personalize this list"),
+                   this,SLOT(otherListActionTriggerSlot()));
+    menu.setAttribute(Qt::WA_TranslucentBackground);
+    menu.setStyleSheet(m_style);
+    menu.exec(QCursor::pos());
     return m_actionNumber;
 }

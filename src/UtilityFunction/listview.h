@@ -45,7 +45,6 @@ protected:
     void initWidget();
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-//    void wheelEvent(QWheelEvent *e);
 
 private:
     QStandardItemModel* listmodel=nullptr;
@@ -59,14 +58,9 @@ private:
     QVector<QStringList> data;
     ItemDelegate* m_delegate=nullptr;
 
-//    QPropertyAnimation *m_scrollAnimation;
-    double m_speedTime = 2.0;
-
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
     void rightClickedSlot();//右键菜单
-//    void animationFinishSlot();//动画停止监控
-//    void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
 Q_SIGNALS:
     void sendItemClickedSignal(QStringList arg);//发送item点击信号
     void sendHideMainWindowSignal();

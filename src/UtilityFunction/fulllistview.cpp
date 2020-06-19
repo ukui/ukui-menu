@@ -27,17 +27,10 @@ FullListView::FullListView(QWidget *parent, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-    menu=new RightClickMenu(0);
+    menu=new RightClickMenu;
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
-
-//    m_scrollAnimation=new QPropertyAnimation(this->verticalScrollBar(), "value");
-//    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuint);
-//    m_scrollAnimation->setDuration(800);
-//    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullListView::animationValueChangedSlot);
-//    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullListView::animationFinishSlot);
-
 }
 
 FullListView::~FullListView()
@@ -180,35 +173,6 @@ void FullListView::leaveEvent(QEvent *e)
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
 }
-
-//void FullListView::animationValueChangedSlot(const QVariant &value)
-//{
-//    Q_UNUSED(value);
-//    if (this->verticalScrollBar()->value() == this->verticalScrollBar()->maximum() ||
-//        this->verticalScrollBar()->value() == this->verticalScrollBar()->minimum()) {
-//        blockSignals(false);
-//    } else {
-//        blockSignals(true);
-//    }
-//}
-
-//void FullListView::animationFinishSlot()
-//{
-//    blockSignals(false);
-////    this->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-
-//    QPoint pos = mapFromGlobal(QCursor::pos());
-//    Q_EMIT entered(indexAt(pos));
-//}
-
-//void FullListView::wheelEvent(QWheelEvent *e)
-//{
-//    int offset = -e->angleDelta().y();
-//    m_scrollAnimation->stop();
-//    m_scrollAnimation->setStartValue(verticalScrollBar()->value());
-//    m_scrollAnimation->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
-//    m_scrollAnimation->start();
-//}
 
 //void FullListView::mousePressEvent(QMouseEvent *event)
 //{

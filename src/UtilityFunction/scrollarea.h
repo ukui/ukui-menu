@@ -33,15 +33,10 @@ public:
 protected:
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-//    void wheelEvent(QWheelEvent *e);
 
 private:
-//    QPropertyAnimation *m_scrollAnimation;
     double m_speedTime = 3;
 
-private Q_SLOTS:
-//    void animationFinishSlot();//动画停止监控
-//    void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
 };
 
 #endif // SCROLLAREA_H

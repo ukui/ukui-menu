@@ -32,17 +32,21 @@ MainViewWidget::MainViewWidget(QWidget *parent) :
 
 MainViewWidget::~MainViewWidget()
 {
-    delete m_commonUseWid;
-    delete m_fullCommonUseWid;
-    delete m_letterWid;
-    delete m_fullLetterWid;
-    delete m_functionWid;
-    delete m_fullFunctionWid;
-    delete m_searchResultWid;
-    delete m_fullSearchResultWid;
-    delete m_searchAppThread;
+//    delete m_commonUseWid;
+//    delete m_fullCommonUseWid;
+//    delete m_letterWid;
+//    delete m_fullLetterWid;
+//    delete m_functionWid;
+//    delete m_fullFunctionWid;
+//    delete m_searchResultWid;
+//    delete m_fullSearchResultWid;
+
     delete m_ukuiMenuInterface;
+    delete m_fileWatcher;
     delete m_directoryChangedThread;
+    delete m_animation;
+    delete m_searchAppThread;
+
 }
 
 void MainViewWidget::initUi()
@@ -51,10 +55,10 @@ void MainViewWidget::initUi()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setStyleSheet("border:0px;background:transparent;");
 
-    QVBoxLayout* mainLayout=new QVBoxLayout(this);
+    QVBoxLayout* mainLayout=new QVBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    m_topWidget=new QWidget(this);
+    m_topWidget=new QWidget;
     m_topWidget->setStyleSheet("border:0px;background:transparent;");
 
     m_verticalSpacer=new QSpacerItem(20,40, QSizePolicy::Fixed, QSizePolicy::Expanding);
@@ -70,14 +74,13 @@ void MainViewWidget::initUi()
     m_functionWid=new FunctionWidget;
     m_fullLetterWid=new FullLetterWidget;
     m_fullFunctionWid=new FullFunctionWidget;
-
     m_fullSearchResultWid=new FullSearchResultWidget;
     m_searchResultWid=new SearchResultWidget;
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
     //监控.desktop文件目录
-    m_fileWatcher=new QFileSystemWatcher(this);
+    m_fileWatcher=new QFileSystemWatcher;
     m_fileWatcher->addPath("/usr/share/applications");
     connect(m_fileWatcher,&QFileSystemWatcher::directoryChanged,this,&MainViewWidget::directoryChangedSlot);
     m_directoryChangedThread=new DirectoryChangedThread;
@@ -123,9 +126,9 @@ void MainViewWidget::initUi()
  */
 void MainViewWidget::addTopControl()
 {
-    m_topLayout=new QHBoxLayout(m_topWidget);
+    m_topLayout=new QHBoxLayout;
     m_topLayout->setSpacing(0);
-    m_queryLineEdit=new QLineEdit(m_topWidget);
+    m_queryLineEdit=new QLineEdit;
     char style[100];
     sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;}",QueryLineEditBackground);
     m_queryLineEdit->setStyleSheet(style);
@@ -141,7 +144,8 @@ void MainViewWidget::addTopControl()
  */
 void MainViewWidget::initQueryLineEdit()
 {
-    m_queryWid=new QWidget(m_queryLineEdit);
+    m_queryWid=new QWidget;
+    m_queryWid->setParent(m_queryLineEdit);
     m_queryWid->setFocusPolicy(Qt::NoFocus);
     m_queryWid->setStyleSheet("border:0px;background:transparent");
     QHBoxLayout* queryWidLayout=new QHBoxLayout;
@@ -149,11 +153,11 @@ void MainViewWidget::initQueryLineEdit()
     queryWidLayout->setSpacing(5);
     m_queryWid->setLayout(queryWidLayout);
     QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
-    m_queryIcon=new QLabel(m_queryWid);
+    m_queryIcon=new QLabel;
     m_queryIcon->setStyleSheet("background:transparent");
     m_queryIcon->setFixedSize(pixmap.size());
     m_queryIcon->setPixmap(pixmap);
-    m_queryText=new QLabel(m_queryWid);
+    m_queryText=new QLabel;
     m_queryText->setText(tr("Search"));
     m_queryText->setStyleSheet("background:transparent;color:#626c6e;");
     m_queryText->adjustSize();
@@ -238,7 +242,10 @@ void MainViewWidget::setLineEditFocus(QString arg)
     {
         m_searchKeyWords=arg;
         m_queryLineEdit->setFocus();
-        m_animation->start();
+        if(m_queryLineEdit->text().isEmpty())
+            m_animation->start();
+        else
+            m_queryLineEdit->setText(arg);
     }
 }
 
@@ -252,7 +259,7 @@ void MainViewWidget::searchAppSlot(QString arg)
         if(m_widgetState!=0)
         {
             QLayoutItem* child;
-            if((child=this->layout()->takeAt(1))!=nullptr)
+            if((child=this->layout()->takeAt(2))!=nullptr)
             {
                 QWidget* childWid=child->widget();
                 if(childWid!=nullptr)
@@ -273,7 +280,7 @@ void MainViewWidget::searchAppSlot(QString arg)
     }
     else{
         QLayoutItem* child;
-        if((child=this->layout()->takeAt(1))!=nullptr)
+        if((child=this->layout()->takeAt(2))!=nullptr)
         {
             QWidget* childWid=child->widget();
             if(childWid!=nullptr)
@@ -366,7 +373,7 @@ void MainViewWidget::loadMinMainView()
     if(m_widgetState==0)
     {
         QLayoutItem* child;
-        if((child=this->layout()->takeAt(1))!=nullptr)
+        if((child=this->layout()->takeAt(2))!=nullptr)
         {
             QWidget* childWid=child->widget();
             if(childWid!=nullptr)
@@ -414,7 +421,7 @@ void MainViewWidget::loadMaxMainView()
     if(m_widgetState==0)
     {
         QLayoutItem* child;
-        if((child=this->layout()->takeAt(1))!=nullptr)
+        if((child=this->layout()->takeAt(2))!=nullptr)
         {
             QWidget* childWid=child->widget();
             if(childWid!=nullptr)
@@ -492,7 +499,7 @@ void MainViewWidget::loadCommonUseWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(1)) != nullptr) {
+    if((child = this->layout()->takeAt(2)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -518,7 +525,7 @@ void MainViewWidget::loadLetterWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(1)) != nullptr) {
+    if((child = this->layout()->takeAt(2)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -543,7 +550,7 @@ void MainViewWidget::loadFunctionWidget()
     m_fullLetterWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(1)) != nullptr) {
+    if((child = this->layout()->takeAt(2)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -569,7 +576,7 @@ void MainViewWidget::loadFullCommonUseWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(1)) != nullptr) {
+    if((child = this->layout()->takeAt(2)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -595,7 +602,7 @@ void MainViewWidget::loadFullLetterWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(1)) != nullptr) {
+    if((child = this->layout()->takeAt(2)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -621,7 +628,7 @@ void MainViewWidget::loadFullFunctionWidget()
     m_fullLetterWid->widgetMakeZero();
     m_functionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(1)) != nullptr) {
+    if((child = this->layout()->takeAt(2)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {

@@ -57,15 +57,17 @@ void MainWindow::initUi()
     this->setMinimumSize(Style::minw,Style::minh);
     this->setContentsMargins(0,0,0,0);
 
-    m_frame=new QFrame(this);
-    m_mainViewWid=new MainViewWidget(this);
-    m_sideBarWid=new SideBarWidget(this);
+    m_frame=new QFrame;
+    m_mainViewWid=new MainViewWidget;
+    m_sideBarWid=new SideBarWidget;
 
     this->setCentralWidget(m_frame);
     QHBoxLayout *mainlayout=new QHBoxLayout;
+    mainlayout->setContentsMargins(0,0,0,0);
+    mainlayout->setSpacing(0);
+    m_frame->setLayout(mainlayout);
 
     mainlayout->addWidget(m_mainViewWid);
-
     m_line=new QFrame(this);
     m_line->setFrameShape(QFrame::VLine);
     m_line->setFixedSize(1,this->height());
@@ -73,11 +75,7 @@ void MainWindow::initUi()
     char linestyle[100];
     sprintf(linestyle, "background-color:%s;",LineBackground);
     m_line->setStyleSheet(linestyle);
-
     mainlayout->addWidget(m_sideBarWid);
-    mainlayout->setContentsMargins(0,0,0,0);
-    mainlayout->setSpacing(0);
-    centralWidget()->setLayout(mainlayout);
 
     m_animation = new QPropertyAnimation(this, "geometry");
     connect(m_animation,&QPropertyAnimation::stateChanged,
