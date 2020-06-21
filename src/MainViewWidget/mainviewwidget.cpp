@@ -190,7 +190,10 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                      QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              m_queryLineEdit->setStyleSheet(style);
              if(!m_queryLineEdit->text().isEmpty())
-                 searchAppSlot(m_queryLineEdit->text());
+             {
+                 if(m_searchKeyWords.isEmpty())
+                    searchAppSlot(m_queryLineEdit->text());
+             }
              else
              {
                  m_animation->stop();
@@ -201,11 +204,12 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                  m_animation->setEasingCurve(QEasingCurve::OutQuad);
                  m_animation->start();
                  m_queryLineEdit->setReadOnly(true);
-                 m_isSearching=true;
              }
+             m_isSearching=true;
         }
         else if(event->type()==QEvent::FocusOut)
         {
+            m_searchKeyWords.clear();
             if(m_queryLineEdit->text().isEmpty())
             {
                 if(m_isSearching)
@@ -221,7 +225,6 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                                                  m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
                     m_animation->setEasingCurve(QEasingCurve::InQuad);
                     m_animation->start();
-                    m_isSearching=false;
                 }
             }
             else {
@@ -230,6 +233,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                         QueryLineEditBackground);
                 m_queryLineEdit->setStyleSheet(style);
             }
+            m_isSearching=false;
         }
     }
 
@@ -242,9 +246,7 @@ void MainViewWidget::setLineEditFocus(QString arg)
     {
         m_searchKeyWords=arg;
         m_queryLineEdit->setFocus();
-        if(m_queryLineEdit->text().isEmpty())
-            m_animation->start();
-        else
+        if(!m_queryLineEdit->text().isEmpty())
             m_queryLineEdit->setText(arg);
     }
 }
@@ -254,10 +256,33 @@ void MainViewWidget::setLineEditFocus(QString arg)
  */
 void MainViewWidget::searchAppSlot(QString arg)
 {
-    if(!arg.isEmpty())
+    if(!m_isHiden)
     {
-        if(m_widgetState!=0)
+        if(!arg.isEmpty())
         {
+            if(m_widgetState!=0)
+            {
+                QLayoutItem* child;
+                if((child=this->layout()->takeAt(2))!=nullptr)
+                {
+                    QWidget* childWid=child->widget();
+                    if(childWid!=nullptr)
+                    {
+                        this->layout()->removeWidget(childWid);
+                        childWid->setParent(nullptr);
+                    }
+                }
+                m_widgetState=0;
+                if(m_isFullScreen==false)
+                {
+                    this->layout()->addWidget(m_searchResultWid);
+                }
+                else{
+                    this->layout()->addWidget(m_fullSearchResultWid);
+                }
+            }
+        }
+        else{
             QLayoutItem* child;
             if((child=this->layout()->takeAt(2))!=nullptr)
             {
@@ -268,61 +293,43 @@ void MainViewWidget::searchAppSlot(QString arg)
                     childWid->setParent(nullptr);
                 }
             }
-            m_widgetState=0;
-            if(m_isFullScreen==false)
+            if(m_isFullScreen)
             {
-                this->layout()->addWidget(m_searchResultWid);
+                switch (m_saveCurrentWidState) {
+                case 1:
+                    loadFullCommonUseWidget();
+                    break;
+                case 2:
+                    loadFullLetterWidget();
+                    break;
+                case 3:
+                    loadFullFunctionWidget();
+                default:
+                    break;
+                }
             }
-            else{
-                this->layout()->addWidget(m_fullSearchResultWid);
-            }
-        }
-    }
-    else{
-        QLayoutItem* child;
-        if((child=this->layout()->takeAt(2))!=nullptr)
-        {
-            QWidget* childWid=child->widget();
-            if(childWid!=nullptr)
-            {
-                this->layout()->removeWidget(childWid);
-                childWid->setParent(nullptr);
-            }
-        }
-        if(m_isFullScreen)
-        {
-            switch (m_saveCurrentWidState) {
-            case 1:
-                loadFullCommonUseWidget();
-                break;
-            case 2:
-                loadFullLetterWidget();
-                break;
-            case 3:
-                loadFullFunctionWidget();
-            default:
-                break;
+            else {
+                switch (m_saveCurrentWidState) {
+                case 1:
+                    loadCommonUseWidget();
+                    break;
+                case 2:
+                    loadLetterWidget();
+                    break;
+                case 3:
+                    loadFunctionWidget();
+                    break;
+                default:
+                    break;
+                }
             }
         }
-        else {
-            switch (m_saveCurrentWidState) {
-            case 1:
-                loadCommonUseWidget();
-                break;
-            case 2:
-                loadLetterWidget();
-                break;
-            case 3:
-                loadFunctionWidget();
-                break;
-            default:
-                break;
-            }
-        }
-    }
 
-    Q_EMIT sendSearchKeyword(arg);
-    m_searchAppThread->start();
+        Q_EMIT sendSearchKeyword(arg);
+        m_searchAppThread->start();
+    }
+    else
+        m_widgetState=m_saveCurrentWidState;
 }
 
 void MainViewWidget::recvSearchResult(QVector<QStringList> arg)
@@ -391,6 +398,7 @@ void MainViewWidget::loadMinMainView()
     else if(m_widgetState==3)
         loadFunctionWidget();
     m_isFullScreen=false;
+    m_isHiden=false;
 }
 
 /**
@@ -439,6 +447,7 @@ void MainViewWidget::loadMaxMainView()
     else if(m_widgetState==3)
         loadFullFunctionWidget();
     m_isFullScreen=true;
+    m_isHiden=false;
 }
 
 void MainViewWidget::resizeControl()
@@ -800,8 +809,8 @@ void MainViewWidget::repaintWidget()
 
 void MainViewWidget::widgetMakeZero()
 {
+    m_isHiden=true;
     m_isSearching=false;
-    blockSignals(true);
     m_commonUseWid->widgetMakeZero();
     m_fullCommonUseWid->widgetMakeZero();
     m_letterWid->widgetMakeZero();
@@ -814,25 +823,6 @@ void MainViewWidget::widgetMakeZero()
     sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
     m_queryLineEdit->setStyleSheet(style);
     m_queryLineEdit->setTextMargins(0,1,0,1);
-    blockSignals(false);
-    if(m_isFullScreen)
-    {
-        if(m_queryWid->layout()->count()==1)
-            m_queryWid->layout()->addWidget(m_queryText);
-        m_queryText->adjustSize();
-        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-        m_queryWid->show();
-    }
-    else
-    {
-        if(m_queryWid->layout()->count()==1)
-            m_queryWid->layout()->addWidget(m_queryText);
-        m_queryText->adjustSize();
-        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-        m_queryWid->show();
-    }
 }
 
 void MainViewWidget::moveScrollBar(int type)
