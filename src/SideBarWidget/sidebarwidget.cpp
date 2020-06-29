@@ -416,6 +416,8 @@ void SideBarWidget::userAccountsChanged()
 {
     const auto ratio=devicePixelRatioF();
     QString usericon=m_ukuiMenuInterface->getUserIcon();
+    if(!QFile::exists(usericon))
+        usericon=QString("/usr/share/ukui/faces/default.png");
     QPixmap facePixmap(usericon);
     facePixmap = facePixmap.scaled((Style::SideBarIconSize+4)*ratio,(Style::SideBarIconSize+4)*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)*ratio/2);

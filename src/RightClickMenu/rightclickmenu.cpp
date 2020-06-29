@@ -294,7 +294,7 @@ int RightClickMenu::showShutdownMenu()
     menu.addAction(QIcon(getIconPixmap("exit-symbolic",1)),tr("Power Off"),
                    this,SLOT(shutdownActionTriggerSlot()));
     menu.setAttribute(Qt::WA_TranslucentBackground);
-    menu.setStyleSheet(m_style);
+//    menu.setStyleSheet(m_style);
     menu.exec(QCursor::pos());
     return m_actionNumber;
 }
@@ -321,7 +321,7 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
     menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/setting.svg",0)),tr("Personalize this list"),
                    this,SLOT(otherListActionTriggerSlot()));
     menu.setAttribute(Qt::WA_TranslucentBackground);
-    menu.setStyleSheet(m_style);
+//    menu.setStyleSheet(m_style);
     menu.exec(QCursor::pos());
     return m_actionNumber;
 }
