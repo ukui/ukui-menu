@@ -55,6 +55,21 @@ void FunctionButtonWidget::initUi()
     gridLayout->setContentsMargins(0,0,0,0);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
+
+    for(int row=0;row<6;row++)
+        for(int col=0;col<2;col++)
+        {
+            FunctionClassifyButton* iconbtn=new FunctionClassifyButton(Style::LeftBtnWidth,
+                                                                       Style::LeftBtnHeight,
+                                                                       Style::LeftIconSize,
+                                                                       m_categoryList.at(row*2+col),
+                                                                       false,
+                                                                       false);
+
+            gridLayout->addWidget(iconbtn,row,col);
+            connect(iconbtn,&FunctionClassifyButton::buttonClicked,this, &FunctionButtonWidget::functionBtnClickedSlot);
+            if(row*2+col==10)break;
+        }
 }
 
 /**
@@ -73,34 +88,19 @@ void FunctionButtonWidget::functionBtnClickedSlot()
  */
 void FunctionButtonWidget::recvClassificationBtnList()
 {
-    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
+    QGridLayout* gridLayout=qobject_cast<QGridLayout*>(this->layout());
     for(int row=0;row<6;row++)
         for(int col=0;col<2;col++)
         {
-            FunctionClassifyButton* iconbtn=nullptr;
-            if(vector.at(row*2+col).isEmpty())
-            {
-                iconbtn=new FunctionClassifyButton(this,
-                                                   Style::LeftBtnWidth,
-                                                   Style::LeftBtnHeight,
-                                                   Style::LeftIconSize,
-                                                   m_categoryList.at(row*2+col),
-                                                   false,
-                                                   false);
-                iconbtn->setEnabled(false);
-            }
-            else {
-                iconbtn=new FunctionClassifyButton(this,
-                                                   Style::LeftBtnWidth,
-                                                   Style::LeftBtnHeight,
-                                                   Style::LeftIconSize,
-                                                   m_categoryList.at(row*2+col),
-                                                   false,
-                                                   true);
-                connect(iconbtn,&FunctionClassifyButton::buttonClicked,this, &FunctionButtonWidget::functionBtnClickedSlot);
-            }
-            QGridLayout* gridLayout=qobject_cast<QGridLayout*>(this->layout());
-            gridLayout->addWidget(iconbtn,row,col);
+            QLayoutItem* item=gridLayout->itemAtPosition(row,col);
+            FunctionClassifyButton* btn=qobject_cast<FunctionClassifyButton*>(item->widget());
+            if(UkuiMenuInterface::functionalVector.at(row*2+col).isEmpty())
+                btn->m_enabled=false;
+            else
+                btn->m_enabled=true;
+            btn->setEnabled(btn->m_enabled);
+            btn->updateBtnState();
+
             if(row*2+col==10)break;
         }
 }

@@ -67,7 +67,7 @@ void LetterButtonWidget::initUi()
         {
             if(row*4+col<letterlist.size())
             {
-                QToolButton* btn=new QToolButton(this);
+                QToolButton* btn=new QToolButton;
                 btn->setFixedSize(55,48);
                 btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
                 btn->setText(letterlist.at(row*4+col));
@@ -106,6 +106,8 @@ void LetterButtonWidget::recvLetterBtnList(QStringList list)
             QString letterstr=btn->text();
             if(list.indexOf(letterstr.at(0))==-1)
                 btn->setEnabled(false);
+            else
+                btn->setEnabled(true);
 
             if(row*4+col==27) break;
         }

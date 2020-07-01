@@ -389,7 +389,7 @@ void FullFunctionWidget::initIconListScrollArea()
     {
 //        if(!vector.at(index).isEmpty())
 //        {
-            FunctionClassifyButton* iconbtn=new FunctionClassifyButton(this,
+            FunctionClassifyButton* iconbtn=new FunctionClassifyButton(
                                                                        Style::LeftBtnWidth,
                                                                        Style::LeftBtnHeight,
                                                                        Style::LeftIconSize,

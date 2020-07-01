@@ -93,7 +93,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 QRect iconRect=QRect(rect.x()+11,rect.y()+(rect.height()-32)/2,32,32);
                 QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
                 QIcon icon;
-                if(QFile::exists(iconstr))
+                QFileInfo iconFileInfo(iconstr);
+                if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg")))
                     icon=QIcon(iconstr);
                 else
                 {
@@ -148,7 +149,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
             QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
             QIcon icon;
-            if(QFile::exists(iconstr))
+            QFileInfo iconFileInfo(iconstr);
+            if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg")))
                 icon=QIcon(iconstr);
             else
             {
@@ -157,6 +159,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 icon=QIcon::fromTheme(iconstr);
                 if(icon.isNull())
                 {
+                    if(pUkuiMenuInterface->getAppName(strlist.at(0))=="baidunetdisk")
+                        syslog(LOG_LOCAL0 | LOG_DEBUG ,"---2---");
                     if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
                         icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
                     else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png")))

@@ -37,13 +37,13 @@ public:
     /**
      * @param iconstr正常图片
      */
-    FunctionClassifyButton(QWidget *parent,
-               int width,
+     FunctionClassifyButton(int width,
                int height,
                int iconSize,
                QString category,
                bool fullscreen,
-               bool enabled);
+               bool enabled,
+               QWidget *parent=nullptr);
 
     enum State {
         Enabled,
@@ -76,6 +76,8 @@ public:
     QLabel* m_iconLabel=nullptr;
     QLabel* m_textLabel=nullptr;
     State m_state=Checked;
+
+    void updateBtnState();
 
 protected:
     void enterEvent(QEvent* e);

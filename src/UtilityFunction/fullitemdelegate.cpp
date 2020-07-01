@@ -75,7 +75,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         QString desktopfp=index.data(Qt::DisplayRole).value<QString>();
         QString iconstr=pUkuiMenuInterface->getAppIcon(desktopfp);
         QIcon icon;
-        if(QFile::exists(iconstr))
+        QFileInfo iconFileInfo(iconstr);
+        if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg")))
             icon=QIcon(iconstr);
         else
         {

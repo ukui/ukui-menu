@@ -785,15 +785,15 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             m_mainViewWid->setLineEditFocus(e->text());
         }
 
-        switch(e->key()){
-        case Qt::Key_Up:
-            m_mainViewWid->moveScrollBar(0);
-            break;
-        case Qt::Key_Down:
-            m_mainViewWid->moveScrollBar(1);
-            break;
-        default:
-            break;
-        }
+//        switch(e->key()){
+//        case Qt::Key_Up:
+//            m_mainViewWid->moveScrollBar(0);
+//            break;
+//        case Qt::Key_Down:
+//            m_mainViewWid->moveScrollBar(1);
+//            break;
+//        default:
+//            break;
+//        }
     }
 }

@@ -213,14 +213,6 @@ void FunctionWidget::appClassificationBtnClickedSlot()
     m_enterAnimation->setDuration(80);
 
     //加载FunctionButtonWidget界面
-    QLayoutItem *child=nullptr;
-    while ((child = m_functionBtnWid->layout()->takeAt(0)) != 0) {
-        QWidget* wid=child->widget();
-        m_functionBtnWid->layout()->removeWidget(wid);
-        wid->setParent(nullptr);
-        delete wid;
-        delete child;
-    }
     Q_EMIT sendClassificationbtnList();
     m_leaveAnimation->setTargetObject(m_appListView);
     m_enterAnimation->setTargetObject(m_functionBtnWid);

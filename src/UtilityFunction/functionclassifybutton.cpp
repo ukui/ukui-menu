@@ -21,13 +21,13 @@
 #include <QDebug>
 #include <syslog.h>
 
-FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
-                       int width,
+FunctionClassifyButton::FunctionClassifyButton(int width,
                        int height,
                        int iconSize,
                        QString category,
                        bool fullscreen,
-                       bool enabled):
+                       bool enabled,
+                       QWidget *parent):
     QPushButton (parent),
     m_width(width),
     m_height(height),
@@ -64,6 +64,14 @@ FunctionClassifyButton::FunctionClassifyButton(QWidget *parent,
     mainlayout->addWidget(m_textLabel);
     connect(this,&FunctionClassifyButton::toggled,this,&FunctionClassifyButton::reactToToggle);
     connect(this,&FunctionClassifyButton::clicked,this,&FunctionClassifyButton::buttonClickedSlot);
+}
+
+void FunctionClassifyButton::updateBtnState()
+{
+    if(m_enabled)
+        updateIconState(Enabled);
+    else
+        updateIconState(Disabled);
 }
 
 void FunctionClassifyButton::enterEvent(QEvent *e)
