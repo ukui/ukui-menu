@@ -16,7 +16,8 @@ TEMPLATE = app
 target.path = /usr/bin
 
 TRANSLATIONS+=\
-    ukui_menu_ch.ts
+    ukui_menu_ch.ts \
+    ukui_menu_tr.ts
 
 SOURCES += \
     src/CommonUseWidget/commonusewidget.cpp \
