@@ -184,6 +184,7 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
     filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
     filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
+    filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
 
     return filePathList;
 }
@@ -200,7 +201,7 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
     vector.append(QStringList()<<"Development");//4开发
     vector.append(QStringList()<<"Graphics");//5图像
     vector.append(QStringList()<<"Game");//6游戏
-    vector.append(QStringList()<<"Office"<<"Calculator"<<"Spreadsheet"<<"Presentation"<<"WordProcessor");//7办公
+    vector.append(QStringList()<<"Office"<<"Calculator"<<"Spreadsheet"<<"Presentation"<<"WordProcessor"<<"TextEditor");//7办公
     vector.append(QStringList()<<"Education");//8教育
     vector.append(QStringList()<<"System"<<"Settings"<<"Security");//9系统
 

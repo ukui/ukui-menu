@@ -116,7 +116,6 @@ void MainWindow::initUi()
                 this,&MainWindow::panelChangedSlot);
     }
 
-
 //    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
 //                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
 }
@@ -713,6 +712,22 @@ void MainWindow::setFrameStyle()
         panelSize=46;
     }
     char style[100];
+
+    QString m_defaultBackground;
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+        if(gsetting->keys().contains(QString("transparency")))
+        {
+            double transparency=gsetting->get("transparency").toDouble();
+            m_defaultBackground=QString("rgba(19, 19, 20,"+QString::number(transparency)+")");
+        }
+        else
+            m_defaultBackground=QString("rgba(19, 19, 20, 0.7)");
+    }
+    else
+        m_defaultBackground=QString("rgba(19, 19, 20, 0.7)");
+
     if(!m_isFullScreen)
     {
         QRectF rect;
@@ -726,7 +741,7 @@ void MainWindow::setFrameStyle()
         if(position==0)
         {
             //右上角
-            sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",DefaultBackground);
+            sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",m_defaultBackground.toLocal8Bit().data());
             path.moveTo(rect.topRight() - QPointF(radius, 0));
             path.lineTo(rect.topLeft());
             path.lineTo(rect.bottomLeft());
@@ -737,7 +752,7 @@ void MainWindow::setFrameStyle()
         else if(position==1)
         {
             //右下角
-            sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
+            sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",m_defaultBackground.toLocal8Bit().data());
             path.moveTo(rect.topRight());
             path.lineTo(rect.topLeft());
             path.lineTo(rect.bottomLeft());
@@ -748,7 +763,7 @@ void MainWindow::setFrameStyle()
         else if(position==2)
         {
             //右下角
-            sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",DefaultBackground);
+            sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",m_defaultBackground.toLocal8Bit().data());
             path.moveTo(rect.topRight());
             path.lineTo(rect.topLeft());
             path.lineTo(rect.bottomLeft());
@@ -759,7 +774,7 @@ void MainWindow::setFrameStyle()
         else
         {
             //左下角
-            sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",DefaultBackground);
+            sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",m_defaultBackground.toLocal8Bit().data());
             path.moveTo(rect.topRight());
             path.lineTo(rect.topLeft());
             path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
@@ -770,7 +785,7 @@ void MainWindow::setFrameStyle()
         setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
     }
     else {
-        sprintf(style, "border:0px;background-color:%s;border-radius:0px;",DefaultBackground);
+        sprintf(style, "border:0px;background-color:%s;border-radius:0px;",m_defaultBackground.toLocal8Bit().data());
     }
     m_frame->setStyleSheet(style);
 }
