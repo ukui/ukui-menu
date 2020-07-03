@@ -306,6 +306,7 @@ QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
 void SideBarWidget::shutdownBtnRightClickSlot()
 {
     int ret=m_shutDownMenu->showShutdownMenu();
+    qDebug()<<ret;
     if(ret>=10 && ret<=14)
     {
         this->parentWidget()->parentWidget()->hide();
@@ -324,6 +325,12 @@ void SideBarWidget::shutdownBtnRightClickSlot()
             break;
         case 14:
             QProcess::startDetached(QString("ukui-session-tools --shutdown"));
+            break;
+        case 16:
+            QProcess::startDetached(QString("ukui-session-tools --hibernate"));
+            break;
+        case 17:
+            QProcess::startDetached(QString("ukui-session-tools --sleep"));
             break;
         default:
             break;

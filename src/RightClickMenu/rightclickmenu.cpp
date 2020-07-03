@@ -238,6 +238,16 @@ void RightClickMenu::otherListActionTriggerSlot()
     m_actionNumber=15;
 }
 
+void RightClickMenu::hibernateActionTriggerSlot()
+{
+    m_actionNumber=16;
+}
+
+void RightClickMenu::sleepActionTriggerSlot()
+{
+    m_actionNumber=17;
+}
+
 int RightClickMenu::showAppBtnMenu(QString desktopfp)
 {
     m_actionNumber=0;
@@ -283,10 +293,19 @@ int RightClickMenu::showShutdownMenu()
 {
     m_actionNumber=0;
     QMenu menu;
-    menu.addAction(QIcon(getIconPixmap("system-lock-screen-symbolic",1)),tr("Lock Screen"),
-                   this,SLOT(lockScreenActionTriggerSlot()));
     menu.addAction(QIcon(getIconPixmap("stock-people-symbolic",1)),tr("Switch User"),
                    this,SLOT(switchUserActionTriggerSlot()));
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.session").toLocal8Bit());
+        if(gsetting->keys().contains(QString("canhibernate")) && gsetting->get("panelposition").toBool())
+            menu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Hibernate"),
+                           this,SLOT(hibernateActionTriggerSlot()));
+    }
+    menu.addAction(QIcon(getIconPixmap("kylin-sleep-symbolic",1)),tr("Sleep"),
+                   this,SLOT(sleepActionTriggerSlot()));
+    menu.addAction(QIcon(getIconPixmap("system-lock-screen-symbolic",1)),tr("Lock Screen"),
+                   this,SLOT(lockScreenActionTriggerSlot()));
     menu.addAction(QIcon(getIconPixmap("system-logout-symbolic",1)),tr("Log Out"),
                    this,SLOT(logoutActionTriggerSlot()));
     menu.addAction(QIcon(getIconPixmap("system-restart-symbolic",1)),tr("Restart"),

@@ -35,14 +35,11 @@ DirectoryChangedThread::~DirectoryChangedThread()
 
 void DirectoryChangedThread::run()
 {
-    if(this->m_path=="/usr/share/applications")
-    {
+//    if(this->m_path=="/usr/share/applications")
+//    {
         QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
         if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
         {
-            syslog(LOG_LOCAL0 | LOG_DEBUG ,"---111---");
-//            sleep(10);
-            syslog(LOG_LOCAL0 | LOG_DEBUG ,"---222---");
             setting->beginGroup("recentapp");
             for(int i=0;i<desktopfpList.count();i++)
             {
@@ -116,7 +113,7 @@ void DirectoryChangedThread::run()
             UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
             Q_EMIT requestUpdateSignal();
         }
-    }
+//    }
 }
 
 void DirectoryChangedThread::recvDirectoryPath(QString arg)

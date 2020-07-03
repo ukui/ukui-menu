@@ -31,6 +31,7 @@ class UkuiMenuInterface
 {
 private:
     QStringList filePathList;
+    QStringList androidDesktopfnList;
     QSettings* setting=nullptr;
 
 protected:
@@ -46,7 +47,6 @@ public:
     static QVector<QStringList> alphabeticVector;
     static QVector<QStringList> functionalVector;
     static QVector<QString> allAppVector;
-    static QVector<QStringList> appInfoSearchVector;
 
     /**
      * 获取系统应用名称
@@ -66,9 +66,7 @@ public:
     QVector<QStringList> getFunctionalClassification();//获取功能分类
     QVector<QString> getCommonUseApp();//获取常用App
     QVector<QString> getAllApp();
-    QStringList getRecentApp();//获取最近添加App
-    QVector<QStringList> getAndroidApp();//获取安卓应用
-    QVector<QStringList> getSearchApp();
+    void getAndroidApp();//获取安卓应用
     static bool cmpApp(QStringList &arg_1,QStringList &arg_2);
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
     QString getAppNameInitials(QString desktopfp);//获取应用名所有首字母

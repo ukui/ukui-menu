@@ -144,6 +144,8 @@ private Q_SLOTS:
      * @brief Shut down
      */
     void shutdownActionTriggerSlot();
+    void hibernateActionTriggerSlot();
+    void sleepActionTriggerSlot();
     /**
      * @brief Personalize this list
      */

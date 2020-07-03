@@ -81,7 +81,7 @@ void MainViewWidget::initUi()
 
     //监控.desktop文件目录
     m_fileWatcher=new QFileSystemWatcher;
-    m_fileWatcher->addPath("/usr/share/applications");
+    m_fileWatcher->addPaths(QStringList()<<"/usr/share/applications"<<QDir::homePath()+"/.local/share/applications/");
     connect(m_fileWatcher,&QFileSystemWatcher::directoryChanged,this,&MainViewWidget::directoryChangedSlot);
     m_directoryChangedThread=new DirectoryChangedThread;
     connect(this,&MainViewWidget::sendDirectoryPath,m_directoryChangedThread,&DirectoryChangedThread::recvDirectoryPath);

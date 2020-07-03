@@ -36,7 +36,6 @@ QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
 QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
 QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::allAppVector=QVector<QString>();
-QVector<QStringList> UkuiMenuInterface::appInfoSearchVector=QVector<QStringList>();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
@@ -139,6 +138,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
     filePathList.clear();
+    getAndroidApp();
     recursiveSearchFile("/usr/share/applications/");
 
     filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
@@ -195,6 +195,7 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
     desktopfpVector.clear();
     QVector<QStringList> appInfoVector;
     QVector<QStringList> vector;
+    vector.append(QStringList()<<"Android");//0安卓
     vector.append(QStringList()<<"Network");//1网络
     vector.append(QStringList()<<"Messaging");//2社交
     vector.append(QStringList()<<"Audio"<<"Video");//3影音
@@ -225,7 +226,7 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
             if(matchingAppCategories(desktopfpList.at(i),vector.at(j)))//有对应分类
             {
                 is_owned=true;
-                appInfoList.append(QString::number(j+1));
+                appInfoList.append(QString::number(j));
             }
         }
         if(!is_owned)//该应用无对应分类
@@ -453,17 +454,25 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
     QVector<QString> data;
     Q_FOREACH(QString desktopfn,lockdesktopfnList)
     {
-        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
+        QString desktopfp;
+        if(androidDesktopfnList.contains(desktopfn))
+            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+        else
+            desktopfp=QString("/usr/share/applications/"+desktopfn);
         QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.exists())
+        if(!fileInfo.isFile())
             continue;
         data.append(desktopfp);
     }
     Q_FOREACH(QString desktopfn,desktopfnList)
     {
-        QString desktopfp=QString("/usr/share/applications/"+desktopfn);
+        QString desktopfp;
+        if(androidDesktopfnList.contains(desktopfn))
+            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+        else
+            desktopfp=QString("/usr/share/applications/"+desktopfn);
         QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.exists() || !desktopfpVector.contains(desktopfp))
+        if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp))
             continue;
         data.append(desktopfp);
     }
@@ -618,6 +627,8 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
         {
             int category=appInfoVector.at(index).at(5+i).toInt();
             switch (category) {
+            case 0:
+                appVector[0].append(appInfoVector.at(index));
             case 1:
                 appVector[1].append(appInfoVector.at(index));
                 break;
@@ -657,8 +668,6 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
 
     QVector<QStringList> data;
     data.clear();
-    appVector[0].clear();
-    appVector[0]=getAndroidApp();
 
     for(int i=0;i<11;i++)
     {
@@ -687,52 +696,67 @@ bool UkuiMenuInterface::matchingAppCategories(QString desktopfp, QStringList cat
     return false;
 }
 
-QStringList UkuiMenuInterface::getRecentApp()
+void UkuiMenuInterface::getAndroidApp()
 {
-    QStringList recentAppList;
-    recentAppList.clear();
-    QDateTime dt=QDateTime::currentDateTime();
-    int currentDateTime=dt.toTime_t();
-    int nDaySec=24*60*60;
-    setting->beginGroup("recentapp");
-    QStringList recentAppKeys=setting->allKeys();
-    for(int i=0;i<recentAppKeys.count();i++)
-    {
-        if((currentDateTime-setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
-            setting->remove(recentAppKeys.at(i));
-    }
-    setting->sync();
-    for(int i=0;i<setting->allKeys().size();i++)
-    {
-        QString desktopfp=QString("/usr/share/applications/"+setting->allKeys().at(i));
-        QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.exists())
-            continue;
-        QString appname=getAppName(desktopfp);
-        recentAppList.append(appname);
-    }
-    setting->endGroup();
-    QLocale local;
-    QString language=local.languageToString(local.language());
-    if(QString::compare(language,"Chinese")==0)
-        local=QLocale(QLocale::Chinese);
-    else
-        local=QLocale(QLocale::English);
-    QCollator collator(local);
-    std::sort(recentAppList.begin(),recentAppList.end(),collator);
-    return recentAppList;
-}
-
-QVector<QStringList> UkuiMenuInterface::getAndroidApp()
-{
+    androidDesktopfnList.clear();
     QVector<QStringList> androidVector;
     androidVector.clear();
-    return androidVector;
-}
+    QString path=QDir::homePath()+"/.local/share/applications/";
+    QDir dir(path);
+    if (!dir.exists()) {
+        return;
+    }
 
-QVector<QStringList> UkuiMenuInterface::getSearchApp()
-{
-    return appInfoSearchVector;
+    dir.setFilter(QDir::Dirs|QDir::Files|QDir::NoDotAndDotDot);
+    dir.setSorting(QDir::DirsFirst);
+    QFileInfoList list = dir.entryInfoList();
+    if(list.size()< 1 ) {
+        return;
+    }
+    int i=0;
+
+    GError** error=nullptr;
+    GKeyFileFlags flags=G_KEY_FILE_NONE;
+    GKeyFile* keyfile=g_key_file_new ();
+
+    do{
+        QFileInfo fileInfo = list.at(i);
+        if(!fileInfo.isFile())
+        {
+            i++;
+            continue;
+        }
+        //过滤后缀不是.desktop的文件
+        QString filePathStr=fileInfo.filePath();
+        if(!filePathStr.endsWith(".desktop"))
+        {
+            i++;
+            continue;
+        }
+
+        QByteArray fpbyte=filePathStr.toLocal8Bit();
+        char* filepath=fpbyte.data();
+        g_key_file_load_from_file(keyfile,filepath,flags,error);
+        char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","Categories", nullptr, nullptr);
+        if(ret_1!=nullptr)
+        {
+            QString str=QString::fromLocal8Bit(ret_1);
+            if(!str.contains("Android"))
+            {
+                i++;
+                continue;
+            }
+            else
+            {
+                filePathList.append(filePathStr);
+                androidDesktopfnList.append(fileInfo.fileName());
+            }
+        }
+
+        i++;
+    }while(i < list.size());
+
+    g_key_file_free(keyfile);
 }
 
 QString UkuiMenuInterface::getAppNameInitials(QString desktopfp)
