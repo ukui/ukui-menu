@@ -2,6 +2,7 @@
 Name=ukui-menu
 comment=ukui-menu
 Comment[zh_CN]=开始菜单
+Comment[tr_TR]=Başlangıç menüsü
 Exec=/usr/bin/ukui-menu
 Terminal=false
 Type=Application
