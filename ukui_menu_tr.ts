@@ -99,7 +99,7 @@
     <message>
         <location filename="src/FunctionWidget/functionwidget.cpp" line="130"/>
         <source>Office</source>
-        <translation>Ofis uygulamaları</translation>
+        <translation>Ofis Uygulamaları</translation>
     </message>
     <message>
         <location filename="src/FunctionWidget/functionwidget.cpp" line="136"/>
@@ -193,7 +193,7 @@
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="265"/>
         <source>Unpin from all</source>
-        <translation type="unfinished">Tüm sabitlemeleri kaldır</translation>
+        <translation>Tüm sabitlemeleri kaldır</translation>
     </message>
     <message>
         <location filename="src/RightClickMenu/rightclickmenu.cpp" line="275"/>
@@ -268,12 +268,12 @@
     <message>
         <location filename="src/SideBarWidget/sidebarwidget.cpp" line="97"/>
         <source>Letter</source>
-        <translation>Mektup</translation>
+        <translation>Alfabetik</translation>
     </message>
     <message>
         <location filename="src/SideBarWidget/sidebarwidget.cpp" line="99"/>
         <source>Function</source>
-        <translation>Fonksiyon</translation>
+        <translation>Kategori</translation>
     </message>
     <message>
         <location filename="src/SideBarWidget/sidebarwidget.cpp" line="114"/>
