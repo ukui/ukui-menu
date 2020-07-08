@@ -24,7 +24,7 @@ jobs:
         run: sudo apt-get -y install build-essential qt5-default qttools5-dev-tools qtmultimedia5-dev
 
       - name: Instal dependcies
-        run: sudo apt-get install debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev
+        run: sudo apt-get install debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev libxrandr-dev libxtst-dev libx11-dev libqt5x11extras5-dev
 
       - name: QMake configure & Make
         run: mkdir build && cd build && qmake .. && make -j$(nproc)
