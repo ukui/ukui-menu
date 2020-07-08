@@ -1,0 +1,30 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+  
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout ukui-menu source
+        uses: actions/checkout@v2
+
+      - name: Update apt repository
+        run: sudo apt-get update -y
+
+      - name: Install latest Qt5
+        run: sudo apt-get -y install build-essential qt5-default qttools5-dev-tools qtmultimedia5-dev
+
+      - name: Instal dependcies
+        run: sudo apt-get install debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev
+
+      - name: QMake configure & Make
+        run: mkdir build && cd build && qmake .. && make -j$(nproc)
