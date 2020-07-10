@@ -1,0 +1,86 @@
+name: Check build
+
+on:
+  push:
+    branches:
+      - master
+    
+  pull_request:
+    branches:
+      - master
+
+  schedule:
+    - cron: '0 0 * * *'
+  
+jobs:
+  archlinux:
+    name: on Archlinux
+    runs-on: ubuntu-20.04
+    container: docker.io/library/archlinux:latest
+    steps:
+      - name: Checkout ukui-menu source code
+        uses: actions/checkout@v2
+      - name: Refresh pacman repository
+        run: pacman -Sy
+      - name: Install build dependencies
+        run: pacman -S --noconfirm base-devel qt5-base bamf gsettings-qt qt5-svg qt5-x11extras qt5-tools
+      - name: QMake configure & Make
+        run: |
+          mkdir build;
+          cd build;
+          qmake-qt5 ..;
+          make -j$(nproc);
+  debian:
+    name: on Debian Sid
+    runs-on: ubuntu-20.04
+    container: docker.io/library/debian:sid
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Checkout ukui-menu source code
+        uses: actions/checkout@v2
+      - name: Update apt repository
+        run: apt-get update -y
+      - name: Install build dependcies
+        run: apt-get install -y build-essential qt5-default qttools5-dev-tools debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev libxrandr-dev libxtst-dev libx11-dev libqt5x11extras5-dev
+      - name: QMake configure & Make
+        run: |
+          mkdir build;
+          cd build;
+          qmake ..;
+          make -j$(nproc);
+  
+  fedora:
+    name: on Fedora 32
+    runs-on: ubuntu-20.04
+    container: docker.io/library/fedora:32
+    steps:
+      - name: Checkout ukui-menu source code
+        uses: actions/checkout@v2
+      - name: Install build dependencies
+        run: dnf install -y which gcc gcc-c++ make cmake cmake-rpm-macros autoconf automake intltool rpm-build qt5-rpm-macros   qt5-qtbase-devel qt5-qtsvg-devel qt5-qtx11extras-devel glib2-devel gsettings-qt-devel bamf-devel libXrandr-devel libXtst-devel libX11-devel
+      - name: QMake configure & Make
+        run: |
+          mkdir build;
+          cd build;
+          qmake-qt5 ..;
+          make -j$(nproc);
+  ubuntu:
+    name: on Ubuntu 20.04
+    runs-on: ubuntu-20.04
+    container: docker.io/library/ubuntu:focal
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Checkout ukui-menu source code
+        uses: actions/checkout@v2
+      - name: Update apt repository
+        run: apt-get update -y
+      - name: Install build dependcies
+        run: apt-get install -y build-essential qt5-default qttools5-dev-tools debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev libxrandr-dev libxtst-dev libx11-dev libqt5x11extras5-dev
+      - name: QMake configure & Make
+        run: |
+          mkdir build;
+          cd build;
+          qmake ..;
+          make -j$(nproc);
