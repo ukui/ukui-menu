@@ -1,6 +1,6 @@
 # ukui-menu
 
-![build](https://github.com/ukui/ukui-menu/workflows/build/badge.svg?branch=master)
+![build](https://github.com/ukui/ukui-menu/workflows/Check%20build/badge.svg?branch=master)
 
 An advanced menu for UKUI, providing common and all software mixed sort module, alphabet classification module, functional classification module and search module.
 
