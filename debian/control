@@ -24,6 +24,7 @@ Package: ukui-menu
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
+         accountsservice,
          libgsettings-qt1,
          libqt5x11extras5,
          bamfdaemon,
