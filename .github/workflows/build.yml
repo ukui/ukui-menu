@@ -58,7 +58,7 @@ jobs:
       - name: Checkout ukui-menu source code
         uses: actions/checkout@v2
       - name: Install build dependencies
-        run: dnf install -y which gcc gcc-c++ make cmake cmake-rpm-macros autoconf automake intltool rpm-build qt5-rpm-macros   qt5-qtbase-devel qt5-qtsvg-devel qt5-qtx11extras-devel glib2-devel gsettings-qt-devel bamf-devel libXrandr-devel libXtst-devel libX11-devel
+        run: dnf install -y which gcc gcc-c++ make cmake cmake-rpm-macros autoconf automake intltool rpm-build qt5-rpm-macros   qt5-qtbase-devel qt5-qtsvg-devel qt5-qtx11extras-devel qt5-linguist glib2-devel gsettings-qt-devel bamf-devel libXrandr-devel libXtst-devel libX11-devel
       - name: QMake configure & Make
         run: |
           mkdir build;
