@@ -16,8 +16,13 @@ TEMPLATE = app
 target.path = /usr/bin
 
 TRANSLATIONS+=\
-    ukui_menu_ch.ts \
-    ukui_menu_tr.ts
+    translations/ukui-menu_bo.ts \
+    translations/ukui-menu_zh_CN.ts \
+    translations/ukui-menu_tr.ts
+
+QM_FILES_INSTALL_PATH = /usr/share/ukui-menu/translations/
+# So we can access it from main.cpp
+DEFINES += QM_FILES_INSTALL_PATH='\\"$${QM_FILES_INSTALL_PATH}\\"'
 
 SOURCES += \
     src/CommonUseWidget/commonusewidget.cpp \
@@ -92,7 +97,7 @@ RESOURCES += \
     res.qrc
 
 PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt libbamf3 x11 xrandr xtst
-CONFIG += no_keywords link_pkgconfig
+CONFIG += no_keywords link_pkgconfig lrelease
 
 desktop_file.files = ukui-menu.desktop
 desktop_file.path = /etc/xdg/autostart

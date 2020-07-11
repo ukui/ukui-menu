@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-    QtSingleApplication app("ukui-start-menu",argc,argv);
+    QtSingleApplication app("ukui-menu", argc, argv);
     app.setQuitOnLastWindowClosed(false);
 
     if(app.isRunning())
@@ -38,14 +38,11 @@ int main(int argc, char *argv[])
         return EXIT_SUCCESS;
     }
 
-    QString locale = QLocale::system().name();
     QTranslator translator;
-    if (locale == "zh_CN"){
-        if (translator.load(":/ukui_menu_ch.qm"))
-            app.installTranslator(&translator);
-        else
-            qDebug() << "Load translations file" << locale << "failed!";
-    }
+    if (translator.load(QLocale(), "ukui-menu", "_", QM_FILES_INSTALL_PATH))
+        app.installTranslator(&translator);
+    else
+        qDebug() << "Load translations file" << QLocale() << "failed!";
 
     MainWindow w;
     int position=0;
