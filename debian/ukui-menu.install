@@ -1,0 +1,4 @@
+ukui-menu usr/bin
+ukui-menu.desktop etc/xdg/autostart
+translations/*.ts usr/share/ukui-menu/translations
+.qm/*.qm usr/share/ukui-menu/translations
