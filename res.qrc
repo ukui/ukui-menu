@@ -81,5 +81,6 @@
         <file>data/img/mainviewwidget/Mobile-Disabled.svg</file>
         <file>data/img/mainviewwidget/Mobile-Enabled.svg</file>
         <file>data/img/mainviewwidget/Mobile-Normal.svg</file>
+        <file>translations/ukui_menu_tr.qm</file>
     </qresource>
 </RCC>
