@@ -21,6 +21,7 @@ TRANSLATIONS+=\
     translations/ukui-menu_tr.ts
 
 QM_FILES_INSTALL_PATH = /usr/share/ukui-menu/translations/
+
 # So we can access it from main.cpp
 DEFINES += QM_FILES_INSTALL_PATH='\\"$${QM_FILES_INSTALL_PATH}\\"'
 
@@ -101,6 +102,9 @@ CONFIG += no_keywords link_pkgconfig lrelease
 
 desktop_file.files = ukui-menu.desktop
 desktop_file.path = /etc/xdg/autostart
+
+# QTBUG-77398: translations not installed
+qm_files.CONFIG = no_check_exist
 
 INSTALLS += \
     target desktop_file
