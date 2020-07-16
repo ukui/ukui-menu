@@ -194,7 +194,7 @@ void RightClickMenu::onReadOutput()
 {
     QString packagestr=QString::fromLocal8Bit(m_cmdProc->readAllStandardOutput().data());
     QString packageName=packagestr.split(":").at(0);
-    qDebug()<<packagestr<<packageName;
+//    qDebug()<<packagestr<<packageName;
     char command[100];
     sprintf(command,"ubuntu-kylin-software-center -remove %s",packageName.toLocal8Bit().data());
     QProcess::startDetached(command);
@@ -298,9 +298,12 @@ int RightClickMenu::showShutdownMenu()
     if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.session").toLocal8Bit());
-        if(gsetting->keys().contains(QString("canhibernate")) && gsetting->get("panelposition").toBool())
-            menu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Hibernate"),
-                           this,SLOT(hibernateActionTriggerSlot()));
+        if(gsetting->keys().contains(QString("canhibernate")))
+        {
+            if(gsetting->get("canhibernate").toBool())
+                menu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Hibernate"),
+                               this,SLOT(hibernateActionTriggerSlot()));
+        }
     }
     menu.addAction(QIcon(getIconPixmap("kylin-sleep-symbolic",1)),tr("Sleep"),
                    this,SLOT(sleepActionTriggerSlot()));

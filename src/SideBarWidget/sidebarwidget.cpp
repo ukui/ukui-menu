@@ -306,7 +306,6 @@ QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
 void SideBarWidget::shutdownBtnRightClickSlot()
 {
     int ret=m_shutDownMenu->showShutdownMenu();
-    qDebug()<<ret;
     if(ret>=10 && ret<=14)
     {
         this->parentWidget()->parentWidget()->hide();
