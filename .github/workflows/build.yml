@@ -23,7 +23,7 @@ jobs:
       - name: Refresh pacman repository
         run: pacman -Sy
       - name: Install build dependencies
-        run: pacman -S --noconfirm base-devel qt5-base bamf gsettings-qt qt5-svg qt5-x11extras qt5-tools
+        run: pacman -S --noconfirm base-devel qt5-base bamf gsettings-qt qt5-svg qt5-x11extras qt5-tools kwindowsystem
       - name: QMake configure & Make
         run: |
           mkdir build;
@@ -42,7 +42,7 @@ jobs:
       - name: Update apt repository
         run: apt-get update -y
       - name: Install build dependcies
-        run: apt-get install -y build-essential qt5-default qttools5-dev-tools debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev libxrandr-dev libxtst-dev libx11-dev libqt5x11extras5-dev
+        run: apt-get install -y build-essential qt5-default qttools5-dev-tools debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev libxrandr-dev libxtst-dev libx11-dev libqt5x11extras5-dev libkf5windowsystem-dev
       - name: QMake configure & Make
         run: |
           mkdir build;
@@ -58,7 +58,7 @@ jobs:
       - name: Checkout ukui-menu source code
         uses: actions/checkout@v2
       - name: Install build dependencies
-        run: dnf install -y which gcc gcc-c++ make cmake cmake-rpm-macros autoconf automake intltool rpm-build qt5-rpm-macros   qt5-qtbase-devel qt5-qtsvg-devel qt5-qtx11extras-devel qt5-linguist glib2-devel gsettings-qt-devel bamf-devel libXrandr-devel libXtst-devel libX11-devel
+        run: dnf install -y which gcc gcc-c++ make cmake cmake-rpm-macros autoconf automake intltool rpm-build qt5-rpm-macros   qt5-qtbase-devel qt5-qtsvg-devel qt5-qtx11extras-devel qt5-linguist glib2-devel gsettings-qt-devel bamf-devel libXrandr-devel libXtst-devel libX11-devel kf5-kwindowsystem-devel
       - name: QMake configure & Make
         run: |
           mkdir build;
@@ -77,7 +77,7 @@ jobs:
       - name: Update apt repository
         run: apt-get update -y
       - name: Install build dependcies
-        run: apt-get install -y build-essential qt5-default qttools5-dev-tools debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev libxrandr-dev libxtst-dev libx11-dev libqt5x11extras5-dev
+        run: apt-get install -y build-essential qt5-default qttools5-dev-tools debhelper-compat qtbase5-dev libqt5svg5-dev libglib2.0-dev libgsettings-qt-dev libbamf3-dev libxrandr-dev libxtst-dev libx11-dev libqt5x11extras5-dev libkf5windowsystem-dev
       - name: QMake configure & Make
         run: |
           mkdir build;

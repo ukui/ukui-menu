@@ -91,6 +91,17 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
                     continue;
                 }
             }
+            char* ret_2=g_key_file_get_locale_string(keyfile,"Desktop Entry","NotShowIn", nullptr, nullptr);
+            if(ret_2!=nullptr)
+            {
+                QString str=QString::fromLocal8Bit(ret_2);
+                if(str.contains("UKUI"))
+                {
+                    i++;
+                    continue;
+                }
+            }
+
             //过滤LXQt、KDE
             char* ret=g_key_file_get_locale_string(keyfile,"Desktop Entry","OnlyShowIn", nullptr, nullptr);
             if(ret!=nullptr)
