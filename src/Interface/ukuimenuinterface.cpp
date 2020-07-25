@@ -223,7 +223,7 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
         bool is_owned=false;
         for(int j=0;j<vector.size();j++)
         {
-            if(matchingAppCategories(desktopfpList.at(i),vector.at(j)))//有对应分类
+            if(matchingAppCategories(desktopfpList.at(i),vector.at(j))&&!is_owned)//有对应分类,且未匹配成功过
             {
                 is_owned=true;
                 appInfoList.append(QString::number(j));
