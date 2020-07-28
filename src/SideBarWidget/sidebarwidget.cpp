@@ -308,7 +308,7 @@ void SideBarWidget::shutdownBtnRightClickSlot()
     int ret=m_shutDownMenu->showShutdownMenu();
     if(ret>=10 && ret<=14)
     {
-        this->parentWidget()->parentWidget()->hide();
+        Q_EMIT sendHideMainWindowSignal();
         switch (ret) {
         case 10:
             QProcess::startDetached(QString("ukui-screensaver-command -l"));
@@ -369,26 +369,26 @@ void SideBarWidget::otherBtnRightClickSlot()
     int ret=m_otherMenu->showOtherMenu(desktopfp);
     if(ret==15)
     {
-        this->parentWidget()->parentWidget()->hide();
+        Q_EMIT sendHideMainWindowSignal();
         QProcess::startDetached(QString("ukui-control-center -d"));
     }
 }
 
 void SideBarWidget::computerBtnClickedSlot()
 {
-    this->parentWidget()->parentWidget()->hide();
+    Q_EMIT sendHideMainWindowSignal();
     QProcess::startDetached(QString("/usr/bin/peony computer:///"));
 }
 
 void SideBarWidget::personalBtnClickedSlot()
 {
-    this->parentWidget()->parentWidget()->hide();
+    Q_EMIT sendHideMainWindowSignal();
     QProcess::startDetached(QString("/usr/bin/peony"));
 }
 
 void SideBarWidget::controlBtnClickedSlot()
 {
-    this->parentWidget()->parentWidget()->hide();
+    Q_EMIT sendHideMainWindowSignal();
     QString execpath=m_ukuiMenuInterface->getAppExec(QString("/usr/share/applications/ukui-control-center.desktop"));
     //移除启动参数%u或者%U
     if(execpath.contains("%"))
@@ -402,19 +402,19 @@ void SideBarWidget::controlBtnClickedSlot()
 
 void SideBarWidget::trashBtnClickedSlot()
 {
-    this->parentWidget()->parentWidget()->hide();
+    Q_EMIT sendHideMainWindowSignal();
     QProcess::startDetached(QString("/usr/bin/peony trash:///"));
 }
 
 void SideBarWidget::shutdownBtnClickedSlot()
 {
-    this->parentWidget()->parentWidget()->hide();
+    Q_EMIT sendHideMainWindowSignal();
     QProcess::startDetached(QString("ukui-session-tools"));
 }
 
 void SideBarWidget::userIconBtnClickedSlot()
 {
-    this->parentWidget()->parentWidget()->hide();
+    Q_EMIT sendHideMainWindowSignal();
     QProcess::startDetached(QString("ukui-control-center -u"));
 }
 

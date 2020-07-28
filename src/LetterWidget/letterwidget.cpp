@@ -125,7 +125,7 @@ void LetterWidget::recvItemClickedSlot(QStringList arg)
  */
 void LetterWidget::execApplication(QString desktopfp)
 {
-    this->parentWidget()->parentWidget()->parentWidget()->hide();
+    Q_EMIT sendHideMainWindowSignal();
     GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
     bool ret=g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
     g_object_unref(desktopAppInfo);

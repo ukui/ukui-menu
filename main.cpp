@@ -138,14 +138,14 @@ int main(int argc, char *argv[])
 //    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
 //    path.lineTo(rect.bottomRight());
 //    path.lineTo(rect.topRight());
-    w.setFrameStyle();
+//    w.setFrameStyle();
 //    w.setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
     //注释掉，以保证自启动时不显示界面
-    w.show();
-    w.raise();
-    w.activateWindow();
-    w.hide();
+//    w.show();
+//    w.raise();
+//    w.activateWindow();
+//    w.hide();
     KWindowEffects::enableBlurBehind(w.winId(),true);
 
     return app.exec();

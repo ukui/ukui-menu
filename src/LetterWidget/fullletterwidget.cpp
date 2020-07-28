@@ -135,7 +135,7 @@ void FullLetterWidget::fillAppList()
  */
 void FullLetterWidget::execApplication(QString desktopfp)
 {
-    this->parentWidget()->parentWidget()->parentWidget()->hide();
+    Q_EMIT sendHideMainWindowSignal();
     GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
     g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
     g_object_unref(desktopAppInfo);

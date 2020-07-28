@@ -218,6 +218,10 @@ Q_SIGNALS:
      * @brief Send the default button click signal
      */
     void sendDefaultBtnSignal();//发送默认(还原)按钮点击信号
+    /**
+     * @brief Send a hidden main window signal to the MainWindow
+     */
+    void sendHideMainWindowSignal();
 };
 
 #endif // SIDEBARWIDGET_H
