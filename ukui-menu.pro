@@ -30,7 +30,7 @@ lrelease.output = ${QMAKE_FILE_IN_BASE}.qm
 lrelease.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
 lrelease.CONFIG = no_link
 QMAKE_EXTRA_COMPILERS += lrelease
-lessThan(QT_MINOR_VERSION, 12): PRE_TARGETDEPS += compiler_lrelease_make_all
+PRE_TARGETDEPS += compiler_lrelease_make_all
 
 for (translation, TRANSLATIONS) {
     translation = $$basename(translation)
