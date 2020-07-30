@@ -25,6 +25,7 @@
 #include <QLocale>
 #include <KWindowEffects>
 #include <X11/Xlib.h>
+#include <syslog.h>
 
 int getScreenWidth() {
     Display *disp = XOpenDisplay(NULL);
@@ -51,6 +52,7 @@ int main(int argc, char *argv[])
 
     QtSingleApplication app("ukui-menu", argc, argv);
     app.setQuitOnLastWindowClosed(false);
+
 
     if(app.isRunning())
     {

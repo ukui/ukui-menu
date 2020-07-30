@@ -116,6 +116,12 @@ void MainWindow::initUi()
                 this,&MainWindow::panelChangedSlot);
     }
 
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.session").toLocal8Bit());
+        connect(gsetting,&QGSettings::changed,this,&MainWindow::winKeyReleaseSlot);
+    }
+
 //    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
 //                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
 }
@@ -431,6 +437,28 @@ void MainWindow::XkbEventsRelease(const QString &keycode)
         this->hide();
         m_mainViewWid->widgetMakeZero();
 //        m_sideBarWid->widgetMakeZero();
+    }
+}
+
+void MainWindow::winKeyReleaseSlot(const QString &key)
+{
+    if(key=="winKeyRelease" || key=="win-key-release")
+    {
+        QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
+        if(gsetting.get(QString("win-key-release")).toBool())
+        {
+            disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+                    this,SLOT(XkbEventsRelease(QString)));
+            disconnect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+                    this,SLOT(XkbEventsPress(QString)));
+        }
+        else
+        {
+            connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+                    this,SLOT(XkbEventsRelease(QString)));
+            connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+                    this,SLOT(XkbEventsPress(QString)));
+        }
     }
 }
 

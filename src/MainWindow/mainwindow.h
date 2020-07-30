@@ -124,6 +124,10 @@ public Q_SLOTS:
      * @brief Open the start menu by signaling
      */
     void recvStartMenuSlot();
+    /**
+     * @brief Monitor win-key-release key value.
+     */
+    void winKeyReleaseSlot(const QString &key);
 };
 
 #endif // MAINWINDOW_H
