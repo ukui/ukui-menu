@@ -295,6 +295,7 @@ int RightClickMenu::showShutdownMenu()
     QMenu menu;
     menu.addAction(QIcon(getIconPixmap("stock-people-symbolic",1)),tr("Switch User"),
                    this,SLOT(switchUserActionTriggerSlot()));
+#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
     if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.session").toLocal8Bit());
@@ -305,6 +306,7 @@ int RightClickMenu::showShutdownMenu()
                                this,SLOT(hibernateActionTriggerSlot()));
         }
     }
+#endif
     menu.addAction(QIcon(getIconPixmap("kylin-sleep-symbolic",1)),tr("Sleep"),
                    this,SLOT(sleepActionTriggerSlot()));
     menu.addAction(QIcon(getIconPixmap("system-lock-screen-symbolic",1)),tr("Lock Screen"),
