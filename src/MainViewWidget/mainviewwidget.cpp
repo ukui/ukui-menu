@@ -104,7 +104,18 @@ void MainViewWidget::initUi()
     connect(m_fullSearchResultWid,&FullSearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
 
     addTopControl();
-    loadMinMainView();
+    //加载默认视图
+//    loadMinMainView();
+    this->setFixedSize(Style::defaultMainViewWidWidth,Style::minh);
+    m_topWidget->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultTopWidHeight);
+    m_topLayout->setContentsMargins(0,0,0,0);
+    m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
+    m_queryLineEdit->setFixedSize(Style::defaultQueryLineEditWidth,Style::defaultQueryLineEditHeight);
+    m_queryText->adjustSize();
+    m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
+                                  m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+    m_queryWid->show();
+    mainLayout->insertWidget(1,m_commonUseWid);
 
     //监控应用进程开启
     bamf_matcher_get_default();
@@ -203,7 +214,8 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                                                m_queryIcon->width()+5,Style::QueryLineEditHeight));
                  m_animation->setEasingCurve(QEasingCurve::OutQuad);
                  m_animation->start();
-                 m_queryLineEdit->setReadOnly(true);
+//                 m_queryLineEdit->setReadOnly(true);
+                 m_queryLineEdit->setTextMargins(-5,1,0,1);
              }
              m_isSearching=true;
         }
@@ -263,7 +275,7 @@ void MainViewWidget::searchAppSlot(QString arg)
             if(m_widgetState!=0)
             {
                 QLayoutItem* child;
-                if((child=this->layout()->takeAt(2))!=nullptr)
+                if((child=this->layout()->takeAt(1))!=nullptr)
                 {
                     QWidget* childWid=child->widget();
                     if(childWid!=nullptr)
@@ -273,26 +285,24 @@ void MainViewWidget::searchAppSlot(QString arg)
                     }
                 }
                 m_widgetState=0;
-                if(m_isFullScreen==false)
-                {
-                    this->layout()->addWidget(m_searchResultWid);
-                }
-                else{
-                    this->layout()->addWidget(m_fullSearchResultWid);
-                }
+                QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+                if(!m_isFullScreen)
+                    layout->insertWidget(1,m_searchResultWid);
+                else
+                    layout->insertWidget(1,m_fullSearchResultWid);
             }
         }
         else{
-            QLayoutItem* child;
-            if((child=this->layout()->takeAt(2))!=nullptr)
-            {
-                QWidget* childWid=child->widget();
-                if(childWid!=nullptr)
-                {
-                    this->layout()->removeWidget(childWid);
-                    childWid->setParent(nullptr);
-                }
-            }
+//            QLayoutItem* child;
+//            if((child=this->layout()->takeAt(2))!=nullptr)
+//            {
+//                QWidget* childWid=child->widget();
+//                if(childWid!=nullptr)
+//                {
+//                    this->layout()->removeWidget(childWid);
+//                    childWid->setParent(nullptr);
+//                }
+//            }
             if(m_isFullScreen)
             {
                 switch (m_saveCurrentWidState) {
@@ -345,7 +355,7 @@ void MainViewWidget::animationFinishedSlot()
     {
         m_queryWid->layout()->removeWidget(m_queryText);
         m_queryText->setParent(nullptr);
-        m_queryLineEdit->setReadOnly(false);
+//        m_queryLineEdit->setReadOnly(false);
         m_queryLineEdit->setTextMargins(20,1,0,1);
         if(!m_searchKeyWords.isEmpty())
         {
@@ -380,7 +390,7 @@ void MainViewWidget::loadMinMainView()
     if(m_widgetState==0)
     {
         QLayoutItem* child;
-        if((child=this->layout()->takeAt(2))!=nullptr)
+        if((child=this->layout()->takeAt(1))!=nullptr)
         {
             QWidget* childWid=child->widget();
             if(childWid!=nullptr)
@@ -389,7 +399,8 @@ void MainViewWidget::loadMinMainView()
                 childWid->setParent(nullptr);
             }
         }
-        this->layout()->addWidget(m_searchResultWid);
+        QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+        layout->insertWidget(1,m_searchResultWid);
     }
     else if(m_widgetState==1)
         loadCommonUseWidget();
@@ -429,7 +440,7 @@ void MainViewWidget::loadMaxMainView()
     if(m_widgetState==0)
     {
         QLayoutItem* child;
-        if((child=this->layout()->takeAt(2))!=nullptr)
+        if((child=this->layout()->takeAt(1))!=nullptr)
         {
             QWidget* childWid=child->widget();
             if(childWid!=nullptr)
@@ -438,7 +449,8 @@ void MainViewWidget::loadMaxMainView()
                 childWid->setParent(nullptr);
             }
         }
-        this->layout()->addWidget(m_fullSearchResultWid);
+        QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+        layout->insertWidget(1,m_fullSearchResultWid);
     }
     else if(m_widgetState==1)
         loadFullCommonUseWidget();
@@ -468,15 +480,6 @@ void MainViewWidget::resizeControl()
                                       0,
                                       (m_topWidget->width()-Style::LeftWidWidth-m_queryLineEdit->width())/2,
                                       0);
-
-//        if(m_queryLineEdit->text().isEmpty() || m_isHiden)
-//        {
-//            if(m_queryWid->layout()->count()==1)
-//                m_queryWid->layout()->addWidget(m_queryText);
-//            m_queryText->adjustSize();
-//            m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-//                                          m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-//        }
     }
     else
     {
@@ -484,15 +487,6 @@ void MainViewWidget::resizeControl()
         m_topWidget->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultTopWidHeight);
         m_topLayout->setContentsMargins(0,0,0,0);
         m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
-//        m_queryLineEdit->setFixedSize(Style::defaultQueryLineEditWidth,Style::defaultQueryLineEditHeight);
-//        if(m_queryLineEdit->text().isEmpty() || m_isHiden)
-//        {
-//            if(m_queryWid->layout()->count()==1)
-//                m_queryWid->layout()->addWidget(m_queryText);
-//            m_queryText->adjustSize();
-//            m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-//                                          m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-//        }
     }
 
 }
@@ -508,7 +502,7 @@ void MainViewWidget::loadCommonUseWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(2)) != nullptr) {
+    if((child = this->layout()->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -517,7 +511,8 @@ void MainViewWidget::loadCommonUseWidget()
         }
 
     }
-    this->layout()->addWidget(m_commonUseWid);
+    QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+    layout->insertWidget(1,m_commonUseWid);
     m_commonUseWid->updateListView();
     m_widgetState=1;
     m_saveCurrentWidState=1;
@@ -534,7 +529,7 @@ void MainViewWidget::loadLetterWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(2)) != nullptr) {
+    if((child = this->layout()->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -543,7 +538,8 @@ void MainViewWidget::loadLetterWidget()
         }
 
     }
-    this->layout()->addWidget(m_letterWid);
+    QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+    layout->insertWidget(1,m_letterWid);
     m_widgetState=2;
     m_saveCurrentWidState=2;
 }
@@ -559,7 +555,7 @@ void MainViewWidget::loadFunctionWidget()
     m_fullLetterWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(2)) != nullptr) {
+    if((child = this->layout()->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -568,7 +564,8 @@ void MainViewWidget::loadFunctionWidget()
         }
 
     }
-    this->layout()->addWidget(m_functionWid);
+    QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+    layout->insertWidget(1,m_functionWid);
     m_widgetState=3;
     m_saveCurrentWidState=3;
 }
@@ -585,7 +582,7 @@ void MainViewWidget::loadFullCommonUseWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(2)) != nullptr) {
+    if((child = this->layout()->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -594,7 +591,8 @@ void MainViewWidget::loadFullCommonUseWidget()
         }
 
     }
-    this->layout()->addWidget(m_fullCommonUseWid);
+    QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+    layout->insertWidget(1,m_fullCommonUseWid);
     m_fullCommonUseWid->updateListView();
     m_widgetState=1;
     m_saveCurrentWidState=1;
@@ -611,7 +609,7 @@ void MainViewWidget::loadFullLetterWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(2)) != nullptr) {
+    if((child = this->layout()->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -619,7 +617,8 @@ void MainViewWidget::loadFullLetterWidget()
             childwid->setParent(nullptr);
         }
     }
-    this->layout()->addWidget(m_fullLetterWid);
+    QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+    layout->insertWidget(1,m_fullLetterWid);
     if(!m_isFullScreen || (m_isFullScreen && m_saveCurrentWidState!=2))
         m_fullLetterWid->enterAnimation();
     m_widgetState=2;
@@ -637,7 +636,7 @@ void MainViewWidget::loadFullFunctionWidget()
     m_fullLetterWid->widgetMakeZero();
     m_functionWid->widgetMakeZero();
     QLayoutItem *child;
-    if((child = this->layout()->takeAt(2)) != nullptr) {
+    if((child = this->layout()->takeAt(1)) != nullptr) {
         QWidget* childwid=child->widget();
         if(childwid!=nullptr)
         {
@@ -646,7 +645,8 @@ void MainViewWidget::loadFullFunctionWidget()
         }
 
     }
-    this->layout()->addWidget(m_fullFunctionWid);
+    QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+    layout->insertWidget(1,m_fullFunctionWid);
     if(!m_isFullScreen || (m_isFullScreen && m_saveCurrentWidState!=3))
         m_fullFunctionWid->enterAnimation();
     m_widgetState=3;
