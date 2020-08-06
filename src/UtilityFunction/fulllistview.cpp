@@ -72,6 +72,7 @@ void FullListView::initWidget()
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
+    this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     connect(this,&FullListView::customContextMenuRequested,this,&FullListView::rightClickedSlot);
     connect(this,&FullListView::clicked,this,&FullListView::onClicked);
 }

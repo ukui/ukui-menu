@@ -67,6 +67,7 @@ void ListView::initWidget()
     this->setSpacing(0);
     this->setContentsMargins(0, 0, 0, 0);
     this->setMouseTracking(true);
+    this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
 }

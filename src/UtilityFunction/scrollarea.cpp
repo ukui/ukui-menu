@@ -32,6 +32,7 @@ ScrollArea::ScrollArea()
       installEventFilter(this);
       this->setFocusPolicy(Qt::NoFocus);
       this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+      this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 void ScrollArea::enterEvent(QEvent *e)
