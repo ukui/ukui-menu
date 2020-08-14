@@ -31,7 +31,7 @@ class UkuiMenuInterface
 {
 private:
     QStringList filePathList;
-    QStringList androidDesktopfnList;
+//    QStringList androidDesktopfnList;
     QSettings* setting=nullptr;
 
 protected:
@@ -47,6 +47,7 @@ public:
     static QVector<QStringList> alphabeticVector;
     static QVector<QStringList> functionalVector;
     static QVector<QString> allAppVector;
+    static QStringList androidDesktopfnList;
 
     /**
      * 获取系统应用名称

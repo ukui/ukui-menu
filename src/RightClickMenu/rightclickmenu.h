@@ -34,7 +34,6 @@
 #include <QDBusInterface>
 #include <QProcess>
 #include <QEvent>
-//#include <QPaintDevice>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 

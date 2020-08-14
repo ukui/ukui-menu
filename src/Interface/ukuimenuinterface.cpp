@@ -36,6 +36,7 @@ QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
 QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
 QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::allAppVector=QVector<QString>();
+QStringList UkuiMenuInterface::androidDesktopfnList=QStringList();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
@@ -640,6 +641,7 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
             switch (category) {
             case 0:
                 appVector[0].append(appInfoVector.at(index));
+                break;
             case 1:
                 appVector[1].append(appInfoVector.at(index));
                 break;

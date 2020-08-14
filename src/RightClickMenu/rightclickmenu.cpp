@@ -281,8 +281,9 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
     menu.addAction(tr("Add to desktop shortcuts"),
                    this,SLOT(addToDesktopActionTriggerSlot()));
     menu.addSeparator();
-    menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
-                   this,SLOT(uninstallActionTriggerSlot()));
+    if(!UkuiMenuInterface::androidDesktopfnList.contains(desktopfn))
+        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
+                       this,SLOT(uninstallActionTriggerSlot()));
 
     menu.setAttribute(Qt::WA_TranslucentBackground);
     menu.exec(QCursor::pos());
