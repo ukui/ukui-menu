@@ -46,6 +46,7 @@ void FunctionWidget::initUi()
     initAppListWidget();
 
     m_functionBtnWid=new FunctionButtonWidget(this);
+    m_functionBtnWid->hide();
     connect(this,&FunctionWidget::sendClassificationbtnList,m_functionBtnWid,&FunctionButtonWidget::recvClassificationBtnList);
     connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&FunctionWidget::recvFunctionBtnSignal);
 
@@ -253,16 +254,14 @@ void FunctionWidget::animationFinishedSLot()
 {
     if(m_widgetState==1)
     {
-        m_appListView->setVisible(false);
-        m_functionBtnWid->setVisible(true);
+        m_appListView->hide();
         m_enterAnimation->start();
         m_widgetState=-1;
         m_functionBtnWid->show();
     }
     if(m_widgetState==0)
     {
-        m_functionBtnWid->setVisible(false);
-        m_appListView->setVisible(true);
+        m_functionBtnWid->hide();
         m_enterAnimation->start();
         m_widgetState=-1;
         m_appListView->show();
@@ -271,8 +270,7 @@ void FunctionWidget::animationFinishedSLot()
 
 void FunctionWidget::widgetMakeZero()
 {
-    m_functionBtnWid->setVisible(false);
-    m_appListView->setVisible(true);
+    m_functionBtnWid->hide();
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
     m_appListView->show();
     m_appListView->verticalScrollBar()->setValue(0);

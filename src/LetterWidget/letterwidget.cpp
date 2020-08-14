@@ -55,6 +55,7 @@ void LetterWidget::initUi()
     initAppListWidget();
 
     m_letterBtnWid=new LetterButtonWidget(this);
+    m_letterBtnWid->hide();
     connect(this,&LetterWidget::sendLetterBtnList,m_letterBtnWid,&LetterButtonWidget::recvLetterBtnList);
     connect(m_letterBtnWid, &LetterButtonWidget::sendLetterBtnSignal,this,&LetterWidget::recvLetterBtnSlot);
 
@@ -221,26 +222,23 @@ void LetterWidget::animationFinishedSLot()
 {
     if(m_widgetState==1)
     {
-        m_appListView->setVisible(false);
-        m_letterBtnWid->setVisible(true);
         m_enterAnimation->start();
         m_widgetState=-1;
+        m_appListView->hide();
         m_letterBtnWid->show();
     }
     if(m_widgetState==0)
     {
-        m_letterBtnWid->setVisible(false);
-        m_appListView->setVisible(true);
         m_enterAnimation->start();
         m_widgetState=-1;
+        m_letterBtnWid->hide();
         m_appListView->show();
     }
 }
 
 void LetterWidget::widgetMakeZero()
 {
-    m_letterBtnWid->setVisible(false);
-    m_appListView->setVisible(true);
+    m_letterBtnWid->hide();
     m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
     m_appListView->show();
     m_appListView->verticalScrollBar()->setValue(0);
