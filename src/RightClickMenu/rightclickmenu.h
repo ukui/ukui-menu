@@ -73,8 +73,6 @@ private:
     int m_actionNumber;
     QSettings *m_setting=nullptr;
 
-    char m_style[400];
-
     QProcess *m_cmdProc=nullptr;
 
 protected:

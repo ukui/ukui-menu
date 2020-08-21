@@ -28,11 +28,6 @@ RightClickMenu::RightClickMenu(QWidget *parent):
 
     m_cmdProc=new QProcess;
     connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
-
-    sprintf(m_style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
-            QMenu::item:selected{background-color:%s;border-radius:6px;}\
-            QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
-            RightClickMenuBorder ,RightClickMenuBackground,RightClickMenuSelected,RightClickMenuSeparator);
 }
 
 RightClickMenu::~RightClickMenu()
@@ -294,24 +289,24 @@ int RightClickMenu::showShutdownMenu()
 {
     m_actionNumber=0;
     QMenu menu;
-    menu.addAction(QIcon(getIconPixmap("stock-people-symbolic",1)),tr("Switch User"),
-                   this,SLOT(switchUserActionTriggerSlot()));
-#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.session").toLocal8Bit());
-        if(gsetting->keys().contains(QString("canhibernate")))
-        {
-            if(gsetting->get("canhibernate").toBool())
-                menu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Hibernate"),
-                               this,SLOT(hibernateActionTriggerSlot()));
-        }
-    }
-#endif
+//    menu.addAction(QIcon(getIconPixmap("stock-people-symbolic",1)),tr("Switch User"),
+//                   this,SLOT(switchUserActionTriggerSlot()));
+//#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
+//    if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
+//    {
+//        QGSettings* gsetting=new QGSettings(QString("org.ukui.session").toLocal8Bit());
+//        if(gsetting->keys().contains(QString("canhibernate")))
+//        {
+//            if(gsetting->get("canhibernate").toBool())
+//                menu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Hibernate"),
+//                               this,SLOT(hibernateActionTriggerSlot()));
+//        }
+//    }
+//#endif
     menu.addAction(QIcon(getIconPixmap("kylin-sleep-symbolic",1)),tr("Sleep"),
                    this,SLOT(sleepActionTriggerSlot()));
-    menu.addAction(QIcon(getIconPixmap("system-lock-screen-symbolic",1)),tr("Lock Screen"),
-                   this,SLOT(lockScreenActionTriggerSlot()));
+//    menu.addAction(QIcon(getIconPixmap("system-lock-screen-symbolic",1)),tr("Lock Screen"),
+//                   this,SLOT(lockScreenActionTriggerSlot()));
     menu.addAction(QIcon(getIconPixmap("system-logout-symbolic",1)),tr("Log Out"),
                    this,SLOT(logoutActionTriggerSlot()));
     menu.addAction(QIcon(getIconPixmap("system-restart-symbolic",1)),tr("Restart"),
@@ -319,7 +314,6 @@ int RightClickMenu::showShutdownMenu()
     menu.addAction(QIcon(getIconPixmap("exit-symbolic",1)),tr("Power Off"),
                    this,SLOT(shutdownActionTriggerSlot()));
     menu.setAttribute(Qt::WA_TranslucentBackground);
-//    menu.setStyleSheet(m_style);
     menu.exec(QCursor::pos());
     return m_actionNumber;
 }
@@ -346,7 +340,6 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
     menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/setting.svg",0)),tr("Personalize this list"),
                    this,SLOT(otherListActionTriggerSlot()));
     menu.setAttribute(Qt::WA_TranslucentBackground);
-//    menu.setStyleSheet(m_style);
     menu.exec(QCursor::pos());
     return m_actionNumber;
 }

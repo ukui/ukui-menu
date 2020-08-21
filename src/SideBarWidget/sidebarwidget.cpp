@@ -89,7 +89,7 @@ void SideBarWidget::addSidebarBtn()
 
     //分类按钮
     m_buttonList.clear();
-    m_buttonTextList.clear();
+//    m_buttonTextList.clear();
     m_btnGroup=new QButtonGroup(m_mainWidget);
     m_allBtn=new QPushButton;
     initBtn(m_allBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),tr("All"),0);
@@ -107,13 +107,13 @@ void SideBarWidget::addSidebarBtn()
     m_userIconBtn=new QPushButton;
     initBtn(m_userIconBtn,usericon,username,3);
     m_personalBtn=new QPushButton;
-    initBtn(m_personalBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/personal.svg"),tr("Personal"),5);
+    initBtn(m_personalBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/personal.svg"),tr("Personal"),4);
     m_trashBtn=new QPushButton;
-    initBtn(m_trashBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),tr("Recycle Bin"),7);
+    initBtn(m_trashBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),tr("Recycle Bin"),5);
     m_computerBtn=new QPushButton;
-    initBtn(m_computerBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/computer.svg"),tr("Computer"),4);
+    initBtn(m_computerBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/computer.svg"),tr("Computer"),6);
     m_controlBtn=new QPushButton;
-    initBtn(m_controlBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/control.svg"),tr("Settings"),6);
+    initBtn(m_controlBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/control.svg"),tr("Settings"),7);
     m_shutDownBtn=new QPushButton;
     initBtn(m_shutDownBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),tr("Power"),8);
     connect(m_btnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&SideBarWidget::btnGroupClickedSlot);
@@ -224,8 +224,6 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
             btnicon=QString("/usr/share/ukui/faces/default.png");
         labelicon->setObjectName(QStringLiteral("faceLabel"));
         labelicon->setFocusPolicy(Qt::NoFocus);
-//        const QString SheetStyle = QString("border-radius: %1px;  border:0px solid white;").arg(12);
-//        labelicon->setStyleSheet(SheetStyle);
         labelicon->setAlignment(Qt::AlignCenter);
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
 
@@ -234,51 +232,16 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
         facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)*ratio/2);
         facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
         labelicon->setPixmap(facePixmap);
-
-
-//        QPixmap pixmapa;
-//        QFileInfo fileInfo(btnicon);
-//        if(fileInfo.isFile())
-//            pixmapa=QPixmap(btnicon);
-//        else
-//            pixmapa=QPixmap(":/data/img/sidebarwidget/usericon-darkcolor.svg");
-
-//        QPixmap p(btnicon);
-//        QPixmap pixmapa(p.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-////        QPixmap pixmapa(p);
-//        QPixmap pixmap(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
-//        pixmap.fill(Qt::transparent);
-//        QPainter painter(&pixmap);
-//        painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-//        QPainterPath path;
-//        path.addEllipse(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4);    //绘制椭圆
-//        painter.setClipPath(path);
-//        painter.drawPixmap(0, 0, Style::SideBarIconSize+4,Style::SideBarIconSize+4, pixmapa);
-
-//        labelicon->setScaledContents(true);
-//        labelicon->setPixmap(pixmap.scaled(Style::SideBarIconSize+4,Style::SideBarIconSize+4));
-//        labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
     }
-
-    QFont ft;
-    QFontMetrics fm(ft);
-    QString text_1 = fm.elidedText(text, Qt::ElideRight, Style::SideBarBtnWidth-44);
-    QLabel* labeltext=new QLabel;
-    labeltext->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    labeltext->setText(text_1);
-    labeltext->setFixedSize(Style::SideBarBtnWidth-44,Style::SideBarBtnHeight);
-    labeltext->setStyleSheet(QString("QLabel{background:transparent;color:#ffffff;}"));
-//    labeltext->adjustSize();
 
     btnLayout->setSpacing(0);
     btnLayout->addWidget(labelicon);
-    btnLayout->addWidget(labeltext);
     btnLayout->addStretch();
     btn->setLayout(btnLayout);
     btn->setFocusPolicy(Qt::NoFocus);
 
     m_buttonList.append(btn);
-    m_buttonTextList.append(labeltext);
+    m_textList.append(text);
 }
 
 QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
@@ -498,6 +461,8 @@ void SideBarWidget::setMinSidebarBtn(QPushButton* btn)
         {
             btn->layout()->removeWidget(childwid);
             childwid->setParent(nullptr);
+            delete childwid;
+            delete child;
         }
     }
 }
@@ -511,8 +476,6 @@ void SideBarWidget::loadMaxSidebar()
     setMinBtn();
 
     this->setFixedSize(Style::SideBarWidWidth,Style::heightavailable);
-//    m_mainWidget->setGeometry(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
-//                                   Style::SideBarBtnWidth,this->height()));
 
     m_minMaxWidget->setFixedSize(Style::MinMaxWidWidth,Style::MinMaxWidHeight);
     m_minMaxLayout->setContentsMargins(m_minMaxWidget->width()-m_minMaxBtn->width(),0,0,0);
@@ -549,7 +512,6 @@ void SideBarWidget::setMinBtn()
  */
 void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
 {
-    btn->setFixedSize(Style::SideBarBtnWidth,Style::SideBarBtnHeight);
     QHBoxLayout* layout=qobject_cast<QHBoxLayout*>(btn->layout());
     if(m_buttonList.indexOf(btn)==3)
     {
@@ -561,7 +523,43 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
         layout->setContentsMargins(15,0,0,0);
         layout->setSpacing(10);
     }
-    layout->insertWidget(1,m_buttonTextList.at(m_buttonList.indexOf(btn)));
+
+    //修复修改字体大小时获取文本Label大小无效
+    //移除按钮文本
+    QLayoutItem *child;
+    if((child = btn->layout()->takeAt(1)) != nullptr) {
+        QWidget* childwid=child->widget();
+        if(childwid!=nullptr)
+        {
+            btn->layout()->removeWidget(childwid);
+            childwid->setParent(nullptr);
+            delete childwid;
+            delete child;
+        }
+    }
+    //添加文本
+    QLabel* labeltext=new QLabel;
+    labeltext->setStyleSheet(QString("QLabel{background:transparent;color:#ffffff;border:0px;}"));
+    if(m_buttonList.indexOf(btn)<=2)
+    {
+        labeltext->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        labeltext->setText(m_textList.at(m_buttonList.indexOf(btn)));
+        labeltext->adjustSize();
+        m_btnWidth=44+labeltext->width()+10;
+    }
+    else
+    {
+            QFont ft;
+            QFontMetrics fm(ft);
+            QString text_1 = fm.elidedText(m_textList.at(m_buttonList.indexOf(btn)), Qt::ElideRight, m_btnWidth-44);
+            labeltext->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+            labeltext->setText(text_1);
+            labeltext->setFixedSize(m_btnWidth-44,Style::SideBarBtnHeight);
+            labeltext->adjustSize();
+    }
+
+    btn->layout()->addWidget(labeltext);
+    btn->setFixedSize(m_btnWidth,Style::SideBarBtnHeight);
 //    btn->setToolTip("");
 }
 
@@ -610,8 +608,8 @@ void SideBarWidget::enterAnimation()
     m_animation->setDuration(200);//动画总时间
     m_animation->setStartValue(QRect(this->width(),0,
                                     0,this->height()));
-    m_animation->setEndValue(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
-                                  Style::SideBarBtnWidth,this->height()));
+    m_animation->setEndValue(QRect(this->width()-m_btnWidth-Style::SideBarMargin,0,
+                                   m_btnWidth,this->height()));
     m_animation->setEasingCurve(QEasingCurve::InQuart);
     m_animation->start();
     m_mainWidget->show();
@@ -619,8 +617,8 @@ void SideBarWidget::enterAnimation()
 
 void SideBarWidget::setSideBarBtnGeometry()
 {
-    m_mainWidget->setGeometry(QRect(this->width()-Style::SideBarBtnWidth-Style::SideBarMargin,0,
-                                    Style::SideBarBtnWidth,this->height()));
+    m_mainWidget->setGeometry(QRect(this->width()-m_btnWidth-Style::SideBarMargin,0,
+                                    m_btnWidth,this->height()));
     m_mainWidget->show();
 }
 

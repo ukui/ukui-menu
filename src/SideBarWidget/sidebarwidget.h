@@ -76,7 +76,7 @@ private:
 
     QButtonGroup *m_btnGroup=nullptr;
     QList<QAbstractButton*> m_buttonList;
-    QList<QLabel*> m_buttonTextList;
+    QStringList m_textList;
     QPushButton *m_allBtn=nullptr;
     QPushButton *m_letterBtn=nullptr;
     QPushButton *m_functionBtn=nullptr;
@@ -93,6 +93,8 @@ private:
     RightClickMenu *m_shutDownMenu=nullptr;
     RightClickMenu *m_otherMenu=nullptr;
     QPropertyAnimation* m_animation=nullptr;
+
+    int m_btnWidth, m_btnheight;
 
 protected:
     /**

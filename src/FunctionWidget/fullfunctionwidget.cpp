@@ -168,8 +168,8 @@ void FullFunctionWidget::fillAppList()
 
 void FullFunctionWidget::insertClassificationBtn(QString category)
 {
-    PushButton* classificationbtn=new PushButton(this,category,m_scrollArea->width()-12,20,2);
-    classificationbtn->setFixedSize(m_scrollArea->width()-12,20);
+    PushButton* classificationbtn=new PushButton(this,category,m_scrollArea->width()-12,30,2);
+//    classificationbtn->setFixedSize(m_scrollArea->width()-12,25);
     m_scrollAreaWidLayout->addWidget(classificationbtn);
     m_classificationList.append(category);
 

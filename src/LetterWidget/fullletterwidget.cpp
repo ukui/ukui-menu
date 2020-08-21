@@ -109,7 +109,7 @@ void FullLetterWidget::fillAppList()
                 letterstr="#";
             m_letterList.append(letterstr);//存储分类字符
             //插入字母分类按钮
-            PushButton* letterbtn=new PushButton(this,letterstr,m_scrollArea->width()-12,20,1);
+            PushButton* letterbtn=new PushButton(this,letterstr,m_scrollArea->width()-12,30,1);
 //            letterbtn->setFixedSize(m_scrollArea->width(),20);
             m_scrollAreaWidLayout->addWidget(letterbtn);
 
