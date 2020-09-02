@@ -1,0 +1,13 @@
+Package: ukui-menu-dbgsym
+Package-Type: ddeb
+Source: ukui-menu
+Version: 1.0.0-1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Kylin Team <team+kylin@tracker.debian.org>
+Installed-Size: 4428
+Depends: ukui-menu (= 1.0.0-1)
+Section: debug
+Priority: optional
+Description: debug symbols for ukui-menu
+Build-Ids: c655bb8f0b2024dadcce069ee514fb4b60026151 f2bc5d6ae801b3aa68379f09464170e37a7bad5f
