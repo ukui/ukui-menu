@@ -1,0 +1,14 @@
+Package: ukui-menu
+Version: 1.0.0-1
+Architecture: amd64
+Maintainer: Kylin Team <team+kylin@tracker.debian.org>
+Installed-Size: 821
+Depends: libbamf3-2 (>= 0.2.20), libc6 (>= 2.14), libgcc-s1 (>= 3.0), libglib2.0-0 (>= 2.36), libgsettings-qt1 (>= 0.1+14.04.20140408), libkf5windowsystem5 (>= 4.96.0), libqt5core5a (>= 5.12.2), libqt5dbus5 (>= 5.0.2), libqt5gui5 (>= 5.8.0) | libqt5gui5-gles (>= 5.8.0), libqt5network5 (>= 5.0.2), libqt5svg5 (>= 5.6.0~beta), libqt5widgets5 (>= 5.11.0~rc1), libstdc++6 (>= 5), libx11-6, libxtst6, accountsservice, libqt5x11extras5, bamfdaemon, libxrandr2
+Section: x11
+Priority: optional
+Homepage: https://github.com/ukui/ukui-menu
+Description: Advanced ukui menu
+ UKUI menu provides start menu development library and advanced
+ graphical user interface.
+ .
+ The package contains executable file.
