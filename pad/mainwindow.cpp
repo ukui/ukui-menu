@@ -70,16 +70,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(animation,&QPropertyAnimation::finished,this,&MainWindow::displayMainViewSlot);
 
     //平板
-//    tabletMode=new QGSettings(TABLED_SCHEMA);
-//    connect(tabletMode,&QGSettings::changed,[this] (const QString &key) {
-//        bool res = tabletMode->get("tablet-mode").toBool();
-//        qDebug()<<res;
-//        if(!res)
-//            this->hide();
-//        else
-//             this->show();
+    tabletMode=new QGSettings(TABLED_SCHEMA);
+    connect(tabletMode,&QGSettings::changed,[this] (const QString &key) {
+        bool res = tabletMode->get("tablet-mode").toBool();
+        qDebug()<<res;
+        if(!res)
+            this->hide();
+        else
+             this->show();
 
-//    });
+    });
 
 
     //监控.desktop文件目录

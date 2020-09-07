@@ -71,6 +71,8 @@ private:
     QPropertyAnimation *m_animation=nullptr;
     bool m_winFlag = false;
 
+   // QGSettings* tabletMode=nullptr;
+
 protected:
     void initUi();
     /**

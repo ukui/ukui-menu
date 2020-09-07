@@ -32,6 +32,7 @@
 #include <QObject>
 
 #include <QMessageBox>
+//
 
 int getScreenWidth() {
     Display *disp = XOpenDisplay(NULL);
@@ -115,8 +116,23 @@ int main(int argc, char *argv[])
     
     
 
+////
+//    QGSettings* tabletMode= new QGSettings(TABLED_SCHEMA);
+//    bool res = tabletMode->get("tablet-mode").toBool();
+//    qDebug()<<res;
+//    if(res)
+//    {
+//        w.hide();
+//    }
 
-    
+
+//    else
+//    {
+//        w.show();
+//        w.raise();
+//        w.activateWindow();
+//    }
+//    w.show();
     
     
 

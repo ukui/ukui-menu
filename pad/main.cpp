@@ -5,7 +5,7 @@
 #include <QLocale>
 #include <QtSingleApplication>
 #include <QSettings>
-//#define TABLED_SCHEMA "org.ukui.SettingsDaemon.plugins.tablet-mode"
+#define TABLED_SCHEMA "org.ukui.SettingsDaemon.plugins.tablet-mode"
 
 int main(int argc, char *argv[])
 {
@@ -37,23 +37,23 @@ int main(int argc, char *argv[])
         a.installTranslator(&translator);
     }
 
-//    QGSettings* tabletMode= new QGSettings(TABLED_SCHEMA);
-//    bool res = tabletMode->get("tablet-mode").toBool();
-//    qDebug()<<res;
-//    if(!res)
-//    {
-//        w.hide();
-//    }
+    QGSettings* tabletMode= new QGSettings(TABLED_SCHEMA);
+    bool res = tabletMode->get("tablet-mode").toBool();
+    qDebug()<<res;
+    if(!res)
+    {
+        w.hide();
+    }
 
 
-//    else
-//    {
-//        w.show();
-//        w.raise();
-//        w.activateWindow();
-//    }
+    else
+    {
+        w.show();
+        w.raise();
+        w.activateWindow();
+    }
 
-    w.show();
+    //w.show();
 
     return a.exec();
 }

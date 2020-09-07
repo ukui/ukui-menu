@@ -39,6 +39,20 @@ MainWindow::MainWindow(QWidget *parent) :
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     m_setting=new QSettings(path,QSettings::IniFormat);
+
+
+    //平板
+//    tabletMode=new QGSettings(TABLED_SCHEMA);
+//    connect(tabletMode,&QGSettings::changed,[this] (const QString &key) {
+//        bool res = tabletMode->get("tablet-mode").toBool();
+//        qDebug()<<res;
+//        if(res)
+//            this->hide();
+//        else
+//             this->show();
+
+//    });
+
     initUi();
 }
 

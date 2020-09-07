@@ -154,7 +154,7 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
     filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
     filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
-    filePathList.removeAll("/usr/share/applications/blueman-manager.desktop");
+  //  filePathList.removeAll("/usr/share/applications/blueman-manager.desktop");
     filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
     filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
     filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
