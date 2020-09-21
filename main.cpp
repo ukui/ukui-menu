@@ -27,28 +27,12 @@
 #include <X11/Xlib.h>
 #include <syslog.h>
 
-int getScreenWidth() {
-    Display *disp = XOpenDisplay(NULL);
-    Screen *scrn = DefaultScreenOfDisplay(disp);
-    if (NULL == scrn) {
-        return 0;
-    }
-    int width = scrn->width;
-
-    if (NULL != disp) {
-        XCloseDisplay(disp);
-    }
-    return width;
-}
-
 int main(int argc, char *argv[])
 {
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
 
-    if (getScreenWidth() > 2560) {
-        QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-        QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-    }
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QtSingleApplication app("ukui-menu", argc, argv);
     app.setQuitOnLastWindowClosed(false);
