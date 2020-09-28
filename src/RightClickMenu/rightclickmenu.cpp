@@ -191,7 +191,7 @@ void RightClickMenu::onReadOutput()
     QString packageName=packagestr.split(":").at(0);
 //    qDebug()<<packagestr<<packageName;
     char command[100];
-    sprintf(command,"ubuntu-kylin-software-center -remove %s",packageName.toLocal8Bit().data());
+    sprintf(command,"kylin-installer -remove %s",packageName.toLocal8Bit().data());
     QProcess::startDetached(command);
 }
 

@@ -114,7 +114,7 @@ private:
     int m_saveCurrentWidState=-1;//Store the current category window number
 
     bool m_isFullScreen=false;
-    bool m_isHiden=false;
+//    bool m_isHiden=false;
 
     QFileSystemWatcher *m_fileWatcher=nullptr;//Monitor desktop folder status
 
@@ -208,10 +208,9 @@ Q_SIGNALS:
      */
     void sendSearchKeyword(QString arg);
     /**
-     * @brief Send the changed directory to DirectoryChangedThread
-     * @param arg: Desktop file directory
+     * @brief Send mounting and unmounting signals to DirectoryChangedThread
      */
-    void sendDirectoryPath(QString arg);
+    void sendDirectoryPath();
     /**
      * @brief Send a hidden main window signal to the MainViewWidget
      */

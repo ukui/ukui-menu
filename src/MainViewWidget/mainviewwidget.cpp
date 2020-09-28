@@ -23,6 +23,7 @@
 #include <libbamf/bamf-matcher.h>
 #include <syslog.h>
 #include <QDebug>
+#include <thread>
 
 MainViewWidget::MainViewWidget(QWidget *parent) :
     QWidget(parent)
@@ -84,7 +85,6 @@ void MainViewWidget::initUi()
     m_fileWatcher->addPaths(QStringList()<<"/usr/share/applications"<<QDir::homePath()+"/.local/share/applications/");
     connect(m_fileWatcher,&QFileSystemWatcher::directoryChanged,this,&MainViewWidget::directoryChangedSlot);
     m_directoryChangedThread=new DirectoryChangedThread;
-    connect(this,&MainViewWidget::sendDirectoryPath,m_directoryChangedThread,&DirectoryChangedThread::recvDirectoryPath);
     connect(m_directoryChangedThread,&DirectoryChangedThread::requestUpdateSignal,this,&MainViewWidget::requestUpdateSlot);
     connect(this,&MainViewWidget::directoryChangedSignal,m_letterWid,&LetterWidget::updateAppListView);
     connect(this,&MainViewWidget::directoryChangedSignal,m_fullLetterWid,&FullLetterWidget::updateAppListView);
@@ -118,7 +118,9 @@ void MainViewWidget::initUi()
     mainLayout->insertWidget(1,m_commonUseWid);
 
     //监控应用进程开启
-    bamf_matcher_get_default();
+//    bamf_matcher_get_default();
+    std::thread t(bamf_matcher_get_default);
+    t.detach();
     QDBusConnection::sessionBus().connect("org.ayatana.bamf","/org/ayatana/bamf/matcher","org.ayatana.bamf.matcher",
                                          QString("ViewOpened"),this,SLOT(ViewOpenedSlot(QDBusMessage)));
 
@@ -268,8 +270,9 @@ void MainViewWidget::setLineEditFocus(QString arg)
  */
 void MainViewWidget::searchAppSlot(QString arg)
 {
-    if(!m_isHiden)
-    {
+    qDebug()<<"---000---";
+//    if(!m_isHiden)
+//    {
         if(!arg.isEmpty())
         {
             if(m_widgetState!=0)
@@ -291,18 +294,10 @@ void MainViewWidget::searchAppSlot(QString arg)
                 else
                     layout->insertWidget(1,m_fullSearchResultWid);
             }
+            Q_EMIT sendSearchKeyword(arg);
+            m_searchAppThread->start();
         }
         else{
-//            QLayoutItem* child;
-//            if((child=this->layout()->takeAt(2))!=nullptr)
-//            {
-//                QWidget* childWid=child->widget();
-//                if(childWid!=nullptr)
-//                {
-//                    this->layout()->removeWidget(childWid);
-//                    childWid->setParent(nullptr);
-//                }
-//            }
             if(m_isFullScreen)
             {
                 switch (m_saveCurrentWidState) {
@@ -335,11 +330,9 @@ void MainViewWidget::searchAppSlot(QString arg)
             }
         }
 
-        Q_EMIT sendSearchKeyword(arg);
-        m_searchAppThread->start();
-    }
-    else
-        m_widgetState=m_saveCurrentWidState;
+//    }
+//    else
+//        m_widgetState=m_saveCurrentWidState;
 }
 
 void MainViewWidget::recvSearchResult(QVector<QStringList> arg)
@@ -351,11 +344,10 @@ void MainViewWidget::recvSearchResult(QVector<QStringList> arg)
 
 void MainViewWidget::animationFinishedSlot()
 {
-    if(m_isSearching)
+    if(m_isSearching)//进入搜索状态
     {
         m_queryWid->layout()->removeWidget(m_queryText);
         m_queryText->setParent(nullptr);
-//        m_queryLineEdit->setReadOnly(false);
         m_queryLineEdit->setTextMargins(20,1,0,1);
         if(!m_searchKeyWords.isEmpty())
         {
@@ -363,7 +355,7 @@ void MainViewWidget::animationFinishedSlot()
             m_searchKeyWords.clear();
         }
     }
-    else
+    else//退出搜索状态
         m_queryWid->layout()->addWidget(m_queryText);
 }
 
@@ -409,7 +401,7 @@ void MainViewWidget::loadMinMainView()
     else if(m_widgetState==3)
         loadFunctionWidget();
     m_isFullScreen=false;
-    m_isHiden=false;
+//    m_isHiden=false;
 }
 
 /**
@@ -459,7 +451,7 @@ void MainViewWidget::loadMaxMainView()
     else if(m_widgetState==3)
         loadFullFunctionWidget();
     m_isFullScreen=true;
-    m_isHiden=false;
+//    m_isHiden=false;
 }
 
 void MainViewWidget::resizeControl()
@@ -666,6 +658,7 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
                                 "org.ayatana.bamf.application",QDBusConnection::sessionBus());
         QDBusReply<QString> replyapp =ifaceapp.call("DesktopFile");
         QString desktopfp=replyapp.value();
+        qDebug()<<desktopfp;
         QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
         if(desktopfpList.contains(desktopfp))
         {
@@ -707,79 +700,7 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
  */
 void MainViewWidget::directoryChangedSlot()
 {
-    Q_EMIT sendDirectoryPath(QString("/usr/share/applications"));
     m_directoryChangedThread->start();
-
-//    QStringList desktopfpList=pUkuiMenuInterface->getDesktopFilePath();
-//    if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
-//    {
-//        m_setting->beginGroup("recentapp");
-//        for(int i=0;i<desktopfpList.count();i++)
-//        {
-//            if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i)))
-//            {
-//                //获取当前时间戳
-//                QDateTime dt=QDateTime::currentDateTime();
-//                int datetime=dt.toTime_t();
-////                QString appname=pUkuiMenuInterface->getAppName(desktopfpList.at(i));
-//                QFileInfo fileInfo(desktopfpList.at(i));
-//                QString desktopfn=fileInfo.fileName();
-//                m_setting->setValue(desktopfn,datetime);
-//                qDebug()<<"安装:"<<desktopfn;
-//                break;
-//            }
-
-//        }
-//        m_setting->endGroup();
-//        UkuiMenuInterface::appInfoVector.clear();
-//        UkuiMenuInterface::alphabeticVector.clear();
-//        UkuiMenuInterface::functionalVector.clear();
-//        UkuiMenuInterface::commonUseVector.clear();
-//        UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
-//        UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
-//        UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
-//        UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
-//        Q_EMIT directoryChangedSignal();
-//    }
-//    else//软件卸载
-//    {
-//        for(int i=0;i<UkuiMenuInterface::desktopfpVector.size();i++)
-//        {
-//            if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i)))
-//            {
-//                QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
-//                QFileInfo fileInfo(desktopfp);
-//                QString desktopfn=fileInfo.fileName();
-//                m_setting->beginGroup("lockapplication");
-//                m_setting->remove(desktopfn);
-//                m_setting->sync();
-//                m_setting->endGroup();
-//                m_setting->beginGroup("application");
-//                m_setting->remove(desktopfn);
-//                m_setting->sync();
-//                m_setting->endGroup();
-//                m_setting->beginGroup("datetime");
-//                m_setting->remove(desktopfn);
-//                m_setting->sync();
-//                m_setting->endGroup();
-//                m_setting->beginGroup("recentapp");
-//                m_setting->remove(desktopfn);
-//                m_setting->sync();
-//                m_setting->endGroup();
-//                qDebug()<<"卸载:"<<desktopfn;
-//                break;
-//            }
-//        }
-//        UkuiMenuInterface::appInfoVector.clear();
-//        UkuiMenuInterface::alphabeticVector.clear();
-//        UkuiMenuInterface::functionalVector.clear();
-//        UkuiMenuInterface::commonUseVector.clear();
-//        UkuiMenuInterface::appInfoVector=pUkuiMenuInterface->createAppInfoVector();
-//        UkuiMenuInterface::alphabeticVector=pUkuiMenuInterface->getAlphabeticClassification();
-//        UkuiMenuInterface::functionalVector=pUkuiMenuInterface->getFunctionalClassification();
-//        UkuiMenuInterface::commonUseVector=pUkuiMenuInterface->getCommonUseApp();
-//        Q_EMIT directoryChangedSignal();
-//    }
 }
 
 void MainViewWidget::requestUpdateSlot()
@@ -809,16 +730,19 @@ void MainViewWidget::repaintWidget()
 
 void MainViewWidget::widgetMakeZero()
 {
-    m_isHiden=true;
+//    m_isHiden=true;
     m_isSearching=false;
+    m_widgetState=m_saveCurrentWidState;
     m_commonUseWid->widgetMakeZero();
     m_fullCommonUseWid->widgetMakeZero();
     m_letterWid->widgetMakeZero();
     m_fullLetterWid->widgetMakeZero();
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
+    m_queryLineEdit->blockSignals(true);
     m_queryLineEdit->clear();
     m_queryLineEdit->clearFocus();
+    m_queryLineEdit->blockSignals(false);
     char style[100];
     sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
     m_queryLineEdit->setStyleSheet(style);

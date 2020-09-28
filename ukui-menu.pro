@@ -117,6 +117,7 @@ RESOURCES += \
 PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt libbamf3 x11 xrandr xtst
 CONFIG += no_keywords link_pkgconfig
 
+LIBS+=-pthread
 
 desktop_file.files = ukui-menu.desktop
 desktop_file.path = /etc/xdg/autostart

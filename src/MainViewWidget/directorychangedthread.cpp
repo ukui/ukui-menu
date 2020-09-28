@@ -35,89 +35,80 @@ DirectoryChangedThread::~DirectoryChangedThread()
 
 void DirectoryChangedThread::run()
 {
-//    if(this->m_path=="/usr/share/applications")
-//    {
-        QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
-        if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
+    QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
+    if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
+    {
+        setting->beginGroup("recentapp");
+        for(int i=0;i<desktopfpList.count();i++)
         {
-            setting->beginGroup("recentapp");
-            for(int i=0;i<desktopfpList.count();i++)
+            if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i)))
             {
-                if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i)))
-                {
-                    //获取当前时间戳
-                    QDateTime dt=QDateTime::currentDateTime();
-                    int datetime=dt.toTime_t();
-                    QFileInfo fileInfo(desktopfpList.at(i));
-                    QString desktopfn=fileInfo.fileName();
-                    setting->setValue(desktopfn,datetime);
+                //获取当前时间戳
+                QDateTime dt=QDateTime::currentDateTime();
+                int datetime=dt.toTime_t();
+                QFileInfo fileInfo(desktopfpList.at(i));
+                QString desktopfn=fileInfo.fileName();
+                setting->setValue(desktopfn,datetime);
 
-                    QString iconstr=m_ukuiMenuInterface->getAppIcon(desktopfpList.at(i));
-                    syslog(LOG_LOCAL0 | LOG_DEBUG ,"%s",iconstr.toLocal8Bit().data());
-                    syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件安装desktop文件名：%s",desktopfn.toLocal8Bit().data());
-                    Q_FOREACH(QString path,QIcon::themeSearchPaths())
-                        syslog(LOG_LOCAL0 | LOG_DEBUG ,"%s",path.toLocal8Bit().data());
-                    break;
-                }
-
+                QString iconstr=m_ukuiMenuInterface->getAppIcon(desktopfpList.at(i));
+                syslog(LOG_LOCAL0 | LOG_DEBUG ,"%s",iconstr.toLocal8Bit().data());
+                syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件安装desktop文件名：%s",desktopfn.toLocal8Bit().data());
+                Q_FOREACH(QString path,QIcon::themeSearchPaths())
+                    syslog(LOG_LOCAL0 | LOG_DEBUG ,"%s",path.toLocal8Bit().data());
+                break;
             }
-            setting->endGroup();
-            UkuiMenuInterface::appInfoVector.clear();
-            UkuiMenuInterface::alphabeticVector.clear();
-            UkuiMenuInterface::functionalVector.clear();
-            UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
-            UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
-            UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
-            Q_EMIT requestUpdateSignal();
+
         }
-        else//软件卸载
+        setting->endGroup();
+        UkuiMenuInterface::appInfoVector.clear();
+        UkuiMenuInterface::alphabeticVector.clear();
+        UkuiMenuInterface::functionalVector.clear();
+        UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
+        UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
+        UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
+        Q_EMIT requestUpdateSignal();
+    }
+    else//软件卸载
+    {
+        for(int i=0;i<UkuiMenuInterface::desktopfpVector.size();i++)
         {
-            for(int i=0;i<UkuiMenuInterface::desktopfpVector.size();i++)
+            if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i)))
             {
-                if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i)))
-                {
-                    QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
-                    QFileInfo fileInfo(desktopfp);
-                    QString desktopfn=fileInfo.fileName();
-                    setting->beginGroup("lockapplication");
-                    setting->remove(desktopfn);
-                    setting->sync();
-                    setting->endGroup();
-                    setting->beginGroup("application");
-                    setting->remove(desktopfn);
-                    setting->sync();
-                    setting->endGroup();
-                    setting->beginGroup("datetime");
-                    setting->remove(desktopfn);
-                    setting->sync();
-                    setting->endGroup();
-                    setting->beginGroup("recentapp");
-                    setting->remove(desktopfn);
-                    setting->sync();
-                    setting->endGroup();
-                    syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件卸载desktop文件名：%s",desktopfn.toLocal8Bit().data());
+                QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
+                QFileInfo fileInfo(desktopfp);
+                QString desktopfn=fileInfo.fileName();
+                setting->beginGroup("lockapplication");
+                setting->remove(desktopfn);
+                setting->sync();
+                setting->endGroup();
+                setting->beginGroup("application");
+                setting->remove(desktopfn);
+                setting->sync();
+                setting->endGroup();
+                setting->beginGroup("datetime");
+                setting->remove(desktopfn);
+                setting->sync();
+                setting->endGroup();
+                setting->beginGroup("recentapp");
+                setting->remove(desktopfn);
+                setting->sync();
+                setting->endGroup();
+                syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件卸载desktop文件名：%s",desktopfn.toLocal8Bit().data());
 
-                    QDBusInterface iface("com.ukui.panel.desktop",
-                                         "/",
-                                         "com.ukui.panel.desktop",
-                                         QDBusConnection::sessionBus());
-                    iface.call("RemoveFromTaskbar",desktopfp);
-                    break;
-                }
+                QDBusInterface iface("com.ukui.panel.desktop",
+                                     "/",
+                                     "com.ukui.panel.desktop",
+                                     QDBusConnection::sessionBus());
+                iface.call("RemoveFromTaskbar",desktopfp);
+                break;
             }
-            UkuiMenuInterface::appInfoVector.clear();
-            UkuiMenuInterface::alphabeticVector.clear();
-            UkuiMenuInterface::functionalVector.clear();
-            UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
-            UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
-            UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
-            Q_EMIT requestUpdateSignal();
         }
-//    }
-}
-
-void DirectoryChangedThread::recvDirectoryPath(QString arg)
-{
-    this->m_path.clear();
-    this->m_path=arg;
+        UkuiMenuInterface::appInfoVector.clear();
+        UkuiMenuInterface::alphabeticVector.clear();
+        UkuiMenuInterface::functionalVector.clear();
+        UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
+        UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
+        UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
+        Q_EMIT requestUpdateSignal();
+    }
 }
