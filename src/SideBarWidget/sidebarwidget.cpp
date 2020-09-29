@@ -419,6 +419,7 @@ void SideBarWidget::loadMinSidebar()
     {
         QPushButton* btn=qobject_cast<QPushButton*>(button);
         setMinSidebarBtn(btn);
+//        btn->setToolTip(m_textList.at(m_buttonList.indexOf(button)));
     }
 
     disconnect(m_minMaxBtn,&QToolButton::clicked,this, &SideBarWidget::sendDefaultBtnSignal);
@@ -445,7 +446,6 @@ void SideBarWidget::setMaxBtn()
  */
 void SideBarWidget::setMinSidebarBtn(QPushButton* btn)
 {
-    const auto ratio=devicePixelRatioF();
     btn->setFixedSize(37,37);
     if(m_buttonList.indexOf(btn)==3)
         btn->layout()->setContentsMargins(7,0,17,0);

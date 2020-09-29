@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     app.setActivationWindow(&w);
     KWindowEffects::enableBlurBehind(w.winId(),true);
+
 //    int position=0;
 //    int panelSize=0;
 //    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
@@ -86,12 +87,9 @@ int main(int argc, char *argv[])
 //        w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh));
 
 //    w.setFrameStyle();
-
-    //注释掉，以保证自启动时不显示界面
 //    w.show();
 //    w.raise();
 //    w.activateWindow();
-//    w.hide();
 
     return app.exec();
 }

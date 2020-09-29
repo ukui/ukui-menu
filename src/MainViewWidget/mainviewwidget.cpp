@@ -105,7 +105,6 @@ void MainViewWidget::initUi()
 
     addTopControl();
     //加载默认视图
-//    loadMinMainView();
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::minh);
     m_topWidget->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultTopWidHeight);
     m_topLayout->setContentsMargins(0,0,0,0);
@@ -116,6 +115,8 @@ void MainViewWidget::initUi()
                                   m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
     m_queryWid->show();
     mainLayout->insertWidget(1,m_commonUseWid);
+    m_widgetState=1;
+    m_saveCurrentWidState=1;
 
     //监控应用进程开启
 //    bamf_matcher_get_default();
@@ -270,10 +271,9 @@ void MainViewWidget::setLineEditFocus(QString arg)
  */
 void MainViewWidget::searchAppSlot(QString arg)
 {
-    qDebug()<<"---000---";
 //    if(!m_isHiden)
 //    {
-        if(!arg.isEmpty())
+        if(!arg.isEmpty())//切换至搜索模块
         {
             if(m_widgetState!=0)
             {
@@ -297,7 +297,7 @@ void MainViewWidget::searchAppSlot(QString arg)
             Q_EMIT sendSearchKeyword(arg);
             m_searchAppThread->start();
         }
-        else{
+        else{//切换至分类模块
             if(m_isFullScreen)
             {
                 switch (m_saveCurrentWidState) {
