@@ -29,7 +29,7 @@
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "utility.h"
 
-class PushButton : public QPushButton
+class PushButton : public QFrame //全屏分隔栏
 {
     Q_OBJECT
 public:

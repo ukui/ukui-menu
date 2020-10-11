@@ -19,7 +19,7 @@
 #include "pushbutton.h"
 
 PushButton::PushButton(QWidget *parent, QString category, int width, int height, int module):
-    QPushButton(parent),
+    QFrame(parent),
     m_category(category),
     m_width(width),
     m_height(height),
@@ -62,8 +62,6 @@ void PushButton::initAppBtn()
     this->setLayout(layout);
     layout->addWidget(m_textLabel);
     layout->addWidget(m_line);
-
-//    this->setEnabled(false);
 }
 
 void PushButton::setLabelText()

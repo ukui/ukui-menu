@@ -291,24 +291,17 @@ void FullFunctionWidget::initIconListWidget()
 void FullFunctionWidget::initIconListScrollArea()
 {
     for(int i=0;i<m_classificationList.size();i++)
-//    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-//    QStringList androidlist=vector.at(0);
-//    for(int index=0;index<vector.size();index++)
     {
-//        if(!vector.at(index).isEmpty())
-//        {
-            FunctionClassifyButton* iconbtn=new FunctionClassifyButton(
-                                                                       Style::LeftBtnWidth,
-                                                                       Style::LeftBtnHeight,
-                                                                       Style::LeftIconSize,
-                                                                       m_classificationList.at(i),
-                                                                       true,
-                                                                       true);
-            iconbtn->setChecked(false);
-            m_buttonList.append(iconbtn);
-            m_iconListScrollAreaWidLayout->addWidget(iconbtn);
-//        }
-
+        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(
+                    Style::LeftBtnWidth,
+                    Style::LeftBtnHeight,
+                    Style::LeftIconSize,
+                    m_classificationList.at(i),
+                    true,
+                    true);
+        iconbtn->setChecked(false);
+        m_buttonList.append(iconbtn);
+        m_iconListScrollAreaWidLayout->addWidget(iconbtn);
     }
 
     int id=0;
