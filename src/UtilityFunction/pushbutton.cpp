@@ -35,23 +35,20 @@ PushButton::~PushButton()
 }
 
 void PushButton::initAppBtn()
-{
-    char btnstyle[300];
-    sprintf(btnstyle,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
-            QPushButton:hover{background-color:%s;}\
-            QPushButton:pressed{background-color:%s;}", ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
-
+{   
     this->setFixedSize(m_width,m_height);
-    this->setStyleSheet(btnstyle);
+    //按钮透明
+    QPalette palette=this->palette();
+    palette.setColor(QPalette::Highlight,Qt::transparent);
+    palette.setBrush(QPalette::Button,QBrush(QColor(1,1,1,0)));
+    this->setPalette(palette);
     this->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* layout=new QHBoxLayout(this);
     layout->setContentsMargins(15,0,0,0);
     layout->setSpacing(6);
 
-    char style[100];
-    sprintf(style,"color:#ffffff;");
+    m_textLabel->setAutoFillBackground(false);
     m_textLabel->setAlignment(Qt::AlignCenter);
-    m_textLabel->setStyleSheet(style);
     if(m_module==1)
         m_textLabel->setText(m_category);
     else
@@ -59,13 +56,14 @@ void PushButton::initAppBtn()
     m_textLabel->adjustSize();
     m_line->setFrameShape(QFrame::HLine);
     m_line->setFixedHeight(1);
-    m_line->setStyleSheet("background-color:rgba(255, 255, 255, 0.06)");
     m_line->setFixedSize(m_width-m_textLabel->width()-15,1);
+    m_line->setEnabled(false);
 
+    this->setLayout(layout);
     layout->addWidget(m_textLabel);
     layout->addWidget(m_line);
-    this->setLayout(layout);
-    this->setEnabled(false);
+
+//    this->setEnabled(false);
 }
 
 void PushButton::setLabelText()

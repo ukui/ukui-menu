@@ -58,18 +58,15 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         path.lineTo(rect.topRight() + QPointF(0, radius));
         path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
-//        painter->setRenderHint(QPainter::Antialiasing);
-//        if(option.state.testFlag(QStyle::State_Selected))
-//        if(option.state & QStyle::State_MouseOver)
-//        {
-//            painter->setPen(QPen(Qt::NoPen));
-//            QColor color;
-//            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
-//            painter->setBrush(QBrush(color));
-
-//            painter->setOpacity(0.14);
-//            painter->drawPath(path);
-//        }
+        painter->setRenderHint(QPainter::Antialiasing);
+        if(option.state & QStyle::State_MouseOver)
+        {
+            painter->save();
+            painter->setPen(QPen(Qt::NoPen));
+            painter->setBrush(option.palette.highlight());
+            painter->drawPath(path);
+            painter->restore();
+        }
 
         painter->setOpacity(1);
         QString desktopfp=index.data(Qt::DisplayRole).value<QString>();
@@ -169,21 +166,11 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         }
         setting->endGroup();
 
-        painter->setPen(QPen(Qt::white));
         painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
+        painter->restore();
 
-        painter->setRenderHint(QPainter::Antialiasing);
-//        if(option.state.testFlag(QStyle::State_Selected))
         if(option.state & QStyle::State_MouseOver)
         {
-            painter->setPen(QPen(Qt::NoPen));
-            QColor color;
-            color.setNamedColor(QString::fromLocal8Bit(AppBtnHover));
-            painter->setBrush(QBrush(color));
-
-            painter->setOpacity(0.14);
-            painter->drawPath(path);
-
             int len=0;
             if(!is_locked && is_recentapp)
                 len=fm.boundingRect(appname).width()+23;
@@ -197,8 +184,6 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         else {
             QToolTip::hideText();
         }
-        painter->restore();
-
     }
 }
 

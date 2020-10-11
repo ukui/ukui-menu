@@ -20,6 +20,16 @@
 #define CLASSIFYSCROLLAREA_H
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QPainter>
+
+class ClassifyScrollAreaWid: public QWidget
+{
+public:
+    ClassifyScrollAreaWid();
+
+protected:
+    void paintEvent(QPaintEvent* event);
+};
 
 class ClassifyScrollArea : public QScrollArea
 {

@@ -38,9 +38,8 @@ FullFunctionWidget::~FullFunctionWidget()
 void FullFunctionWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-    this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+    this->setAttribute(Qt::WA_TranslucentBackground);
     m_applistWid=new QWidget(this);
     m_iconListWid=new QWidget(this);
     this->setFixedSize(Style::MainViewWidWidth,
@@ -51,8 +50,6 @@ void FullFunctionWidget::initUi()
     QHBoxLayout* mainLayout=new QHBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    m_applistWid->setStyleSheet("border:0px;background:transparent;");
-    m_iconListWid->setStyleSheet("border:0px;background:transparent");
     mainLayout->addWidget(m_iconListWid);
     mainLayout->addWidget(m_applistWid);
     this->setLayout(mainLayout);
@@ -73,7 +70,8 @@ void FullFunctionWidget::initAppListWidget()
     m_applistWid->setLayout(layout);
 
     m_scrollArea=new ScrollArea;
-    m_scrollAreaWid=new QWidget;
+    m_scrollAreaWid=new ScrollAreaWid;
+    m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
     m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
@@ -178,6 +176,10 @@ void FullFunctionWidget::insertClassificationBtn(QString category)
 void FullFunctionWidget::insertAppList(QStringList desktopfplist)
 {
     FullListView* listview=new FullListView(this,2);
+    //修复异常黑框问题
+    connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
+        listview->repaint(listview->rect());
+    });
     m_scrollAreaWidLayout->addWidget(listview);
     m_data.clear();
     for(int i=0;i<desktopfplist.count();i++)
@@ -186,100 +188,6 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
     connect(listview,&FullListView::sendItemClickedSignal,this,&FullFunctionWidget::execApplication);
     connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullFunctionWidget::sendHideMainWindowSignal);
 }
-
-//void FullFunctionWidget::updateRecentListView()
-//{
-//    data.clear();
-//    QStringList recentlist;
-//    recentlist.clear();
-//    recentlist=pUkuiMenuInterface->getRecentApp();
-//    if(!recentlist.isEmpty())//最近添加非空
-//    {
-//        if(m_classificationList.contains(tr("Recently")))//有最近添加分类
-//        {
-//            QLayoutItem *child;
-//            if((child = m_scrollAreaWidLayout->itemAt(1)) != 0)
-//            {
-//                QWidget* wid=child->widget();
-//                FullListView* listview=qobject_cast<FullListView*>(wid);
-//                for(int i=0;i<recentlist.count();i++)
-//                {
-//                    QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
-//                    data.append(desktopfp);
-//                }
-//                listview->updateData(data);
-//            }
-//        }
-//        else//无最近添加分类
-//        {
-//            PushButton* classificationbtn=new PushButton(this,tr("Recently"),scrollarea->width()-12,20);
-//            classificationbtn->setFixedSize(scrollarea->width()-12,20);
-//            m_scrollAreaWidLayout->insertWidget(0,classificationbtn);
-//            m_classificationList.insert(0,tr("Recently"));
-
-//            FullListView* listview=new FullListView(this,2);
-//            m_scrollAreaWidLayout->insertWidget(1,listview);
-//            for(int i=0;i<recentlist.count();i++)
-//            {
-
-//                QString desktopfp=pUkuiMenuInterface->getDesktopPathByAppName(recentlist.at(i));
-//                data.append(desktopfp);
-//            }
-//            listview->addData(data);
-//            connect(listview,SIGNAL(sendItemClickedSignal(QString)),this,SLOT(execApplication(QString)));
-
-//            //刷新图标列表界面
-//            Q_FOREACH (QAbstractButton* button, m_buttonList){
-//                m_btnGroup->removeButton(button);
-//            }
-//            m_buttonList.clear();
-//            QLayoutItem *child;
-//            while ((child = m_iconListScrollAreaWidLayout->takeAt(0)) != 0) {
-//                QWidget* wid=child->widget();
-//                m_iconListScrollAreaWidLayout->removeWidget(wid);
-//                wid->setParent(nullptr);
-//                delete wid;
-//                delete child;
-//            }
-//            initIconListScrollArea();
-//        }
-//    }
-//    else//最近添加为空
-//    {
-//        if(m_classificationList.contains(tr("Recently")))
-//        {
-//            int num=0;
-//            QLayoutItem *child;
-//             while ((child = m_scrollAreaWidLayout->takeAt(0)) != 0) {
-//                 QWidget* wid=child->widget();
-//                 m_scrollAreaWidLayout->removeWidget(wid);
-//                 wid->setParent(nullptr);
-//                 delete wid;
-//                 delete child;
-//                 num++;
-//                 if(num==2)
-//                     break;
-//             }
-//             m_classificationList.removeAt(0);
-
-//             //刷新图标列表界面
-//             Q_FOREACH (QAbstractButton* button, m_buttonList){
-//                 m_btnGroup->removeButton(button);
-//             }
-//             m_buttonList.clear();
-//             while ((child = m_iconListScrollAreaWidLayout->takeAt(0)) != 0) {
-//                 QWidget* wid=child->widget();
-//                 m_iconListScrollAreaWidLayout->removeWidget(wid);
-//                 wid->setParent(nullptr);
-//                 delete wid;
-//                 delete child;
-//             }
-//             initIconListScrollArea();
-//        }
-//    }
-//    resizeScrollAreaControls();
-//    setting->endGroup();
-//}
 
 /**
  * 执行应用程序
@@ -359,7 +267,7 @@ void FullFunctionWidget::resizeScrollAreaControls()
 void FullFunctionWidget::initIconListWidget()
 {
     m_iconListScrollArea=new ClassifyScrollArea(m_iconListWid);
-    m_iconListScrollAreaWid=new QWidget;
+    m_iconListScrollAreaWid=new ClassifyScrollAreaWid;
     m_iconListScrollAreaWidLayout=new QVBoxLayout;
     m_iconListScrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_iconListScrollAreaWidLayout->setSpacing(Style::LeftSpaceBetweenItem);

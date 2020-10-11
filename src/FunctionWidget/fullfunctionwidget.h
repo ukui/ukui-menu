@@ -78,7 +78,7 @@ private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     QWidget* m_applistWid=nullptr;
     ScrollArea* m_scrollArea=nullptr;
-    QWidget* m_scrollAreaWid=nullptr;
+    ScrollAreaWid* m_scrollAreaWid=nullptr;
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_classificationList;//Store the list of category buttons
     QStringList m_data;
@@ -86,7 +86,7 @@ private:
     /*Function classification list interface*/
     QWidget* m_iconListWid=nullptr;
     ClassifyScrollArea* m_iconListScrollArea=nullptr;
-    QWidget* m_iconListScrollAreaWid=nullptr;
+    ClassifyScrollAreaWid* m_iconListScrollAreaWid=nullptr;
     QVBoxLayout* m_iconListScrollAreaWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;
@@ -107,7 +107,6 @@ protected:
      */
     void initIconListWidget();
     void initIconListScrollArea();
-
     /**
      * @brief Initialize the application list interface
      */

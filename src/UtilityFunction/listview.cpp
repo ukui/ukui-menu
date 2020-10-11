@@ -32,7 +32,6 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
 
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
-
 }
 ListView::~ListView()
 {
@@ -42,19 +41,11 @@ ListView::~ListView()
 
 void ListView::initWidget()
 {
-//    this->setFixedSize(w,h);
-
-    this->verticalScrollBar()->setStyleSheet("QScrollBar{padding-top:0px;padding-bottom:0px;background:transparent;width:3px;border-radius:1.5px;}"
-                                             "QScrollBar::handle{background-color:rgba(255,255,255,0.25); width:3px;border-radius:1.5px;}"
-                                             "QScrollBar::handle:hover{background-color:#697883;width:3px;border-radius:1.5px;}"
-                                             "QScrollBar::handle:pressed{background-color:#8897a3;width:3px;border-radius:1.5px;}"
-                                             "QScrollBar::sub-line{background-color:transparent;height:0px;width:0px;}"
-                                             "QScrollBar::add-line{background-color:transparent;height:0px;width:0px;}"
-                                             );
+    setAttribute(Qt::WA_TranslucentBackground);
+    viewport()->setAttribute(Qt::WA_TranslucentBackground);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    this->setGridSize(QSize(310,48));
     this->setResizeMode(QListView::Adjust);
     this->setTextElideMode(Qt::ElideRight);
     this->setViewMode(QListView::ListMode);
@@ -63,11 +54,11 @@ void ListView::initWidget()
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setUpdatesEnabled(true);
-//    this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     this->setSpacing(0);
     this->setContentsMargins(0, 0, 0, 0);
     this->setMouseTracking(true);
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    this->setFrameShape(QFrame::NoFrame);
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
 }
@@ -178,4 +169,16 @@ void ListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
+}
+
+void ListView::paintEvent(QPaintEvent *e)
+{
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+    double transparency=gsetting->get("transparency").toDouble();
+    QPainter painter(this->viewport());
+    painter.setOpacity(transparency);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(this->palette().base());
+    painter.fillRect(this->rect(), this->palette().base());
+    QListView::paintEvent(e);
 }

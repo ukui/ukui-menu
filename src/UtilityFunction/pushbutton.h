@@ -66,7 +66,6 @@ private:
 protected:
     void initAppBtn();
     void setLabelText();
-
 };
 
 #endif // PUSHBUTTON_H

@@ -35,7 +35,6 @@ void LetterButtonWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
     this->resize(235,366);
 
     QGridLayout* gridLayout=new QGridLayout;
@@ -69,7 +68,6 @@ void LetterButtonWidget::initUi()
             {
                 QToolButton* btn=new QToolButton;
                 btn->setFixedSize(55,48);
-                btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
                 btn->setText(letterlist.at(row*4+col));
                 gridLayout->addWidget(btn,row,col);
                 connect(btn, &QToolButton::clicked, this, &LetterButtonWidget::letterBtnClickedSlot);

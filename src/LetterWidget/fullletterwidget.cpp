@@ -37,9 +37,8 @@ FullLetterWidget::~FullLetterWidget()
 void FullLetterWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-    this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+    this->setAttribute(Qt::WA_TranslucentBackground);
 
     m_applistWid=new QWidget(this);
     m_letterListWid=new QWidget(this);
@@ -51,8 +50,6 @@ void FullLetterWidget::initUi()
     QHBoxLayout* mainLayout=new QHBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    m_applistWid->setStyleSheet("border:0px;background: transparent;");
-    m_letterListWid->setStyleSheet("border:0px;background: transparent;");
     mainLayout->addWidget(m_letterListWid);
     mainLayout->addWidget(m_applistWid);
     this->setLayout(mainLayout);
@@ -72,7 +69,11 @@ void FullLetterWidget::initAppListWidget()
     m_applistWid->setLayout(layout);
 
     m_scrollArea=new ScrollArea;
-    m_scrollAreaWid=new QWidget;
+    m_scrollAreaWid=new ScrollAreaWid;
+//    m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
+//    m_scrollArea->setAttribute(Qt::WA_TranslucentBackground, false);
+//    m_scrollAreaWid->setBackgroundRole(m_scrollAreaWid->palette().Highlight);
+//    m_scrollAreaWid->setAutoFillBackground(true);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
     m_scrollArea->setWidgetResizable(true);
@@ -85,6 +86,7 @@ void FullLetterWidget::initAppListWidget()
             this,&FullLetterWidget::valueChangedSlot);
 
     fillAppList();
+
 
 }
 
@@ -115,6 +117,12 @@ void FullLetterWidget::fillAppList()
 
             //插入应用列表
             FullListView* listview=new FullListView(this,1);
+
+            //修复异常黑框问题
+            connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
+                listview->repaint(listview->rect());
+            });
+
             m_scrollAreaWidLayout->addWidget(listview);
             m_data.clear();
             for(int i=0;i<appList.count();i++)
@@ -213,7 +221,7 @@ void FullLetterWidget::resizeScrollAreaControls()
 void FullLetterWidget::initLetterListWidget()
 {
     m_letterListScrollArea=new ClassifyScrollArea(m_letterListWid);
-    m_letterListScrollAreaWid=new QWidget(m_letterListScrollArea);
+    m_letterListScrollAreaWid=new ClassifyScrollAreaWid;
     m_letterListScrollAreaWidLayout=new QVBoxLayout;
     m_letterListScrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_letterListScrollAreaWidLayout->setSpacing(0);

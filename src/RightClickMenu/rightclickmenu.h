@@ -85,12 +85,6 @@ protected:
      * @return
      */
     QPixmap getIconPixmap(QString iconstr, int type);
-    /**
-     * @brief Process image color
-     * @param source: QPixmap icon
-     * @return return QPixmap icon
-     */
-    QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
 
 private Q_SLOTS:
     /**

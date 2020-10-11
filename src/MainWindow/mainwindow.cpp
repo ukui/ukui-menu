@@ -25,6 +25,7 @@
 #include <syslog.h>
 #include "src/XEventMonitor/xeventmonitor.h"
 #include "src/Style/style.h"
+#include <QPalette>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -74,7 +75,7 @@ void MainWindow::initUi()
     mainlayout->addWidget(m_line);
     char linestyle[100];
     sprintf(linestyle, "background-color:%s;",LineBackground);
-    m_line->setStyleSheet(linestyle);
+//    m_line->setStyleSheet(linestyle);
     mainlayout->addWidget(m_sideBarWid);
 
     m_animation = new QPropertyAnimation(this, "geometry");
@@ -123,6 +124,52 @@ void MainWindow::initUi()
 
 //    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
 //                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
+}
+
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+    double transparency=gsetting->get("transparency").toDouble();
+    qreal radius = 0;
+    QRect rect = this->rect();
+    rect.setWidth(rect.width());
+    rect.setHeight(rect.height());
+    rect.setX(this->rect().x());
+    rect.setY(this->rect().y());
+    rect.setWidth(this->rect().width());
+    rect.setHeight(this->rect().height());
+    if(!m_isFullScreen)
+    {
+        radius=12;
+    }
+    else
+    {
+        radius=0;
+    }
+    QPainterPath path;
+    path.moveTo(rect.topRight() - QPointF(radius, 0));
+    path.lineTo(rect.topLeft() + QPointF(radius, 0));
+    path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
+    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+    path.lineTo(rect.topRight() + QPointF(0, radius));
+    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+    painter.setBrush(this->palette().base());
+    painter.setPen(Qt::transparent);
+    painter.setOpacity(transparency);
+    if(!m_isFullScreen)
+    {
+        painter.drawPath(path);
+        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+    }
+    else
+        painter.drawRect(this->rect());
+    QMainWindow::paintEvent(event);
 }
 
 /**
@@ -282,7 +329,7 @@ void MainWindow::animationValueFinishedSlot()
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
     }
-    setFrameStyle();
+//    setFrameStyle();
 }
 
 /**
@@ -478,7 +525,7 @@ void MainWindow::loadMainWindow()
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
     }
-    setFrameStyle();
+//    setFrameStyle();
 }
 
 void MainWindow::monitorResolutionChange(QRect rect)
@@ -565,80 +612,60 @@ void MainWindow::repaintWidget()
             m_sideBarWid->loadMinSidebar();
             m_mainViewWid->resizeControl();
         }
-        setFrameStyle();
+//        setFrameStyle();
     }
 }
 
-void MainWindow::setFrameStyle()
-{
-    int position=0;
-    int panelSize=0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        if(gsetting->keys().contains(QString("panelposition")))
-            position=gsetting->get("panelposition").toInt();
-        else
-            position=0;
-        if(gsetting->keys().contains(QString("panelsize")))
-            panelSize=gsetting->get("panelsize").toInt();
-        else
-            panelSize=46;
-    }
-    else
-    {
-        position=0;
-        panelSize=46;
-    }
-    char style[100];
+//void MainWindow::setFrameStyle()
+//{
+//    int position=0;
+//    int panelSize=0;
+//    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
+//    {
+//        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+//        if(gsetting->keys().contains(QString("panelposition")))
+//            position=gsetting->get("panelposition").toInt();
+//        else
+//            position=0;
+//        if(gsetting->keys().contains(QString("panelsize")))
+//            panelSize=gsetting->get("panelsize").toInt();
+//        else
+//            panelSize=46;
+//    }
+//    else
+//    {
+//        position=0;
+//        panelSize=46;
+//    }
 
-    QString m_defaultBackground;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-        if(gsetting->keys().contains(QString("transparency")))
-        {
-            double transparency=gsetting->get("transparency").toDouble();
-            m_defaultBackground=QString("rgba(19, 19, 20,"+QString::number(transparency)+")");
-        }
-        else
-            m_defaultBackground=QString("rgba(19, 19, 20, 0.7)");
-    }
-    else
-        m_defaultBackground=QString("rgba(19, 19, 20, 0.7)");
+//    QRectF rect;
+//    rect.setX(this->rect().x()+1);
+//    rect.setY(this->rect().y()+1);
+//    rect.setWidth(this->rect().width()-2);
+//    rect.setHeight(this->rect().height()-2);
+//    qreal radius = 0;
+//    QPainterPath path;
+//    if(!m_isFullScreen)
+//    {
+//        radius=12;
+//    }
+//    else
+//    {
+//        radius=0;
+//    }
 
+//    path.moveTo(rect.topRight() - QPointF(radius, 0));
+//    path.lineTo(rect.topLeft() + QPointF(radius, 0));
+//    path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
+//    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+//    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+//    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+//    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+//    path.lineTo(rect.topRight() + QPointF(0, radius));
+//    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
-    QRectF rect;
-    rect.setX(this->rect().x()+1);
-    rect.setY(this->rect().y()+1);
-    rect.setWidth(this->rect().width()-2);
-    rect.setHeight(this->rect().height()-2);
-    qreal radius = 0;
-    QPainterPath path;
-    if(!m_isFullScreen)
-    {
-        radius=12;
-        sprintf(style, "border:0px;background-color:%s;border-radius:12px;",m_defaultBackground.toLocal8Bit().data());
-    }
-    else
-    {
-        sprintf(style, "border:0px;background-color:%s;border-radius:0px;",m_defaultBackground.toLocal8Bit().data());
-        radius=0;
-    }
-
-    path.moveTo(rect.topRight() - QPointF(radius, 0));
-    path.lineTo(rect.topLeft() + QPointF(radius, 0));
-    path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
-    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
-    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
-    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
-    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
-    path.lineTo(rect.topRight() + QPointF(0, radius));
-    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
-
-    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-    m_frame->setStyleSheet(style);
-}
+//    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+//}
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {

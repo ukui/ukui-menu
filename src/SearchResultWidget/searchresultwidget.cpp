@@ -36,12 +36,12 @@ void SearchResultWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
+//    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
 
-    m_listView=new ListView(this,this->width()-4,this->height(),3);
-    m_listView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_listView=new ListView(this,this->width()-6,this->height()-6,3);
+    m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_listView->show();
 
     m_data.clear();
@@ -83,6 +83,6 @@ void SearchResultWidget::moveScrollBar(int type)
 void SearchResultWidget::repaintWidget()
 {
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
-    m_listView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_listView->show();
 }

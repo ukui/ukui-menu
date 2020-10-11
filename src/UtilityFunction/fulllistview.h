@@ -43,6 +43,7 @@ protected:
     void initWidget();
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) override;
 //    void mousePressEvent(QMouseEvent *event);
 
 private:

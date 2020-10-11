@@ -54,10 +54,10 @@ ToolButton::ToolButton(int width,
     {
         this->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         this->setText(tr(text.toLocal8Bit().data()));
-        this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255, 50%);font-size:14px;");
+//        this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255, 50%);font-size:14px;");
     }
-    else
-        this->setStyleSheet("border:0px;padding-left:0px;background:transparent;");
+//    else
+//        this->setStyleSheet("border:0px;padding-left:0px;background:transparent;");
 }
 
 void ToolButton::enterEvent(QEvent *e)
@@ -70,7 +70,7 @@ void ToolButton::enterEvent(QEvent *e)
         sprintf(style,"border:0px;padding-left:16px;background-color:%s;color:#ffffff;font-size:14px;",hover);
     else
         sprintf(style,"border:0px;padding-left:0px;background-color:%s;",hover);
-    this->setStyleSheet(QString::fromLocal8Bit(style));
+//    this->setStyleSheet(QString::fromLocal8Bit(style));
     delete svgRender;
     svgRender=new QSvgRenderer(this);
     svgRender->load(piconstr);
@@ -89,15 +89,15 @@ void ToolButton::enterEvent(QEvent *e)
 void ToolButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    if(module==2)
-    {
-        if(!is_pressed)
-            this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255, 50%);font-size:14px;");
-        else
-            this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255);font-size:14px;");
-    }
-    else
-        this->setStyleSheet("border:0px;padding-left:0px;background:transparent;");
+//    if(module==2)
+//    {
+//        if(!is_pressed)
+//            this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255, 50%);font-size:14px;");
+//        else
+//            this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255);font-size:14px;");
+//    }
+//    else
+//        this->setStyleSheet("border:0px;padding-left:0px;background:transparent;");
     delete svgRender;
     svgRender=new QSvgRenderer(this);
     if(module==2 && is_pressed)
@@ -127,7 +127,7 @@ void ToolButton::mousePressEvent(QMouseEvent *event)
         sprintf(style,"border:0px;padding-left:0px;background-color:%s;",pressed);
     if(event->button()==Qt::LeftButton)
     {
-        this->setStyleSheet(QString::fromLocal8Bit(style));
+//        this->setStyleSheet(QString::fromLocal8Bit(style));
         delete svgRender;
         svgRender=new QSvgRenderer(this);
         svgRender->load(piconstr);
@@ -157,7 +157,7 @@ void ToolButton::mouseReleaseEvent(QMouseEvent *event)
         sprintf(style,"border:0px;padding-left:0px;background-color:%s;",hover);
     if(event->button()==Qt::LeftButton)
     {
-        this->setStyleSheet(QString::fromLocal8Bit(style));
+//        this->setStyleSheet(QString::fromLocal8Bit(style));
         delete svgRender;
         svgRender=new QSvgRenderer(this);
         svgRender->load(piconstr);

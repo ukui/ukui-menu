@@ -46,7 +46,7 @@ void SideBarWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
+//    this->setStyleSheet("border:0px;background:transparent;");
     this->setFocusPolicy(Qt::NoFocus);
 
     addSidebarBtn();
@@ -65,14 +65,12 @@ void SideBarWidget::addSidebarBtn()
     m_mainWidget=new QWidget;
     m_mainWidget->setParent(this);
     m_mainWidgetLayout=new QVBoxLayout;
-    m_mainWidgetLayout->setContentsMargins(0,0,0,0);
+    m_mainWidgetLayout->setContentsMargins(0,0,0,6);
     m_mainWidgetLayout->setSpacing(10);
     m_mainWidget->setLayout(m_mainWidgetLayout);
-    m_mainWidget->setStyleSheet("background:transparent;");
 
     //放大缩小按钮界面
     m_minMaxWidget=new QWidget;
-    m_minMaxWidget->setStyleSheet("QWidget{background:transparent;border:0px;}");
     m_minMaxLayout=new QHBoxLayout;
     m_minMaxBtn=new QToolButton;
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
@@ -80,16 +78,9 @@ void SideBarWidget::addSidebarBtn()
     m_minMaxBtn->setShortcut(Qt::Key_Return);
     m_minMaxLayout->addWidget(m_minMaxBtn);
     m_minMaxWidget->setLayout(m_minMaxLayout);
-    char btncolor[300];
-    sprintf(btncolor,"QToolButton{background:transparent;border:0px;padding-left:0px;border-radius:4px;}\
-            QToolButton:hover{background-color:%s;border:0px;border-radius:4px;}\
-            QToolButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
-            MMBtnHoverBackground,MMBtnHoverBackground);
-    m_minMaxBtn->setStyleSheet(QString::fromLocal8Bit(btncolor));
 
     //分类按钮
     m_buttonList.clear();
-//    m_buttonTextList.clear();
     m_btnGroup=new QButtonGroup(m_mainWidget);
     m_allBtn=new QPushButton;
     initBtn(m_allBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),tr("All"),0);
@@ -169,6 +160,12 @@ void SideBarWidget::addSidebarBtn()
     }
     m_mainWidgetLayout->addWidget(m_buttonList.at(8));
 
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+        connect(gsetting,&QGSettings::changed,this,&SideBarWidget::themeModeChangeSlot);
+    }
+
     m_animation = new QPropertyAnimation(m_mainWidget, "geometry");
 }
 
@@ -201,20 +198,18 @@ void SideBarWidget::resetSidebarBtnSlot()
  */
 void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int num)
 {
-    char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\
-            QPushButton:hover{background-color:%s;border:0px;border-radius:4px;}\
-            QPushButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
-            SBFunBtnHoverBackground,SBFunBtnHoverBackground);
-    btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
     QHBoxLayout* btnLayout=new QHBoxLayout;
     QLabel* labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);
-    labelicon->setStyleSheet("background:transparent;border:0px;");
     const auto ratio=devicePixelRatioF();
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
     if(num!=3)
     {
         QPixmap pixmap=loadSvg(btnicon,Style::SideBarIconSize*ratio);
+        if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+            pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+        else
+            pixmap=drawSymbolicColoredPixmap(pixmap);//反白
         pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
         labelicon->setFixedSize(Style::SideBarIconSize,Style::SideBarIconSize);
         labelicon->setPixmap(pixmap);
@@ -304,7 +299,6 @@ void SideBarWidget::shutdownBtnRightClickSlot()
 void SideBarWidget::addRightClickMenu(QPushButton *btn)
 {
     btn->setContextMenuPolicy(Qt::CustomContextMenu);
-//    disconnect(btn,&QPushButton::customContextMenuRequested,this,&SideBarWidget::otherBtnRightClickSlot);
     connect(btn,&QPushButton::customContextMenuRequested,this,&SideBarWidget::otherBtnRightClickSlot);
 }
 
@@ -391,9 +385,6 @@ void SideBarWidget::userAccountsChanged()
     facePixmap = facePixmap.scaled((Style::SideBarIconSize+4)*ratio,(Style::SideBarIconSize+4)*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)*ratio/2);
 
-//    QLayoutItem* item=m_userIconBtn->layout()->itemAt(0);
-//    QLabel* labelicon=qobject_cast<QLabel*>(item->widget());
-//    labelicon->setScaledContents(true);
     QLabel* labelicon=m_userIconBtn->findChild<QLabel*>("faceLabel");
     facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     labelicon->setPixmap(facePixmap);
@@ -413,13 +404,13 @@ void SideBarWidget::loadMinSidebar()
     m_minMaxWidget->setFixedSize(37,70);
     m_minMaxLayout->setContentsMargins(0,0,0,0);
 
-    m_mainWidgetLayout->setContentsMargins(8,0,10,0);
+    m_mainWidgetLayout->setContentsMargins(8,0,10,6);
 
     Q_FOREACH(QAbstractButton* button,m_buttonList)
     {
         QPushButton* btn=qobject_cast<QPushButton*>(button);
         setMinSidebarBtn(btn);
-//        btn->setToolTip(m_textList.at(m_buttonList.indexOf(button)));
+        btn->setToolTip(m_textList.at(m_buttonList.indexOf(button)));
     }
 
     disconnect(m_minMaxBtn,&QToolButton::clicked,this, &SideBarWidget::sendDefaultBtnSignal);
@@ -431,14 +422,17 @@ void SideBarWidget::loadMinSidebar()
  */
 void SideBarWidget::setMaxBtn()
 {
+    const auto ratio=devicePixelRatioF();
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    QPixmap pixmap=loadSvg(QString(":/data/img/sidebarwidget/max.svg"),14*ratio);
+    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    else
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+
     m_minMaxBtn->setFixedSize(37,37);
-    QSvgRenderer* svgRender = new QSvgRenderer(m_minMaxBtn);
-    svgRender->load(QString(":/data/img/sidebarwidget/max.svg"));
-    QPixmap* pixmap = new QPixmap(14,14);
-    pixmap->fill(Qt::transparent);//设置背景透明
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    m_minMaxBtn->setIcon(QIcon(*pixmap));
+    m_minMaxBtn->setIcon(QIcon(pixmap));
 }
 
 /**
@@ -480,12 +474,13 @@ void SideBarWidget::loadMaxSidebar()
     m_minMaxWidget->setFixedSize(Style::MinMaxWidWidth,Style::MinMaxWidHeight);
     m_minMaxLayout->setContentsMargins(m_minMaxWidget->width()-m_minMaxBtn->width(),0,0,0);
 
-    m_mainWidgetLayout->setContentsMargins(0,0,0,0);
+    m_mainWidgetLayout->setContentsMargins(0,0,0,6);
 
     Q_FOREACH(QAbstractButton* button,m_buttonList)
     {
         QPushButton* btn=qobject_cast<QPushButton*>(button);
         setMaxSidebarBtn(btn);
+        btn->setToolTip("");
     }
 
     disconnect(m_minMaxBtn, &QToolButton::clicked,this,&SideBarWidget::sendFullScreenBtnSignal);
@@ -497,14 +492,17 @@ void SideBarWidget::loadMaxSidebar()
  */
 void SideBarWidget::setMinBtn()
 {
+    const auto ratio=devicePixelRatioF();
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    QPixmap pixmap=loadSvg(QString(":/data/img/sidebarwidget/min.svg"),14*ratio);
+    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    else
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+
     m_minMaxBtn->setFixedSize(Style::MinMaxBtnWidth,Style::MinMaxBtnWidth);
-    QSvgRenderer* svgRender = new QSvgRenderer(m_minMaxBtn);
-    svgRender->load(QString(":/data/img/sidebarwidget/min.svg"));
-    QPixmap* pixmap = new QPixmap(Style::MinMaxIconSize,Style::MinMaxIconSize);
-    pixmap->fill(Qt::transparent);//设置背景透明
-    QPainter p(pixmap);
-    svgRender->render(&p);
-    m_minMaxBtn->setIcon(QIcon(*pixmap));
+    m_minMaxBtn->setIcon(QIcon(pixmap));
 }
 
 /**
@@ -539,7 +537,6 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
     }
     //添加文本
     QLabel* labeltext=new QLabel;
-    labeltext->setStyleSheet(QString("QLabel{background:transparent;color:#ffffff;border:0px;}"));
     if(m_buttonList.indexOf(btn)<=2)
     {
         labeltext->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -560,24 +557,13 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
 
     btn->layout()->addWidget(labeltext);
     btn->setFixedSize(m_btnWidth,Style::SideBarBtnHeight);
-//    btn->setToolTip("");
 }
 
 void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
 {
-    char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\
-            QPushButton:hover{background-color:%s;border:0px;border-radius:4px;}\
-            QPushButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
-            SBFunBtnHoverBackground,SBFunBtnHoverBackground);
-
-    char pressstyle[200];
-    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:4px;}",SBClassifyBtnSelectedBackground);
-
     Q_FOREACH (QAbstractButton* button, m_buttonList) {
         if(m_btnGroup->id(btn)==m_buttonList.indexOf(button))
         {
-            button->setStyleSheet(pressstyle);
             if(m_btnGroup->id(btn)==0)
             {
                 if(m_isFullScreen)
@@ -597,8 +583,62 @@ void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
                 else Q_EMIT sendFunctionBtnSignal();
             }
         }
-        else{
-            button->setStyleSheet(btncolor);
+    }
+}
+
+void SideBarWidget::themeModeChangeSlot(QString styleName)
+{
+    if(styleName=="styleName")
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+        Q_FOREACH(QAbstractButton *button,m_buttonList)
+        {
+            QPushButton *btn=qobject_cast<QPushButton*>(button);
+            QLayoutItem *item=btn->layout()->itemAt(0);
+            QLabel *label=qobject_cast<QLabel*>(item->widget());
+            QString iconStr;
+            switch (m_buttonList.indexOf(button)) {
+            case 0:
+                iconStr=QString(":/data/img/sidebarwidget/commonuse.svg");
+                break;
+            case 1:
+                iconStr=QString(":/data/img/sidebarwidget/letter.svg");
+                break;
+            case 2:
+                iconStr=QString(":/data/img/sidebarwidget/function.svg");
+                break;
+            case 3:
+                userAccountsChanged();
+                break;
+            case 4:
+                iconStr=QString(":/data/img/sidebarwidget/personal.svg");
+                break;
+            case 5:
+                iconStr=QString(":/data/img/sidebarwidget/trash.svg");
+                break;
+            case 6:
+                iconStr=QString(":/data/img/sidebarwidget/computer.svg");
+                break;
+            case 7:
+                iconStr=QString(":/data/img/sidebarwidget/setting.svg");
+                break;
+            case 8:
+                iconStr=QString(":/data/img/sidebarwidget/shutdown.svg");
+                break;
+            default:
+                break;
+            }
+            if(m_buttonList.indexOf(button)!=3)
+            {
+                const auto ratio=devicePixelRatioF();
+                QPixmap pixmap=loadSvg(iconStr,19*ratio);
+                if(gsetting->get("style-name").toString()=="ukui-light")//反黑
+                    pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+                else
+                    pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+                pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+                label->setPixmap(pixmap);
+            }
         }
     }
 }
@@ -626,14 +666,14 @@ void SideBarWidget::widgetMakeZero()
 {
     char pressstyle[200];
     sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:4px;}",SBClassifyBtnSelectedBackground);
-    m_allBtn->setStyleSheet(pressstyle);
+//    m_allBtn->setStyleSheet(pressstyle);
     char btncolor[300];
     sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\
             QPushButton:hover{background-color:%s;border:0px;border-radius:4px;}\
             QPushButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
             SBFunBtnHoverBackground,SBFunBtnHoverBackground);
-    m_letterBtn->setStyleSheet(btncolor);
-    m_functionBtn->setStyleSheet(btncolor);
+//    m_letterBtn->setStyleSheet(btncolor);
+//    m_functionBtn->setStyleSheet(btncolor);
 }
 
 //void SideBarWidget::mousePressEvent(QMouseEvent *event)

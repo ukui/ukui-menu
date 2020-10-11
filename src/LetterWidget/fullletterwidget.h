@@ -85,7 +85,7 @@ private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     QWidget* m_applistWid=nullptr;
     ScrollArea* m_scrollArea=nullptr;
-    QWidget* m_scrollAreaWid=nullptr;
+    ScrollAreaWid* m_scrollAreaWid=nullptr;
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_letterList;//Store the list of letter buttons
     QStringList m_data;
@@ -93,7 +93,7 @@ private:
     /*Alphabetic classification list interface*/
     QWidget* m_letterListWid=nullptr;
     ClassifyScrollArea* m_letterListScrollArea=nullptr;
-    QWidget* m_letterListScrollAreaWid=nullptr;
+    ClassifyScrollAreaWid* m_letterListScrollAreaWid=nullptr;
     QVBoxLayout* m_letterListScrollAreaWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;
@@ -110,6 +110,7 @@ protected:
      * @brief Initializes UI
      */
     void initUi();
+//    void paintEvent(QPaintEvent *event);
     /**
      * @brief fill application list
      */

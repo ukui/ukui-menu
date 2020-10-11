@@ -18,21 +18,38 @@
 
 #include "scrollarea.h"
 #include <QDebug>
+#include <QPainter>
+#include <QGSettings>
+
+ScrollAreaWid::ScrollAreaWid()
+{
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+}
+
+void ScrollAreaWid::paintEvent(QPaintEvent *event)
+{
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+    double transparency=gsetting->get("transparency").toDouble();
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setOpacity(transparency);
+    painter.setBrush(this->palette().base());
+    painter.setPen(Qt::NoPen);
+    QRect rect = this->rect();
+    rect.setWidth(rect.width());
+    rect.setHeight(rect.height());
+    painter.drawRect(rect);
+}
 
 ScrollArea::ScrollArea()
 {
     this->verticalScrollBar()->setVisible(false);
-    this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background:transparent;border-radius:6px;}"
-                                             "QScrollBar::handle{background-color:rgba(255,255,255,0.25); width:3px;border-radius:1.5px;}"
-                                             "QScrollBar::handle:hover{background-color:#697883;border-radius:1.5px;}"
-                                             "QScrollBar::handle:pressed{background-color:#8897a3;border-radius:1.5px;}"
-                                             "QScrollBar::sub-line{background-color:transparent;height:0px;width:0px;}"
-                                             "QScrollBar::add-line{background-color:transparent;height:0px;width:0px;}"
-                                             );
-      installEventFilter(this);
-      this->setFocusPolicy(Qt::NoFocus);
-      this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-      this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    installEventFilter(this);
+    this->setFocusPolicy(Qt::NoFocus);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    this->setFrameShape(QFrame::NoFrame);
 }
 
 void ScrollArea::enterEvent(QEvent *e)
@@ -45,4 +62,14 @@ void ScrollArea::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
+}
+
+void ScrollArea::scrollContentsBy(int dx, int dy)
+{
+    QScrollArea::scrollContentsBy(dx,dy);
+
+    Q_EMIT requestUpdate();
+
+//    update();
+//    viewport()->update();
 }

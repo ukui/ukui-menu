@@ -41,23 +41,7 @@ FullListView::~FullListView()
 
 void FullListView::initWidget()
 {
-    char style[500];
-    sprintf(style,"QListView{border:0px;}\
-            QListView:Item{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;}\
-            QListView:Item:hover{background:transparent;}\
-            QListView:Item:pressed{background:transparent;}");
-
-    if(module!=1 && module!=2)
-        this->verticalScrollBar()->setStyleSheet("QScrollBar{width:3px;padding-top:0px;padding-bottom:0px;background:transparent;border-radius:6px;}"
-                                             "QScrollBar::handle{background-color:rgba(255,255,255,0.25); width:3px;border-radius:1.5px;}"
-                                             "QScrollBar::handle:hover{background-color:#697883;border-radius:1.5px;}"
-                                             "QScrollBar::handle:pressed{background-color:#8897a3;border-radius:1.5px;}"
-                                             "QScrollBar::sub-line{background-color:transparent;height:0px;width:0px;}"
-                                             "QScrollBar::add-line{background-color:transparent;height:0px;width:0px;}"
-                                             );
-
-
-//    this->setStyleSheet(style);
+    viewport()->setAttribute(Qt::WA_TranslucentBackground);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     if(module==1 || module==2)
@@ -73,6 +57,7 @@ void FullListView::initWidget()
     this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    this->setFrameShape(QFrame::NoFrame);//移除边框
     connect(this,&FullListView::customContextMenuRequested,this,&FullListView::rightClickedSlot);
     connect(this,&FullListView::clicked,this,&FullListView::onClicked);
 }
@@ -173,6 +158,19 @@ void FullListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
+}
+
+void FullListView::paintEvent(QPaintEvent *e)
+{
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+    double transparency=gsetting->get("transparency").toDouble();
+    QPainter painter(this->viewport());
+    painter.setOpacity(transparency);
+    painter.setPen(Qt::NoPen);
+//    painter.setOpacity(0.9);
+    painter.fillRect(this->rect(), this->palette().base());
+//    painter.fillRect(this->rect(),Qt::blue);
+    QListView::paintEvent(e);
 }
 
 //void FullListView::mousePressEvent(QMouseEvent *event)

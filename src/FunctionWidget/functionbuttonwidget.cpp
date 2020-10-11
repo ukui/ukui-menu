@@ -48,7 +48,6 @@ void FunctionButtonWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
     this->resize(Style::LeftBtnWidth*2+5,Style::LeftBtnHeight*6+25);
 
     QGridLayout* gridLayout=new QGridLayout;

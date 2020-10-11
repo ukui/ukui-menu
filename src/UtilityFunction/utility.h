@@ -23,4 +23,11 @@
 
 const QPixmap loadSvg(const QString &fileName, const int size);
 
+//图片反白
+QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
+
+//图片反黑
+QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
+
+
 #endif // UTILITY_H

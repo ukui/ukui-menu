@@ -34,3 +34,54 @@ const QPixmap loadSvg(const QString &fileName, const int size)
 
     return pixmap;
 }
+
+QPixmap drawSymbolicColoredPixmap(const QPixmap &source)
+{
+    QColor gray(128,128,128);
+    QColor standard (31,32,34);
+    QImage img = source.toImage();
+    for (int x = 0; x < img.width(); x++) {
+        for (int y = 0; y < img.height(); y++) {
+            auto color = img.pixelColor(x, y);
+            if (color.alpha() > 0) {
+                if (qAbs(color.red()-gray.red())<20 && qAbs(color.green()-gray.green())<20 && qAbs(color.blue()-gray.blue())<20) {
+                    color.setRed(255);
+                    color.setGreen(255);
+                    color.setBlue(255);
+                    img.setPixelColor(x, y, color);
+                }
+                else if(qAbs(color.red()-standard.red())<20 && qAbs(color.green()-standard.green())<20 && qAbs(color.blue()-standard.blue())<20)
+                {
+                    color.setRed(255);
+                    color.setGreen(255);
+                    color.setBlue(255);
+                    img.setPixelColor(x, y, color);
+                }
+                else
+                {
+                    img.setPixelColor(x, y, color);
+                }
+            }
+        }
+    }
+    return QPixmap::fromImage(img);
+}
+
+QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source)
+{
+    QImage img = source.toImage();
+    for (int x = 0; x < img.width(); x++) {
+        for (int y = 0; y < img.height(); y++) {
+            auto color = img.pixelColor(x, y);
+            if (color.alpha() > 0) {
+                if (qAbs(color.red())>=200 && qAbs(color.green())>=200 && qAbs(color.blue())>=200) {
+                    color.setRed(56);
+                    color.setGreen(56);
+                    color.setBlue(56);
+                    img.setPixelColor(x, y, color);
+                }
+            }
+        }
+    }
+    return QPixmap::fromImage(img);
+}

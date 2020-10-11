@@ -23,7 +23,6 @@
 #include <QScreen>
 #include <QTranslator>
 #include <QLocale>
-#include <KWindowEffects>
 #include <X11/Xlib.h>
 #include <syslog.h>
 
@@ -52,44 +51,45 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     app.setActivationWindow(&w);
-    KWindowEffects::enableBlurBehind(w.winId(),true);
+    w.setProperty("useSystemStyleBlur", true);
 
-//    int position=0;
-//    int panelSize=0;
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-//    {
-//        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-//        if(gsetting->keys().contains(QString("panelposition")))
-//            position=gsetting->get("panelposition").toInt();
-//        else
-//            position=0;
-//        if(gsetting->keys().contains(QString("panelsize")))
-//            panelSize=gsetting->get("panelsize").toInt();
-//        else
-//            panelSize=46;
-//    }
-//    else
-//    {
-//        position=0;
-//        panelSize=46;
-//    }
+    int position=0;
+    int panelSize=0;
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        if(gsetting->keys().contains(QString("panelposition")))
+            position=gsetting->get("panelposition").toInt();
+        else
+            position=0;
+        if(gsetting->keys().contains(QString("panelsize")))
+            panelSize=gsetting->get("panelsize").toInt();
+        else
+            panelSize=46;
+    }
+    else
+    {
+        position=0;
+        panelSize=46;
+    }
 
-//    int x=QApplication::primaryScreen()->geometry().x();
-//    int y=QApplication::primaryScreen()->geometry().y();
+    int x=QApplication::primaryScreen()->geometry().x();
+    int y=QApplication::primaryScreen()->geometry().y();
 
-//    if(position==0)
-//        w.setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,Style::minw,Style::minh));
-//    else if(position==1)
-//        w.setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
-//    else if(position==2)
-//        w.setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
-//    else
-//        w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh));
-
+    if(position==0)
+        w.setGeometry(QRect(x+8,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh-8,
+                                  Style::minw,Style::minh));
+    else if(position==1)
+        w.setGeometry(QRect(x+8,y+panelSize+8,Style::minw,Style::minh));
+    else if(position==2)
+        w.setGeometry(QRect(x+panelSize+8,y+8,Style::minw,Style::minh));
+    else
+        w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-8,y+8,
+                                  Style::minw,Style::minh));
 //    w.setFrameStyle();
-//    w.show();
-//    w.raise();
-//    w.activateWindow();
+    w.show();
+    w.raise();
+    w.activateWindow();
 
     return app.exec();
 }

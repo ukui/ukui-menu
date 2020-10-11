@@ -186,6 +186,7 @@ private Q_SLOTS:
      * @brief Reset the sidebar button
      */
     void resetSidebarBtnSlot();
+    void themeModeChangeSlot(QString styleName);
 
 Q_SIGNALS:
     /**

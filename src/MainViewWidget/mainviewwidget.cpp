@@ -54,13 +54,12 @@ void MainViewWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
+    this->setAttribute(Qt::WA_TranslucentBackground);
 
     QVBoxLayout* mainLayout=new QVBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     m_topWidget=new QWidget;
-    m_topWidget->setStyleSheet("border:0px;background:transparent;");
 
     m_verticalSpacer=new QSpacerItem(20,40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     mainLayout->addWidget(m_topWidget);
@@ -143,9 +142,6 @@ void MainViewWidget::addTopControl()
     m_topLayout=new QHBoxLayout;
     m_topLayout->setSpacing(0);
     m_queryLineEdit=new QLineEdit;
-    char style[100];
-    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;}",QueryLineEditBackground);
-    m_queryLineEdit->setStyleSheet(style);
     m_topLayout->addWidget(m_queryLineEdit);
     m_topWidget->setLayout(m_topLayout);
 
@@ -161,19 +157,22 @@ void MainViewWidget::initQueryLineEdit()
     m_queryWid=new QWidget;
     m_queryWid->setParent(m_queryLineEdit);
     m_queryWid->setFocusPolicy(Qt::NoFocus);
-    m_queryWid->setStyleSheet("border:0px;background:transparent");
     QHBoxLayout* queryWidLayout=new QHBoxLayout;
-    queryWidLayout->setContentsMargins(5,0,0,0);
+    queryWidLayout->setContentsMargins(5,3,0,2);
     queryWidLayout->setSpacing(5);
     m_queryWid->setLayout(queryWidLayout);
     QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    else
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_queryIcon=new QLabel;
-    m_queryIcon->setStyleSheet("background:transparent");
     m_queryIcon->setFixedSize(pixmap.size());
     m_queryIcon->setPixmap(pixmap);
     m_queryText=new QLabel;
     m_queryText->setText(tr("Search"));
-    m_queryText->setStyleSheet("background:transparent;color:#626c6e;");
     m_queryText->adjustSize();
     queryWidLayout->addWidget(m_queryIcon);
     queryWidLayout->addWidget(m_queryText);
@@ -199,10 +198,6 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
     {
         if(event->type()==QEvent::FocusIn)
         {
-             char style[200];
-             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
-                     QueryLineEditClickedBorder,QueryLineEditClickedBackground);
-             m_queryLineEdit->setStyleSheet(style);
              if(!m_queryLineEdit->text().isEmpty())
              {
                  if(m_searchKeyWords.isEmpty())
@@ -217,7 +212,6 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                                                m_queryIcon->width()+5,Style::QueryLineEditHeight));
                  m_animation->setEasingCurve(QEasingCurve::OutQuad);
                  m_animation->start();
-//                 m_queryLineEdit->setReadOnly(true);
                  m_queryLineEdit->setTextMargins(-5,1,0,1);
              }
              m_isSearching=true;
@@ -229,10 +223,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             {
                 if(m_isSearching)
                 {
-                    char style[100];
-                    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;}",QueryLineEditBackground);
                     m_animation->stop();
-                    m_queryLineEdit->setStyleSheet(style);
                     m_queryText->adjustSize();
                     m_animation->setStartValue(QRect(0,0,
                                                     m_queryIcon->width()+5,Style::QueryLineEditHeight));
@@ -241,12 +232,6 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                     m_animation->setEasingCurve(QEasingCurve::InQuad);
                     m_animation->start();
                 }
-            }
-            else {
-                char style[100];
-                sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
-                        QueryLineEditBackground);
-                m_queryLineEdit->setStyleSheet(style);
             }
             m_isSearching=false;
         }
@@ -271,68 +256,62 @@ void MainViewWidget::setLineEditFocus(QString arg)
  */
 void MainViewWidget::searchAppSlot(QString arg)
 {
-//    if(!m_isHiden)
-//    {
-        if(!arg.isEmpty())//切换至搜索模块
+    if(!arg.isEmpty())//切换至搜索模块
+    {
+        if(m_widgetState!=0)
         {
-            if(m_widgetState!=0)
+            QLayoutItem* child;
+            if((child=this->layout()->takeAt(1))!=nullptr)
             {
-                QLayoutItem* child;
-                if((child=this->layout()->takeAt(1))!=nullptr)
+                QWidget* childWid=child->widget();
+                if(childWid!=nullptr)
                 {
-                    QWidget* childWid=child->widget();
-                    if(childWid!=nullptr)
-                    {
-                        this->layout()->removeWidget(childWid);
-                        childWid->setParent(nullptr);
-                    }
+                    this->layout()->removeWidget(childWid);
+                    childWid->setParent(nullptr);
                 }
-                m_widgetState=0;
-                QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
-                if(!m_isFullScreen)
-                    layout->insertWidget(1,m_searchResultWid);
-                else
-                    layout->insertWidget(1,m_fullSearchResultWid);
             }
-            Q_EMIT sendSearchKeyword(arg);
-            m_searchAppThread->start();
+            m_widgetState=0;
+            QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
+            if(!m_isFullScreen)
+                layout->insertWidget(1,m_searchResultWid);
+            else
+                layout->insertWidget(1,m_fullSearchResultWid);
         }
-        else{//切换至分类模块
-            if(m_isFullScreen)
-            {
-                switch (m_saveCurrentWidState) {
-                case 1:
-                    loadFullCommonUseWidget();
-                    break;
-                case 2:
-                    loadFullLetterWidget();
-                    break;
-                case 3:
-                    loadFullFunctionWidget();
-                default:
-                    break;
-                }
-            }
-            else {
-                switch (m_saveCurrentWidState) {
-                case 1:
-                    loadCommonUseWidget();
-                    break;
-                case 2:
-                    loadLetterWidget();
-                    break;
-                case 3:
-                    loadFunctionWidget();
-                    break;
-                default:
-                    break;
-                }
+        Q_EMIT sendSearchKeyword(arg);
+        m_searchAppThread->start();
+    }
+    else{//切换至分类模块
+        if(m_isFullScreen)
+        {
+            switch (m_saveCurrentWidState) {
+            case 1:
+                loadFullCommonUseWidget();
+                break;
+            case 2:
+                loadFullLetterWidget();
+                break;
+            case 3:
+                loadFullFunctionWidget();
+            default:
+                break;
             }
         }
-
-//    }
-//    else
-//        m_widgetState=m_saveCurrentWidState;
+        else {
+            switch (m_saveCurrentWidState) {
+            case 1:
+                loadCommonUseWidget();
+                break;
+            case 2:
+                loadLetterWidget();
+                break;
+            case 3:
+                loadFunctionWidget();
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }
 
 void MainViewWidget::recvSearchResult(QVector<QStringList> arg)
@@ -356,7 +335,9 @@ void MainViewWidget::animationFinishedSlot()
         }
     }
     else//退出搜索状态
+    {
         m_queryWid->layout()->addWidget(m_queryText);
+    }
 }
 
 /**
@@ -378,6 +359,15 @@ void MainViewWidget::loadMinMainView()
                                       m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
         m_queryWid->show();
     }
+
+    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    else
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_queryIcon->setPixmap(pixmap);
 
     if(m_widgetState==0)
     {
@@ -428,6 +418,15 @@ void MainViewWidget::loadMaxMainView()
                                       m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
         m_queryWid->show();
     }
+
+    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    else
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_queryIcon->setPixmap(pixmap);
 
     if(m_widgetState==0)
     {
@@ -745,7 +744,7 @@ void MainViewWidget::widgetMakeZero()
     m_queryLineEdit->blockSignals(false);
     char style[100];
     sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:2px;}",QueryLineEditBackground);
-    m_queryLineEdit->setStyleSheet(style);
+//    m_queryLineEdit->setStyleSheet(style);
     m_queryLineEdit->setTextMargins(0,1,0,1);
 }
 

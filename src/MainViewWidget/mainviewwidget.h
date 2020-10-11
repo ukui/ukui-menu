@@ -134,6 +134,7 @@ protected:
      * @brief Initializes the query box
      */
     void initQueryLineEdit();
+//    void paintEvent(QPaintEvent* event);
 
 public Q_SLOTS:
     /**
