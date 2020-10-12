@@ -66,9 +66,21 @@ void FunctionButtonWidget::initUi()
                                                                        false);
 
             gridLayout->addWidget(iconbtn,row,col);
+            m_buttonList.append(iconbtn);
             connect(iconbtn,&FunctionClassifyButton::buttonClicked,this, &FunctionButtonWidget::functionBtnClickedSlot);
             if(row*2+col==10)break;
         }
+
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+        connect(gsetting,&QGSettings::changed,this,[=]{
+            Q_FOREACH (QAbstractButton* btn, m_buttonList) {
+                FunctionClassifyButton *fbtn=qobject_cast<FunctionClassifyButton*>(btn);
+                fbtn->updateIconState();
+            }
+        });
+    }
 }
 
 /**

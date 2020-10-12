@@ -72,7 +72,8 @@ void SideBarWidget::addSidebarBtn()
     //放大缩小按钮界面
     m_minMaxWidget=new QWidget;
     m_minMaxLayout=new QHBoxLayout;
-    m_minMaxBtn=new QToolButton;
+    m_minMaxBtn=new QPushButton;
+    m_minMaxBtn->setFlat(true);
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
 //    m_minMaxBtn->setShortcut(Qt::Key_Enter);
     m_minMaxBtn->setShortcut(Qt::Key_Return);
@@ -198,6 +199,8 @@ void SideBarWidget::resetSidebarBtnSlot()
  */
 void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int num)
 {
+    btn->setFlat(true);
+    btn->setCheckable(true);
     QHBoxLayout* btnLayout=new QHBoxLayout;
     QLabel* labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);

@@ -74,9 +74,6 @@ void MainWindow::initUi()
     m_line->setFixedSize(1,this->height());
     m_line->setEnabled(false);
     mainlayout->addWidget(m_line);
-    char linestyle[100];
-    sprintf(linestyle, "background-color:%s;",LineBackground);
-//    m_line->setStyleSheet(linestyle);
     mainlayout->addWidget(m_sideBarWid);
 
     m_animation = new QPropertyAnimation(this, "geometry");

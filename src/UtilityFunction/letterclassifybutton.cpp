@@ -22,15 +22,15 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
                                            QString hoverbg,
                                            QString pressedbg,
                                            QString letter):
-    QToolButton(parent)
+    QPushButton(parent)
 {
-    QPalette palette=this->palette();
-    palette.setBrush(QPalette::Button,QBrush(QColor(1,1,1,0)));
-    this->setPalette(palette);
+//    QPalette palette=this->palette();
+//    palette.setBrush(QPalette::Button,QBrush(QColor(1,1,1,0)));
+//    this->setPalette(palette);
 
+    this->setFlat(true);
     this->hoverbg=hoverbg;
     this->pressedbg=pressedbg;
-//    this->setStyleSheet(QString("background:transparent;color:#8b8b8b;padding-left:0px;"));
     QFont font;
     font.setPixelSize(Style::LeftLetterFontSize);
     this->setFont(font);
@@ -43,7 +43,6 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
 void LetterClassifyButton::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
-//    this->setStyleSheet(QString("background:transparent;color:#ffffff;padding-left:0px;"));
     QFont font;
     font.setPixelSize(Style::LeftLetterFontSize*3);
     this->setFont(font);
@@ -53,10 +52,6 @@ void LetterClassifyButton::enterEvent(QEvent *e)
 void LetterClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
-//    if(is_pressed)
-//        this->setStyleSheet(QString("background:transparent;color:#ffffff;padding-left:0px;"));
-//    else
-//        this->setStyleSheet(QString("background:transparent;color:#8b8b8b;padding-left:0px;"));
     QFont font;
     font.setPixelSize(Style::LeftLetterFontSize);
     this->setFont(font);
@@ -66,7 +61,6 @@ void LetterClassifyButton::leaveEvent(QEvent *e)
 void LetterClassifyButton::mousePressEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-//    this->setStyleSheet(QString("background:transparent;color:#ffffff;padding-left:0px;"));
     QFont font;
     font.setPixelSize(Style::LeftLetterFontSize*3);
     this->setFont(font);
@@ -77,7 +71,6 @@ void LetterClassifyButton::mousePressEvent(QMouseEvent *event)
 void LetterClassifyButton::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-//    this->setStyleSheet(QString("background:transparent;color:#ffffff;padding-left:0px;"));
     QFont font;
     font.setPixelSize(Style::LeftLetterFontSize*3);
     this->setFont(font);
@@ -89,12 +82,10 @@ void LetterClassifyButton::reactToToggle(bool checked)
 {
     if(checked)
     {
-//        this->setStyleSheet(QString("background:transparent;color:#ffffff;padding-left:0px;"));
         this->is_pressed=true;
     }
     else
     {
-//        this->setStyleSheet(QString("background:transparent;color:#8b8b8b;padding-left:0px;"));
         this->is_pressed=false;
     }
 }

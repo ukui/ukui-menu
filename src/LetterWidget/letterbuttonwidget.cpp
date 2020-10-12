@@ -66,7 +66,9 @@ void LetterButtonWidget::initUi()
         {
             if(row*4+col<letterlist.size())
             {
-                QToolButton* btn=new QToolButton;
+                QPushButton* btn=new QPushButton;
+                btn->setFlat(true);
+                btn->setCheckable(false);
                 btn->setFixedSize(55,48);
                 btn->setText(letterlist.at(row*4+col));
                 gridLayout->addWidget(btn,row,col);
@@ -84,7 +86,7 @@ void LetterButtonWidget::initUi()
  */
 void LetterButtonWidget::letterBtnClickedSlot()
 {
-    QToolButton* btn=dynamic_cast<QToolButton *>(QObject::sender());
+    QPushButton* btn=dynamic_cast<QPushButton *>(QObject::sender());
     QString btnname=btn->text();
     Q_EMIT sendLetterBtnSignal(btnname);
 }
@@ -100,7 +102,7 @@ void LetterButtonWidget::recvLetterBtnList(QStringList list)
         for(int col=0;col<4;col++)
         {
             QLayoutItem* item=gridLayout->itemAt(row*4+col);
-            QToolButton* btn=static_cast<QToolButton*>(item->widget());
+            QPushButton* btn=static_cast<QPushButton*>(item->widget());
             QString letterstr=btn->text();
             if(list.indexOf(letterstr.at(0))==-1)
                 btn->setEnabled(false);

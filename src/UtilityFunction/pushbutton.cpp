@@ -38,10 +38,10 @@ void PushButton::initAppBtn()
 {   
     this->setFixedSize(m_width,m_height);
     //按钮透明
-    QPalette palette=this->palette();
-    palette.setColor(QPalette::Highlight,Qt::transparent);
-    palette.setBrush(QPalette::Button,QBrush(QColor(1,1,1,0)));
-    this->setPalette(palette);
+//    QPalette palette=this->palette();
+//    palette.setColor(QPalette::Highlight,Qt::transparent);
+//    palette.setBrush(QPalette::Button,QBrush(QColor(1,1,1,0)));
+//    this->setPalette(palette);
     this->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* layout=new QHBoxLayout(this);
     layout->setContentsMargins(15,0,0,0);

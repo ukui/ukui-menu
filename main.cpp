@@ -25,6 +25,7 @@
 #include <QLocale>
 #include <X11/Xlib.h>
 #include <syslog.h>
+#include "src/UtilityFunction/internalstyle.h"
 
 int main(int argc, char *argv[])
 {
@@ -42,6 +43,9 @@ int main(int argc, char *argv[])
         app.sendMessage("raise_window_noop");
         return EXIT_SUCCESS;
     }
+
+//    auto Style=new ProxyStyle;
+//    app.setStyle(Style);
 
     QTranslator translator;
     if (translator.load(QLocale(), "ukui-menu", "_", QM_FILES_INSTALL_PATH))
@@ -86,9 +90,9 @@ int main(int argc, char *argv[])
 //    else
 //        w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-8,y+8,
 //                                  Style::minw,Style::minh));
-//    w.setFrameStyle();
 //    w.show();
 //    w.raise();
+//    w.update();
 //    w.activateWindow();
 
     return app.exec();

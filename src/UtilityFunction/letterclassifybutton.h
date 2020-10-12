@@ -18,12 +18,12 @@
 
 #ifndef LETTERCLASSIFYBUTTON_H
 #define LETTERCLASSIFYBUTTON_H
-#include <QToolButton>
+#include <QPushButton>
 #include <QEvent>
 #include <QMouseEvent>
 #include "src/Style/style.h"
 
-class LetterClassifyButton : public QToolButton
+class LetterClassifyButton : public QPushButton
 {
     Q_OBJECT
 public:

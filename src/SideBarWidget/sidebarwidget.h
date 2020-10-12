@@ -72,7 +72,7 @@ private:
 
     QWidget *m_minMaxWidget=nullptr;
     QHBoxLayout *m_minMaxLayout=nullptr;
-    QToolButton *m_minMaxBtn=nullptr;
+    QPushButton *m_minMaxBtn=nullptr;
 
     QButtonGroup *m_btnGroup=nullptr;
     QList<QAbstractButton*> m_buttonList;

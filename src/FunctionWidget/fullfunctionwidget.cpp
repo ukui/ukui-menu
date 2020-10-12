@@ -281,6 +281,16 @@ void FullFunctionWidget::initIconListWidget()
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullFunctionWidget::animationFinishSlot);
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullFunctionWidget::animationValueChangedSlot);
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+        connect(gsetting,&QGSettings::changed,this,[=]{
+            Q_FOREACH (QAbstractButton* btn, m_buttonList) {
+                FunctionClassifyButton *fbtn=qobject_cast<FunctionClassifyButton*>(btn);
+                fbtn->updateIconState();
+            }
+        });
+    }
 
     initIconListScrollArea();
 }

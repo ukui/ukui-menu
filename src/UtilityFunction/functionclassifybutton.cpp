@@ -38,27 +38,24 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
     m_iconLabel(new QLabel),
     m_textLabel(new QLabel)
 {
-    QPalette palette=this->palette();
-    palette.setColor(QPalette::Highlight,Qt::transparent);
-    palette.setBrush(QPalette::Button,QBrush(QColor(1,1,1,0)));
-    this->setPalette(palette);
-
-    m_textLabel->setAutoFillBackground(true);
+    this->setFlat(true);
     this->setFixedSize(m_width,m_height);
-    this->setCheckable(true);
     this->setFocusPolicy(Qt::NoFocus);
     m_iconLabel->setFixedSize(m_iconSize,m_iconSize);
     m_textLabel->adjustSize();
-//    m_iconLabel->setStyleSheet("background:transparent;");
     setLabelText();
     if(m_fullscreen)
+    {
         updateIconState(Normal);
+        this->setCheckable(true);
+    }
     else
     {
         if(m_enabled)
             updateIconState(Enabled);
         else
             updateIconState(Disabled);
+        this->setCheckable(false);
     }
 
     QHBoxLayout* mainlayout=new QHBoxLayout;
@@ -84,17 +81,9 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
     Q_UNUSED(e);
     QByteArray byte=QString(ClassifyBtnHoverBackground).toLocal8Bit();
     char* hover=byte.data();
-    char style[100];
     if(m_enabled)
     {
         updateIconState(Checked);
-        if(!m_fullscreen)
-        {
-            sprintf(style,"border:0px;border-radius:4px;padding-left:0px;background-color:%s;",hover);
-//            this->setStyleSheet(QString::fromLocal8Bit(style));
-        }
-//        else
-//            this->setStyleSheet("border:0px;border-radius:4px;padding-left:0px;background:transparent;");
     }
 }
 
@@ -130,6 +119,34 @@ void FunctionClassifyButton::buttonClickedSlot()
     Q_EMIT buttonClicked();
 }
 
+void FunctionClassifyButton::updateIconState()
+{
+    this->setFlat(true);
+    QString picState;
+    switch (m_state)
+    {
+    case Enabled:   picState="Enabled"; break;
+    case Disabled:  picState="Disabled"; break;
+    case Normal:    picState="Normal"; break;
+    case Checked:   picState="Checked"; break;
+    default:        break;
+    }
+
+    const auto ratio = devicePixelRatioF();
+    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize*ratio);
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+    {
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    }
+    else
+    {
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    }
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_iconLabel->setPixmap(pixmap);
+}
+
 void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State state)
 {
     if (state == m_state)
@@ -150,10 +167,13 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize*ratio);
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
     if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+    {
         pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    }
     else
+    {
         pixmap=drawSymbolicColoredPixmap(pixmap);//反白
-    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    }
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_iconLabel->setPixmap(pixmap);
     updateTextState(state);

@@ -61,9 +61,11 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->setRenderHint(QPainter::Antialiasing);
         if(option.state & QStyle::State_MouseOver)
         {
+            QColor color = option.palette.text().color();
+            color.setAlphaF(0.15);
             painter->save();
             painter->setPen(QPen(Qt::NoPen));
-            painter->setBrush(option.palette.highlight());
+            painter->setBrush(color);
             painter->drawPath(path);
             painter->restore();
         }
