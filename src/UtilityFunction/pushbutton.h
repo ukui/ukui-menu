@@ -66,6 +66,7 @@ private:
 protected:
     void initAppBtn();
     void setLabelText();
+//    void paintEvent(QPaintEvent* event);
 };
 
 #endif // PUSHBUTTON_H

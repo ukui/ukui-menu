@@ -610,7 +610,7 @@ void MainViewWidget::loadFullLetterWidget()
     }
     QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
     layout->insertWidget(1,m_fullLetterWid);
-    if(!m_isFullScreen || (m_isFullScreen && m_saveCurrentWidState!=2))
+//    if(!m_isFullScreen || (m_isFullScreen && m_saveCurrentWidState!=2))
         m_fullLetterWid->enterAnimation();
     m_widgetState=2;
     m_saveCurrentWidState=2;
@@ -638,7 +638,7 @@ void MainViewWidget::loadFullFunctionWidget()
     }
     QVBoxLayout *layout=qobject_cast<QVBoxLayout*>(this->layout());
     layout->insertWidget(1,m_fullFunctionWid);
-    if(!m_isFullScreen || (m_isFullScreen && m_saveCurrentWidState!=3))
+//    if(!m_isFullScreen || (m_isFullScreen && m_saveCurrentWidState!=3))
         m_fullFunctionWid->enterAnimation();
     m_widgetState=3;
     m_saveCurrentWidState=3;

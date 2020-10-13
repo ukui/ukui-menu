@@ -20,6 +20,8 @@
 #include "utility.h"
 #include <QDebug>
 #include <syslog.h>
+#include <QStylePainter>
+#include <QStyleOptionButton>
 
 FunctionClassifyButton::FunctionClassifyButton(int width,
                        int height,
@@ -68,6 +70,38 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
     connect(this,&FunctionClassifyButton::clicked,this,&FunctionClassifyButton::buttonClickedSlot);
 }
 
+void FunctionClassifyButton::paintEvent(QPaintEvent* e)
+{
+    QStylePainter painter(this);
+    QStyleOptionButton option;
+    initStyleOption(&option);
+    if ((option.state & QStyle::State_Enabled) && (option.state & QStyle::State_MouseOver)) {
+        painter.save();
+        painter.setPen(Qt::NoPen);
+        QColor color = option.palette.color(QPalette::Text);
+        color.setAlphaF(0.15);
+        painter.setBrush(color);
+        painter.drawRoundedRect(option.rect, 4, 4);
+        painter.restore();
+    }
+    if(m_fullscreen && (option.state & QStyle::State_On))
+    {
+        painter.save();
+        painter.setPen(Qt::NoPen);
+        QColor color = option.palette.color(QPalette::Text);
+        color.setAlphaF(0.15);
+        painter.setBrush(color);
+        painter.drawRoundedRect(option.rect, 4, 4);
+        painter.restore();
+    }
+
+    QStyleOptionButton subopt = option;
+    subopt.rect = painter.style()->subElementRect(QStyle::SE_PushButtonContents, &option, this);
+    subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
+    painter.style()->drawControl(QStyle::CE_PushButtonLabel, &subopt, &painter, this);
+    return;
+}
+
 void FunctionClassifyButton::updateBtnState()
 {
     if(m_enabled)
@@ -90,7 +124,6 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
 void FunctionClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
-//    this->setStyleSheet("border:0px;border-radius:4px;padding-left:0px;background:transparent;");
     if(m_fullscreen)
     {
         if(!isChecked())

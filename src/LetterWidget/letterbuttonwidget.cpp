@@ -42,14 +42,6 @@ void LetterButtonWidget::initUi()
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
 
-    char btncolor[400];
-    sprintf(btncolor,"QToolButton{background:transparent;color:#ffffff;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;border-radius:4px;}\
-            QToolButton:pressed{background-color:%s;color:#ffffff;border-radius:4px;}\
-            QToolButton:disabled{color:rgba(255, 255, 255, 0.25);}",
-            ClassifyBtnHoverBackground,
-            ClassifyBtnHoverBackground);
-
     QStringList letterlist;
     letterlist.clear();
     for(int i=0;i<26;i++)
@@ -66,13 +58,12 @@ void LetterButtonWidget::initUi()
         {
             if(row*4+col<letterlist.size())
             {
-                QPushButton* btn=new QPushButton;
+                LetterClassifyButton* btn=new LetterClassifyButton(this,false,letterlist.at(row*4+col));
                 btn->setFlat(true);
                 btn->setCheckable(false);
                 btn->setFixedSize(55,48);
-                btn->setText(letterlist.at(row*4+col));
                 gridLayout->addWidget(btn,row,col);
-                connect(btn, &QToolButton::clicked, this, &LetterButtonWidget::letterBtnClickedSlot);
+                connect(btn,&LetterClassifyButton::buttonClicked,this, &LetterButtonWidget::letterBtnClickedSlot);
             }
             else {
                 break;
@@ -86,7 +77,7 @@ void LetterButtonWidget::initUi()
  */
 void LetterButtonWidget::letterBtnClickedSlot()
 {
-    QPushButton* btn=dynamic_cast<QPushButton *>(QObject::sender());
+    LetterClassifyButton* btn=dynamic_cast<LetterClassifyButton *>(QObject::sender());
     QString btnname=btn->text();
     Q_EMIT sendLetterBtnSignal(btnname);
 }
@@ -102,7 +93,7 @@ void LetterButtonWidget::recvLetterBtnList(QStringList list)
         for(int col=0;col<4;col++)
         {
             QLayoutItem* item=gridLayout->itemAt(row*4+col);
-            QPushButton* btn=static_cast<QPushButton*>(item->widget());
+            LetterClassifyButton* btn=static_cast<LetterClassifyButton*>(item->widget());
             QString letterstr=btn->text();
             if(list.indexOf(letterstr.at(0))==-1)
                 btn->setEnabled(false);

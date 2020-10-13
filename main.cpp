@@ -25,7 +25,7 @@
 #include <QLocale>
 #include <X11/Xlib.h>
 #include <syslog.h>
-#include "src/UtilityFunction/internalstyle.h"
+#include "src/UtilityFunction/proxystyle.h"
 
 int main(int argc, char *argv[])
 {

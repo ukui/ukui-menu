@@ -202,7 +202,7 @@ void FunctionWidget::updateAppListView()
  */
 void FunctionWidget::appClassificationBtnClickedSlot()
 {
-    m_leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
+    m_leaveAnimation->setStartValue(QRect(6,0,this->width()-6,this->height()-6));
     m_leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
     m_enterAnimation->setStartValue(QRect(-40,-40,this->width()+80,this->height()+80));
     m_enterAnimation->setEndValue(QRect((this->width()-Style::LeftBtnWidth*2-5)/2,
@@ -239,7 +239,7 @@ void FunctionWidget::recvFunctionBtnSignal(QString btnname)
                                         Style::LeftBtnHeight*6+25));
     m_leaveAnimation->setEndValue(QRect(-40,-40,this->width()+80,this->height()+80));
     m_enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
-    m_enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+    m_enterAnimation->setEndValue(QRect(6,0,this->width()-6,this->height()-6));
     m_leaveAnimation->setDuration(80);
     m_enterAnimation->setDuration(10);
 

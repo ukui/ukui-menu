@@ -1,4 +1,4 @@
-#include "internalstyle.h"
+#include "proxystyle.h"
 #include <QApplication>
 #include <QDebug>
 

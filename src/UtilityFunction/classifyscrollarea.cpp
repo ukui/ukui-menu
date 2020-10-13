@@ -24,6 +24,7 @@ ClassifyScrollAreaWid::ClassifyScrollAreaWid()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
+
 }
 
 void ClassifyScrollAreaWid::paintEvent(QPaintEvent *event)
@@ -46,7 +47,6 @@ ClassifyScrollArea::ClassifyScrollArea(QWidget *parent):
     QScrollArea(parent)
 {
     initWid();
-
 }
 
 void ClassifyScrollArea::initWid()

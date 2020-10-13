@@ -28,20 +28,19 @@ class LetterClassifyButton : public QPushButton
     Q_OBJECT
 public:
     LetterClassifyButton(QWidget *parent,
-                         QString hoverbg,
-                         QString pressedbg,
+                         bool fullscreen,
                          QString letter
                          );
 
     bool is_pressed=false;
 
 private:
-    QString hoverbg;
-    QString pressedbg;
+    bool m_fullscreen=false;
 
 protected:
     void enterEvent(QEvent* e);
     void leaveEvent(QEvent* e);
+    void paintEvent(QPaintEvent* e);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 

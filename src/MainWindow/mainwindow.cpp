@@ -501,7 +501,8 @@ void MainWindow::loadMainWindow()
         else
             this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
         m_sideBarWid->loadMaxSidebar();
-        m_sideBarWid->setSideBarBtnGeometry();
+//        m_sideBarWid->setSideBarBtnGeometry();
+        m_sideBarWid->enterAnimation();
         m_mainViewWid->loadMaxMainView();
         QPainterPath path;
         path.addRect(this->rect());

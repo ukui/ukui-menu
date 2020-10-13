@@ -37,13 +37,15 @@ PushButton::~PushButton()
 void PushButton::initAppBtn()
 {   
     this->setFixedSize(m_width,m_height);
+    this->setStyleSheet("background:transparent");
     //按钮透明
 //    QPalette palette=this->palette();
 //    palette.setColor(QPalette::Highlight,Qt::transparent);
 //    palette.setBrush(QPalette::Button,QBrush(QColor(1,1,1,0)));
 //    this->setPalette(palette);
     this->setFocusPolicy(Qt::NoFocus);
-    QHBoxLayout* layout=new QHBoxLayout(this);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    QHBoxLayout* layout=new QHBoxLayout;
     layout->setContentsMargins(15,0,0,0);
     layout->setSpacing(6);
 
@@ -63,6 +65,22 @@ void PushButton::initAppBtn()
     layout->addWidget(m_textLabel);
     layout->addWidget(m_line);
 }
+
+//void PushButton::paintEvent(QPaintEvent *event)
+//{
+//    Q_UNUSED(event);
+//    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+//    double transparency=gsetting->get("transparency").toDouble();
+//    QPainter painter(this);
+//    painter.setRenderHint(QPainter::Antialiasing);
+//    painter.setOpacity(0);
+//    painter.setBrush(this->palette().base());
+//    painter.setPen(Qt::NoPen);
+//    QRect rect = this->rect();
+//    rect.setWidth(rect.width());
+//    rect.setHeight(rect.height());
+//    painter.drawRect(rect);
+//}
 
 void PushButton::setLabelText()
 {

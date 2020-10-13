@@ -83,6 +83,7 @@ public:
 protected:
     void enterEvent(QEvent* e);
     void leaveEvent(QEvent* e);
+    void paintEvent(QPaintEvent* e);
     void updateIconState(const State state);
     void updateTextState(const State state);
     void setLabelText();

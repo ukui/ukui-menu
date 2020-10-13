@@ -246,19 +246,14 @@ void FullLetterWidget::initLetterListWidget()
  */
 void FullLetterWidget::initLetterListScrollArea()
 {
-//    m_letterListScrollArea->setStyleSheet("border:1px solid #ff0000;");
-//    m_letterListScrollArea->setFixedSize(Style::LeftLetterBtnHeight*2,
-//                                       (m_letterList.size()+1)*Style::LeftLetterBtnHeight);
-
-//    m_letterListScrollArea->setStyleSheet("border:1px solid #ff0000;");
     if(m_letterList.contains("&"))
         m_letterList.replace(m_letterList.indexOf("&"),"&&");
     for(int i=0;i<m_letterList.size();i++)
     {
         LetterClassifyButton* letterbtn=new LetterClassifyButton(m_letterListScrollAreaWid,
-                                                                 ClassifyBtnHoverBackground,
-                                                                 ClassifyBtnHoverBackground,
+                                                                 true,
                                                                  m_letterList.at(i));
+        letterbtn->setFixedSize(Style::LeftLetterBtnHeight,Style::LeftLetterBtnHeight);
         m_buttonList.append(letterbtn);
         m_letterListScrollAreaWidLayout->addWidget(letterbtn);
         m_letterListScrollAreaWidLayout->setAlignment(letterbtn,Qt::AlignHCenter);
