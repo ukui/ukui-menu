@@ -39,7 +39,6 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 {
     if(index.isValid())
     {
-        painter->save();
         QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
         QStringList strlist1=index.model()->data(index,Qt::DisplayRole).toStringList();
@@ -110,15 +109,21 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                             icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
                         else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png")))
                             icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
+                        else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png")))
+                            icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
+                        else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg")))
+                            icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
                         else
                             icon=QIcon::fromTheme(QString("application-x-desktop"));
                     }
                 }
+                painter->save();
                 icon.paint(painter,iconRect,Qt::AlignLeft);
-//                painter->setPen(QPen(Qt::white));
                 QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
                 painter->drawText(QRect(iconRect.right()+15,rect.y(),
                                         rect.width()-62,rect.height()),Qt::AlignVCenter,appname);
+                painter->restore();
+                painter->save();
                 setting->beginGroup("recentapp");
                 QFileInfo fileInfo(strlist.at(0));
                 QString desktopfn=fileInfo.fileName();
@@ -129,21 +134,24 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                     painter->drawEllipse(QPoint(rect.topRight().x()-22,rect.y()+(rect.height()-8)/2+4),4,4);
                 }
                 setting->endGroup();
+                painter->restore();
             }
             else
             {
+                //绘制分割线
+                painter->save();
                 QRect textRect=QRect(rect.x()+11,rect.y()+12,rect.width(),rect.height());
                 painter->drawText(textRect,Qt::AlignLeft,strlist.at(0));
                 painter->setRenderHint(QPainter::Antialiasing, true);
-                painter->setPen(QPen(QColor("#FFFFFF"),1));
-                painter->setOpacity(0.06);
+                painter->setPen(QPen(QColor(option.palette.text().color()),1));
+                painter->setOpacity(0.1);
                 painter->drawLine(QPoint(5,rect.bottom()),QPoint(rect.right(),rect.bottom()));
+                painter->restore();
             }
 
         }
         else
         {
-            painter->setOpacity(1);
             QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
             QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
             QIcon icon;
@@ -157,8 +165,6 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 icon=QIcon::fromTheme(iconstr);
                 if(icon.isNull())
                 {
-                    if(pUkuiMenuInterface->getAppName(strlist.at(0))=="baidunetdisk")
-                        syslog(LOG_LOCAL0 | LOG_DEBUG ,"---2---");
                     if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
                         icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
                     else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png")))
@@ -167,6 +173,10 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                         icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
                     else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg")))
                         icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
+                    else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png")))
+                        icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
+                    else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg")))
+                        icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
                     else
                         icon=QIcon::fromTheme(QString("application-x-desktop"));
                 }
@@ -184,6 +194,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 icon.paint(painter,QRect(rect.topRight().x()-22,rect.y()+(rect.height()-16)/2,16,16));
             }
             setting->endGroup();
+            painter->setOpacity(1);
+            painter->save();
             setting->beginGroup("recentapp");
             if(setting->contains(desktopfn) && !is_locked)
             {
@@ -192,12 +204,15 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 painter->drawEllipse(QPoint(rect.topRight().x()-22,rect.y()+(rect.height()-8)/2+4),4,4);
             }
             setting->endGroup();
+            painter->restore();
+            painter->save();
+            painter->setPen(QPen(option.palette.text().color()));
+            painter->setBrush(Qt::NoBrush);
             painter->setOpacity(1);
-//            painter->setPen(QPen(Qt::white));
             painter->drawText(QRect(iconRect.right()+15,rect.y(),
                                     rect.width()-62,rect.height()),Qt::AlignVCenter,appname);
+            painter->restore();
         }
-        painter->restore();
     }
 
 }

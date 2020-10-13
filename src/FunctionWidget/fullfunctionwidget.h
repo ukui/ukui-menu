@@ -90,6 +90,8 @@ private:
     QVBoxLayout* m_iconListScrollAreaWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;
+    QSpacerItem* m_topSpacerItem=nullptr;
+    QSpacerItem* m_bottomSpacerItem=nullptr;
 
     /*Animation*/
     QPropertyAnimation* m_animation=nullptr;//Function category button animation

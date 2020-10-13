@@ -37,7 +37,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 {
     if(index.isValid())
     {
-        painter->save();
+//        painter->save();
         QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
         rect.setX(option.rect.x());
@@ -70,6 +70,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             painter->restore();
         }
 
+        painter->save();
         painter->setOpacity(1);
         QString desktopfp=index.data(Qt::DisplayRole).value<QString>();
         QString iconstr=pUkuiMenuInterface->getAppIcon(desktopfp);
@@ -104,6 +105,10 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
                     icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
                 else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg")))
                     icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
+                else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png")))
+                    icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
+                else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg")))
+                    icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
                 else
                     icon=QIcon::fromTheme(QString("application-x-desktop"));
             }
@@ -118,19 +123,13 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
                        Style::AppListIconSize,
                        Style::AppListIconSize);
         icon.paint(painter,iconRect);
+        painter->restore();
 
-        textRect=QRect(rect.x()+5,
-                       iconRect.bottom()+Style::AppSpaceBetweenIconText,
-                       rect.width()-10,
-                       rect.height()-iconRect.height()-Style::AppSpaceBetweenIconText);
-
+        painter->save();
         bool is_locked=false;
-        bool is_recentapp=false;
         QFileInfo fileInfo(desktopfp);
         QString desktopfn=fileInfo.fileName();
-        QFontMetrics fm=painter->fontMetrics();
-        QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-10,Qt::TextShowMnemonic);
-
+        //添加固定图标
         if(module==0)
         {
             setting->beginGroup("lockapplication");
@@ -142,6 +141,18 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             }
             setting->endGroup();
         }
+        painter->restore();
+
+        textRect=QRect(rect.x()+5,
+                       iconRect.bottom()+Style::AppSpaceBetweenIconText,
+                       rect.width()-10,
+                       rect.height()-iconRect.height()-Style::AppSpaceBetweenIconText);
+
+        painter->save();
+        //添加最近安装蓝色标签
+        bool is_recentapp=false;
+        QFontMetrics fm=painter->fontMetrics();
+        QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-10,Qt::TextShowMnemonic);
         setting->beginGroup("recentapp");
         if(setting->contains(desktopfn) && !is_locked)
         {
@@ -167,7 +178,11 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
         }
         setting->endGroup();
+        painter->restore();
 
+        painter->save();
+        painter->setPen(QPen(option.palette.text().color()));
+        painter->setBrush(Qt::NoBrush);
         painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
         painter->restore();
 

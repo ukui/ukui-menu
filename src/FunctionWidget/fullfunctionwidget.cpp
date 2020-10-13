@@ -220,6 +220,8 @@ void FullFunctionWidget::updateAppListView()
         m_btnGroup->removeButton(button);
     }
     m_buttonList.clear();
+    m_iconListScrollAreaWidLayout->removeItem(m_topSpacerItem);
+    m_iconListScrollAreaWidLayout->removeItem(m_bottomSpacerItem);
     while ((child = m_iconListScrollAreaWidLayout->takeAt(0)) != 0) {
         QWidget* wid=child->widget();
         m_iconListScrollAreaWidLayout->removeWidget(wid);
@@ -274,6 +276,9 @@ void FullFunctionWidget::initIconListWidget()
     m_iconListScrollAreaWid->setLayout(m_iconListScrollAreaWidLayout);
     m_iconListScrollArea->setWidget(m_iconListScrollAreaWid);
 
+    m_topSpacerItem=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
+    m_bottomSpacerItem=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
+
     m_btnGroup=new QButtonGroup(m_iconListScrollAreaWid);
     m_animation = new QPropertyAnimation(m_iconListScrollArea, "geometry");
 
@@ -300,6 +305,7 @@ void FullFunctionWidget::initIconListWidget()
  */
 void FullFunctionWidget::initIconListScrollArea()
 {
+    m_iconListScrollAreaWidLayout->addItem(m_topSpacerItem);
     for(int i=0;i<m_classificationList.size();i++)
     {
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(
@@ -313,6 +319,7 @@ void FullFunctionWidget::initIconListScrollArea()
         m_buttonList.append(iconbtn);
         m_iconListScrollAreaWidLayout->addWidget(iconbtn);
     }
+    m_iconListScrollAreaWidLayout->addItem(m_bottomSpacerItem);
 
     int id=0;
     Q_FOREACH (QAbstractButton* btn, m_buttonList) {
@@ -400,14 +407,20 @@ void FullFunctionWidget::valueChangedSlot(int value)
 
 void FullFunctionWidget::enterAnimation()
 {
-    int height=m_classificationList.size()*Style::LeftBtnHeight+(m_classificationList.size()-1)*Style::LeftSpaceBetweenItem;
+//    int height=m_classificationList.size()*Style::LeftBtnHeight+(m_classificationList.size()-1)*Style::LeftSpaceBetweenItem;
     m_animation->setDuration(200);//动画总时间
-    m_animation->setStartValue(QRect(0,(m_iconListWid->height()-height)/2,
-                                    0,height));
+//    m_animation->setStartValue(QRect(0,(m_iconListWid->height()-height)/2,
+//                                    0,height));
+//    m_animation->setEndValue(QRect(Style::LeftMargin,
+//                                  (m_iconListWid->height()-height)/2,
+//                                  Style::LeftBtnWidth,
+//                                  height));
+    m_animation->setStartValue(QRect(0,0,
+                                    0,m_iconListWid->height()));
     m_animation->setEndValue(QRect(Style::LeftMargin,
-                                  (m_iconListWid->height()-height)/2,
+                                  0,
                                   Style::LeftBtnWidth,
-                                  height));
+                                  m_iconListWid->height()));
     m_animation->setEasingCurve(QEasingCurve::InQuart);
     m_animation->start();
     m_iconListScrollArea->show();
