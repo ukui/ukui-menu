@@ -37,7 +37,7 @@ PushButton::~PushButton()
 void PushButton::initAppBtn()
 {   
     this->setFixedSize(m_width,m_height);
-    this->setStyleSheet("background:transparent");
+//    this->setStyleSheet("background:transparent");
     //按钮透明
 //    QPalette palette=this->palette();
 //    palette.setColor(QPalette::Highlight,Qt::transparent);

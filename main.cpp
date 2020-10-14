@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     app.setActivationWindow(&w);
     w.setProperty("useSystemStyleBlur", true);
 
+    //测试
 //    int position=0;
 //    int panelSize=0;
 //    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
@@ -94,6 +95,7 @@ int main(int argc, char *argv[])
 //    w.raise();
 //    w.update();
 //    w.activateWindow();
+    //测试
 
     return app.exec();
 }

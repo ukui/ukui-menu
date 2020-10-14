@@ -167,7 +167,6 @@ void FullFunctionWidget::fillAppList()
 void FullFunctionWidget::insertClassificationBtn(QString category)
 {
     PushButton* classificationbtn=new PushButton(this,category,m_scrollArea->width()-12,30,2);
-//    classificationbtn->setFixedSize(m_scrollArea->width()-12,25);
     m_scrollAreaWidLayout->addWidget(classificationbtn);
     m_classificationList.append(category);
 
@@ -407,14 +406,7 @@ void FullFunctionWidget::valueChangedSlot(int value)
 
 void FullFunctionWidget::enterAnimation()
 {
-//    int height=m_classificationList.size()*Style::LeftBtnHeight+(m_classificationList.size()-1)*Style::LeftSpaceBetweenItem;
     m_animation->setDuration(200);//动画总时间
-//    m_animation->setStartValue(QRect(0,(m_iconListWid->height()-height)/2,
-//                                    0,height));
-//    m_animation->setEndValue(QRect(Style::LeftMargin,
-//                                  (m_iconListWid->height()-height)/2,
-//                                  Style::LeftBtnWidth,
-//                                  height));
     m_animation->setStartValue(QRect(0,0,
                                     0,m_iconListWid->height()));
     m_animation->setEndValue(QRect(Style::LeftMargin,
@@ -449,16 +441,6 @@ void FullFunctionWidget::repaintWidget()
 
 void FullFunctionWidget::widgetMakeZero()
 {
-//    Q_FOREACH (QAbstractButton* button, m_buttonList) {
-//        int num=m_classificationList.indexOf(functionnamelist.at(m_buttonList.indexOf(button)));
-//        if(num!=-1)
-//        {
-//            m_btnGroup->button(num)->setChecked(true);
-//            m_btnGroup->button(num)->click();
-//            m_iconListScrollArea->verticalScrollBar()->setSliderPosition(0);
-//            break;
-//        }
-//    }
     m_btnGroup->button(0)->click();
     m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }

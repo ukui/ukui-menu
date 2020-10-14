@@ -52,10 +52,6 @@ public:
      */
     void loadMaxSidebar();
     /**
-     * @brief Initializes the interface state
-     */
-    void widgetMakeZero();
-    /**
      * @brief Sidebar animation
      */
     void enterAnimation();

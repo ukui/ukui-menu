@@ -29,28 +29,28 @@
 #include <QFileInfo>
 
 //颜色
-#define BORDERCOLOR "rgba(37,41,43)" //边框
-#define SHADOWCOLOR "#80000000" //阴影
+//#define BORDERCOLOR "rgba(37,41,43)" //边框
+//#define SHADOWCOLOR "#80000000" //阴影
 
-#define UserIconBackground "#ffffff"
-#define UserIconOpacity 0.20
-#define RightClickMenuBackground "rgba(12, 12, 13, 0.7)"//右键菜单背景
-#define RightClickMenuSeparator "rgba(255, 255, 255, 0.08)"//右键菜单分割线
-#define RightClickMenuSelected "rgba(61, 107, 229, 1)"//右键菜单悬浮
-#define RightClickMenuBorder "rgba(255, 255, 255, 0.2)"//右键菜单边框
-#define RightClickMenuFont "rgba(255, 255, 255, 0.91)"
-#define RightClickMenuOpacity 0.95
-#define ToolTipBackground "rgba(26, 26, 26, 0.7)"
-#define DefaultBackground "rgba(19, 19, 20, 0.7)" //默认态背景色
-#define LineBackground "rgba(255,255,255,0.06)" //分割线背景色
-#define SBClassifyBtnSelectedBackground "#3D6BE5" //侧边栏上部分类按钮选择背景
-#define SBFunBtnHoverBackground "rgba(255, 255, 255, 0.14)" //侧边栏目下部功能按钮悬浮背景
-#define ClassifyBtnHoverBackground "rgba(255, 255, 255, 0.14)" //分类按钮悬浮背景
-#define MMBtnHoverBackground "rgba(255, 255, 255, 0.14)" //最大化最小化按钮悬浮背景
-#define QueryLineEditBackground "rgba(0, 0, 0,0.4)" //搜索框背景
-#define QueryLineEditClickedBackground "rgba(0, 0, 0,0.5)" //搜索框背景选中
-#define QueryLineEditClickedBorder "rgba(61, 107, 229, 1)" //搜索框背景选中边框
-#define AppBtnHover "#ffffff" //按钮悬浮
+//#define UserIconBackground "#ffffff"
+//#define UserIconOpacity 0.20
+//#define RightClickMenuBackground "rgba(12, 12, 13, 0.7)"//右键菜单背景
+//#define RightClickMenuSeparator "rgba(255, 255, 255, 0.08)"//右键菜单分割线
+//#define RightClickMenuSelected "rgba(61, 107, 229, 1)"//右键菜单悬浮
+//#define RightClickMenuBorder "rgba(255, 255, 255, 0.2)"//右键菜单边框
+//#define RightClickMenuFont "rgba(255, 255, 255, 0.91)"
+//#define RightClickMenuOpacity 0.95
+//#define ToolTipBackground "rgba(26, 26, 26, 0.7)"
+//#define DefaultBackground "rgba(19, 19, 20, 0.7)" //默认态背景色
+//#define LineBackground "rgba(255,255,255,0.06)" //分割线背景色
+//#define SBClassifyBtnSelectedBackground "#3D6BE5" //侧边栏上部分类按钮选择背景
+//#define SBFunBtnHoverBackground "rgba(255, 255, 255, 0.14)" //侧边栏目下部功能按钮悬浮背景
+//#define ClassifyBtnHoverBackground "rgba(255, 255, 255, 0.14)" //分类按钮悬浮背景
+//#define MMBtnHoverBackground "rgba(255, 255, 255, 0.14)" //最大化最小化按钮悬浮背景
+//#define QueryLineEditBackground "rgba(0, 0, 0,0.4)" //搜索框背景
+//#define QueryLineEditClickedBackground "rgba(0, 0, 0,0.5)" //搜索框背景选中
+//#define QueryLineEditClickedBorder "rgba(61, 107, 229, 1)" //搜索框背景选中边框
+//#define AppBtnHover "#ffffff" //按钮悬浮
 
 /**
  * 大小(全屏)

@@ -72,6 +72,7 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
 
 void FunctionClassifyButton::paintEvent(QPaintEvent* e)
 {
+    Q_UNUSED(e);
     QStylePainter painter(this);
     QStyleOptionButton option;
     initStyleOption(&option);
@@ -113,8 +114,6 @@ void FunctionClassifyButton::updateBtnState()
 void FunctionClassifyButton::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    QByteArray byte=QString(ClassifyBtnHoverBackground).toLocal8Bit();
-    char* hover=byte.data();
     if(m_enabled)
     {
         updateIconState(Checked);

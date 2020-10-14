@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
     UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
     UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
-    UkuiMenuInterface::allAppVector=m_ukuiMenuInterface->getAllApp();
+    UkuiMenuInterface::allAppVector=m_ukuiMenuInterface->getAllClassification();
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     m_setting=new QSettings(path,QSettings::IniFormat);
@@ -492,21 +492,57 @@ void MainWindow::loadMainWindow()
     int y=QApplication::primaryScreen()->geometry().y();
     if(m_isFullScreen)
     {
+//        if(position==0)
+//            this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+//        else if(position==1)
+//            this->setGeometry(QRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+//        else if(position==2)
+//            this->setGeometry(QRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+//        else
+//            this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+//        m_sideBarWid->loadMaxSidebar();
+////        m_sideBarWid->setSideBarBtnGeometry();
+//        m_sideBarWid->enterAnimation();
+//        m_mainViewWid->loadMaxMainView();
+//        QPainterPath path;
+//        path.addRect(this->rect());
+
+        //修复界面黑框问题
+        QRect startRect;
+        QRect endRect;
         if(position==0)
-            this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+        {
+            startRect.setRect(x+8,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh-8,Style::minw,Style::minh);
+            endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
+        }
         else if(position==1)
-            this->setGeometry(QRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+        {
+            startRect.setRect(x+8,y+panelSize+8,Style::minw,Style::minh);
+            endRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
+        }
         else if(position==2)
-            this->setGeometry(QRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+        {
+            startRect.setRect(x+panelSize+8,y+8,Style::minw,Style::minh);
+            endRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
+        }
         else
-            this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
-        m_sideBarWid->loadMaxSidebar();
-//        m_sideBarWid->setSideBarBtnGeometry();
-        m_sideBarWid->enterAnimation();
-        m_mainViewWid->loadMaxMainView();
-        QPainterPath path;
-        path.addRect(this->rect());
-        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+        {
+            startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-8,y+8,Style::minw,Style::minh);
+            endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
+        }
+
+        this->centralWidget()->layout()->removeWidget(m_mainViewWid);
+        m_mainViewWid->setParent(nullptr);
+        this->centralWidget()->layout()->removeWidget(m_line);
+        m_line->setParent(nullptr);
+        this->centralWidget()->layout()->removeWidget(m_sideBarWid);
+        m_sideBarWid->setParent(nullptr);
+
+        m_animation->setDuration(1);//动画总时间
+        m_animation->setStartValue(startRect);
+        m_animation->setEndValue(endRect);
+        m_animation->setEasingCurve(QEasingCurve::Linear);
+        m_animation->start();
     }
     else
     {
@@ -524,7 +560,6 @@ void MainWindow::loadMainWindow()
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
     }
-//    setFrameStyle();
 }
 
 void MainWindow::monitorResolutionChange(QRect rect)

@@ -46,7 +46,6 @@ void SideBarWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-//    this->setStyleSheet("border:0px;background:transparent;");
     this->setFocusPolicy(Qt::NoFocus);
 
     addSidebarBtn();
@@ -92,6 +91,7 @@ void SideBarWidget::addSidebarBtn()
     int id=0;
     Q_FOREACH (QAbstractButton* btn, m_buttonList) {
         m_btnGroup->addButton(btn,id++);
+        btn->setCheckable(true);
     }
 
     QString usericon=m_ukuiMenuInterface->getUserIcon();
@@ -120,7 +120,10 @@ void SideBarWidget::addSidebarBtn()
     {
         QPushButton* btn=qobject_cast<QPushButton*>(button);
         if(m_buttonList.indexOf(button)>3 && m_buttonList.indexOf(button)<m_buttonList.count()-1)
+        {
+            button->setCheckable(false);
             addRightClickMenu(btn);
+        }
     }
     m_shutDownBtn->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_shutDownBtn,&QPushButton::customContextMenuRequested,this,
@@ -200,7 +203,6 @@ void SideBarWidget::resetSidebarBtnSlot()
 void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int num)
 {
     btn->setFlat(true);
-    btn->setCheckable(true);
     QHBoxLayout* btnLayout=new QHBoxLayout;
     QLabel* labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);
@@ -663,20 +665,6 @@ void SideBarWidget::setSideBarBtnGeometry()
     m_mainWidget->setGeometry(QRect(this->width()-m_btnWidth-Style::SideBarMargin,0,
                                     m_btnWidth,this->height()));
     m_mainWidget->show();
-}
-
-void SideBarWidget::widgetMakeZero()
-{
-    char pressstyle[200];
-    sprintf(pressstyle,"QPushButton{background-color:%s;border:0px;padding-left:0;border-radius:4px;}",SBClassifyBtnSelectedBackground);
-//    m_allBtn->setStyleSheet(pressstyle);
-    char btncolor[300];
-    sprintf(btncolor,"QPushButton{background:transparent;border:0px;padding-left:0;border-radius:4px;}\
-            QPushButton:hover{background-color:%s;border:0px;border-radius:4px;}\
-            QPushButton:pressed{background-color:%s;border:0px;border-radius:4px;}",
-            SBFunBtnHoverBackground,SBFunBtnHoverBackground);
-//    m_letterBtn->setStyleSheet(btncolor);
-//    m_functionBtn->setStyleSheet(btncolor);
 }
 
 //void SideBarWidget::mousePressEvent(QMouseEvent *event)

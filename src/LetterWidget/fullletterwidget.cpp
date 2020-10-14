@@ -70,10 +70,6 @@ void FullLetterWidget::initAppListWidget()
 
     m_scrollArea=new ScrollArea;
     m_scrollAreaWid=new ScrollAreaWid;
-//    m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
-//    m_scrollArea->setAttribute(Qt::WA_TranslucentBackground, false);
-//    m_scrollAreaWid->setBackgroundRole(m_scrollAreaWid->palette().Highlight);
-//    m_scrollAreaWid->setAutoFillBackground(true);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
     m_scrollArea->setWidgetResizable(true);
@@ -112,7 +108,6 @@ void FullLetterWidget::fillAppList()
             m_letterList.append(letterstr);//存储分类字符
             //插入字母分类按钮
             PushButton* letterbtn=new PushButton(this,letterstr,m_scrollArea->width()-12,30,1);
-//            letterbtn->setFixedSize(m_scrollArea->width(),20);
             m_scrollAreaWidLayout->addWidget(letterbtn);
 
             //插入应用列表

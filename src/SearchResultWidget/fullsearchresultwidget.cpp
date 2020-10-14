@@ -36,7 +36,6 @@ void FullSearchResultWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-//    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
@@ -46,7 +45,7 @@ void FullSearchResultWidget::initUi()
     m_spaceItem=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     mainLayout->addItem(m_spaceItem);
     m_listView=new FullListView(this,3);
-    m_listView->setFixedSize(this->width()-Style::LeftWidWidth,this->height());
+    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+1,this->height());
     mainLayout->addWidget(m_listView);
     this->setLayout(mainLayout);
 
@@ -86,7 +85,7 @@ void FullSearchResultWidget::repaintWidget()
     m_listView->setParent(nullptr);
     delete m_listView;
     m_listView=new FullListView(this,3);
-    m_listView->setFixedSize(this->width()-Style::LeftWidWidth,this->height());
+    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+1,this->height());
     QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
     mainLayout->insertWidget(1,m_listView);
     m_data.clear();
