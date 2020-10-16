@@ -165,10 +165,10 @@ void FullListView::paintEvent(QPaintEvent *e)
     QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
     double transparency=gsetting->get("transparency").toDouble();
     QPainter painter(this->viewport());
-    painter.setOpacity(transparency);
+    painter.setOpacity(0.25);
     painter.setPen(Qt::NoPen);
-//    painter.setOpacity(0.9);
-    painter.fillRect(this->rect(), this->palette().base());
+//    painter.fillRect(this->rect(), this->palette().base());
+    painter.fillRect(this->rect(),QBrush(Qt::black));
 //    painter.fillRect(this->rect(),Qt::blue);
     QListView::paintEvent(e);
 }

@@ -418,6 +418,8 @@ void SideBarWidget::loadMinSidebar()
         btn->setToolTip(m_textList.at(m_buttonList.indexOf(button)));
     }
 
+    changeIconColor(false);
+
     disconnect(m_minMaxBtn,&QToolButton::clicked,this, &SideBarWidget::sendDefaultBtnSignal);
     connect(m_minMaxBtn, &QToolButton::clicked,this,&SideBarWidget::sendFullScreenBtnSignal);
 }
@@ -487,6 +489,8 @@ void SideBarWidget::loadMaxSidebar()
         setMaxSidebarBtn(btn);
         btn->setToolTip("");
     }
+
+    changeIconColor(true);
 
     disconnect(m_minMaxBtn, &QToolButton::clicked,this,&SideBarWidget::sendFullScreenBtnSignal);
     connect(m_minMaxBtn, &QToolButton::clicked,this,&SideBarWidget::sendDefaultBtnSignal);
@@ -644,6 +648,60 @@ void SideBarWidget::themeModeChangeSlot(QString styleName)
                 pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
                 label->setPixmap(pixmap);
             }
+        }
+    }
+}
+
+void SideBarWidget::changeIconColor(bool isFullScreen)
+{
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+    Q_FOREACH(QAbstractButton *button,m_buttonList)
+    {
+        QPushButton *btn=qobject_cast<QPushButton*>(button);
+        QLayoutItem *item=btn->layout()->itemAt(0);
+        QLabel *label=qobject_cast<QLabel*>(item->widget());
+        QString iconStr;
+        switch (m_buttonList.indexOf(button)) {
+        case 0:
+            iconStr=QString(":/data/img/sidebarwidget/commonuse.svg");
+            break;
+        case 1:
+            iconStr=QString(":/data/img/sidebarwidget/letter.svg");
+            break;
+        case 2:
+            iconStr=QString(":/data/img/sidebarwidget/function.svg");
+            break;
+        case 3:
+            userAccountsChanged();
+            break;
+        case 4:
+            iconStr=QString(":/data/img/sidebarwidget/personal.svg");
+            break;
+        case 5:
+            iconStr=QString(":/data/img/sidebarwidget/trash.svg");
+            break;
+        case 6:
+            iconStr=QString(":/data/img/sidebarwidget/computer.svg");
+            break;
+        case 7:
+            iconStr=QString(":/data/img/sidebarwidget/setting.svg");
+            break;
+        case 8:
+            iconStr=QString(":/data/img/sidebarwidget/shutdown.svg");
+            break;
+        default:
+            break;
+        }
+        if(m_buttonList.indexOf(button)!=3)
+        {
+            const auto ratio=devicePixelRatioF();
+            QPixmap pixmap=loadSvg(iconStr,19*ratio);
+            if(gsetting->get("style-name").toString()=="ukui-light" && !isFullScreen)//反黑
+                pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+            else
+                pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+            pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+            label->setPixmap(pixmap);
         }
     }
 }

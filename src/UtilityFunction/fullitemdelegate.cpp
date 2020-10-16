@@ -181,7 +181,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->restore();
 
         painter->save();
-        painter->setPen(QPen(option.palette.text().color()));
+//        painter->setPen(QPen(option.palette.text().color()));
+        painter->setPen(QPen(Qt::white));
         painter->setBrush(Qt::NoBrush);
         painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
         painter->restore();

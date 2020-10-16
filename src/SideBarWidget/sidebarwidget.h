@@ -134,6 +134,7 @@ protected:
      */
     void setMaxBtn();
     QPixmap PixmapToRound(const QPixmap &src, int radius);
+    void changeIconColor(bool isFullScreen);
 //    void mousePressEvent(QMouseEvent* event);
 
 private Q_SLOTS:

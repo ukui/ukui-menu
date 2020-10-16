@@ -30,12 +30,10 @@ ClassifyScrollAreaWid::ClassifyScrollAreaWid()
 void ClassifyScrollAreaWid::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-    double transparency=gsetting->get("transparency").toDouble();
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setOpacity(transparency);
-    painter.setBrush(this->palette().base());
+    painter.setOpacity(0.25);
+    painter.setBrush(Qt::black);
     painter.setPen(Qt::NoPen);
     QRect rect = this->rect();
     rect.setWidth(rect.width());
