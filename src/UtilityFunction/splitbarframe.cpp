@@ -16,9 +16,9 @@
  *
  */
 
-#include "pushbutton.h"
+#include "splitbarframe.h"
 
-PushButton::PushButton(QWidget *parent, QString category, int width, int height, int module):
+SplitBarFrame::SplitBarFrame(QWidget *parent, QString category, int width, int height, int module):
     QFrame(parent),
     m_category(category),
     m_width(width),
@@ -30,19 +30,15 @@ PushButton::PushButton(QWidget *parent, QString category, int width, int height,
     initAppBtn();
 }
 
-PushButton::~PushButton()
+SplitBarFrame::~SplitBarFrame()
 {
 }
 
-void PushButton::initAppBtn()
+void SplitBarFrame::initAppBtn()
 {   
     this->setFixedSize(m_width,m_height);
 //    this->setStyleSheet("background:transparent");
     //按钮透明
-//    QPalette palette=this->palette();
-//    palette.setColor(QPalette::Highlight,Qt::transparent);
-//    palette.setBrush(QPalette::Button,QBrush(QColor(1,1,1,0)));
-//    this->setPalette(palette);
     this->setFocusPolicy(Qt::NoFocus);
     this->setAttribute(Qt::WA_TranslucentBackground);
     QHBoxLayout* layout=new QHBoxLayout;
@@ -56,35 +52,27 @@ void PushButton::initAppBtn()
     else
         setLabelText();
     m_textLabel->adjustSize();
+    QPalette pe=m_textLabel->palette();
+    pe.setColor(QPalette::WindowText,Qt::white);
+    m_textLabel->setPalette(pe);
     m_line->setFrameShape(QFrame::HLine);
     m_line->setFixedHeight(1);
     m_line->setFixedSize(m_width-m_textLabel->width()-15,1);
     m_line->setEnabled(false);
+    QPalette linePe=m_line->palette();
+    QColor color(255,255,255);
+    color.setAlphaF(0.25);
+    linePe.setColor(QPalette::WindowText,color);
+    m_line->setPalette(linePe);
 
     this->setLayout(layout);
     layout->addWidget(m_textLabel);
     layout->addWidget(m_line);
 }
 
-//void PushButton::paintEvent(QPaintEvent *event)
-//{
-//    Q_UNUSED(event);
-//    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-//    double transparency=gsetting->get("transparency").toDouble();
-//    QPainter painter(this);
-//    painter.setRenderHint(QPainter::Antialiasing);
-//    painter.setOpacity(0);
-//    painter.setBrush(this->palette().base());
-//    painter.setPen(Qt::NoPen);
-//    QRect rect = this->rect();
-//    rect.setWidth(rect.width());
-//    rect.setHeight(rect.height());
-//    painter.drawRect(rect);
-//}
-
-void PushButton::setLabelText()
+void SplitBarFrame::setLabelText()
 {
-    QMetaEnum metaEnum=QMetaEnum::fromType<PushButton::Category>();
+    QMetaEnum metaEnum=QMetaEnum::fromType<SplitBarFrame::Category>();
     switch (metaEnum.keyToValue(m_category.toLocal8Bit().data()))
     {
     case Mobile:

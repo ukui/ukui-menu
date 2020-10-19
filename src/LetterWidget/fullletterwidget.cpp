@@ -107,7 +107,7 @@ void FullLetterWidget::fillAppList()
                 letterstr="#";
             m_letterList.append(letterstr);//存储分类字符
             //插入字母分类按钮
-            PushButton* letterbtn=new PushButton(this,letterstr,m_scrollArea->width()-12,30,1);
+            SplitBarFrame* letterbtn=new SplitBarFrame(this,letterstr,m_scrollArea->width()-12,30,1);
             m_scrollAreaWidLayout->addWidget(letterbtn);
 
             //插入应用列表
@@ -215,8 +215,8 @@ void FullLetterWidget::resizeScrollAreaControls()
  */
 void FullLetterWidget::initLetterListWidget()
 {
-    m_letterListScrollArea=new ClassifyScrollArea(m_letterListWid);
-    m_letterListScrollAreaWid=new ClassifyScrollAreaWid;
+    m_letterListScrollArea=new ClassifyBtnScrollArea(m_letterListWid);
+    m_letterListScrollAreaWid=new ClassifyBtnScrollAreaWid;
     m_letterListScrollAreaWidLayout=new QVBoxLayout;
     m_letterListScrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_letterListScrollAreaWidLayout->setSpacing(0);

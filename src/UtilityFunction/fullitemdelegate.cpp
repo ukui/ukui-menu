@@ -37,7 +37,6 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 {
     if(index.isValid())
     {
-//        painter->save();
         QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
         rect.setX(option.rect.x());
@@ -185,6 +184,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->setPen(QPen(Qt::white));
         painter->setBrush(Qt::NoBrush);
         painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
+//        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter,appname);
         painter->restore();
 
         if(option.state & QStyle::State_MouseOver)

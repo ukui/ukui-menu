@@ -140,6 +140,15 @@ void MainViewWidget::addTopControl()
     m_queryLineEdit=new QLineEdit;
     m_topLayout->addWidget(m_queryLineEdit);
     m_topWidget->setLayout(m_topLayout);
+    char style[100];
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    if(gsetting.get("style-name").toString()=="ukui-light")
+    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#000000;}",
+            QueryLineEditBackground);
+    else
+        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
+                QueryLineEditBackground);
+    m_queryLineEdit->setStyleSheet(style);
 
     initQueryLineEdit();
 
@@ -154,7 +163,7 @@ void MainViewWidget::initQueryLineEdit()
     m_queryWid->setParent(m_queryLineEdit);
     m_queryWid->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* queryWidLayout=new QHBoxLayout;
-    queryWidLayout->setContentsMargins(5,3,0,2);
+    queryWidLayout->setContentsMargins(0,0,0,0);
     queryWidLayout->setSpacing(5);
     m_queryWid->setLayout(queryWidLayout);
     QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
@@ -172,6 +181,8 @@ void MainViewWidget::initQueryLineEdit()
     m_queryText->adjustSize();
     queryWidLayout->addWidget(m_queryIcon);
     queryWidLayout->addWidget(m_queryText);
+    queryWidLayout->setAlignment(m_queryIcon,Qt::AlignVCenter);
+    queryWidLayout->setAlignment(m_queryText,Qt::AlignVCenter);
     m_queryLineEdit->setFocusPolicy(Qt::ClickFocus);
     m_queryLineEdit->installEventFilter(this);
     m_queryLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
@@ -192,8 +203,23 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if(watched==m_queryLineEdit)
     {
+        char style[200];
         if(event->type()==QEvent::FocusIn)
         {
+            if(!m_isFullScreen)
+            {
+                QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+                if(gsetting.get("style-name").toString()=="ukui-light")
+                sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                        QueryLineEditClickedBorder,QueryLineEditClickedBackground);
+                else
+                    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                            QueryLineEditClickedBorder,QueryLineEditClickedBackground);
+            }
+            else
+                sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                        QueryLineEditClickedBorder,QueryLineEditClickedBackground);
+            m_queryLineEdit->setStyleSheet(style);
              if(!m_queryLineEdit->text().isEmpty())
              {
                  if(m_searchKeyWords.isEmpty())
@@ -201,6 +227,8 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
              }
              else
              {
+                 m_queryWid->layout()->removeWidget(m_queryText);
+                 m_queryText->setParent(nullptr);
                  m_animation->stop();
                  m_animation->setStartValue(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
                                                 m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
@@ -219,6 +247,20 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             {
                 if(m_isSearching)
                 {
+                    if(!m_isFullScreen)
+                    {
+                        QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+                        if(gsetting.get("style-name").toString()=="ukui-light")
+                        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#000000;}",
+                                QueryLineEditBackground);
+                        else
+                            sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
+                                    QueryLineEditBackground);
+                    }
+                    else
+                        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
+                                QueryLineEditBackground);
+                    m_queryLineEdit->setStyleSheet(style);
                     m_animation->stop();
                     m_queryText->adjustSize();
                     m_animation->setStartValue(QRect(0,0,
@@ -228,6 +270,23 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                     m_animation->setEasingCurve(QEasingCurve::InQuad);
                     m_animation->start();
                 }
+            }
+            else
+            {
+                if(!m_isFullScreen)
+                {
+                    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+                    if(gsetting.get("style-name").toString()=="ukui-light")
+                    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#000000;}",
+                            QueryLineEditBackground);
+                    else
+                        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
+                                QueryLineEditBackground);
+                }
+                else
+                    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
+                            QueryLineEditBackground);
+                m_queryLineEdit->setStyleSheet(style);
             }
             m_isSearching=false;
         }
@@ -311,8 +370,8 @@ void MainViewWidget::animationFinishedSlot()
 {
     if(m_isSearching)//进入搜索状态
     {
-        m_queryWid->layout()->removeWidget(m_queryText);
-        m_queryText->setParent(nullptr);
+//        m_queryWid->layout()->removeWidget(m_queryText);
+//        m_queryText->setParent(nullptr);
         m_queryLineEdit->setTextMargins(20,1,0,1);
         if(!m_searchKeyWords.isEmpty())
         {
@@ -323,6 +382,25 @@ void MainViewWidget::animationFinishedSlot()
     else//退出搜索状态
     {
         m_queryWid->layout()->addWidget(m_queryText);
+        m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
+        m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
+        QPalette pe = m_queryText->palette();
+        if(!m_isFullScreen)
+        {
+            QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+            if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+            {
+                pe.setColor(QPalette::Text,QColor(Qt::black));
+            }
+            else
+            {
+                pe.setColor(QPalette::Text,QColor(Qt::white));
+            }
+        }
+        else
+            pe.setColor(QPalette::Text,QColor(Qt::white));
+
+        m_queryText->setPalette(pe);
     }
 }
 
@@ -340,21 +418,39 @@ void MainViewWidget::loadMinMainView()
     if(m_queryLineEdit->text().isEmpty())
     {
         if(m_queryWid->layout()->count()==1)
+        {
             m_queryWid->layout()->addWidget(m_queryText);
+            m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
+            m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
+        }
         m_queryText->adjustSize();
         m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
                                       m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
         m_queryWid->show();
     }
 
+    char style[200];
+    QPalette pe = m_queryText->palette();
     QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
-    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
-        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    if(gsetting.get("style-name").toString()=="ukui-light")
+    {
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);//反黑
+        pe.setColor(QPalette::Text,QColor(Qt::black));
+        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#000000;}",
+                QueryLineEditBackground);
+    }
     else
+    {
         pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+        pe.setColor(QPalette::Text,QColor(Qt::white));
+        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
+                QueryLineEditBackground);
+    }
+    m_queryLineEdit->setStyleSheet(style);
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_queryIcon->setPixmap(pixmap);
+    m_queryText->setPalette(pe);
 
     //内容区
     m_contentWid->setFixedSize(this->width(),this->height()-m_topWidget->height());
@@ -390,19 +486,28 @@ void MainViewWidget::loadMaxMainView()
     if(m_queryLineEdit->text().isEmpty())
     {
         if(m_queryWid->layout()->count()==1)
+        {
             m_queryWid->layout()->addWidget(m_queryText);
+            m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
+            m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
+        }
         m_queryText->adjustSize();
         m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
                                       m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
         m_queryWid->show();
     }
 
+    char style[200];
+    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
+            QueryLineEditBackground);
+    m_queryLineEdit->setStyleSheet(style);
+
     QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
-    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
-    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
-        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
-    else
-        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    QPalette pe = m_queryText->palette();
+    pe.setColor(QPalette::Text,QColor(Qt::white));
+    m_queryText->setPalette(pe);
+
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_queryIcon->setPixmap(pixmap);
 

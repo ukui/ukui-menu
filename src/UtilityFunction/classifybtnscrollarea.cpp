@@ -16,18 +16,18 @@
  *
  */
 
-#include "classifyscrollarea.h"
+#include "classifybtnscrollarea.h"
 #include <QGSettings>
 #include <QVariant>
 
-ClassifyScrollAreaWid::ClassifyScrollAreaWid()
+ClassifyBtnScrollAreaWid::ClassifyBtnScrollAreaWid()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
 
 }
 
-void ClassifyScrollAreaWid::paintEvent(QPaintEvent *event)
+void ClassifyBtnScrollAreaWid::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
@@ -41,13 +41,13 @@ void ClassifyScrollAreaWid::paintEvent(QPaintEvent *event)
     painter.drawRect(rect);
 }
 
-ClassifyScrollArea::ClassifyScrollArea(QWidget *parent):
+ClassifyBtnScrollArea::ClassifyBtnScrollArea(QWidget *parent):
     QScrollArea(parent)
 {
     initWid();
 }
 
-void ClassifyScrollArea::initWid()
+void ClassifyBtnScrollArea::initWid()
 {
     this->verticalScrollBar()->setHidden(true);
     this->horizontalScrollBar()->setHidden(true);

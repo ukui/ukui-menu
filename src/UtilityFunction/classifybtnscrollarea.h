@@ -22,19 +22,19 @@
 #include <QScrollBar>
 #include <QPainter>
 
-class ClassifyScrollAreaWid: public QWidget
+class ClassifyBtnScrollAreaWid: public QWidget
 {
 public:
-    ClassifyScrollAreaWid();
+    ClassifyBtnScrollAreaWid();
 
 protected:
     void paintEvent(QPaintEvent* event);
 };
 
-class ClassifyScrollArea : public QScrollArea
+class ClassifyBtnScrollArea : public QScrollArea
 {
 public:
-    explicit ClassifyScrollArea(QWidget* parent=nullptr);
+    explicit ClassifyBtnScrollArea(QWidget* parent=nullptr);
 
 protected:
     void initWid();

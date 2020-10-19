@@ -35,9 +35,9 @@
 #include <gio/gdesktopappinfo.h>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/scrollarea.h"
-#include "src/UtilityFunction/pushbutton.h"
+#include "src/UtilityFunction/splitbarframe.h"
 #include "src/UtilityFunction/fulllistview.h"
-#include "src/UtilityFunction/classifyscrollarea.h"
+#include "src/UtilityFunction/classifybtnscrollarea.h"
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/UtilityFunction/functionclassifybutton.h"
 #include "src/Style/style.h"
@@ -85,8 +85,8 @@ private:
 
     /*Function classification list interface*/
     QWidget* m_iconListWid=nullptr;
-    ClassifyScrollArea* m_iconListScrollArea=nullptr;
-    ClassifyScrollAreaWid* m_iconListScrollAreaWid=nullptr;
+    ClassifyBtnScrollArea* m_iconListScrollArea=nullptr;
+    ClassifyBtnScrollAreaWid* m_iconListScrollAreaWid=nullptr;
     QVBoxLayout* m_iconListScrollAreaWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;

@@ -45,6 +45,12 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
     this->setFocusPolicy(Qt::NoFocus);
     m_iconLabel->setFixedSize(m_iconSize,m_iconSize);
     m_textLabel->adjustSize();
+    if(m_fullscreen)
+    {
+        QPalette pe = m_textLabel->palette();
+        pe.setColor(QPalette::ButtonText,QColor(Qt::white));
+        m_textLabel->setPalette(pe);
+    }
     setLabelText();
     if(m_fullscreen)
     {
@@ -197,15 +203,20 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
 
     const auto ratio = devicePixelRatioF();
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize*ratio);
-    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
-    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+    if(!m_fullscreen)
     {
-        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+        QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+        if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+        {
+            pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+        }
+        else
+        {
+            pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+        }
     }
     else
-    {
         pixmap=drawSymbolicColoredPixmap(pixmap);//反白
-    }
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_iconLabel->setPixmap(pixmap);
     updateTextState(state);

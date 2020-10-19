@@ -31,7 +31,6 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
     font.setPixelSize(Style::LeftLetterFontSize);
     this->setFont(font);
     this->setText(letter);
-//    this->setFixedSize(Style::LeftLetterBtnHeight,Style::LeftLetterBtnHeight);
     this->setCheckable(true);
     connect(this,&LetterClassifyButton::toggled,this,&LetterClassifyButton::reactToToggle);
 }
@@ -63,7 +62,10 @@ void LetterClassifyButton::paintEvent(QPaintEvent* e)
 
     QStyleOptionButton subopt = option;
     subopt.rect = painter.style()->subElementRect(QStyle::SE_PushButtonContents, &option, this);
-    subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
+    if(m_fullscreen)
+        subopt.palette.setBrush(QPalette::ButtonText, QColor(Qt::white));
+    else
+        subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
     painter.style()->drawControl(QStyle::CE_PushButtonLabel, &subopt, &painter, this);
     return;
 }

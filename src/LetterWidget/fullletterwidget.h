@@ -43,9 +43,9 @@
 #include <gio/gdesktopappinfo.h>
 #include "src/UtilityFunction/letterclassifybutton.h"
 #include "src/UtilityFunction/scrollarea.h"
-#include "src/UtilityFunction/pushbutton.h"
+#include "src/UtilityFunction/splitbarframe.h"
 #include "src/UtilityFunction/fulllistview.h"
-#include "src/UtilityFunction/classifyscrollarea.h"
+#include "src/UtilityFunction/classifybtnscrollarea.h"
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/Style/style.h"
 
@@ -92,8 +92,8 @@ private:
 
     /*Alphabetic classification list interface*/
     QWidget* m_letterListWid=nullptr;
-    ClassifyScrollArea* m_letterListScrollArea=nullptr;
-    ClassifyScrollAreaWid* m_letterListScrollAreaWid=nullptr;
+    ClassifyBtnScrollArea* m_letterListScrollArea=nullptr;
+    ClassifyBtnScrollAreaWid* m_letterListScrollAreaWid=nullptr;
     QVBoxLayout* m_letterListScrollAreaWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;

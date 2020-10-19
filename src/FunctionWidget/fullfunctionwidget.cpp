@@ -166,7 +166,7 @@ void FullFunctionWidget::fillAppList()
 
 void FullFunctionWidget::insertClassificationBtn(QString category)
 {
-    PushButton* classificationbtn=new PushButton(this,category,m_scrollArea->width()-12,30,2);
+    SplitBarFrame* classificationbtn=new SplitBarFrame(this,category,m_scrollArea->width()-12,30,2);
     m_scrollAreaWidLayout->addWidget(classificationbtn);
     m_classificationList.append(category);
 
@@ -267,8 +267,8 @@ void FullFunctionWidget::resizeScrollAreaControls()
  */
 void FullFunctionWidget::initIconListWidget()
 {
-    m_iconListScrollArea=new ClassifyScrollArea(m_iconListWid);
-    m_iconListScrollAreaWid=new ClassifyScrollAreaWid;
+    m_iconListScrollArea=new ClassifyBtnScrollArea(m_iconListWid);
+    m_iconListScrollAreaWid=new ClassifyBtnScrollAreaWid;
     m_iconListScrollAreaWidLayout=new QVBoxLayout;
     m_iconListScrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_iconListScrollAreaWidLayout->setSpacing(Style::LeftSpaceBetweenItem);
@@ -285,16 +285,6 @@ void FullFunctionWidget::initIconListWidget()
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullFunctionWidget::animationFinishSlot);
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullFunctionWidget::animationValueChangedSlot);
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
-        connect(gsetting,&QGSettings::changed,this,[=]{
-            Q_FOREACH (QAbstractButton* btn, m_buttonList) {
-                FunctionClassifyButton *fbtn=qobject_cast<FunctionClassifyButton*>(btn);
-                fbtn->updateIconState();
-            }
-        });
-    }
 
     initIconListScrollArea();
 }

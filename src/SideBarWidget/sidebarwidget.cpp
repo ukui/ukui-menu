@@ -101,7 +101,7 @@ void SideBarWidget::addSidebarBtn()
     m_personalBtn=new QPushButton;
     initBtn(m_personalBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/personal.svg"),tr("Personal"),4);
     m_trashBtn=new QPushButton;
-    initBtn(m_trashBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),tr("Recycle Bin"),5);
+    initBtn(m_trashBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/trash.svg"),tr("Trash"),5);
     m_computerBtn=new QPushButton;
     initBtn(m_computerBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/computer.svg"),tr("Computer"),6);
     m_controlBtn=new QPushButton;
@@ -490,6 +490,12 @@ void SideBarWidget::loadMaxSidebar()
         btn->setToolTip("");
     }
 
+    Q_FOREACH(QAbstractButton* button,m_buttonList)
+    {
+        QPushButton* btn=qobject_cast<QPushButton*>(button);
+        btn->setFixedSize(m_btnWidth,Style::SideBarBtnHeight);
+    }
+
     changeIconColor(true);
 
     disconnect(m_minMaxBtn, &QToolButton::clicked,this,&SideBarWidget::sendFullScreenBtnSignal);
@@ -502,12 +508,8 @@ void SideBarWidget::loadMaxSidebar()
 void SideBarWidget::setMinBtn()
 {
     const auto ratio=devicePixelRatioF();
-    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
     QPixmap pixmap=loadSvg(QString(":/data/img/sidebarwidget/min.svg"),14*ratio);
-    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
-        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
-    else
-        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    pixmap=drawSymbolicColoredPixmap(pixmap);//反白
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
 
     m_minMaxBtn->setFixedSize(Style::MinMaxBtnWidth,Style::MinMaxBtnWidth);
@@ -563,9 +565,11 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
             labeltext->setFixedSize(m_btnWidth-44,Style::SideBarBtnHeight);
             labeltext->adjustSize();
     }
-
+    QPalette pe = labeltext->palette();
+    pe.setColor(QPalette::ButtonText,QColor(Qt::white));
+    labeltext->setPalette(pe);
     btn->layout()->addWidget(labeltext);
-    btn->setFixedSize(m_btnWidth,Style::SideBarBtnHeight);
+//    btn->setFixedSize(m_btnWidth,Style::SideBarBtnHeight);
 }
 
 void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
