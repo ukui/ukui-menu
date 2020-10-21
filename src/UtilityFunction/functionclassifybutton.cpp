@@ -85,9 +85,17 @@ void FunctionClassifyButton::paintEvent(QPaintEvent* e)
     if ((option.state & QStyle::State_Enabled) && (option.state & QStyle::State_MouseOver)) {
         painter.save();
         painter.setPen(Qt::NoPen);
-        QColor color = option.palette.color(QPalette::Text);
-        color.setAlphaF(0.15);
-        painter.setBrush(color);
+        if(!m_fullscreen)
+        {
+            QColor color = option.palette.color(QPalette::Text);
+            color.setAlphaF(0.15);
+            painter.setBrush(color);
+        }
+        else
+        {
+            painter.setOpacity(0.15);
+            painter.setBrush(Qt::white);
+        }
         painter.drawRoundedRect(option.rect, 4, 4);
         painter.restore();
     }
@@ -95,9 +103,11 @@ void FunctionClassifyButton::paintEvent(QPaintEvent* e)
     {
         painter.save();
         painter.setPen(Qt::NoPen);
-        QColor color = option.palette.color(QPalette::Text);
-        color.setAlphaF(0.15);
-        painter.setBrush(color);
+//        QColor color = option.palette.color(QPalette::Text);
+//        color.setAlphaF(0.15);
+//        painter.setBrush(color);
+        painter.setOpacity(0.15);
+        painter.setBrush(Qt::white);
         painter.drawRoundedRect(option.rect, 4, 4);
         painter.restore();
     }

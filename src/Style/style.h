@@ -47,9 +47,12 @@
 #define SBFunBtnHoverBackground "rgba(255, 255, 255, 0.14)" //侧边栏目下部功能按钮悬浮背景
 #define ClassifyBtnHoverBackground "rgba(255, 255, 255, 0.14)" //分类按钮悬浮背景
 #define MMBtnHoverBackground "rgba(255, 255, 255, 0.14)" //最大化最小化按钮悬浮背景
-#define QueryLineEditBackground "rgba(0, 0, 0,0.4)" //搜索框背景
-#define QueryLineEditClickedBackground "rgba(0, 0, 0,0.5)" //搜索框背景选中
-#define QueryLineEditClickedBorder "rgba(61, 107, 229, 1)" //搜索框背景选中边框
+#define QueryLineEditDefaultBackground "rgba(0, 0, 0,0.04)" //搜索框默认态背景
+#define QueryLineEditBackground "rgba(255, 255, 255,0.06)" //搜索框背景
+#define QueryLineEditClickedDefaultBackground "rgba(0, 0, 0,0.04)" //搜索框默认态背景选中
+#define QueryLineEditClickedBackground "rgba(255, 255, 255,0.06)" //搜索框背景选中
+#define QueryLineEditClickedBorderDefault "rgba(0, 0, 0,0.1)" //搜索框默认态背景选中边框
+#define QueryLineEditClickedBorder "rgba(255, 255, 255,0.15)" //搜索框背景选中边框
 #define AppBtnHover "#ffffff" //按钮悬浮
 
 /**

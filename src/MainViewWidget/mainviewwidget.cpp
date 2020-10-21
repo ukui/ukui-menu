@@ -140,14 +140,14 @@ void MainViewWidget::addTopControl()
     m_queryLineEdit=new QLineEdit;
     m_topLayout->addWidget(m_queryLineEdit);
     m_topWidget->setLayout(m_topLayout);
-    char style[100];
+    char style[200];
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
     if(gsetting.get("style-name").toString()=="ukui-light")
-    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#000000;}",
-            QueryLineEditBackground);
+    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+            QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
     else
-        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
-                QueryLineEditBackground);
+        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                QueryLineEditClickedBorder,QueryLineEditBackground);
     m_queryLineEdit->setStyleSheet(style);
 
     initQueryLineEdit();
@@ -210,8 +210,8 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             {
                 QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
                 if(gsetting.get("style-name").toString()=="ukui-light")
-                sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
-                        QueryLineEditClickedBorder,QueryLineEditClickedBackground);
+                    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                            QueryLineEditClickedBorderDefault,QueryLineEditClickedDefaultBackground);
                 else
                     sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                             QueryLineEditClickedBorder,QueryLineEditClickedBackground);
@@ -251,15 +251,15 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                     {
                         QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
                         if(gsetting.get("style-name").toString()=="ukui-light")
-                        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#000000;}",
-                                QueryLineEditBackground);
+                        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                                QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
                         else
-                            sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
-                                    QueryLineEditBackground);
+                            sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                                    QueryLineEditClickedBorder,QueryLineEditBackground);
                     }
                     else
-                        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
-                                QueryLineEditBackground);
+                        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                                QueryLineEditClickedBorder,QueryLineEditBackground);
                     m_queryLineEdit->setStyleSheet(style);
                     m_animation->stop();
                     m_queryText->adjustSize();
@@ -277,15 +277,15 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                 {
                     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
                     if(gsetting.get("style-name").toString()=="ukui-light")
-                    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#000000;}",
-                            QueryLineEditBackground);
+                    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                            QueryLineEditClickedDefaultBackground,QueryLineEditDefaultBackground);
                     else
-                        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
-                                QueryLineEditBackground);
+                        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                                QueryLineEditClickedBorder,QueryLineEditBackground);
                 }
                 else
-                    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
-                            QueryLineEditBackground);
+                    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                            QueryLineEditClickedBorder,QueryLineEditBackground);
                 m_queryLineEdit->setStyleSheet(style);
             }
             m_isSearching=false;
@@ -437,15 +437,15 @@ void MainViewWidget::loadMinMainView()
     {
         pixmap=drawSymbolicBlackColoredPixmap(pixmap);//反黑
         pe.setColor(QPalette::Text,QColor(Qt::black));
-        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#000000;}",
-                QueryLineEditBackground);
+        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
     }
     else
     {
         pixmap=drawSymbolicColoredPixmap(pixmap);//反白
         pe.setColor(QPalette::Text,QColor(Qt::white));
-        sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
-                QueryLineEditBackground);
+        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                QueryLineEditClickedBorder,QueryLineEditBackground);
     }
     m_queryLineEdit->setStyleSheet(style);
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
@@ -498,8 +498,8 @@ void MainViewWidget::loadMaxMainView()
     }
 
     char style[200];
-    sprintf(style, "QLineEdit{border:0px;background-color:%s;border-radius:4px;color:#ffffff;}",
-            QueryLineEditBackground);
+    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+            QueryLineEditClickedBorder,QueryLineEditBackground);
     m_queryLineEdit->setStyleSheet(style);
 
     QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);

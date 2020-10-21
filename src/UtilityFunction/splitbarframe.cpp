@@ -61,7 +61,7 @@ void SplitBarFrame::initAppBtn()
     m_line->setEnabled(false);
     QPalette linePe=m_line->palette();
     QColor color(255,255,255);
-    color.setAlphaF(0.25);
+    color.setAlphaF(0.10);
     linePe.setColor(QPalette::WindowText,color);
     m_line->setPalette(linePe);
 
