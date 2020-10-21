@@ -271,7 +271,7 @@ void FullFunctionWidget::initIconListWidget()
     m_iconListScrollArea->setFixedSize(Style::LeftBtnWidth,
                                        m_iconListWid->height());
     m_iconListScrollAreaWid=new ClassifyBtnScrollAreaWid;
-    m_iconListScrollAreaWid->setFixedSize(m_iconListScrollArea->widget(),m_iconListScrollArea->height());
+    m_iconListScrollAreaWid->setFixedSize(m_iconListScrollArea->width(),m_iconListScrollArea->height());
     m_iconListScrollAreaWidLayout=new QVBoxLayout;
     m_iconListScrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_iconListScrollAreaWidLayout->setSpacing(Style::LeftSpaceBetweenItem);
@@ -430,7 +430,7 @@ void FullFunctionWidget::repaintWidget()
     m_iconListWid->setFixedSize(Style::LeftWidWidth,this->height());
     m_iconListScrollArea->setFixedSize(Style::LeftBtnWidth,
                                        m_iconListWid->height());
-    m_iconListScrollAreaWid->setFixedSize(m_iconListScrollArea->widget(),m_iconListScrollArea->height());
+    m_iconListScrollAreaWid->setFixedSize(m_iconListScrollArea->width(),m_iconListScrollArea->height());
 //    m_iconListScrollArea->widget()->adjustSize();
     m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
     updateAppListView();
