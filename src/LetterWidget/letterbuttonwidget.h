@@ -26,7 +26,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QSpacerItem>
-#include "src/UtilityFunction/functionclassifybutton.h"
+#include "src/UtilityFunction/letterclassifybutton.h"
 
 class LetterButtonWidget : public QWidget
 {

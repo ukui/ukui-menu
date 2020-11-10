@@ -369,7 +369,7 @@ bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
         return false;
 }
 
-QVector<QString> UkuiMenuInterface::getAllApp()
+QVector<QString> UkuiMenuInterface::getAllClassification()
 {
     QVector<QString> allAppVector;
     QVector<QString> commonVector;

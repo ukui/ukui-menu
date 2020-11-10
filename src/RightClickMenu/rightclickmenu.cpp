@@ -56,38 +56,6 @@ QPixmap RightClickMenu::getIconPixmap(QString iconstr, int type)
     return pixmap;
 }
 
-QPixmap RightClickMenu::drawSymbolicColoredPixmap(const QPixmap &source)
-{
-    QColor gray(128,128,128);
-    QColor standard (31,32,34);
-    QImage img = source.toImage();
-    for (int x = 0; x < img.width(); x++) {
-        for (int y = 0; y < img.height(); y++) {
-            auto color = img.pixelColor(x, y);
-            if (color.alpha() > 0) {
-                if (qAbs(color.red()-gray.red())<20 && qAbs(color.green()-gray.green())<20 && qAbs(color.blue()-gray.blue())<20) {
-                    color.setRed(255);
-                    color.setGreen(255);
-                    color.setBlue(255);
-                    img.setPixelColor(x, y, color);
-                }
-                else if(qAbs(color.red()-standard.red())<20 && qAbs(color.green()-standard.green())<20 && qAbs(color.blue()-standard.blue())<20)
-                {
-                    color.setRed(255);
-                    color.setGreen(255);
-                    color.setBlue(255);
-                    img.setPixelColor(x, y, color);
-                }
-                else
-                {
-                    img.setPixelColor(x, y, color);
-                }
-            }
-        }
-    }
-    return QPixmap::fromImage(img);
-}
-
 void RightClickMenu::fixToAllActionTriggerSlot()
 {
     m_actionNumber=1;
@@ -289,24 +257,8 @@ int RightClickMenu::showShutdownMenu()
 {
     m_actionNumber=0;
     QMenu menu;
-//    menu.addAction(QIcon(getIconPixmap("stock-people-symbolic",1)),tr("Switch User"),
-//                   this,SLOT(switchUserActionTriggerSlot()));
-//#if (QT_VERSION < QT_VERSION_CHECK(5,12,0))
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
-//    {
-//        QGSettings* gsetting=new QGSettings(QString("org.ukui.session").toLocal8Bit());
-//        if(gsetting->keys().contains(QString("canhibernate")))
-//        {
-//            if(gsetting->get("canhibernate").toBool())
-//                menu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Hibernate"),
-//                               this,SLOT(hibernateActionTriggerSlot()));
-//        }
-//    }
-//#endif
     menu.addAction(QIcon(getIconPixmap("kylin-sleep-symbolic",1)),tr("Sleep"),
-                   this,SLOT(sleepActionTriggerSlot()));
-//    menu.addAction(QIcon(getIconPixmap("system-lock-screen-symbolic",1)),tr("Lock Screen"),
-//                   this,SLOT(lockScreenActionTriggerSlot()));
+                   this,SLOT(hibernateActionTriggerSlot()));//休眠睡眠相同
     menu.addAction(QIcon(getIconPixmap("system-logout-symbolic",1)),tr("Log Out"),
                    this,SLOT(logoutActionTriggerSlot()));
     menu.addAction(QIcon(getIconPixmap("system-restart-symbolic",1)),tr("Restart"),

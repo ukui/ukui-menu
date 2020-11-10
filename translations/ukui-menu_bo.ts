@@ -2,170 +2,59 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
-    <name>CommonUseWidget</name>
+    <name>FunctionClassifyButton</name>
     <message>
-        <location filename="src/CommonUseWidget/commonusewidget.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FullCommonUseWidget</name>
-    <message>
-        <location filename="src/CommonUseWidget/fullcommonusewidget.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FullFunctionWidget</name>
-    <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.ui" line="14"/>
-        <source>Form</source>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="258"/>
+        <source>Mobile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="94"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="151"/>
-        <source>Android</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="95"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="158"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="261"/>
         <source>Internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="96"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="164"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="264"/>
         <source>Social</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="97"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="170"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="267"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="98"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="176"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="270"/>
         <source>Development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="99"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="182"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="273"/>
         <source>Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="100"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="188"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="276"/>
         <source>Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="101"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="194"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="279"/>
         <source>Office</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="102"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="200"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="282"/>
         <source>Education</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="103"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="207"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="285"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="104"/>
-        <location filename="src/FunctionWidget/fullfunctionwidget.cpp" line="213"/>
-        <source>Others</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FullLetterWidget</name>
-    <message>
-        <location filename="src/LetterWidget/fullletterwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FullSearchResultWidget</name>
-    <message>
-        <location filename="src/SearchResultWidget/fullsearchresultwidget.ui" line="16"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FunctionButtonWidget</name>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.ui" line="16"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="91"/>
-        <source>Android</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="92"/>
-        <source>Internet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="93"/>
-        <source>Social</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="94"/>
-        <source>Video</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="95"/>
-        <source>Development</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="96"/>
-        <source>Image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="97"/>
-        <source>Game</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="98"/>
-        <source>Office</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="99"/>
-        <source>Education</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="100"/>
-        <source>System</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionbuttonwidget.cpp" line="101"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="288"/>
         <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,246 +62,227 @@
 <context>
     <name>FunctionWidget</name>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.ui" line="14"/>
-        <source>Form</source>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="88"/>
+        <source>Mobile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="95"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="223"/>
-        <source>Android</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="102"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="230"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="94"/>
         <source>Internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="108"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="236"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="100"/>
         <source>Social</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="114"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="242"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="106"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="120"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="248"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="112"/>
         <source>Development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="126"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="254"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="118"/>
         <source>Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="132"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="260"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="124"/>
         <source>Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="138"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="266"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="130"/>
         <source>Office</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="144"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="272"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="136"/>
         <source>Education</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="151"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="279"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="143"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="157"/>
-        <location filename="src/FunctionWidget/functionwidget.cpp" line="285"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="149"/>
         <source>Others</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>LetterButtonWidget</name>
-    <message>
-        <location filename="src/LetterWidget/letterbuttonwidget.ui" line="16"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>LetterWidget</name>
-    <message>
-        <location filename="src/LetterWidget/letterwidget.ui" line="14"/>
-        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainViewWidget</name>
     <message>
-        <location filename="src/MainViewWidget/mainviewwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/MainViewWidget/mainviewwidget.cpp" line="174"/>
+        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="176"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="src/MainWindow/mainwindow.ui" line="14"/>
-        <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>RightClickMenu</name>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="117"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="175"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="225"/>
         <source>Pin to all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="121"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="179"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="228"/>
         <source>Unpin from all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="125"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="183"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="270"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="238"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="303"/>
         <source>Pin to taskbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="129"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="187"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="274"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="241"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="306"/>
         <source>Unpin from taskbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="133"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="191"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="244"/>
         <source>Add to desktop shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="137"/>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="195"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="248"/>
         <source>Uninstall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="228"/>
-        <source>Lock Screen</source>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="274"/>
+        <source>Sleep</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="233"/>
-        <source>Switch User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="238"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="278"/>
         <source>Log Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="243"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="280"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="248"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="282"/>
         <source>Power Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/RightClickMenu/rightclickmenu.cpp" line="278"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="308"/>
         <source>Personalize this list</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SearchResultWidget</name>
-    <message>
-        <location filename="src/SearchResultWidget/searchresultwidget.ui" line="16"/>
-        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SideBarWidget</name>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="110"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="533"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="86"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="114"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="536"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="88"/>
         <source>Letter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="118"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="539"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="90"/>
         <source>Function</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="138"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="561"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="104"/>
+        <source>Trash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="106"/>
         <source>Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="140"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="555"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="102"/>
         <source>Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="142"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="564"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="108"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="144"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="558"/>
-        <source>Recycle Bin</source>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="110"/>
+        <source>Power</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SplitBarFrame</name>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="79"/>
+        <source>Mobile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="146"/>
-        <location filename="src/SideBarWidget/sidebarwidget.cpp" line="572"/>
-        <source>Power</source>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="82"/>
+        <source>Internet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="85"/>
+        <source>Social</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="88"/>
+        <source>Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="91"/>
+        <source>Development</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="94"/>
+        <source>Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="97"/>
+        <source>Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="100"/>
+        <source>Office</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="103"/>
+        <source>Education</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="106"/>
+        <source>System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="109"/>
+        <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

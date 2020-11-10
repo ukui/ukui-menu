@@ -25,6 +25,7 @@
 #include <syslog.h>
 #include "src/XEventMonitor/xeventmonitor.h"
 #include "src/Style/style.h"
+#include <QPalette>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -33,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
     UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
     UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
-    UkuiMenuInterface::allAppVector=m_ukuiMenuInterface->getAllApp();
+    UkuiMenuInterface::allAppVector=m_ukuiMenuInterface->getAllClassification();
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     m_setting=new QSettings(path,QSettings::IniFormat);
@@ -71,10 +72,8 @@ void MainWindow::initUi()
     m_line=new QFrame;
     m_line->setFrameShape(QFrame::VLine);
     m_line->setFixedSize(1,this->height());
+    m_line->setEnabled(false);
     mainlayout->addWidget(m_line);
-    char linestyle[100];
-    sprintf(linestyle, "background-color:%s;",LineBackground);
-    m_line->setStyleSheet(linestyle);
     mainlayout->addWidget(m_sideBarWid);
 
     m_animation = new QPropertyAnimation(this, "geometry");
@@ -123,6 +122,93 @@ void MainWindow::initUi()
 
 //    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
 //                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
+}
+
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+    double transparency=gsetting->get("transparency").toDouble();
+    qreal radius = 0;
+    QRect rect = this->rect();
+    rect.setWidth(rect.width());
+    rect.setHeight(rect.height());
+    rect.setX(this->rect().x());
+    rect.setY(this->rect().y());
+    rect.setWidth(this->rect().width());
+    rect.setHeight(this->rect().height());
+    if(!m_isFullScreen)
+    {
+        radius=6;
+    }
+    else
+    {
+        radius=0;
+    }
+    QPainterPath path;
+    path.moveTo(rect.topRight() - QPointF(radius, 0));
+    path.lineTo(rect.topLeft() + QPointF(radius, 0));
+    path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
+    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+    path.lineTo(rect.topRight() + QPointF(0, radius));
+    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+    painter.setPen(Qt::transparent);
+    if(!m_isFullScreen)
+    {
+        painter.setBrush(this->palette().base());
+        painter.setPen(Qt::transparent);
+        painter.setOpacity(transparency);
+        painter.drawPath(path);
+        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+    }
+    else//全屏固定背景色(黑底白字)
+    {
+//        QGSettings gsetting(QString("org.mate.background").toLocal8Bit());
+//        QString iconPath =gsetting.get("picture-filename").toString();
+//        painter.drawPixmap(0,0,this->width(),this->height(),QPixmap(iconPath));
+
+        if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
+        {
+            QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
+            if(gsetting.keys().contains(QString("effect")))
+            {
+                if(gsetting.get("effect").toBool())
+                {
+                    painter.setBrush(Qt::black);
+                    painter.setPen(Qt::transparent);
+                    painter.setOpacity(0.25);
+                    painter.drawRect(this->rect());
+                }
+                else
+                {
+                    painter.setBrush(this->palette().base());
+                    painter.setPen(Qt::transparent);
+                    painter.setOpacity(transparency);
+                    painter.drawRect(this->rect());
+                }
+            }
+            else
+            {
+                painter.setBrush(this->palette().base());
+                painter.setPen(Qt::transparent);
+                painter.setOpacity(transparency);
+                painter.drawRect(this->rect());
+            }
+        }
+        else
+        {
+            painter.setBrush(this->palette().base());
+            painter.setPen(Qt::transparent);
+            painter.setOpacity(transparency);
+            painter.drawRect(this->rect());
+        }
+    }
+    QMainWindow::paintEvent(event);
 }
 
 /**
@@ -282,7 +368,7 @@ void MainWindow::animationValueFinishedSlot()
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
     }
-    setFrameStyle();
+//    setFrameStyle();
 }
 
 /**
@@ -447,20 +533,42 @@ void MainWindow::loadMainWindow()
     int y=QApplication::primaryScreen()->geometry().y();
     if(m_isFullScreen)
     {
+        //修复界面黑框问题
+        QRect startRect;
+        QRect endRect;
         if(position==0)
-            this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+        {
+            startRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,Style::minw,Style::minh);
+            endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
+        }
         else if(position==1)
-            this->setGeometry(QRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
+        {
+            startRect.setRect(x,y+panelSize,Style::minw,Style::minh);
+            endRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
+        }
         else if(position==2)
-            this->setGeometry(QRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
+        {
+            startRect.setRect(x+panelSize,y,Style::minw,Style::minh);
+            endRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
+        }
         else
-            this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
-        m_sideBarWid->loadMaxSidebar();
-        m_sideBarWid->setSideBarBtnGeometry();
-        m_mainViewWid->loadMaxMainView();
-        QPainterPath path;
-        path.addRect(this->rect());
-        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+        {
+            startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh);
+            endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
+        }
+
+        this->centralWidget()->layout()->removeWidget(m_mainViewWid);
+        m_mainViewWid->setParent(nullptr);
+        this->centralWidget()->layout()->removeWidget(m_line);
+        m_line->setParent(nullptr);
+        this->centralWidget()->layout()->removeWidget(m_sideBarWid);
+        m_sideBarWid->setParent(nullptr);
+
+        m_animation->setDuration(1);//动画总时间
+        m_animation->setStartValue(startRect);
+        m_animation->setEndValue(endRect);
+        m_animation->setEasingCurve(QEasingCurve::Linear);
+        m_animation->start();
     }
     else
     {
@@ -478,75 +586,6 @@ void MainWindow::loadMainWindow()
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
     }
-    setFrameStyle();
-
-    //默认开启默认态
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.desktop").toLocal8Bit()))
-//    {
-//        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.desktop").toLocal8Bit());
-//        bool ret=false;
-//        if(gsetting->keys().contains(QString("menufullScreen")))
-//            ret=gsetting->get("menufull-screen").toBool();
-//        if(ret)
-//        {
-//            if(position==0)
-//                this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
-//            else if(position==1)
-//                this->setGeometry(QRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize));
-//            else if(position==2)
-//                this->setGeometry(QRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
-//            else
-//                this->setGeometry(QRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height()));
-//            this->centralWidget()->layout()->removeWidget(m_line);
-//            m_line->setParent(nullptr);
-//            m_sideBarWid->loadMaxSidebar();
-//            m_mainViewWid->loadMaxMainView();
-//            m_sideBarWid->enterAnimation();
-//            QPainterPath path;
-//            path.addRect(this->rect());
-//            setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-//            m_isFullScreen=true;
-//        }
-//        else
-//        {
-//            if(position==0)
-//                this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,
-//                                          Style::minw,Style::minh));
-//            else if(position==1)
-//                this->setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
-//            else if(position==2)
-//                this->setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
-//            else
-//                this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
-//                                          Style::minw,Style::minh));
-//            QHBoxLayout* mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
-//            mainLayout->insertWidget(1,m_line);
-//            m_sideBarWid->loadMinSidebar();
-//            m_mainViewWid->loadMinMainView();
-//            m_isFullScreen=false;
-//        }
-//    }
-//    else
-//    {
-//        if(position==0)
-//            this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,
-//                                      Style::minw,Style::minh));
-//        else if(position==1)
-//            this->setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
-//        else if(position==2)
-//            this->setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
-//        else
-//            this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
-//                                      Style::minw,Style::minh));
-
-//        QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
-//        mainLayout->insertWidget(1,m_line);
-//        m_sideBarWid->loadMinSidebar();
-//        m_mainViewWid->loadMinMainView();
-//        m_isFullScreen=false;
-//    }
-
-//    setFrameStyle();
 }
 
 void MainWindow::monitorResolutionChange(QRect rect)
@@ -628,114 +667,62 @@ void MainWindow::repaintWidget()
                 this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
                                           Style::minw,Style::minh));
 
-//            QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->centralWidget()->layout());
-//            mainLayout->insertWidget(1,m_line);
             m_sideBarWid->loadMinSidebar();
             m_mainViewWid->resizeControl();
         }
-        setFrameStyle();
     }
 }
 
-void MainWindow::setFrameStyle()
-{
-    int position=0;
-    int panelSize=0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        if(gsetting->keys().contains(QString("panelposition")))
-            position=gsetting->get("panelposition").toInt();
-        else
-            position=0;
-        if(gsetting->keys().contains(QString("panelsize")))
-            panelSize=gsetting->get("panelsize").toInt();
-        else
-            panelSize=46;
-    }
-    else
-    {
-        position=0;
-        panelSize=46;
-    }
-    char style[100];
+//void MainWindow::setFrameStyle()
+//{
+//    int position=0;
+//    int panelSize=0;
+//    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
+//    {
+//        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+//        if(gsetting->keys().contains(QString("panelposition")))
+//            position=gsetting->get("panelposition").toInt();
+//        else
+//            position=0;
+//        if(gsetting->keys().contains(QString("panelsize")))
+//            panelSize=gsetting->get("panelsize").toInt();
+//        else
+//            panelSize=46;
+//    }
+//    else
+//    {
+//        position=0;
+//        panelSize=46;
+//    }
 
-    QString m_defaultBackground;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-        if(gsetting->keys().contains(QString("transparency")))
-        {
-            double transparency=gsetting->get("transparency").toDouble();
-            m_defaultBackground=QString("rgba(19, 19, 20,"+QString::number(transparency)+")");
-        }
-        else
-            m_defaultBackground=QString("rgba(19, 19, 20, 0.7)");
-    }
-    else
-        m_defaultBackground=QString("rgba(19, 19, 20, 0.7)");
+//    QRectF rect;
+//    rect.setX(this->rect().x()+1);
+//    rect.setY(this->rect().y()+1);
+//    rect.setWidth(this->rect().width()-2);
+//    rect.setHeight(this->rect().height()-2);
+//    qreal radius = 0;
+//    QPainterPath path;
+//    if(!m_isFullScreen)
+//    {
+//        radius=12;
+//    }
+//    else
+//    {
+//        radius=0;
+//    }
 
-    if(!m_isFullScreen)
-    {
-        QRectF rect;
-        rect.setX(this->rect().x()+1);
-        rect.setY(this->rect().y()+1);
-        rect.setWidth(this->rect().width()-2);
-        rect.setHeight(this->rect().height()-2);
-        const qreal radius = 6;
-        QPainterPath path;
+//    path.moveTo(rect.topRight() - QPointF(radius, 0));
+//    path.lineTo(rect.topLeft() + QPointF(radius, 0));
+//    path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
+//    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+//    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+//    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+//    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+//    path.lineTo(rect.topRight() + QPointF(0, radius));
+//    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
-        if(position==0)
-        {
-            //右上角
-            sprintf(style, "border:0px;background-color:%s;border-top-right-radius:6px;",m_defaultBackground.toLocal8Bit().data());
-            path.moveTo(rect.topRight() - QPointF(radius, 0));
-            path.lineTo(rect.topLeft());
-            path.lineTo(rect.bottomLeft());
-            path.lineTo(rect.bottomRight());
-            path.lineTo(rect.topRight() + QPointF(0, radius));
-            path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
-        }
-        else if(position==1)
-        {
-            //右下角
-            sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",m_defaultBackground.toLocal8Bit().data());
-            path.moveTo(rect.topRight());
-            path.lineTo(rect.topLeft());
-            path.lineTo(rect.bottomLeft());
-            path.lineTo(rect.bottomRight() - QPointF(radius, 0));
-            path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
-            path.lineTo(rect.topRight());
-        }
-        else if(position==2)
-        {
-            //右下角
-            sprintf(style, "border:0px;background-color:%s;border-bottom-right-radius:6px;",m_defaultBackground.toLocal8Bit().data());
-            path.moveTo(rect.topRight());
-            path.lineTo(rect.topLeft());
-            path.lineTo(rect.bottomLeft());
-            path.lineTo(rect.bottomRight() - QPointF(radius, 0));
-            path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
-            path.lineTo(rect.topRight());
-        }
-        else
-        {
-            //左下角
-            sprintf(style, "border:0px;background-color:%s;border-bottom-left-radius:6px;",m_defaultBackground.toLocal8Bit().data());
-            path.moveTo(rect.topRight());
-            path.lineTo(rect.topLeft());
-            path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
-            path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
-            path.lineTo(rect.bottomRight());
-            path.lineTo(rect.topRight());
-        }
-        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-    }
-    else {
-        sprintf(style, "border:0px;background-color:%s;border-radius:0px;",m_defaultBackground.toLocal8Bit().data());
-    }
-    m_frame->setStyleSheet(style);
-}
+//    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+//}
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {

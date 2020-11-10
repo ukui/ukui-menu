@@ -48,7 +48,6 @@ void FunctionButtonWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
     this->resize(Style::LeftBtnWidth*2+5,Style::LeftBtnHeight*6+25);
 
     QGridLayout* gridLayout=new QGridLayout;
@@ -67,9 +66,21 @@ void FunctionButtonWidget::initUi()
                                                                        false);
 
             gridLayout->addWidget(iconbtn,row,col);
+            m_buttonList.append(iconbtn);
             connect(iconbtn,&FunctionClassifyButton::buttonClicked,this, &FunctionButtonWidget::functionBtnClickedSlot);
             if(row*2+col==10)break;
         }
+
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+        connect(gsetting,&QGSettings::changed,this,[=]{
+            Q_FOREACH (QAbstractButton* btn, m_buttonList) {
+                FunctionClassifyButton *fbtn=qobject_cast<FunctionClassifyButton*>(btn);
+                fbtn->updateIconState();
+            }
+        });
+    }
 }
 
 /**

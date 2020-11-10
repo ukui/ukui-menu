@@ -18,30 +18,29 @@
 
 #ifndef LETTERCLASSIFYBUTTON_H
 #define LETTERCLASSIFYBUTTON_H
-#include <QToolButton>
+#include <QPushButton>
 #include <QEvent>
 #include <QMouseEvent>
 #include "src/Style/style.h"
 
-class LetterClassifyButton : public QToolButton
+class LetterClassifyButton : public QPushButton
 {
     Q_OBJECT
 public:
     LetterClassifyButton(QWidget *parent,
-                         QString hoverbg,
-                         QString pressedbg,
+                         bool fullscreen,
                          QString letter
                          );
 
     bool is_pressed=false;
 
 private:
-    QString hoverbg;
-    QString pressedbg;
+    bool m_fullscreen=false;
 
 protected:
     void enterEvent(QEvent* e);
     void leaveEvent(QEvent* e);
+    void paintEvent(QPaintEvent* e);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 

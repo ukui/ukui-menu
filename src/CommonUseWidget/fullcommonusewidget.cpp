@@ -36,13 +36,11 @@ void FullCommonUseWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
 
     QHBoxLayout* mainLayout=new QHBoxLayout;
-//    mainLayout->setContentsMargins(Style::LeftWidWidth,0,0,0);
     mainLayout->setContentsMargins(0,0,0,0);
     this->setLayout(mainLayout);
     m_spaceItem=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -57,7 +55,7 @@ void FullCommonUseWidget::initUi()
 void FullCommonUseWidget::initAppListWidget()
 {
     m_listView=new FullListView(this,0);
-    m_listView->setFixedSize(this->width()-Style::LeftWidWidth,this->height());
+    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+1,this->height());
     QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
     mainLayout->insertWidget(1,m_listView);
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
@@ -94,7 +92,7 @@ void FullCommonUseWidget::updateListViewSlot()
 void FullCommonUseWidget::updateListView()
 {
     m_data.clear();
-    Q_FOREACH(QString desktopfp,m_ukuiMenuInterface->getAllApp())
+    Q_FOREACH(QString desktopfp,m_ukuiMenuInterface->getAllClassification())
         m_data.append(desktopfp);
     m_listView->updateData(m_data);
 }

@@ -43,9 +43,9 @@
 #include <gio/gdesktopappinfo.h>
 #include "src/UtilityFunction/letterclassifybutton.h"
 #include "src/UtilityFunction/scrollarea.h"
-#include "src/UtilityFunction/pushbutton.h"
+#include "src/UtilityFunction/splitbarframe.h"
 #include "src/UtilityFunction/fulllistview.h"
-#include "src/UtilityFunction/classifyscrollarea.h"
+#include "src/UtilityFunction/classifybtnscrollarea.h"
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/Style/style.h"
 
@@ -85,15 +85,15 @@ private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     QWidget* m_applistWid=nullptr;
     ScrollArea* m_scrollArea=nullptr;
-    QWidget* m_scrollAreaWid=nullptr;
+    ScrollAreaWid* m_scrollAreaWid=nullptr;
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_letterList;//Store the list of letter buttons
     QStringList m_data;
 
     /*Alphabetic classification list interface*/
     QWidget* m_letterListWid=nullptr;
-    ClassifyScrollArea* m_letterListScrollArea=nullptr;
-    QWidget* m_letterListScrollAreaWid=nullptr;
+    ClassifyBtnScrollArea* m_letterListScrollArea=nullptr;
+    ClassifyBtnScrollAreaWid* m_letterListScrollAreaWid=nullptr;
     QVBoxLayout* m_letterListScrollAreaWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;
@@ -110,6 +110,7 @@ protected:
      * @brief Initializes UI
      */
     void initUi();
+//    void paintEvent(QPaintEvent *event);
     /**
      * @brief fill application list
      */

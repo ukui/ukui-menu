@@ -20,6 +20,8 @@
 #include "utility.h"
 #include <QDebug>
 #include <syslog.h>
+#include <QStylePainter>
+#include <QStyleOptionButton>
 
 FunctionClassifyButton::FunctionClassifyButton(int width,
                        int height,
@@ -38,22 +40,30 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
     m_iconLabel(new QLabel),
     m_textLabel(new QLabel)
 {
-    m_textLabel->setAutoFillBackground(true);
+    this->setFlat(true);
     this->setFixedSize(m_width,m_height);
-    this->setCheckable(true);
     this->setFocusPolicy(Qt::NoFocus);
     m_iconLabel->setFixedSize(m_iconSize,m_iconSize);
     m_textLabel->adjustSize();
-    m_iconLabel->setStyleSheet("background:transparent;");
+    if(m_fullscreen)
+    {
+        QPalette pe = m_textLabel->palette();
+        pe.setColor(QPalette::ButtonText,QColor(Qt::white));
+        m_textLabel->setPalette(pe);
+    }
     setLabelText();
     if(m_fullscreen)
+    {
         updateIconState(Normal);
+        this->setCheckable(true);
+    }
     else
     {
         if(m_enabled)
             updateIconState(Enabled);
         else
             updateIconState(Disabled);
+        this->setCheckable(false);
     }
 
     QHBoxLayout* mainlayout=new QHBoxLayout;
@@ -64,6 +74,49 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
     mainlayout->addWidget(m_textLabel);
     connect(this,&FunctionClassifyButton::toggled,this,&FunctionClassifyButton::reactToToggle);
     connect(this,&FunctionClassifyButton::clicked,this,&FunctionClassifyButton::buttonClickedSlot);
+}
+
+void FunctionClassifyButton::paintEvent(QPaintEvent* e)
+{
+    Q_UNUSED(e);
+    QStylePainter painter(this);
+    QStyleOptionButton option;
+    initStyleOption(&option);
+    if ((option.state & QStyle::State_Enabled) && (option.state & QStyle::State_MouseOver)) {
+        painter.save();
+        painter.setPen(Qt::NoPen);
+        if(!m_fullscreen)
+        {
+            QColor color = option.palette.color(QPalette::Text);
+            color.setAlphaF(0.15);
+            painter.setBrush(color);
+        }
+        else
+        {
+            painter.setOpacity(0.15);
+            painter.setBrush(Qt::white);
+        }
+        painter.drawRoundedRect(option.rect, 4, 4);
+        painter.restore();
+    }
+    if(m_fullscreen && (option.state & QStyle::State_On))
+    {
+        painter.save();
+        painter.setPen(Qt::NoPen);
+//        QColor color = option.palette.color(QPalette::Text);
+//        color.setAlphaF(0.15);
+//        painter.setBrush(color);
+        painter.setOpacity(0.15);
+        painter.setBrush(Qt::white);
+        painter.drawRoundedRect(option.rect, 4, 4);
+        painter.restore();
+    }
+
+    QStyleOptionButton subopt = option;
+    subopt.rect = painter.style()->subElementRect(QStyle::SE_PushButtonContents, &option, this);
+    subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
+    painter.style()->drawControl(QStyle::CE_PushButtonLabel, &subopt, &painter, this);
+    return;
 }
 
 void FunctionClassifyButton::updateBtnState()
@@ -77,26 +130,15 @@ void FunctionClassifyButton::updateBtnState()
 void FunctionClassifyButton::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    QByteArray byte=QString(ClassifyBtnHoverBackground).toLocal8Bit();
-    char* hover=byte.data();
-    char style[100];
     if(m_enabled)
     {
         updateIconState(Checked);
-        if(!m_fullscreen)
-        {
-            sprintf(style,"border:0px;border-radius:4px;padding-left:0px;background-color:%s;",hover);
-            this->setStyleSheet(QString::fromLocal8Bit(style));
-        }
-        else
-            this->setStyleSheet("border:0px;border-radius:4px;padding-left:0px;background:transparent;");
     }
 }
 
 void FunctionClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    this->setStyleSheet("border:0px;border-radius:4px;padding-left:0px;background:transparent;");
     if(m_fullscreen)
     {
         if(!isChecked())
@@ -125,6 +167,34 @@ void FunctionClassifyButton::buttonClickedSlot()
     Q_EMIT buttonClicked();
 }
 
+void FunctionClassifyButton::updateIconState()
+{
+    this->setFlat(true);
+    QString picState;
+    switch (m_state)
+    {
+    case Enabled:   picState="Enabled"; break;
+    case Disabled:  picState="Disabled"; break;
+    case Normal:    picState="Normal"; break;
+    case Checked:   picState="Checked"; break;
+    default:        break;
+    }
+
+    const auto ratio = devicePixelRatioF();
+    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize*ratio);
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+    {
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+    }
+    else
+    {
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+    }
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_iconLabel->setPixmap(pixmap);
+}
+
 void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State state)
 {
     if (state == m_state)
@@ -143,6 +213,20 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
 
     const auto ratio = devicePixelRatioF();
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize*ratio);
+    if(!m_fullscreen)
+    {
+        QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+        if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+        {
+            pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+        }
+        else
+        {
+            pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+        }
+    }
+    else
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_iconLabel->setPixmap(pixmap);
     updateTextState(state);
@@ -155,19 +239,19 @@ void FunctionClassifyButton::updateTextState(const FunctionClassifyButton::State
     {
     case Enabled:
 //        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1));
-        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255);");
+//        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255);");
         break;
     case Disabled:
 //        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1, 0.25));
-        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 25%);");
+//        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 25%);");
         break;
     case Normal:
 //        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1, 0.50));
-        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
+//        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
         break;
     case Checked:
 //        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1));
-        m_textLabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
+//        m_textLabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
         break;
     default:
         break;

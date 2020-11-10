@@ -38,7 +38,6 @@ void FunctionWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
 
@@ -64,8 +63,8 @@ void FunctionWidget::initUi()
  */
 void FunctionWidget::initAppListWidget()
 {
-    m_appListView=new ListView(this,this->width()-4,this->height(),2);
-    m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView=new ListView(this,this->width()-6,this->height()-6,2);
+    m_appListView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_appListView->show();
     fillAppListView(0);
     connect(m_appListView,&ListView::sendItemClickedSignal,this,&FunctionWidget::recvItemClickedSlot);
@@ -203,7 +202,7 @@ void FunctionWidget::updateAppListView()
  */
 void FunctionWidget::appClassificationBtnClickedSlot()
 {
-    m_leaveAnimation->setStartValue(QRect(0,0,this->width()-4,this->height()));
+    m_leaveAnimation->setStartValue(QRect(6,0,this->width()-6,this->height()-6));
     m_leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
     m_enterAnimation->setStartValue(QRect(-40,-40,this->width()+80,this->height()+80));
     m_enterAnimation->setEndValue(QRect((this->width()-Style::LeftBtnWidth*2-5)/2,
@@ -240,7 +239,7 @@ void FunctionWidget::recvFunctionBtnSignal(QString btnname)
                                         Style::LeftBtnHeight*6+25));
     m_leaveAnimation->setEndValue(QRect(-40,-40,this->width()+80,this->height()+80));
     m_enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
-    m_enterAnimation->setEndValue(QRect(0,0,this->width()-4,this->height()));
+    m_enterAnimation->setEndValue(QRect(6,0,this->width()-6,this->height()-6));
     m_leaveAnimation->setDuration(80);
     m_enterAnimation->setDuration(10);
 
@@ -271,7 +270,7 @@ void FunctionWidget::animationFinishedSLot()
 void FunctionWidget::widgetMakeZero()
 {
     m_functionBtnWid->hide();
-    m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_appListView->show();
     m_appListView->verticalScrollBar()->setValue(0);
 }
@@ -287,6 +286,6 @@ void FunctionWidget::moveScrollBar(int type)
 void FunctionWidget::repaintWidget()
 {
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
-    m_appListView->setGeometry(QRect(0,0,this->width()-4,this->height()));
+    m_appListView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_appListView->show();
 }

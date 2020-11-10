@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui svg dbus x11extras KWindowSystem
+QT       += core gui svg dbus x11extras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 include(src/QtSingleApplication/qtsingleapplication.pri)
@@ -62,15 +62,16 @@ SOURCES += \
     src/SearchResultWidget/searchresultwidget.cpp \
     src/SideBarWidget/sidebarwidget.cpp \
     src/Style/style.cpp \
-    src/UtilityFunction/classifyscrollarea.cpp \
+    src/UtilityFunction/classifybtnscrollarea.cpp \
     src/UtilityFunction/fullitemdelegate.cpp \
     src/UtilityFunction/fulllistview.cpp \
     src/UtilityFunction/functionclassifybutton.cpp \
     src/UtilityFunction/itemdelegate.cpp \
     src/UtilityFunction/letterclassifybutton.cpp \
     src/UtilityFunction/listview.cpp \
-    src/UtilityFunction/pushbutton.cpp \
+    src/UtilityFunction/proxystyle.cpp \
     src/UtilityFunction/scrollarea.cpp \
+    src/UtilityFunction/splitbarframe.cpp \
     src/UtilityFunction/toolbutton.cpp \
     src/Interface/ukuichineseletter.cpp \
     src/Interface/ukuimenuinterface.cpp \
@@ -96,15 +97,16 @@ HEADERS  += \
     src/SearchResultWidget/searchresultwidget.h \
     src/SideBarWidget/sidebarwidget.h \
     src/Style/style.h \
-    src/UtilityFunction/classifyscrollarea.h \
+    src/UtilityFunction/classifybtnscrollarea.h \
     src/UtilityFunction/fullitemdelegate.h \
     src/UtilityFunction/fulllistview.h \
     src/UtilityFunction/functionclassifybutton.h \
     src/UtilityFunction/itemdelegate.h \
     src/UtilityFunction/letterclassifybutton.h \
     src/UtilityFunction/listview.h \
-    src/UtilityFunction/pushbutton.h \
+    src/UtilityFunction/proxystyle.h \
     src/UtilityFunction/scrollarea.h \
+    src/UtilityFunction/splitbarframe.h \
     src/UtilityFunction/toolbutton.h \
     src/Interface/ukuichineseletter.h \
     src/Interface/ukuimenuinterface.h \

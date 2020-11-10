@@ -88,7 +88,7 @@ private:
     QWidget *m_topWidget=nullptr;
     QHBoxLayout *m_topLayout=nullptr;
 
-    QSpacerItem *m_verticalSpacer=nullptr;
+    QWidget *m_contentWid=nullptr;
 
     QLineEdit *m_queryLineEdit=nullptr;
     QWidget *m_queryWid=nullptr;
@@ -134,6 +134,10 @@ protected:
      * @brief Initializes the query box
      */
     void initQueryLineEdit();
+//    void paintEvent(QPaintEvent* event);
+    void loadSearchResultWidget();
+    void loadFullSearchResultWidget();
+    void hideWidget();
 
 public Q_SLOTS:
     /**

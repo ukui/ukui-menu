@@ -16,21 +16,28 @@
  *
  */
 
-#include "classifyscrollarea.h"
+#ifndef CLASSIFYSCROLLAREA_H
+#define CLASSIFYSCROLLAREA_H
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QPainter>
 
-ClassifyScrollArea::ClassifyScrollArea(QWidget *parent):
-    QScrollArea(parent)
+class ClassifyBtnScrollAreaWid: public QWidget
 {
-    initWid();
+public:
+    ClassifyBtnScrollAreaWid();
 
-}
+protected:
+    void paintEvent(QPaintEvent* event);
+};
 
-void ClassifyScrollArea::initWid()
+class ClassifyBtnScrollArea : public QScrollArea
 {
-    this->verticalScrollBar()->setHidden(true);
-    this->horizontalScrollBar()->setHidden(true);
-    this->setWidgetResizable(true);
-    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+public:
+    explicit ClassifyBtnScrollArea(QWidget* parent=nullptr);
 
-}
+protected:
+    void initWid();
+};
+
+#endif // CLASSIFYSCROLLAREA_H

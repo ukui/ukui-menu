@@ -48,7 +48,7 @@ public:
     /**
      * @brief Set the QFrame style
      */
-    void setFrameStyle();
+//    void setFrameStyle();
     /**
      * @brief Load the main window
      */
@@ -74,7 +74,7 @@ protected:
      * @brief Handle events clicking on the outside of the window
      */
     bool event(QEvent *event);
-//    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent* event);
     /**
      * @brief The query box responds to keyboard events
      */

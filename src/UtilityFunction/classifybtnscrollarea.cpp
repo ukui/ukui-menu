@@ -16,18 +16,18 @@
  *
  */
 
-#include "scrollarea.h"
-#include <QDebug>
-#include <QPainter>
+#include "classifybtnscrollarea.h"
 #include <QGSettings>
+#include <QVariant>
 
-ScrollAreaWid::ScrollAreaWid()
+ClassifyBtnScrollAreaWid::ClassifyBtnScrollAreaWid()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
+
 }
 
-void ScrollAreaWid::paintEvent(QPaintEvent *event)
+void ClassifyBtnScrollAreaWid::paintEvent(QPaintEvent *event)
 {
     QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
     double transparency=gsetting->get("transparency").toDouble();
@@ -69,8 +69,7 @@ void ScrollAreaWid::paintEvent(QPaintEvent *event)
             painter.drawRect(this->rect());
         }
     }
-    else
-    {
+    else{
         painter.setBrush(this->palette().base());
         painter.setPen(Qt::transparent);
         painter.setOpacity(transparency);
@@ -79,34 +78,18 @@ void ScrollAreaWid::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
-ScrollArea::ScrollArea()
+ClassifyBtnScrollArea::ClassifyBtnScrollArea(QWidget *parent):
+    QScrollArea(parent)
 {
-    this->verticalScrollBar()->setVisible(false);
-    installEventFilter(this);
-    this->setFocusPolicy(Qt::NoFocus);
-    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    initWid();
+}
+
+void ClassifyBtnScrollArea::initWid()
+{
+    this->verticalScrollBar()->setHidden(true);
+    this->horizontalScrollBar()->setHidden(true);
+    this->setWidgetResizable(true);
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setFrameShape(QFrame::NoFrame);
-}
-
-void ScrollArea::enterEvent(QEvent *e)
-{
-    Q_UNUSED(e);
-    this->verticalScrollBar()->setVisible(true);
-}
-
-void ScrollArea::leaveEvent(QEvent *e)
-{
-    Q_UNUSED(e);
-    this->verticalScrollBar()->setVisible(false);
-}
-
-void ScrollArea::scrollContentsBy(int dx, int dy)
-{
-    QScrollArea::scrollContentsBy(dx,dy);
-
-    Q_EMIT requestUpdate();
-
-//    update();
-//    viewport()->update();
 }

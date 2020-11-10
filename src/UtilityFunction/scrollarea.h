@@ -25,18 +25,32 @@
 #include <QMouseEvent>
 #include <QPropertyAnimation>
 
-class ScrollArea : public QScrollArea
+class ScrollAreaWid: public QWidget
 {
 public:
+    ScrollAreaWid();
+
+protected:
+    void paintEvent(QPaintEvent* event);
+};
+
+class ScrollArea : public QScrollArea
+{
+    Q_OBJECT
+public:
     ScrollArea();
+
+Q_SIGNALS:
+    void requestUpdate();
 
 protected:
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
 
+    void scrollContentsBy(int dx, int dy) override;
+
 private:
     double m_speedTime = 3;
-
 };
 
 #endif // SCROLLAREA_H

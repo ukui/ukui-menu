@@ -78,10 +78,12 @@ public:
     State m_state=Checked;
 
     void updateBtnState();
+    void updateIconState();//根据主题修改图标
 
 protected:
     void enterEvent(QEvent* e);
     void leaveEvent(QEvent* e);
+    void paintEvent(QPaintEvent* e);
     void updateIconState(const State state);
     void updateTextState(const State state);
     void setLabelText();

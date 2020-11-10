@@ -16,10 +16,10 @@
  *
  */
 
-#include "pushbutton.h"
+#include "splitbarframe.h"
 
-PushButton::PushButton(QWidget *parent, QString category, int width, int height, int module):
-    QPushButton(parent),
+SplitBarFrame::SplitBarFrame(QWidget *parent, QString category, int width, int height, int module):
+    QFrame(parent),
     m_category(category),
     m_width(width),
     m_height(height),
@@ -30,47 +30,49 @@ PushButton::PushButton(QWidget *parent, QString category, int width, int height,
     initAppBtn();
 }
 
-PushButton::~PushButton()
+SplitBarFrame::~SplitBarFrame()
 {
 }
 
-void PushButton::initAppBtn()
-{
-    char btnstyle[300];
-    sprintf(btnstyle,"QPushButton{background:transparent;border:0px;color:#ffffff;font-size:14px;padding-left:0px;text-align: left center;}\
-            QPushButton:hover{background-color:%s;}\
-            QPushButton:pressed{background-color:%s;}", ClassifyBtnHoverBackground,ClassifyBtnHoverBackground);
-
+void SplitBarFrame::initAppBtn()
+{   
     this->setFixedSize(m_width,m_height);
-    this->setStyleSheet(btnstyle);
+//    this->setStyleSheet("background:transparent");
+    //按钮透明
     this->setFocusPolicy(Qt::NoFocus);
-    QHBoxLayout* layout=new QHBoxLayout(this);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    QHBoxLayout* layout=new QHBoxLayout;
     layout->setContentsMargins(15,0,0,0);
     layout->setSpacing(6);
 
-    char style[100];
-    sprintf(style,"color:#ffffff;");
+    m_textLabel->setAutoFillBackground(false);
     m_textLabel->setAlignment(Qt::AlignCenter);
-    m_textLabel->setStyleSheet(style);
     if(m_module==1)
         m_textLabel->setText(m_category);
     else
         setLabelText();
     m_textLabel->adjustSize();
+    QPalette pe=m_textLabel->palette();
+    pe.setColor(QPalette::WindowText,Qt::white);
+    m_textLabel->setPalette(pe);
     m_line->setFrameShape(QFrame::HLine);
     m_line->setFixedHeight(1);
-    m_line->setStyleSheet("background-color:rgba(255, 255, 255, 0.06)");
     m_line->setFixedSize(m_width-m_textLabel->width()-15,1);
+    m_line->setEnabled(false);
+    QPalette linePe=m_line->palette();
+    QColor color(255,255,255);
+    color.setAlphaF(0.10);
+    linePe.setColor(QPalette::WindowText,color);
+    m_line->setPalette(linePe);
 
+    this->setLayout(layout);
     layout->addWidget(m_textLabel);
     layout->addWidget(m_line);
-    this->setLayout(layout);
-    this->setEnabled(false);
 }
 
-void PushButton::setLabelText()
+void SplitBarFrame::setLabelText()
 {
-    QMetaEnum metaEnum=QMetaEnum::fromType<PushButton::Category>();
+    QMetaEnum metaEnum=QMetaEnum::fromType<SplitBarFrame::Category>();
     switch (metaEnum.keyToValue(m_category.toLocal8Bit().data()))
     {
     case Mobile:

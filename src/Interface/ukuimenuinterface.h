@@ -63,10 +63,10 @@ public:
     QString getAppComment(QString desktopfp);//获取应用注释
     QStringList getDesktopFilePath();//获取系统deskyop文件路径
 
-    QVector<QStringList> getAlphabeticClassification();//获取字母分类
-    QVector<QStringList> getFunctionalClassification();//获取功能分类
+    QVector<QStringList> getAlphabeticClassification();//字母分类模块
+    QVector<QStringList> getFunctionalClassification();//功能分类模块
     QVector<QString> getCommonUseApp();//获取常用App
-    QVector<QString> getAllApp();
+    QVector<QString> getAllClassification();//所有软件模块
     void getAndroidApp();//获取安卓应用
     static bool cmpApp(QStringList &arg_1,QStringList &arg_2);
     bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories

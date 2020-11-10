@@ -35,9 +35,9 @@
 #include <gio/gdesktopappinfo.h>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/scrollarea.h"
-#include "src/UtilityFunction/pushbutton.h"
+#include "src/UtilityFunction/splitbarframe.h"
 #include "src/UtilityFunction/fulllistview.h"
-#include "src/UtilityFunction/classifyscrollarea.h"
+#include "src/UtilityFunction/classifybtnscrollarea.h"
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/UtilityFunction/functionclassifybutton.h"
 #include "src/Style/style.h"
@@ -78,18 +78,20 @@ private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     QWidget* m_applistWid=nullptr;
     ScrollArea* m_scrollArea=nullptr;
-    QWidget* m_scrollAreaWid=nullptr;
+    ScrollAreaWid* m_scrollAreaWid=nullptr;
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_classificationList;//Store the list of category buttons
     QStringList m_data;
 
     /*Function classification list interface*/
     QWidget* m_iconListWid=nullptr;
-    ClassifyScrollArea* m_iconListScrollArea=nullptr;
-    QWidget* m_iconListScrollAreaWid=nullptr;
+    ClassifyBtnScrollArea* m_iconListScrollArea=nullptr;
+    ClassifyBtnScrollAreaWid* m_iconListScrollAreaWid=nullptr;
     QVBoxLayout* m_iconListScrollAreaWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;
+    QSpacerItem* m_topSpacerItem=nullptr;
+    QSpacerItem* m_bottomSpacerItem=nullptr;
 
     /*Animation*/
     QPropertyAnimation* m_animation=nullptr;//Function category button animation
@@ -107,7 +109,6 @@ protected:
      */
     void initIconListWidget();
     void initIconListScrollArea();
-
     /**
      * @brief Initialize the application list interface
      */

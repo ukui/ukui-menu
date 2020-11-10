@@ -52,10 +52,6 @@ public:
      */
     void loadMaxSidebar();
     /**
-     * @brief Initializes the interface state
-     */
-    void widgetMakeZero();
-    /**
      * @brief Sidebar animation
      */
     void enterAnimation();
@@ -72,7 +68,7 @@ private:
 
     QWidget *m_minMaxWidget=nullptr;
     QHBoxLayout *m_minMaxLayout=nullptr;
-    QToolButton *m_minMaxBtn=nullptr;
+    QPushButton *m_minMaxBtn=nullptr;
 
     QButtonGroup *m_btnGroup=nullptr;
     QList<QAbstractButton*> m_buttonList;
@@ -138,6 +134,7 @@ protected:
      */
     void setMaxBtn();
     QPixmap PixmapToRound(const QPixmap &src, int radius);
+    void changeIconColor(bool isFullScreen);
 //    void mousePressEvent(QMouseEvent* event);
 
 private Q_SLOTS:
@@ -186,6 +183,7 @@ private Q_SLOTS:
      * @brief Reset the sidebar button
      */
     void resetSidebarBtnSlot();
+    void themeModeChangeSlot(QString styleName);
 
 Q_SIGNALS:
     /**

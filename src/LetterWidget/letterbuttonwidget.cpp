@@ -35,21 +35,12 @@ void LetterButtonWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setStyleSheet("border:0px;background:transparent;");
     this->resize(235,366);
 
     QGridLayout* gridLayout=new QGridLayout;
     gridLayout->setContentsMargins(0,0,0,0);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
-
-    char btncolor[400];
-    sprintf(btncolor,"QToolButton{background:transparent;color:#ffffff;padding-left:0px;}\
-            QToolButton:hover{background-color:%s;color:#ffffff;border-radius:4px;}\
-            QToolButton:pressed{background-color:%s;color:#ffffff;border-radius:4px;}\
-            QToolButton:disabled{color:rgba(255, 255, 255, 0.25);}",
-            ClassifyBtnHoverBackground,
-            ClassifyBtnHoverBackground);
 
     QStringList letterlist;
     letterlist.clear();
@@ -67,12 +58,12 @@ void LetterButtonWidget::initUi()
         {
             if(row*4+col<letterlist.size())
             {
-                QToolButton* btn=new QToolButton;
+                LetterClassifyButton* btn=new LetterClassifyButton(this,false,letterlist.at(row*4+col));
+                btn->setFlat(true);
+                btn->setCheckable(false);
                 btn->setFixedSize(55,48);
-                btn->setStyleSheet(QString::fromLocal8Bit(btncolor));
-                btn->setText(letterlist.at(row*4+col));
                 gridLayout->addWidget(btn,row,col);
-                connect(btn, &QToolButton::clicked, this, &LetterButtonWidget::letterBtnClickedSlot);
+                connect(btn,&LetterClassifyButton::buttonClicked,this, &LetterButtonWidget::letterBtnClickedSlot);
             }
             else {
                 break;
@@ -86,7 +77,7 @@ void LetterButtonWidget::initUi()
  */
 void LetterButtonWidget::letterBtnClickedSlot()
 {
-    QToolButton* btn=dynamic_cast<QToolButton *>(QObject::sender());
+    LetterClassifyButton* btn=dynamic_cast<LetterClassifyButton *>(QObject::sender());
     QString btnname=btn->text();
     Q_EMIT sendLetterBtnSignal(btnname);
 }
@@ -102,7 +93,7 @@ void LetterButtonWidget::recvLetterBtnList(QStringList list)
         for(int col=0;col<4;col++)
         {
             QLayoutItem* item=gridLayout->itemAt(row*4+col);
-            QToolButton* btn=static_cast<QToolButton*>(item->widget());
+            LetterClassifyButton* btn=static_cast<LetterClassifyButton*>(item->widget());
             QString letterstr=btn->text();
             if(list.indexOf(letterstr.at(0))==-1)
                 btn->setEnabled(false);
