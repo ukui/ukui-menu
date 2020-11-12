@@ -100,6 +100,8 @@ QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
     socketName += QLatin1Char('-') + QString::number(::getuid(), 16);
 #endif
 
+    socketName += qgetenv("DISPLAY");
+
     server = new QLocalServer(this);
     QString lockName = QDir(QDir::tempPath()).absolutePath()
                        + QLatin1Char('/') + socketName

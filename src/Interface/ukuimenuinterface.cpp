@@ -203,15 +203,19 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
         QByteArray readBy=file.readAll();
         QJsonParseError error;
         QJsonDocument readDoc=QJsonDocument::fromJson(readBy,&error);
-        QJsonObject obj=readDoc.object().value("ukui-menu").toObject();;
-        QJsonArray blArray=obj.value("blacklist").toArray();
-        QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
-        for(int index=0;index<enArray.size();index++)
+        if(!readDoc.isNull() && error.error==QJsonParseError::NoError)
         {
-            QJsonObject obj=enArray.at(index).toObject();
-            filePathList.removeAll(obj.value("path").toString());
-//            qDebug()<<obj.value("path").toString();
+            QJsonObject obj=readDoc.object().value("ukui-menu").toObject();;
+            QJsonArray blArray=obj.value("blacklist").toArray();
+            QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
+            for(int index=0;index<enArray.size();index++)
+            {
+                QJsonObject obj=enArray.at(index).toObject();
+                filePathList.removeAll(obj.value("path").toString());
+//                qDebug()<<obj.value("path").toString();
+            }
         }
+
         file.close();
     }
 
