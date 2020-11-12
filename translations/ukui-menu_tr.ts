@@ -264,7 +264,7 @@
     <message>
         <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="104"/>
         <source>Trash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Çöp</translation>
     </message>
     <message>
         <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="106"/>
