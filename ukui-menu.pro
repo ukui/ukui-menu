@@ -77,7 +77,9 @@ SOURCES += \
     src/Interface/ukuimenuinterface.cpp \
     main.cpp \
     src/UtilityFunction/utility.cpp \
-    src/XEventMonitor/xeventmonitor.cpp
+    src/XEventMonitor/xeventmonitor.cpp \
+    src/DBus/dbus.cpp \
+    src/DBus/dbus-adaptor.cpp
 
 HEADERS  += \
     src/CommonUseWidget/commonusewidget.h \
@@ -111,7 +113,9 @@ HEADERS  += \
     src/Interface/ukuichineseletter.h \
     src/Interface/ukuimenuinterface.h \
     src/UtilityFunction/utility.h \
-    src/XEventMonitor/xeventmonitor.h
+    src/XEventMonitor/xeventmonitor.h \
+    src/DBus/dbus.h \
+    src/DBus/dbus-adaptor.h
 
 RESOURCES += \
     res.qrc

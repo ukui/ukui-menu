@@ -23,6 +23,8 @@
 #include <QCollator>
 #include <QLocale>
 #include <QStringList>
+#include <QJsonArray>
+#include <QJsonObject>
 #include "ukuichineseletter.h"
 
 UkuiMenuInterface::UkuiMenuInterface()
@@ -192,6 +194,26 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
     filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
     filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
+
+    QString jsonPath=QDir::homePath()+"/.config/ukui-menu-security-config.json";
+    QFile file(jsonPath);
+    if(file.exists())
+    {
+        file.open(QIODevice::ReadOnly);
+        QByteArray readBy=file.readAll();
+        QJsonParseError error;
+        QJsonDocument readDoc=QJsonDocument::fromJson(readBy,&error);
+        QJsonObject obj=readDoc.object().value("ukui-menu").toObject();;
+        QJsonArray blArray=obj.value("blacklist").toArray();
+        QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
+        for(int index=0;index<enArray.size();index++)
+        {
+            QJsonObject obj=enArray.at(index).toObject();
+            filePathList.removeAll(obj.value("path").toString());
+//            qDebug()<<obj.value("path").toString();
+        }
+        file.close();
+    }
 
     return filePathList;
 }

@@ -263,7 +263,8 @@ void FullLetterWidget::initLetterListScrollArea()
 
     connect(m_btnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&FullLetterWidget::btnGroupClickedSlot);
     m_letterListScrollArea->widget()->adjustSize();
-    m_btnGroup->button(0)->click();
+    if(m_btnGroup->button(0)!=nullptr)
+        m_btnGroup->button(0)->click();
 }
 
 void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)

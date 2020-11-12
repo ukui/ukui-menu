@@ -82,6 +82,7 @@ public:
      * @brief Resize the control
      */
     void resizeControl();
+    void reloadUkuiMenu();
 
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;

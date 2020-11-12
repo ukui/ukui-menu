@@ -319,7 +319,8 @@ void FullFunctionWidget::initIconListScrollArea()
     }
     connect(m_btnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&FullFunctionWidget::btnGroupClickedSlot);
 //    m_iconListScrollArea->widget()->adjustSize();
-    m_btnGroup->button(0)->click();
+    if(m_btnGroup->button(0)!=nullptr)
+        m_btnGroup->button(0)->click();
 }
 
 void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
@@ -438,7 +439,8 @@ void FullFunctionWidget::repaintWidget()
 
 void FullFunctionWidget::widgetMakeZero()
 {
-    m_btnGroup->button(0)->click();
+    if(m_btnGroup->button(0)!=nullptr)
+        m_btnGroup->button(0)->click();
     m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 

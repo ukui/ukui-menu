@@ -37,6 +37,8 @@
 #include "src/Style/style.h"
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
+#include "src/DBus/dbus.h"
+#include "src/DBus/dbus-adaptor.h"
 
 class MainWindow : public QMainWindow
 {
@@ -67,6 +69,7 @@ private:
 
     QPropertyAnimation *m_animation=nullptr;
     bool m_winFlag = false;
+    DBus *m_dbus=nullptr;
 
 protected:
     void initUi();

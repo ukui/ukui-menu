@@ -23,6 +23,11 @@
 #include <QtSingleApplication>
 #include <QtX11Extras/QX11Info>
 #include <syslog.h>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonParseError>
+#include <QJsonValue>
 #include "src/XEventMonitor/xeventmonitor.h"
 #include "src/Style/style.h"
 #include <QPalette>
@@ -39,6 +44,25 @@ MainWindow::MainWindow(QWidget *parent) :
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     m_setting=new QSettings(path,QSettings::IniFormat);
     initUi();
+
+    m_dbus=new DBus;
+    new MenuAdaptor(m_dbus);
+    QDBusConnection con=QDBusConnection::sessionBus();
+    if(!con.registerService("org.ukui.menu") ||
+            !con.registerObject("/org/ukui/menu",m_dbus))
+    {
+        qDebug()<<"error:"<<con.lastError().message();
+    }
+    connect(m_dbus,&DBus::sendReloadSignal,this,[=]
+    {
+        UkuiMenuInterface::appInfoVector.clear();
+        UkuiMenuInterface::alphabeticVector.clear();
+        UkuiMenuInterface::functionalVector.clear();
+        UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
+        UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
+        UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
+        Q_EMIT m_mainViewWid->reloadUkuiMenu();
+    });
 }
 
 MainWindow::~MainWindow()

@@ -763,6 +763,11 @@ void MainViewWidget::iconThemeChangeSlot(QString key)
         Q_EMIT directoryChangedSignal();
 }
 
+void MainViewWidget::reloadUkuiMenu()
+{
+    Q_EMIT directoryChangedSignal();
+}
+
 void MainViewWidget::repaintWidget()
 {
     this->setMinimumSize(Style::minw,Style::minh);
