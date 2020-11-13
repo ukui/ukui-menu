@@ -82,6 +82,7 @@ void FullFunctionWidget::initAppListWidget()
     layout->addWidget(m_scrollArea);
     connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&FullFunctionWidget::valueChangedSlot);
+    m_appListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     fillAppList();
 }
 
@@ -160,7 +161,7 @@ void FullFunctionWidget::fillAppList()
         insertClassificationBtn("Others");
         insertAppList(otherlist);
     }
-
+    m_scrollAreaWidLayout->addItem(m_appListBottomSpacer);
     resizeScrollAreaControls();
 }
 
@@ -205,6 +206,7 @@ void FullFunctionWidget::updateAppListView()
 {
     //刷新应用列表界面
     QLayoutItem *child;
+    m_scrollAreaWidLayout->removeItem(m_appListBottomSpacer);
      while ((child = m_scrollAreaWidLayout->takeAt(0)) != 0) {
          QWidget* wid=child->widget();
          m_scrollAreaWidLayout->removeWidget(wid);
@@ -429,13 +431,10 @@ void FullFunctionWidget::repaintWidget()
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
     m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
+    m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
     m_iconListWid->setFixedSize(Style::LeftWidWidth,this->height());
-//    m_iconListScrollArea->setFixedSize(Style::LeftBtnWidth,
-//                                       m_iconListWid->height());
     m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
                                           m_iconListWid->height());
-//    m_iconListScrollArea->widget()->adjustSize();
-    m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
     updateAppListView();
 }
 

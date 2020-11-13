@@ -92,6 +92,7 @@ private:
     QButtonGroup* m_btnGroup=nullptr;
     QSpacerItem* m_topSpacerItem=nullptr;
     QSpacerItem* m_bottomSpacerItem=nullptr;
+    QSpacerItem* m_appListBottomSpacer=nullptr;
 
     /*Animation*/
     QPropertyAnimation* m_animation=nullptr;//Function category button animation

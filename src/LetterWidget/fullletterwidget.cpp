@@ -29,6 +29,8 @@ FullLetterWidget::FullLetterWidget(QWidget *parent) :
 FullLetterWidget::~FullLetterWidget()
 {
     delete m_ukuiMenuInterface;
+    delete m_letterListBottomSpacer;
+    delete m_appListBottomSpacer;
 }
 
 /**
@@ -80,6 +82,7 @@ void FullLetterWidget::initAppListWidget()
     layout->addWidget(m_scrollArea);
     connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&FullLetterWidget::valueChangedSlot);
+    m_appListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
 
     fillAppList();
 
@@ -129,8 +132,9 @@ void FullLetterWidget::fillAppList()
             connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullLetterWidget::sendHideMainWindowSignal);
         }
     }
+    m_scrollAreaWidLayout->addItem(m_appListBottomSpacer);
 
-        resizeScrollAreaControls();
+    resizeScrollAreaControls();
 }
 
 /**
@@ -151,6 +155,7 @@ void FullLetterWidget::updateAppListView()
 {
     //刷新应用列表界面
     QLayoutItem *child;
+    m_scrollAreaWidLayout->removeItem(m_appListBottomSpacer);
      while ((child = m_scrollAreaWidLayout->takeAt(0)) != 0) {
          QWidget* wid=child->widget();
          m_scrollAreaWidLayout->removeWidget(wid);
@@ -351,20 +356,20 @@ void FullLetterWidget::valueChangedSlot(int value)
             index++;
     }
 
-    //向下滚动
-    if((m_buttonList.at(index)->pos().y()+m_buttonList.at(index)->height()+m_letterListScrollArea->widget()->pos().y()) >= m_letterListScrollArea->height())
-    {
-        int val=m_letterListScrollArea->verticalScrollBar()->sliderPosition()+m_buttonList.at(index)->height();
-        m_letterListScrollArea->verticalScrollBar()->setSliderPosition(val);
-    }
+//    //向下滚动
+//    if((m_buttonList.at(index)->pos().y()+m_buttonList.at(index)->height()+m_letterListScrollArea->widget()->pos().y()) >= m_letterListScrollArea->height())
+//    {
+//        int val=m_letterListScrollArea->verticalScrollBar()->sliderPosition()+m_buttonList.at(index)->height();
+//        m_letterListScrollArea->verticalScrollBar()->setSliderPosition(val);
+//    }
 
-    //向上滚动
-    if((m_buttonList.at(index)->pos().y()+m_letterListScrollArea->widget()->pos().y()) <= 0)
-    {
+//    //向上滚动
+//    if((m_buttonList.at(index)->pos().y()+m_letterListScrollArea->widget()->pos().y()) <= 0)
+//    {
 
-        int val=m_letterListScrollArea->verticalScrollBar()->value()-m_buttonList.at(index)->height();
-        m_letterListScrollArea->verticalScrollBar()->setSliderPosition(val);
-    }
+//        int val=m_letterListScrollArea->verticalScrollBar()->value()-m_buttonList.at(index)->height();
+//        m_letterListScrollArea->verticalScrollBar()->setSliderPosition(val);
+//    }
 
 }
 
@@ -396,8 +401,8 @@ void FullLetterWidget::repaintWidget()
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
     m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
-    m_letterListWid->setFixedSize(Style::LeftWidWidth,this->height());
     m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
+    m_letterListWid->setFixedSize(Style::LeftWidWidth,this->height());
     updateAppListView();
 }
 

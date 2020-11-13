@@ -152,8 +152,58 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
     filePathList.clear();
-    getAndroidApp();
-    recursiveSearchFile("/usr/share/applications/");
+
+    QString jsonPath=QDir::homePath()+"/.config/ukui-menu-security-config.json";
+    QFile file(jsonPath);
+    if(file.exists())
+    {
+        file.open(QIODevice::ReadOnly);
+        QByteArray readBy=file.readAll();
+        QJsonParseError error;
+        QJsonDocument readDoc=QJsonDocument::fromJson(readBy,&error);
+        if(!readDoc.isNull() && error.error==QJsonParseError::NoError)
+        {
+            QJsonObject obj=readDoc.object().value("ukui-menu").toObject();
+            if(obj.value("mode").toString()=="whitelist")
+            {
+                QJsonArray blArray=obj.value("whitelist").toArray();
+                QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
+                for(int index=0;index<enArray.size();index++)
+                {
+                    QJsonObject obj=enArray.at(index).toObject();
+                    filePathList.append(obj.value("path").toString());
+//                    qDebug()<<obj.value("path").toString();
+                }
+                return filePathList;
+            }
+            else if(obj.value("mode").toString()=="blacklist")
+            {
+                getAndroidApp();
+                recursiveSearchFile("/usr/share/applications/");
+                QJsonArray blArray=obj.value("blacklist").toArray();
+                QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
+                for(int index=0;index<enArray.size();index++)
+                {
+                    QJsonObject obj=enArray.at(index).toObject();
+                    filePathList.removeAll(obj.value("path").toString());
+//                    qDebug()<<obj.value("path").toString();
+                }
+            }
+            else
+            {
+                getAndroidApp();
+                recursiveSearchFile("/usr/share/applications/");
+            }
+
+        }
+
+        file.close();
+    }
+    else
+    {
+        getAndroidApp();
+        recursiveSearchFile("/usr/share/applications/");
+    }
 
     filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
     filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
@@ -194,30 +244,6 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
     filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
     filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
-
-    QString jsonPath=QDir::homePath()+"/.config/ukui-menu-security-config.json";
-    QFile file(jsonPath);
-    if(file.exists())
-    {
-        file.open(QIODevice::ReadOnly);
-        QByteArray readBy=file.readAll();
-        QJsonParseError error;
-        QJsonDocument readDoc=QJsonDocument::fromJson(readBy,&error);
-        if(!readDoc.isNull() && error.error==QJsonParseError::NoError)
-        {
-            QJsonObject obj=readDoc.object().value("ukui-menu").toObject();;
-            QJsonArray blArray=obj.value("blacklist").toArray();
-            QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
-            for(int index=0;index<enArray.size();index++)
-            {
-                QJsonObject obj=enArray.at(index).toObject();
-                filePathList.removeAll(obj.value("path").toString());
-//                qDebug()<<obj.value("path").toString();
-            }
-        }
-
-        file.close();
-    }
 
     return filePathList;
 }
@@ -493,7 +519,7 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
         else
             desktopfp=QString("/usr/share/applications/"+desktopfn);
         QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.isFile())
+        if(!fileInfo.isFile()|| !desktopfpVector.contains(desktopfp))
             continue;
         data.append(desktopfp);
     }

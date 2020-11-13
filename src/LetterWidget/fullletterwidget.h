@@ -98,6 +98,7 @@ private:
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;
     QSpacerItem* m_letterListBottomSpacer=nullptr;
+    QSpacerItem* m_appListBottomSpacer=nullptr;
 
     /*Animation*/
     QPropertyAnimation* m_animation=nullptr;//Letter category button animation

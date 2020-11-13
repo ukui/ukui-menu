@@ -31,7 +31,6 @@ class UkuiMenuInterface
 {
 private:
     QStringList filePathList;
-//    QStringList androidDesktopfnList;
     QSettings* setting=nullptr;
 
 protected:
