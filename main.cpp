@@ -26,6 +26,7 @@
 #include <X11/Xlib.h>
 #include <syslog.h>
 #include "src/UtilityFunction/proxystyle.h"
+#include <KWindowEffects>
 
 int main(int argc, char *argv[])
 {
@@ -55,7 +56,8 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     app.setActivationWindow(&w);
-    w.setProperty("useSystemStyleBlur", true);
+
+//    w.setProperty("useSystemStyleBlur", true);
 
     //测试
     int position=0;

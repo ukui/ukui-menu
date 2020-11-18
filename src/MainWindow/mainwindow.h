@@ -39,6 +39,7 @@
 #include "src/MainViewWidget/mainviewwidget.h"
 #include "src/DBus/dbus.h"
 #include "src/DBus/dbus-adaptor.h"
+#include <KWindowEffects>
 
 class MainWindow : public QMainWindow
 {
