@@ -77,7 +77,7 @@ void MainWindow::initUi()
     mainlayout->addWidget(m_sideBarWid);
 
     m_animation = new QPropertyAnimation(this, "geometry");
-    connect(m_animation, &QPropertyAnimation::valueChanged, this, &MainWindow::animationValueChangedSlot);
+//    connect(m_animation, &QPropertyAnimation::valueChanged, this, &MainWindow::animationValueChangedSlot);
     connect(m_animation,&QPropertyAnimation::finished,this,&MainWindow::animationValueFinishedSlot);
 
     connect(m_sideBarWid, &SideBarWidget::sendCommonUseBtnSignal, m_mainViewWid, &MainViewWidget::loadCommonUseWidget);
@@ -145,26 +145,28 @@ void MainWindow::paintEvent(QPaintEvent *event)
         radius=0;
     }
     QPainterPath path;
-    path.moveTo(rect.topRight() - QPointF(radius, 0));
-    path.lineTo(rect.topLeft() + QPointF(radius, 0));
-    path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
-    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
-    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
-    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
-    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
-    path.lineTo(rect.topRight() + QPointF(0, radius));
-    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     painter.setPen(Qt::transparent);
     if(!m_isFullScreen)
     {
+        path.moveTo(rect.topRight() - QPointF(radius, 0));
+        path.lineTo(rect.topLeft() + QPointF(radius, 0));
+        path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
+        path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+        path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+        path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+        path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+        path.lineTo(rect.topRight() + QPointF(0, radius));
+        path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
+
         painter.setBrush(this->palette().base());
         painter.setPen(Qt::transparent);
         painter.setOpacity(transparency);
         painter.drawPath(path);
-        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+//        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
     }
     else//全屏固定背景色(黑底白字)
     {
@@ -172,6 +174,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::transparent);
         painter.setOpacity(0.25);
         painter.drawRect(this->rect());
+
+        QPainterPath path;
+        path.addRect(this->rect());
+        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     }
     QMainWindow::paintEvent(event);
 }
@@ -311,7 +317,8 @@ void MainWindow::animationValueChangedSlot(const QVariant &value)
     {
         QPainterPath path;
         path.addRect(this->rect());
-        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+//        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     }
 }
 
@@ -630,9 +637,6 @@ void MainWindow::repaintWidget()
             m_sideBarWid->loadMaxSidebar();
             m_sideBarWid->setSideBarBtnGeometry();
             m_mainViewWid->resizeControl();
-            QPainterPath path;
-            path.addRect(this->rect());
-            setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
         }
         else
         {

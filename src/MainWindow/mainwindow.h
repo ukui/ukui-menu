@@ -34,6 +34,7 @@
 #include <QSettings>
 #include <QPropertyAnimation>
 #include <QFileInfo>
+#include <KWindowEffects>
 #include "src/Style/style.h"
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
