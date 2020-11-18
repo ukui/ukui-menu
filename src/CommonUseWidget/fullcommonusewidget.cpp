@@ -55,7 +55,7 @@ void FullCommonUseWidget::initUi()
 void FullCommonUseWidget::initAppListWidget()
 {
     m_listView=new FullListView(this,0);
-    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+1,this->height());
+    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
     QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
     mainLayout->insertWidget(1,m_listView);
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
