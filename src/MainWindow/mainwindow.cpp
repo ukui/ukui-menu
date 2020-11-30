@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
     UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
     UkuiMenuInterface::allAppVector=m_ukuiMenuInterface->getAllClassification();
+
     Style::initWidStyle();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     m_setting=new QSettings(path,QSettings::IniFormat);
@@ -150,8 +151,12 @@ void MainWindow::initUi()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-    double transparency=gsetting->get("transparency").toDouble();
+    double transparency=0.0;
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+        transparency=gsetting->get("transparency").toDouble();
+    }
     qreal radius = 0;
     QRect rect = this->rect();
     rect.setWidth(rect.width());
@@ -169,15 +174,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
         radius=0;
     }
     QPainterPath path;
-//    path.moveTo(rect.topRight() - QPointF(radius, 0));
-//    path.lineTo(rect.topLeft() + QPointF(radius, 0));
-//    path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
-//    path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
-//    path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
-//    path.lineTo(rect.bottomRight() - QPointF(radius, 0));
-//    path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
-//    path.lineTo(rect.topRight() + QPointF(0, radius));
-//    path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;

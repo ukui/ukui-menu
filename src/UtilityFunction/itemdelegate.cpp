@@ -39,23 +39,23 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 {
     if(index.isValid())
     {
-        QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
+//        QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
-        QStringList strlist1=index.model()->data(index,Qt::DisplayRole).toStringList();
-        if(strlist1.at(1).toInt()==1)
-        {
+//        QStringList strlist1=index.model()->data(index,Qt::DisplayRole).toStringList();
+//        if(strlist1.at(1).toInt()==1)
+//        {
             rect.setX(option.rect.x());
             rect.setY(option.rect.y());
-            rect.setWidth(option.rect.width()-6);
+            rect.setWidth(option.rect.width()-10);
             rect.setHeight(option.rect.height()-2);
-        }
-        else
-        {
-            rect.setX(option.rect.x());
-            rect.setY(option.rect.y()+2);
-            rect.setWidth(option.rect.width()-6);
-            rect.setHeight(option.rect.height()-6);
-        }
+//        }
+//        else
+//        {
+//            rect.setX(option.rect.x());
+//            rect.setY(option.rect.y()+2);
+//            rect.setWidth(option.rect.width()-6);
+//            rect.setHeight(option.rect.height()-6);
+//        }
 
         //QPainterPath画圆角矩形
         const qreal radius = 4;
@@ -140,8 +140,9 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             {
                 //绘制分割线
                 painter->save();
-                QRect textRect=QRect(rect.x()+11,rect.y()+12,rect.width(),rect.height());
-                painter->drawText(textRect,Qt::AlignLeft,strlist.at(0));
+//                QRect textRect=QRect(rect.x()+11,rect.y()+12,rect.width(),rect.height());
+                QRect textRect=QRect(rect.x()+11,rect.y(),rect.width(),rect.height());
+                painter->drawText(textRect,Qt::AlignVCenter,strlist.at(0));
                 painter->setRenderHint(QPainter::Antialiasing, true);
                 painter->setPen(QPen(QColor(option.palette.text().color()),1));
                 painter->setOpacity(0.1);
@@ -219,10 +220,10 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
 QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
-    if(strlist.at(1).toInt()==1)
+//    QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
+//    if(strlist.at(1).toInt()==1)
         return QSize(310,44);
-    else
-        return QSize(310,48);
+//    else
+//        return QSize(310,48);
 
 }

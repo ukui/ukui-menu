@@ -186,7 +186,7 @@ public Q_SLOTS:
     /**
      * @brief Monitor desktop file directory changes
      */
-    void directoryChangedSlot();
+    void directoryChangedSlot(const QString &path);
     /**
      * @brief Receive search results
      * @param arg: Search results

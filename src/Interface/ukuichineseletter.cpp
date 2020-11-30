@@ -112,8 +112,10 @@ QString UkuiChineseLetter::getFirstLetter(const QString &src)
 //    }
 
     QString appnamePy=getPinyins(src);
-
-    return QString(appnamePy.at(0));
+    if(!appnamePy.isEmpty())
+        return QString(appnamePy.at(0));
+    else
+        return QString();
 }
 
 QString UkuiChineseLetter::getFirstLetters(const QString &src)

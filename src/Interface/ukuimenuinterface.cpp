@@ -116,26 +116,11 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
                     continue;
                 }
             }
-            //过滤中英文名为空的情况
-            QLocale cn;
-            QString language=cn.languageToString(cn.language());
-            if(QString::compare(language,"Chinese")==0)
+            //过滤应用名为空的情况
+            if(getAppName(filePathStr).isEmpty())
             {
-                char* nameCh=g_key_file_get_string(keyfile,"Desktop Entry","Name[zh_CN]", nullptr);
-                char* nameEn=g_key_file_get_string(keyfile,"Desktop Entry","Name", nullptr);
-                if(QString::fromLocal8Bit(nameCh).isEmpty() && QString::fromLocal8Bit(nameEn).isEmpty())
-                {
-                    i++;
-                    continue;
-                }
-            }
-            else {
-                char* name=g_key_file_get_string(keyfile,"Desktop Entry","Name", nullptr);
-                if(QString::fromLocal8Bit(name).isEmpty())
-                {
-                    i++;
-                    continue;
-                }
+                i++;
+                continue;
             }
 
             filePathList.append(filePathStr);
@@ -550,92 +535,95 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
     {
         QString appname=appInfoVector.at(index).at(1);
         QString appnamepy=UkuiChineseLetter::getPinyins(appname);
-        char c=appnamepy.at(0).toLatin1();
-        switch (c) {
-        case 'A':
-            appVector[0].append(appInfoVector.at(index));
-            break;
-        case 'B':
-            appVector[1].append(appInfoVector.at(index));
-            break;
-        case 'C':
-            appVector[2].append(appInfoVector.at(index));
-            break;
-        case 'D':
-            appVector[3].append(appInfoVector.at(index));
-            break;
-        case 'E':
-            appVector[4].append(appInfoVector.at(index));
-            break;
-        case 'F':
-            appVector[5].append(appInfoVector.at(index));
-            break;
-        case 'G':
-            appVector[6].append(appInfoVector.at(index));
-            break;
-        case 'H':
-            appVector[7].append(appInfoVector.at(index));
-            break;
-        case 'I':
-            appVector[8].append(appInfoVector.at(index));
-            break;
-        case 'J':
-            appVector[9].append(appInfoVector.at(index));
-            break;
-        case 'K':
-            appVector[10].append(appInfoVector.at(index));
-            break;
-        case 'L':
-            appVector[11].append(appInfoVector.at(index));
-            break;
-        case 'M':
-            appVector[12].append(appInfoVector.at(index));
-            break;
-        case 'N':
-            appVector[13].append(appInfoVector.at(index));
-            break;
-        case 'O':
-            appVector[14].append(appInfoVector.at(index));
-            break;
-        case 'P':
-            appVector[15].append(appInfoVector.at(index));
-            break;
-        case 'Q':
-            appVector[16].append(appInfoVector.at(index));
-            break;
-        case 'R':
-            appVector[17].append(appInfoVector.at(index));
-            break;
-        case 'S':
-            appVector[18].append(appInfoVector.at(index));
-            break;
-        case 'T':
-            appVector[19].append(appInfoVector.at(index));
-            break;
-        case 'U':
-            appVector[20].append(appInfoVector.at(index));
-            break;
-        case 'V':
-            appVector[21].append(appInfoVector.at(index));
-            break;
-        case 'W':
-            appVector[22].append(appInfoVector.at(index));
-            break;
-        case 'X':
-            appVector[23].append(appInfoVector.at(index));
-            break;
-        case 'Y':
-            appVector[24].append(appInfoVector.at(index));
-            break;
-        case 'Z':
-            appVector[25].append(appInfoVector.at(index));
-            break;
-        default:
-            appVector[26].append(appInfoVector.at(index));
-            break;
-        }
+        if(!appnamepy.isEmpty())
+        {
+            char c=appnamepy.at(0).toLatin1();
+            switch (c) {
+            case 'A':
+                appVector[0].append(appInfoVector.at(index));
+                break;
+            case 'B':
+                appVector[1].append(appInfoVector.at(index));
+                break;
+            case 'C':
+                appVector[2].append(appInfoVector.at(index));
+                break;
+            case 'D':
+                appVector[3].append(appInfoVector.at(index));
+                break;
+            case 'E':
+                appVector[4].append(appInfoVector.at(index));
+                break;
+            case 'F':
+                appVector[5].append(appInfoVector.at(index));
+                break;
+            case 'G':
+                appVector[6].append(appInfoVector.at(index));
+                break;
+            case 'H':
+                appVector[7].append(appInfoVector.at(index));
+                break;
+            case 'I':
+                appVector[8].append(appInfoVector.at(index));
+                break;
+            case 'J':
+                appVector[9].append(appInfoVector.at(index));
+                break;
+            case 'K':
+                appVector[10].append(appInfoVector.at(index));
+                break;
+            case 'L':
+                appVector[11].append(appInfoVector.at(index));
+                break;
+            case 'M':
+                appVector[12].append(appInfoVector.at(index));
+                break;
+            case 'N':
+                appVector[13].append(appInfoVector.at(index));
+                break;
+            case 'O':
+                appVector[14].append(appInfoVector.at(index));
+                break;
+            case 'P':
+                appVector[15].append(appInfoVector.at(index));
+                break;
+            case 'Q':
+                appVector[16].append(appInfoVector.at(index));
+                break;
+            case 'R':
+                appVector[17].append(appInfoVector.at(index));
+                break;
+            case 'S':
+                appVector[18].append(appInfoVector.at(index));
+                break;
+            case 'T':
+                appVector[19].append(appInfoVector.at(index));
+                break;
+            case 'U':
+                appVector[20].append(appInfoVector.at(index));
+                break;
+            case 'V':
+                appVector[21].append(appInfoVector.at(index));
+                break;
+            case 'W':
+                appVector[22].append(appInfoVector.at(index));
+                break;
+            case 'X':
+                appVector[23].append(appInfoVector.at(index));
+                break;
+            case 'Y':
+                appVector[24].append(appInfoVector.at(index));
+                break;
+            case 'Z':
+                appVector[25].append(appInfoVector.at(index));
+                break;
+            default:
+                appVector[26].append(appInfoVector.at(index));
+                break;
+            }
 
-        index++;
+            index++;
+        }
     }
 
     for(int i=0;i<26;i++)

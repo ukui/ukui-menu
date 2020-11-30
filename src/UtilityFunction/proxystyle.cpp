@@ -10,7 +10,6 @@ ProxyStyle::ProxyStyle()
         connect(gsetting,&QGSettings::changed,this,[=]{
             for(auto widget: QApplication::allWidgets())
             {
-                qDebug()<<"---111---";
                 widget->update();
             }
         });

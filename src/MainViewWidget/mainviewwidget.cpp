@@ -73,7 +73,8 @@ void MainViewWidget::initUi()
 
     //监控.desktop文件目录
     m_fileWatcher=new QFileSystemWatcher;
-    m_fileWatcher->addPaths(QStringList()<<"/usr/share/applications"<<QDir::homePath()+"/.local/share/applications/");
+    m_fileWatcher->addPaths(QStringList()<<QString("/usr/share/applications")
+                                      <<QString(QDir::homePath()+"/.local/share/applications/"));
     connect(m_fileWatcher,&QFileSystemWatcher::directoryChanged,this,&MainViewWidget::directoryChangedSlot);
     m_directoryChangedThread=new DirectoryChangedThread;
     connect(m_directoryChangedThread,&DirectoryChangedThread::requestUpdateSignal,this,&MainViewWidget::requestUpdateSlot);
@@ -120,6 +121,7 @@ void MainViewWidget::initUi()
     QDBusConnection::sessionBus().connect("org.ayatana.bamf","/org/ayatana/bamf/matcher","org.ayatana.bamf.matcher",
                                          QString("ViewOpened"),this,SLOT(ViewOpenedSlot(QDBusMessage)));
 
+    //监控图标主题
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     m_setting=new QSettings(path,QSettings::IniFormat);
 
@@ -706,9 +708,9 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
                                 "org.ayatana.bamf.application",QDBusConnection::sessionBus());
         QDBusReply<QString> replyapp =ifaceapp.call("DesktopFile");
         QString desktopfp=replyapp.value();
-        qDebug()<<desktopfp;
-        QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
-        if(desktopfpList.contains(desktopfp))
+//        qDebug()<<desktopfp;
+        QVector<QString> desktopfpVec=UkuiMenuInterface::desktopfpVector;
+        if(desktopfpVec.contains(desktopfp))
         {
             QFileInfo fileInfo(desktopfp);
             QString desktopfn=fileInfo.fileName();
@@ -739,6 +741,12 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
                 m_setting->sync();
                 m_setting->endGroup();
             }
+
+            m_setting->beginGroup("recentapp");
+            m_setting->remove(desktopfn);
+            m_setting->sync();
+            m_setting->endGroup();
+
         }
     }
 }
@@ -746,8 +754,9 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
 /**
  * desktop文件目录改变信号槽
  */
-void MainViewWidget::directoryChangedSlot()
+void MainViewWidget::directoryChangedSlot(const QString &path)
 {
+    syslog(LOG_LOCAL0 | LOG_DEBUG ,"Directory changed: %s",path.toLocal8Bit().data());
     m_directoryChangedThread->start();
 }
 
