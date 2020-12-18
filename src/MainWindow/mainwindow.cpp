@@ -96,7 +96,7 @@ void MainWindow::initUi()
     mainlayout->addWidget(m_mainViewWid);
     m_line=new QFrame;
     m_line->setFrameShape(QFrame::VLine);
-    m_line->setFixedSize(1,this->height());
+    m_line->setFixedSize(1,this->height()-1);
     m_line->setEnabled(false);
     mainlayout->addWidget(m_line);
     mainlayout->addWidget(m_sideBarWid);
@@ -157,22 +157,14 @@ void MainWindow::paintEvent(QPaintEvent *event)
         QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
         transparency=gsetting->get("transparency").toDouble();
     }
-    qreal radius = 0;
+
     QRect rect = this->rect();
-    rect.setWidth(rect.width());
-    rect.setHeight(rect.height());
-    rect.setX(this->rect().x());
-    rect.setY(this->rect().y());
-    rect.setWidth(this->rect().width());
-    rect.setHeight(this->rect().height());
-    if(!m_isFullScreen)
-    {
-        radius=6;
-    }
-    else
-    {
-        radius=0;
-    }
+//    rect.setWidth(this->rect().width());
+//    rect.setHeight(this->rect().height());
+//    rect.setX(this->rect().x());
+//    rect.setY(this->rect().y());
+//    rect.setWidth(this->rect().width());
+//    rect.setHeight(this->rect().height());
     QPainterPath path;
 
     QPainter painter(this);
@@ -180,6 +172,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::transparent);
     if(!m_isFullScreen)
     {
+        qreal radius=6;
         path.moveTo(rect.topRight() - QPointF(radius, 0));
         path.lineTo(rect.topLeft() + QPointF(radius, 0));
         path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
@@ -194,6 +187,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::transparent);
         painter.setOpacity(transparency);
         painter.drawPath(path);
+
 //        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     }
@@ -280,22 +274,22 @@ void MainWindow::showFullScreenWidget()
     QRect endRect;
     if(position==0)
     {
-        startRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,Style::minw,Style::minh);
+        startRect.setRect(x+4,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh-3,Style::minw,Style::minh);
         endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==1)
     {
-        startRect.setRect(x,y+panelSize,Style::minw,Style::minh);
+        startRect.setRect(x+4,y+panelSize+4,Style::minw,Style::minh);
         endRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==2)
     {
-        startRect.setRect(x+panelSize,y,Style::minw,Style::minh);
+        startRect.setRect(x+panelSize+4,y+4,Style::minw,Style::minh);
         endRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
     else
     {
-        startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh);
+        startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-4,y+4,Style::minw,Style::minh);
         endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
 
@@ -345,22 +339,22 @@ void MainWindow::showDefaultWidget()
     QRect endRect;
     if(position==0)
     {
-        endRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,Style::minw,Style::minh);
+        endRect.setRect(x+4,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh-3,Style::minw,Style::minh);
         startRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==1)
     {
-        endRect.setRect(x,y+panelSize,Style::minw,Style::minh);
+        endRect.setRect(x+4,y+panelSize+4,Style::minw,Style::minh);
         startRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
     }
     else if(position==2)
     {
-        endRect.setRect(x+panelSize,y,Style::minw,Style::minh);
+        endRect.setRect(x+panelSize+4,y+4,Style::minw,Style::minh);
         startRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
     else
     {
-        endRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh);
+        endRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-4,y+4,Style::minw,Style::minh);
         startRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
     }
 
@@ -575,22 +569,22 @@ void MainWindow::loadMainWindow()
         QRect endRect;
         if(position==0)
         {
-            startRect.setRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,Style::minw,Style::minh);
+            startRect.setRect(x+4,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh-3,Style::minw,Style::minh);
             endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
         }
         else if(position==1)
         {
-            startRect.setRect(x,y+panelSize,Style::minw,Style::minh);
+            startRect.setRect(x+4,y+panelSize+4,Style::minw,Style::minh);
             endRect.setRect(x,y+panelSize,QApplication::primaryScreen()->geometry().width(),QApplication::primaryScreen()->geometry().height()-panelSize);
         }
         else if(position==2)
         {
-            startRect.setRect(x+panelSize,y,Style::minw,Style::minh);
+            startRect.setRect(x+panelSize+4,y+4,Style::minw,Style::minh);
             endRect.setRect(x+panelSize,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
         }
         else
         {
-            startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,Style::minw,Style::minh);
+            startRect.setRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-4,y+4,Style::minw,Style::minh);
             endRect.setRect(x,y,QApplication::primaryScreen()->geometry().width()-panelSize,QApplication::primaryScreen()->geometry().height());
         }
 
@@ -610,14 +604,14 @@ void MainWindow::loadMainWindow()
     else
     {
         if(position==0)
-            this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,
+            this->setGeometry(QRect(x+4,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh-3,
                                       Style::minw,Style::minh));
         else if(position==1)
-            this->setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
+            this->setGeometry(QRect(x+4,y+panelSize+4,Style::minw,Style::minh));
         else if(position==2)
-            this->setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
+            this->setGeometry(QRect(x+panelSize+4,y+4,Style::minw,Style::minh));
         else
-            this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
+            this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-4,y+4,
                                       Style::minw,Style::minh));
 
         m_sideBarWid->loadMinSidebar();
@@ -648,7 +642,7 @@ void MainWindow::repaintWidget()
 {
     Style::initWidStyle();
     this->setMinimumSize(Style::minw,Style::minh);
-    m_line->setFixedSize(1,this->height());
+    m_line->setFixedSize(1,this->height()-1);
     m_mainViewWid->repaintWidget();
 
     if(QApplication::activeWindow() == this)
@@ -687,22 +681,18 @@ void MainWindow::repaintWidget()
             m_sideBarWid->loadMaxSidebar();
             m_sideBarWid->setSideBarBtnGeometry();
             m_mainViewWid->resizeControl();
-//            QPainterPath path;
-//            path.addRect(this->rect());
-//            setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-//            KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
         }
         else
         {
             if(position==0)
-                this->setGeometry(QRect(x,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh,
+                this->setGeometry(QRect(x+4,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh-3,
                                           Style::minw,Style::minh));
             else if(position==1)
-                this->setGeometry(QRect(x,y+panelSize,Style::minw,Style::minh));
+                this->setGeometry(QRect(x+4,y+panelSize+4,Style::minw,Style::minh));
             else if(position==2)
-                this->setGeometry(QRect(x+panelSize,y,Style::minw,Style::minh));
+                this->setGeometry(QRect(x+panelSize+4,y+4,Style::minw,Style::minh));
             else
-                this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw,y,
+                this->setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-4,y+4,
                                           Style::minw,Style::minh));
 
             m_sideBarWid->loadMinSidebar();
