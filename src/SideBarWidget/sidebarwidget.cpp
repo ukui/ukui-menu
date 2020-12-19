@@ -487,7 +487,6 @@ void SideBarWidget::loadMaxSidebar()
     {
         QPushButton* btn=qobject_cast<QPushButton*>(button);
         setMaxSidebarBtn(btn);
-        btn->setToolTip("");
     }
 
     Q_FOREACH(QAbstractButton* button,m_buttonList)
@@ -554,22 +553,26 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
         labeltext->setText(m_textList.at(m_buttonList.indexOf(btn)));
         labeltext->adjustSize();
         m_btnWidth=44+labeltext->width()+10;
+        btn->setToolTip("");
     }
     else
     {
             QFont ft;
             QFontMetrics fm(ft);
-            QString text_1 = fm.elidedText(m_textList.at(m_buttonList.indexOf(btn)), Qt::ElideRight, m_btnWidth-44);
+            QString text = fm.elidedText(m_textList.at(m_buttonList.indexOf(btn)), Qt::ElideRight, m_btnWidth-44);
             labeltext->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-            labeltext->setText(text_1);
+            labeltext->setText(text);
             labeltext->setFixedSize(m_btnWidth-44,Style::SideBarBtnHeight);
             labeltext->adjustSize();
+            if(fm.boundingRect(m_textList.at(m_buttonList.indexOf(btn))).width()>labeltext->width())
+                btn->setToolTip(m_textList.at(m_buttonList.indexOf(btn)));
+            else
+                btn->setToolTip("");
     }
     QPalette pe = labeltext->palette();
     pe.setColor(QPalette::ButtonText,QColor(Qt::white));
     labeltext->setPalette(pe);
     btn->layout()->addWidget(labeltext);
-//    btn->setFixedSize(m_btnWidth,Style::SideBarBtnHeight);
 }
 
 void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)

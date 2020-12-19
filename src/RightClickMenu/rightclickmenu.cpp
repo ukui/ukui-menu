@@ -277,18 +277,18 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
     this->m_desktopfp=desktopfp;
 
     QMenu menu;
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
+//    QDBusInterface iface("com.ukui.panel.desktop",
+//                         "/",
+//                         "com.ukui.panel.desktop",
+//                         QDBusConnection::sessionBus());
 
-    QDBusReply<bool> ret=iface.call("CheckIfExist",this->m_desktopfp);
-    if(!ret)
-        menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/fixed.svg",0)),tr("Pin to taskbar"),
-                       this,SLOT(fixToTaskbarActionTriggerSlot()));
-    else
-        menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/unfixed.svg",0)),tr("Unpin from taskbar"),
-                       this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
+//    QDBusReply<bool> ret=iface.call("CheckIfExist",this->m_desktopfp);
+//    if(!ret)
+//        menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/fixed.svg",0)),tr("Pin to taskbar"),
+//                       this,SLOT(fixToTaskbarActionTriggerSlot()));
+//    else
+//        menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/unfixed.svg",0)),tr("Unpin from taskbar"),
+//                       this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
     menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/setting.svg",0)),tr("Personalize this list"),
                    this,SLOT(otherListActionTriggerSlot()));
     menu.setAttribute(Qt::WA_TranslucentBackground);
