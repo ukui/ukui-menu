@@ -74,6 +74,7 @@ private:
     QSettings *m_setting=nullptr;
 
     QProcess *m_cmdProc=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
 
 protected:
     /**

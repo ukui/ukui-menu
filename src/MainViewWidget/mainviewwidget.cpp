@@ -238,7 +238,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                                                m_queryIcon->width()+5,Style::QueryLineEditHeight));
                  m_animation->setEasingCurve(QEasingCurve::OutQuad);
                  m_animation->start();
-                 m_queryLineEdit->setTextMargins(-5,1,0,1);
+                 m_queryLineEdit->setTextMargins(-5,0,0,0);
              }
              m_isSearching=true;
         }
@@ -374,7 +374,7 @@ void MainViewWidget::animationFinishedSlot()
     {
 //        m_queryWid->layout()->removeWidget(m_queryText);
 //        m_queryText->setParent(nullptr);
-        m_queryLineEdit->setTextMargins(20,1,0,1);
+        m_queryLineEdit->setTextMargins(20,0,0,0);
         if(!m_searchKeyWords.isEmpty())
         {
             m_queryLineEdit->setText(m_searchKeyWords);
@@ -804,7 +804,7 @@ void MainViewWidget::widgetMakeZero()
     m_queryLineEdit->clear();
     m_queryLineEdit->clearFocus();
     m_queryLineEdit->blockSignals(false);
-    m_queryLineEdit->setTextMargins(0,1,0,1);
+    m_queryLineEdit->setTextMargins(0,0,0,0);
 }
 
 void MainViewWidget::moveScrollBar(int type)

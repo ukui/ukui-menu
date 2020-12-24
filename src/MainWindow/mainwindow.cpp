@@ -422,6 +422,11 @@ bool MainWindow::event ( QEvent * event )
 void MainWindow::XkbEventsPress(const QString &keycode)
 {
     QString KeyName;
+    if(keycode.compare("Print")==0)
+    {
+        QProcess::startDetached("kylin-screenshot full");
+        return;
+    }
     if (keycode.length() >= 8){
         KeyName = keycode.left(8);
     }

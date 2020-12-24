@@ -28,12 +28,15 @@ RightClickMenu::RightClickMenu(QWidget *parent):
 
     m_cmdProc=new QProcess;
     connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
+
+    m_ukuiMenuInterface=new UkuiMenuInterface;
 }
 
 RightClickMenu::~RightClickMenu()
 {
     delete m_cmdProc;
     delete m_setting;
+    delete m_ukuiMenuInterface;
 
 }
 
@@ -244,7 +247,10 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
     menu.addAction(tr("Add to desktop shortcuts"),
                    this,SLOT(addToDesktopActionTriggerSlot()));
     menu.addSeparator();
-    if(!UkuiMenuInterface::androidDesktopfnList.contains(desktopfn))
+
+    if(!m_ukuiMenuInterface->getAppCategories(desktopfp).contains("Android") &&
+            !m_ukuiMenuInterface->getAppExec(desktopfp).contains("ukui") &&
+            !m_ukuiMenuInterface->getAppExec(desktopfp).contains("kylin"))
         menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
                        this,SLOT(uninstallActionTriggerSlot()));
 
