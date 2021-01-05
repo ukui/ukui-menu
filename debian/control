@@ -12,9 +12,6 @@ Build-Depends: debhelper-compat (=12),
                libgsettings-qt-dev,
                qttools5-dev-tools,
                libbamf3-dev,
-               libxrandr-dev,
-               libxtst-dev,
-               libx11-dev,
                libkf5windowsystem-dev
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
@@ -29,10 +26,7 @@ Depends: ${shlibs:Depends},
          accountsservice,
          libgsettings-qt1,
          libqt5x11extras5,
-         bamfdaemon,
-         libxrandr2,
-         libxtst6,
-         libx11-6
+         bamfdaemon
 Description: Advanced ukui menu
  UKUI menu provides start menu development library and advanced
  graphical user interface.

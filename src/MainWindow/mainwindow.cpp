@@ -28,7 +28,6 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 #include <QJsonValue>
-#include "src/XEventMonitor/xeventmonitor.h"
 #include "src/Style/style.h"
 #include <QPalette>
 
@@ -68,7 +67,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    XEventMonitor::instance()->quit();
     delete m_ukuiMenuInterface;
 }
 
@@ -126,23 +124,11 @@ void MainWindow::initUi()
     connect(qApp,&QApplication::primaryScreenChanged,this,
             &MainWindow::primaryScreenChangedSlot);
 
-    XEventMonitor::instance()->start();
-    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-            this,SLOT(XkbEventsRelease(QString)));
-    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-            this,SLOT(XkbEventsPress(QString)));
-
     if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
         QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
         connect(gsetting,&QGSettings::changed,
                 this,&MainWindow::panelChangedSlot);
-    }
-
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.session").toLocal8Bit());
-        connect(gsetting,&QGSettings::changed,this,&MainWindow::winKeyReleaseSlot);
     }
 
 //    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
@@ -419,90 +405,6 @@ bool MainWindow::event ( QEvent * event )
    return QWidget::event(event);
 }
 
-void MainWindow::XkbEventsPress(const QString &keycode)
-{
-    QString KeyName;
-    if(keycode.compare("Print")==0)
-    {
-        QProcess::startDetached("kylin-screenshot full");
-        return;
-    }
-    if (keycode.length() >= 8){
-        KeyName = keycode.left(8);
-    }
-    if(KeyName.compare("Super_L+")==0){
-        m_winFlag = true;
-    }
-    if(m_winFlag && keycode == "Super_L"){
-        m_winFlag = false;
-        return;
-    }
-
-}
-
-void MainWindow::XkbEventsRelease(const QString &keycode)
-{
-    QString KeyName;
-    static bool winFlag=false;
-    if (keycode.length() >= 8){
-        KeyName = keycode.left(8);
-    }
-    if(KeyName.compare("Super_L+")==0){
-        winFlag = true;
-    }
-    if(winFlag && keycode == "Super_L"){
-        winFlag = false;
-        return;
-    }else if(m_winFlag && keycode == "Super_L")
-        return;
-
-    if((keycode == "Super_L") || (keycode == "Super_R"))
-    {
-//        if(this->isVisible())
-        if(QApplication::activeWindow() == this)
-        {
-            this->hide();
-            m_mainViewWid->widgetMakeZero();
-//            m_sideBarWid->widgetMakeZero();
-        }
-        else{
-            this->loadMainWindow();
-            this->show();
-            this->raise();
-            this->activateWindow();
-        }
-    }
-
-    if(keycode == "Escape")
-    {
-        this->hide();
-        m_mainViewWid->widgetMakeZero();
-//        m_sideBarWid->widgetMakeZero();
-    }
-}
-
-void MainWindow::winKeyReleaseSlot(const QString &key)
-{
-    if(key=="winKeyRelease" || key=="win-key-release")
-    {
-        QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-        if(gsetting.get(QString("win-key-release")).toBool())
-        {
-            disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-                    this,SLOT(XkbEventsRelease(QString)));
-            disconnect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-                    this,SLOT(XkbEventsPress(QString)));
-        }
-        else
-        {
-            connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-                    this,SLOT(XkbEventsRelease(QString)));
-            connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-                    this,SLOT(XkbEventsPress(QString)));
-        }
-    }
-}
-
 void MainWindow::recvStartMenuSlot()
 {
     if(this->isVisible())
@@ -759,7 +661,7 @@ void MainWindow::repaintWidget()
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-    if(e->type()==KeyPress+4)
+    if(e->type()==QEvent::KeyPress)
     {
         QKeyEvent* ke=static_cast<QKeyEvent*>(e);
         if((ke->key()>=0x30 && ke->key()<=0x39) || (ke->key()>=0x41 && ke->key()<=0x5a))
