@@ -87,11 +87,6 @@ protected:
 
 public Q_SLOTS:
     /**
-     * @brief Monitor win key events
-     */
-    void XkbEventsPress(const QString &keycode);
-    void XkbEventsRelease(const QString &keycode);
-    /**
      * @brief Load the full screen window
      */
     void showFullScreenWidget();
@@ -122,10 +117,6 @@ public Q_SLOTS:
      * @brief Open the start menu by signaling
      */
     void recvStartMenuSlot();
-    /**
-     * @brief Monitor win-key-release key value.
-     */
-    void winKeyReleaseSlot(const QString &key);
 };
 
 #endif // MAINWINDOW_H

@@ -706,7 +706,6 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
                                 "org.ayatana.bamf.application",QDBusConnection::sessionBus());
         QDBusReply<QString> replyapp =ifaceapp.call("DesktopFile");
         QString desktopfp=replyapp.value();
-        qDebug()<<desktopfp;
         QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
         if(desktopfpList.contains(desktopfp))
         {
