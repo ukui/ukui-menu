@@ -61,13 +61,6 @@ void DirectoryChangedThread::run()
 
         }
         setting->endGroup();
-//        UkuiMenuInterface::appInfoVector.clear();
-//        UkuiMenuInterface::alphabeticVector.clear();
-//        UkuiMenuInterface::functionalVector.clear();
-//        UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
-//        UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
-//        UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
-//        Q_EMIT requestUpdateSignal();
     }
     else//软件卸载
     {
@@ -95,22 +88,9 @@ void DirectoryChangedThread::run()
                 setting->sync();
                 setting->endGroup();
                 syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件卸载desktop文件名：%s",desktopfn.toLocal8Bit().data());
-
-                QDBusInterface iface("com.ukui.panel.desktop",
-                                     "/",
-                                     "com.ukui.panel.desktop",
-                                     QDBusConnection::sessionBus());
-                iface.call("RemoveFromTaskbar",desktopfp);
                 break;
             }
         }
-//        UkuiMenuInterface::appInfoVector.clear();
-//        UkuiMenuInterface::alphabeticVector.clear();
-//        UkuiMenuInterface::functionalVector.clear();
-//        UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
-//        UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
-//        UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
-//        Q_EMIT requestUpdateSignal();
     }
 
     UkuiMenuInterface::appInfoVector.clear();

@@ -363,7 +363,7 @@ void MainViewWidget::searchAppSlot(QString arg)
 void MainViewWidget::recvSearchResult(QVector<QStringList> arg)
 {
     m_searchAppThread->quit();
-    m_searchAppThread->wait();
+//    m_searchAppThread->wait();
     m_fullSearchResultWid->updateAppListView(arg);
     m_searchResultWid->updateAppListView(arg);
 }

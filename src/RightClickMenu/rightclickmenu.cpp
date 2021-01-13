@@ -163,6 +163,7 @@ void RightClickMenu::onReadOutput()
 //    qDebug()<<packagestr<<packageName;
     char command[100];
     sprintf(command,"kylin-uninstaller %s",packageName.toLocal8Bit().data());
+//    sprintf(command,"kylin-installer -remove %s",packageName.toLocal8Bit().data());
     QProcess::startDetached(command);
 }
 

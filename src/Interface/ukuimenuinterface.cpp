@@ -257,26 +257,50 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
         QStringList appInfoList;
         QString desktopfp=desktopfpList.at(i);
         QString name=getAppName(desktopfpList.at(i));
-        QString englishName=getAppEnglishName(desktopfpList.at(i));
-        QString letter=getAppNameInitial(desktopfpList.at(i));
-        QString letters=getAppNameInitials(desktopfpList.at(i));
-
-        desktopfpVector.append(desktopfp);
-
-        appInfoList<<desktopfp<<name<<englishName<<letter<<letters;
-        bool is_owned=false;
-        for(int j=0;j<vector.size();j++)
+        if(!name.isEmpty())
         {
-            if(matchingAppCategories(desktopfpList.at(i),vector.at(j)))//有对应分类
-            {
-                is_owned=true;
-                appInfoList.append(QString::number(j));
-            }
-        }
-        if(!is_owned)//该应用无对应分类
-            appInfoList.append(QString::number(10));
+            QString englishName=getAppEnglishName(desktopfpList.at(i));
+            QString letter=getAppNameInitial(desktopfpList.at(i));
+            QString letters=getAppNameInitials(desktopfpList.at(i));
 
-        appInfoVector.append(appInfoList);
+            desktopfpVector.append(desktopfp);
+
+            appInfoList<<desktopfp<<name<<englishName<<letter<<letters;
+            bool is_owned=false;
+            for(int j=0;j<vector.size();j++)
+            {
+                if(matchingAppCategories(desktopfpList.at(i),vector.at(j)))//有对应分类
+                {
+                    is_owned=true;
+                    appInfoList.append(QString::number(j));
+                }
+            }
+            if(!is_owned)//该应用无对应分类
+                appInfoList.append(QString::number(10));
+
+            appInfoVector.append(appInfoList);
+        }
+        else
+        {
+            QFileInfo fileInfo(desktopfp);
+            QString desktopfn=fileInfo.fileName();
+            setting->beginGroup("lockapplication");
+            setting->remove(desktopfn);
+            setting->sync();
+            setting->endGroup();
+            setting->beginGroup("application");
+            setting->remove(desktopfn);
+            setting->sync();
+            setting->endGroup();
+            setting->beginGroup("datetime");
+            setting->remove(desktopfn);
+            setting->sync();
+            setting->endGroup();
+            setting->beginGroup("recentapp");
+            setting->remove(desktopfn);
+            setting->sync();
+            setting->endGroup();
+        }
     }
 
     return appInfoVector;
@@ -621,9 +645,8 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
                 appVector[26].append(appInfoVector.at(index));
                 break;
             }
-
-            index++;
         }
+        index++;
     }
 
     for(int i=0;i<26;i++)

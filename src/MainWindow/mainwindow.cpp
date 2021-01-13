@@ -399,7 +399,6 @@ bool MainWindow::event ( QEvent * event )
         {
             this->hide();
             m_mainViewWid->widgetMakeZero();
-//            m_sideBarWid->widgetMakeZero();
         }
    }
    return QWidget::event(event);
