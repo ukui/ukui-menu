@@ -629,6 +629,14 @@ void MainViewWidget::loadFullCommonUseWidget()
     m_fullCommonUseWid->updateListView();
     m_widgetState=1;
     m_saveCurrentWidState=1;
+    QString msg=QString("FullCommonUseWidget geometry: (%1, %2, %3, %4), listView size: (%5, %6).")
+            .arg(m_fullCommonUseWid->x())
+            .arg(m_fullCommonUseWid->y())
+            .arg(m_fullCommonUseWid->width())
+            .arg(m_fullCommonUseWid->height())
+            .arg(m_fullCommonUseWid->m_listView->width())
+            .arg(m_fullCommonUseWid->m_listView->height());
+    debugLog(msg);
 }
 
 /**

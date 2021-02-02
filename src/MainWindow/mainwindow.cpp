@@ -369,6 +369,7 @@ void MainWindow::animationValueChangedSlot(const QVariant &value)
 
 void MainWindow::animationValueFinishedSlot()
 {
+    QString arg;
     if(m_isFullScreen)
     {
         this->centralWidget()->layout()->addWidget(m_mainViewWid);
@@ -376,6 +377,7 @@ void MainWindow::animationValueFinishedSlot()
         m_sideBarWid->loadMaxSidebar();
         m_mainViewWid->loadMaxMainView();
         m_sideBarWid->enterAnimation();
+        arg=QString("Full screen!");
     }
     else
     {
@@ -384,7 +386,27 @@ void MainWindow::animationValueFinishedSlot()
         this->centralWidget()->layout()->addWidget(m_sideBarWid);
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
+        arg=QString("Default screen!");
     }
+    QString msg_1=QString("%1 Primary screen geometry: (%2, %3, %4, %5). MainWindow geometry: (%6, %7, %8, %9).")
+            .arg(arg)
+            .arg(QApplication::primaryScreen()->geometry().x())
+            .arg(QApplication::primaryScreen()->geometry().y())
+            .arg(QApplication::primaryScreen()->geometry().width())
+            .arg(QApplication::primaryScreen()->geometry().height())
+            .arg(this->x())
+            .arg(this->y())
+            .arg(this->width())
+            .arg(this->height());
+    debugLog(msg_1);
+
+    QString msg_2=QString("MainViewWidget size: (%1, %2). SideBarWidget size: (%3, %4).")
+            .arg(m_mainViewWid->width())
+            .arg(m_mainViewWid->height())
+            .arg(m_sideBarWid->width())
+            .arg(m_sideBarWid->height());
+    debugLog(msg_2);
+
 //    setFrameStyle();
 }
 
@@ -662,10 +684,14 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 {
     if(e->type()==QEvent::KeyPress)
     {
-        QKeyEvent* ke=static_cast<QKeyEvent*>(e);
-        if((ke->key()>=0x30 && ke->key()<=0x39) || (ke->key()>=0x41 && ke->key()<=0x5a))
+        if((e->key()>=0x30 && e->key()<=0x39) || (e->key()>=0x41 && e->key()<=0x5a))
         {
             m_mainViewWid->setLineEditFocus(e->text());
+        }
+        if(e->key()==Qt::Key_Escape)
+        {
+            this->hide();
+            m_mainViewWid->widgetMakeZero();
         }
 
 //        switch(e->key()){

@@ -85,3 +85,19 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source)
     }
     return QPixmap::fromImage(img);
 }
+
+void debugLog(QString strMsg)
+{
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.log";
+    QFile confFile(path);
+    if(confFile.open(QIODevice::Text | QIODevice::ReadWrite | QIODevice::Append))
+    {
+        QString text=QString("%1 %2")
+                .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"))
+                .arg(strMsg);
+        QTextStream textStream(&confFile);
+        textStream<<text<<endl;
+        textStream.flush();
+        confFile.close();
+    }
+}

@@ -29,5 +29,8 @@ QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
 //图片反黑
 QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
 
+//调试日志
+void debugLog(QString strMsg);
+
 
 #endif // UTILITY_H

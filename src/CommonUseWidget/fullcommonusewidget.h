@@ -64,9 +64,10 @@ public:
      */
     void moveScrollBar(int type);
 
+    FullListView* m_listView=nullptr;
+
 private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
-    FullListView* m_listView=nullptr;
     QStringList m_data;
     QSpacerItem *m_spaceItem=nullptr;
 

@@ -29,6 +29,23 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     m_cmdProc=new QProcess;
     connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
 
+    m_whiteList.append("kylin-screenshot.desktop");
+    m_whiteList.append("ukui-notebook.desktop");
+    m_whiteList.append("ukui-clock.desktop");
+    m_whiteList.append("kylin-calculator.desktop");
+    m_whiteList.append("kylin-recorder.desktop");
+    m_whiteList.append("kylin-software-center.desktop");
+    m_whiteList.append("kylin-camera.desktop");
+    m_whiteList.append("biometric-manager.desktop");
+    m_whiteList.append("yhkylin-backup-tools.desktop");
+    m_whiteList.append("box-manager.desktop");
+    m_whiteList.append("ukui-system-monitor.desktop");
+    m_whiteList.append("ksc-defender.desktop");
+    m_whiteList.append("logview.desktop");
+    m_whiteList.append("kylin-service-support.desktop");
+    m_whiteList.append("kylin-user-guide.desktop");
+    m_whiteList.append("ukui-control-center.desktop");
+
     m_ukuiMenuInterface=new UkuiMenuInterface;
 }
 
@@ -250,8 +267,7 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
     menu.addSeparator();
 
     if(!m_ukuiMenuInterface->getAppCategories(desktopfp).contains("Android") &&
-            !m_ukuiMenuInterface->getAppExec(desktopfp).contains("ukui") &&
-            !m_ukuiMenuInterface->getAppExec(desktopfp).contains("kylin"))
+            !m_whiteList.contains(desktopfn))
         menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
                        this,SLOT(uninstallActionTriggerSlot()));
 

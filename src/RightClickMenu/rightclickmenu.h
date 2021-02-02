@@ -76,6 +76,8 @@ private:
     QProcess *m_cmdProc=nullptr;
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
 
+    QStringList m_whiteList;
+
 protected:
     /**
      * @brief Get icon pixmap

@@ -73,6 +73,7 @@ void SideBarWidget::addSidebarBtn()
     m_minMaxLayout=new QHBoxLayout;
     m_minMaxBtn=new QPushButton;
     m_minMaxBtn->setFlat(true);
+    m_minMaxBtn->setProperty("doNotAnimate",true);
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
 //    m_minMaxBtn->setShortcut(Qt::Key_Enter);
     m_minMaxBtn->setShortcut(Qt::Key_Return);
@@ -171,6 +172,14 @@ void SideBarWidget::addSidebarBtn()
     }
 
     m_animation = new QPropertyAnimation(m_mainWidget, "geometry");
+    connect(m_animation,&QPropertyAnimation::finished,this,[=]{
+        QString msg=QString("Sidebar main widget geometry: (%1, %2, %3, %4).")
+                .arg(m_mainWidget->x())
+                .arg(m_mainWidget->y())
+                .arg(m_mainWidget->width())
+                .arg(m_mainWidget->height());
+        debugLog(msg);
+    });
 }
 
 void SideBarWidget::resetSidebarBtnSlot()
@@ -203,6 +212,7 @@ void SideBarWidget::resetSidebarBtnSlot()
 void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int num)
 {
     btn->setFlat(true);
+    btn->setProperty("doNotAnimate",true);
     QHBoxLayout* btnLayout=new QHBoxLayout;
     QLabel* labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);
