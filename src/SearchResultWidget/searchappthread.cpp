@@ -55,7 +55,7 @@ void SearchAppThread::run()
 //                    QString appEnglishName=m_appInfoVector.at(index).at(2);
                     QString appNameFl=m_appInfoVector.at(index).at(3);
 
-                    if(appNameFl==str)
+                    if(appNameFl==str)//匹配首字母
                     {
                         m_searchResultVector.append(m_appInfoVector.at(index));
                     }
@@ -86,7 +86,7 @@ void SearchAppThread::run()
 
                 if(m_keyWord.contains(QRegExp("[\\x4e00-\\x9fa5]+")))//中文正则表达式
                 {
-                    if(appName.contains(m_keyWord))
+                    if(appName.toUpper().contains(m_keyWord.toUpper()))
                         m_searchResultVector.append(m_appInfoVector.at(index));
                 }
                 else

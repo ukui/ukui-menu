@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <syslog.h>
+#include <QShortcut>
 #include "src/Style/style.h"
 #include "src/UtilityFunction/utility.h"
 
@@ -76,7 +77,11 @@ void SideBarWidget::addSidebarBtn()
     m_minMaxBtn->setProperty("doNotAnimate",true);
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
 //    m_minMaxBtn->setShortcut(Qt::Key_Enter);
-    m_minMaxBtn->setShortcut(Qt::Key_Return);
+//    m_minMaxBtn->setShortcut(Qt::Key_Return);
+    QShortcut *key_1 = new QShortcut(QKeySequence(Qt::Key_Enter),this);
+    connect(key_1,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
+    QShortcut *key_2 = new QShortcut(QKeySequence(Qt::Key_Return),this);
+    connect(key_2,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
     m_minMaxLayout->addWidget(m_minMaxBtn);
     m_minMaxWidget->setLayout(m_minMaxLayout);
 
