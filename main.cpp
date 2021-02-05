@@ -80,18 +80,21 @@ int main(int argc, char *argv[])
         panelSize=46;
     }
 
-    int x=QApplication::primaryScreen()->geometry().x();
-    int y=QApplication::primaryScreen()->geometry().y();
+    QRect rect=QApplication::desktop()->screenGeometry(0);
+    int x=rect.x();
+    int y=rect.y();
+    int width=rect.width();
+    int height=rect.height();
 
     if(position==0)
-        w.setGeometry(QRect(x+4,y+QApplication::primaryScreen()->geometry().height()-panelSize-Style::minh-3,
+        w.setGeometry(QRect(x+4,y+height-panelSize-Style::minh-3,
                                   Style::minw,Style::minh));
     else if(position==1)
         w.setGeometry(QRect(x+4,y+panelSize+4,Style::minw,Style::minh));
     else if(position==2)
         w.setGeometry(QRect(x+panelSize+4,y+4,Style::minw,Style::minh));
     else
-        w.setGeometry(QRect(x+QApplication::primaryScreen()->geometry().width()-panelSize-Style::minw-4,y+4,
+        w.setGeometry(QRect(x+width-panelSize-Style::minw-4,y+4,
                                   Style::minw,Style::minh));
     w.show();
     w.raise();

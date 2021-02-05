@@ -423,7 +423,8 @@ void FullLetterWidget::widgetMakeZero()
 
 void FullLetterWidget::moveScrollBar(int type)
 {
-    int height=QApplication::primaryScreen()->geometry().height();
+    QRect rect=QApplication::desktop()->screenGeometry(0);
+    int height=rect.height();
     if(type==0)
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()-height*100/1080);
     else

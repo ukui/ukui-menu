@@ -118,16 +118,19 @@ void Style::initWidStyle()
         panelSize=46;
     }
 
+    QRect rect=QApplication::desktop()->screenGeometry(0);
+    int width=rect.width();
+    int height=rect.height();
 
     if(position==0 || position==1)
     {
-        widthavailable=QApplication::primaryScreen()->geometry().width();
-        heightavailable=QApplication::primaryScreen()->geometry().height()-panelSize;
+        widthavailable=width;
+        heightavailable=height-panelSize;
     }
     if(position==2 || position==3)
     {
-        widthavailable=QApplication::primaryScreen()->geometry().width()-panelSize;
-        heightavailable=QApplication::primaryScreen()->geometry().height();
+        widthavailable=width-panelSize;
+        heightavailable=height;
     }
 
     int len=0;
@@ -137,8 +140,7 @@ void Style::initWidStyle()
     else
         len=10;
 
-    if(QApplication::primaryScreen()->geometry().width()==800 &&
-            QApplication::primaryScreen()->geometry().height()==600)
+    if(width==800 && height==600)
     {
         minw=320;
         minh=500;
