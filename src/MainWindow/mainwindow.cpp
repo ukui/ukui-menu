@@ -316,62 +316,40 @@ void MainWindow::showFullScreenWidget()
 /**
  * 显示默认窗口
  */
+#define MARGIN 4
 void MainWindow::showDefaultWidget()
 {
     m_isFullScreen=false;
     this->setContentsMargins(0,0,0,0);
-    int position=0;
-    int panelSize=0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        if(gsetting->keys().contains(QString("panelposition")))
-            position=gsetting->get("panelposition").toInt();
-        else
-            position=0;
-        if(gsetting->keys().contains(QString("panelsize")))
-            panelSize=gsetting->get("panelsize").toInt();
-        else
-            panelSize=46;
-    }
-    else
-    {
-        position=0;
-        panelSize=46;
-    }
-    int x = getScreenGeometry("x");
-    int y = getScreenGeometry("y");
-    int width = getScreenGeometry("width");
-    int height = getScreenGeometry("height");
-    if(width==0 || height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        x=rect.x();
-        y=rect.y();
-        width=rect.width();
-        height=rect.height();
-    }
+
+    QDBusInterface iface("org.ukui.panel",
+                         "/panel/position",
+                         "org.ukui.panel",
+                         QDBusConnection::sessionBus());
+    QDBusReply<QVariantList> reply=iface.call("GetPrimaryScreenGeometry");
+    QVariantList position_list=reply.value();
+    /*
+     * 通过这个dbus接口获取到的5个参数分别为 ：可用屏幕大小的x坐标、y坐标、宽度、高度，任务栏位置
+    */
     QRect startRect;
     QRect endRect;
-    if(position==0)
-    {
-        endRect.setRect(x+4,y+height-panelSize-Style::minh-3,Style::minw,Style::minh);
-        startRect.setRect(x,y,width,height-panelSize);
-    }
-    else if(position==1)
-    {
-        endRect.setRect(x+4,y+panelSize+4,Style::minw,Style::minh);
-        startRect.setRect(x,y+panelSize,width,height-panelSize);
-    }
-    else if(position==2)
-    {
-        endRect.setRect(x+panelSize+4,y+4,Style::minw,Style::minh);
-        startRect.setRect(x+panelSize,y,width-panelSize,height);
-    }
-    else
-    {
-        endRect.setRect(x+width-panelSize-Style::minw-4,y+4,Style::minw,Style::minh);
-        startRect.setRect(x,y,width-panelSize,height);
+    switch(reply.value().at(4).toInt()){
+    case 1:
+        endRect.setRect(position_list.at(0).toInt()+MARGIN,position_list.at(1).toInt()+MARGIN,Style::minw,Style::minh);
+        startRect.setRect(position_list.at(0).toInt(),position_list.at(1).toInt(),position_list.at(2).toInt(),position_list.at(3).toInt());
+        break;
+    case 2:
+        endRect.setRect(position_list.at(0).toInt()+MARGIN,position_list.at(1).toInt()+MARGIN,Style::minw,Style::minh);
+        startRect.setRect(position_list.at(0).toInt(),position_list.at(1).toInt(),position_list.at(2).toInt(),position_list.at(3).toInt());
+        break;
+    case 3:
+        endRect.setRect(position_list.at(0).toInt()+position_list.at(2).toInt()-Style::minw-MARGIN,position_list.at(1).toInt()+MARGIN,Style::minw,Style::minh);
+        startRect.setRect(position_list.at(0).toInt(),position_list.at(1).toInt(),position_list.at(2).toInt(),position_list.at(3).toInt());
+        break;
+    default:
+        endRect.setRect(position_list.at(0).toInt()+MARGIN,position_list.at(1).toInt()+position_list.at(3).toInt()-Style::minh-3,Style::minw,Style::minh);
+        startRect.setRect(position_list.at(0).toInt(),position_list.at(1).toInt(),position_list.at(2).toInt(),position_list.at(3).toInt());
+        break;
     }
 
     this->centralWidget()->layout()->removeWidget(m_mainViewWid);
