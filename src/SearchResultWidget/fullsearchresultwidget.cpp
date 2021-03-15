@@ -19,6 +19,7 @@
 #include "fullsearchresultwidget.h"
 #include <QHeaderView>
 #include "src/Style/style.h"
+#include "src/UtilityFunction/utility.h"
 #include <QDebug>
 
 FullSearchResultWidget::FullSearchResultWidget(QWidget *parent) :
@@ -45,9 +46,21 @@ void FullSearchResultWidget::initUi()
     m_spaceItem=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     mainLayout->addItem(m_spaceItem);
     m_listView=new FullListView(this,3);
-    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
-    mainLayout->addWidget(m_listView);
     this->setLayout(mainLayout);
+
+    m_scrollArea=new ScrollArea;
+    m_scrollAreaWid=new ScrollAreaWid;
+    m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
+    m_scrollArea->setFixedSize(Style::AppListWidWidth,this->height());
+    m_scrollArea->setWidget(m_scrollAreaWid);
+    m_scrollArea->setWidgetResizable(true);
+    m_scrollAreaWidLayout=new QVBoxLayout;
+    m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
+    m_scrollAreaWidLayout->setSpacing(10);
+    m_scrollAreaWid->setLayout(m_scrollAreaWidLayout);
+    mainLayout->addWidget(m_scrollArea);
+    m_scrollAreaWidLayout->addWidget(m_listView);
+    m_scrollAreaWidLayout->addItem(new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding));
 
     m_data.clear();
     m_listView->addData(m_data);
@@ -74,6 +87,29 @@ void FullSearchResultWidget::updateAppListView(QVector<QStringList> arg)
     Q_FOREACH(QStringList appinfo,arg)
         m_data.append(appinfo.at(0));
     m_listView->updateData(m_data);
+    resizeScrollAreaControls();
+}
+
+void FullSearchResultWidget::resizeScrollAreaControls()
+{
+    QLayoutItem* widItem=m_scrollAreaWidLayout->itemAt(0);
+    QWidget* wid=widItem->widget();
+    FullListView* listview=qobject_cast<FullListView*>(wid);
+    listview->adjustSize();
+    int dividend=(m_scrollArea->width()-Style::SliderSize)/Style::AppListGridSizeWidth;
+    int rowcount=0;
+    if(listview->model()->rowCount()%dividend>0)
+    {
+        rowcount=listview->model()->rowCount()/dividend+1;
+    }
+    else
+    {
+        rowcount=listview->model()->rowCount()/dividend;
+
+    }
+
+    listview->setFixedSize(m_scrollArea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
+    m_scrollArea->widget()->adjustSize();
 }
 
 void FullSearchResultWidget::repaintWidget()
@@ -81,23 +117,27 @@ void FullSearchResultWidget::repaintWidget()
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
     this->layout()->setContentsMargins(Style::LeftWidWidth,0,0,0);
-    this->layout()->removeWidget(m_listView);
+    m_scrollAreaWidLayout->removeWidget(m_listView);
     m_listView->setParent(nullptr);
     delete m_listView;
     m_listView=new FullListView(this,3);
-    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
-    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
-    mainLayout->insertWidget(1,m_listView);
+    m_scrollAreaWidLayout->insertWidget(0,m_listView);
+
     m_data.clear();
     m_listView->addData(m_data);
+    resizeScrollAreaControls();
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullSearchResultWidget::sendHideMainWindowSignal);
 }
 
 void FullSearchResultWidget::moveScrollBar(int type)
 {
-    QRect rect=QApplication::desktop()->screenGeometry(0);
-    int height=rect.height();
+    int height=getScreenGeometry("height");
+    if(height==0)
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        height=rect.height();
+    }
     if(type==0)
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-height*100/1080);
     else

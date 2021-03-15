@@ -27,6 +27,7 @@
 #include <syslog.h>
 #include "src/UtilityFunction/proxystyle.h"
 #include <KWindowEffects>
+#include "src/UtilityFunction/utility.h"
 
 int main(int argc, char *argv[])
 {
@@ -80,11 +81,18 @@ int main(int argc, char *argv[])
         panelSize=46;
     }
 
-    QRect rect=QApplication::desktop()->screenGeometry(0);
-    int x=rect.x();
-    int y=rect.y();
-    int width=rect.width();
-    int height=rect.height();
+    int x = getScreenGeometry("x");
+    int y = getScreenGeometry("y");
+    int width = getScreenGeometry("width");
+    int height = getScreenGeometry("height");
+    if(width==0 || height==0)
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        x=rect.x();
+        y=rect.y();
+        width=rect.width();
+        height=rect.height();
+    }
 
     if(position==0)
         w.setGeometry(QRect(x+4,y+height-panelSize-Style::minh-3,

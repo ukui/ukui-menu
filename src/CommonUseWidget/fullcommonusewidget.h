@@ -36,6 +36,7 @@
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/fulllistview.h"
 #include "src/Style/style.h"
+#include "src/UtilityFunction/scrollarea.h"
 
 class FullCommonUseWidget : public QWidget
 {
@@ -70,6 +71,9 @@ private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     QStringList m_data;
     QSpacerItem *m_spaceItem=nullptr;
+    ScrollArea* m_scrollArea=nullptr;
+    ScrollAreaWid* m_scrollAreaWid=nullptr;
+    QVBoxLayout* m_scrollAreaWidLayout=nullptr;
 
 protected:
     /**
@@ -84,6 +88,7 @@ protected:
      * @brief fill application list
      */
     void fillAppList();
+    void resizeScrollAreaControls();
 
 public Q_SLOTS:
     /**

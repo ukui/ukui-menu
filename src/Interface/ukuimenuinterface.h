@@ -26,12 +26,17 @@
 #include <QDBusReply>
 #include <QDBusObjectPath>
 #include <QSettings>
+#include <glib.h>
 
 class UkuiMenuInterface
 {
 private:
     QStringList filePathList;
     QSettings* setting=nullptr;
+
+    GError** error=nullptr;
+    GKeyFileFlags flags=G_KEY_FILE_NONE;
+    GKeyFile* keyfile=nullptr;
 
 protected:
     void recursiveSearchFile(const QString& _filePath);//遍历/usr/share/applications/文件夹

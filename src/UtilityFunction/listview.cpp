@@ -17,6 +17,7 @@
  */
 
 #include "listview.h"
+#include "utility.h"
 #include <QDebug>
 
 ListView::ListView(QWidget *parent, int width, int height, int module):
@@ -173,8 +174,7 @@ void ListView::leaveEvent(QEvent *e)
 
 void ListView::paintEvent(QPaintEvent *e)
 {
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-    double transparency=gsetting->get("transparency").toDouble();
+    double transparency=getTransparency();
     QPainter painter(this->viewport());
     painter.setOpacity(transparency);
     painter.setPen(Qt::NoPen);

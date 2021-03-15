@@ -17,6 +17,7 @@
  */
 
 #include "classifybtnscrollarea.h"
+#include "utility.h"
 #include <QGSettings>
 #include <QVariant>
 
@@ -29,17 +30,8 @@ ClassifyBtnScrollAreaWid::ClassifyBtnScrollAreaWid()
 
 void ClassifyBtnScrollAreaWid::paintEvent(QPaintEvent *event)
 {
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-    double transparency=gsetting->get("transparency").toDouble();
+    double transparency=getTransparency();
     QPainter painter(this);
-//    painter.setRenderHint(QPainter::Antialiasing);
-//    painter.setOpacity(0.25);
-//    painter.setBrush(Qt::black);
-//    painter.setPen(Qt::NoPen);
-//    QRect rect = this->rect();
-//    rect.setWidth(rect.width());
-//    rect.setHeight(rect.height());
-//    painter.drawRect(rect);
 
     if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
     {

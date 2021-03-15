@@ -17,6 +17,7 @@
  */
 
 #include "fulllistview.h"
+#include "utility.h"
 #include <QDebug>
 #include <syslog.h>
 
@@ -44,7 +45,7 @@ void FullListView::initWidget()
     viewport()->setAttribute(Qt::WA_TranslucentBackground);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    if(module==1 || module==2)
+//    if(module==1 || module==2)s
         this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setViewMode(QListView::IconMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -162,14 +163,8 @@ void FullListView::leaveEvent(QEvent *e)
 
 void FullListView::paintEvent(QPaintEvent *e)
 {
-    QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-    double transparency=gsetting->get("transparency").toDouble();
+    double transparency=getTransparency();
     QPainter painter(this->viewport());
-//    painter.setOpacity(0.25);
-//    painter.setPen(Qt::NoPen);
-//    painter.fillRect(this->rect(),QBrush(Qt::black));
-//    QListView::paintEvent(e);
-
 
     if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
     {

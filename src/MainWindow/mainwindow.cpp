@@ -119,10 +119,25 @@ void MainWindow::initUi()
     connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
-    connect(QApplication::primaryScreen(),&QScreen::geometryChanged,
-            this,&MainWindow::monitorResolutionChange);
-    connect(qApp,&QApplication::primaryScreenChanged,this,
-            &MainWindow::primaryScreenChangedSlot);
+//    connect(QApplication::primaryScreen(),&QScreen::geometryChanged,
+//            this,&MainWindow::monitorResolutionChange);
+//    connect(qApp,&QApplication::primaryScreenChanged,this,
+//            &MainWindow::primaryScreenChangedSlot);
+
+    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
+        qDebug()<<"---分辨率变化---";
+        repaintWidget();
+    });
+    connect(QApplication::desktop(),&QDesktopWidget::primaryScreenChanged,this,[=]{
+        qDebug()<<"---主屏幕变化---";
+        repaintWidget();
+    });
+
+    connect(QApplication::desktop(),&QDesktopWidget::screenCountChanged,this,[=]{
+        qDebug()<<"---屏幕数量变化---";
+        repaintWidget();
+    });
+
 
     if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
@@ -137,12 +152,7 @@ void MainWindow::initUi()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-    double transparency=0.0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-        transparency=gsetting->get("transparency").toDouble();
-    }
+    double transparency=getTransparency();
 
     QRect rect = this->rect();
 //    rect.setWidth(this->rect().width());
@@ -254,11 +264,18 @@ void MainWindow::showFullScreenWidget()
         panelSize=46;
     }
 
-    QRect rect=QApplication::desktop()->screenGeometry(0);
-    int x=rect.x();
-    int y=rect.y();
-    int width=rect.width();
-    int height=rect.height();
+    int x = getScreenGeometry("x");
+    int y = getScreenGeometry("y");
+    int width = getScreenGeometry("width");
+    int height = getScreenGeometry("height");
+    if(width==0 || height==0)
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        x=rect.x();
+        y=rect.y();
+        width=rect.width();
+        height=rect.height();
+    }
     QRect startRect;
     QRect endRect;
     if(position==0)
@@ -322,11 +339,18 @@ void MainWindow::showDefaultWidget()
         position=0;
         panelSize=46;
     }
-    QRect rect=QApplication::desktop()->screenGeometry(0);
-    int x=rect.x();
-    int y=rect.y();
-    int width=rect.width();
-    int height=rect.height();
+    int x = getScreenGeometry("x");
+    int y = getScreenGeometry("y");
+    int width = getScreenGeometry("width");
+    int height = getScreenGeometry("height");
+    if(width==0 || height==0)
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        x=rect.x();
+        y=rect.y();
+        width=rect.width();
+        height=rect.height();
+    }
     QRect startRect;
     QRect endRect;
     if(position==0)
@@ -394,31 +418,18 @@ void MainWindow::animationValueFinishedSlot()
         m_mainViewWid->loadMinMainView();
         arg=QString("Default screen!");
     }
-    QRect rect=QApplication::desktop()->screenGeometry(0);
-    int x=rect.x();
-    int y=rect.y();
-    int width=rect.width();
-    int height=rect.height();
-    QString msg_1=QString("%1 Primary screen geometry: (%2, %3, %4, %5). MainWindow geometry: (%6, %7, %8, %9).")
-            .arg(arg)
-            .arg(x)
-            .arg(y)
-            .arg(width)
-            .arg(height)
-            .arg(this->x())
-            .arg(this->y())
-            .arg(this->width())
-            .arg(this->height());
-    debugLog(msg_1);
-
-    QString msg_2=QString("MainViewWidget size: (%1, %2). SideBarWidget size: (%3, %4).")
-            .arg(m_mainViewWid->width())
-            .arg(m_mainViewWid->height())
-            .arg(m_sideBarWid->width())
-            .arg(m_sideBarWid->height());
-    debugLog(msg_2);
-
-//    setFrameStyle();
+    int x = getScreenGeometry("x");
+    int y = getScreenGeometry("y");
+    int width = getScreenGeometry("width");
+    int height = getScreenGeometry("height");
+    if(width==0 || height==0)
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        x=rect.x();
+        y=rect.y();
+        width=rect.width();
+        height=rect.height();
+    }
 }
 
 /**
@@ -443,11 +454,9 @@ void MainWindow::recvStartMenuSlot()
     {
         this->hide();
         m_mainViewWid->widgetMakeZero();
-//        m_sideBarWid->widgetMakeZero();
     }
     else{
         m_mainViewWid->widgetMakeZero();
-//        m_sideBarWid->widgetMakeZero();
         this->loadMainWindow();
         this->show();
         this->raise();
@@ -499,11 +508,18 @@ void MainWindow::loadMainWindow()
         position=0;
         panelSize=46;
     }
-    QRect rect=QApplication::desktop()->screenGeometry(0);
-    int x=rect.x();
-    int y=rect.y();
-    int width=rect.width();
-    int height=rect.height();
+    int x = getScreenGeometry("x");
+    int y = getScreenGeometry("y");
+    int width = getScreenGeometry("width");
+    int height = getScreenGeometry("height");
+    if(width==0 || height==0)
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        x=rect.x();
+        y=rect.y();
+        width=rect.width();
+        height=rect.height();
+    }
     if(m_isFullScreen)
     {
         //修复界面黑框问题
@@ -564,12 +580,14 @@ void MainWindow::loadMainWindow()
 void MainWindow::monitorResolutionChange(QRect rect)
 {
     Q_UNUSED(rect);
+    qDebug()<<"---分辨率变化---";
     repaintWidget();
 }
 
 void MainWindow::primaryScreenChangedSlot(QScreen *screen)
 {
     Q_UNUSED(screen);
+    qDebug()<<"---主屏幕变化---";
     repaintWidget();
 
 }
@@ -608,11 +626,18 @@ void MainWindow::repaintWidget()
             position=0;
             panelSize=46;
         }
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        int x=rect.x();
-        int y=rect.y();
-        int width=rect.width();
-        int height=rect.height();
+        int x = getScreenGeometry("x");
+        int y = getScreenGeometry("y");
+        int width = getScreenGeometry("width");
+        int height = getScreenGeometry("height");
+        if(width==0 || height==0)
+        {
+            QRect rect=QApplication::desktop()->screenGeometry(0);
+            x=rect.x();
+            y=rect.y();
+            width=rect.width();
+            height=rect.height();
+        }
         if(m_isFullScreen)
         {
             if(position==0)

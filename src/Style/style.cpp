@@ -17,6 +17,7 @@
  */
 
 #include "style.h"
+#include "src/UtilityFunction/utility.h"
 #include <QDebug>
 
 Style::Style()
@@ -118,9 +119,14 @@ void Style::initWidStyle()
         panelSize=46;
     }
 
-    QRect rect=QApplication::desktop()->screenGeometry(0);
-    int width=rect.width();
-    int height=rect.height();
+    int width = getScreenGeometry("width");
+    int height = getScreenGeometry("height");
+    if(width==0 || height==0)
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        width=rect.width();
+        height=rect.height();
+    }
 
     if(position==0 || position==1)
     {

@@ -177,14 +177,6 @@ void SideBarWidget::addSidebarBtn()
     }
 
     m_animation = new QPropertyAnimation(m_mainWidget, "geometry");
-    connect(m_animation,&QPropertyAnimation::finished,this,[=]{
-        QString msg=QString("Sidebar main widget geometry: (%1, %2, %3, %4).")
-                .arg(m_mainWidget->x())
-                .arg(m_mainWidget->y())
-                .arg(m_mainWidget->width())
-                .arg(m_mainWidget->height());
-        debugLog(msg);
-    });
 }
 
 void SideBarWidget::resetSidebarBtnSlot()
@@ -304,7 +296,7 @@ void SideBarWidget::shutdownBtnRightClickSlot()
             QProcess::startDetached(QString("ukui-session-tools --shutdown"));
             break;
         case 16:
-            QProcess::startDetached(QString("ukui-session-tools --hibernate"));
+            QProcess::startDetached(QString("ukui-session-tools --suspend"));
             break;
         case 17:
             QProcess::startDetached(QString("ukui-session-tools --sleep"));

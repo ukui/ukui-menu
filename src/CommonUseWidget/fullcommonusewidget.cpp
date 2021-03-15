@@ -19,6 +19,7 @@
 #include "fullcommonusewidget.h"
 #include <QDesktopWidget>
 #include "src/Style/style.h"
+#include "src/UtilityFunction/utility.h"
 #include <QDebug>
 
 FullCommonUseWidget::FullCommonUseWidget(QWidget *parent) :
@@ -46,6 +47,18 @@ void FullCommonUseWidget::initUi()
     m_spaceItem=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     mainLayout->addItem(m_spaceItem);
 
+    m_scrollArea=new ScrollArea;
+    m_scrollAreaWid=new ScrollAreaWid;
+    m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
+    m_scrollArea->setFixedSize(Style::AppListWidWidth,this->height());
+    m_scrollArea->setWidget(m_scrollAreaWid);
+    m_scrollArea->setWidgetResizable(true);
+    m_scrollAreaWidLayout=new QVBoxLayout;
+    m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
+    m_scrollAreaWidLayout->setSpacing(10);
+    m_scrollAreaWid->setLayout(m_scrollAreaWidLayout);
+    mainLayout->addWidget(m_scrollArea);
+
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
     initAppListWidget();
@@ -55,12 +68,35 @@ void FullCommonUseWidget::initUi()
 void FullCommonUseWidget::initAppListWidget()
 {
     m_listView=new FullListView(this,0);
-    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
-    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
-    mainLayout->insertWidget(1,m_listView);
+//    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
+//    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
+//    mainLayout->insertWidget(1,m_listView);
+    m_scrollAreaWidLayout->addWidget(m_listView);
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
+}
+
+void FullCommonUseWidget::resizeScrollAreaControls()
+{
+    QLayoutItem* widItem=m_scrollAreaWidLayout->itemAt(0);
+    QWidget* wid=widItem->widget();
+    FullListView* listview=qobject_cast<FullListView*>(wid);
+    listview->adjustSize();
+    int dividend=(m_scrollArea->width()-Style::SliderSize)/Style::AppListGridSizeWidth;
+    int rowcount=0;
+    if(listview->model()->rowCount()%dividend>0)
+    {
+        rowcount=listview->model()->rowCount()/dividend+1;
+    }
+    else
+    {
+        rowcount=listview->model()->rowCount()/dividend;
+
+    }
+
+    listview->setFixedSize(m_scrollArea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
+    m_scrollArea->widget()->adjustSize();
 }
 
 void FullCommonUseWidget::fillAppList()
@@ -69,6 +105,7 @@ void FullCommonUseWidget::fillAppList()
     Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
         m_data.append(desktopfp);
     m_listView->addData(m_data);
+    resizeScrollAreaControls();
 }
 
 /**
@@ -101,7 +138,7 @@ void FullCommonUseWidget::repaintWidget()
 {
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
-    this->layout()->removeWidget(m_listView);
+    m_scrollAreaWidLayout->removeWidget(m_listView);
     m_listView->setParent(nullptr);
     delete m_listView;
     initAppListWidget();
@@ -115,8 +152,12 @@ void FullCommonUseWidget::widgetMakeZero()
 
 void FullCommonUseWidget::moveScrollBar(int type)
 {
-    QRect rect=QApplication::desktop()->screenGeometry(0);
-    int height=rect.height();
+    int height=getScreenGeometry("height");
+    if(height==0)
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        height=rect.height();
+    }
     if(type==0)
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-height*100/1080);
     else

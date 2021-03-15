@@ -32,5 +32,8 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
 //调试日志
 void debugLog(QString strMsg);
 
+int getScreenGeometry(QString methodName);
+double getTransparency();
+
 
 #endif // UTILITY_H

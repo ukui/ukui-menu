@@ -30,6 +30,7 @@
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/UtilityFunction/fulllistview.h"
 #include "src/Style/style.h"
+#include "src/UtilityFunction/scrollarea.h"
 
 class FullSearchResultWidget : public QWidget
 {
@@ -60,11 +61,16 @@ private:
     QStringList m_data;
     QSpacerItem *m_spaceItem=nullptr;
 
+    ScrollArea* m_scrollArea=nullptr;
+    ScrollAreaWid* m_scrollAreaWid=nullptr;
+    QVBoxLayout* m_scrollAreaWidLayout=nullptr;
+
 protected:
     /**
      * @brief Initializes UI
      */
     void initUi();
+    void resizeScrollAreaControls();
 
 private Q_SLOTS:
     /**

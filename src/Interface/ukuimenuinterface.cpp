@@ -17,7 +17,6 @@
  */
 
 #include "ukuimenuinterface.h"
-#include <glib.h>
 #include <QDir>
 #include <QDebug>
 #include <QCollator>
@@ -47,10 +46,6 @@ UkuiMenuInterface::~UkuiMenuInterface()
 //文件递归查询
 void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
 {
-    GError** error=nullptr;
-    GKeyFileFlags flags=G_KEY_FILE_NONE;
-    GKeyFile* keyfile=g_key_file_new ();
-
     QDir dir(_filePath);
     if (!dir.exists()) {
         return;
@@ -81,15 +76,19 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
                 i++;
                 continue;
             }
+            keyfile=g_key_file_new();
+
             QByteArray fpbyte=filePathStr.toLocal8Bit();
             char* filepath=fpbyte.data();
-            g_key_file_load_from_file(keyfile,filepath,flags,error);
+            if(!g_key_file_load_from_file(keyfile,filepath,flags,error))
+                return;
             char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","NoDisplay", nullptr, nullptr);
             if(ret_1!=nullptr)
             {
                 QString str=QString::fromLocal8Bit(ret_1);
                 if(str.contains("true"))
                 {
+                    g_key_file_free(keyfile);
                     i++;
                     continue;
                 }
@@ -100,6 +99,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
                 QString str=QString::fromLocal8Bit(ret_2);
                 if(str.contains("UKUI"))
                 {
+                    g_key_file_free(keyfile);
                     i++;
                     continue;
                 }
@@ -112,6 +112,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
                 QString str=QString::fromLocal8Bit(ret);
                 if(str.contains("LXQt") || str.contains("KDE"))
                 {
+                    g_key_file_free(keyfile);
                     i++;
                     continue;
                 }
@@ -119,18 +120,17 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
             //过滤应用名为空的情况
             if(getAppName(filePathStr).isEmpty())
             {
+                g_key_file_free(keyfile);
                 i++;
                 continue;
             }
 
+            g_key_file_free(keyfile);
             filePathList.append(filePathStr);
         }
         i++;
 
     } while(i < list.size());
-
-    g_key_file_free(keyfile);
-
 }
 
 //获取系统deskyop文件路径

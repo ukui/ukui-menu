@@ -20,6 +20,13 @@
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QPixmap>
+#include <QDBusMessage>
+#include <QDBusConnection>
+#include <QGSettings>
+
+#define DBUS_NAME       "org.ukui.SettingsDaemon"
+#define DBUS_PATH       "/org/ukui/SettingsDaemon/wayland"
+#define DBUS_INTERFACE  "org.ukui.SettingsDaemon.wayland"
 
 const QPixmap loadSvg(const QString &fileName, const int size)
 {
@@ -84,6 +91,43 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source)
         }
     }
     return QPixmap::fromImage(img);
+}
+
+int getScreenGeometry(QString methodName)
+{
+    int res = 0;
+    QString xdg_session_type=qgetenv("XDG_SESSION_TYPE");
+    if(xdg_session_type=="wayland")
+    {
+        QDBusMessage message = QDBusMessage::createMethodCall(DBUS_NAME,
+                                   DBUS_PATH,
+                                   DBUS_INTERFACE,
+                                   methodName);
+        QDBusMessage response = QDBusConnection::sessionBus().call(message);
+        if (response.type() == QDBusMessage::ReplyMessage)
+        {
+            if(response.arguments().isEmpty() == false) {
+                int value = response.arguments().takeFirst().toInt();
+                res = value;
+                qDebug() << value;
+            }
+        } else {
+            qDebug()<<methodName<<"called failed";
+        }
+    }
+    return res;
+}
+
+double getTransparency()
+{
+    double transparency=0.0;
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
+    {
+        QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
+        if(gsetting.keys().contains(QString("transparency")))
+            transparency=gsetting.get("transparency").toDouble();
+    }
+    return transparency;
 }
 
 void debugLog(QString strMsg)
