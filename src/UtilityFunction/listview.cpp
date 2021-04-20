@@ -60,6 +60,7 @@ void ListView::initWidget()
     this->setMouseTracking(true);
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);
+    this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
 }
@@ -180,5 +181,12 @@ void ListView::paintEvent(QPaintEvent *e)
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base());
     painter.fillRect(this->rect(), this->palette().base());
+
+    //滚动条
+    QPalette p=this->verticalScrollBar()->palette();
+    QColor color(255, 255, 255);
+    color.setAlphaF(0.25);
+    p.setColor(QPalette::Active,QPalette::Button,color);
+    this->verticalScrollBar()->setPalette(p);
     QListView::paintEvent(e);
 }

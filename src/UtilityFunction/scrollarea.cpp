@@ -75,11 +75,20 @@ void ScrollAreaWid::paintEvent(QPaintEvent *event)
 ScrollArea::ScrollArea()
 {
     this->verticalScrollBar()->setVisible(false);
-    installEventFilter(this);
     this->setFocusPolicy(Qt::NoFocus);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);
+    this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
+    this->verticalScrollBar()->setAttribute(Qt::WA_TranslucentBackground, false);
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //滚动条设置
+    QPalette p=this->verticalScrollBar()->palette();
+    QColor color(255, 255, 255);
+    color.setAlphaF(0.25);
+    p.setColor(QPalette::Active, QPalette::Button, color);
+    this->verticalScrollBar()->setPalette(p);
+
 }
 
 void ScrollArea::enterEvent(QEvent *e)
