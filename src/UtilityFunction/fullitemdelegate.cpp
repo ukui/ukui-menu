@@ -17,14 +17,13 @@
  */
 
 #include "fullitemdelegate.h"
+#include "src/UtilityFunction/utility.h"
 #include <QDebug>
 
 FullItemDelegate::FullItemDelegate(QObject *parent, int module):
     QStyledItemDelegate(parent)
 {
     this->module=module;
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
     pUkuiMenuInterface=new UkuiMenuInterface;
 }
 
@@ -132,14 +131,12 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         //添加固定图标
         if(module==0)
         {
-            setting->beginGroup("lockapplication");
-            if(setting->contains(desktopfn))
+            if(checkIfLocked(desktopfn))
             {
                 is_locked=true;
                 QIcon icon(QString(":/data/img/mainviewwidget/lock-fs.svg"));
                 icon.paint(painter,QRect(iconRect.topRight().x()-14,iconRect.topRight().y()-2,16,16));
             }
-            setting->endGroup();
         }
         painter->restore();
 
@@ -153,8 +150,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         bool is_recentapp=false;
         QFontMetrics fm=painter->fontMetrics();
         QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-10,Qt::TextShowMnemonic);
-        setting->beginGroup("recentapp");
-        if(setting->contains(desktopfn) && !is_locked)
+        if(checkIfRecent(desktopfn) && !checkIfLocked(desktopfn))
         {
             is_recentapp=true;
             appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-23,Qt::TextShowMnemonic);
@@ -177,7 +173,6 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
                                  4);
 
         }
-        setting->endGroup();
         painter->restore();
 
         painter->save();
@@ -199,9 +194,9 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             {
                 QToolTip::showText(QCursor::pos(),appname);
             }
-        }
-        else {
-            QToolTip::hideText();
+            else {
+                QToolTip::hideText();
+            }
         }
     }
 }

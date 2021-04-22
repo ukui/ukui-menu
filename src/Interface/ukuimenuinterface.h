@@ -32,7 +32,6 @@ class UkuiMenuInterface
 {
 private:
     QStringList filePathList;
-    QSettings* setting=nullptr;
 
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
@@ -77,6 +76,7 @@ public:
     QString getAppNameInitials(QString desktopfp);//获取应用名所有首字母
     QString getAppNameInitial(QString desktopfp);//获取应用名所有首字母
     QString getAppNamePinyin(QString appname);//获取应用名拼音
+    bool checkKreApp(QString desktopfp);
 
     //获取用户图像
     QString getUserIcon();

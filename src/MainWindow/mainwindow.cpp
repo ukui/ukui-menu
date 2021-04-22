@@ -34,15 +34,15 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    openDataBase("MainThread");
     m_ukuiMenuInterface=new UkuiMenuInterface;
     UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
+    initDatabase();
     UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
     UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
     UkuiMenuInterface::allAppVector=m_ukuiMenuInterface->getAllClassification();
 
     Style::initWidStyle();
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    m_setting=new QSettings(path,QSettings::IniFormat);
     initUi();
 
     m_dbus=new DBus;
@@ -63,10 +63,41 @@ MainWindow::MainWindow(QWidget *parent) :
         UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
         Q_EMIT m_mainViewWid->reloadUkuiMenu();
     });
+
+    connect(m_dbus,&DBus::winKeyResponseSignal,this,[=]{
+        if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
+        {
+            QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
+            if(gsetting.keys().contains("win-key-release"))
+                if(gsetting.get("win-key-release").toBool())
+                    return;
+        }
+        if(QGSettings::isSchemaInstalled(QString("org.ukui.screenshot").toLocal8Bit()))
+        {
+            QGSettings gsetting(QString("org.ukui.screenshot").toLocal8Bit());
+            if(gsetting.keys().contains("isrunning"))
+                if(gsetting.get("isrunning").toBool())
+                    return;
+        }
+
+        if(this->isVisible())
+        {
+            this->hide();
+        }
+        else{
+            this->loadMainWindow();
+            this->show();
+            this->raise();
+            this->activateWindow();
+        }
+        m_mainViewWid->widgetMakeZero();
+    });
+
 }
 
 MainWindow::~MainWindow()
 {
+    closeDataBase("MainThread");
     delete m_ukuiMenuInterface;
 }
 
@@ -100,7 +131,6 @@ void MainWindow::initUi()
     mainlayout->addWidget(m_sideBarWid);
 
     m_animation = new QPropertyAnimation(this, "geometry");
-//    connect(m_animation, &QPropertyAnimation::valueChanged, this, &MainWindow::animationValueChangedSlot);
     connect(m_animation,&QPropertyAnimation::finished,this,&MainWindow::animationValueFinishedSlot);
 
     connect(m_sideBarWid, &SideBarWidget::sendCommonUseBtnSignal, m_mainViewWid, &MainViewWidget::loadCommonUseWidget);
@@ -119,25 +149,27 @@ void MainWindow::initUi()
     connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
-//    connect(QApplication::primaryScreen(),&QScreen::geometryChanged,
-//            this,&MainWindow::monitorResolutionChange);
-//    connect(qApp,&QApplication::primaryScreenChanged,this,
-//            &MainWindow::primaryScreenChangedSlot);
-
     connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
-        qDebug()<<"---分辨率变化---";
         repaintWidget();
     });
     connect(QApplication::desktop(),&QDesktopWidget::primaryScreenChanged,this,[=]{
-        qDebug()<<"---主屏幕变化---";
         repaintWidget();
     });
 
     connect(QApplication::desktop(),&QDesktopWidget::screenCountChanged,this,[=]{
-        qDebug()<<"---屏幕数量变化---";
         repaintWidget();
     });
 
+    //监听屏幕缩放
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit()))
+    {
+        QGSettings* m_gsetting=new QGSettings(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit());
+        connect(m_gsetting,&QGSettings::changed,this,[=](const QString &key)
+        {
+            if(key=="scalingFactor")
+                repaintWidget();
+        });
+    }
 
     if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
     {
@@ -145,9 +177,6 @@ void MainWindow::initUi()
         connect(gsetting,&QGSettings::changed,
                 this,&MainWindow::panelChangedSlot);
     }
-
-//    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
-//                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)
@@ -155,12 +184,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
     double transparency=getTransparency();
 
     QRect rect = this->rect();
-//    rect.setWidth(this->rect().width());
-//    rect.setHeight(this->rect().height());
-//    rect.setX(this->rect().x());
-//    rect.setY(this->rect().y());
-//    rect.setWidth(this->rect().width());
-//    rect.setHeight(this->rect().height());
     QPainterPath path;
 
     QPainter painter(this);
@@ -189,10 +212,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
     }
     else//全屏固定背景色(黑底白字)
     {
-//        QGSettings gsetting(QString("org.mate.background").toLocal8Bit());
-//        QString iconPath =gsetting.get("picture-filename").toString();
-//        painter.drawPixmap(0,0,this->width(),this->height(),QPixmap(iconPath));
-
         if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
         {
             QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
@@ -231,7 +250,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
         QPainterPath path;
         path.addRect(this->rect());
-//        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     }
     QMainWindow::paintEvent(event);
@@ -244,38 +262,12 @@ void MainWindow::showFullScreenWidget()
 {
     m_isFullScreen=true;
     this->setContentsMargins(0,0,0,0);
-    int position=0;
-    int panelSize=0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        if(gsetting->keys().contains(QString("panelposition")))
-            position=gsetting->get("panelposition").toInt();
-        else
-            position=0;
-        if(gsetting->keys().contains(QString("panelsize")))
-            panelSize=gsetting->get("panelsize").toInt();
-        else
-            panelSize=46;
-    }
-    else
-    {
-        position=0;
-        panelSize=46;
-    }
-
-    int x = getScreenGeometry("x");
-    int y = getScreenGeometry("y");
-    int width = getScreenGeometry("width");
-    int height = getScreenGeometry("height");
-    if(width==0 || height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        x=rect.x();
-        y=rect.y();
-        width=rect.width();
-        height=rect.height();
-    }
+    int position=Style::panelPosition;
+    int panelSize=Style::panelSize;
+    int x = Style::primaryScreenX;
+    int y = Style::primaryScreenY;
+    int width = Style::primaryScreenWidth;
+    int height = Style::primaryScreenHeight;
     QRect startRect;
     QRect endRect;
     if(position==0)
@@ -320,37 +312,12 @@ void MainWindow::showDefaultWidget()
 {
     m_isFullScreen=false;
     this->setContentsMargins(0,0,0,0);
-    int position=0;
-    int panelSize=0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        if(gsetting->keys().contains(QString("panelposition")))
-            position=gsetting->get("panelposition").toInt();
-        else
-            position=0;
-        if(gsetting->keys().contains(QString("panelsize")))
-            panelSize=gsetting->get("panelsize").toInt();
-        else
-            panelSize=46;
-    }
-    else
-    {
-        position=0;
-        panelSize=46;
-    }
-    int x = getScreenGeometry("x");
-    int y = getScreenGeometry("y");
-    int width = getScreenGeometry("width");
-    int height = getScreenGeometry("height");
-    if(width==0 || height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        x=rect.x();
-        y=rect.y();
-        width=rect.width();
-        height=rect.height();
-    }
+    int position=Style::panelPosition;
+    int panelSize=Style::panelSize;
+    int x = Style::primaryScreenX;
+    int y = Style::primaryScreenY;
+    int width = Style::primaryScreenWidth;
+    int height = Style::primaryScreenHeight;
     QRect startRect;
     QRect endRect;
     if(position==0)
@@ -399,7 +366,6 @@ void MainWindow::animationValueChangedSlot(const QVariant &value)
 
 void MainWindow::animationValueFinishedSlot()
 {
-    QString arg;
     if(m_isFullScreen)
     {
         this->centralWidget()->layout()->addWidget(m_mainViewWid);
@@ -407,7 +373,6 @@ void MainWindow::animationValueFinishedSlot()
         m_sideBarWid->loadMaxSidebar();
         m_mainViewWid->loadMaxMainView();
         m_sideBarWid->enterAnimation();
-        arg=QString("Full screen!");
     }
     else
     {
@@ -416,19 +381,6 @@ void MainWindow::animationValueFinishedSlot()
         this->centralWidget()->layout()->addWidget(m_sideBarWid);
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
-        arg=QString("Default screen!");
-    }
-    int x = getScreenGeometry("x");
-    int y = getScreenGeometry("y");
-    int width = getScreenGeometry("width");
-    int height = getScreenGeometry("height");
-    if(width==0 || height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        x=rect.x();
-        y=rect.y();
-        width=rect.width();
-        height=rect.height();
     }
 }
 
@@ -448,22 +400,6 @@ bool MainWindow::event ( QEvent * event )
    return QWidget::event(event);
 }
 
-void MainWindow::recvStartMenuSlot()
-{
-    if(this->isVisible())
-    {
-        this->hide();
-        m_mainViewWid->widgetMakeZero();
-    }
-    else{
-        m_mainViewWid->widgetMakeZero();
-        this->loadMainWindow();
-        this->show();
-        this->raise();
-        this->activateWindow();
-    }
-}
-
 /**
  * 隐藏窗口
  */
@@ -476,50 +412,14 @@ void MainWindow::recvHideMainWindowSlot()
 
 void MainWindow::loadMainWindow()
 {
-    QDateTime dt=QDateTime::currentDateTime();
-    int currentDateTime=dt.toTime_t();
-    int nDaySec=24*60*60;
-    m_setting->beginGroup("recentapp");
-    QStringList recentAppKeys=m_setting->allKeys();
-    for(int i=0;i<recentAppKeys.count();i++)
-    {
-        if((currentDateTime-m_setting->value(recentAppKeys.at(i)).toInt())/nDaySec >= 3)
-            m_setting->remove(recentAppKeys.at(i));
-    }
-    m_setting->sync();
-    m_setting->endGroup();
+    cleanTimeoutApp();
 
-    int position=0;
-    int panelSize=0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        if(gsetting->keys().contains(QString("panelposition")))
-            position=gsetting->get("panelposition").toInt();
-        else
-            position=0;
-        if(gsetting->keys().contains(QString("panelsize")))
-            panelSize=gsetting->get("panelsize").toInt();
-        else
-            panelSize=46;
-    }
-    else
-    {
-        position=0;
-        panelSize=46;
-    }
-    int x = getScreenGeometry("x");
-    int y = getScreenGeometry("y");
-    int width = getScreenGeometry("width");
-    int height = getScreenGeometry("height");
-    if(width==0 || height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        x=rect.x();
-        y=rect.y();
-        width=rect.width();
-        height=rect.height();
-    }
+    int position=Style::panelPosition;
+    int panelSize=Style::panelSize;
+    int x = Style::primaryScreenX;
+    int y = Style::primaryScreenY;
+    int width = Style::primaryScreenWidth;
+    int height = Style::primaryScreenHeight;
     if(m_isFullScreen)
     {
         //修复界面黑框问题
@@ -577,21 +477,6 @@ void MainWindow::loadMainWindow()
     }
 }
 
-void MainWindow::monitorResolutionChange(QRect rect)
-{
-    Q_UNUSED(rect);
-    qDebug()<<"---分辨率变化---";
-    repaintWidget();
-}
-
-void MainWindow::primaryScreenChangedSlot(QScreen *screen)
-{
-    Q_UNUSED(screen);
-    qDebug()<<"---主屏幕变化---";
-    repaintWidget();
-
-}
-
 void MainWindow::panelChangedSlot(QString key)
 {
     Q_UNUSED(key);
@@ -607,37 +492,12 @@ void MainWindow::repaintWidget()
 
     if(QApplication::activeWindow() == this)
     {
-        int position=0;
-        int panelSize=0;
-        if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-        {
-            QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-            if(gsetting->keys().contains(QString("panelposition")))
-                position=gsetting->get("panelposition").toInt();
-            else
-                position=0;
-            if(gsetting->keys().contains(QString("panelsize")))
-                panelSize=gsetting->get("panelsize").toInt();
-            else
-                panelSize=46;
-        }
-        else
-        {
-            position=0;
-            panelSize=46;
-        }
-        int x = getScreenGeometry("x");
-        int y = getScreenGeometry("y");
-        int width = getScreenGeometry("width");
-        int height = getScreenGeometry("height");
-        if(width==0 || height==0)
-        {
-            QRect rect=QApplication::desktop()->screenGeometry(0);
-            x=rect.x();
-            y=rect.y();
-            width=rect.width();
-            height=rect.height();
-        }
+        int position=Style::panelPosition;
+        int panelSize=Style::panelSize;
+        int x = Style::primaryScreenX;
+        int y = Style::primaryScreenY;
+        int width = Style::primaryScreenWidth;
+        int height = Style::primaryScreenHeight;
         if(m_isFullScreen)
         {
             if(position==0)

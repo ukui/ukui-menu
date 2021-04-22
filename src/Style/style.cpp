@@ -25,6 +25,12 @@ Style::Style()
 
 }
 
+int Style::primaryScreenX=0;
+int Style::primaryScreenY=0;
+int Style::primaryScreenWidth=0;
+int Style::primaryScreenHeight=0;
+int Style::panelPosition=0;
+int Style::panelSize=0;
 //默认窗口
 int Style::minw=0;
 int Style::minh=0;
@@ -76,7 +82,7 @@ int Style::AppSpaceBetweenIconText=0;
 int Style::AppBottomSpace=0;
 int Style::SliderSize=0;
 
-//侧边栏
+//侧边栏primaryScreen
 int Style::SideBarWidWidth=0;
 int Style::SideBarMargin=0;
 int Style::MinMaxWidWidth=0;
@@ -94,49 +100,32 @@ int Style::SideBarSpaceBetweenItem=0;
 
 void Style::initWidStyle()
 {
+
+    QVariantList list=getScreenGeometry();
+    if(list.count()==7)
+    {
+        primaryScreenX=list.at(0).toInt();
+        primaryScreenY=list.at(1).toInt();
+        primaryScreenWidth=list.at(2).toInt();
+        primaryScreenHeight=list.at(3).toInt();
+        panelSize=list.at(4).toInt();
+        panelPosition=list.at(5).toInt();
+    }
+
     QGSettings* setting=new QGSettings(QString("org.mate.interface").toLocal8Bit());
     QString value=setting->get("font-name").toString();
     QStringList valstr=value.split(" ");
     int fontSize=valstr.at(valstr.count()-1).toInt();
 
-    int position=0;
-    int panelSize=0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
+    if(panelPosition==0 || panelPosition==1)
     {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        if(gsetting->keys().contains(QString("panelposition")))
-            position=gsetting->get("panelposition").toInt();
-        else
-            position=0;
-        if(gsetting->keys().contains(QString("panelsize")))
-            panelSize=gsetting->get("panelsize").toInt();
-        else
-            panelSize=46;
+        widthavailable=primaryScreenWidth;
+        heightavailable=primaryScreenHeight-panelSize;
     }
-    else
+    if(panelPosition==2 || panelPosition==3)
     {
-        position=0;
-        panelSize=46;
-    }
-
-    int width = getScreenGeometry("width");
-    int height = getScreenGeometry("height");
-    if(width==0 || height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        width=rect.width();
-        height=rect.height();
-    }
-
-    if(position==0 || position==1)
-    {
-        widthavailable=width;
-        heightavailable=height-panelSize;
-    }
-    if(position==2 || position==3)
-    {
-        widthavailable=width-panelSize;
-        heightavailable=height;
+        widthavailable=primaryScreenWidth-panelSize;
+        heightavailable=primaryScreenHeight;
     }
 
     int len=0;
@@ -146,7 +135,7 @@ void Style::initWidStyle()
     else
         len=10;
 
-    if(width==800 && height==600)
+    if(primaryScreenWidth==800 && primaryScreenHeight==600)
     {
         minw=320;
         minh=500;

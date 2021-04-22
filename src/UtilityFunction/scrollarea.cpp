@@ -88,7 +88,6 @@ ScrollArea::ScrollArea()
     color.setAlphaF(0.25);
     p.setColor(QPalette::Active, QPalette::Button, color);
     this->verticalScrollBar()->setPalette(p);
-
 }
 
 void ScrollArea::enterEvent(QEvent *e)

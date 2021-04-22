@@ -33,7 +33,6 @@ public:
 
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
-    QSettings* setting=nullptr;
 
 Q_SIGNALS:
     /**

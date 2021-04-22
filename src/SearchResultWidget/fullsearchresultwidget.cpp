@@ -76,9 +76,7 @@ void FullSearchResultWidget::initUi()
 void FullSearchResultWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
-    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
-    g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
-    g_object_unref(desktopAppInfo);
+    execApp(desktopfp);
 }
 
 void FullSearchResultWidget::updateAppListView(QVector<QStringList> arg)
@@ -132,12 +130,7 @@ void FullSearchResultWidget::repaintWidget()
 
 void FullSearchResultWidget::moveScrollBar(int type)
 {
-    int height=getScreenGeometry("height");
-    if(height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        height=rect.height();
-    }
+    int height=Style::primaryScreenHeight;
     if(type==0)
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-height*100/1080);
     else

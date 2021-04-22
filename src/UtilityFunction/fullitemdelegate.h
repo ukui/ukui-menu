@@ -40,7 +40,6 @@ public:
 
 private:
     int module=0;
-    QSettings* setting=nullptr;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
 protected:

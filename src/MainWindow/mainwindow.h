@@ -61,7 +61,6 @@ private:
 
     bool m_isFullScreen=false;
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
-    QSettings *m_setting=nullptr;
 
     QFrame *m_line=nullptr;//Vertical dividing line
     QFrame *m_frame=nullptr;
@@ -99,27 +98,12 @@ public Q_SLOTS:
     void showDefaultWidget();
     void recvHideMainWindowSlot();//接收隐藏主窗口信号
     /**
-     * @brief Monitor screen resolution
-     * @param rect: Screen resolution
-     */
-    void monitorResolutionChange(QRect rect);
-    /**
-     * @brief Monitor primary screen changes
-     * @param screen: Primary screen
-     */
-    void primaryScreenChangedSlot(QScreen *screen);
-    /**
      * @brief Monitor taskbar key changes
      * @param key: Key
      */
     void panelChangedSlot(QString key);
     void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
     void animationValueFinishedSlot();
-
-    /**
-     * @brief Open the start menu by signaling
-     */
-    void recvStartMenuSlot();
 };
 
 #endif // MAINWINDOW_H

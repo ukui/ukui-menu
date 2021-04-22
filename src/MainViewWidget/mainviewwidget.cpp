@@ -20,10 +20,11 @@
 #include "src/Style/style.h"
 #include <QSvgRenderer>
 #include <QPainter>
-#include <libbamf/bamf-matcher.h>
 #include <syslog.h>
 #include <QDebug>
 #include <thread>
+#include <KWindowInfo>
+#include <KWindowSystem>
 
 MainViewWidget::MainViewWidget(QWidget *parent) :
     QWidget(parent)
@@ -115,16 +116,59 @@ void MainViewWidget::initUi()
     m_saveCurrentWidState=1;
 
     //监控应用进程开启
-//    bamf_matcher_get_default();
-    std::thread t(bamf_matcher_get_default);
-    t.detach();
-    QDBusConnection::sessionBus().connect("org.ayatana.bamf","/org/ayatana/bamf/matcher","org.ayatana.bamf.matcher",
-                                         QString("ViewOpened"),this,SLOT(ViewOpenedSlot(QDBusMessage)));
+    connect(KWindowSystem::self(),&KWindowSystem::windowAdded,[=](WId id)
+    {
+       KWindowInfo info(id,NET::WMPid);
+       int pid=info.pid();
+       QString desktopfp=getEnvOverriddenDesktopFile(pid);
+       if(!desktopfp.isEmpty())
+           ViewOpenedSlot(desktopfp);
+       else
+       {
+           //获取软件名(2种方式)
+           //法1
+           QStringList nameList;
+           KWindowInfo info(id,NET::WMName);
+           nameList.append(info.name());
+           //法2
+           QString path=QString("/proc/%1/status").arg(pid);
+           QFile file(path);
+           if(file.open(QIODevice::ReadOnly))
+           {
+               char buf[1024];
+               qint64 len=file.readLine(buf,sizeof(buf));
+               if(len!=-1)
+               {
+                   QString name=QString::fromLocal8Bit(buf).remove("Name:").remove("\t").remove("\n");
+                   nameList.append(name);
+               }
+           }
+
+           QVector<QStringList> appInfoVector=UkuiMenuInterface::appInfoVector;
+           Q_FOREACH(QStringList list , appInfoVector)
+           {
+               if(list.at(1).contains(nameList.at(0),Qt::CaseInsensitive) ||
+                       list.at(2).contains(nameList.at(0),Qt::CaseInsensitive) ||
+                       list.at(5).contains(nameList.at(0),Qt::CaseInsensitive))
+               {
+                   ViewOpenedSlot(list.at(0));
+                   break;
+               }
+               else if(nameList.size()==2 &&
+                       (
+                           list.at(1).contains(nameList.at(1),Qt::CaseInsensitive) ||
+                           list.at(2).contains(nameList.at(1),Qt::CaseInsensitive) ||
+                           list.at(5).contains(nameList.at(1),Qt::CaseInsensitive))
+                       )
+               {
+                   ViewOpenedSlot(list.at(0));
+                   break;
+               }
+           }
+       }
+    });
 
     //监控图标主题
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    m_setting=new QSettings(path,QSettings::IniFormat);
-
     if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit()))
     {
         m_gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
@@ -698,55 +742,20 @@ void MainViewWidget::hideWidget()
 /**
  * 进程开启监控槽函数
  */
-void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
+void MainViewWidget::ViewOpenedSlot(QString desktopfp)
 {
-    QString path=msg.arguments().at(0).value<QString>();
-    QString type=msg.arguments().at(1).value<QString>();
-    if(QString::compare(type,"application")==0)
+    qDebug()<<"open software:"<<desktopfp;
+    QVector<QString> desktopfpVec=UkuiMenuInterface::desktopfpVector;
+    if(desktopfpVec.contains(desktopfp))
     {
-        QDBusInterface ifaceapp("org.ayatana.bamf",path,
-                                "org.ayatana.bamf.application",QDBusConnection::sessionBus());
-        QDBusReply<QString> replyapp =ifaceapp.call("DesktopFile");
-        QString desktopfp=replyapp.value();
-//        qDebug()<<desktopfp;
-        QVector<QString> desktopfpVec=UkuiMenuInterface::desktopfpVector;
-        if(desktopfpVec.contains(desktopfp))
+        QFileInfo fileInfo(desktopfp);
+        QString desktopfn=fileInfo.fileName();
+
+        QString dateTimeKey;
+        dateTimeKey.clear();
+        if(!desktopfn.isEmpty())
         {
-            QFileInfo fileInfo(desktopfp);
-            QString desktopfn=fileInfo.fileName();
-
-            QString dateTimeKey;
-            dateTimeKey.clear();
-            if(!desktopfn.isEmpty())
-            {
-                m_setting->beginGroup("lockapplication");
-                bool ret=m_setting->contains(desktopfn);
-                m_setting->endGroup();
-                if(!ret)
-                {
-                    m_setting->beginGroup("application");
-                    m_setting->setValue(desktopfn,m_setting->value(desktopfn).toInt()+1);
-                    dateTimeKey=desktopfn;
-                    m_setting->sync();
-                    m_setting->endGroup();
-                }
-            }
-
-            if(!dateTimeKey.isEmpty())
-            {
-                QDateTime dt=QDateTime::currentDateTime();
-                int datetime=dt.toTime_t();
-                m_setting->beginGroup("datetime");
-                m_setting->setValue(dateTimeKey,datetime);
-                m_setting->sync();
-                m_setting->endGroup();
-            }
-
-            m_setting->beginGroup("recentapp");
-            m_setting->remove(desktopfn);
-            m_setting->sync();
-            m_setting->endGroup();
-
+            updateDataBaseTableTimes(desktopfn);
         }
     }
 }
@@ -756,7 +765,6 @@ void MainViewWidget::ViewOpenedSlot(QDBusMessage msg)
  */
 void MainViewWidget::directoryChangedSlot(const QString &path)
 {
-    syslog(LOG_LOCAL0 | LOG_DEBUG ,"Directory changed: %s",path.toLocal8Bit().data());
     m_directoryChangedThread->start();
 }
 

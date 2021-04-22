@@ -6,5 +6,7 @@
     </method>
     <method name="ReloadSecurityConfig">
     </method>
+    <method name="WinKeyResponse">
+    </method>
   </interface>
 </node>

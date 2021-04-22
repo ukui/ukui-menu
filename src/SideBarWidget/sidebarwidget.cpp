@@ -68,7 +68,10 @@ void SideBarWidget::addSidebarBtn()
     m_mainWidgetLayout->setContentsMargins(0,0,0,6);
     m_mainWidgetLayout->setSpacing(10);
     m_mainWidget->setLayout(m_mainWidgetLayout);
-
+//    m_mainWidget->setAutoFillBackground(true);
+//    QPalette palette;
+//    palette.setBrush(QPalette::Background,Qt::red);
+//    m_mainWidget->setPalette(palette);
     //放大缩小按钮界面
     m_minMaxWidget=new QWidget;
     m_minMaxLayout=new QHBoxLayout;
@@ -243,12 +246,20 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
 
     btnLayout->setSpacing(0);
     btnLayout->addWidget(labelicon);
+//    btnLayout->addStretch();
+
+    QLabel* textLabel=new QLabel;
+    textLabel->setText(text);
+    btnLayout->addWidget(textLabel);
     btnLayout->addStretch();
+
     btn->setLayout(btnLayout);
     btn->setFocusPolicy(Qt::NoFocus);
 
     m_buttonList.append(btn);
     m_textList.append(text);
+
+    m_labelList.append(textLabel);
 }
 
 QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
@@ -358,14 +369,7 @@ void SideBarWidget::personalBtnClickedSlot()
 void SideBarWidget::controlBtnClickedSlot()
 {
     Q_EMIT sendHideMainWindowSignal();
-    QString execpath=m_ukuiMenuInterface->getAppExec(QString("/usr/share/applications/ukui-control-center.desktop"));
-    //移除启动参数%u或者%U
-    if(execpath.contains("%"))
-    {
-        int index=execpath.indexOf(QString("%").at(0));
-        execpath.remove(index-1,3);
-    }
-    QProcess::startDetached(execpath);
+    execApp("/usr/share/applications/ukui-control-center.desktop");
 
 }
 
@@ -410,6 +414,7 @@ void SideBarWidget::loadMinSidebar()
     m_isFullScreen=false;
     setMaxBtn();
 
+    m_animation->stop();
     this->setFixedSize(Style::defaultSideBarWidWidth,Style::minh);
     m_mainWidget->setGeometry(QRect(0,0,this->width(),this->height()));
     m_mainWidget->show();
@@ -461,18 +466,20 @@ void SideBarWidget::setMinSidebarBtn(QPushButton* btn)
         btn->layout()->setContentsMargins(9,0,17,0);
     btn->layout()->setSpacing(0);
 
+    m_labelList.at(m_buttonList.indexOf(btn))->setVisible(false);
+
     //移除按钮文本
-    QLayoutItem *child;
-    if((child = btn->layout()->takeAt(1)) != nullptr) {
-        QWidget* childwid=child->widget();
-        if(childwid!=nullptr)
-        {
-            btn->layout()->removeWidget(childwid);
-            childwid->setParent(nullptr);
-            delete childwid;
-            delete child;
-        }
-    }
+//    QLayoutItem *child;
+//    if((child = btn->layout()->takeAt(1)) != nullptr) {
+//        QWidget* childwid=child->widget();
+//        if(childwid!=nullptr)
+//        {
+//            btn->layout()->removeWidget(childwid);
+//            childwid->setParent(nullptr);
+//            delete childwid;
+//            delete child;
+//        }
+//    }
 }
 
 /**
@@ -539,21 +546,24 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
         layout->setSpacing(10);
     }
 
+     QLabel* labeltext=m_labelList.at(m_buttonList.indexOf(btn));
+     labeltext->setVisible(true);
+
     //修复修改字体大小时获取文本Label大小无效
     //移除按钮文本
-    QLayoutItem *child;
-    if((child = btn->layout()->takeAt(1)) != nullptr) {
-        QWidget* childwid=child->widget();
-        if(childwid!=nullptr)
-        {
-            btn->layout()->removeWidget(childwid);
-            childwid->setParent(nullptr);
-            delete childwid;
-            delete child;
-        }
-    }
+//    QLayoutItem *child;
+//    if((child = btn->layout()->takeAt(1)) != nullptr) {
+//        QWidget* childwid=child->widget();
+//        if(childwid!=nullptr)
+//        {
+//            btn->layout()->removeWidget(childwid);
+//            childwid->setParent(nullptr);
+//            delete childwid;
+//            delete child;
+//        }
+//    }
     //添加文本
-    QLabel* labeltext=new QLabel;
+//    QLabel* labeltext=new QLabel;
     if(m_buttonList.indexOf(btn)<=2)
     {
         labeltext->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -579,7 +589,7 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
     QPalette pe = labeltext->palette();
     pe.setColor(QPalette::ButtonText,QColor(Qt::white));
     labeltext->setPalette(pe);
-    btn->layout()->addWidget(labeltext);
+//    btn->layout()->addWidget(labeltext);
 }
 
 void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
@@ -722,6 +732,7 @@ void SideBarWidget::changeIconColor(bool isFullScreen)
 
 void SideBarWidget::enterAnimation()
 {
+    m_animation->stop();
     m_animation->setDuration(200);//动画总时间
     m_animation->setStartValue(QRect(this->width(),0,
                                     0,this->height()));

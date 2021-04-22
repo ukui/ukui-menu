@@ -23,9 +23,6 @@
 RightClickMenu::RightClickMenu(QWidget *parent):
     QWidget(parent)
 {
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    m_setting=new QSettings(path,QSettings::IniFormat);
-
     m_cmdProc=new QProcess;
     connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
 
@@ -52,7 +49,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
 RightClickMenu::~RightClickMenu()
 {
     delete m_cmdProc;
-    delete m_setting;
+//    delete m_setting;
     delete m_ukuiMenuInterface;
 
 }
@@ -81,22 +78,7 @@ void RightClickMenu::fixToAllActionTriggerSlot()
     m_actionNumber=1;
     QFileInfo fileInfo(m_desktopfp);
     QString desktopfn=fileInfo.fileName();
-    m_setting->beginGroup("lockapplication");
-    m_setting->setValue(desktopfn,m_setting->allKeys().size());
-    m_setting->sync();
-    m_setting->endGroup();
-    m_setting->beginGroup("application");
-    m_setting->remove(desktopfn);
-    m_setting->sync();
-    m_setting->endGroup();
-    m_setting->beginGroup("datetime");
-    m_setting->remove(desktopfn);
-    m_setting->sync();
-    m_setting->endGroup();
-    m_setting->beginGroup("recentapp");
-    m_setting->remove(desktopfn);
-    m_setting->sync();
-    m_setting->endGroup();
+    updateDataBaseTableType(desktopfn,1);
 }
 
 void RightClickMenu::unfixedFromAllActionTriggerSlot()
@@ -104,25 +86,7 @@ void RightClickMenu::unfixedFromAllActionTriggerSlot()
     m_actionNumber=2;
     QFileInfo fileInfo(m_desktopfp);
     QString desktopfn=fileInfo.fileName();
-    m_setting->beginGroup("lockapplication");
-    Q_FOREACH(QString desktop,m_setting->allKeys())
-    {
-        if(m_setting->value(desktop).toInt() > m_setting->value(desktopfn).toInt())
-        {
-            m_setting->setValue(desktop,m_setting->value(desktop).toInt()-1);
-        }
-    }
-    m_setting->remove(desktopfn);
-    m_setting->sync();
-    m_setting->endGroup();
-    m_setting->beginGroup("application");
-    m_setting->remove(desktopfn);
-    m_setting->sync();
-    m_setting->endGroup();
-    m_setting->beginGroup("datetime");
-    m_setting->remove(desktopfn);
-    m_setting->sync();
-    m_setting->endGroup();
+    updateDataBaseTableType(desktopfn,0);
 }
 
 void RightClickMenu::fixToTaskbarActionTriggerSlot()
@@ -178,6 +142,7 @@ void RightClickMenu::onReadOutput()
 {
     QString packagestr=QString::fromLocal8Bit(m_cmdProc->readAllStandardOutput().data());
     QString packageName=packagestr.split(":").at(0);
+//    qDebug()<<packagestr<<packageName;
     char command[100];
     sprintf(command,"kylin-installer -remove %s",packageName.toLocal8Bit().data());
     bool ret=QProcess::startDetached(command);
@@ -239,16 +204,14 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
     this->m_desktopfp=desktopfp;
     QMenu menu;
     //添加菜单项，指定图标、名称、响应函数
-    m_setting->beginGroup("lockapplication");
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
-    if(!m_setting->contains(desktopfn))
+    if(!checkIfLocked(desktopfn))
         menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg",0)),tr("Pin to all"),
                        this,SLOT(fixToAllActionTriggerSlot()));
     else
         menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/unfixed.svg",0)),tr("Unpin from all"),
                        this,SLOT(unfixedFromAllActionTriggerSlot()));
-    m_setting->endGroup();
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
                          "com.ukui.panel.desktop",
@@ -264,6 +227,11 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
 
     menu.addAction(tr("Add to desktop shortcuts"),
                    this,SLOT(addToDesktopActionTriggerSlot()));
+    //检查桌面快捷方式是否存在
+    QString desktopPath=QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QString path=QString(desktopPath+"/"+QFileInfo(m_desktopfp).fileName());
+    if(QFile(path).exists())
+        menu.actions().at(2)->setEnabled(false);//存在时禁用
     menu.addSeparator();
 
     if(!m_ukuiMenuInterface->getAppCategories(desktopfp).contains("Android") &&

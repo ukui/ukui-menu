@@ -55,7 +55,6 @@ void FunctionWidget::initUi()
     m_leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
     connect(m_leaveAnimation,&QPropertyAnimation::finished,this,&FunctionWidget::animationFinishedSLot);
     connect(m_enterAnimation,&QPropertyAnimation::finished,this,&FunctionWidget::animationFinishedSLot);
-
 }
 
 /**
@@ -184,9 +183,7 @@ void FunctionWidget::recvItemClickedSlot(QStringList arg)
 void FunctionWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
-    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
-    g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
-    g_object_unref(desktopAppInfo);
+    execApp(desktopfp);
 }
 
 /**
@@ -203,14 +200,15 @@ void FunctionWidget::updateAppListView()
 void FunctionWidget::appClassificationBtnClickedSlot()
 {
     m_leaveAnimation->setStartValue(QRect(6,0,this->width()-6,this->height()-6));
-    m_leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
+//    m_leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
+    m_leaveAnimation->setEndValue(QRect(6,0,this->width()-6,this->height()-6));
     m_enterAnimation->setStartValue(QRect(-40,-40,this->width()+80,this->height()+80));
     m_enterAnimation->setEndValue(QRect((this->width()-Style::LeftBtnWidth*2-5)/2,
                                       (this->height()-Style::LeftBtnHeight*6-25)/2,
                                       Style::LeftBtnWidth*2+5,
                                       Style::LeftBtnHeight*6+25));
     m_leaveAnimation->setDuration(10);
-    m_enterAnimation->setDuration(80);
+    m_enterAnimation->setDuration(100);
 
     //加载FunctionButtonWidget界面
     Q_EMIT sendClassificationbtnList();
@@ -238,9 +236,10 @@ void FunctionWidget::recvFunctionBtnSignal(QString btnname)
                                         Style::LeftBtnWidth*2+5,
                                         Style::LeftBtnHeight*6+25));
     m_leaveAnimation->setEndValue(QRect(-40,-40,this->width()+80,this->height()+80));
-    m_enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
+//    m_enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
+    m_enterAnimation->setStartValue(QRect(6,0,this->width()-6,this->height()-6));
     m_enterAnimation->setEndValue(QRect(6,0,this->width()-6,this->height()-6));
-    m_leaveAnimation->setDuration(80);
+    m_leaveAnimation->setDuration(100);
     m_enterAnimation->setDuration(10);
 
     m_leaveAnimation->setTargetObject(m_functionBtnWid);

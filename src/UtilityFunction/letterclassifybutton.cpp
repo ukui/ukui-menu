@@ -27,9 +27,13 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
     m_fullscreen(fullscreen)
 {
     this->setFlat(true);
-    QFont font;
-    font.setPixelSize(Style::LeftLetterFontSize);
-    this->setFont(font);
+    if(m_fullscreen)
+    {
+        QFont font;
+        font.setPixelSize(Style::LeftLetterFontSize);
+        this->setFont(font);
+    }
+
     this->setText(letter);
     this->setCheckable(true);
     connect(this,&LetterClassifyButton::toggled,this,&LetterClassifyButton::reactToToggle);

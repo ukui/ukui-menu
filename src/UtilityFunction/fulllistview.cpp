@@ -29,9 +29,6 @@ FullListView::FullListView(QWidget *parent, int module):
 
     pUkuiMenuInterface=new UkuiMenuInterface;
     menu=new RightClickMenu;
-
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
 }
 
 FullListView::~FullListView()
@@ -94,12 +91,6 @@ void FullListView::onClicked(QModelIndex index)
      if(var.isValid())
      {
          QString desktopfp=var.value<QString>();
-         QFileInfo fileInfo(desktopfp);
-         QString desktopfn=fileInfo.fileName();
-         setting->beginGroup("recentapp");
-         setting->remove(desktopfn);
-         setting->sync();
-         setting->endGroup();
          Q_EMIT sendItemClickedSignal(desktopfp);
 
      }

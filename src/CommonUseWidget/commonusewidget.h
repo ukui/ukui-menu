@@ -35,6 +35,7 @@
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "src/UtilityFunction/listview.h"
 #include "src/UtilityFunction/itemdelegate.h"
+#include "src/UtilityFunction/utility.h"
 
 class CommonUseWidget : public QWidget
 {

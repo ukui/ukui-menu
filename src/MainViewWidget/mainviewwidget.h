@@ -119,7 +119,6 @@ private:
 
     QFileSystemWatcher *m_fileWatcher=nullptr;//Monitor desktop folder status
 
-    QSettings *m_setting=nullptr;
     QGSettings *m_gsetting=nullptr;
 
 protected:
@@ -180,9 +179,8 @@ public Q_SLOTS:
     void animationFinishedSlot();
     /**
      * @brief Monitor application startup
-     * @param msg: Application information
      */
-    void ViewOpenedSlot(QDBusMessage msg);
+    void ViewOpenedSlot(QString desktopfp);
     /**
      * @brief Monitor desktop file directory changes
      */

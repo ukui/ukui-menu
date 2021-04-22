@@ -24,12 +24,12 @@
 #include <QStringList>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <unistd.h>
 #include "ukuichineseletter.h"
+#include "src/UtilityFunction/utility.h"
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
 }
 
 QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
@@ -76,10 +76,16 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
                 i++;
                 continue;
             }
-            keyfile=g_key_file_new();
 
             QByteArray fpbyte=filePathStr.toLocal8Bit();
             char* filepath=fpbyte.data();
+            if(0!=access(filepath,R_OK))//判断文件是否可读
+            {
+                i++;
+                continue;
+            }
+
+            keyfile=g_key_file_new();
             if(!g_key_file_load_from_file(keyfile,filepath,flags,error))
                 return;
             char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","NoDisplay", nullptr, nullptr);
@@ -116,13 +122,6 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
                     i++;
                     continue;
                 }
-            }
-            //过滤应用名为空的情况
-            if(getAppName(filePathStr).isEmpty())
-            {
-                g_key_file_free(keyfile);
-                i++;
-                continue;
             }
 
             g_key_file_free(keyfile);
@@ -279,27 +278,6 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
                 appInfoList.append(QString::number(10));
 
             appInfoVector.append(appInfoList);
-        }
-        else
-        {
-            QFileInfo fileInfo(desktopfp);
-            QString desktopfn=fileInfo.fileName();
-            setting->beginGroup("lockapplication");
-            setting->remove(desktopfn);
-            setting->sync();
-            setting->endGroup();
-            setting->beginGroup("application");
-            setting->remove(desktopfn);
-            setting->sync();
-            setting->endGroup();
-            setting->beginGroup("datetime");
-            setting->remove(desktopfn);
-            setting->sync();
-            setting->endGroup();
-            setting->beginGroup("recentapp");
-            setting->remove(desktopfn);
-            setting->sync();
-            setting->endGroup();
         }
     }
 
@@ -458,69 +436,95 @@ QVector<QString> UkuiMenuInterface::getAllClassification()
 
 QVector<QString> UkuiMenuInterface::getCommonUseApp()
 {
-    QDateTime dt=QDateTime::currentDateTime();
-    int currentDateTime=dt.toTime_t();
-    int nDaySec=24*60*60;
-    setting->beginGroup("datetime");
-    QStringList dateTimeKeys=setting->allKeys();
-    QStringList timeOutKeys;
-    timeOutKeys.clear();
-    for(int i=0;i<dateTimeKeys.count();i++)
-    {
-        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 4)
-        {
-            timeOutKeys.append(dateTimeKeys.at(i));
-        }
+//    QDateTime dt=QDateTime::currentDateTime();
+//    int currentDateTime=dt.toTime_t();
+//    int nDaySec=24*60*60;
+//    setting->beginGroup("datetime");
+//    QStringList dateTimeKeys=setting->allKeys();
+//    QStringList timeOutKeys;
+//    timeOutKeys.clear();
+//    for(int i=0;i<dateTimeKeys.count();i++)
+//    {
+//        if((currentDateTime-setting->value(dateTimeKeys.at(i)).toInt())/nDaySec >= 4)
+//        {
+//            timeOutKeys.append(dateTimeKeys.at(i));
+//        }
 
-    }
-    setting->endGroup();
-    for(int i=0;i<timeOutKeys.count();i++)
-    {
-        setting->beginGroup("application");
-        setting->remove(timeOutKeys.at(i));
-        setting->sync();
-        setting->endGroup();
-        setting->beginGroup("datetime");
-        setting->remove(timeOutKeys.at(i));
-        setting->sync();
-        setting->endGroup();
-    }
+//    }
+//    setting->endGroup();
+//    for(int i=0;i<timeOutKeys.count();i++)
+//    {
+//        setting->beginGroup("application");
+//        setting->remove(timeOutKeys.at(i));
+//        setting->sync();
+//        setting->endGroup();
+//        setting->beginGroup("datetime");
+//        setting->remove(timeOutKeys.at(i));
+//        setting->sync();
+//        setting->endGroup();
+//    }
 
-    setting->beginGroup("lockapplication");
-    QStringList lockdesktopfnList=setting->allKeys();
-    for(int i=0;i<lockdesktopfnList.count()-1;i++)
-        for(int j=0;j<lockdesktopfnList.count()-1-i;j++)
-        {
-            int value_1=setting->value(lockdesktopfnList.at(j)).toInt();
-            int value_2=setting->value(lockdesktopfnList.at(j+1)).toInt();
-            if(value_1 > value_2)
-            {
-                QString tmp=lockdesktopfnList.at(j);
-                lockdesktopfnList.replace(j,lockdesktopfnList.at(j+1));
-                lockdesktopfnList.replace(j+1,tmp);
+//    setting->beginGroup("lockapplication");
+//    QStringList lockdesktopfnList=setting->allKeys();
+//    for(int i=0;i<lockdesktopfnList.count()-1;i++)
+//        for(int j=0;j<lockdesktopfnList.count()-1-i;j++)
+//        {
+//            int value_1=setting->value(lockdesktopfnList.at(j)).toInt();
+//            int value_2=setting->value(lockdesktopfnList.at(j+1)).toInt();
+//            if(value_1 > value_2)
+//            {
+//                QString tmp=lockdesktopfnList.at(j);
+//                lockdesktopfnList.replace(j,lockdesktopfnList.at(j+1));
+//                lockdesktopfnList.replace(j+1,tmp);
 
-            }
-        }
-    setting->endGroup();
-    setting->beginGroup("application");
-    QStringList desktopfnList=setting->allKeys();
-    for(int i=0;i<desktopfnList.count()-1;i++)
-        for(int j=0;j<desktopfnList.count()-1-i;j++)
-        {
-            int value_1=setting->value(desktopfnList.at(j)).toInt();
-            int value_2=setting->value(desktopfnList.at(j+1)).toInt();
-            if(value_1 < value_2)
-            {
-                QString tmp=desktopfnList.at(j);
-                desktopfnList.replace(j,desktopfnList.at(j+1));
-                desktopfnList.replace(j+1,tmp);
+//            }
+//        }
+//    setting->endGroup();
+//    setting->beginGroup("application");
+//    QStringList desktopfnList=setting->allKeys();
+//    for(int i=0;i<desktopfnList.count()-1;i++)
+//        for(int j=0;j<desktopfnList.count()-1-i;j++)
+//        {
+//            int value_1=setting->value(desktopfnList.at(j)).toInt();
+//            int value_2=setting->value(desktopfnList.at(j+1)).toInt();
+//            if(value_1 < value_2)
+//            {
+//                QString tmp=desktopfnList.at(j);
+//                desktopfnList.replace(j,desktopfnList.at(j+1));
+//                desktopfnList.replace(j+1,tmp);
 
-            }
-        }
-    setting->endGroup();
+//            }
+//        }
+//    setting->endGroup();
+
+//    QVector<QString> data;
+//    Q_FOREACH(QString desktopfn,lockdesktopfnList)
+//    {
+//        QString desktopfp;
+//        if(androidDesktopfnList.contains(desktopfn))
+//            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+//        else
+//            desktopfp=QString("/usr/share/applications/"+desktopfn);
+//        QFileInfo fileInfo(desktopfp);
+//        if(!fileInfo.isFile()|| !desktopfpVector.contains(desktopfp))
+//            continue;
+//        data.append(desktopfp);
+//    }
+//    Q_FOREACH(QString desktopfn,desktopfnList)
+//    {
+//        QString desktopfp;
+//        if(androidDesktopfnList.contains(desktopfn))
+//            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+//        else
+//            desktopfp=QString("/usr/share/applications/"+desktopfn);
+//        QFileInfo fileInfo(desktopfp);
+//        if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp))
+//            continue;
+//        data.append(desktopfp);
+//    }
 
     QVector<QString> data;
-    Q_FOREACH(QString desktopfn,lockdesktopfnList)
+    Q_FOREACH(QString desktopfn, getLockAppList())
     {
         QString desktopfp;
         if(androidDesktopfnList.contains(desktopfn))
@@ -528,11 +532,12 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
         else
             desktopfp=QString("/usr/share/applications/"+desktopfn);
         QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.isFile()|| !desktopfpVector.contains(desktopfp))
+        if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp))
             continue;
         data.append(desktopfp);
     }
-    Q_FOREACH(QString desktopfn,desktopfnList)
+
+    Q_FOREACH(QString desktopfn, getUnlockAllList())
     {
         QString desktopfp;
         if(androidDesktopfnList.contains(desktopfn))
@@ -857,6 +862,25 @@ QString UkuiMenuInterface::getAppNameInitial(QString desktopfp)
 QString UkuiMenuInterface::getAppNamePinyin(QString appname)
 {
     return UkuiChineseLetter::getPinyins(appname);
+}
+
+bool UkuiMenuInterface::checkKreApp(QString desktopfp)
+{
+    GError** error=nullptr;
+    GKeyFileFlags flags=G_KEY_FILE_NONE;
+    GKeyFile* keyfile=g_key_file_new ();
+
+    QByteArray fpbyte=desktopfp.toLocal8Bit();
+    char* filepath=fpbyte.data();
+    g_key_file_load_from_file(keyfile,filepath,flags,error);
+
+    char* value=g_key_file_get_locale_string(keyfile,"Desktop Entry","environment", nullptr, nullptr);
+    g_key_file_free(keyfile);
+    if(!value)
+        return false;
+    else if(QString::compare(QString::fromLocal8Bit(value),"kre-environment")==0)
+        return true;
+    return false;
 }
 
 //获取指定类型应用列表

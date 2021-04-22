@@ -19,13 +19,13 @@
 #include "itemdelegate.h"
 #include <QPushButton>
 #include <syslog.h>
+#include <QToolTip>
+#include "src/UtilityFunction/utility.h"
 
 ItemDelegate::ItemDelegate(QObject* parent, int module):
     QStyledItemDelegate(parent)
 {
     this->module=module;
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
     pUkuiMenuInterface=new UkuiMenuInterface;
 
 }
@@ -41,21 +41,10 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     {
 //        QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
-//        QStringList strlist1=index.model()->data(index,Qt::DisplayRole).toStringList();
-//        if(strlist1.at(1).toInt()==1)
-//        {
-            rect.setX(option.rect.x());
-            rect.setY(option.rect.y());
-            rect.setWidth(option.rect.width()-10);
-            rect.setHeight(option.rect.height()-2);
-//        }
-//        else
-//        {
-//            rect.setX(option.rect.x());
-//            rect.setY(option.rect.y()+2);
-//            rect.setWidth(option.rect.width()-6);
-//            rect.setHeight(option.rect.height()-6);
-//        }
+        rect.setX(option.rect.x());
+        rect.setY(option.rect.y());
+        rect.setWidth(option.rect.width());
+        rect.setHeight(option.rect.height()-2);
 
         //QPainterPath画圆角矩形
         const qreal radius = 4;
@@ -120,21 +109,33 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 painter->save();
                 icon.paint(painter,iconRect,Qt::AlignLeft);
                 QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
+                QFontMetrics fm=painter->fontMetrics();
+                QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-62,Qt::TextShowMnemonic);
                 painter->drawText(QRect(iconRect.right()+15,rect.y(),
-                                        rect.width()-62,rect.height()),Qt::AlignVCenter,appname);
+                                        rect.width()-62,rect.height()),Qt::AlignVCenter,appnameElidedText);
                 painter->restore();
                 painter->save();
-                setting->beginGroup("recentapp");
                 QFileInfo fileInfo(strlist.at(0));
                 QString desktopfn=fileInfo.fileName();
-                if(setting->contains(desktopfn))
+                if(checkIfRecent(desktopfn))
                 {
                     painter->setPen(QPen(Qt::NoPen));
                     painter->setBrush(QColor("#4d94ff"));
                     painter->drawEllipse(QPoint(rect.topRight().x()-22,rect.y()+(rect.height()-8)/2+4),4,4);
                 }
-                setting->endGroup();
                 painter->restore();
+
+                if(option.state & QStyle::State_MouseOver)
+                {
+                    int len=fm.boundingRect(appname).width();
+                    if(len>rect.width()-62)
+                    {
+                        QToolTip::showText(QCursor::pos(),appname);
+                    }
+                    else {
+                        QToolTip::hideText();
+                    }
+                }
             }
             else
             {
@@ -186,33 +187,41 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
             QFileInfo fileInfo(strlist.at(0));
             QString desktopfn=fileInfo.fileName();
-            bool is_locked=false;
-            setting->beginGroup("lockapplication");
-            if(setting->contains(desktopfn))
+            if(checkIfLocked(desktopfn))
             {
-                is_locked=true;
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
                 icon.paint(painter,QRect(rect.topRight().x()-22,rect.y()+(rect.height()-16)/2,16,16));
             }
-            setting->endGroup();
             painter->setOpacity(1);
             painter->save();
-            setting->beginGroup("recentapp");
-            if(setting->contains(desktopfn) && !is_locked)
+            if(checkIfRecent(desktopfn) && !checkIfLocked(desktopfn))
             {
                 painter->setPen(QPen(Qt::NoPen));
                 painter->setBrush(QColor("#4d94ff"));
                 painter->drawEllipse(QPoint(rect.topRight().x()-22,rect.y()+(rect.height()-8)/2+4),4,4);
             }
-            setting->endGroup();
             painter->restore();
             painter->save();
             painter->setPen(QPen(option.palette.text().color()));
             painter->setBrush(Qt::NoBrush);
             painter->setOpacity(1);
+            QFontMetrics fm=painter->fontMetrics();
+            QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-62,Qt::TextShowMnemonic);
             painter->drawText(QRect(iconRect.right()+15,rect.y(),
-                                    rect.width()-62,rect.height()),Qt::AlignVCenter,appname);
+                                    rect.width()-62,rect.height()),Qt::AlignVCenter,appnameElidedText);
             painter->restore();
+
+            if(option.state & QStyle::State_MouseOver)
+            {
+                int len=fm.boundingRect(appname).width();
+                if(len>rect.width()-62)
+                {
+                    QToolTip::showText(QCursor::pos(),appname);
+                }
+                else {
+                    QToolTip::hideText();
+                }
+            }
         }
     }
 

@@ -30,9 +30,6 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
 
     pUkuiMenuInterface=new UkuiMenuInterface;
     menu=new RightClickMenu;
-
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
 }
 ListView::~ListView()
 {
@@ -96,17 +93,6 @@ void ListView::onClicked(QModelIndex index)
      QVariant var = listmodel->data(index, Qt::DisplayRole);
      if(var.isValid())
      {
-         QString valstr=var.value<QStringList>().at(1);
-         if(valstr.toInt()==1)
-         {
-             QString desktopfp=var.value<QStringList>().at(0);
-             QFileInfo fileInfo(desktopfp);
-             QString desktopfn=fileInfo.fileName();
-             setting->beginGroup("recentapp");
-             setting->remove(desktopfn);
-             setting->sync();
-             setting->endGroup();
-         }
          Q_EMIT sendItemClickedSignal(var.value<QStringList>());
      }
 }
@@ -185,6 +171,7 @@ void ListView::paintEvent(QPaintEvent *e)
     //滚动条
     QPalette p=this->verticalScrollBar()->palette();
     QColor color(255, 255, 255);
+//    QColor color=p.color(QPalette::Active,QPalette::Button);
     color.setAlphaF(0.25);
     p.setColor(QPalette::Active,QPalette::Button,color);
     this->verticalScrollBar()->setPalette(p);

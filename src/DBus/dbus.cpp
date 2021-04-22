@@ -17,3 +17,8 @@ QString DBus::GetSecurityConfigPath()
     QString path=QDir::homePath()+"/.config/ukui-menu-security-config.json";
     return path;
 }
+
+void DBus::WinKeyResponse()
+{
+    Q_EMIT winKeyResponseSignal();
+}

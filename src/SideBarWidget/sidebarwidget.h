@@ -72,6 +72,7 @@ private:
 
     QButtonGroup *m_btnGroup=nullptr;
     QList<QAbstractButton*> m_buttonList;
+    QList<QLabel*> m_labelList;
     QStringList m_textList;
     QPushButton *m_allBtn=nullptr;
     QPushButton *m_letterBtn=nullptr;

@@ -20,6 +20,11 @@
 #define UTILITY_H
 
 #include <QtCore>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <gio/gdesktopappinfo.h>
+#include "src/Interface/ukuimenuinterface.h"
 
 const QPixmap loadSvg(const QString &fileName, const int size);
 
@@ -32,8 +37,24 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
 //调试日志
 void debugLog(QString strMsg);
 
-int getScreenGeometry(QString methodName);
+QVariantList getScreenGeometry();
 double getTransparency();
+QString getEnvOverriddenDesktopFile(int pid);
+//数据库操作
+void openDataBase(QString connectionName);
+void closeDataBase(QString connectionName);
+void initDatabase();
+bool updateDataBaseTableTimes(QString desktopfn);//更新打开次数
+bool updateDataBaseTableType(QString desktopfn, int type);//更新是否锁定
+bool updateDataBaseTableRecent(QString desktopfn);//更新最近添加
+bool checkIfLocked(QString desktopfn);//检查是否被锁定
+bool checkIfRecent(QString desktopfn);//检查是否最近安装
+QStringList getLockAppList();//获取被锁定应用
+QStringList getUnlockAllList();//获取未被锁定应用
+void cleanTimeoutApp();//清理超时应用
+bool deleteAppRecord(QString desktopfn);//删除应用记录
 
+//启动应用
+void execApp(QString desktopfp);
 
 #endif // UTILITY_H

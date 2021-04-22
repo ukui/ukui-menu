@@ -19,13 +19,11 @@
 #include "directorychangedthread.h"
 #include <syslog.h>
 #include <QIcon>
+#include "src/UtilityFunction/utility.h"
 
 DirectoryChangedThread::DirectoryChangedThread()
 {
     m_ukuiMenuInterface=new UkuiMenuInterface;
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
-
 }
 
 DirectoryChangedThread::~DirectoryChangedThread()
@@ -35,32 +33,22 @@ DirectoryChangedThread::~DirectoryChangedThread()
 
 void DirectoryChangedThread::run()
 {
+    closeDataBase("DirectoryChangedThread");
+    openDataBase("DirectoryChangedThread");
     QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
     if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
     {
-        setting->beginGroup("recentapp");
         for(int i=0;i<desktopfpList.count();i++)
         {
             if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i)))
             {
-                //获取当前时间戳
-                QDateTime dt=QDateTime::currentDateTime();
-                int datetime=dt.toTime_t();
                 QFileInfo fileInfo(desktopfpList.at(i));
                 QString desktopfn=fileInfo.fileName();
-                setting->setValue(desktopfn,datetime);
-                setting->sync();
-
-                QString iconstr=m_ukuiMenuInterface->getAppIcon(desktopfpList.at(i));
-                syslog(LOG_LOCAL0 | LOG_DEBUG ,"%s",iconstr.toLocal8Bit().data());
-                syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件安装desktop文件名：%s",desktopfn.toLocal8Bit().data());
-                Q_FOREACH(QString path,QIcon::themeSearchPaths())
-                    syslog(LOG_LOCAL0 | LOG_DEBUG ,"%s",path.toLocal8Bit().data());
+                updateDataBaseTableRecent(desktopfn);
                 break;
             }
 
         }
-        setting->endGroup();
     }
     else//软件卸载
     {
@@ -71,23 +59,7 @@ void DirectoryChangedThread::run()
                 QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
                 QFileInfo fileInfo(desktopfp);
                 QString desktopfn=fileInfo.fileName();
-                setting->beginGroup("lockapplication");
-                setting->remove(desktopfn);
-                setting->sync();
-                setting->endGroup();
-                setting->beginGroup("application");
-                setting->remove(desktopfn);
-                setting->sync();
-                setting->endGroup();
-                setting->beginGroup("datetime");
-                setting->remove(desktopfn);
-                setting->sync();
-                setting->endGroup();
-                setting->beginGroup("recentapp");
-                setting->remove(desktopfn);
-                setting->sync();
-                setting->endGroup();
-                syslog(LOG_LOCAL0 | LOG_DEBUG ,"软件卸载desktop文件名：%s",desktopfn.toLocal8Bit().data());
+                deleteAppRecord(desktopfn);
                 break;
             }
         }

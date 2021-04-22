@@ -20,6 +20,7 @@
 #include "src/Style/style.h"
 #include <QDebug>
 #include <QHeaderView>
+#include "src/UtilityFunction/utility.h"
 
 SearchResultWidget::SearchResultWidget(QWidget *parent) :
     QWidget(parent)
@@ -58,9 +59,7 @@ void SearchResultWidget::execApplication(QStringList arg)
 {
     Q_EMIT sendHideMainWindowSignal();
     QString desktopfp=arg.at(0);
-    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
-    g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
-    g_object_unref(desktopAppInfo);
+    execApp(desktopfp);
 }
 
 void SearchResultWidget::updateAppListView(QVector<QStringList> arg)

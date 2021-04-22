@@ -88,6 +88,13 @@ class Style
 public:
     Style();
     static void initWidStyle();
+
+    static int primaryScreenX;
+    static int primaryScreenY;
+    static int primaryScreenWidth;
+    static int primaryScreenHeight;
+    static int panelPosition;
+    static int panelSize;
     //默认窗口
     static int minw;
     static int minh;

@@ -28,6 +28,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <syslog.h>
 #include "src/UtilityFunction/itemdelegate.h"
+#include "src/UtilityFunction/utility.h"
 
 LetterWidget::LetterWidget(QWidget *parent) :
     QWidget(parent)
@@ -126,14 +127,7 @@ void LetterWidget::recvItemClickedSlot(QStringList arg)
 void LetterWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
-    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
-    bool ret=g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
-    g_object_unref(desktopAppInfo);
-    syslog(LOG_LOCAL0 | LOG_DEBUG ,"执行应用程序 %s:%d:%s:%s",
-           desktopfp.toLocal8Bit().data(),
-           ret,
-           m_ukuiMenuInterface->getAppExec(desktopfp).toLocal8Bit().data(),
-           m_ukuiMenuInterface->getAppIcon(desktopfp).toLocal8Bit().data());
+    execApp(desktopfp);
 }
 
 /**
@@ -176,17 +170,17 @@ void LetterWidget::updateAppListView()
 void LetterWidget::appClassificationBtnClickedSlot()
 {
     m_leaveAnimation->setStartValue(QRect(6,0,this->width()-6,this->height()-6));
-    m_leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
+    m_leaveAnimation->setEndValue(QRect(6,0,this->width()-6,this->height()-6));
+//    m_leaveAnimation->setEndValue(QRect(20,20,this->width()-40,this->height()-40));
     m_enterAnimation->setStartValue(QRect(-40,-40,this->width()+80,this->height()+80));
     m_enterAnimation->setEndValue(QRect((this->width()-235)/2,(this->height()-366)/2,235,366));
-    m_leaveAnimation->setDuration(10);
-    m_enterAnimation->setDuration(80);
 
     //加载LetterBUttonWidget界面
+    m_enterAnimation->setDuration(100);
+    m_leaveAnimation->setDuration(10);
     Q_EMIT sendLetterBtnList(m_letterList);
     m_leaveAnimation->setTargetObject(m_appListView);
     m_enterAnimation->setTargetObject(m_letterBtnWid);
-    m_letterBtnWid->setWindowOpacity(0.1);
     m_leaveAnimation->start();
     m_widgetState=1;
 }
@@ -206,11 +200,12 @@ void LetterWidget::recvLetterBtnSlot(QString btnname)
 
     m_leaveAnimation->setStartValue(QRect((this->width()-235)/2,(this->height()-366)/2,235,366));
     m_leaveAnimation->setEndValue(QRect(-40,-40,this->width()+80,this->height()+80));
-    m_enterAnimation->setStartValue(QRect(20,20,this->width()-40,this->height()-40));
+//    m_enterAnimation->setStartValue(QRect(16,10,this->width()-20,this->height()-20));
+    m_enterAnimation->setStartValue(QRect(6,0,this->width()-6,this->height()-6));
     m_enterAnimation->setEndValue(QRect(6,0,this->width()-6,this->height()-6));
-    m_leaveAnimation->setDuration(80);
-    m_enterAnimation->setDuration(10);
 
+    m_enterAnimation->setDuration(10);
+    m_leaveAnimation->setDuration(100);
     m_leaveAnimation->setTargetObject(m_letterBtnWid);
     m_enterAnimation->setTargetObject(m_appListView);
     m_leaveAnimation->start();

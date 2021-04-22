@@ -52,7 +52,6 @@ private:
     int module=0;
 
     RightClickMenu* menu=nullptr;//右键菜单
-    QSettings *setting=nullptr;
     QStringList data;
 
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;

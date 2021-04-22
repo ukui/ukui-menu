@@ -195,9 +195,8 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
 void FullFunctionWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
-    GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
-    g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
-    g_object_unref(desktopAppInfo);}
+    execApp(desktopfp);
+}
 
 /**
  * 更新应用列表
@@ -447,12 +446,7 @@ void FullFunctionWidget::widgetMakeZero()
 
 void FullFunctionWidget::moveScrollBar(int type)
 {
-    int height=getScreenGeometry("height");
-    if(height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        height=rect.height();
-    }
+    int height=Style::primaryScreenHeight;
     if(type==0)
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()-height*100/1080);
     else

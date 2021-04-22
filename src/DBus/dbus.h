@@ -12,10 +12,12 @@ public:
 
 Q_SIGNALS:
     void sendReloadSignal();
+    void winKeyResponseSignal();
 
 public Q_SLOTS:
     QString GetSecurityConfigPath();
     void ReloadSecurityConfig();
+    void WinKeyResponse();
 };
 
 #endif // DBUS_H

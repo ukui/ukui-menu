@@ -55,7 +55,6 @@ private:
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
     RightClickMenu* menu=nullptr;//右键菜单
-    QSettings *setting=nullptr;
     QVector<QStringList> data;
     ItemDelegate* m_delegate=nullptr;
 

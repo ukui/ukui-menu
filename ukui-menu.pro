@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui svg dbus x11extras KWindowSystem
+QT       += core gui svg dbus x11extras KWindowSystem sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 include(src/QtSingleApplication/qtsingleapplication.pri)
@@ -118,7 +118,7 @@ HEADERS  += \
 RESOURCES += \
     res.qrc
 
-PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt libbamf3
+PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt
 CONFIG += no_keywords link_pkgconfig
 
 LIBS+=-pthread

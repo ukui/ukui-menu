@@ -33,8 +33,13 @@ int main(int argc, char *argv[])
 {
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
 
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+   QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
 
     QtSingleApplication app("ukui-menu", argc, argv);
     app.setQuitOnLastWindowClosed(false);
@@ -61,48 +66,16 @@ int main(int argc, char *argv[])
 //    w.setProperty("useSystemStyleBlur", true);
 
     //测试
-    int position=0;
-    int panelSize=0;
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
-    {
-        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        if(gsetting->keys().contains(QString("panelposition")))
-            position=gsetting->get("panelposition").toInt();
-        else
-            position=0;
-        if(gsetting->keys().contains(QString("panelsize")))
-            panelSize=gsetting->get("panelsize").toInt();
-        else
-            panelSize=46;
-    }
-    else
-    {
-        position=0;
-        panelSize=46;
-    }
 
-    int x = getScreenGeometry("x");
-    int y = getScreenGeometry("y");
-    int width = getScreenGeometry("width");
-    int height = getScreenGeometry("height");
-    if(width==0 || height==0)
-    {
-        QRect rect=QApplication::desktop()->screenGeometry(0);
-        x=rect.x();
-        y=rect.y();
-        width=rect.width();
-        height=rect.height();
-    }
-
-    if(position==0)
-        w.setGeometry(QRect(x+4,y+height-panelSize-Style::minh-3,
+    if(Style::panelPosition==0)
+        w.setGeometry(QRect(Style::primaryScreenX+4,Style::primaryScreenY+Style::primaryScreenHeight-Style::panelSize-Style::minh-3,
                                   Style::minw,Style::minh));
-    else if(position==1)
-        w.setGeometry(QRect(x+4,y+panelSize+4,Style::minw,Style::minh));
-    else if(position==2)
-        w.setGeometry(QRect(x+panelSize+4,y+4,Style::minw,Style::minh));
+    else if(Style::panelPosition==1)
+        w.setGeometry(QRect(Style::primaryScreenX+4,Style::primaryScreenY+Style::panelSize+4,Style::minw,Style::minh));
+    else if(Style::panelPosition==2)
+        w.setGeometry(QRect(Style::primaryScreenX+Style::panelSize+4,Style::primaryScreenY+4,Style::minw,Style::minh));
     else
-        w.setGeometry(QRect(x+width-panelSize-Style::minw-4,y+4,
+        w.setGeometry(QRect(Style::primaryScreenX+Style::primaryScreenWidth-Style::panelSize-Style::minw-4,Style::primaryScreenY+4,
                                   Style::minw,Style::minh));
     w.show();
     w.raise();
