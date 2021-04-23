@@ -114,7 +114,8 @@ void FullSearchResultWidget::repaintWidget()
 {
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
-    this->layout()->setContentsMargins(Style::LeftWidWidth,0,0,0);
+    m_scrollArea->setFixedSize(Style::AppListWidWidth,this->height());
+//    this->layout()->setContentsMargins(Style::LeftWidWidth,0,0,0);
     m_scrollAreaWidLayout->removeWidget(m_listView);
     m_listView->setParent(nullptr);
     delete m_listView;

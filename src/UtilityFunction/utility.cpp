@@ -28,10 +28,6 @@
 #include <QApplication>
 #include <QDBusInterface>
 
-#define DBUS_NAME       "org.ukui.panel"
-#define DBUS_PATH       "/panel/position"
-#define DBUS_INTERFACE  "org.ukui.panel"
-
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
 
 const QPixmap loadSvg(const QString &fileName, const int size)
@@ -102,13 +98,16 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source)
 QVariantList getScreenGeometry()
 {
     QVariantList list;
+    list.clear();
     QDBusInterface iface(DBUS_NAME,
                          DBUS_PATH,
                          DBUS_INTERFACE,
                          QDBusConnection::sessionBus());
     QDBusReply<QVariantList> reply=iface.call("GetPrimaryScreenPhysicalGeometry");
     if(reply.isValid())
+    {
         list=reply.value();
+    }
     return list;
 }
 

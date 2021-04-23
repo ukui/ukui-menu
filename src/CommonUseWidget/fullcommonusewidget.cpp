@@ -137,6 +137,7 @@ void FullCommonUseWidget::repaintWidget()
 {
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
+    m_scrollArea->setFixedSize(Style::AppListWidWidth,this->height());
     m_scrollAreaWidLayout->removeWidget(m_listView);
     m_listView->setParent(nullptr);
     delete m_listView;

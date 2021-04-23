@@ -149,16 +149,18 @@ void MainWindow::initUi()
     connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
-    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
-        repaintWidget();
-    });
-    connect(QApplication::desktop(),&QDesktopWidget::primaryScreenChanged,this,[=]{
-        repaintWidget();
-    });
+//    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
+//        repaintWidget();
+//    });
+//    connect(QApplication::desktop(),&QDesktopWidget::primaryScreenChanged,this,[=]{
+//        repaintWidget();
+//    });
 
-    connect(QApplication::desktop(),&QDesktopWidget::screenCountChanged,this,[=]{
-        repaintWidget();
-    });
+//    connect(QApplication::desktop(),&QDesktopWidget::screenCountChanged,this,[=]{
+//        repaintWidget();
+//    });
+
+    QDBusConnection::sessionBus().connect(DBUS_NAME,DBUS_PATH,DBUS_INTERFACE,QString("PanelGeometryRefresh"),this,SLOT(primaryScreenChangeSlot()));
 
     //监听屏幕缩放
     if(QGSettings::isSchemaInstalled(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit()))
@@ -480,6 +482,11 @@ void MainWindow::loadMainWindow()
 void MainWindow::panelChangedSlot(QString key)
 {
     Q_UNUSED(key);
+    repaintWidget();
+}
+
+void MainWindow::primaryScreenChangeSlot()
+{
     repaintWidget();
 }
 
