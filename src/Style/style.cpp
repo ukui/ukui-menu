@@ -102,7 +102,7 @@ void Style::initWidStyle()
 {
 
     QVariantList list=getScreenGeometry();
-    if(list.count()==7)
+    if(list.count()>=6)
     {
         primaryScreenX=list.at(0).toInt();
         primaryScreenY=list.at(1).toInt();
@@ -127,7 +127,6 @@ void Style::initWidStyle()
         widthavailable=primaryScreenWidth-panelSize;
         heightavailable=primaryScreenHeight;
     }
-
     int len=0;
     QString locale = QLocale::system().name();
     if (locale == "zh_CN")

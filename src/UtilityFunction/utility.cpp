@@ -104,9 +104,39 @@ QVariantList getScreenGeometry()
                          DBUS_INTERFACE,
                          QDBusConnection::sessionBus());
     QDBusReply<QVariantList> reply=iface.call("GetPrimaryScreenPhysicalGeometry");
-    if(reply.isValid())
+    if(iface.isValid() && reply.isValid())
     {
         list=reply.value();
+    }
+    else
+    {
+        QRect rect=QApplication::desktop()->screenGeometry(0);
+        list.append(QString::number(rect.x()));
+        list.append(QString::number(rect.y()));
+        list.append(QString::number(rect.width()));
+        list.append(QString::number(rect.height()));
+
+        int position=0;
+        int panelSize=0;
+        if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
+        {
+            QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+            if(gsetting->keys().contains(QString("panelposition")))
+                position=gsetting->get("panelposition").toInt();
+            else
+                position=0;
+            if(gsetting->keys().contains(QString("panelsize")))
+                panelSize=gsetting->get("panelsize").toInt();
+            else
+                panelSize=46;
+        }
+        else
+        {
+            position=0;
+            panelSize=46;
+        }
+        list.append(QString::number(panelSize));
+        list.append(QString::number(position));
     }
     return list;
 }
