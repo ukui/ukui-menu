@@ -916,39 +916,3 @@ QStringList UkuiMenuInterface::getSpecifiedCategoryAppList(QString categorystr)
     return appnameList;
 
 }
-
-//获取用户图像
-QString UkuiMenuInterface::getUserIcon()
-{
-    qint64 uid=static_cast<qint64>(getuid());
-    QDBusInterface iface("org.freedesktop.Accounts",
-                         "/org/freedesktop/Accounts",
-                         "org.freedesktop.Accounts",
-                         QDBusConnection::systemBus());
-    QDBusReply<QDBusObjectPath>objPath=iface.call("FindUserById",uid);
-
-    QDBusInterface useriface("org.freedesktop.Accounts",
-                             objPath.value().path(),
-                             "org.freedesktop.DBus.Properties",
-                             QDBusConnection::systemBus());
-    QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","IconFile");
-    QString iconstr=var.value().toString();
-    return iconstr;
-}
-
-QString UkuiMenuInterface::getUserName()
-{
-    qint64 uid=static_cast<qint64>(getuid());
-    QDBusInterface iface("org.freedesktop.Accounts",
-                         "/org/freedesktop/Accounts",
-                         "org.freedesktop.Accounts",
-                         QDBusConnection::systemBus());
-    QDBusReply<QDBusObjectPath> objPath=iface.call("FindUserById",uid);
-    QDBusInterface useriface("org.freedesktop.Accounts",
-                             objPath.value().path(),
-                             "org.freedesktop.DBus.Properties",
-                             QDBusConnection::systemBus());
-    QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","UserName");
-    QString name=var.value().toString();
-    return name;
-}

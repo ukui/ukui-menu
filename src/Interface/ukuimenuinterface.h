@@ -77,12 +77,6 @@ public:
     QString getAppNameInitial(QString desktopfp);//获取应用名所有首字母
     QString getAppNamePinyin(QString appname);//获取应用名拼音
     bool checkKreApp(QString desktopfp);
-
-    //获取用户图像
-    QString getUserIcon();
-    //获取用户姓名
-    QString getUserName();
-
 };
 
 #endif // UKUIMENUINTERFACE_H

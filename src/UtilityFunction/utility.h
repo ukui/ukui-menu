@@ -60,5 +60,12 @@ bool deleteAppRecord(QString desktopfn);//删除应用记录
 
 //启动应用
 void execApp(QString desktopfp);
+bool checkOsRelease();//区分社区办与商业版
+
+//获取用户图像
+QString getUserIcon();
+//获取用户姓名
+QString getUserName();
+
 
 #endif // UTILITY_H

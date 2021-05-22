@@ -103,8 +103,8 @@ void SideBarWidget::addSidebarBtn()
         btn->setCheckable(true);
     }
 
-    QString usericon=m_ukuiMenuInterface->getUserIcon();
-    QString username=m_ukuiMenuInterface->getUserName();
+    QString usericon=getUserIcon();
+    QString username=getUserName();
     m_userIconBtn=new QPushButton;
     initBtn(m_userIconBtn,usericon,username,3);
     m_personalBtn=new QPushButton;
@@ -232,7 +232,7 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
     else {
         if(!QFile::exists(btnicon))
             btnicon=QString("/usr/share/ukui/faces/default.png");
-        labelicon->setObjectName(QStringLiteral("faceLabel"));
+        labelicon->setObjectName("faceLabel");
         labelicon->setFocusPolicy(Qt::NoFocus);
         labelicon->setAlignment(Qt::AlignCenter);
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
@@ -249,6 +249,8 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
 //    btnLayout->addStretch();
 
     QLabel* textLabel=new QLabel;
+    if(num==3)
+        textLabel->setObjectName("nameLabel");
     textLabel->setText(text);
     btnLayout->addWidget(textLabel);
     btnLayout->addStretch();
@@ -394,7 +396,7 @@ void SideBarWidget::userIconBtnClickedSlot()
 void SideBarWidget::userAccountsChanged()
 {
     const auto ratio=devicePixelRatioF();
-    QString usericon=m_ukuiMenuInterface->getUserIcon();
+    QString usericon=getUserIcon();
     if(!QFile::exists(usericon))
         usericon=QString("/usr/share/ukui/faces/default.png");
     QPixmap facePixmap(usericon);
@@ -404,6 +406,9 @@ void SideBarWidget::userAccountsChanged()
     QLabel* labelicon=m_userIconBtn->findChild<QLabel*>("faceLabel");
     facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     labelicon->setPixmap(facePixmap);
+    QLabel* labelname=m_userIconBtn->findChild<QLabel*>("nameLabel");
+    labelname->setText(getUserName());//更新用户名
+    m_textList.replace(3,labelname->text());//更新用户名
 }
 
 /**

@@ -24,7 +24,6 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     QWidget(parent)
 {
     m_cmdProc=new QProcess;
-    connect(m_cmdProc , &QProcess::readyReadStandardOutput, this , &RightClickMenu::onReadOutput);
 
     m_whiteList.append("kylin-screenshot.desktop");
     m_whiteList.append("ukui-notebook.desktop");
@@ -49,9 +48,22 @@ RightClickMenu::RightClickMenu(QWidget *parent):
 RightClickMenu::~RightClickMenu()
 {
     delete m_cmdProc;
-//    delete m_setting;
     delete m_ukuiMenuInterface;
-
+    if(m_showAppMenu != nullptr)
+    {
+        delete m_showAppMenu;
+        m_showAppMenu = nullptr;
+    }
+    if(m_showShutdownMenu != nullptr)
+    {
+        delete m_showShutdownMenu;
+        m_showShutdownMenu = nullptr;
+    }
+    if(m_showOtherMenu != nullptr)
+    {
+        delete m_showOtherMenu;
+        m_showOtherMenu = nullptr;
+    }
 }
 
 QPixmap RightClickMenu::getIconPixmap(QString iconstr, int type)
@@ -128,25 +140,30 @@ void RightClickMenu::addToDesktopActionTriggerSlot()
 
 void RightClickMenu::uninstallActionTriggerSlot()
 {
-    QString cmd=QString("dpkg -S "+m_desktopfp);
-    m_cmdProc->setReadChannel(QProcess::StandardOutput);
-    m_cmdProc->start("sh",QStringList()<<"-c"<<cmd);
-    m_cmdProc->waitForFinished();
-    m_cmdProc->waitForReadyRead();
-    m_cmdProc->close();
-    m_actionNumber=6;
-    qDebug()<<"查询包名："<<cmd;
-}
+    if(!checkOsRelease())
+    {
+        QString cmd=QString("kylin-uninstaller %1")
+                .arg(m_desktopfp.toLocal8Bit().data());
+        bool ret=QProcess::startDetached(cmd);
+        qDebug()<<"卸载："<<cmd<<ret;
+        qDebug() << "kylin-uninstaller";
 
-void RightClickMenu::onReadOutput()
-{
-    QString packagestr=QString::fromLocal8Bit(m_cmdProc->readAllStandardOutput().data());
-    QString packageName=packagestr.split(":").at(0);
-//    qDebug()<<packagestr<<packageName;
-    char command[100];
-    sprintf(command,"kylin-installer -remove %s",packageName.toLocal8Bit().data());
-    bool ret=QProcess::startDetached(command);
-    qDebug()<<"卸载："<<command<<ret;
+    }
+    else
+    {
+        QString cmd=QString("dpkg -S "+m_desktopfp);
+        m_cmdProc->start("sh",QStringList()<<"-c"<<cmd);
+        m_cmdProc->waitForFinished();
+        QString output=m_cmdProc->readAllStandardOutput().trimmed();
+        QString packageName=output.split(":").at(0);
+        cmd.clear();
+        cmd=QString("kylin-installer -remove %1")
+                .arg(packageName.toLocal8Bit().data());
+        bool ret=QProcess::startDetached(cmd);
+        qDebug()<<"卸载："<<cmd<<ret;
+        qDebug() << "dpkg -S";
+    }
+    m_actionNumber=6;
 }
 
 void RightClickMenu::attributeActionTriggerSlot()
@@ -202,15 +219,21 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
     m_actionNumber=0;
     this->m_desktopfp.clear();
     this->m_desktopfp=desktopfp;
-    QMenu menu;
+    if(m_showAppMenu != nullptr)
+    {
+        delete m_showAppMenu;
+        m_showAppMenu = nullptr;
+    }
+
+    m_showAppMenu = new QMenu(this);
     //添加菜单项，指定图标、名称、响应函数
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
     if(!checkIfLocked(desktopfn))
-        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg",0)),tr("Pin to all"),
+        m_showAppMenu->addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg",0)),tr("Pin to all"),
                        this,SLOT(fixToAllActionTriggerSlot()));
     else
-        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/unfixed.svg",0)),tr("Unpin from all"),
+        m_showAppMenu->addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/unfixed.svg",0)),tr("Unpin from all"),
                        this,SLOT(unfixedFromAllActionTriggerSlot()));
     QDBusInterface iface("com.ukui.panel.desktop",
                          "/",
@@ -219,45 +242,53 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
 
     QDBusReply<bool> ret=iface.call("CheckIfExist",desktopfp);
     if(!ret)
-        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg",0)),tr("Pin to taskbar"),
+        m_showAppMenu->addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg",0)),tr("Pin to taskbar"),
                        this,SLOT(fixToTaskbarActionTriggerSlot()));
     else
-        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/unfixed.svg",0)),tr("Unpin from taskbar"),
+        m_showAppMenu->addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/unfixed.svg",0)),tr("Unpin from taskbar"),
                        this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
 
-    menu.addAction(tr("Add to desktop shortcuts"),
+    m_showAppMenu->addAction(tr("Add to desktop shortcuts"),
                    this,SLOT(addToDesktopActionTriggerSlot()));
     //检查桌面快捷方式是否存在
     QString desktopPath=QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     QString path=QString(desktopPath+"/"+QFileInfo(m_desktopfp).fileName());
     if(QFile(path).exists())
-        menu.actions().at(2)->setEnabled(false);//存在时禁用
-    menu.addSeparator();
+        m_showAppMenu->actions().at(2)->setEnabled(false);//存在时禁用
+    m_showAppMenu->addSeparator();
 
     if(!m_ukuiMenuInterface->getAppCategories(desktopfp).contains("Android") &&
             !m_whiteList.contains(desktopfn))
-        menu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
+        m_showAppMenu->addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
                        this,SLOT(uninstallActionTriggerSlot()));
 
-    menu.setAttribute(Qt::WA_TranslucentBackground);
-    menu.exec(QCursor::pos());
+    m_showAppMenu->setAttribute(Qt::WA_TranslucentBackground);
+    m_showAppMenu->exec(QCursor::pos());
+
     return m_actionNumber;
 }
 
 int RightClickMenu::showShutdownMenu()
 {
     m_actionNumber=0;
-    QMenu menu;
-    menu.addAction(QIcon(getIconPixmap("system-sleep",1)),tr("Sleep"),
+    if(m_showShutdownMenu != nullptr)
+    {
+        delete m_showShutdownMenu;
+        m_showShutdownMenu = nullptr;
+    }
+    m_showShutdownMenu = new QMenu(this);
+    m_showShutdownMenu->addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Sleep"),
                    this,SLOT(hibernateActionTriggerSlot()));//休眠睡眠相同
-    menu.addAction(QIcon(getIconPixmap("system-logout-symbolic",1)),tr("Log Out"),
+    m_showShutdownMenu->addAction(QIcon(getIconPixmap("system-logout-symbolic",1)),tr("Log Out"),
                    this,SLOT(logoutActionTriggerSlot()));
-    menu.addAction(QIcon(getIconPixmap("system-restart-symbolic",1)),tr("Restart"),
+    m_showShutdownMenu->addAction(QIcon(getIconPixmap("system-restart-symbolic",1)),tr("Restart"),
                    this,SLOT(rebootActionTriggerSlot()));
-    menu.addAction(QIcon(getIconPixmap("exit-symbolic",1)),tr("Power Off"),
+    m_showShutdownMenu->addAction(QIcon(getIconPixmap("exit-symbolic",1)),tr("Power Off"),
                    this,SLOT(shutdownActionTriggerSlot()));
-    menu.setAttribute(Qt::WA_TranslucentBackground);
-    menu.exec(QCursor::pos());
+    m_showShutdownMenu->setAttribute(Qt::WA_TranslucentBackground);
+    m_showShutdownMenu->setAttribute(Qt::WA_DeleteOnClose);
+    m_showShutdownMenu->exec(QCursor::pos());
+
     return m_actionNumber;
 }
 
@@ -267,7 +298,13 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
     this->m_desktopfp.clear();
     this->m_desktopfp=desktopfp;
 
-    QMenu menu;
+    if(m_showOtherMenu != nullptr)
+    {
+        delete m_showOtherMenu;
+        m_showOtherMenu = nullptr;
+    }
+
+    m_showOtherMenu = new QMenu(this);
 //    QDBusInterface iface("com.ukui.panel.desktop",
 //                         "/",
 //                         "com.ukui.panel.desktop",
@@ -280,9 +317,11 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
 //    else
 //        menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/unfixed.svg",0)),tr("Unpin from taskbar"),
 //                       this,SLOT(unfixedFromTaskbarActionTriggerSlot()));
-    menu.addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/setting.svg",0)),tr("Personalize this list"),
+    m_showOtherMenu->addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/setting.svg",0)),tr("Personalize this list"),
                    this,SLOT(otherListActionTriggerSlot()));
-    menu.setAttribute(Qt::WA_TranslucentBackground);
-    menu.exec(QCursor::pos());
+    m_showOtherMenu->setAttribute(Qt::WA_TranslucentBackground);
+    m_showOtherMenu->setAttribute(Qt::WA_DeleteOnClose);
+    m_showOtherMenu->exec(QCursor::pos());
+
     return m_actionNumber;
 }

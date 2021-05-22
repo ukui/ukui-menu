@@ -71,11 +71,13 @@ public:
 private:
     QString m_desktopfp;
     int m_actionNumber;
-
     QProcess *m_cmdProc=nullptr;
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
 
     QStringList m_whiteList;
+    QMenu *m_showAppMenu;
+    QMenu *m_showShutdownMenu;
+    QMenu *m_showOtherMenu;
 
 protected:
     /**
@@ -143,10 +145,6 @@ private Q_SLOTS:
      * @brief Personalize this list
      */
     void otherListActionTriggerSlot();
-    /**
-     * @brief Read command output
-     */
-    void onReadOutput();
 };
 
 #endif // RIGHTCLICKMENU_H
