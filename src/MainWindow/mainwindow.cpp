@@ -391,6 +391,7 @@ void MainWindow::animationValueFinishedSlot()
  */
 bool MainWindow::event ( QEvent * event )
 {
+
    if (event->type() == QEvent::ActivationChange)
    {
         if(QApplication::activeWindow() != this)

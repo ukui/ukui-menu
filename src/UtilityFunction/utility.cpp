@@ -129,6 +129,7 @@ QVariantList getScreenGeometry()
                 panelSize=gsetting->get("panelsize").toInt();
             else
                 panelSize=46;
+            delete gsetting;
         }
         else
         {
@@ -222,10 +223,6 @@ void initDatabase()
     {
         if(sql.value(0).toInt()==0)
         {
-//            QFileInfo info("/usr/share/applications/qaxbrowser-safe.desktop");
-//            if(info.exists() && info.isFile())
-//                desktopfn=info.fileName();
-
             QSettings* setting=new QSettings("/var/lib/ukui-menu/ukui-menu.ini",QSettings::IniFormat);
             setting->beginGroup("application");
             QString desktopfp;
@@ -481,4 +478,59 @@ void execApp(QString desktopfp)
         g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
         g_object_unref(desktopAppInfo);
     }
+}
+
+bool checkOsRelease()
+{
+    QFile file("/etc/os-release");
+    if(file.open(QFile::ReadOnly))
+    {
+        QByteArray line=file.readLine();
+        file.close();
+        if(QString(line).contains("Ubuntu"))
+            return true;
+    }
+    return false;
+}
+
+//获取用户图像
+QString getUserIcon()
+{
+    qint64 uid=static_cast<qint64>(getuid());
+    QDBusInterface iface("org.freedesktop.Accounts",
+                         "/org/freedesktop/Accounts",
+                         "org.freedesktop.Accounts",
+                         QDBusConnection::systemBus());
+    QDBusReply<QDBusObjectPath>objPath=iface.call("FindUserById",uid);
+
+    QDBusInterface useriface("org.freedesktop.Accounts",
+                             objPath.value().path(),
+                             "org.freedesktop.DBus.Properties",
+                             QDBusConnection::systemBus());
+    QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","IconFile");
+    QString iconstr=var.value().toString();
+    return iconstr;
+}
+
+QString getUserName()
+{
+    QString name;
+    qint64 uid=static_cast<qint64>(getuid());
+    QDBusInterface iface("org.freedesktop.Accounts",
+                         "/org/freedesktop/Accounts",
+                         "org.freedesktop.Accounts",
+                         QDBusConnection::systemBus());
+    QDBusReply<QDBusObjectPath> objPath=iface.call("FindUserById",uid);
+    QDBusInterface useriface("org.freedesktop.Accounts",
+                             objPath.value().path(),
+                             "org.freedesktop.DBus.Properties",
+                             QDBusConnection::systemBus());
+    QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","RealName");
+    name=var.value().toString();
+    if(name.isEmpty())
+    {
+        var=useriface.call("Get","org.freedesktop.Accounts.User","UserName");
+        name=var.value().toString();
+    }
+    return name;
 }
