@@ -20,6 +20,7 @@
 #include "utility.h"
 #include <QDebug>
 #include <syslog.h>
+#include <QPushButton>
 
 FullListView::FullListView(QWidget *parent, int module):
     QListView(parent)
@@ -43,20 +44,22 @@ void FullListView::initWidget()
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    if(module==1 || module==2)s
-        this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setViewMode(QListView::IconMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setResizeMode(QListView::Adjust);
     this->setTextElideMode(Qt::ElideRight);
     this->setMouseTracking(true);
-    this->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);//移除边框
+    this->setStyleSheet(QString::fromUtf8("QStandardItemModel#listmodel{border:3px solid #FFFFFF; }QWidget#widget:focus{ border:5px solid #A5A6A1;  } "));
     connect(this,&FullListView::customContextMenuRequested,this,&FullListView::rightClickedSlot);
+
     connect(this,&FullListView::clicked,this,&FullListView::onClicked);
 }
 
@@ -64,6 +67,7 @@ void FullListView::addData(QStringList data)
 {
     listmodel=new QStandardItemModel(this);
     this->setModel(listmodel);
+
     Q_FOREACH(QString desktopfp,data)
     {
         QStandardItem* item=new QStandardItem;
@@ -150,6 +154,13 @@ void FullListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
+//    QWidget *current_focus_widget;
+   // current_focus_widget = QApplication::focusWidget();
+//    current_focus_widget = QWidget::focusWidget();
+//    QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
+
+    
+        //    le->clicked();
 }
 
 void FullListView::paintEvent(QPaintEvent *e)
@@ -195,6 +206,28 @@ void FullListView::paintEvent(QPaintEvent *e)
     QListView::paintEvent(e);
 }
 
+
+void FullListView::keyPressEvent(QKeyEvent* e)
+{
+    QModelIndex indexFromList = listmodel->index(1,0);
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch (e->type())
+        {
+        case Qt::Key_Up:
+            qDebug() << "按下下";
+            this->setCurrentIndex(indexFromList);
+            break;
+        case Qt::Key_Down:
+            qDebug() << "按下下";
+            this->setCurrentIndex(indexFromList);
+            break;
+        default:
+            break;
+        }
+
+     }
+}
 //void FullListView::mousePressEvent(QMouseEvent *event)
 //{
 //    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)

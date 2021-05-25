@@ -48,7 +48,7 @@ void ListView::initWidget()
     this->setTextElideMode(Qt::ElideRight);
     this->setViewMode(QListView::ListMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
-    this->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setUpdatesEnabled(true);

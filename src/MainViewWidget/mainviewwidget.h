@@ -72,6 +72,15 @@ public:
      */
     void repaintWidget();
     /**
+     * @brief changeFocuUp
+     */
+    void changeFocuUp();
+    /**
+     * @brief changeFocuDown
+     */
+    void changeFocuDown();
+
+    /**
      * @brief Move the scroll bar
      * @param type: Scroll way,Only the following parameters can be entered:
      *  0: moving up

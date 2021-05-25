@@ -106,7 +106,7 @@ void MainWindow::initUi()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
-    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocusPolicy(Qt::NoFocus);
 
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
     this->setMinimumSize(Style::minw,Style::minh);
@@ -115,6 +115,9 @@ void MainWindow::initUi()
     m_frame=new QFrame;
     m_mainViewWid=new MainViewWidget;
     m_sideBarWid=new SideBarWidget;
+
+    setTabOrder(m_mainViewWid , m_sideBarWid);
+    setTabOrder(m_sideBarWid , m_mainViewWid);
 
     this->setCentralWidget(m_frame);
     QHBoxLayout *mainlayout=new QHBoxLayout;
@@ -604,15 +607,39 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             m_mainViewWid->widgetMakeZero();
         }
 
-//        switch(e->key()){
-//        case Qt::Key_Up:
-//            m_mainViewWid->moveScrollBar(0);
-//            break;
-//        case Qt::Key_Down:
-//            m_mainViewWid->moveScrollBar(1);
-//            break;
-//        default:
-//            break;
-//        }
+        switch(e->key()){
+        case Qt::Key_Up:
+           // m_mainViewWid->changeFocuUp();
+            this->focusNextPrevChild(FALSE);
+            break;
+        case Qt::Key_Down:
+         //   m_mainViewWid->changeFocuDown();
+            this->focusNextPrevChild(true);
+            break;
+        case Qt::Key_Enter:
+        case Qt::Key_Escape:
+         //   this->focusProxy()->children();
+        {
+            QWidget *current_focus_widget;
+           // current_focus_widget = QApplication::focusWidget();
+            current_focus_widget = QWidget::focusWidget();
+
+            if (current_focus_widget->inherits("QPushButton"))
+            {
+                QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
+                le->clicked();
+            }
+            else if(current_focus_widget->inherits("QAbstractButton"))
+            {
+                QAbstractButton *absButton = qobject_cast<QAbstractButton*>(current_focus_widget);
+                absButton->setChecked(true);
+            }
+
+            QMainWindow::keyPressEvent(e);
+        }
+            break;
+        default:
+            break;
+        }
     }
 }

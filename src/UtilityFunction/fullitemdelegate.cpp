@@ -57,7 +57,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
         painter->setRenderHint(QPainter::Antialiasing);
-        if(option.state & QStyle::State_MouseOver)
+        if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus))
         {
 //            QColor color = option.palette.text().color();
 //            color.setAlphaF(0.15);
@@ -183,7 +183,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter,appname);
         painter->restore();
 
-        if(option.state & QStyle::State_MouseOver)
+        if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus))
         {
             int len=0;
             if(!is_locked && is_recentapp)

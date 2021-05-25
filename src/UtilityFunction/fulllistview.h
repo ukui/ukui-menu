@@ -41,6 +41,7 @@ public:
 
 protected:
     void initWidget();
+    void keyPressEvent(QKeyEvent* e);
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) override;

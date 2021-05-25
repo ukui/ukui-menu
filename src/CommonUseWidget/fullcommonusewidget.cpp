@@ -40,7 +40,7 @@ void FullCommonUseWidget::initUi()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
-
+    this->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* mainLayout=new QHBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     this->setLayout(mainLayout);

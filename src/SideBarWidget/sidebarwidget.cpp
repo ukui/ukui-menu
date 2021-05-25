@@ -68,6 +68,7 @@ void SideBarWidget::addSidebarBtn()
     m_mainWidgetLayout->setContentsMargins(0,0,0,6);
     m_mainWidgetLayout->setSpacing(10);
     m_mainWidget->setLayout(m_mainWidgetLayout);
+  //  m_mainWidget->setFocusPolicy(Qt::StrongFocus);
 //    m_mainWidget->setAutoFillBackground(true);
 //    QPalette palette;
 //    palette.setBrush(QPalette::Background,Qt::red);
@@ -76,31 +77,36 @@ void SideBarWidget::addSidebarBtn()
     m_minMaxWidget=new QWidget;
     m_minMaxLayout=new QHBoxLayout;
     m_minMaxBtn=new QPushButton;
-    m_minMaxBtn->setFlat(true);
-    m_minMaxBtn->setProperty("doNotAnimate",true);
+//    m_minMaxBtn->setFlat(true);
+//    m_minMaxBtn->setProperty("doNotAnimate",true);
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
+
 //    m_minMaxBtn->setShortcut(Qt::Key_Enter);
 //    m_minMaxBtn->setShortcut(Qt::Key_Return);
-    QShortcut *key_1 = new QShortcut(QKeySequence(Qt::Key_Enter),this);
-    connect(key_1,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
-    QShortcut *key_2 = new QShortcut(QKeySequence(Qt::Key_Return),this);
-    connect(key_2,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
+//    QShortcut *key_1 = new QShortcut(QKeySequence(Qt::Key_Enter),this);
+//    connect(key_1,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
+//    QShortcut *key_2 = new QShortcut(QKeySequence(Qt::Key_Return),this);
+//    connect(key_2,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
     m_minMaxLayout->addWidget(m_minMaxBtn);
     m_minMaxWidget->setLayout(m_minMaxLayout);
+    m_minMaxWidget->hasFocus();
 
     //分类按钮
     m_buttonList.clear();
     m_btnGroup=new QButtonGroup(m_mainWidget);
     m_allBtn=new QPushButton;
+    m_allBtn->setFocusPolicy(Qt::StrongFocus);
     initBtn(m_allBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),tr("All"),0);
     m_letterBtn=new QPushButton;
+    m_letterBtn->setFocusPolicy(Qt::StrongFocus);
     initBtn(m_letterBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/letter.svg"),tr("Letter"),1);
     m_functionBtn=new QPushButton;
+    m_functionBtn->setFocusPolicy(Qt::StrongFocus);
     initBtn(m_functionBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/function.svg"),tr("Function"),2);
     int id=0;
     Q_FOREACH (QAbstractButton* btn, m_buttonList) {
         m_btnGroup->addButton(btn,id++);
-        btn->setCheckable(true);
+       // btn->setCheckable(true);
     }
 
     QString usericon=getUserIcon();
@@ -233,7 +239,7 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
         if(!QFile::exists(btnicon))
             btnicon=QString("/usr/share/ukui/faces/default.png");
         labelicon->setObjectName("faceLabel");
-        labelicon->setFocusPolicy(Qt::NoFocus);
+        labelicon->setFocusPolicy(Qt::StrongFocus);
         labelicon->setAlignment(Qt::AlignCenter);
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
 
@@ -256,7 +262,7 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
     btnLayout->addStretch();
 
     btn->setLayout(btnLayout);
-    btn->setFocusPolicy(Qt::NoFocus);
+    btn->setFocusPolicy(Qt::StrongFocus);
 
     m_buttonList.append(btn);
     m_textList.append(text);

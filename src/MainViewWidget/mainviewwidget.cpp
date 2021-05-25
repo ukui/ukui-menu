@@ -207,7 +207,7 @@ void MainViewWidget::initQueryLineEdit()
 {
     m_queryWid=new QWidget;
     m_queryWid->setParent(m_queryLineEdit);
-    m_queryWid->setFocusPolicy(Qt::NoFocus);
+    m_queryWid->setFocusPolicy(Qt::StrongFocus);
     QHBoxLayout* queryWidLayout=new QHBoxLayout;
     queryWidLayout->setContentsMargins(0,0,0,0);
     queryWidLayout->setSpacing(5);
@@ -737,6 +737,16 @@ void MainViewWidget::hideWidget()
     m_fullFunctionWid->hide();
     m_searchResultWid->hide();
     m_fullSearchResultWid->hide();
+}
+
+void MainViewWidget::changeFocuUp()
+{
+    this->focusPreviousChild();
+}
+
+void MainViewWidget::changeFocuDown()
+{
+    this->focusNextChild();
 }
 
 /**
