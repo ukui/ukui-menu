@@ -116,8 +116,8 @@ void MainWindow::initUi()
     m_mainViewWid=new MainViewWidget;
     m_sideBarWid=new SideBarWidget;
 
-//    setTabOrder(m_mainViewWid , m_sideBarWid);
-//    setTabOrder(m_sideBarWid , m_mainViewWid);
+    setTabOrder(m_mainViewWid , m_sideBarWid);
+    setTabOrder(m_sideBarWid , m_mainViewWid);
 
     this->setCentralWidget(m_frame);
     QHBoxLayout *mainlayout=new QHBoxLayout;
@@ -402,6 +402,22 @@ bool MainWindow::event ( QEvent * event )
             this->hide();
             m_mainViewWid->widgetMakeZero();
         }
+   }
+
+   if (event->type() == QEvent::KeyPress)
+   {
+       QKeyEvent *keyEvent = (QKeyEvent *) event;
+       if (keyEvent->key() == Qt::Key_Tab)
+       {
+
+
+       return true;
+       }
+//       if((keyEvent->key() >= 0x30 && keyEvent->key() <= 0x39) ||
+//               (keyEvent->key() >= 0x41 && keyEvent->key() <= 0x5a))
+//       {
+//           m_mainViewWid->setLineEditFocus(keyEvent->text());
+//       }
    }
    return QWidget::event(event);
 }

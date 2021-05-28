@@ -207,7 +207,7 @@ void FullListView::paintEvent(QPaintEvent *e)
 
 void FullListView::keyPressEvent(QKeyEvent* e)
 {
-   //  QRect center = visualRect(currentIndex());
+     QRect center = visualRect(currentIndex());
     if(e->type()==QEvent::KeyPress)
     {
         switch(e->key())
@@ -219,24 +219,18 @@ void FullListView::keyPressEvent(QKeyEvent* e)
             Q_EMIT clicked(index);
         }
             break;
-         case Qt::Key_Up:
+        case Qt::Key_Up:
         {
-//            qDebug() << "center.topRight().y()" << center.topRight().y();
-//           if(center.topRight().y() < Style::AppListGridSizeWidth)
-           {
+            if(mapToGlobal(center.topRight()).y() < Style::AppListGridSizeWidth)
+            {
              Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
-           }
-           currentIndex().row();
-//           QPushButton *pButton = qobject_cast<QPushButton*>(currentIndex());
-//               QPoint pp = pButton->mapToGlobal(QPoint(0, 0));
-//           qDebug() << "QWidget::focusWidget()" << currentIndex().row() << pp;
+            }
             return QListView::keyPressEvent(e);
         }
             break;
         case Qt::Key_Down:
         {
-//            qDebug() << "center.bottomRight().y()" << center.bottomRight().y() << "height" << height();
-//            if(center.bottomRight().y() > (height() - Style::AppListGridSizeWidth))
+            if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
             {
                 Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
             }

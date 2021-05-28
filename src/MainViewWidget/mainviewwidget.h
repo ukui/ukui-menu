@@ -147,6 +147,7 @@ protected:
     void loadSearchResultWidget();
     void loadFullSearchResultWidget();
     void hideWidget();
+    void keyPressEvent(QKeyEvent* e);
 
 public Q_SLOTS:
     /**

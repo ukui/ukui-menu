@@ -119,23 +119,3 @@ void CommonUseWidget::repaintWidget()
     m_listView->show();
 }
 
-void CommonUseWidget::keyPressEvent(QKeyEvent* e)
-{
-    if(e->type()==QEvent::KeyPress)
-    {
-        switch(e->key())
-        {
-        case Qt::Key_Down:
-            focusNextChild();
-
-            qDebug() << "actions().count();" << this->actions().count();
-            break;
-        case Qt::Key_Up:
-            focusPreviousChild();
-            break;
-        default:
-            return QWidget::keyPressEvent(e);
-            break;
-        }
-    }
-}

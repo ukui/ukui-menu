@@ -862,3 +862,29 @@ void MainViewWidget::moveScrollBar(int type)
 //    if(m_isFullScreen && event->button()==Qt::LeftButton)
 //        Q_EMIT sendHideMainWindowSignal();
 //}
+void MainViewWidget::keyPressEvent(QKeyEvent *e)
+{
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+            case Qt::Key_Down:
+            {
+                if(m_queryLineEdit->hasFocus())
+                {
+                    if(m_isFullScreen)
+                    {
+                        m_fullSearchResultWid->setViewFocus();
+                    }
+                    else
+                    {
+                        m_searchResultWid->setViewFocus();
+                    }
+                }
+            }
+                break;
+            default:
+                break;
+        }
+    }
+}

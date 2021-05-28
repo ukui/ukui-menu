@@ -83,8 +83,6 @@ protected:
      */
     void fillAppList();
 
-    void keyPressEvent(QKeyEvent* e);
-
 public Q_SLOTS:
     /**
      * @brief Open the application
