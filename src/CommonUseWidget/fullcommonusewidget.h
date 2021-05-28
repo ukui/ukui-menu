@@ -101,6 +101,8 @@ public Q_SLOTS:
      */
     void updateListViewSlot();
 
+    void onSetSlider(int value);
+
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget

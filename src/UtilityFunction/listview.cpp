@@ -178,3 +178,23 @@ void ListView::paintEvent(QPaintEvent *e)
     this->verticalScrollBar()->setPalette(p);
     QListView::paintEvent(e);
 }
+
+void ListView::keyPressEvent(QKeyEvent* e)
+{
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        {
+            QModelIndex index=this->currentIndex();
+            Q_EMIT clicked(index);
+        }
+            break;   
+        default:
+            return QListView::keyPressEvent(e);
+            break;
+        }
+    }
+}

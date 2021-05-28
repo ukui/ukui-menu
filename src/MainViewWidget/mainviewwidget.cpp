@@ -58,7 +58,7 @@ void MainViewWidget::initUi()
     mainLayout->addWidget(m_contentWid);
     this->setLayout(mainLayout);
 
-    this->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
 
     m_commonUseWid=new CommonUseWidget(m_contentWid);
     m_fullCommonUseWid=new FullCommonUseWidget(m_contentWid);
@@ -207,7 +207,7 @@ void MainViewWidget::initQueryLineEdit()
 {
     m_queryWid=new QWidget;
     m_queryWid->setParent(m_queryLineEdit);
-    m_queryWid->setFocusPolicy(Qt::StrongFocus);
+    m_queryWid->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* queryWidLayout=new QHBoxLayout;
     queryWidLayout->setContentsMargins(0,0,0,0);
     queryWidLayout->setSpacing(5);

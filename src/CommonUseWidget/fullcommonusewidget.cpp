@@ -75,6 +75,7 @@ void FullCommonUseWidget::initAppListWidget()
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
+    connect(m_listView,SIGNAL(sendSetslidebar(int)),this,SLOT(onSetSlider(int)));
 }
 
 void FullCommonUseWidget::resizeScrollAreaControls()
@@ -117,6 +118,12 @@ void FullCommonUseWidget::execApplication(QString desktopfp)
     execApp(desktopfp);
 }
 
+void FullCommonUseWidget::onSetSlider(int value)
+{
+    int curvalue = m_scrollArea->verticalScrollBar()->value();
+    m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+            //setSliderPosition(verticalScrollBar()->sliderPosition() + 100);
+}
 /**
  * 更新应用列表
  */

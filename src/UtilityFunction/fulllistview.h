@@ -65,6 +65,7 @@ Q_SIGNALS:
     void sendItemClickedSignal(QString arg);//发送item点击信号
     void sendHideMainWindowSignal();
     void sendUpdateAppListSignal();
+    void sendSetslidebar(int value);
 };
 
 #endif // FULLLISTVIEW_H

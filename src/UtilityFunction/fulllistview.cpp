@@ -53,7 +53,6 @@ void FullListView::initWidget()
     this->setFocusPolicy(Qt::StrongFocus);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    this->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);//移除边框
@@ -206,39 +205,60 @@ void FullListView::paintEvent(QPaintEvent *e)
     QListView::paintEvent(e);
 }
 
-
 void FullListView::keyPressEvent(QKeyEvent* e)
 {
-    QModelIndex indexFromList = listmodel->index(1,0);
+   //  QRect center = visualRect(currentIndex());
     if(e->type()==QEvent::KeyPress)
     {
-        switch (e->type())
+        switch(e->key())
         {
-        case Qt::Key_Up:
-            qDebug() << "按下下";
-            this->setCurrentIndex(indexFromList);
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        {
+            QModelIndex index=this->currentIndex();
+            Q_EMIT clicked(index);
+        }
+            break;
+         case Qt::Key_Up:
+        {
+//            qDebug() << "center.topRight().y()" << center.topRight().y();
+//           if(center.topRight().y() < Style::AppListGridSizeWidth)
+           {
+             Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+           }
+           currentIndex().row();
+//           QPushButton *pButton = qobject_cast<QPushButton*>(currentIndex());
+//               QPoint pp = pButton->mapToGlobal(QPoint(0, 0));
+//           qDebug() << "QWidget::focusWidget()" << currentIndex().row() << pp;
+            return QListView::keyPressEvent(e);
+        }
             break;
         case Qt::Key_Down:
-            qDebug() << "按下下";
-            this->setCurrentIndex(indexFromList);
-            break;
+        {
+//            qDebug() << "center.bottomRight().y()" << center.bottomRight().y() << "height" << height();
+//            if(center.bottomRight().y() > (height() - Style::AppListGridSizeWidth))
+            {
+                Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+            }
+            return QListView::keyPressEvent(e);
+        }
         default:
+            return QListView::keyPressEvent(e);
             break;
         }
-
-     }
+    }
 }
 //void FullListView::mousePressEvent(QMouseEvent *event)
 //{
 //    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
-//        Q_EMIT sendHideMainWindowSignal();
+//                                                 Q_EMIT sendHideMainWindowSignal();
 //    else{
 //        if(event->button()==Qt::LeftButton)
 //            Q_EMIT clicked(this->indexAt(event->pos()));
 //        if(event->button()==Qt::RightButton)
 //        {
 //             this->selectionModel()->setCurrentIndex(this->indexAt(event->pos()),QItemSelectionModel::SelectCurrent);
-//            Q_EMIT customContextMenuRequested(event->pos());
+//            Q_EMIT customCont     extMenuRequested(event->pos());
 //        }
 //    }
 //}

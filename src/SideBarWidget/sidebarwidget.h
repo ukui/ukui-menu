@@ -137,6 +137,7 @@ protected:
     QPixmap PixmapToRound(const QPixmap &src, int radius);
     void changeIconColor(bool isFullScreen);
 //    void mousePressEvent(QMouseEvent* event);
+    void keyPressEvent(QKeyEvent* e);
 
 private Q_SLOTS:
     /**

@@ -47,7 +47,7 @@ void SideBarWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
 
     addSidebarBtn();
     loadMinSidebar();
@@ -95,13 +95,10 @@ void SideBarWidget::addSidebarBtn()
     m_buttonList.clear();
     m_btnGroup=new QButtonGroup(m_mainWidget);
     m_allBtn=new QPushButton;
-    m_allBtn->setFocusPolicy(Qt::StrongFocus);
     initBtn(m_allBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),tr("All"),0);
     m_letterBtn=new QPushButton;
-    m_letterBtn->setFocusPolicy(Qt::StrongFocus);
     initBtn(m_letterBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/letter.svg"),tr("Letter"),1);
     m_functionBtn=new QPushButton;
-    m_functionBtn->setFocusPolicy(Qt::StrongFocus);
     initBtn(m_functionBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/function.svg"),tr("Function"),2);
     int id=0;
     Q_FOREACH (QAbstractButton* btn, m_buttonList) {
@@ -239,7 +236,7 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
         if(!QFile::exists(btnicon))
             btnicon=QString("/usr/share/ukui/faces/default.png");
         labelicon->setObjectName("faceLabel");
-        labelicon->setFocusPolicy(Qt::StrongFocus);
+        labelicon->setFocusPolicy(Qt::NoFocus);
         labelicon->setAlignment(Qt::AlignCenter);
         labelicon->setFixedSize(Style::SideBarIconSize+4,Style::SideBarIconSize+4);
 
@@ -777,3 +774,54 @@ void SideBarWidget::setSideBarBtnGeometry()
 //                 this->parentWidget()->parentWidget()->hide();
 //    }
 //}
+
+void SideBarWidget::keyPressEvent(QKeyEvent* e)
+{
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        {
+            if(m_allBtn->hasFocus())
+            {
+                m_allBtn->click();
+            }
+            else if(m_letterBtn->hasFocus())
+            {
+                m_letterBtn->click();
+            }
+            else if(m_functionBtn->hasFocus())
+            {
+                m_functionBtn->click();
+            }
+            else
+            {
+                QWidget *current_focus_widget;
+                current_focus_widget = QWidget::focusWidget();
+                QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
+                le->clicked();
+            }
+        }
+            break;
+        case Qt::Key_Down:
+       //     focusNextChild();
+            if(m_buttonList.at(2)->hasFocus())
+            {
+                m_buttonList.at(3)->setFocus();
+            }
+            break;
+        case Qt::Key_Up:
+        //    focusPreviousChild();
+            if(m_buttonList.at(0)->hasFocus())
+            {
+                m_minMaxBtn->setFocus();
+            }
+            break;
+        default:
+            return QWidget::keyPressEvent(e);
+            break;
+        }
+    }
+}
