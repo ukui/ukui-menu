@@ -180,6 +180,7 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
     connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
         listview->repaint(listview->rect());
     });
+    connect(listview, &FullListView::sendSetslidebar, this, &FullFunctionWidget::onSetSlider);
     m_scrollAreaWidLayout->addWidget(listview);
     m_data.clear();
     for(int i=0;i<desktopfplist.count();i++)
@@ -451,4 +452,11 @@ void FullFunctionWidget::moveScrollBar(int type)
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()-height*100/1080);
     else
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()+height*100/1080);
+}
+
+void FullFunctionWidget::onSetSlider(int value)
+{
+    int curvalue = m_scrollArea->verticalScrollBar()->value();
+    m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+
 }

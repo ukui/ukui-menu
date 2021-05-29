@@ -51,11 +51,34 @@ void SideBarWidget::initUi()
 
     addSidebarBtn();
     loadMinSidebar();
-
+    m_minMaxBtn->installEventFilter(this);
+    m_allBtn->installEventFilter(this);
+    m_letterBtn->installEventFilter(this);
+    m_functionBtn->installEventFilter(this);
+    m_userIconBtn->installEventFilter(this);
+    m_computerBtn->installEventFilter(this);
+    m_personalBtn->installEventFilter(this);
+    m_controlBtn->installEventFilter(this);
+    m_trashBtn->installEventFilter(this);
+    m_shutDownBtn->installEventFilter(this);
     m_ukuiMenuInterface=new UkuiMenuInterface;
     m_shutDownMenu=new RightClickMenu;
     m_otherMenu=new RightClickMenu;
 }
+
+bool SideBarWidget::eventFilter(QObject * target , QEvent * event )
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if( ke->key() == Qt::Key_Tab )
+        {
+            Q_EMIT setFocusToMainWin();
+        }
+    }
+}
+
+
 
 /**
  * 侧边栏添加控件
@@ -460,6 +483,7 @@ void SideBarWidget::setMaxBtn()
 
     m_minMaxBtn->setFixedSize(37,37);
     m_minMaxBtn->setIcon(QIcon(pixmap));
+    m_minMaxBtn->setFocus();
 }
 
 /**
@@ -535,6 +559,7 @@ void SideBarWidget::setMinBtn()
 
     m_minMaxBtn->setFixedSize(Style::MinMaxBtnWidth,Style::MinMaxBtnWidth);
     m_minMaxBtn->setIcon(QIcon(pixmap));
+    m_minMaxBtn->setFocus();
 }
 
 /**
@@ -811,6 +836,7 @@ void SideBarWidget::keyPressEvent(QKeyEvent* e)
             {
                 m_buttonList.at(3)->setFocus();
             }
+
             break;
         case Qt::Key_Up:
         //    focusPreviousChild();
@@ -818,6 +844,7 @@ void SideBarWidget::keyPressEvent(QKeyEvent* e)
             {
                 m_minMaxBtn->setFocus();
             }
+
             break;
         default:
             return QWidget::keyPressEvent(e);

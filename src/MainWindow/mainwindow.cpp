@@ -116,8 +116,12 @@ void MainWindow::initUi()
     m_mainViewWid=new MainViewWidget;
     m_sideBarWid=new SideBarWidget;
 
-    setTabOrder(m_mainViewWid , m_sideBarWid);
-    setTabOrder(m_sideBarWid , m_mainViewWid);
+//    m_frame->installEventFilter(this);
+//    m_mainViewWid->installEventFilter(this);
+//    m_sideBarWid->installEventFilter(this);
+
+//    setTabOrder(m_mainViewWid , m_sideBarWid);
+//    setTabOrder(m_sideBarWid , m_mainViewWid);
 
     this->setCentralWidget(m_frame);
     QHBoxLayout *mainlayout=new QHBoxLayout;
@@ -127,6 +131,7 @@ void MainWindow::initUi()
 
     mainlayout->addWidget(m_mainViewWid);
     m_line=new QFrame;
+    m_line->installEventFilter(this);
     m_line->setFrameShape(QFrame::VLine);
     m_line->setFixedSize(1,this->height()-1);
     m_line->setEnabled(false);
@@ -136,6 +141,7 @@ void MainWindow::initUi()
     m_animation = new QPropertyAnimation(this, "geometry");
     connect(m_animation,&QPropertyAnimation::finished,this,&MainWindow::animationValueFinishedSlot);
 
+    connect(m_sideBarWid, &SideBarWidget::setFocusToMainWin, m_mainViewWid, &MainViewWidget::setFocusToThis);
     connect(m_sideBarWid, &SideBarWidget::sendCommonUseBtnSignal, m_mainViewWid, &MainViewWidget::loadCommonUseWidget);
     connect(m_sideBarWid,&SideBarWidget::sendLetterBtnSignal, m_mainViewWid, &MainViewWidget::loadLetterWidget);
     connect(m_sideBarWid, &SideBarWidget::sendFunctionBtnSignal, m_mainViewWid, &MainViewWidget::loadFunctionWidget);
@@ -611,31 +617,20 @@ void MainWindow::repaintWidget()
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-    if(e->type()==QEvent::KeyPress)
+    if(e->type() == QEvent::KeyPress)
     {
-        if((e->key()>=0x30 && e->key()<=0x39) || (e->key()>=0x41 && e->key()<=0x5a))
+        if((e->key() >= 0x30 && e->key() <= 0x39) || (e->key() >= 0x41 && e->key() <= 0x5a))
         {
             m_mainViewWid->setLineEditFocus(e->text());
         }
-        if(e->key()==Qt::Key_Escape)
+        if(e->key() == Qt::Key_Backspace)
+        {
+            m_mainViewWid->setLineEditFocus("");
+        }
+        if(e->key() == Qt::Key_Escape)
         {
             this->hide();
             m_mainViewWid->widgetMakeZero();
-        }
-
-        switch(e->key()){
-
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        {
-            QWidget *current_focus_widget;
-            current_focus_widget = QWidget::focusWidget();
-            QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
-            le->clicked();
-        }
-            break;
-        default:
-            break;
         }
     }
 }

@@ -130,6 +130,10 @@ protected:
      */
     void resizeScrollAreaControls();
 
+    void keyPressEvent(QKeyEvent* e);
+
+    bool eventFilter(QObject *watched, QEvent *event);
+
 public Q_SLOTS:
     /**
      * @brief Respond to button click
@@ -160,11 +164,17 @@ public Q_SLOTS:
      */
     void animationValueChangedSlot(const QVariant &value);
 
+    void onSetSlider(int);
+
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+    /**
+     * @brief setFocusToMainWin
+     */
+    void setFocusToMainWin();
 };
 
 #endif // FULLLETTERWIDGET_H

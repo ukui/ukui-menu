@@ -85,8 +85,6 @@ void FullLetterWidget::initAppListWidget()
     m_appListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
 
     fillAppList();
-
-
 }
 
 /**
@@ -115,7 +113,8 @@ void FullLetterWidget::fillAppList()
 
             //插入应用列表
             FullListView* listview=new FullListView(this,1);
-
+            connect(listview,&FullListView::sendSetslidebar,this,&FullLetterWidget::onSetSlider);
+            listview->installEventFilter(this);
             //修复异常黑框问题
             connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
                 listview->repaint(listview->rect());
@@ -426,4 +425,49 @@ void FullLetterWidget::moveScrollBar(int type)
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()-height*100/1080);
     else
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()+height*100/1080);
+}
+
+void FullLetterWidget::onSetSlider(int value)
+{
+    int curvalue = m_scrollArea->verticalScrollBar()->value();
+    m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+            //setSliderPosition(verticalScrollBar()->sliderPosition() + 100);
+}
+
+void FullLetterWidget::keyPressEvent(QKeyEvent* e)
+{
+    if(e->key() == QEvent::KeyPress)
+    {
+        qDebug() << "FullLetterWidget::keyPressEvent" << e->type();
+        switch(e->key())
+        {
+        case Qt::Key_Up:
+        {
+            focusPreviousChild();
+          //  return QWidget::keyPressEvent(e);
+        }
+            break;
+        case Qt::Key_Down:
+        {
+            focusNextChild();
+         //   return QWidget::keyPressEvent(e);
+        }
+            break;
+        default:
+            return QWidget::keyPressEvent(e);
+            break;
+        }
+    }
+}
+
+bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if( ke->key() == Qt::Key_Tab )
+        {
+            m_letterListScrollAreaWid->setFocus();
+        }
+    }
 }

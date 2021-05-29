@@ -210,6 +210,8 @@ public Q_SLOTS:
      */
     void requestUpdateSlot();
 
+    void setFocusToThis();
+
 Q_SIGNALS:
     /**
      * @brief Desktop file directory change signal

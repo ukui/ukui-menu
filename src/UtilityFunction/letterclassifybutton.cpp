@@ -121,6 +121,18 @@ void LetterClassifyButton::mousePressEvent(QMouseEvent *event)
     }
 }
 
+void LetterClassifyButton::focusInEvent(QEvent* e)
+{
+    Q_UNUSED(e);
+    if(m_fullscreen)
+    {
+        QFont font;
+        font.setPixelSize(Style::LeftLetterFontSize*3);
+        this->setFont(font);
+        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+    }
+}
+
 void LetterClassifyButton::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);

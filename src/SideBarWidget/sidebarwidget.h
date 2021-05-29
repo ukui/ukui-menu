@@ -139,6 +139,8 @@ protected:
 //    void mousePressEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* e);
 
+    bool eventFilter(QObject * target , QEvent * event );
+
 private Q_SLOTS:
     /**
      * @brief Respond to button click
@@ -224,6 +226,8 @@ Q_SIGNALS:
      * @brief Send a hidden main window signal to the MainWindow
      */
     void sendHideMainWindowSignal();
+
+    void setFocusToMainWin();
 };
 
 #endif // SIDEBARWIDGET_H

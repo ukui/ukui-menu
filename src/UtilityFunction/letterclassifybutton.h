@@ -43,6 +43,8 @@ protected:
     void paintEvent(QPaintEvent* e);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void focusInEvent(QEvent* e);
+    void focusOutEvent(QEvent* e);
 
 Q_SIGNALS:
     void buttonClicked(QAbstractButton* btn);

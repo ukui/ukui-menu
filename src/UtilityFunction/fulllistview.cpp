@@ -208,20 +208,21 @@ void FullListView::paintEvent(QPaintEvent *e)
 void FullListView::keyPressEvent(QKeyEvent* e)
 {
      QRect center = visualRect(currentIndex());
-    if(e->type()==QEvent::KeyPress)
+    if(e->type() == QEvent::KeyPress)
     {
         switch(e->key())
         {
         case Qt::Key_Enter:
         case Qt::Key_Return:
         {
-            QModelIndex index=this->currentIndex();
+            QModelIndex index = this->currentIndex();
             Q_EMIT clicked(index);
         }
             break;
         case Qt::Key_Up:
         {
-            if(mapToGlobal(center.topRight()).y() < Style::AppListGridSizeWidth)
+
+            if(mapToGlobal(center.topRight()).y() < (Style::AppListGridSizeWidth + Style::QueryLineEditHeight))
             {
              Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
             }
@@ -230,6 +231,7 @@ void FullListView::keyPressEvent(QKeyEvent* e)
             break;
         case Qt::Key_Down:
         {
+
             if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
             {
                 Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);

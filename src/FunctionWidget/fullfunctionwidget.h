@@ -163,6 +163,8 @@ public Q_SLOTS:
      */
     void animationValueChangedSlot(const QVariant &value);
 
+    void onSetSlider(int);
+
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget

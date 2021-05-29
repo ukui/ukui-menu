@@ -98,33 +98,25 @@ void ScrollArea::enterEvent(QEvent *e)
 
 void ScrollArea::keyPressEvent(QKeyEvent* e)
 {
-//    if(e->type()==QEvent::KeyPress)
-//    {
-//        switch(e->key())
-//        {
-//        case Qt::Key_Up:
-//        {
-//            //    //向下滚动
-//            //    if((m_buttonList.at(index)->pos().y()+m_buttonList.at(index)->height()+m_letterListScrollArea->widget()->pos().y()) >= m_letterListScrollArea->height())
-//            //    {
-//                    int val= verticalScrollBar()->sliderPosition() - 100;
-//                    verticalScrollBar()->setSliderPosition(val);
-//            //    }
-//           //  verticalScrollBar()->setSliderPosition(verticalScrollBar()->sliderPosition() - 100);
-//             return QScrollArea::keyPressEvent(e);
-//        }
-//            break;
-//        case Qt::Key_Down:
-//        {
-//            verticalScrollBar()->setSliderPosition(verticalScrollBar()->sliderPosition() + 100);
-//            return QScrollArea::keyPressEvent(e);
-//        }
-//            break;
-//        default:
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+        case Qt::Key_Up:
+        {
+            focusPreviousChild();
+        }
+            break;
+        case Qt::Key_Down:
+        {
+            focusNextChild();
+        }
+            break;
+        default:
             return QScrollArea::keyPressEvent(e);
-//            break;
-//        }
-//    }
+            break;
+        }
+    }
 }
 
 void ScrollArea::leaveEvent(QEvent *e)

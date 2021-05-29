@@ -75,7 +75,7 @@ void FullCommonUseWidget::initAppListWidget()
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
-    connect(m_listView,SIGNAL(sendSetslidebar(int)),this,SLOT(onSetSlider(int)));
+    connect(m_listView,&FullListView::sendSetslidebar,this,&FullCommonUseWidget::onSetSlider);
 }
 
 void FullCommonUseWidget::resizeScrollAreaControls()

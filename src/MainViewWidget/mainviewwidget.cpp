@@ -888,3 +888,9 @@ void MainViewWidget::keyPressEvent(QKeyEvent *e)
         }
     }
 }
+
+
+void MainViewWidget::setFocusToThis()
+{
+    this->setFocus();
+}

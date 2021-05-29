@@ -35,6 +35,7 @@ void LetterButtonWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
+    this->setFocusPolicy(Qt::StrongFocus);
     this->resize(235,366);
 
     QGridLayout* gridLayout=new QGridLayout;

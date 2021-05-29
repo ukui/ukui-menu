@@ -20,6 +20,7 @@
 #include "utility.h"
 #include <QGSettings>
 #include <QVariant>
+#include <QKeyEvent>
 
 ClassifyBtnScrollAreaWid::ClassifyBtnScrollAreaWid()
 {
@@ -84,4 +85,28 @@ void ClassifyBtnScrollArea::initWid()
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setFrameShape(QFrame::NoFrame);
+}
+
+void ClassifyBtnScrollArea::keyPressEvent(QKeyEvent* e)
+{
+    if(e->key() == QEvent::KeyPress)
+    {
+        qDebug() << "ClassifyBtnScrollAreaWid::keyPressEvent" << e->key();
+        switch(e->key())
+        {
+        case Qt::Key_Up:
+        {
+            focusPreviousChild();
+        }
+            break;
+        case Qt::Key_Down:
+        {
+            focusNextChild();
+        }
+            break;
+        default:
+            return QScrollArea::keyPressEvent(e);
+            break;
+        }
+    }
 }
