@@ -189,6 +189,10 @@ private Q_SLOTS:
     void resetSidebarBtnSlot();
     void themeModeChangeSlot(QString styleName);
 
+public Q_SLOTS:
+
+    void setFocusToThis();
+
 Q_SIGNALS:
     /**
      * @brief Send all category button signal

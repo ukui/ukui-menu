@@ -42,7 +42,7 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
 {
     this->setFlat(true);
     this->setFixedSize(m_width,m_height);
-    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocusPolicy(Qt::NoFocus);
     m_iconLabel->setFixedSize(m_iconSize,m_iconSize);
     m_textLabel->adjustSize();
     if(m_fullscreen)

@@ -80,6 +80,8 @@ public:
      */
     void setLetterBtnGeometry();
 
+    void letterButtonClick();
+
 private:
     /*Application list interface*/
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
@@ -130,8 +132,6 @@ protected:
      */
     void resizeScrollAreaControls();
 
-    void keyPressEvent(QKeyEvent* e);
-
     bool eventFilter(QObject *watched, QEvent *event);
 
 public Q_SLOTS:
@@ -174,7 +174,8 @@ Q_SIGNALS:
     /**
      * @brief setFocusToMainWin
      */
-    void setFocusToMainWin();
+    void setFocusToSideWin();
+
 };
 
 #endif // FULLLETTERWIDGET_H

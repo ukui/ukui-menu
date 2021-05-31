@@ -33,8 +33,8 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
         font.setPixelSize(Style::LeftLetterFontSize);
         this->setFont(font);
     }
-
     this->setText(letter);
+    this->setFocusPolicy(Qt::NoFocus);
     this->setCheckable(true);
     connect(this,&LetterClassifyButton::toggled,this,&LetterClassifyButton::reactToToggle);
 }
@@ -44,7 +44,7 @@ void LetterClassifyButton::paintEvent(QPaintEvent* e)
     QStylePainter painter(this);
     QStyleOptionButton option;
     initStyleOption(&option);
-    if ((option.state & QStyle::State_Enabled) && (option.state & QStyle::State_MouseOver)) {
+    if ((option.state & QStyle::State_Enabled) && (option.state & QStyle::State_MouseOver || option.state & QStyle::State_HasFocus)) {
         painter.save();
         painter.setPen(Qt::NoPen);
         if(!m_fullscreen)

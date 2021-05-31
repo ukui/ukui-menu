@@ -26,7 +26,6 @@ ClassifyBtnScrollAreaWid::ClassifyBtnScrollAreaWid()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-
 }
 
 void ClassifyBtnScrollAreaWid::paintEvent(QPaintEvent *event)
@@ -71,6 +70,31 @@ void ClassifyBtnScrollAreaWid::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
+//void ClassifyBtnScrollAreaWid::keyPressEvent(QKeyEvent* e)
+//{
+//    if(e->key() == QEvent::KeyPress)
+//    {
+//        qDebug() << "ClassifyBtnScrollAreaWid::keyPressEvent" << e->key();
+//        switch(e->key())
+//        {
+//        case Qt::Key_Up:
+//        {
+//            focusPreviousChild();
+//        }
+//            break;
+//        case Qt::Key_Down:
+//        {
+//            focusNextChild();
+//        }
+//            break;
+//        default:
+//            return QWidget::keyPressEvent(e);
+//            break;
+//        }
+//    }
+//}
+
+
 ClassifyBtnScrollArea::ClassifyBtnScrollArea(QWidget *parent):
     QScrollArea(parent)
 {
@@ -85,28 +109,4 @@ void ClassifyBtnScrollArea::initWid()
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setFrameShape(QFrame::NoFrame);
-}
-
-void ClassifyBtnScrollArea::keyPressEvent(QKeyEvent* e)
-{
-    if(e->key() == QEvent::KeyPress)
-    {
-        qDebug() << "ClassifyBtnScrollAreaWid::keyPressEvent" << e->key();
-        switch(e->key())
-        {
-        case Qt::Key_Up:
-        {
-            focusPreviousChild();
-        }
-            break;
-        case Qt::Key_Down:
-        {
-            focusNextChild();
-        }
-            break;
-        default:
-            return QScrollArea::keyPressEvent(e);
-            break;
-        }
-    }
 }

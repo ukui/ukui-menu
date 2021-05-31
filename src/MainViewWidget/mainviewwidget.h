@@ -230,6 +230,8 @@ Q_SIGNALS:
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+
+    void setFocusToSideWin();
 };
 
 #endif // MAINVIEWWIDGET_H

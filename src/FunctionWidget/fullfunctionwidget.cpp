@@ -181,6 +181,7 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
         listview->repaint(listview->rect());
     });
     connect(listview, &FullListView::sendSetslidebar, this, &FullFunctionWidget::onSetSlider);
+    listview->installEventFilter(this);
     m_scrollAreaWidLayout->addWidget(listview);
     m_data.clear();
     for(int i=0;i<desktopfplist.count();i++)
@@ -458,5 +459,27 @@ void FullFunctionWidget::onSetSlider(int value)
 {
     int curvalue = m_scrollArea->verticalScrollBar()->value();
     m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+    qDebug() << "FullFunctionWidget::onSetSlider" << curvalue;
+}
 
+bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if( ke->key() == Qt::Key_Tab )
+        {
+           // m_letterListScrollAreaWid->setFocus();
+           // m_letterListScrollArea->setFocus();
+           // return true;
+           Q_EMIT setFocusToSideWin();
+        }
+    }
+    return QWidget::eventFilter(watched,event);
+}
+
+void FullFunctionWidget::functionButtonClick()
+{
+    if(m_btnGroup->button(0)!=nullptr)
+        m_btnGroup->button(0)->click();
 }

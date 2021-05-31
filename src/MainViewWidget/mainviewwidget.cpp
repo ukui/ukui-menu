@@ -86,6 +86,8 @@ void MainViewWidget::initUi()
     connect(this,&MainViewWidget::directoryChangedSignal,m_commonUseWid,&CommonUseWidget::updateListViewSlot);
     connect(this,&MainViewWidget::directoryChangedSignal,m_fullCommonUseWid,&FullCommonUseWidget::updateListViewSlot);
 
+    connect(m_fullLetterWid,&FullLetterWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
+    connect(m_fullFunctionWid,&FullFunctionWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
     //发送隐藏主界面信号
     connect(m_commonUseWid,&CommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
     connect(m_fullCommonUseWid,&FullCommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
@@ -893,4 +895,6 @@ void MainViewWidget::keyPressEvent(QKeyEvent *e)
 void MainViewWidget::setFocusToThis()
 {
     this->setFocus();
+    m_fullLetterWid->letterButtonClick();
+    m_fullFunctionWid->functionButtonClick();
 }

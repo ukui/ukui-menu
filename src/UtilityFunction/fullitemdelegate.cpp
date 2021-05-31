@@ -34,6 +34,7 @@ FullItemDelegate::~FullItemDelegate()
 
 void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+
     if(index.isValid())
     {
         QStyleOptionViewItem viewOption(option);//用来在视图中画一个item

@@ -290,7 +290,6 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
                 m_scrollAnimation->setStartValue(m_beginPos);
                 m_scrollAnimation->setEndValue(m_endPos);
                 m_scrollAnimation->start();
-
             }
         }
         else{
@@ -434,32 +433,6 @@ void FullLetterWidget::onSetSlider(int value)
             //setSliderPosition(verticalScrollBar()->sliderPosition() + 100);
 }
 
-void FullLetterWidget::keyPressEvent(QKeyEvent* e)
-{
-    if(e->key() == QEvent::KeyPress)
-    {
-        qDebug() << "FullLetterWidget::keyPressEvent" << e->type();
-        switch(e->key())
-        {
-        case Qt::Key_Up:
-        {
-            focusPreviousChild();
-          //  return QWidget::keyPressEvent(e);
-        }
-            break;
-        case Qt::Key_Down:
-        {
-            focusNextChild();
-         //   return QWidget::keyPressEvent(e);
-        }
-            break;
-        default:
-            return QWidget::keyPressEvent(e);
-            break;
-        }
-    }
-}
-
 bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if( event->type() == QEvent::KeyPress )
@@ -467,7 +440,17 @@ bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
         QKeyEvent *ke = (QKeyEvent *)event;
         if( ke->key() == Qt::Key_Tab )
         {
-            m_letterListScrollAreaWid->setFocus();
+           // m_letterListScrollAreaWid->setFocus();
+           // m_letterListScrollArea->setFocus();
+           // return true;
+           Q_EMIT setFocusToSideWin();
         }
     }
+    return QWidget::eventFilter(watched,event);
+}
+
+void FullLetterWidget::letterButtonClick()
+{
+    if(m_btnGroup->button(0)!=nullptr)
+        m_btnGroup->button(0)->click();
 }

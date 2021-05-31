@@ -29,7 +29,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent* event);
-
+   // void keyPressEvent(QKeyEvent* e);
 };
 
 class ClassifyBtnScrollArea : public QScrollArea
@@ -39,7 +39,6 @@ public:
 
 protected:
     void initWid();
-    void keyPressEvent(QKeyEvent* e);
 };
 
 #endif // CLASSIFYSCROLLAREA_H

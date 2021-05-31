@@ -47,7 +47,7 @@ void SideBarWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocusPolicy(Qt::NoFocus);
 
     addSidebarBtn();
     loadMinSidebar();
@@ -74,8 +74,10 @@ bool SideBarWidget::eventFilter(QObject * target , QEvent * event )
         if( ke->key() == Qt::Key_Tab )
         {
             Q_EMIT setFocusToMainWin();
+         //   return true;
         }
     }
+    return QWidget::eventFilter(target , event);
 }
 
 
@@ -851,4 +853,9 @@ void SideBarWidget::keyPressEvent(QKeyEvent* e)
             break;
         }
     }
+}
+
+void SideBarWidget::setFocusToThis()
+{
+    this->setFocus();
 }

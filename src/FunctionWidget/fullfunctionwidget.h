@@ -73,6 +73,8 @@ public:
      */
     void setFunctionBtnGeometry();
 
+    void functionButtonClick();
+
 private:
     /*Application list interface*/
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
@@ -133,6 +135,9 @@ protected:
      */
     void resizeScrollAreaControls();
 
+    bool eventFilter(QObject *watched, QEvent *event);
+
+
 public Q_SLOTS:
     /**
      * @brief Open the application
@@ -170,6 +175,8 @@ Q_SIGNALS:
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+
+    void setFocusToSideWin();
 };
 
 #endif // FULLFUNCTIONWIDGET_H

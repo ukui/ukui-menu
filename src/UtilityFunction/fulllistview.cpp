@@ -221,21 +221,21 @@ void FullListView::keyPressEvent(QKeyEvent* e)
             break;
         case Qt::Key_Up:
         {
-
             if(mapToGlobal(center.topRight()).y() < (Style::AppListGridSizeWidth + Style::QueryLineEditHeight))
             {
              Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+                qDebug() << "FullListView::keyPressEvent";
             }
             return QListView::keyPressEvent(e);
         }
             break;
         case Qt::Key_Down:
         {
-
             if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
             {
                 Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
             }
+
             return QListView::keyPressEvent(e);
         }
         default:
