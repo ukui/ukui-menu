@@ -138,6 +138,8 @@ void FullListView::rightClickedSlot(const QPoint &pos)
         }
         this->selectionModel()->clear();
     }
+
+    this->setFocus();
 }
 
 void FullListView::enterEvent(QEvent *e)

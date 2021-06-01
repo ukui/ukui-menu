@@ -620,6 +620,7 @@ void MainViewWidget::loadCommonUseWidget()
     this->layout()->update();
     m_widgetState=1;
     m_saveCurrentWidState=1;
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -637,6 +638,7 @@ void MainViewWidget::loadLetterWidget()
     m_letterWid->show();
     m_widgetState=2;
     m_saveCurrentWidState=2;
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -654,6 +656,7 @@ void MainViewWidget::loadFunctionWidget()
     m_functionWid->show();
     m_widgetState=3;
     m_saveCurrentWidState=3;
+    m_queryLineEdit->clear();
 }
 
 
@@ -673,6 +676,7 @@ void MainViewWidget::loadFullCommonUseWidget()
     m_fullCommonUseWid->updateListView();
     m_widgetState=1;
     m_saveCurrentWidState=1;
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -692,6 +696,7 @@ void MainViewWidget::loadFullLetterWidget()
     m_fullLetterWid->enterAnimation();
     m_widgetState=2;
     m_saveCurrentWidState=2;
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -711,6 +716,7 @@ void MainViewWidget::loadFullFunctionWidget()
     m_fullFunctionWid->enterAnimation();
     m_widgetState=3;
     m_saveCurrentWidState=3;
+    m_queryLineEdit->clear();
 }
 
 void MainViewWidget::loadSearchResultWidget()

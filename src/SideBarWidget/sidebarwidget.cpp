@@ -288,7 +288,7 @@ QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
  */
 void SideBarWidget::shutdownBtnRightClickSlot()
 {
-    int ret=m_shutDownMenu->showShutdownMenu();
+    int ret = m_shutDownMenu->showShutdownMenu();
     if(ret>=10 && ret<=17)
     {
         Q_EMIT sendHideMainWindowSignal();
@@ -319,6 +319,7 @@ void SideBarWidget::shutdownBtnRightClickSlot()
         }
 
     }
+    this->setFocus();
 }
 
 void SideBarWidget::addRightClickMenu(QPushButton *btn)
@@ -348,12 +349,13 @@ void SideBarWidget::otherBtnRightClickSlot()
     default:
         break;
     }
-    int ret=m_otherMenu->showOtherMenu(desktopfp);
+    int ret = m_otherMenu->showOtherMenu(desktopfp);
     if(ret==15)
     {
         Q_EMIT sendHideMainWindowSignal();
         QProcess::startDetached(QString("ukui-control-center -d"));
     }
+    this->setFocus();
 }
 
 void SideBarWidget::computerBtnClickedSlot()
