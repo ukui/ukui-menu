@@ -118,7 +118,6 @@ void SideBarWidget::addSidebarBtn()
 
     //分类按钮
     m_buttonList.clear();
-    m_btnGroup=new QButtonGroup(m_mainWidget);
     m_allBtn=new QPushButton;
     initBtn(m_allBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),tr("All"),0);
     m_letterBtn=new QPushButton;
@@ -127,8 +126,8 @@ void SideBarWidget::addSidebarBtn()
     initBtn(m_functionBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/function.svg"),tr("Function"),2);
     int id=0;
     Q_FOREACH (QAbstractButton* btn, m_buttonList) {
-        m_btnGroup->addButton(btn,id++);
-       // btn->setCheckable(true);
+      //  m_btnGroup->addButton(btn,id++);
+        btn->setCheckable(true);
     }
 
     QString usericon=getUserIcon();
@@ -145,7 +144,9 @@ void SideBarWidget::addSidebarBtn()
     initBtn(m_controlBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/control.svg"),tr("Settings"),7);
     m_shutDownBtn=new QPushButton;
     initBtn(m_shutDownBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),tr("Power"),8);
-    connect(m_btnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&SideBarWidget::btnGroupClickedSlot);
+    connect(m_allBtn, &QPushButton::clicked, this, &SideBarWidget::btnAllClickedSlot);
+    connect(m_letterBtn ,&QPushButton::clicked, this, &SideBarWidget::btnLetterClickedSlot);
+    connect(m_functionBtn, &QPushButton::clicked, this, &SideBarWidget::btnFuncClickedSlot);
     connect(m_computerBtn,&QPushButton::clicked,this,&SideBarWidget::computerBtnClickedSlot);
     connect(m_personalBtn,&QPushButton::clicked,this,&SideBarWidget::personalBtnClickedSlot);
     connect(m_controlBtn,&QPushButton::clicked,this,&SideBarWidget::controlBtnClickedSlot);
@@ -627,30 +628,49 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
 //    btn->layout()->addWidget(labeltext);
 }
 
-void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
+void SideBarWidget::btnAllClickedSlot()
 {
-    Q_FOREACH (QAbstractButton* button, m_buttonList) {
-        if(m_btnGroup->id(btn)==m_buttonList.indexOf(button))
-        {
-            if(m_btnGroup->id(btn)==0)
-            {
-                if(m_isFullScreen)
-                    Q_EMIT sendFullScreenCommonUseBtnSignal();
-                else
-                    Q_EMIT sendCommonUseBtnSignal();
-            }
-            else if(m_btnGroup->id(btn)==1)
-            {
-                if(m_isFullScreen)
-                    Q_EMIT sendFullScreenLetterBtnSignal();
-                else Q_EMIT sendLetterBtnSignal();
-            }
-            else{
-                if(m_isFullScreen)
-                    Q_EMIT sendFullScreenFunctionBtnSignal();
-                else Q_EMIT sendFunctionBtnSignal();
-            }
-        }
+    m_allBtn->setChecked(true);
+    m_letterBtn->setChecked(false);
+    m_functionBtn->setChecked(false);
+    if(m_isFullScreen)
+    {
+        Q_EMIT sendFullScreenCommonUseBtnSignal();
+    }
+    else
+    {
+        Q_EMIT sendCommonUseBtnSignal();
+    }
+}
+
+void SideBarWidget::btnLetterClickedSlot()
+{
+    m_allBtn->setChecked(false);
+    m_letterBtn->setChecked(true);
+    m_functionBtn->setChecked(false);
+    if(m_isFullScreen)
+    {
+        Q_EMIT sendFullScreenLetterBtnSignal();
+    }
+    else
+    {
+        Q_EMIT sendLetterBtnSignal();
+    }
+}
+
+void SideBarWidget::btnFuncClickedSlot()
+{
+    m_allBtn->setChecked(false);
+    m_letterBtn->setChecked(false);
+    m_functionBtn->setChecked(true);
+
+    if(m_isFullScreen)
+    {
+        Q_EMIT sendFullScreenFunctionBtnSignal();
+    }
+    else
+    {
+        Q_EMIT sendFunctionBtnSignal();
     }
 }
 

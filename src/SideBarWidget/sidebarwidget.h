@@ -70,7 +70,6 @@ private:
     QHBoxLayout *m_minMaxLayout=nullptr;
     QPushButton *m_minMaxBtn=nullptr;
 
-    QButtonGroup *m_btnGroup=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QList<QLabel*> m_labelList;
     QStringList m_textList;
@@ -143,10 +142,17 @@ protected:
 
 private Q_SLOTS:
     /**
-     * @brief Respond to button click
-     * @param btn: QButtonGroup button
+     * @brief btnAllClickedSlot
      */
-    void btnGroupClickedSlot(QAbstractButton *btn);
+    void btnAllClickedSlot();
+    /**
+     * @brief btnLetterClickedSlot
+     */
+    void btnLetterClickedSlot();
+    /**
+     * @brief btnFuncClickedSlot
+     */
+    void btnFuncClickedSlot();
     /**
      * @brief Load power button right-click menu
      */
