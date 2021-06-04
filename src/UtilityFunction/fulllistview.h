@@ -51,7 +51,7 @@ private:
     QStandardItemModel* listmodel=nullptr;
     int module=0;
 
-    RightClickMenu* menu=nullptr;//右键菜单
+//    RightClickMenu* menu=nullptr;//右键菜单
     QStringList data;
 
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;

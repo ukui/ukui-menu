@@ -36,8 +36,8 @@ SideBarWidget::SideBarWidget(QWidget *parent) :
 SideBarWidget::~SideBarWidget()
 {
     delete m_ukuiMenuInterface;
-    delete m_shutDownMenu;
-    delete m_otherMenu;
+//    delete m_shutDownMenu;
+//    delete m_otherMenu;
 }
 
 /**
@@ -53,8 +53,8 @@ void SideBarWidget::initUi()
     loadMinSidebar();
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
-    m_shutDownMenu=new RightClickMenu;
-    m_otherMenu=new RightClickMenu;
+ //   m_shutDownMenu=new RightClickMenu;
+ //   m_otherMenu=new RightClickMenu;
 }
 
 /**
@@ -288,7 +288,10 @@ QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
  */
 void SideBarWidget::shutdownBtnRightClickSlot()
 {
-    int ret = m_shutDownMenu->showShutdownMenu();
+
+    RightClickMenu m_otherMenu;
+    int ret = m_otherMenu.showShutdownMenu();
+    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
     if(ret>=10 && ret<=17)
     {
         Q_EMIT sendHideMainWindowSignal();
@@ -319,7 +322,7 @@ void SideBarWidget::shutdownBtnRightClickSlot()
         }
 
     }
-    this->setFocus();
+    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
 }
 
 void SideBarWidget::addRightClickMenu(QPushButton *btn)
@@ -330,6 +333,7 @@ void SideBarWidget::addRightClickMenu(QPushButton *btn)
 
 void SideBarWidget::otherBtnRightClickSlot()
 {
+    qDebug() << "SideBarWidget::otherBtnRightClickSlot() 开始";
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
     int index=m_buttonList.indexOf(btn);
     QString desktopfp;
@@ -349,13 +353,14 @@ void SideBarWidget::otherBtnRightClickSlot()
     default:
         break;
     }
-    int ret = m_otherMenu->showOtherMenu(desktopfp);
+    RightClickMenu m_otherMenu;
+    int ret = m_otherMenu.showOtherMenu(desktopfp);
     if(ret==15)
     {
         Q_EMIT sendHideMainWindowSignal();
         QProcess::startDetached(QString("ukui-control-center -d"));
     }
-    this->setFocus();
+    qDebug() << "SideBarWidget::otherBtnRightClickSlot() 结束";
 }
 
 void SideBarWidget::computerBtnClickedSlot()
@@ -437,6 +442,7 @@ void SideBarWidget::loadMinSidebar()
         btn->setToolTip(m_textList.at(m_buttonList.indexOf(button)));
     }
 
+
     changeIconColor(false);
 
     disconnect(m_minMaxBtn,&QToolButton::clicked,this, &SideBarWidget::sendDefaultBtnSignal);
@@ -459,6 +465,7 @@ void SideBarWidget::setMaxBtn()
 
     m_minMaxBtn->setFixedSize(37,37);
     m_minMaxBtn->setIcon(QIcon(pixmap));
+    m_minMaxBtn->setToolTip(tr("Max"));
 }
 
 /**
@@ -534,6 +541,7 @@ void SideBarWidget::setMinBtn()
 
     m_minMaxBtn->setFixedSize(Style::MinMaxBtnWidth,Style::MinMaxBtnWidth);
     m_minMaxBtn->setIcon(QIcon(pixmap));
+    m_minMaxBtn->setToolTip("");
 }
 
 /**

@@ -73,6 +73,9 @@ private:
     int m_actionNumber;
     QProcess *m_cmdProc=nullptr;
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
+    QMenu* m_showAppMenu = nullptr;
+    QMenu* m_showShutMenu = nullptr;
+    QMenu* m_showOtherMenu = nullptr;
 
     QStringList m_whiteList;
 

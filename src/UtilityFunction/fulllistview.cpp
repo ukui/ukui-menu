@@ -28,12 +28,12 @@ FullListView::FullListView(QWidget *parent, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-    menu=new RightClickMenu;
+//    menu=new RightClickMenu;
 }
 
 FullListView::~FullListView()
 {
-    delete menu;
+//    delete menu;
     delete pUkuiMenuInterface;
 }
 
@@ -104,7 +104,8 @@ void FullListView::rightClickedSlot(const QPoint &pos)
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
-        int ret=menu->showAppBtnMenu(desktopfp);
+        RightClickMenu menu;
+        int ret=menu.showAppBtnMenu(desktopfp);
         if(module>0)
         {
             switch (ret) {
@@ -138,8 +139,6 @@ void FullListView::rightClickedSlot(const QPoint &pos)
         }
         this->selectionModel()->clear();
     }
-
-    this->setFocus();
 }
 
 void FullListView::enterEvent(QEvent *e)
