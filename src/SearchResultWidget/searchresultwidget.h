@@ -56,6 +56,8 @@ public:
      */
     void repaintWidget();
 
+    void setViewFocus();
+
 private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     ListView* m_listView=nullptr;

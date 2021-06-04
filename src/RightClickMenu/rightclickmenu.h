@@ -75,9 +75,9 @@ private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
 
     QStringList m_whiteList;
-    QMenu *m_showAppMenu;
-    QMenu *m_showShutdownMenu;
-    QMenu *m_showOtherMenu;
+    QMenu *m_showAppMenu = nullptr;
+    QMenu *m_showShutdownMenu = nullptr;
+    QMenu *m_showOtherMenu = nullptr;
 
 protected:
     /**

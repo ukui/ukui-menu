@@ -39,7 +39,7 @@ void SearchResultWidget::initUi()
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
-
+    this->setFocusPolicy(Qt::StrongFocus);
     m_listView=new ListView(this,this->width()-6,this->height()-6,3);
     m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_listView->show();
@@ -83,4 +83,9 @@ void SearchResultWidget::repaintWidget()
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
     m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_listView->show();
+}
+
+void SearchResultWidget::setViewFocus()
+{
+    m_listView->setFocus();
 }

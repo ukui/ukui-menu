@@ -40,7 +40,7 @@ void FullCommonUseWidget::initUi()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
-
+    this->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* mainLayout=new QHBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     this->setLayout(mainLayout);
@@ -63,6 +63,17 @@ void FullCommonUseWidget::initUi()
 
     initAppListWidget();
     fillAppList();
+
+    flag = true;
+    //翻页灵敏度时间调节
+    time = new QTimer(this);
+    connect(time,&QTimer::timeout,[=](){
+        if(flag == false)
+        {
+            flag = true;
+            time->stop();
+        }
+    });
 }
 
 void FullCommonUseWidget::initAppListWidget()
@@ -75,6 +86,7 @@ void FullCommonUseWidget::initAppListWidget()
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
+    connect(m_listView,&FullListView::sendSetslidebar,this,&FullCommonUseWidget::onSetSlider);
 }
 
 void FullCommonUseWidget::resizeScrollAreaControls()
@@ -117,6 +129,23 @@ void FullCommonUseWidget::execApplication(QString desktopfp)
     execApp(desktopfp);
 }
 
+void FullCommonUseWidget::onSetSlider(int value)
+{
+//    if(flag)
+//    {
+//        flag = false;
+//        time->start(100);
+        if(value == 0)
+        {
+            m_scrollArea->verticalScrollBar()->setValue(0);
+        }
+        else
+        {
+            int curvalue = m_scrollArea->verticalScrollBar()->value();
+            m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+        }
+//    }
+}
 /**
  * 更新应用列表
  */

@@ -80,6 +80,8 @@ public:
      */
     void setLetterBtnGeometry();
 
+    void letterButtonClick();
+
 private:
     /*Application list interface*/
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
@@ -89,7 +91,8 @@ private:
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_letterList;//Store the list of letter buttons
     QStringList m_data;
-
+    bool flag;
+    QTimer *time = nullptr;
     /*Alphabetic classification list interface*/
     QWidget* m_letterListWid=nullptr;
     ClassifyBtnScrollArea* m_letterListScrollArea=nullptr;
@@ -130,6 +133,8 @@ protected:
      */
     void resizeScrollAreaControls();
 
+    bool eventFilter(QObject *watched, QEvent *event);
+
 public Q_SLOTS:
     /**
      * @brief Respond to button click
@@ -160,11 +165,18 @@ public Q_SLOTS:
      */
     void animationValueChangedSlot(const QVariant &value);
 
+    void onSetSlider(int);
+
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+    /**
+     * @brief setFocusToMainWin
+     */
+    void setFocusToSideWin();
+
 };
 
 #endif // FULLLETTERWIDGET_H

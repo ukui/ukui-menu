@@ -59,6 +59,17 @@ void FullLetterWidget::initUi()
 
     initAppListWidget();
     initLetterListWidget();
+
+    flag = true;
+    //翻页灵敏度时间调节
+    time = new QTimer(this);
+    connect(time,&QTimer::timeout,[=](){
+        if(flag == false)
+        {
+            flag = true;
+            time->stop();
+        }
+    });
 }
 
 /**
@@ -85,8 +96,6 @@ void FullLetterWidget::initAppListWidget()
     m_appListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
 
     fillAppList();
-
-
 }
 
 /**
@@ -115,7 +124,8 @@ void FullLetterWidget::fillAppList()
 
             //插入应用列表
             FullListView* listview=new FullListView(this,1);
-
+            connect(listview,&FullListView::sendSetslidebar,this,&FullLetterWidget::onSetSlider);
+            listview->installEventFilter(this);
             //修复异常黑框问题
             connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
                 listview->repaint(listview->rect());
@@ -291,7 +301,6 @@ void FullLetterWidget::btnGroupClickedSlot(QAbstractButton *btn)
                 m_scrollAnimation->setStartValue(m_beginPos);
                 m_scrollAnimation->setEndValue(m_endPos);
                 m_scrollAnimation->start();
-
             }
         }
         else{
@@ -426,4 +435,37 @@ void FullLetterWidget::moveScrollBar(int type)
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()-height*100/1080);
     else
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()+height*100/1080);
+}
+
+void FullLetterWidget::onSetSlider(int value)
+{
+//    if(flag)
+//    {
+//        flag = false;
+//        time->start(100);
+        int curvalue = m_scrollArea->verticalScrollBar()->value();
+        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+//    }
+}
+
+bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if( ke->key() == Qt::Key_Tab )
+        {
+           // m_letterListScrollAreaWid->setFocus();
+           // m_letterListScrollArea->setFocus();
+           // return true;
+           Q_EMIT setFocusToSideWin();
+        }
+    }
+    return QWidget::eventFilter(watched,event);
+}
+
+void FullLetterWidget::letterButtonClick()
+{
+    if(m_btnGroup->button(0)!=nullptr)
+        m_btnGroup->button(0)->click();
 }

@@ -46,6 +46,7 @@ protected:
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) override;
+    void keyPressEvent(QKeyEvent* e);
 
 private:
     QStandardItemModel* listmodel=nullptr;

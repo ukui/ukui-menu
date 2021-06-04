@@ -137,3 +137,8 @@ void FullSearchResultWidget::moveScrollBar(int type)
     else
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+height*100/1080);
 }
+
+void FullSearchResultWidget::setViewFocus()
+{
+    m_listView->setFocus();
+}
