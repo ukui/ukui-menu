@@ -59,6 +59,17 @@ void FullLetterWidget::initUi()
 
     initAppListWidget();
     initLetterListWidget();
+
+    flag = true;
+    //翻页灵敏度时间调节
+    time = new QTimer(this);
+    connect(time,&QTimer::timeout,[=](){
+        if(flag == false)
+        {
+            flag = true;
+            time->stop();
+        }
+    });
 }
 
 /**
@@ -428,9 +439,13 @@ void FullLetterWidget::moveScrollBar(int type)
 
 void FullLetterWidget::onSetSlider(int value)
 {
-    int curvalue = m_scrollArea->verticalScrollBar()->value();
-    m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
-            //setSliderPosition(verticalScrollBar()->sliderPosition() + 100);
+//    if(flag)
+//    {
+//        flag = false;
+//        time->start(100);
+        int curvalue = m_scrollArea->verticalScrollBar()->value();
+        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+//    }
 }
 
 bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)

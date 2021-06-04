@@ -238,6 +238,8 @@ Q_SIGNALS:
     void sendHideMainWindowSignal();
 
     void setFocusToMainWin();
+
+    void setSlideBar(int value);
 };
 
 #endif // SIDEBARWIDGET_H

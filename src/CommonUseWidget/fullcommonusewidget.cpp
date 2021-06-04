@@ -63,6 +63,17 @@ void FullCommonUseWidget::initUi()
 
     initAppListWidget();
     fillAppList();
+
+    flag = true;
+    //翻页灵敏度时间调节
+    time = new QTimer(this);
+    connect(time,&QTimer::timeout,[=](){
+        if(flag == false)
+        {
+            flag = true;
+            time->stop();
+        }
+    });
 }
 
 void FullCommonUseWidget::initAppListWidget()
@@ -120,9 +131,20 @@ void FullCommonUseWidget::execApplication(QString desktopfp)
 
 void FullCommonUseWidget::onSetSlider(int value)
 {
-    int curvalue = m_scrollArea->verticalScrollBar()->value();
-    m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
-            //setSliderPosition(verticalScrollBar()->sliderPosition() + 100);
+//    if(flag)
+//    {
+//        flag = false;
+//        time->start(100);
+        if(value == 0)
+        {
+            m_scrollArea->verticalScrollBar()->setValue(0);
+        }
+        else
+        {
+            int curvalue = m_scrollArea->verticalScrollBar()->value();
+            m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+        }
+//    }
 }
 /**
  * 更新应用列表

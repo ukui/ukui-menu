@@ -45,17 +45,21 @@ protected:
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) override;
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
 //    void mousePressEvent(QMouseEvent *event);
 
 private:
     FullItemDelegate* m_delegate=nullptr;
     QStandardItemModel* listmodel=nullptr;
     int module=0;
-
+    double transparency;
     RightClickMenu* menu=nullptr;//右键菜单
     QStringList data;
-
+    QGSettings* gsetting;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+
+//    bool inCurView;
 
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item

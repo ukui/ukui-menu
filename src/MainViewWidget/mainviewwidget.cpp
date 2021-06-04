@@ -86,6 +86,7 @@ void MainViewWidget::initUi()
     connect(this,&MainViewWidget::directoryChangedSignal,m_commonUseWid,&CommonUseWidget::updateListViewSlot);
     connect(this,&MainViewWidget::directoryChangedSignal,m_fullCommonUseWid,&FullCommonUseWidget::updateListViewSlot);
 
+    connect(this, &MainViewWidget::setSlideBar, m_fullCommonUseWid, &FullCommonUseWidget::onSetSlider);
     connect(m_fullLetterWid,&FullLetterWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
     connect(m_fullFunctionWid,&FullFunctionWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
     //发送隐藏主界面信号

@@ -153,6 +153,8 @@ void MainWindow::initUi()
     connect(m_sideBarWid,&SideBarWidget::sendFullScreenFunctionBtnSignal,
             m_mainViewWid,&MainViewWidget::loadFullFunctionWidget);
 
+    connect(m_sideBarWid, &SideBarWidget::setSlideBar, m_mainViewWid, &MainViewWidget::setSlideBar);
+
     connect(m_sideBarWid,&SideBarWidget::sendFullScreenBtnSignal,this,&MainWindow::showFullScreenWidget);
     connect(m_sideBarWid,&SideBarWidget::sendDefaultBtnSignal,this,&MainWindow::showDefaultWidget);
     connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);

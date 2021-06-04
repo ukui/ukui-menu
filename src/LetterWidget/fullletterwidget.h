@@ -91,7 +91,8 @@ private:
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_letterList;//Store the list of letter buttons
     QStringList m_data;
-
+    bool flag;
+    QTimer *time = nullptr;
     /*Alphabetic classification list interface*/
     QWidget* m_letterListWid=nullptr;
     ClassifyBtnScrollArea* m_letterListScrollArea=nullptr;

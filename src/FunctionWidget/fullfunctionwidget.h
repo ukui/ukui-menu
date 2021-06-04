@@ -84,7 +84,8 @@ private:
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_classificationList;//Store the list of category buttons
     QStringList m_data;
-
+    QTimer *time = nullptr;
+    bool flag;
     /*Function classification list interface*/
     QWidget* m_iconListWid=nullptr;
     ClassifyBtnScrollArea* m_iconListScrollArea=nullptr;

@@ -232,6 +232,8 @@ Q_SIGNALS:
     void sendHideMainWindowSignal();
 
     void setFocusToSideWin();
+
+    void setSlideBar(int value);
 };
 
 #endif // MAINVIEWWIDGET_H

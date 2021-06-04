@@ -58,6 +58,17 @@ void FullFunctionWidget::initUi()
 
     initAppListWidget();
     initIconListWidget();
+
+    flag = true;
+    //翻页灵敏度时间调节
+    time = new QTimer(this);
+    connect(time,&QTimer::timeout,[=](){
+        if(flag == false)
+        {
+            flag = true;
+            time->stop();
+        }
+    });
 }
 
 /**
@@ -457,9 +468,14 @@ void FullFunctionWidget::moveScrollBar(int type)
 
 void FullFunctionWidget::onSetSlider(int value)
 {
-    int curvalue = m_scrollArea->verticalScrollBar()->value();
-    m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
-    qDebug() << "FullFunctionWidget::onSetSlider" << curvalue;
+//    if(flag)
+//    {
+//        flag = false;
+//        time->start(100);
+        int curvalue = m_scrollArea->verticalScrollBar()->value();
+        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+//        qDebug() << "FullFunctionWidget::onSetSlider" << curvalue;
+//    }
 }
 
 bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)

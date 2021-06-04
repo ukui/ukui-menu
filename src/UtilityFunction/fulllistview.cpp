@@ -21,13 +21,14 @@
 #include <QDebug>
 #include <syslog.h>
 #include <QPushButton>
+#include <QGSettings>
 
 FullListView::FullListView(QWidget *parent, int module):
     QListView(parent)
 {
     this->module=module;
     initWidget();
-
+//    inCurView = false;
     pUkuiMenuInterface=new UkuiMenuInterface;
     menu=new RightClickMenu;
 }
@@ -60,6 +61,20 @@ void FullListView::initWidget()
     connect(this,&FullListView::customContextMenuRequested,this,&FullListView::rightClickedSlot);
 
     connect(this,&FullListView::clicked,this,&FullListView::onClicked);
+
+//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
+//    {
+//        gsetting = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+//        if(gsetting->keys().contains(QString("transparency")))
+//            transparency = gsetting->get("transparency").toDouble();
+//        connect(gsetting,&QGSettings::changed,[this] (const QString &key)
+//        {
+//            if (key == "transparency")
+//            {
+//                transparency = gsetting->get("transparency").toDouble();
+//            }
+//        });
+//    }
 }
 
 void FullListView::addData(QStringList data)
@@ -75,6 +90,18 @@ void FullListView::addData(QStringList data)
     }
     m_delegate= new FullItemDelegate(this,module);
     this->setItemDelegate(m_delegate);
+}
+
+void FullListView::focusInEvent(QFocusEvent *event)
+{
+    //inCurView = true;
+    return QListView::focusInEvent(event);
+}
+
+void FullListView::focusOutEvent(QFocusEvent *event)
+{
+    //inCurView = false;
+    return QListView::focusOutEvent(event);
 }
 
 void FullListView::updateData(QStringList data)
@@ -221,21 +248,31 @@ void FullListView::keyPressEvent(QKeyEvent* e)
             break;
         case Qt::Key_Up:
         {
-            if(mapToGlobal(center.topRight()).y() < (Style::AppListGridSizeWidth + Style::QueryLineEditHeight))
-            {
-             Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
-                qDebug() << "FullListView::keyPressEvent";
-            }
+//            if(inCurView)
+//            {
+                this->clearFocus();
+                if(mapToGlobal(center.topRight()).y() < (Style::AppListGridSizeWidth + Style::QueryLineEditHeight))
+                {
+                 Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+                }
+//            }
+                repaint();
+                this->setFocus();
             return QListView::keyPressEvent(e);
         }
             break;
         case Qt::Key_Down:
         {
-            if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
-            {
-                Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
-            }
-
+//            if(inCurView)
+//            {
+                this->clearFocus();
+                if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
+                {
+                    Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+                }
+//            }
+                repaint();
+                this->setFocus();
             return QListView::keyPressEvent(e);
         }
         default:

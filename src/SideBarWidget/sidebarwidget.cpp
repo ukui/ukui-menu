@@ -636,6 +636,7 @@ void SideBarWidget::btnAllClickedSlot()
     if(m_isFullScreen)
     {
         Q_EMIT sendFullScreenCommonUseBtnSignal();
+        Q_EMIT setSlideBar(0);
     }
     else
     {
