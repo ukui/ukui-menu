@@ -463,8 +463,9 @@ void SideBarWidget::userAccountsChanged()
     facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     labelicon->setPixmap(facePixmap);
     QLabel* labelname=m_userIconBtn->findChild<QLabel*>("nameLabel");
-    labelname->setText(getUserName());//更新用户名
-    m_textList.replace(3,labelname->text());//更新用户名
+    QString userName = fontMetrics().elidedText(getUserName(),Qt::ElideRight,labelname->width()-10,Qt::TextShowMnemonic);
+    labelname->setText(userName);//更新用户名
+    m_textList.replace(3,getUserName());//更新用户名
 }
 
 /**
