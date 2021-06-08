@@ -81,5 +81,7 @@
         <file>data/img/mainviewwidget/Mobile-Disabled.svg</file>
         <file>data/img/mainviewwidget/Mobile-Enabled.svg</file>
         <file>data/img/mainviewwidget/Mobile-Normal.svg</file>
+        <file>src/SearchResultWidget/pinyinWithTone.txt</file>
+        <file>src/SearchResultWidget/pinyinWithoutTone.txt</file>
     </qresource>
 </RCC>

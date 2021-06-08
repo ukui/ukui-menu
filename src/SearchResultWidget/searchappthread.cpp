@@ -18,6 +18,7 @@
 
 #include "searchappthread.h"
 #include <syslog.h>
+#include "src/SearchResultWidget/file-utils.h"
 
 SearchAppThread::SearchAppThread()
 {
@@ -79,10 +80,19 @@ void SearchAppThread::run()
         {
             while(index<m_appInfoVector.size())
             {
-                QString appNamePy=m_ukuiMenuInterface->getAppNamePinyin(m_appInfoVector.at(index).at(1));
-                QString appName=m_appInfoVector.at(index).at(1);
+               // QString appNamePy=m_ukuiMenuInterface->getAppNamePinyin(m_appInfoVector.at(index).at(1));
+                QStringList appNameLs;
+                QStringList appNameFls;
+                QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords(m_appInfoVector.at(index).at(1));
+                for(int i = 0; i < appNamePyLst.size()/2; i++)
+                {
+                   appNameLs.append(appNamePyLst.at(i * 2));
+                   appNameFls.append(appNamePyLst.at(i * 2 + 1));
+                }
+
+                QString appName = m_appInfoVector.at(index).at(1);
                 QString appEnglishName=m_appInfoVector.at(index).at(2);
-                QString appNameFls=m_appInfoVector.at(index).at(4);
+                //QString appNameFls=m_appInfoVector.at(index).at(4);
 
                 if(m_keyWord.contains(QRegExp("[\\x4e00-\\x9fa5]+")))//中文正则表达式
                 {
@@ -91,11 +101,15 @@ void SearchAppThread::run()
                 }
                 else
                 {
-                    if(appNamePy.contains(str,Qt::CaseInsensitive) ||
-                            appNameFls.contains(str,Qt::CaseInsensitive) ||
-                            appEnglishName.contains(str,Qt::CaseInsensitive))
+                    for (int var = 0; var < appNameLs.size(); ++var)
                     {
-                        m_searchResultVector.append(m_appInfoVector.at(index));
+                        if(appNameLs[var].contains(str,Qt::CaseInsensitive) ||
+                                appNameFls[var].contains(str,Qt::CaseInsensitive) ||
+                                appEnglishName.contains(str,Qt::CaseInsensitive))
+                        {
+                            m_searchResultVector.append(m_appInfoVector.at(index));
+                            break;
+                        }
                     }
                 }
                 index++;
