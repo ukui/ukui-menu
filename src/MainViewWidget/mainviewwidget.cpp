@@ -348,10 +348,10 @@ void MainViewWidget::setLineEditFocus(QString arg)
 {
     if(!m_queryLineEdit->hasFocus())
     {
-      //  m_searchKeyWords=arg;
+        m_searchKeyWords=arg;
         m_queryLineEdit->setFocus();
-        //if(!m_queryLineEdit->text().isEmpty())
-          //  m_queryLineEdit->setText(arg);
+        if(!m_queryLineEdit->text().isEmpty())
+            m_queryLineEdit->setText(arg);
     }
 }
 
@@ -623,9 +623,7 @@ void MainViewWidget::loadCommonUseWidget()
     this->layout()->update();
     m_widgetState=1;
     m_saveCurrentWidState=1;
-    m_queryLineEdit->setFocus();
     m_queryLineEdit->clear();
-    this->setFocus();
 }
 
 /**
@@ -643,9 +641,7 @@ void MainViewWidget::loadLetterWidget()
     m_letterWid->show();
     m_widgetState=2;
     m_saveCurrentWidState=2;
-    m_queryLineEdit->setFocus();
     m_queryLineEdit->clear();
-    this->setFocus();
 }
 
 /**
@@ -663,9 +659,7 @@ void MainViewWidget::loadFunctionWidget()
     m_functionWid->show();
     m_widgetState=3;
     m_saveCurrentWidState=3;
-    m_queryLineEdit->setFocus();
     m_queryLineEdit->clear();
-    this->setFocus();
 }
 
 /**
@@ -684,9 +678,7 @@ void MainViewWidget::loadFullCommonUseWidget()
     m_fullCommonUseWid->updateListView();
     m_widgetState=1;
     m_saveCurrentWidState=1;
-    m_queryLineEdit->setFocus();
     m_queryLineEdit->clear();
-    this->setFocus();
 }
 
 /**
@@ -706,9 +698,7 @@ void MainViewWidget::loadFullLetterWidget()
     m_fullLetterWid->enterAnimation();
     m_widgetState=2;
     m_saveCurrentWidState=2;
-    m_queryLineEdit->setFocus();
     m_queryLineEdit->clear();
-    this->setFocus();
 }
 
 /**
@@ -728,9 +718,7 @@ void MainViewWidget::loadFullFunctionWidget()
     m_fullFunctionWid->enterAnimation();
     m_widgetState=3;
     m_saveCurrentWidState=3;
-    m_queryLineEdit->setFocus();
     m_queryLineEdit->clear();
-    this->setFocus();
 }
 
 void MainViewWidget::loadSearchResultWidget()
