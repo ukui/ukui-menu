@@ -57,6 +57,7 @@ SOURCES += \
     src/MainViewWidget/mainviewwidget.cpp \
     src/MainWindow/mainwindow.cpp \
     src/RightClickMenu/rightclickmenu.cpp \
+    src/SearchResultWidget/file-utils.cpp \
     src/SearchResultWidget/fullsearchresultwidget.cpp \
     src/SearchResultWidget/searchappthread.cpp \
     src/SearchResultWidget/searchresultwidget.cpp \
@@ -93,6 +94,7 @@ HEADERS  += \
     src/MainViewWidget/mainviewwidget.h \
     src/MainWindow/mainwindow.h \
     src/RightClickMenu/rightclickmenu.h \
+    src/SearchResultWidget/file-utils.h \
     src/SearchResultWidget/fullsearchresultwidget.h \
     src/SearchResultWidget/searchappthread.h \
     src/SearchResultWidget/searchresultwidget.h \
@@ -119,9 +121,10 @@ RESOURCES += \
     res.qrc
 
 PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt
+
 CONFIG += no_keywords link_pkgconfig
 
-LIBS+=-pthread
+LIBS+=-pthread -luchardet
 
 desktop_file.files = ukui-menu.desktop
 desktop_file.path = /usr/share/applications

@@ -107,7 +107,6 @@ void ListView::rightClickedSlot()
         if(strlist.at(1).toInt()==1)
         {
             int ret = menu->showAppBtnMenu(strlist.at(0));
-
             if(module>0)
             {
                 if(strlist.at(1).toInt()==1)

@@ -44,6 +44,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     m_whiteList.append("peony.desktop");
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
+
 }
 
 RightClickMenu::~RightClickMenu()
@@ -55,10 +56,10 @@ RightClickMenu::~RightClickMenu()
         delete m_showAppMenu;
         m_showAppMenu = nullptr;
     }
-    if(m_showShutdownMenu != nullptr)
+    if(m_showShutMenu != nullptr)
     {
-        delete m_showShutdownMenu;
-        m_showShutdownMenu = nullptr;
+        delete m_showShutMenu;
+        m_showShutMenu = nullptr;
     }
     if(m_showOtherMenu != nullptr)
     {
@@ -220,13 +221,9 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
     m_actionNumber=0;
     this->m_desktopfp.clear();
     this->m_desktopfp=desktopfp;
-    if(m_showAppMenu != nullptr)
-    {
-        delete m_showAppMenu;
-        m_showAppMenu = nullptr;
-    }
 
     m_showAppMenu = new QMenu(this);
+
     //添加菜单项，指定图标、名称、响应函数
     QFileInfo fileInfo(desktopfp);
     QString desktopfn=fileInfo.fileName();
@@ -264,32 +261,29 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
                        this,SLOT(uninstallActionTriggerSlot()));
 
     m_showAppMenu->setAttribute(Qt::WA_TranslucentBackground);
+//    m_showMenu->setAttribute(Qt::WA_DeleteOnClose);
     m_showAppMenu->exec(QCursor::pos());
-
+    qDebug() << "RightClickMenu::showAppBtnMenu(QString desktopfp)";
     return m_actionNumber;
 }
 
 int RightClickMenu::showShutdownMenu()
 {
     m_actionNumber=0;
-    if(m_showShutdownMenu != nullptr)
-    {
-        delete m_showShutdownMenu;
-        m_showShutdownMenu = nullptr;
-    }
-    m_showShutdownMenu = new QMenu(this);
-    m_showShutdownMenu->addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Sleep"),
-                   this,SLOT(hibernateActionTriggerSlot()));//休眠睡眠相同
-    m_showShutdownMenu->addAction(QIcon(getIconPixmap("system-logout-symbolic",1)),tr("Log Out"),
-                   this,SLOT(logoutActionTriggerSlot()));
-    m_showShutdownMenu->addAction(QIcon(getIconPixmap("system-restart-symbolic",1)),tr("Restart"),
-                   this,SLOT(rebootActionTriggerSlot()));
-    m_showShutdownMenu->addAction(QIcon(getIconPixmap("exit-symbolic",1)),tr("Power Off"),
-                   this,SLOT(shutdownActionTriggerSlot()));
-    m_showShutdownMenu->setAttribute(Qt::WA_TranslucentBackground);
-    m_showShutdownMenu->setAttribute(Qt::WA_DeleteOnClose);
-    m_showShutdownMenu->exec(QCursor::pos());
+    m_showShutMenu = new QMenu(this);
 
+    m_showShutMenu->addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Sleep"),
+                   this,SLOT(hibernateActionTriggerSlot()));//休眠睡眠相同
+    m_showShutMenu->addAction(QIcon(getIconPixmap("system-logout-symbolic",1)),tr("Log Out"),
+                   this,SLOT(logoutActionTriggerSlot()));
+    m_showShutMenu->addAction(QIcon(getIconPixmap("system-restart-symbolic",1)),tr("Restart"),
+                   this,SLOT(rebootActionTriggerSlot()));
+    m_showShutMenu->addAction(QIcon(getIconPixmap("exit-symbolic",1)),tr("Power Off"),
+                   this,SLOT(shutdownActionTriggerSlot()));
+    m_showShutMenu->setAttribute(Qt::WA_TranslucentBackground);
+//    m_showShutMenu->setAttribute(Qt::WA_DeleteOnClose);
+    m_showShutMenu->exec(QCursor::pos());
+    qDebug() << "RightClickMenu::showShutdownMenu()";
     return m_actionNumber;
 }
 
@@ -298,13 +292,6 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
     m_actionNumber=0;
     this->m_desktopfp.clear();
     this->m_desktopfp=desktopfp;
-
-    if(m_showOtherMenu != nullptr)
-    {
-        delete m_showOtherMenu;
-        m_showOtherMenu = nullptr;
-    }
-
     m_showOtherMenu = new QMenu(this);
 //    QDBusInterface iface("com.ukui.panel.desktop",
 //                         "/",
@@ -321,8 +308,9 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
     m_showOtherMenu->addAction(QIcon(getIconPixmap(":/data/img/sidebarwidget/setting.svg",0)),tr("Personalize this list"),
                    this,SLOT(otherListActionTriggerSlot()));
     m_showOtherMenu->setAttribute(Qt::WA_TranslucentBackground);
-    m_showOtherMenu->setAttribute(Qt::WA_DeleteOnClose);
+//    m_showOtherMenu->setAttribute(Qt::WA_DeleteOnClose);
     m_showOtherMenu->exec(QCursor::pos());
+    qDebug() << "RightClickMenu::showOtherMenu(QString desktopfp)";
 
     return m_actionNumber;
 }
