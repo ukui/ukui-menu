@@ -73,6 +73,8 @@ public:
      */
     void setFunctionBtnGeometry();
 
+    void functionButtonClick();
+
 private:
     /*Application list interface*/
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
@@ -82,7 +84,8 @@ private:
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_classificationList;//Store the list of category buttons
     QStringList m_data;
-
+    QTimer *time = nullptr;
+    bool flag;
     /*Function classification list interface*/
     QWidget* m_iconListWid=nullptr;
     ClassifyBtnScrollArea* m_iconListScrollArea=nullptr;
@@ -133,6 +136,9 @@ protected:
      */
     void resizeScrollAreaControls();
 
+    bool eventFilter(QObject *watched, QEvent *event);
+
+
 public Q_SLOTS:
     /**
      * @brief Open the application
@@ -163,11 +169,15 @@ public Q_SLOTS:
      */
     void animationValueChangedSlot(const QVariant &value);
 
+    void onSetSlider(int);
+
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+
+    void setFocusToSideWin();
 };
 
 #endif // FULLFUNCTIONWIDGET_H

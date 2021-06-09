@@ -86,6 +86,7 @@ void LetterWidget::initAppListWidget()
  */
 void LetterWidget::fillAppListView()
 {
+    m_data.clear();
     int row=0;
     QVector<QStringList> vector=UkuiMenuInterface::alphabeticVector;
     for(int i=0;i<vector.size();i++)

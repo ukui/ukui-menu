@@ -118,3 +118,4 @@ void CommonUseWidget::repaintWidget()
     m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_listView->show();
 }
+

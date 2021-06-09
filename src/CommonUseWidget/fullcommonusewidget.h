@@ -74,6 +74,8 @@ private:
     ScrollArea* m_scrollArea=nullptr;
     ScrollAreaWid* m_scrollAreaWid=nullptr;
     QVBoxLayout* m_scrollAreaWidLayout=nullptr;
+    bool flag;
+    QTimer *time = nullptr;
 
 protected:
     /**
@@ -100,6 +102,8 @@ public Q_SLOTS:
      * @brief Update the application list slot function
      */
     void updateListViewSlot();
+
+    void onSetSlider(int value);
 
 Q_SIGNALS:
     /**

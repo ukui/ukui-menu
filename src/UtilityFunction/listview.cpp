@@ -48,7 +48,7 @@ void ListView::initWidget()
     this->setTextElideMode(Qt::ElideRight);
     this->setViewMode(QListView::ListMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
-    this->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setUpdatesEnabled(true);
@@ -176,4 +176,24 @@ void ListView::paintEvent(QPaintEvent *e)
     p.setColor(QPalette::Active,QPalette::Button,color);
     this->verticalScrollBar()->setPalette(p);
     QListView::paintEvent(e);
+}
+
+void ListView::keyPressEvent(QKeyEvent* e)
+{
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        {
+            QModelIndex index=this->currentIndex();
+            Q_EMIT clicked(index);
+        }
+            break;   
+        default:
+            return QListView::keyPressEvent(e);
+            break;
+        }
+    }
 }

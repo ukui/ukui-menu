@@ -106,7 +106,7 @@ void MainWindow::initUi()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
-    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocusPolicy(Qt::NoFocus);
 
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
     this->setMinimumSize(Style::minw,Style::minh);
@@ -116,6 +116,13 @@ void MainWindow::initUi()
     m_mainViewWid=new MainViewWidget;
     m_sideBarWid=new SideBarWidget;
 
+//    m_frame->installEventFilter(this);
+//    m_mainViewWid->installEventFilter(this);
+//    m_sideBarWid->installEventFilter(this);
+
+//    setTabOrder(m_mainViewWid , m_sideBarWid);
+//    setTabOrder(m_sideBarWid , m_mainViewWid);
+
     this->setCentralWidget(m_frame);
     QHBoxLayout *mainlayout=new QHBoxLayout;
     mainlayout->setContentsMargins(0,0,0,0);
@@ -124,6 +131,7 @@ void MainWindow::initUi()
 
     mainlayout->addWidget(m_mainViewWid);
     m_line=new QFrame;
+    m_line->installEventFilter(this);
     m_line->setFrameShape(QFrame::VLine);
     m_line->setFixedSize(1,this->height()-1);
     m_line->setEnabled(false);
@@ -133,6 +141,7 @@ void MainWindow::initUi()
     m_animation = new QPropertyAnimation(this, "geometry");
     connect(m_animation,&QPropertyAnimation::finished,this,&MainWindow::animationValueFinishedSlot);
 
+    connect(m_sideBarWid, &SideBarWidget::setFocusToMainWin, m_mainViewWid, &MainViewWidget::setFocusToThis);
     connect(m_sideBarWid, &SideBarWidget::sendCommonUseBtnSignal, m_mainViewWid, &MainViewWidget::loadCommonUseWidget);
     connect(m_sideBarWid,&SideBarWidget::sendLetterBtnSignal, m_mainViewWid, &MainViewWidget::loadLetterWidget);
     connect(m_sideBarWid, &SideBarWidget::sendFunctionBtnSignal, m_mainViewWid, &MainViewWidget::loadFunctionWidget);
@@ -144,11 +153,14 @@ void MainWindow::initUi()
     connect(m_sideBarWid,&SideBarWidget::sendFullScreenFunctionBtnSignal,
             m_mainViewWid,&MainViewWidget::loadFullFunctionWidget);
 
+    connect(m_sideBarWid, &SideBarWidget::setSlideBar, m_mainViewWid, &MainViewWidget::setSlideBar);
+
     connect(m_sideBarWid,&SideBarWidget::sendFullScreenBtnSignal,this,&MainWindow::showFullScreenWidget);
     connect(m_sideBarWid,&SideBarWidget::sendDefaultBtnSignal,this,&MainWindow::showDefaultWidget);
     connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
+    connect(m_mainViewWid,&MainViewWidget::setFocusToSideWin,m_sideBarWid,&SideBarWidget::setFocusToThis);
 //    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
 //        repaintWidget();
 //    });
@@ -400,6 +412,22 @@ bool MainWindow::event ( QEvent * event )
             m_mainViewWid->widgetMakeZero();
         }
    }
+
+   if (event->type() == QEvent::KeyPress)
+   {
+       QKeyEvent *keyEvent = (QKeyEvent *) event;
+       if (keyEvent->key() == Qt::Key_Tab)
+       {
+
+
+       return true;
+       }
+//       if((keyEvent->key() >= 0x30 && keyEvent->key() <= 0x39) ||
+//               (keyEvent->key() >= 0x41 && keyEvent->key() <= 0x5a))
+//       {
+//           m_mainViewWid->setLineEditFocus(keyEvent->text());
+//       }
+   }
    return QWidget::event(event);
 }
 
@@ -592,27 +620,20 @@ void MainWindow::repaintWidget()
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-    if(e->type()==QEvent::KeyPress)
+    if(e->type() == QEvent::KeyPress)
     {
-        if((e->key()>=0x30 && e->key()<=0x39) || (e->key()>=0x41 && e->key()<=0x5a))
+        if((e->key() >= 0x30 && e->key() <= 0x39) || (e->key() >= 0x41 && e->key() <= 0x5a))
         {
             m_mainViewWid->setLineEditFocus(e->text());
         }
-        if(e->key()==Qt::Key_Escape)
+        if(e->key() == Qt::Key_Backspace)
+        {
+            m_mainViewWid->setLineEditFocus("");
+        }
+        if(e->key() == Qt::Key_Escape)
         {
             this->hide();
             m_mainViewWid->widgetMakeZero();
         }
-
-//        switch(e->key()){
-//        case Qt::Key_Up:
-//            m_mainViewWid->moveScrollBar(0);
-//            break;
-//        case Qt::Key_Down:
-//            m_mainViewWid->moveScrollBar(1);
-//            break;
-//        default:
-//            break;
-//        }
     }
 }

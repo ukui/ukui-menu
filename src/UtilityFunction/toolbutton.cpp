@@ -36,7 +36,7 @@ ToolButton::ToolButton(int width,
     this->module=module;
     this->text=text;
 
-    this->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
     svgRender=new QSvgRenderer(this);
     svgRender->load(iconstr);
     if(module==1)

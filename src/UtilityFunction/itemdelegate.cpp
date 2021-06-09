@@ -61,7 +61,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
         QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
         painter->setRenderHint(QPainter::Antialiasing);
-        if(option.state & QStyle::State_MouseOver)
+        if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus))
         {
             QColor color = option.palette.text().color();
             color.setAlphaF(0.15);
@@ -125,7 +125,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 }
                 painter->restore();
 
-                if(option.state & QStyle::State_MouseOver)
+                if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus))
                 {
                     int len=fm.boundingRect(appname).width();
                     if(len>rect.width()-62)
@@ -211,7 +211,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                                     rect.width()-62,rect.height()),Qt::AlignVCenter,appnameElidedText);
             painter->restore();
 
-            if(option.state & QStyle::State_MouseOver)
+            if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus))
             {
                 int len=fm.boundingRect(appname).width();
                 if(len>rect.width()-62)

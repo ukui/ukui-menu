@@ -55,6 +55,8 @@ public:
      */
     void moveScrollBar(int type);
 
+    void setViewFocus();
+
 private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     FullListView* m_listView=nullptr;

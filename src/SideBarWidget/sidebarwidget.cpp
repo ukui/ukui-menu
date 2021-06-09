@@ -51,11 +51,36 @@ void SideBarWidget::initUi()
 
     addSidebarBtn();
     loadMinSidebar();
-
+    m_minMaxBtn->installEventFilter(this);
+    m_allBtn->installEventFilter(this);
+    m_letterBtn->installEventFilter(this);
+    m_functionBtn->installEventFilter(this);
+    m_userIconBtn->installEventFilter(this);
+    m_computerBtn->installEventFilter(this);
+    m_personalBtn->installEventFilter(this);
+    m_controlBtn->installEventFilter(this);
+    m_trashBtn->installEventFilter(this);
+    m_shutDownBtn->installEventFilter(this);
     m_ukuiMenuInterface=new UkuiMenuInterface;
  //   m_shutDownMenu=new RightClickMenu;
  //   m_otherMenu=new RightClickMenu;
 }
+
+bool SideBarWidget::eventFilter(QObject * target , QEvent * event )
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if( ke->key() == Qt::Key_Tab )
+        {
+            Q_EMIT setFocusToMainWin();
+         //   return true;
+        }
+    }
+    return QWidget::eventFilter(target , event);
+}
+
+
 
 /**
  * 侧边栏添加控件
@@ -68,6 +93,7 @@ void SideBarWidget::addSidebarBtn()
     m_mainWidgetLayout->setContentsMargins(0,0,0,6);
     m_mainWidgetLayout->setSpacing(10);
     m_mainWidget->setLayout(m_mainWidgetLayout);
+  //  m_mainWidget->setFocusPolicy(Qt::StrongFocus);
 //    m_mainWidget->setAutoFillBackground(true);
 //    QPalette palette;
 //    palette.setBrush(QPalette::Background,Qt::red);
@@ -76,21 +102,22 @@ void SideBarWidget::addSidebarBtn()
     m_minMaxWidget=new QWidget;
     m_minMaxLayout=new QHBoxLayout;
     m_minMaxBtn=new QPushButton;
-    m_minMaxBtn->setFlat(true);
-    m_minMaxBtn->setProperty("doNotAnimate",true);
+//    m_minMaxBtn->setFlat(true);
+//    m_minMaxBtn->setProperty("doNotAnimate",true);
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
+
 //    m_minMaxBtn->setShortcut(Qt::Key_Enter);
 //    m_minMaxBtn->setShortcut(Qt::Key_Return);
-    QShortcut *key_1 = new QShortcut(QKeySequence(Qt::Key_Enter),this);
-    connect(key_1,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
-    QShortcut *key_2 = new QShortcut(QKeySequence(Qt::Key_Return),this);
-    connect(key_2,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
+//    QShortcut *key_1 = new QShortcut(QKeySequence(Qt::Key_Enter),this);
+//    connect(key_1,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
+//    QShortcut *key_2 = new QShortcut(QKeySequence(Qt::Key_Return),this);
+//    connect(key_2,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
     m_minMaxLayout->addWidget(m_minMaxBtn);
     m_minMaxWidget->setLayout(m_minMaxLayout);
+    m_minMaxWidget->hasFocus();
 
     //分类按钮
     m_buttonList.clear();
-    m_btnGroup=new QButtonGroup(m_mainWidget);
     m_allBtn=new QPushButton;
     initBtn(m_allBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/commonuse.svg"),tr("All"),0);
     m_letterBtn=new QPushButton;
@@ -99,7 +126,7 @@ void SideBarWidget::addSidebarBtn()
     initBtn(m_functionBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/function.svg"),tr("Function"),2);
     int id=0;
     Q_FOREACH (QAbstractButton* btn, m_buttonList) {
-        m_btnGroup->addButton(btn,id++);
+      //  m_btnGroup->addButton(btn,id++);
         btn->setCheckable(true);
     }
 
@@ -117,7 +144,9 @@ void SideBarWidget::addSidebarBtn()
     initBtn(m_controlBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/control.svg"),tr("Settings"),7);
     m_shutDownBtn=new QPushButton;
     initBtn(m_shutDownBtn,QString::fromLocal8Bit(":/data/img/sidebarwidget/shutdown.svg"),tr("Power"),8);
-    connect(m_btnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&SideBarWidget::btnGroupClickedSlot);
+    connect(m_allBtn, &QPushButton::clicked, this, &SideBarWidget::btnAllClickedSlot);
+    connect(m_letterBtn ,&QPushButton::clicked, this, &SideBarWidget::btnLetterClickedSlot);
+    connect(m_functionBtn, &QPushButton::clicked, this, &SideBarWidget::btnFuncClickedSlot);
     connect(m_computerBtn,&QPushButton::clicked,this,&SideBarWidget::computerBtnClickedSlot);
     connect(m_personalBtn,&QPushButton::clicked,this,&SideBarWidget::personalBtnClickedSlot);
     connect(m_controlBtn,&QPushButton::clicked,this,&SideBarWidget::controlBtnClickedSlot);
@@ -256,7 +285,7 @@ void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int
     btnLayout->addStretch();
 
     btn->setLayout(btnLayout);
-    btn->setFocusPolicy(Qt::NoFocus);
+    btn->setFocusPolicy(Qt::StrongFocus);
 
     m_buttonList.append(btn);
     m_textList.append(text);
@@ -466,6 +495,7 @@ void SideBarWidget::setMaxBtn()
     m_minMaxBtn->setFixedSize(37,37);
     m_minMaxBtn->setIcon(QIcon(pixmap));
     m_minMaxBtn->setToolTip(tr("Max"));
+    m_minMaxBtn->setFocus();
 }
 
 /**
@@ -542,6 +572,7 @@ void SideBarWidget::setMinBtn()
     m_minMaxBtn->setFixedSize(Style::MinMaxBtnWidth,Style::MinMaxBtnWidth);
     m_minMaxBtn->setIcon(QIcon(pixmap));
     m_minMaxBtn->setToolTip("");
+    m_minMaxBtn->setFocus();
 }
 
 /**
@@ -607,30 +638,50 @@ void SideBarWidget::setMaxSidebarBtn(QPushButton *btn)
 //    btn->layout()->addWidget(labeltext);
 }
 
-void SideBarWidget::btnGroupClickedSlot(QAbstractButton *btn)
+void SideBarWidget::btnAllClickedSlot()
 {
-    Q_FOREACH (QAbstractButton* button, m_buttonList) {
-        if(m_btnGroup->id(btn)==m_buttonList.indexOf(button))
-        {
-            if(m_btnGroup->id(btn)==0)
-            {
-                if(m_isFullScreen)
-                    Q_EMIT sendFullScreenCommonUseBtnSignal();
-                else
-                    Q_EMIT sendCommonUseBtnSignal();
-            }
-            else if(m_btnGroup->id(btn)==1)
-            {
-                if(m_isFullScreen)
-                    Q_EMIT sendFullScreenLetterBtnSignal();
-                else Q_EMIT sendLetterBtnSignal();
-            }
-            else{
-                if(m_isFullScreen)
-                    Q_EMIT sendFullScreenFunctionBtnSignal();
-                else Q_EMIT sendFunctionBtnSignal();
-            }
-        }
+    m_allBtn->setChecked(true);
+    m_letterBtn->setChecked(false);
+    m_functionBtn->setChecked(false);
+    if(m_isFullScreen)
+    {
+        Q_EMIT sendFullScreenCommonUseBtnSignal();
+        Q_EMIT setSlideBar(0);
+    }
+    else
+    {
+        Q_EMIT sendCommonUseBtnSignal();
+    }
+}
+
+void SideBarWidget::btnLetterClickedSlot()
+{
+    m_allBtn->setChecked(false);
+    m_letterBtn->setChecked(true);
+    m_functionBtn->setChecked(false);
+    if(m_isFullScreen)
+    {
+        Q_EMIT sendFullScreenLetterBtnSignal();
+    }
+    else
+    {
+        Q_EMIT sendLetterBtnSignal();
+    }
+}
+
+void SideBarWidget::btnFuncClickedSlot()
+{
+    m_allBtn->setChecked(false);
+    m_letterBtn->setChecked(false);
+    m_functionBtn->setChecked(true);
+
+    if(m_isFullScreen)
+    {
+        Q_EMIT sendFullScreenFunctionBtnSignal();
+    }
+    else
+    {
+        Q_EMIT sendFunctionBtnSignal();
     }
 }
 
@@ -781,3 +832,61 @@ void SideBarWidget::setSideBarBtnGeometry()
 //                 this->parentWidget()->parentWidget()->hide();
 //    }
 //}
+
+void SideBarWidget::keyPressEvent(QKeyEvent* e)
+{
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        {
+            if(m_allBtn->hasFocus())
+            {
+                m_allBtn->click();
+            }
+            else if(m_letterBtn->hasFocus())
+            {
+                m_letterBtn->click();
+            }
+            else if(m_functionBtn->hasFocus())
+            {
+                m_functionBtn->click();
+            }
+            else
+            {
+                QWidget *current_focus_widget;
+                current_focus_widget = QWidget::focusWidget();
+                QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
+                le->clicked();
+            }
+        }
+            break;
+        case Qt::Key_Down:
+       //     focusNextChild();
+            if(m_buttonList.at(2)->hasFocus())
+            {
+                m_buttonList.at(3)->setFocus();
+            }
+
+            break;
+        case Qt::Key_Up:
+        //    focusPreviousChild();
+            if(m_buttonList.at(0)->hasFocus())
+            {
+                m_minMaxBtn->setFocus();
+            }
+
+            break;
+        default:
+            return QWidget::keyPressEvent(e);
+            break;
+        }
+    }
+}
+
+void SideBarWidget::setFocusToThis()
+{
+    this->setFocus();
+}

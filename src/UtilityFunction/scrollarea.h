@@ -46,7 +46,7 @@ Q_SIGNALS:
 protected:
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-
+    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
     void scrollContentsBy(int dx, int dy) override;
 
 private:

@@ -58,7 +58,7 @@ void MainViewWidget::initUi()
     mainLayout->addWidget(m_contentWid);
     this->setLayout(mainLayout);
 
-    this->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
 
     m_commonUseWid=new CommonUseWidget(m_contentWid);
     m_fullCommonUseWid=new FullCommonUseWidget(m_contentWid);
@@ -86,6 +86,9 @@ void MainViewWidget::initUi()
     connect(this,&MainViewWidget::directoryChangedSignal,m_commonUseWid,&CommonUseWidget::updateListViewSlot);
     connect(this,&MainViewWidget::directoryChangedSignal,m_fullCommonUseWid,&FullCommonUseWidget::updateListViewSlot);
 
+    connect(this, &MainViewWidget::setSlideBar, m_fullCommonUseWid, &FullCommonUseWidget::onSetSlider);
+    connect(m_fullLetterWid,&FullLetterWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
+    connect(m_fullFunctionWid,&FullFunctionWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
     //发送隐藏主界面信号
     connect(m_commonUseWid,&CommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
     connect(m_fullCommonUseWid,&FullCommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
@@ -756,6 +759,16 @@ void MainViewWidget::hideWidget()
     m_fullSearchResultWid->hide();
 }
 
+void MainViewWidget::changeFocuUp()
+{
+    this->focusPreviousChild();
+}
+
+void MainViewWidget::changeFocuDown()
+{
+    this->focusNextChild();
+}
+
 /**
  * 进程开启监控槽函数
  */
@@ -869,3 +882,37 @@ void MainViewWidget::moveScrollBar(int type)
 //    if(m_isFullScreen && event->button()==Qt::LeftButton)
 //        Q_EMIT sendHideMainWindowSignal();
 //}
+void MainViewWidget::keyPressEvent(QKeyEvent *e)
+{
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+            case Qt::Key_Down:
+            {
+                if(m_queryLineEdit->hasFocus())
+                {
+                    if(m_isFullScreen)
+                    {
+                        m_fullSearchResultWid->setViewFocus();
+                    }
+                    else
+                    {
+                        m_searchResultWid->setViewFocus();
+                    }
+                }
+            }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+
+void MainViewWidget::setFocusToThis()
+{
+    this->setFocus();
+    m_fullLetterWid->letterButtonClick();
+    m_fullFunctionWid->functionButtonClick();
+}

@@ -58,6 +58,17 @@ void FullFunctionWidget::initUi()
 
     initAppListWidget();
     initIconListWidget();
+
+    flag = true;
+    //翻页灵敏度时间调节
+    time = new QTimer(this);
+    connect(time,&QTimer::timeout,[=](){
+        if(flag == false)
+        {
+            flag = true;
+            time->stop();
+        }
+    });
 }
 
 /**
@@ -180,6 +191,8 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
     connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
         listview->repaint(listview->rect());
     });
+    connect(listview, &FullListView::sendSetslidebar, this, &FullFunctionWidget::onSetSlider);
+    listview->installEventFilter(this);
     m_scrollAreaWidLayout->addWidget(listview);
     m_data.clear();
     for(int i=0;i<desktopfplist.count();i++)
@@ -451,4 +464,38 @@ void FullFunctionWidget::moveScrollBar(int type)
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()-height*100/1080);
     else
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition()+height*100/1080);
+}
+
+void FullFunctionWidget::onSetSlider(int value)
+{
+//    if(flag)
+//    {
+//        flag = false;
+//        time->start(100);
+        int curvalue = m_scrollArea->verticalScrollBar()->value();
+        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+//        qDebug() << "FullFunctionWidget::onSetSlider" << curvalue;
+//    }
+}
+
+bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if( ke->key() == Qt::Key_Tab )
+        {
+           // m_letterListScrollAreaWid->setFocus();
+           // m_letterListScrollArea->setFocus();
+           // return true;
+           Q_EMIT setFocusToSideWin();
+        }
+    }
+    return QWidget::eventFilter(watched,event);
+}
+
+void FullFunctionWidget::functionButtonClick()
+{
+    if(m_btnGroup->button(0)!=nullptr)
+        m_btnGroup->button(0)->click();
 }

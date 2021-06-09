@@ -96,6 +96,29 @@ void ScrollArea::enterEvent(QEvent *e)
     this->verticalScrollBar()->setVisible(true);
 }
 
+void ScrollArea::keyPressEvent(QKeyEvent* e)
+{
+    if(e->type()==QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+        case Qt::Key_Up:
+        {
+            focusPreviousChild();
+        }
+            break;
+        case Qt::Key_Down:
+        {
+            focusNextChild();
+        }
+            break;
+        default:
+            return QScrollArea::keyPressEvent(e);
+            break;
+        }
+    }
+}
+
 void ScrollArea::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);

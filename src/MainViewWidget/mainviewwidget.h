@@ -72,6 +72,15 @@ public:
      */
     void repaintWidget();
     /**
+     * @brief changeFocuUp
+     */
+    void changeFocuUp();
+    /**
+     * @brief changeFocuDown
+     */
+    void changeFocuDown();
+
+    /**
      * @brief Move the scroll bar
      * @param type: Scroll way,Only the following parameters can be entered:
      *  0: moving up
@@ -138,6 +147,7 @@ protected:
     void loadSearchResultWidget();
     void loadFullSearchResultWidget();
     void hideWidget();
+    void keyPressEvent(QKeyEvent* e);
 
 public Q_SLOTS:
     /**
@@ -200,6 +210,8 @@ public Q_SLOTS:
      */
     void requestUpdateSlot();
 
+    void setFocusToThis();
+
 Q_SIGNALS:
     /**
      * @brief Desktop file directory change signal
@@ -218,6 +230,10 @@ Q_SIGNALS:
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+
+    void setFocusToSideWin();
+
+    void setSlideBar(int value);
 };
 
 #endif // MAINVIEWWIDGET_H
