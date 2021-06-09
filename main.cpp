@@ -82,7 +82,6 @@ int main(int argc, char *argv[])
     w.raise();
     w.update();
     w.activateWindow();
-    w.hide();
     //测试
 
     return app.exec();
