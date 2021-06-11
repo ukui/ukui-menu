@@ -58,6 +58,8 @@ private:
     RightClickMenu* menu=nullptr;//右键菜单
     QVector<QStringList> data;
     ItemDelegate* m_delegate=nullptr;
+    int m_preRowCount;
+
 
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item

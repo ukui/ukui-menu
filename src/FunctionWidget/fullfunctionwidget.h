@@ -41,6 +41,7 @@
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/UtilityFunction/functionclassifybutton.h"
 #include "src/Style/style.h"
+#include <QAbstractButton>
 
 class FullFunctionWidget : public QWidget
 {
@@ -74,6 +75,8 @@ public:
     void setFunctionBtnGeometry();
 
     void functionButtonClick();
+
+    QAbstractButton* getCurLetterButton(int value);
 
 private:
     /*Application list interface*/
@@ -137,7 +140,6 @@ protected:
     void resizeScrollAreaControls();
 
     bool eventFilter(QObject *watched, QEvent *event);
-
 
 public Q_SLOTS:
     /**

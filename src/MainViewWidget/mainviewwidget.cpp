@@ -47,7 +47,6 @@ void MainViewWidget::initUi()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setAttribute(Qt::WA_TranslucentBackground);
-
     QVBoxLayout* mainLayout=new QVBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
@@ -58,7 +57,7 @@ void MainViewWidget::initUi()
     mainLayout->addWidget(m_contentWid);
     this->setLayout(mainLayout);
 
-    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocusPolicy(Qt::NoFocus);
 
     m_commonUseWid=new CommonUseWidget(m_contentWid);
     m_fullCommonUseWid=new FullCommonUseWidget(m_contentWid);
@@ -202,6 +201,16 @@ void MainViewWidget::addTopControl()
     initQueryLineEdit();
 
 }
+
+//void MainViewWidget::focusInEvent(QFocusEvent *event)
+//{
+//    Q_UNUSED(event);
+//    if(this->hasFocus())
+//    {
+//        this->focusNextChild();
+//    }
+//    return QWidget::focusInEvent(event);
+//}
 
 /**
  * 添加搜索框
@@ -896,7 +905,6 @@ void MainViewWidget::keyPressEvent(QKeyEvent *e)
         }
     }
 }
-
 
 void MainViewWidget::setFocusToThis()
 {

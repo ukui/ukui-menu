@@ -248,6 +248,7 @@ void FullListView::keyPressEvent(QKeyEvent* e)
         }
             break;
         case Qt::Key_Up:
+        case Qt::Key_Left:
         {
 //            if(inCurView)
 //            {
@@ -257,12 +258,12 @@ void FullListView::keyPressEvent(QKeyEvent* e)
                  Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
                 }
 //            }
-                repaint();
                 this->setFocus();
             return QListView::keyPressEvent(e);
         }
             break;
         case Qt::Key_Down:
+        case Qt::Key_Right:
         {
 //            if(inCurView)
 //            {
@@ -272,7 +273,10 @@ void FullListView::keyPressEvent(QKeyEvent* e)
                     Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
                 }
 //            }
-                repaint();
+//                if(currentIndex().row() == this->model()->rowCount() - 1)
+//                {
+//                    setCurrentIndex(this->model()->index(0,0));
+//                }
                 this->setFocus();
             return QListView::keyPressEvent(e);
         }

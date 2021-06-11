@@ -413,6 +413,34 @@ void FullFunctionWidget::valueChangedSlot(int value)
     }
 }
 
+QAbstractButton* FullFunctionWidget::getCurLetterButton(int value)
+{
+    int index=0;
+    while(index<=m_classificationList.count()-1)
+    {
+        int min=m_scrollAreaWidLayout->itemAt(2*index)->widget()->y();
+        int max=0;
+        if(index==m_classificationList.count()-1)
+            max=m_scrollAreaWid->height();
+        else
+            max=m_scrollAreaWidLayout->itemAt(2*(index+1))->widget()->y();
+        if(value>=min && value<max)
+        {
+            Q_FOREACH (QAbstractButton* button, m_buttonList) {
+                FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
+                if(index==m_buttonList.indexOf(button))
+                {
+                    return button;
+                }
+            }
+            break;
+        }
+        else
+            index++;
+    }
+}
+
+
 void FullFunctionWidget::enterAnimation()
 {
     m_animation->setDuration(200);//动画总时间
@@ -490,6 +518,29 @@ bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
            // return true;
            Q_EMIT setFocusToSideWin();
         }
+        if(ke->key() == Qt::Key_Up)
+        {
+          //  qDebug() << "FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)";
+            if(m_scrollArea->verticalScrollBar()->value() != 0)
+            {
+                this->m_scrollArea->setFocusToPreChild();
+                return true;
+            }
+
+        }
+        if(ke->key() == Qt::Key_Down)
+        {
+//          QAbstractButton* button = getCurLetterButton(m_scrollArea->verticalScrollBar()->value());
+//          btnGroupClickedSlot(button);
+          //  qDebug() << "FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)";
+          //  if(m_scrollArea->verticalScrollBar()->value() <= m_scrollAreaWidLayout->itemAt(2 * (m_classificationList.count()))->widget()->y())
+            {
+                this->m_scrollArea->setFocusToNextChild();
+                return true;
+            }
+
+        }
+
     }
     return QWidget::eventFilter(watched,event);
 }
@@ -499,3 +550,5 @@ void FullFunctionWidget::functionButtonClick()
     if(m_btnGroup->button(0)!=nullptr)
         m_btnGroup->button(0)->click();
 }
+
+

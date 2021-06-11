@@ -92,7 +92,6 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         m_mainViewWid->widgetMakeZero();
     });
-
 }
 
 MainWindow::~MainWindow()
@@ -111,11 +110,10 @@ void MainWindow::initUi()
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
     this->setMinimumSize(Style::minw,Style::minh);
     this->setContentsMargins(0,0,0,0);
-
+    this->setFocus();
     m_frame=new QFrame;
     m_mainViewWid=new MainViewWidget;
     m_sideBarWid=new SideBarWidget;
-
 //    m_frame->installEventFilter(this);
 //    m_mainViewWid->installEventFilter(this);
 //    m_sideBarWid->installEventFilter(this);
@@ -137,6 +135,9 @@ void MainWindow::initUi()
     m_line->setEnabled(false);
     mainlayout->addWidget(m_line);
     mainlayout->addWidget(m_sideBarWid);
+    m_sideBarWid->loadMinSidebar();
+    m_mainViewWid->loadMinMainView();
+
 
     m_animation = new QPropertyAnimation(this, "geometry");
     connect(m_animation,&QPropertyAnimation::finished,this,&MainWindow::animationValueFinishedSlot);
@@ -161,6 +162,7 @@ void MainWindow::initUi()
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
     connect(m_mainViewWid,&MainViewWidget::setFocusToSideWin,m_sideBarWid,&SideBarWidget::setFocusToThis);
+    connect(this, &MainWindow::setFocusSignal, m_mainViewWid, &MainViewWidget::changeFocuDown);
 //    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
 //        repaintWidget();
 //    });
@@ -403,7 +405,6 @@ void MainWindow::animationValueFinishedSlot()
  */
 bool MainWindow::event ( QEvent * event )
 {
-
    if (event->type() == QEvent::ActivationChange)
    {
         if(QApplication::activeWindow() != this)
@@ -418,15 +419,16 @@ bool MainWindow::event ( QEvent * event )
        QKeyEvent *keyEvent = (QKeyEvent *) event;
        if (keyEvent->key() == Qt::Key_Tab)
        {
-
-
-       return true;
+           m_mainViewWid->setFocus();
+           Q_EMIT setFocusSignal();
+           return true;
        }
-//       if((keyEvent->key() >= 0x30 && keyEvent->key() <= 0x39) ||
-//               (keyEvent->key() >= 0x41 && keyEvent->key() <= 0x5a))
-//       {
-//           m_mainViewWid->setLineEditFocus(keyEvent->text());
-//       }
+       if(keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down ||
+               keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right)
+       {
+         m_mainViewWid->setFocus();
+         Q_EMIT setFocusSignal();
+       }
    }
    return QWidget::event(event);
 }
@@ -451,6 +453,7 @@ void MainWindow::loadMainWindow()
     int y = Style::primaryScreenY;
     int width = Style::primaryScreenWidth;
     int height = Style::primaryScreenHeight;
+    this->setFocus();
     if(m_isFullScreen)
     {
         //修复界面黑框问题
@@ -483,7 +486,8 @@ void MainWindow::loadMainWindow()
         m_line->setParent(nullptr);
         this->centralWidget()->layout()->removeWidget(m_sideBarWid);
         m_sideBarWid->setParent(nullptr);
-
+//        m_sideBarWid->clearFocus();
+//        m_mainViewWid->clearFocus();
         m_animation->setDuration(1);//动画总时间
         m_animation->setStartValue(startRect);
         m_animation->setEndValue(endRect);
@@ -566,7 +570,6 @@ void MainWindow::repaintWidget()
         }
     }
 }
-
 //void MainWindow::setFrameStyle()
 //{
 //    int position=0;
@@ -635,5 +638,12 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             this->hide();
             m_mainViewWid->widgetMakeZero();
         }
+//        if(e->key() == Qt::Key_Up || e->key() == Qt::Key_Down ||
+//                e->key() == Qt::Key_Left || e->key() == Qt::Key_Right)
+//        {
+//          qDebug() << "11111111111111111";
+//          m_sideBarWid->setFocus();
+//          Q_EMIT setFocusSignal();
+//        }
     }
 }

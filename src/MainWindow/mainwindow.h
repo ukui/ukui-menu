@@ -105,6 +105,10 @@ public Q_SLOTS:
     void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
     void animationValueFinishedSlot();
     void primaryScreenChangeSlot();
+
+public:
+Q_SIGNALS:
+    void setFocusSignal();
 };
 
 #endif // MAINWINDOW_H

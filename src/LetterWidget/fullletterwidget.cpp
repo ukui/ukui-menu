@@ -460,6 +460,24 @@ bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
            // return true;
            Q_EMIT setFocusToSideWin();
         }
+        if(ke->key() == Qt::Key_Up)
+        {
+            if(m_scrollArea->verticalScrollBar()->value() != 0)
+            {
+                this->m_scrollArea->setFocusToPreChild();
+                return true;
+            }
+
+        }
+        if(ke->key() == Qt::Key_Down)
+        {
+           // if(m_scrollArea->verticalScrollBar()->value() != m_scrollArea->verticalScrollBar()->maximum())
+            {
+                this->m_scrollArea->setFocusToNextChild();
+                return true;
+            }
+
+        }
     }
     return QWidget::eventFilter(watched,event);
 }

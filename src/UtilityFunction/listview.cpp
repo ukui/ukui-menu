@@ -58,6 +58,7 @@ void ListView::initWidget()
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);
     this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
+    this->setFocus();
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
 }
@@ -190,7 +191,26 @@ void ListView::keyPressEvent(QKeyEvent* e)
             QModelIndex index=this->currentIndex();
             Q_EMIT clicked(index);
         }
-            break;   
+        case Qt::Key_Down:
+        {
+            if(currentIndex().row() == this->model()->rowCount() - 1)
+            {
+                setCurrentIndex(this->model()->index(0,0));
+                break;
+            }
+            return QListView::keyPressEvent(e);
+            break;
+        }
+        case Qt::Key_Up:
+        {
+            if(currentIndex().row() == 0)
+            {
+                setCurrentIndex(this->model()->index(this->model()->rowCount()-1,0));
+                break;
+            }
+            return QListView::keyPressEvent(e);
+            break;
+        }
         default:
             return QListView::keyPressEvent(e);
             break;
