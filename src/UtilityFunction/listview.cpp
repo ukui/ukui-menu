@@ -191,6 +191,7 @@ void ListView::keyPressEvent(QKeyEvent* e)
             QModelIndex index=this->currentIndex();
             Q_EMIT clicked(index);
         }
+            break;
         case Qt::Key_Down:
         {
             if(currentIndex().row() == this->model()->rowCount() - 1)

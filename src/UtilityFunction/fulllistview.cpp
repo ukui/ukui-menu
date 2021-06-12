@@ -280,6 +280,7 @@ void FullListView::keyPressEvent(QKeyEvent* e)
                 this->setFocus();
             return QListView::keyPressEvent(e);
         }
+            break;
         default:
             return QListView::keyPressEvent(e);
             break;
