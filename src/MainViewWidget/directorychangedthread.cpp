@@ -36,7 +36,7 @@ void DirectoryChangedThread::run()
     closeDataBase("DirectoryChangedThread");
     openDataBase("DirectoryChangedThread");
     QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
-    if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
+    if(desktopfpList.size() >= UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
     {
         for(int i=0;i<desktopfpList.count();i++)
         {
@@ -45,7 +45,7 @@ void DirectoryChangedThread::run()
                 QFileInfo fileInfo(desktopfpList.at(i));
                 QString desktopfn=fileInfo.fileName();
                 updateDataBaseTableRecent(desktopfn);
-                break;
+                //break;
             }
 
         }
@@ -60,7 +60,7 @@ void DirectoryChangedThread::run()
                 QFileInfo fileInfo(desktopfp);
                 QString desktopfn=fileInfo.fileName();
                 deleteAppRecord(desktopfn);
-                break;
+             //   break;
             }
         }
     }

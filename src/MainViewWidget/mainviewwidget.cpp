@@ -805,6 +805,9 @@ void MainViewWidget::ViewOpenedSlot(QString desktopfp)
  */
 void MainViewWidget::directoryChangedSlot(const QString &path)
 {
+    QEventLoop loop;
+    QTimer::singleShot(100, &loop, SLOT(quit()));
+    loop.exec();
     m_directoryChangedThread->start();
 }
 
