@@ -885,6 +885,8 @@ void MainViewWidget::keyPressEvent(QKeyEvent *e)
     {
         switch(e->key())
         {
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
             case Qt::Key_Down:
             {
                 if(m_queryLineEdit->hasFocus())
