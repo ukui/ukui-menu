@@ -496,7 +496,7 @@ void MainViewWidget::loadMinMainView()
             m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
             m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
         }
-        m_queryText->adjustSize();
+        m_queryText->setFixedWidth(42);
         m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
                                       m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
         m_queryWid->show();
