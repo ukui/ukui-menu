@@ -103,8 +103,9 @@ private:
     /*Animation*/
     QPropertyAnimation* m_animation=nullptr;//Function category button animation
     QPropertyAnimation* m_scrollAnimation=nullptr;//Application list animation
-    int m_beginPos=0;//Application list scrollbar starting value
-    int m_endPos=0;//Application list scrollbar end value
+    int m_beginPos= 0;//Application list scrollbar starting value
+    int m_endPos= 0;//Application list scrollbar end value
+    int m_index = 0;
 
 protected:
     /**

@@ -448,10 +448,29 @@ void FullLetterWidget::onSetSlider(int value)
 //    }
 }
 
+QAbstractButton* FullLetterWidget::getCurLetterButton(int value)
+{
+    Q_FOREACH (QAbstractButton* button, m_buttonList)
+    {
+        if(value==m_buttonList.indexOf(button))
+        {
+            return button;
+        }
+    }
+}
+
 bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if( event->type() == QEvent::KeyPress )
     {
+        QLayoutItem* widItem = m_scrollAreaWidLayout->itemAt(2 * m_buttonList.size() - 1);
+        QWidget* wid = widItem->widget();
+        FullListView* m_listview = qobject_cast<FullListView*>(wid);
+
+        QLayoutItem* widItemTop = m_scrollAreaWidLayout->itemAt(1);
+        QWidget* widTop = widItemTop->widget();
+        FullListView* m_listviewTop = qobject_cast<FullListView*>(widTop);
+
         QKeyEvent *ke = (QKeyEvent *)event;
         if( ke->key() == Qt::Key_Tab )
         {
@@ -462,21 +481,39 @@ bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
         }
         if(ke->key() == Qt::Key_Up)
         {
-            if(m_scrollArea->verticalScrollBar()->value() != 0)
+            if(!m_listviewTop->hasFocus())
             {
+                QAbstractButton* buttonTop = getCurLetterButton(( --m_index) % m_buttonList.size());
+                btnGroupClickedSlot(buttonTop);
                 this->m_scrollArea->setFocusToPreChild();
-                return true;
             }
-
+            else
+            {
+               m_listview->setFocus();
+               QAbstractButton* button = getCurLetterButton(m_buttonList.size() - 1);
+               btnGroupClickedSlot(button);
+               m_index = m_buttonList.size() - 1;
+            }
+            return true;
         }
         if(ke->key() == Qt::Key_Down)
         {
-           // if(m_scrollArea->verticalScrollBar()->value() != m_scrollArea->verticalScrollBar()->maximum())
-            {
-                this->m_scrollArea->setFocusToNextChild();
-                return true;
-            }
 
+
+            if(!m_listview->hasFocus())
+            {
+                QAbstractButton* button = getCurLetterButton(( ++m_index) % m_buttonList.size());
+                btnGroupClickedSlot(button);
+                this->m_scrollArea->setFocusToNextChild();
+            }
+            else
+            {
+                m_listviewTop->setFocus();
+                QAbstractButton* buttonTop = getCurLetterButton(0);
+                btnGroupClickedSlot(buttonTop);
+                m_index = 0;
+            }
+            return true;
         }
     }
     return QWidget::eventFilter(watched,event);
@@ -486,4 +523,5 @@ void FullLetterWidget::letterButtonClick()
 {
     if(m_btnGroup->button(0)!=nullptr)
         m_btnGroup->button(0)->click();
+    m_index = 0;
 }

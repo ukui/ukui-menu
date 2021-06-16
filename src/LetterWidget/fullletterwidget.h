@@ -82,6 +82,8 @@ public:
 
     void letterButtonClick();
 
+    QAbstractButton* getCurLetterButton(int value);
+
 private:
     /*Application list interface*/
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
@@ -93,6 +95,7 @@ private:
     QStringList m_data;
     bool flag;
     QTimer *time = nullptr;
+    int m_index = 0;
     /*Alphabetic classification list interface*/
     QWidget* m_letterListWid=nullptr;
     ClassifyBtnScrollArea* m_letterListScrollArea=nullptr;

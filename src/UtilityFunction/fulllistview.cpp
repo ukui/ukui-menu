@@ -245,42 +245,56 @@ void FullListView::keyPressEvent(QKeyEvent* e)
         {
             QModelIndex index = this->currentIndex();
             Q_EMIT clicked(index);
-        }
             break;
-        case Qt::Key_Up:
+        }
         case Qt::Key_Left:
         {
-//            if(inCurView)
-//            {
-                this->clearFocus();
-                if(mapToGlobal(center.topRight()).y() < (Style::AppListGridSizeWidth + Style::QueryLineEditHeight))
-                {
-                 Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
-                }
-//            }
-                this->setFocus();
+            this->clearFocus();
+            if(mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::AppListGridSizeWidth)
+            {
+               Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+            }
+            this->setFocus();
             return QListView::keyPressEvent(e);
-        }
             break;
-        case Qt::Key_Down:
+        }
         case Qt::Key_Right:
         {
-//            if(inCurView)
-//            {
-                this->clearFocus();
+
+            this->clearFocus();
+            if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
+            {
+                Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+            }
+            this->setFocus();
+            return QListView::keyPressEvent(e);
+            break;
+        }
+        case Qt::Key_Up:
+        {
+            if(module == 0)
+            {
+                if(mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::AppListGridSizeWidth))
+                {
+                   Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+                }
+            }
+            return QListView::keyPressEvent(e);
+            break;
+        }
+        case Qt::Key_Down:
+        {
+            if(module == 0)
+            {
                 if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
                 {
                     Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
                 }
-//            }
-//                if(currentIndex().row() == this->model()->rowCount() - 1)
-//                {
-//                    setCurrentIndex(this->model()->index(0,0));
-//                }
-                this->setFocus();
+            }
             return QListView::keyPressEvent(e);
-        }
             break;
+        }
+
         default:
             return QListView::keyPressEvent(e);
             break;

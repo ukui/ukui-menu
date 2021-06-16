@@ -415,28 +415,12 @@ void FullFunctionWidget::valueChangedSlot(int value)
 
 QAbstractButton* FullFunctionWidget::getCurLetterButton(int value)
 {
-    int index=0;
-    while(index<=m_classificationList.count()-1)
+    Q_FOREACH (QAbstractButton* button, m_buttonList)
     {
-        int min=m_scrollAreaWidLayout->itemAt(2*index)->widget()->y();
-        int max=0;
-        if(index==m_classificationList.count()-1)
-            max=m_scrollAreaWid->height();
-        else
-            max=m_scrollAreaWidLayout->itemAt(2*(index+1))->widget()->y();
-        if(value>=min && value<max)
+        if(value==m_buttonList.indexOf(button))
         {
-            Q_FOREACH (QAbstractButton* button, m_buttonList) {
-                FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-                if(index==m_buttonList.indexOf(button))
-                {
-                    return button;
-                }
-            }
-            break;
+            return button;
         }
-        else
-            index++;
     }
 }
 
@@ -510,37 +494,83 @@ bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if( event->type() == QEvent::KeyPress )
     {
+        QLayoutItem* widItem = m_scrollAreaWidLayout->itemAt(2 * m_buttonList.size() - 1);
+        QWidget* wid = widItem->widget();
+        FullListView* m_listview = qobject_cast<FullListView*>(wid);
+
+        QLayoutItem* widItemTop = m_scrollAreaWidLayout->itemAt(1);
+        QWidget* widTop = widItemTop->widget();
+        FullListView* m_listviewTop = qobject_cast<FullListView*>(widTop);
+
         QKeyEvent *ke = (QKeyEvent *)event;
         if( ke->key() == Qt::Key_Tab )
         {
-           // m_letterListScrollAreaWid->setFocus();
-           // m_letterListScrollArea->setFocus();
-           // return true;
            Q_EMIT setFocusToSideWin();
         }
+//        if(ke->key() == Qt::Key_Up)
+//        {
+//            QLayoutItem* widItemTop = m_scrollAreaWidLayout->itemAt(1);
+//            QWidget* widTop = widItemTop->widget();
+//            FullListView* m_listviewTop = qobject_cast<FullListView*>(widTop);
+//            if(!m_listviewTop->hasFocus())
+//            {
+//                QAbstractButton* buttonTop = getCurLetterButton(( --m_index) % m_buttonList.size());
+//                btnGroupClickedSlot(buttonTop);
+//                this->m_scrollArea->setFocusToPreChild();
+//                return true;
+//            }
+//        }
+//        if(ke->key() == Qt::Key_Down)
+//        {
+//            QLayoutItem* widItem = m_scrollAreaWidLayout->itemAt(2 * m_buttonList.size() - 1);
+//            QWidget* wid = widItem->widget();
+//            FullListView* m_listview = qobject_cast<FullListView*>(wid);
+
+//            if(!m_listview->hasFocus())
+//            {
+//                QAbstractButton* button = getCurLetterButton(( ++m_index) % m_buttonList.size());
+//                btnGroupClickedSlot(button);
+//                this->m_scrollArea->setFocusToNextChild();
+//                return true;
+//            }
+//        }
+
         if(ke->key() == Qt::Key_Up)
         {
-          //  qDebug() << "FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)";
-            if(m_scrollArea->verticalScrollBar()->value() != 0)
+            if(!m_listviewTop->hasFocus())
             {
+                QAbstractButton* buttonTop = getCurLetterButton(( --m_index) % m_buttonList.size());
+                btnGroupClickedSlot(buttonTop);
                 this->m_scrollArea->setFocusToPreChild();
-                return true;
             }
-
+            else
+            {
+               m_listview->setFocus();
+               QAbstractButton* button = getCurLetterButton(m_buttonList.size() - 1);
+               btnGroupClickedSlot(button);
+               m_index = m_buttonList.size() - 1;
+            }
+            return true;
         }
         if(ke->key() == Qt::Key_Down)
         {
-//          QAbstractButton* button = getCurLetterButton(m_scrollArea->verticalScrollBar()->value());
-//          btnGroupClickedSlot(button);
-          //  qDebug() << "FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)";
-          //  if(m_scrollArea->verticalScrollBar()->value() <= m_scrollAreaWidLayout->itemAt(2 * (m_classificationList.count()))->widget()->y())
+
+
+            if(!m_listview->hasFocus())
             {
+                QAbstractButton* button = getCurLetterButton(( ++m_index) % m_buttonList.size());
+                btnGroupClickedSlot(button);
                 this->m_scrollArea->setFocusToNextChild();
-                return true;
             }
-
+            else
+            {
+                m_listviewTop->setFocus();
+                QAbstractButton* buttonTop = getCurLetterButton(0);
+                btnGroupClickedSlot(buttonTop);
+                m_index = 0;
+            }
+            return true;
         }
-
     }
     return QWidget::eventFilter(watched,event);
 }
@@ -549,6 +579,7 @@ void FullFunctionWidget::functionButtonClick()
 {
     if(m_btnGroup->button(0)!=nullptr)
         m_btnGroup->button(0)->click();
+    m_index = 0;
 }
 
 
