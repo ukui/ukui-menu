@@ -883,11 +883,6 @@ void MainViewWidget::moveScrollBar(int type)
     }
 }
 
-//void MainViewWidget::mousePressEvent(QMouseEvent *event)
-//{
-//    if(m_isFullScreen && event->button()==Qt::LeftButton)
-//        Q_EMIT sendHideMainWindowSignal();
-//}
 void MainViewWidget::keyPressEvent(QKeyEvent *e)
 {
     if(e->type()==QEvent::KeyPress)

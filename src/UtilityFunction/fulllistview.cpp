@@ -309,17 +309,15 @@ void FullListView::keyPressEvent(QKeyEvent* e)
         }
     }
 }
-//void FullListView::mousePressEvent(QMouseEvent *event)
-//{
-//    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
-//                                                 Q_EMIT sendHideMainWindowSignal();
-//    else{
-//        if(event->button()==Qt::LeftButton)
-//            Q_EMIT clicked(this->indexAt(event->pos()));
-//        if(event->button()==Qt::RightButton)
-//        {
-//             this->selectionModel()->setCurrentIndex(this->indexAt(event->pos()),QItemSelectionModel::SelectCurrent);
-//            Q_EMIT customCont     extMenuRequested(event->pos());
-//        }
-//    }
-//}
+
+void FullListView::mousePressEvent(QMouseEvent *event)
+{
+    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
+    {
+        Q_EMIT sendHideMainWindowSignal();
+    }
+    else
+    {
+        return QListView::mousePressEvent(event);
+    }
+}
