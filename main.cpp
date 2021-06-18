@@ -80,7 +80,6 @@ int main(int argc, char *argv[])
         w.setGeometry(QRect(Style::primaryScreenX+Style::primaryScreenWidth-Style::panelSize-Style::minw-4,Style::primaryScreenY+4,
                                   Style::minw,Style::minh));
 
-    w.loadMainWindow();
     w.show();
     w.raise();
     w.update();
