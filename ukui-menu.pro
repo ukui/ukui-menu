@@ -124,7 +124,7 @@ CONFIG += no_keywords link_pkgconfig
 LIBS+=-pthread
 
 desktop_file.files = ukui-menu.desktop
-desktop_file.path = /usr/share/applications
+desktop_file.path = /etc/xdg/autostart
 
 INSTALLS += \
     target desktop_file
