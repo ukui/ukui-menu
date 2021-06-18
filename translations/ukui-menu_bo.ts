@@ -4,57 +4,57 @@
 <context>
     <name>FunctionClassifyButton</name>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="258"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="268"/>
         <source>Mobile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="261"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="271"/>
         <source>Internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="264"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="274"/>
         <source>Social</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="267"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="277"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="270"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="280"/>
         <source>Development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="273"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="283"/>
         <source>Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="276"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="286"/>
         <source>Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="279"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="289"/>
         <source>Office</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="282"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="292"/>
         <source>Education</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="285"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="295"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="288"/>
+        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="298"/>
         <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
@@ -62,57 +62,57 @@
 <context>
     <name>FunctionWidget</name>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="88"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="87"/>
         <source>Mobile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="94"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="93"/>
         <source>Internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="100"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="99"/>
         <source>Social</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="106"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="105"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="112"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="111"/>
         <source>Development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="118"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="117"/>
         <source>Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="124"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="123"/>
         <source>Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="130"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="129"/>
         <source>Office</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="136"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="135"/>
         <source>Education</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="143"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="142"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="149"/>
+        <location filename="../src/FunctionWidget/functionwidget.cpp" line="148"/>
         <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
@@ -120,7 +120,7 @@
 <context>
     <name>MainViewWidget</name>
     <message>
-        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="176"/>
+        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="226"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
@@ -128,59 +128,57 @@
 <context>
     <name>RightClickMenu</name>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="225"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="216"/>
         <source>Pin to all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="228"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="219"/>
         <source>Unpin from all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="238"/>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="303"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="228"/>
         <source>Pin to taskbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="241"/>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="306"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="231"/>
         <source>Unpin from taskbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="244"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="234"/>
         <source>Add to desktop shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="248"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="245"/>
         <source>Uninstall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="274"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="259"/>
         <source>Sleep</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="278"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="261"/>
         <source>Log Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="280"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="263"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="282"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="265"/>
         <source>Power Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="308"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="292"/>
         <source>Personalize this list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -188,42 +186,47 @@
 <context>
     <name>SideBarWidget</name>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="86"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="95"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="88"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="97"/>
         <source>Letter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="90"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="99"/>
         <source>Function</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="104"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="113"/>
         <source>Trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="106"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="115"/>
         <source>Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="102"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="469"/>
+        <source>Max</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="111"/>
         <source>Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="108"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="117"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="110"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="119"/>
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
