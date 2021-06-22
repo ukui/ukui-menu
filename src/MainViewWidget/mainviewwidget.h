@@ -75,10 +75,6 @@ public:
      * @brief changeFocuUp
      */
     void changeFocuUp();
-    /**
-     * @brief changeFocuDown
-     */
-    void changeFocuDown();
 
     /**
      * @brief Move the scroll bar
@@ -148,6 +144,7 @@ protected:
     void loadFullSearchResultWidget();
     void hideWidget();
     void keyPressEvent(QKeyEvent* e);
+//    void focusInEvent(QFocusEvent *event);
 
 public Q_SLOTS:
     /**
@@ -211,6 +208,11 @@ public Q_SLOTS:
     void requestUpdateSlot();
 
     void setFocusToThis();
+
+    /**
+     * @brief changeFocuDown
+     */
+    void changeFocuDown();
 
 Q_SIGNALS:
     /**

@@ -245,37 +245,56 @@ void FullListView::keyPressEvent(QKeyEvent* e)
         {
             QModelIndex index = this->currentIndex();
             Q_EMIT clicked(index);
-        }
             break;
+        }
+        case Qt::Key_Left:
+        {
+            this->clearFocus();
+            if(mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::AppListGridSizeWidth)
+            {
+               Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+            }
+            this->setFocus();
+            return QListView::keyPressEvent(e);
+            break;
+        }
+        case Qt::Key_Right:
+        {
+
+            this->clearFocus();
+            if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
+            {
+                Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+            }
+            this->setFocus();
+            return QListView::keyPressEvent(e);
+            break;
+        }
         case Qt::Key_Up:
         {
-//            if(inCurView)
-//            {
-                this->clearFocus();
-                if(mapToGlobal(center.topRight()).y() < (Style::AppListGridSizeWidth + Style::QueryLineEditHeight))
+            if(module == 0)
+            {
+                if(mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::AppListGridSizeWidth))
                 {
-                 Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+                   Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
                 }
-//            }
-                repaint();
-                this->setFocus();
+            }
             return QListView::keyPressEvent(e);
-        }
             break;
+        }
         case Qt::Key_Down:
         {
-//            if(inCurView)
-//            {
-                this->clearFocus();
+            if(module == 0)
+            {
                 if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
                 {
                     Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
                 }
-//            }
-                repaint();
-                this->setFocus();
+            }
             return QListView::keyPressEvent(e);
+            break;
         }
+
         default:
             return QListView::keyPressEvent(e);
             break;

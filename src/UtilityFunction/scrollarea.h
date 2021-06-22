@@ -39,6 +39,8 @@ class ScrollArea : public QScrollArea
     Q_OBJECT
 public:
     ScrollArea();
+    void setFocusToNextChild();
+    void setFocusToPreChild();
 
 Q_SIGNALS:
     void requestUpdate();
@@ -46,7 +48,7 @@ Q_SIGNALS:
 protected:
     void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
+//    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
     void scrollContentsBy(int dx, int dy) override;
 
 private:

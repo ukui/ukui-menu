@@ -41,6 +41,7 @@
 #include "src/UtilityFunction/toolbutton.h"
 #include "src/UtilityFunction/functionclassifybutton.h"
 #include "src/Style/style.h"
+#include <QAbstractButton>
 
 class FullFunctionWidget : public QWidget
 {
@@ -75,6 +76,8 @@ public:
 
     void functionButtonClick();
 
+    QAbstractButton* getCurLetterButton(int value);
+
 private:
     /*Application list interface*/
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
@@ -100,8 +103,9 @@ private:
     /*Animation*/
     QPropertyAnimation* m_animation=nullptr;//Function category button animation
     QPropertyAnimation* m_scrollAnimation=nullptr;//Application list animation
-    int m_beginPos=0;//Application list scrollbar starting value
-    int m_endPos=0;//Application list scrollbar end value
+    int m_beginPos= 0;//Application list scrollbar starting value
+    int m_endPos= 0;//Application list scrollbar end value
+    int m_index = 0;
 
 protected:
     /**
@@ -137,7 +141,6 @@ protected:
     void resizeScrollAreaControls();
 
     bool eventFilter(QObject *watched, QEvent *event);
-
 
 public Q_SLOTS:
     /**

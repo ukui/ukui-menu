@@ -336,6 +336,7 @@ void QtSingleApplication::activateWindow()
             actWin->raise();
             actWin->showNormal();
             actWin->activateWindow();
+
         }
         else {
             actWin->setWindowState(actWin->windowState() & Qt::WindowMinimized);

@@ -90,35 +90,43 @@ ScrollArea::ScrollArea()
     this->verticalScrollBar()->setPalette(p);
 }
 
+void ScrollArea::setFocusToNextChild()
+{
+    this->focusNextChild();
+}
+void ScrollArea::setFocusToPreChild()
+{
+    this->focusPreviousChild();
+}
+
 void ScrollArea::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(true);
 }
 
-void ScrollArea::keyPressEvent(QKeyEvent* e)
-{
-    if(e->type()==QEvent::KeyPress)
-    {
-        switch(e->key())
-        {
-        case Qt::Key_Up:
-        {
-            focusPreviousChild();
-        }
-            break;
-        case Qt::Key_Down:
-        {
-            focusNextChild();
-        }
-            break;
-        default:
-            return QScrollArea::keyPressEvent(e);
-            break;
-        }
-    }
-}
-
+//void ScrollArea::keyPressEvent(QKeyEvent* e)
+//{
+//    if(e->type()==QEvent::KeyPress)
+//    {
+//        switch(e->key())
+//        {
+//        case Qt::Key_Up:
+//        {
+//            focusPreviousChild();
+//        }
+//            break;
+//        case Qt::Key_Down:
+//        {
+//            focusNextChild();
+//        }
+//            break;
+//        default:
+//            return QScrollArea::keyPressEvent(e);
+//            break;
+//        }
+//    }
+//}
 void ScrollArea::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
