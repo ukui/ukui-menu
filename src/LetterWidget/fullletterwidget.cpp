@@ -450,13 +450,7 @@ void FullLetterWidget::onSetSlider(int value)
 
 QAbstractButton* FullLetterWidget::getCurLetterButton(int value)
 {
-    Q_FOREACH (QAbstractButton* button, m_buttonList)
-    {
-        if(value==m_buttonList.indexOf(button))
-        {
-            return button;
-        }
-    }
+    return m_buttonList.at(value);
 }
 
 bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
