@@ -415,13 +415,7 @@ void FullFunctionWidget::valueChangedSlot(int value)
 
 QAbstractButton* FullFunctionWidget::getCurLetterButton(int value)
 {
-    Q_FOREACH (QAbstractButton* button, m_buttonList)
-    {
-        if(value==m_buttonList.indexOf(button))
-        {
-            return button;
-        }
-    }
+    return m_buttonList.at(value);
 }
 
 
