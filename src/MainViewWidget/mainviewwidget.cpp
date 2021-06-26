@@ -160,7 +160,9 @@ void MainViewWidget::initUi()
            {
                if(list.at(1).contains(nameList.at(0),Qt::CaseInsensitive) ||
                        list.at(2).contains(nameList.at(0),Qt::CaseInsensitive) ||
-                       list.at(5).contains(nameList.at(0),Qt::CaseInsensitive))
+                       list.at(5).contains(nameList.at(0),Qt::CaseInsensitive) ||
+                       nameList.at(0).contains(list.at(1),Qt::CaseInsensitive) ||
+                       nameList.at(0).contains(list.at(2),Qt::CaseInsensitive))
                {
                    ViewOpenedSlot(list.at(0));
                    break;
@@ -169,7 +171,9 @@ void MainViewWidget::initUi()
                        (
                            list.at(1).contains(nameList.at(1),Qt::CaseInsensitive) ||
                            list.at(2).contains(nameList.at(1),Qt::CaseInsensitive) ||
-                           list.at(5).contains(nameList.at(1),Qt::CaseInsensitive))
+                           list.at(5).contains(nameList.at(1),Qt::CaseInsensitive) ||
+                           nameList.at(0).contains(list.at(1),Qt::CaseInsensitive) ||
+                           nameList.at(0).contains(list.at(2),Qt::CaseInsensitive))
                        )
                {
                    ViewOpenedSlot(list.at(0));
