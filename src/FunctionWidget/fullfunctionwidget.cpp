@@ -192,6 +192,7 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
         listview->repaint(listview->rect());
     });
     connect(listview, &FullListView::sendSetslidebar, this, &FullFunctionWidget::onSetSlider);
+    connect(this, &FullFunctionWidget::selectFirstItem, listview, &FullListView::selectFirstItem);
     listview->installEventFilter(this);
     m_scrollAreaWidLayout->addWidget(listview);
     m_data.clear();
@@ -415,13 +416,7 @@ void FullFunctionWidget::valueChangedSlot(int value)
 
 QAbstractButton* FullFunctionWidget::getCurLetterButton(int value)
 {
-    Q_FOREACH (QAbstractButton* button, m_buttonList)
-    {
-        if(value==m_buttonList.indexOf(button))
-        {
-            return button;
-        }
-    }
+    return m_buttonList.at(value);
 }
 
 
@@ -550,12 +545,11 @@ bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
                btnGroupClickedSlot(button);
                m_index = m_buttonList.size() - 1;
             }
+            Q_EMIT selectFirstItem();
             return true;
         }
         if(ke->key() == Qt::Key_Down)
         {
-
-
             if(!m_listview->hasFocus())
             {
                 QAbstractButton* button = getCurLetterButton(( ++m_index) % m_buttonList.size());
@@ -567,8 +561,10 @@ bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
                 m_listviewTop->setFocus();
                 QAbstractButton* buttonTop = getCurLetterButton(0);
                 btnGroupClickedSlot(buttonTop);
+                m_listviewTop->setCurrentIndex(m_listviewTop->model()->index(0,0));
                 m_index = 0;
             }
+            Q_EMIT selectFirstItem();
             return true;
         }
     }
@@ -582,4 +578,9 @@ void FullFunctionWidget::functionButtonClick()
     m_index = 0;
 }
 
-
+void FullFunctionWidget::setFocusToThis()
+{
+    functionButtonClick();
+    this->setFocus();
+    Q_EMIT selectFirstItem();
+}

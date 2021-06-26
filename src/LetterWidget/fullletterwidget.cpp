@@ -98,6 +98,13 @@ void FullLetterWidget::initAppListWidget()
     fillAppList();
 }
 
+void FullLetterWidget::setFocusToThis()
+{
+    letterButtonClick();
+    this->setFocus();
+    Q_EMIT selectFirstItem();
+}
+
 /**
  * 填充应用列表
  */
@@ -124,7 +131,8 @@ void FullLetterWidget::fillAppList()
 
             //插入应用列表
             FullListView* listview=new FullListView(this,1);
-            connect(listview,&FullListView::sendSetslidebar,this,&FullLetterWidget::onSetSlider);
+            connect(listview, &FullListView::sendSetslidebar,this,&FullLetterWidget::onSetSlider);
+            connect(this, &FullLetterWidget::selectFirstItem, listview, &FullListView::selectFirstItem);
             listview->installEventFilter(this);
             //修复异常黑框问题
             connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
@@ -450,13 +458,7 @@ void FullLetterWidget::onSetSlider(int value)
 
 QAbstractButton* FullLetterWidget::getCurLetterButton(int value)
 {
-    Q_FOREACH (QAbstractButton* button, m_buttonList)
-    {
-        if(value==m_buttonList.indexOf(button))
-        {
-            return button;
-        }
-    }
+    return m_buttonList.at(value);
 }
 
 bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
@@ -494,12 +496,11 @@ bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
                btnGroupClickedSlot(button);
                m_index = m_buttonList.size() - 1;
             }
+            Q_EMIT selectFirstItem();
             return true;
         }
         if(ke->key() == Qt::Key_Down)
         {
-
-
             if(!m_listview->hasFocus())
             {
                 QAbstractButton* button = getCurLetterButton(( ++m_index) % m_buttonList.size());
@@ -513,6 +514,7 @@ bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
                 btnGroupClickedSlot(buttonTop);
                 m_index = 0;
             }
+            Q_EMIT selectFirstItem();
             return true;
         }
     }

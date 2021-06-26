@@ -68,6 +68,7 @@ void SideBarWidget::initUi()
 
 bool SideBarWidget::eventFilter(QObject * target , QEvent * event )
 {
+
     if( event->type() == QEvent::KeyPress )
     {
         QKeyEvent *ke = (QKeyEvent *)event;
@@ -117,6 +118,10 @@ void SideBarWidget::addSidebarBtn()
     m_minMaxWidget=new QWidget;
     m_minMaxLayout=new QHBoxLayout;
     m_minMaxBtn=new QPushButton;
+    m_minMaxBtn->setFlat(true);
+    m_minMaxBtn->setProperty("useButtonPalette", true);
+//    m_minMaxBtn->setProperty("doNotAnimate",true);
+//    m_minMaxBtn->setProperty("useButtonPalette", true);
 //    m_minMaxBtn->setFlat(true);
 //    m_minMaxBtn->setProperty("doNotAnimate",true);
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
@@ -129,6 +134,7 @@ void SideBarWidget::addSidebarBtn()
 //    connect(key_2,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
     m_minMaxLayout->addWidget(m_minMaxBtn);
     m_minMaxWidget->setLayout(m_minMaxLayout);
+//    m_minMaxWidget->setAttribute(Qt::WA_StyledBackground,true);
 //    m_minMaxWidget->hasFocus();
 
     //分类按钮
@@ -256,7 +262,7 @@ void SideBarWidget::resetSidebarBtnSlot()
 void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int num)
 {
     btn->setFlat(true);
-    btn->setProperty("doNotAnimate",true);
+    btn->setProperty("useButtonPalette",true);
     QHBoxLayout* btnLayout=new QHBoxLayout;
     QLabel* labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);
@@ -330,12 +336,13 @@ QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
 /**
  * 加载关机按钮右键菜单
  */
-void SideBarWidget::shutdownBtnRightClickSlot()
+void SideBarWidget::shutdownBtnRightClickSlot(const QPoint &pos)
 {
-    RightClickMenu m_otherMenu;
+
+    RightClickMenu m_otherMenu(this);
     connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
     Q_EMIT sendShowMainWindowSignal(false);
-    int ret = m_otherMenu.showShutdownMenu();
+    int ret = m_otherMenu.showShutdownMenu(m_shutDownBtn->mapToGlobal(pos));
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
     if(ret>=10 && ret<=17)
     {
@@ -376,7 +383,7 @@ void SideBarWidget::addRightClickMenu(QPushButton *btn)
     connect(btn,&QPushButton::customContextMenuRequested,this,&SideBarWidget::otherBtnRightClickSlot);
 }
 
-void SideBarWidget::otherBtnRightClickSlot()
+void SideBarWidget::otherBtnRightClickSlot(const QPoint &pos)
 {
     qDebug() << "SideBarWidget::otherBtnRightClickSlot() 开始";
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
@@ -400,7 +407,7 @@ void SideBarWidget::otherBtnRightClickSlot()
     }
     RightClickMenu m_otherMenu;
     connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
-    int ret = m_otherMenu.showOtherMenu(desktopfp);
+    int ret = m_otherMenu.showOtherMenu(btn->mapToGlobal(pos), desktopfp);
     Q_EMIT sendShowMainWindowSignal(false);
     if(ret==15)
     {

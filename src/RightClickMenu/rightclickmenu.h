@@ -56,18 +56,18 @@ public:
      * @param desktopfp: Application desktop file
      * @return return action number
      */
-    int showAppBtnMenu(QString desktopfp);
+    int showAppBtnMenu(const QPoint &pos, QString desktopfp);
     /**
      * @brief Displays the power right-click menu
      * @return return action number
      */
-    int showShutdownMenu();
+    int showShutdownMenu(const QPoint &pos);
     /**
      * @brief Displays other application right-click menus
      * @param desktopfp: Application desktop file
      * @return return action number
      */
-    int showOtherMenu(QString desktopfp);
+    int showOtherMenu(const QPoint &pos, QString desktopfp);
 
 private:
     QString m_desktopfp;

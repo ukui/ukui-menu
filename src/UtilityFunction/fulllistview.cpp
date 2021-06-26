@@ -135,7 +135,7 @@ void FullListView::rightClickedSlot(const QPoint &pos)
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
         RightClickMenu menu;
-        int ret=menu.showAppBtnMenu(desktopfp);
+        int ret=menu.showAppBtnMenu(this->mapToGlobal(pos), desktopfp);
         if(module>0)
         {
             switch (ret) {
@@ -167,13 +167,14 @@ void FullListView::rightClickedSlot(const QPoint &pos)
                 break;
             }
         }
-        this->selectionModel()->clear();
+        //this->selectionModel()->clear();
     }
 }
 
 void FullListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
+    this->selectionModel()->clear();
     this->verticalScrollBar()->setVisible(true);
 }
 
@@ -186,8 +187,15 @@ void FullListView::leaveEvent(QEvent *e)
 //    current_focus_widget = QWidget::focusWidget();
 //    QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
 
-    
-        //    le->clicked();
+}
+
+void FullListView::selectFirstItem()
+{
+    qDebug() << "void FullListView::selectFirstItem()";
+    if(this->currentIndex().row() == -1)
+    {
+        this->setCurrentIndex(this->model()->index(0,0));
+    }
 }
 
 void FullListView::paintEvent(QPaintEvent *e)

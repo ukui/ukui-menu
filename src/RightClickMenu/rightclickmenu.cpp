@@ -201,7 +201,7 @@ void RightClickMenu::sleepActionTriggerSlot()
     m_actionNumber=17;
 }
 
-int RightClickMenu::showAppBtnMenu(QString desktopfp)
+int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
 {
     m_actionNumber=0;
     this->m_desktopfp.clear();
@@ -241,20 +241,18 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
     if(QFile(path).exists())
         m_showAppMenu.actions().at(2)->setEnabled(false);//存在时禁用
     m_showAppMenu.addSeparator();
-
-    if(!m_ukuiMenuInterface->getAppCategories(desktopfp).contains("Android") &&
-            !m_whiteList.contains(desktopfn))
+    if(!m_whiteList.contains(desktopfn))
         m_showAppMenu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
                        this,SLOT(uninstallActionTriggerSlot()));
 
     m_showAppMenu.setAttribute(Qt::WA_TranslucentBackground);
     m_showAppMenu.setAttribute(Qt::WA_DeleteOnClose);
-    m_showAppMenu.exec(QCursor::pos());
+    m_showAppMenu.exec(pos);
     qDebug() << "RightClickMenu::showAppBtnMenu(QString desktopfp)";
     return m_actionNumber;
 }
 
-int RightClickMenu::showShutdownMenu()
+int RightClickMenu::showShutdownMenu(const QPoint &pos)
 {
     m_actionNumber=0;
     MenuBox m_showShutMenu;
@@ -272,12 +270,12 @@ int RightClickMenu::showShutdownMenu()
     m_showShutMenu.setAttribute(Qt::WA_TranslucentBackground);
     m_showShutMenu.setAttribute(Qt::WA_DeleteOnClose);
     m_showShutMenu.raise();
-    m_showShutMenu.exec(QCursor::pos());
+    m_showShutMenu.exec(pos);
     qDebug() << "RightClickMenu::showShutdownMenu()";
     return m_actionNumber;
 }
 
-int RightClickMenu::showOtherMenu(QString desktopfp)
+int RightClickMenu::showOtherMenu(const QPoint &pos, QString desktopfp)
 {
     m_actionNumber=0;
     this->m_desktopfp.clear();
@@ -301,7 +299,7 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
                    this,SLOT(otherListActionTriggerSlot()));
     m_showOtherMenu.setAttribute(Qt::WA_TranslucentBackground);
     m_showOtherMenu.setAttribute(Qt::WA_DeleteOnClose);
-    m_showOtherMenu.exec(QCursor::pos());
+    m_showOtherMenu.exec(pos);
     qDebug() << "RightClickMenu::showOtherMenu(QString desktopfp)";
 
     return m_actionNumber;

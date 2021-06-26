@@ -72,6 +72,20 @@ void CommonUseWidget::fillAppList()
     m_listView->addData(m_data);
 }
 
+void CommonUseWidget::selectFirstItem()
+{
+    this->focusNextChild();
+    m_listView->setCurrentIndex(m_listView->model()->index(0,0));
+}
+
+void CommonUseWidget::selectFirstItemTab()
+{
+    this->setFocus();
+    if(m_listView->currentIndex().row() == -1)
+    {
+         m_listView->setCurrentIndex(m_listView->model()->index(0,0));
+    }
+}
 /**
  * 执行应用程序
  */

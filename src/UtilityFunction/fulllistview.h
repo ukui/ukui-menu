@@ -61,9 +61,10 @@ private:
 
 //    bool inCurView;
 
-private Q_SLOTS:
+public Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
     void rightClickedSlot(const QPoint &pos);//右键菜单
+    void selectFirstItem();
 
 Q_SIGNALS:
     void sendItemClickedSignal(QString arg);//发送item点击信号
