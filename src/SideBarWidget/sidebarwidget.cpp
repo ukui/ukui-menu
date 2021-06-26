@@ -117,6 +117,10 @@ void SideBarWidget::addSidebarBtn()
     m_minMaxWidget=new QWidget;
     m_minMaxLayout=new QHBoxLayout;
     m_minMaxBtn=new QPushButton;
+    m_minMaxBtn->setFlat(true);
+    m_minMaxBtn->setProperty("useButtonPalette", true);
+//    m_minMaxBtn->setProperty("doNotAnimate",true);
+//    m_minMaxBtn->setProperty("useButtonPalette", true);
 //    m_minMaxBtn->setFlat(true);
 //    m_minMaxBtn->setProperty("doNotAnimate",true);
 //    m_minMaxBtn->setShortcut(QKeySequence::InsertParagraphSeparator);
@@ -129,6 +133,7 @@ void SideBarWidget::addSidebarBtn()
 //    connect(key_2,&QShortcut::activated,m_minMaxBtn,&QPushButton::click);
     m_minMaxLayout->addWidget(m_minMaxBtn);
     m_minMaxWidget->setLayout(m_minMaxLayout);
+//    m_minMaxWidget->setAttribute(Qt::WA_StyledBackground,true);
 //    m_minMaxWidget->hasFocus();
 
     //分类按钮
@@ -256,7 +261,7 @@ void SideBarWidget::resetSidebarBtnSlot()
 void SideBarWidget::initBtn(QPushButton *btn, QString btnicon, QString text, int num)
 {
     btn->setFlat(true);
-    btn->setProperty("doNotAnimate",true);
+    btn->setProperty("useButtonPalette",true);
     QHBoxLayout* btnLayout=new QHBoxLayout;
     QLabel* labelicon=new QLabel;
     labelicon->setAlignment(Qt::AlignCenter);
