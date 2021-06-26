@@ -255,8 +255,7 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
         m_showAppMenu->actions().at(2)->setEnabled(false);//存在时禁用
     m_showAppMenu->addSeparator();
 
-    if(!m_ukuiMenuInterface->getAppCategories(desktopfp).contains("Android") &&
-            !m_whiteList.contains(desktopfn))
+    if(!m_whiteList.contains(desktopfn))
         m_showAppMenu->addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg",0)),tr("Uninstall"),
                        this,SLOT(uninstallActionTriggerSlot()));
 
