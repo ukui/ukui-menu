@@ -51,7 +51,7 @@ void FullListView::initWidget()
     this->setResizeMode(QListView::Adjust);
     this->setTextElideMode(Qt::ElideRight);
     this->setMouseTracking(true);
-    this->setFocusPolicy(Qt::StrongFocus);
+  //  this->setFocusPolicy(Qt::StrongFocus);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));

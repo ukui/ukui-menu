@@ -56,6 +56,7 @@ SOURCES += \
     src/MainViewWidget/directorychangedthread.cpp \
     src/MainViewWidget/mainviewwidget.cpp \
     src/MainWindow/mainwindow.cpp \
+    src/RightClickMenu/menubox.cpp \
     src/RightClickMenu/rightclickmenu.cpp \
     src/SearchResultWidget/file-utils.cpp \
     src/SearchResultWidget/fullsearchresultwidget.cpp \
@@ -93,6 +94,7 @@ HEADERS  += \
     src/MainViewWidget/directorychangedthread.h \
     src/MainViewWidget/mainviewwidget.h \
     src/MainWindow/mainwindow.h \
+    src/RightClickMenu/menubox.h \
     src/RightClickMenu/rightclickmenu.h \
     src/SearchResultWidget/file-utils.h \
     src/SearchResultWidget/fullsearchresultwidget.h \
@@ -127,7 +129,7 @@ CONFIG += no_keywords link_pkgconfig
 LIBS+=-pthread -luchardet -lukui-log4qt
 
 desktop_file.files = ukui-menu.desktop
-desktop_file.path = /usr/share/applications
+desktop_file.path = /etc/xdg/autostart
 
 INSTALLS += \
     target desktop_file

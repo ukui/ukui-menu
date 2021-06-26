@@ -247,6 +247,21 @@ bool QtSingleApplication::isRunning()
     return peer->isClient();
 }
 
+//bool QtSingleApplication::notify(QObject *obj, QEvent * event)
+//{
+//    if (event->type() == QEvent::ActivationChange)
+//   // if(QEvent::WindowDeactivate == event->type())//窗口停用
+//    {
+//        qDebug() << " * 1111111鼠标点击窗口外部事件";
+//         if(QApplication::activeWindow() != actWin)
+//         {
+//             actWin->hide();
+//            // ->widgetMakeZero();
+//         }
+//    }
+//    return QApplication::notify(obj, event);
+//}
+
 
 /*!
     Tries to send the text \a message to the currently running

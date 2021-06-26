@@ -105,6 +105,8 @@ public Q_SLOTS:
     void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
     void animationValueFinishedSlot();
     void primaryScreenChangeSlot();
+    void activeWindowSolt(bool flag);
+    void mainWinShowSlot();
 
 public:
 Q_SIGNALS:

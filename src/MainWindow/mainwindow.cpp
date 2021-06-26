@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Style::initWidStyle();
     initUi();
 
+
     m_dbus=new DBus;
     new MenuAdaptor(m_dbus);
     QDBusConnection con=QDBusConnection::sessionBus();
@@ -158,6 +159,7 @@ void MainWindow::initUi()
 
     connect(m_sideBarWid,&SideBarWidget::sendFullScreenBtnSignal,this,&MainWindow::showFullScreenWidget);
     connect(m_sideBarWid,&SideBarWidget::sendDefaultBtnSignal,this,&MainWindow::showDefaultWidget);
+    connect(m_sideBarWid, &SideBarWidget::sendShowMainWindowSignal, this, &MainWindow::activeWindowSolt);
     connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
@@ -400,13 +402,26 @@ void MainWindow::animationValueFinishedSlot()
     }
 }
 
+void MainWindow::activeWindowSolt(bool flag)
+{
+    QTimer::singleShot(30,this, SLOT(mainWinShowSlot()));
+}
+
+void MainWindow::mainWinShowSlot()
+{
+     this->activateWindow();
+     qDebug() << "void MainWindow::activeWindowSolt()";
+}
+
 /**
  * 鼠标点击窗口外部事件
  */
 bool MainWindow::event ( QEvent * event )
 {
    if (event->type() == QEvent::ActivationChange)
+  // if(QEvent::WindowDeactivate == event->type() && m_canHide)//窗口停用
    {
+       qDebug() << " * 鼠标点击窗口外部事件";
         if(QApplication::activeWindow() != this)
         {
             this->hide();

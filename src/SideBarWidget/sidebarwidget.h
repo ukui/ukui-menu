@@ -237,6 +237,8 @@ Q_SIGNALS:
      */
     void sendHideMainWindowSignal();
 
+    void sendShowMainWindowSignal(bool flag);
+
     void setFocusToMainWin();
 
     void setSlideBar(int value);
