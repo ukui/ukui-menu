@@ -94,12 +94,15 @@ public Q_SLOTS:
      */
     void updateListViewSlot();
 
+    void selectFirstItem();
+
+    void selectFirstItemTab();
+
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
-
 };
 
 #endif // COMMONUSEWIDGET_H

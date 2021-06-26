@@ -110,6 +110,8 @@ public Q_SLOTS:
      */
     void animationFinishedSLot();
 
+    void setFocusToThis();
+
 Q_SIGNALS:
     /**
      * @brief Send alphabetic classification list to the letterbuttonwidget

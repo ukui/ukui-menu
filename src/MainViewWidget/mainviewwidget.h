@@ -235,6 +235,10 @@ Q_SIGNALS:
 
     void setFocusToSideWin();
 
+    void selectFirstItem();
+
+    void selectFirstItemTab();
+
     void setSlideBar(int value);
 };
 

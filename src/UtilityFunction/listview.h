@@ -63,7 +63,7 @@ private:
 
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
-    void rightClickedSlot();//右键菜单
+    void rightClickedSlot(const QPoint &pos);//右键菜单
 Q_SIGNALS:
     void sendItemClickedSignal(QStringList arg);//发送item点击信号
     void sendHideMainWindowSignal();

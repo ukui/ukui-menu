@@ -156,11 +156,11 @@ private Q_SLOTS:
     /**
      * @brief Load power button right-click menu
      */
-    void shutdownBtnRightClickSlot();
+    void shutdownBtnRightClickSlot(const QPoint &pos);
     /**
      * @brief Load other application right-click menu
      */
-    void otherBtnRightClickSlot();
+    void otherBtnRightClickSlot(const QPoint &pos);
     /**
      * @brief Respond to computer btn
      */

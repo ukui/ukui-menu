@@ -216,7 +216,7 @@ void RightClickMenu::sleepActionTriggerSlot()
     m_actionNumber=17;
 }
 
-int RightClickMenu::showAppBtnMenu(QString desktopfp)
+int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
 {
     m_actionNumber=0;
     this->m_desktopfp.clear();
@@ -261,12 +261,12 @@ int RightClickMenu::showAppBtnMenu(QString desktopfp)
 
     m_showAppMenu->setAttribute(Qt::WA_TranslucentBackground);
 //    m_showMenu->setAttribute(Qt::WA_DeleteOnClose);
-    m_showAppMenu->exec(QCursor::pos());
+    m_showAppMenu->exec(pos);
     qDebug() << "RightClickMenu::showAppBtnMenu(QString desktopfp)";
     return m_actionNumber;
 }
 
-int RightClickMenu::showShutdownMenu()
+int RightClickMenu::showShutdownMenu(const QPoint &pos)
 {
     m_actionNumber=0;
     m_showShutMenu = new QMenu(this);
@@ -281,12 +281,13 @@ int RightClickMenu::showShutdownMenu()
                    this,SLOT(shutdownActionTriggerSlot()));
     m_showShutMenu->setAttribute(Qt::WA_TranslucentBackground);
 //    m_showShutMenu->setAttribute(Qt::WA_DeleteOnClose);
-    m_showShutMenu->exec(QCursor::pos());
+//    m_showShutMenu->exec(QCursor::pos());
+    m_showShutMenu->exec(pos);
     qDebug() << "RightClickMenu::showShutdownMenu()";
     return m_actionNumber;
 }
 
-int RightClickMenu::showOtherMenu(QString desktopfp)
+int RightClickMenu::showOtherMenu(const QPoint &pos, QString desktopfp)
 {
     m_actionNumber=0;
     this->m_desktopfp.clear();
@@ -308,7 +309,7 @@ int RightClickMenu::showOtherMenu(QString desktopfp)
                    this,SLOT(otherListActionTriggerSlot()));
     m_showOtherMenu->setAttribute(Qt::WA_TranslucentBackground);
 //    m_showOtherMenu->setAttribute(Qt::WA_DeleteOnClose);
-    m_showOtherMenu->exec(QCursor::pos());
+    m_showOtherMenu->exec(pos);
     qDebug() << "RightClickMenu::showOtherMenu(QString desktopfp)";
 
     return m_actionNumber;
