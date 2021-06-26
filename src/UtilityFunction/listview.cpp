@@ -29,7 +29,7 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-    menu=new RightClickMenu;
+    menu=new RightClickMenu(this);
 }
 ListView::~ListView()
 {
@@ -58,7 +58,7 @@ void ListView::initWidget()
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);
     this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
-    this->setFocus();
+   // this->setFocus();
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
 }
@@ -98,16 +98,17 @@ void ListView::onClicked(QModelIndex index)
      }
 }
 
-void ListView::rightClickedSlot()
+void ListView::rightClickedSlot(const QPoint &pos)
 {
     if(!this->selectionModel()->selectedIndexes().isEmpty())
     {
         QModelIndex index=this->currentIndex();
+//        QRect center = visualRect(index);
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QStringList strlist=var.value<QStringList>();
         if(strlist.at(1).toInt()==1)
         {
-            int ret = menu->showAppBtnMenu(strlist.at(0));
+            int ret = menu->showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
             if(module>0)
             {
                 if(strlist.at(1).toInt()==1)
@@ -143,7 +144,7 @@ void ListView::rightClickedSlot()
                 }
             }
 
-            this->selectionModel()->clear();
+          //  this->selectionModel()->clear();
         }
     }
 }
@@ -151,6 +152,7 @@ void ListView::rightClickedSlot()
 void ListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
+    this->selectionModel()->clear();
     this->verticalScrollBar()->setVisible(true);
 }
 

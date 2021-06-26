@@ -121,6 +121,8 @@ public Q_SLOTS:
      */
     void animationFinishedSLot();
 
+    void setFocusToThis();
+
 Q_SIGNALS:
     /**
      * @brief Send the classification button click signal to functionbuttonwidget

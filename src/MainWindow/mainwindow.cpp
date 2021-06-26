@@ -110,7 +110,7 @@ void MainWindow::initUi()
     this->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
     this->setMinimumSize(Style::minw,Style::minh);
     this->setContentsMargins(0,0,0,0);
-    this->setFocus();
+ //   this->setFocus();
     m_frame=new QFrame;
     m_mainViewWid=new MainViewWidget;
     m_sideBarWid=new SideBarWidget;
@@ -142,7 +142,7 @@ void MainWindow::initUi()
     m_animation = new QPropertyAnimation(this, "geometry");
     connect(m_animation,&QPropertyAnimation::finished,this,&MainWindow::animationValueFinishedSlot);
 
-    connect(m_sideBarWid, &SideBarWidget::setFocusToMainWin, m_mainViewWid, &MainViewWidget::setFocusToThis);
+    connect(m_sideBarWid, &SideBarWidget::setFocusToMainWin, m_mainViewWid, &MainViewWidget::selectFirstItemTab);
     connect(m_sideBarWid, &SideBarWidget::sendCommonUseBtnSignal, m_mainViewWid, &MainViewWidget::loadCommonUseWidget);
     connect(m_sideBarWid,&SideBarWidget::sendLetterBtnSignal, m_mainViewWid, &MainViewWidget::loadLetterWidget);
     connect(m_sideBarWid, &SideBarWidget::sendFunctionBtnSignal, m_mainViewWid, &MainViewWidget::loadFunctionWidget);
@@ -162,7 +162,7 @@ void MainWindow::initUi()
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
     connect(m_mainViewWid,&MainViewWidget::setFocusToSideWin,m_sideBarWid,&SideBarWidget::setFocusToThis);
-    connect(this, &MainWindow::setFocusSignal, m_mainViewWid, &MainViewWidget::changeFocuDown);
+    connect(this, &MainWindow::setFocusSignal, m_mainViewWid, &MainViewWidget::selectFirstItem);
 //    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
 //        repaintWidget();
 //    });
@@ -417,17 +417,19 @@ bool MainWindow::event ( QEvent * event )
    if (event->type() == QEvent::KeyPress)
    {
        QKeyEvent *keyEvent = (QKeyEvent *) event;
-       if (keyEvent->key() == Qt::Key_Tab)
-       {
-           m_mainViewWid->setFocus();
-           Q_EMIT setFocusSignal();
-           return true;
-       }
+//       if (keyEvent->key() == Qt::Key_Tab)
+//       {
+//           m_mainViewWid->setFocus();
+//           Q_EMIT setFocusSignal();
+//           return true;
+//       }
        if(keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down ||
-               keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right)
+               keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right ||
+               keyEvent->key() == Qt::Key_Tab)
        {
          m_mainViewWid->setFocus();
          Q_EMIT setFocusSignal();
+        // return true;
        }
    }
    return QWidget::event(event);

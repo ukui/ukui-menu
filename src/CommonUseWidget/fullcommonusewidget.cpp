@@ -128,6 +128,22 @@ void FullCommonUseWidget::execApplication(QString desktopfp)
     execApp(desktopfp);
 }
 
+void FullCommonUseWidget::selectFirstItem()
+{
+  //  this->focusNextChild();
+    qDebug() << "void FullCommonUseWidget::selectFirstItem()";
+    m_listView->setCurrentIndex(m_listView->model()->index(0,0));
+}
+
+void FullCommonUseWidget::selectFirstItemTab()
+{
+    this->setFocus();
+    if(m_listView->currentIndex().row() == -1)
+    {
+        m_listView->setCurrentIndex(m_listView->model()->index(0,0));
+    }
+}
+
 void FullCommonUseWidget::onSetSlider(int value)
 {
 //    if(flag)

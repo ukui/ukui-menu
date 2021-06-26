@@ -253,3 +253,8 @@ void LetterWidget::repaintWidget()
     m_appListView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_appListView->show();
 }
+
+void LetterWidget::setFocusToThis()
+{
+    this->setFocus();
+}

@@ -68,6 +68,7 @@ void SideBarWidget::initUi()
 
 bool SideBarWidget::eventFilter(QObject * target , QEvent * event )
 {
+
     if( event->type() == QEvent::KeyPress )
     {
         QKeyEvent *ke = (QKeyEvent *)event;
@@ -330,11 +331,10 @@ QPixmap SideBarWidget::PixmapToRound(const QPixmap &src, int radius)
 /**
  * 加载关机按钮右键菜单
  */
-void SideBarWidget::shutdownBtnRightClickSlot()
+void SideBarWidget::shutdownBtnRightClickSlot(const QPoint &pos)
 {
-
-    RightClickMenu m_otherMenu;
-    int ret = m_otherMenu.showShutdownMenu();
+    RightClickMenu m_otherMenu(this);
+    int ret = m_otherMenu.showShutdownMenu(m_shutDownBtn->mapToGlobal(pos));
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
     if(ret>=10 && ret<=17)
     {
@@ -375,7 +375,7 @@ void SideBarWidget::addRightClickMenu(QPushButton *btn)
     connect(btn,&QPushButton::customContextMenuRequested,this,&SideBarWidget::otherBtnRightClickSlot);
 }
 
-void SideBarWidget::otherBtnRightClickSlot()
+void SideBarWidget::otherBtnRightClickSlot(const QPoint &pos)
 {
     qDebug() << "SideBarWidget::otherBtnRightClickSlot() 开始";
     QPushButton* btn=dynamic_cast<QPushButton*>(QObject::sender());
@@ -398,7 +398,7 @@ void SideBarWidget::otherBtnRightClickSlot()
         break;
     }
     RightClickMenu m_otherMenu;
-    int ret = m_otherMenu.showOtherMenu(desktopfp);
+    int ret = m_otherMenu.showOtherMenu(btn->mapToGlobal(pos), desktopfp);
     if(ret==15)
     {
         Q_EMIT sendHideMainWindowSignal();

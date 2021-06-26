@@ -84,6 +84,15 @@ void MainViewWidget::initUi()
     connect(this,&MainViewWidget::directoryChangedSignal,m_fullFunctionWid,&FullFunctionWidget::updateAppListView);
     connect(this,&MainViewWidget::directoryChangedSignal,m_commonUseWid,&CommonUseWidget::updateListViewSlot);
     connect(this,&MainViewWidget::directoryChangedSignal,m_fullCommonUseWid,&FullCommonUseWidget::updateListViewSlot);
+    connect(this, &MainViewWidget::selectFirstItem, m_commonUseWid, &CommonUseWidget::selectFirstItem);
+    connect(this, &MainViewWidget::selectFirstItem, m_fullCommonUseWid, &FullCommonUseWidget::selectFirstItem);
+    connect(this, &MainViewWidget::selectFirstItemTab, m_commonUseWid, &CommonUseWidget::selectFirstItemTab);
+    connect(this, &MainViewWidget::selectFirstItemTab, m_letterWid, &LetterWidget::setFocusToThis);
+    connect(this, &MainViewWidget::selectFirstItemTab, m_functionWid, &FunctionWidget::setFocusToThis);
+    connect(this, &MainViewWidget::selectFirstItemTab, m_fullCommonUseWid, &FullCommonUseWidget::selectFirstItemTab);
+    connect(this, &MainViewWidget::selectFirstItemTab, m_fullLetterWid, &FullLetterWidget::setFocusToThis);
+    connect(this, &MainViewWidget::selectFirstItemTab, m_fullFunctionWid, &FullFunctionWidget::setFocusToThis);
+
 
     connect(this, &MainViewWidget::setSlideBar, m_fullCommonUseWid, &FullCommonUseWidget::onSetSlider);
     connect(m_fullLetterWid,&FullLetterWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
@@ -911,6 +920,7 @@ void MainViewWidget::keyPressEvent(QKeyEvent *e)
 void MainViewWidget::setFocusToThis()
 {
     this->setFocus();
-    m_fullLetterWid->letterButtonClick();
-    m_fullFunctionWid->functionButtonClick();
+    ////   this->focusProxy();
+    //    m_fullLetterWid->letterButtonClick();
+    //    m_fullFunctionWid->functionButtonClick();
 }

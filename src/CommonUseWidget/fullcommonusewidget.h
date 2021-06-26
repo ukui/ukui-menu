@@ -105,6 +105,10 @@ public Q_SLOTS:
 
     void onSetSlider(int value);
 
+    void selectFirstItem();
+
+    void selectFirstItemTab();
+
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget

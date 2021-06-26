@@ -174,6 +174,8 @@ public Q_SLOTS:
 
     void onSetSlider(int);
 
+    void setFocusToThis();
+
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget
@@ -181,6 +183,8 @@ Q_SIGNALS:
     void sendHideMainWindowSignal();
 
     void setFocusToSideWin();
+
+    void selectFirstItem();
 };
 
 #endif // FULLFUNCTIONWIDGET_H
