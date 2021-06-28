@@ -6244,7 +6244,7 @@ bao 保
 yu,shu 俞
 qi,si 俟
 xia 俠
-xin,shen 信
+xin 信
 xiu 俢
 yu 俣
 di 俤
@@ -8647,7 +8647,7 @@ di,ti 奃
 yan 奄
 pao 奅
 juan 奆
-ji,ai,yi,qi 奇
+ji,qi 奇
 nai 奈
 feng 奉
 pi,xi,lie,xie 奊
