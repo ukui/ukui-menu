@@ -474,6 +474,16 @@ void execApp(QString desktopfp)
     }
     else
     {
+        QString appName = interface.getAppExec(desktopfp);
+        QStringList strList = (appName.replace("\"","")).split(" ");
+        for(int i = 1; i < strList.size(); i++)
+        {
+            if(QString(strList.at(i)).size() > 2)
+            {
+                QProcess::startDetached(strList.at(0));
+                return;
+            }
+        }
         GDesktopAppInfo * desktopAppInfo=g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
         g_app_info_launch(G_APP_INFO(desktopAppInfo),nullptr, nullptr, nullptr);
         g_object_unref(desktopAppInfo);
