@@ -87,6 +87,8 @@ protected:
      */
     void repaintWidget();
 
+    void mouseReleaseEvent(QMouseEvent *event);
+
 public Q_SLOTS:
     /**
      * @brief Load the full screen window

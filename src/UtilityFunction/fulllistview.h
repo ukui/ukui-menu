@@ -47,7 +47,7 @@ protected:
     void paintEvent(QPaintEvent *e) override;
     void focusInEvent(QFocusEvent *event);
     void focusOutEvent(QFocusEvent *event);
-//    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     FullItemDelegate* m_delegate=nullptr;

@@ -323,6 +323,14 @@ void MainWindow::showFullScreenWidget()
     m_animation->start();
 }
 
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(m_isFullScreen && event->button()==Qt::LeftButton)
+    {
+        this->hide();
+    }
+}
+
 /**
  * 显示默认窗口
  */
