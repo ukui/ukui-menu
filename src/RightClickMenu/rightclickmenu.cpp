@@ -42,6 +42,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     m_whiteList.append("kylin-user-guide.desktop");
     m_whiteList.append("ukui-control-center.desktop");
     m_whiteList.append("peony.desktop");
+    m_whiteList.append("engrampa.desktop");
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
 

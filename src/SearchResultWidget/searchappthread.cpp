@@ -84,6 +84,7 @@ void SearchAppThread::run()
                 QStringList appNameLs;
                 QStringList appNameFls;
                 QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords(m_appInfoVector.at(index).at(1));
+               // QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords("奇安信可信");
                 for(int i = 0; i < appNamePyLst.size()/2; i++)
                 {
                    appNameLs.append(appNamePyLst.at(i * 2));
