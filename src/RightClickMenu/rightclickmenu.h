@@ -36,6 +36,7 @@
 #include <QEvent>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
+#include "menubox.h"
 
 class RightClickMenu : public QWidget
 {
@@ -73,9 +74,6 @@ private:
     int m_actionNumber;
     QProcess *m_cmdProc=nullptr;
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
-    QMenu* m_showAppMenu = nullptr;
-    QMenu* m_showShutMenu = nullptr;
-    QMenu* m_showOtherMenu = nullptr;
 
     QStringList m_whiteList;
 
@@ -145,6 +143,10 @@ private Q_SLOTS:
      * @brief Personalize this list
      */
     void otherListActionTriggerSlot();
+
+public:
+Q_SIGNALS:
+    void sendMainWinActiveSignal(bool flag);
 };
 
 #endif // RIGHTCLICKMENU_H
