@@ -39,7 +39,6 @@ MainViewWidget::~MainViewWidget()
     delete m_directoryChangedThread;
     delete m_animation;
     delete m_searchAppThread;
-
 }
 
 void MainViewWidget::initUi()
@@ -106,6 +105,7 @@ void MainViewWidget::initUi()
     connect(m_fullFunctionWid,&FullFunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
     connect(m_searchResultWid,&SearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
     connect(m_fullSearchResultWid,&FullSearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(m_commonUseWid, &CommonUseWidget::sendMainWinActiveSignal, this, &MainViewWidget::sendMainWinActiveSignal);
 
     addTopControl();
     //加载默认视图

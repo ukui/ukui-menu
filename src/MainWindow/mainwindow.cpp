@@ -161,6 +161,7 @@ void MainWindow::initUi()
     connect(m_sideBarWid,&SideBarWidget::sendDefaultBtnSignal,this,&MainWindow::showDefaultWidget);
     connect(m_sideBarWid, &SideBarWidget::sendShowMainWindowSignal, this, &MainWindow::activeWindowSolt);
     connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
+    connect(m_mainViewWid, &MainViewWidget::sendMainWinActiveSignal, this, &MainWindow::activeWindowSolt);
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
     connect(m_mainViewWid,&MainViewWidget::setFocusToSideWin,m_sideBarWid,&SideBarWidget::setFocusToThis);
@@ -412,13 +413,19 @@ void MainWindow::animationValueFinishedSlot()
 
 void MainWindow::activeWindowSolt(bool flag)
 {
+//    qDebug() << "void MainWindow::activeWindowSolt(bool flag)";
     QTimer::singleShot(30,this, SLOT(mainWinShowSlot()));
 }
 
 void MainWindow::mainWinShowSlot()
 {
-     this->activateWindow();
-     qDebug() << "void MainWindow::activeWindowSolt()";
+    qDebug() << "void MainWindow::activeWindowSolt()"<< this->isActiveWindow();
+    this->activateWindow();
+    if(!this->geometry().contains(QCursor::pos()))
+    {
+        this->hide();
+    }
+//     qDebug() << "void MainWindow::activeWindowSolt()";
 }
 
 /**
