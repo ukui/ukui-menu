@@ -13,11 +13,6 @@ protected:
 
     void mousePressEvent(QMouseEvent *event);
 
-//    void mouseReleaseEvent(QMouseEvent *event);
-
-//    void focusInEvent(QFocusEvent *event);
-
-//    void focusOutEvent(QFocusEvent *event);
 public:
 Q_SIGNALS:
     void sendMainWinActiveSignal(bool flag);
