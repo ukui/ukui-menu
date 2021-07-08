@@ -89,6 +89,8 @@ public:
     void resizeControl();
     void reloadUkuiMenu();
 
+    void resetQueryLine();
+
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
     QWidget *m_topWidget=nullptr;
