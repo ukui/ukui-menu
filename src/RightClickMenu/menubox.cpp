@@ -7,30 +7,16 @@
 MenuBox::MenuBox(QWidget *parent):
     QMenu(parent)
 {
-    this->activateWindow();
+
 }
 
 void MenuBox::mousePressEvent(QMouseEvent *event)
 {
-    this->activateWindow();
-    Q_EMIT sendMainWinActiveSignal(true);
+    if(!this->actionAt(event->pos()))
+    {
+        Q_EMIT sendMainWinActiveSignal(true);
+    }
+    qDebug() << "void MenuBox::mousePressEvent(QMouseEvent *event)";
     return QMenu::mousePressEvent(event);
 }
 
-//void MenuBox::mouseReleaseEvent(QMouseEvent *event)
-//{
-//    Q_UNUSED(event);
-//    this->activateWindow();
-//     Q_EMIT sendMainWinActiveSignal(true);
-//    if(this->geometry().contains(QCursor::pos()))
-//    {
-//        return QMenu::mousePressEvent(event);
-//    }
-//    else
-//    {
-//        this->raise();
-//        this->activateWindow();
-//    }
-
-//    return QMenu::mouseReleaseEvent(event);
-//}

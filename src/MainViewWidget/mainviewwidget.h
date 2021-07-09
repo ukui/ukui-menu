@@ -233,6 +233,8 @@ Q_SIGNALS:
      */
     void sendHideMainWindowSignal();
 
+    void sendMainWinActiveSignal(bool flag);
+
     void setFocusToSideWin();
 
     void selectFirstItem();

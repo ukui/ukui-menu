@@ -55,7 +55,6 @@ private:
     int module=0;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
-    RightClickMenu* menu=nullptr;//右键菜单
     QVector<QStringList> data;
     ItemDelegate* m_delegate=nullptr;
     int m_preRowCount;
@@ -64,10 +63,12 @@ private:
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
     void rightClickedSlot(const QPoint &pos);//右键菜单
+
 Q_SIGNALS:
     void sendItemClickedSignal(QStringList arg);//发送item点击信号
     void sendHideMainWindowSignal();
     void sendUpdateAppListSignal();
+    void sendMainWinActiveSignal(bool flag);
 };
 
 #endif // LISTVIEW_H

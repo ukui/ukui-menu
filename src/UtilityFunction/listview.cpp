@@ -29,11 +29,9 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-    menu=new RightClickMenu(this);
 }
 ListView::~ListView()
 {
-    delete menu;
     delete pUkuiMenuInterface;
 }
 
@@ -108,7 +106,9 @@ void ListView::rightClickedSlot(const QPoint &pos)
         QStringList strlist=var.value<QStringList>();
         if(strlist.at(1).toInt()==1)
         {
-            int ret = menu->showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
+            RightClickMenu menu(this);
+            connect(&menu, &RightClickMenu::sendMainWinActiveSignal, this, &ListView::sendMainWinActiveSignal);
+            int ret = menu.showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
             if(module>0)
             {
                 if(strlist.at(1).toInt()==1)
