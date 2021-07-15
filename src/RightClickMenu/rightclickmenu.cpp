@@ -210,7 +210,7 @@ int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
 
     MenuBox m_showAppMenu;
     connect(&m_showAppMenu, &MenuBox::sendMainWinActiveSignal, this, &RightClickMenu::sendMainWinActiveSignal);
-   // m_showAppMenu.setWindowFlag(Qt::Popup);
+    m_showAppMenu.setWindowFlag(Qt::Popup);
 
     //添加菜单项，指定图标、名称、响应函数
     QFileInfo fileInfo(desktopfp);
@@ -258,7 +258,7 @@ int RightClickMenu::showShutdownMenu(const QPoint &pos)
     m_actionNumber=0;
     MenuBox m_showShutMenu;
     connect(&m_showShutMenu, &MenuBox::sendMainWinActiveSignal, this, &RightClickMenu::sendMainWinActiveSignal);
-   // m_showShutMenu.setWindowFlag(Qt::Popup);
+    m_showShutMenu.setWindowFlag(Qt::Popup);
 
     m_showShutMenu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic",1)),tr("Sleep"),
                    this,SLOT(hibernateActionTriggerSlot()));//休眠睡眠相同
@@ -283,7 +283,7 @@ int RightClickMenu::showOtherMenu(const QPoint &pos, QString desktopfp)
     this->m_desktopfp=desktopfp;
     MenuBox m_showOtherMenu;
     connect(&m_showOtherMenu, &MenuBox::sendMainWinActiveSignal, this, &RightClickMenu::sendMainWinActiveSignal);
- //   m_showOtherMenu.setWindowFlag(Qt::Popup);
+    m_showOtherMenu.setWindowFlag(Qt::Popup);
 //    QDBusInterface iface("com.ukui.panel.desktop",
 //                         "/",
 //                         "com.ukui.panel.desktop",

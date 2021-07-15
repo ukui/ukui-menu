@@ -47,6 +47,10 @@ protected:
     void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) override;
     void keyPressEvent(QKeyEvent* e);
+    void dropEvent(QDropEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *e);
+    void dragMoveEvent(QDragMoveEvent *event);
 
 private:
     QStandardItemModel* listmodel=nullptr;
@@ -55,20 +59,22 @@ private:
     int module=0;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 
+    RightClickMenu* menu=nullptr;//右键菜单
     QVector<QStringList> data;
     ItemDelegate* m_delegate=nullptr;
     int m_preRowCount;
+    QPoint startPos;
+//    QMimeData *mimeData = nullptr;
+//    QDrag *drag = nullptr;
 
 
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item
     void rightClickedSlot(const QPoint &pos);//右键菜单
-
 Q_SIGNALS:
     void sendItemClickedSignal(QStringList arg);//发送item点击信号
     void sendHideMainWindowSignal();
     void sendUpdateAppListSignal();
-    void sendMainWinActiveSignal(bool flag);
 };
 
 #endif // LISTVIEW_H

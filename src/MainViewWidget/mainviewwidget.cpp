@@ -39,6 +39,7 @@ MainViewWidget::~MainViewWidget()
     delete m_directoryChangedThread;
     delete m_animation;
     delete m_searchAppThread;
+
 }
 
 void MainViewWidget::initUi()
@@ -105,7 +106,6 @@ void MainViewWidget::initUi()
     connect(m_fullFunctionWid,&FullFunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
     connect(m_searchResultWid,&SearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
     connect(m_fullSearchResultWid,&FullSearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_commonUseWid, &CommonUseWidget::sendMainWinActiveSignal, this, &MainViewWidget::sendMainWinActiveSignal);
 
     addTopControl();
     //加载默认视图
@@ -277,7 +277,6 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
         char style[200];
         if(event->type()==QEvent::FocusIn)
         {
-            qDebug() << "MainViewWidget::eventFilter(QObject *watched, QEvent *event)iiiiiiiiiiiiii";
             if(!m_isFullScreen)
             {
                 QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
@@ -314,7 +313,6 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
         }
         else if(event->type()==QEvent::FocusOut)
         {
-            qDebug() << "MainViewWidget::eventFilter(QObject *watched, QEvent *event)ooooooooooo";
             m_searchKeyWords.clear();
             if(m_queryLineEdit->text().isEmpty())
             {
@@ -496,7 +494,7 @@ void MainViewWidget::loadMinMainView()
             m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
             m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
         }
-        m_queryText->setFixedWidth(42);
+        m_queryText->adjustSize();
         m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
                                       m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
         m_queryWid->show();
@@ -630,60 +628,6 @@ void MainViewWidget::resizeControl()
 
 }
 
-void MainViewWidget::resetQueryLine()
-{
-    if(!m_queryLineEdit->text().isEmpty())
-    {
-        m_queryLineEdit->clearFocus();
-        m_queryLineEdit->clear();
-        m_isSearching = false;
-
-        if(m_queryWid->layout()->count()==1)
-        {
-            m_queryWid->layout()->addWidget(m_queryText);
-            m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
-            m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
-        }
-        m_queryText->adjustSize();
-        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-        char style[200];
-        QPalette pe = m_queryText->palette();
-        QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
-        if(!m_isFullScreen)
-        {
-
-            QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
-            if(gsetting.get("style-name").toString()=="ukui-light")
-            {
-                pixmap=drawSymbolicBlackColoredPixmap(pixmap);//反黑
-                pe.setColor(QPalette::Text,QColor(Qt::black));
-                sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
-                        QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
-            }
-            else
-            {
-                pixmap=drawSymbolicColoredPixmap(pixmap);//反白
-                pe.setColor(QPalette::Text,QColor(Qt::white));
-                sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
-                        QueryLineEditClickedBorder,QueryLineEditBackground);
-            }
-        }
-        else
-        {
-            sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
-                    QueryLineEditClickedBorder,QueryLineEditBackground);
-            pixmap=drawSymbolicColoredPixmap(pixmap);//反白
-            pe.setColor(QPalette::Text,QColor(Qt::white));
-        }
-        m_queryLineEdit->setStyleSheet(style);
-        pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-        m_queryIcon->setPixmap(pixmap);
-        m_queryText->setPalette(pe);
-    }
-
-}
-
 /**
  * 加载常用分类界面
  */
@@ -701,7 +645,7 @@ void MainViewWidget::loadCommonUseWidget()
     this->layout()->update();
     m_widgetState=1;
     m_saveCurrentWidState=1;
-    resetQueryLine();
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -719,7 +663,7 @@ void MainViewWidget::loadLetterWidget()
     m_letterWid->show();
     m_widgetState=2;
     m_saveCurrentWidState=2;
-    resetQueryLine();
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -737,7 +681,7 @@ void MainViewWidget::loadFunctionWidget()
     m_functionWid->show();
     m_widgetState=3;
     m_saveCurrentWidState=3;
-    resetQueryLine();
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -756,7 +700,7 @@ void MainViewWidget::loadFullCommonUseWidget()
     m_fullCommonUseWid->updateListView();
     m_widgetState=1;
     m_saveCurrentWidState=1;
-    resetQueryLine();
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -776,7 +720,7 @@ void MainViewWidget::loadFullLetterWidget()
     m_fullLetterWid->enterAnimation();
     m_widgetState=2;
     m_saveCurrentWidState=2;
-    resetQueryLine();
+    m_queryLineEdit->clear();
 }
 
 /**
@@ -796,7 +740,7 @@ void MainViewWidget::loadFullFunctionWidget()
     m_fullFunctionWid->enterAnimation();
     m_widgetState=3;
     m_saveCurrentWidState=3;
-    resetQueryLine();
+    m_queryLineEdit->clear();
 }
 
 void MainViewWidget::loadSearchResultWidget()
@@ -953,7 +897,7 @@ void MainViewWidget::keyPressEvent(QKeyEvent *e)
             case Qt::Key_Return:
             case Qt::Key_Down:
             {
-                if(m_queryLineEdit->hasFocus() && !m_queryLineEdit->text().isEmpty())
+                if(m_queryLineEdit->hasFocus())
                 {
                     if(m_isFullScreen)
                     {
@@ -976,6 +920,6 @@ void MainViewWidget::setFocusToThis()
 {
     this->setFocus();
     ////   this->focusProxy();
-//        m_fullLetterWid->letterButtonClick();
-//        m_fullFunctionWid->functionButtonClick();
+    //    m_fullLetterWid->letterButtonClick();
+    //    m_fullFunctionWid->functionButtonClick();
 }

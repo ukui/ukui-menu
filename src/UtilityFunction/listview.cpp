@@ -19,6 +19,7 @@
 #include "listview.h"
 #include "utility.h"
 #include <QDebug>
+#include <QDrag>
 
 ListView::ListView(QWidget *parent, int width, int height, int module):
     QListView(parent)
@@ -29,9 +30,11 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
+    menu=new RightClickMenu(this);
 }
 ListView::~ListView()
 {
+    delete menu;
     delete pUkuiMenuInterface;
 }
 
@@ -47,7 +50,8 @@ void ListView::initWidget()
     this->setViewMode(QListView::ListMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setFocusPolicy(Qt::StrongFocus);
-    this->setMovement(QListView::Static);
+    this->setMovement(QListView::Free);
+    this->setDragEnabled(QListView::Free);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setUpdatesEnabled(true);
     this->setSpacing(0);
@@ -106,9 +110,7 @@ void ListView::rightClickedSlot(const QPoint &pos)
         QStringList strlist=var.value<QStringList>();
         if(strlist.at(1).toInt()==1)
         {
-            RightClickMenu menu(this);
-            connect(&menu, &RightClickMenu::sendMainWinActiveSignal, this, &ListView::sendMainWinActiveSignal);
-            int ret = menu.showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
+            int ret = menu->showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
             if(module>0)
             {
                 if(strlist.at(1).toInt()==1)
@@ -149,6 +151,17 @@ void ListView::rightClickedSlot(const QPoint &pos)
     }
 }
 
+void ListView::dragMoveEvent(QDragMoveEvent *e)
+{
+    Q_UNUSED(e);
+}
+
+void ListView::dropEvent(QDropEvent *e)
+{
+    qDebug() << "fdasfdsafsdafdsafdas";
+    Q_UNUSED(e);
+}
+
 void ListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
@@ -179,6 +192,31 @@ void ListView::paintEvent(QPaintEvent *e)
     p.setColor(QPalette::Active,QPalette::Button,color);
     this->verticalScrollBar()->setPalette(p);
     QListView::paintEvent(e);
+}
+
+void ListView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    qDebug() << "void ListView::mouseReleaseEvent(QMouseEvent *event)";
+    QVariant pressApp = listmodel->data(this->indexAt(startPos), Qt::DisplayRole);
+    QStringList m_desktopfp = pressApp.value<QStringList>();
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QFileInfo fileInfo(m_desktopfp.at(0));
+    QString desktopfn=fileInfo.fileName();
+    QFile file(m_desktopfp.at(0));
+    QString newname=QString(path+"/"+desktopfn);
+    bool ret=file.copy(QString(path+"/"+desktopfn));
+    if(ret)
+    {
+        char command[200];
+        sprintf(command,"chmod a+x %s",newname.toLocal8Bit().data());
+        QProcess::startDetached(QString::fromLocal8Bit(command));
+    }
+}
+
+void ListView::mousePressEvent(QMouseEvent *event)
+{
+    startPos = event->pos();
+    return QListView::mousePressEvent(event);
 }
 
 void ListView::keyPressEvent(QKeyEvent* e)

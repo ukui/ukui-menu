@@ -89,8 +89,6 @@ public:
     void resizeControl();
     void reloadUkuiMenu();
 
-    void resetQueryLine();
-
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
     QWidget *m_topWidget=nullptr;
@@ -234,8 +232,6 @@ Q_SIGNALS:
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
-
-    void sendMainWinActiveSignal(bool flag);
 
     void setFocusToSideWin();
 

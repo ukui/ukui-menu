@@ -59,7 +59,6 @@ void CommonUseWidget::initAppListWidget()
     connect(m_listView,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
     connect(m_listView,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);
     connect(m_listView,&ListView::sendHideMainWindowSignal,this,&CommonUseWidget::sendHideMainWindowSignal);
-    connect(m_listView, &ListView::sendMainWinActiveSignal, this, &CommonUseWidget::sendMainWinActiveSignal);
 }
 
 /**
