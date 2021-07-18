@@ -29,7 +29,7 @@ ListView::ListView(QWidget *parent, int width, int height, int module):
     initWidget();
 
     pUkuiMenuInterface=new UkuiMenuInterface;
-    menu=new RightClickMenu(this);
+    menu=new RightClickMenu;
 }
 ListView::~ListView()
 {
@@ -58,7 +58,7 @@ void ListView::initWidget()
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);
     this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
-   // this->setFocus();
+    this->setFocus();
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
 }

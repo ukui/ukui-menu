@@ -1,3 +1,11 @@
+ukui-menu (3.0.1-0718) v101; urgency=medium
+
+  * Fixed: no response on click the first application icon in ukui-menu
+    - 解决点击开始菜单首个应用icon无反应的问题
+    - bugId:67643
+
+ -- zhaikangning <zhaikangning@kylinos.cn>  Sun, 18 Jul 2021 10:27:02 +0800
+
 ukui-menu (3.0.1-1) unstable; urgency=medium
 
   * New upstream bugfix release.
