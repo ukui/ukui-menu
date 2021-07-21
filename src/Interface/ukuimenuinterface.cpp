@@ -88,6 +88,18 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
             keyfile=g_key_file_new();
             if(!g_key_file_load_from_file(keyfile,filepath,flags,error))
                 return;
+
+            char* ret_0 = g_key_file_get_locale_string(keyfile,"Desktop Entry","Categories", nullptr, nullptr);
+            if(ret_0 != nullptr)
+            {
+                QString str = QString::fromLocal8Bit(ret_0);
+                if(str.contains("Android"))
+                {
+                    g_key_file_free(keyfile);
+                    i++;
+                    continue;
+                }
+            }
             char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","NoDisplay", nullptr, nullptr);
             if(ret_1!=nullptr)
             {
@@ -164,6 +176,9 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
             {
                 getAndroidApp();
                 recursiveSearchFile("/usr/share/applications/");
+                recursiveSearchFile(QDir::homePath()+"/.local/share/applications/");
+                recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+                recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
                 QJsonArray blArray=obj.value("blacklist").toArray();
                 QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
                 for(int index=0;index<enArray.size();index++)
@@ -177,6 +192,9 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
             {
                 getAndroidApp();
                 recursiveSearchFile("/usr/share/applications/");
+                recursiveSearchFile(QDir::homePath()+"/.local/share/applications/");
+                recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+                recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
             }
 
         }
@@ -187,6 +205,9 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     {
         getAndroidApp();
         recursiveSearchFile("/usr/share/applications/");
+        recursiveSearchFile(QDir::homePath()+"/.local/share/applications/");
+        recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+        recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
     }
 
     filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
