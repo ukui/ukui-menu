@@ -277,7 +277,6 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
         char style[200];
         if(event->type()==QEvent::FocusIn)
         {
-            qDebug() << "MainViewWidget::eventFilter(QObject *watched, QEvent *event)iiiiiiiiiiiiii";
             if(!m_isFullScreen)
             {
                 QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
@@ -314,7 +313,6 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
         }
         else if(event->type()==QEvent::FocusOut)
         {
-            qDebug() << "MainViewWidget::eventFilter(QObject *watched, QEvent *event)ooooooooooo";
             m_searchKeyWords.clear();
             if(m_queryLineEdit->text().isEmpty())
             {
