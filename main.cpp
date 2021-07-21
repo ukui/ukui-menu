@@ -72,16 +72,16 @@ int main(int argc, char *argv[])
 
     //测试
 
-    if(Style::panelPosition==0)
-        w.setGeometry(QRect(Style::primaryScreenX+4,Style::primaryScreenY+Style::primaryScreenHeight-Style::panelSize-Style::minh-3,
-                                  Style::minw,Style::minh));
-    else if(Style::panelPosition==1)
-        w.setGeometry(QRect(Style::primaryScreenX+4,Style::primaryScreenY+Style::panelSize+4,Style::minw,Style::minh));
-    else if(Style::panelPosition==2)
-        w.setGeometry(QRect(Style::primaryScreenX+Style::panelSize+4,Style::primaryScreenY+4,Style::minw,Style::minh));
-    else
-        w.setGeometry(QRect(Style::primaryScreenX+Style::primaryScreenWidth-Style::panelSize-Style::minw-4,Style::primaryScreenY+4,
-                                  Style::minw,Style::minh));
+//    if(Style::panelPosition==0)
+//        w.setGeometry(QRect(Style::primaryScreenX+4,Style::primaryScreenY+Style::primaryScreenHeight-Style::panelSize-Style::minh-3,
+//                                  Style::minw,Style::minh));
+//    else if(Style::panelPosition==1)
+//        w.setGeometry(QRect(Style::primaryScreenX+4,Style::primaryScreenY+Style::panelSize+4,Style::minw,Style::minh));
+//    else if(Style::panelPosition==2)
+//        w.setGeometry(QRect(Style::primaryScreenX+Style::panelSize+4,Style::primaryScreenY+4,Style::minw,Style::minh));
+//    else
+//        w.setGeometry(QRect(Style::primaryScreenX+Style::primaryScreenWidth-Style::panelSize-Style::minw-4,Style::primaryScreenY+4,
+//                                  Style::minw,Style::minh));
 
     w.show();
     w.raise();

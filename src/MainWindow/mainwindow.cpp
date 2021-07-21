@@ -278,6 +278,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
  */
 void MainWindow::showFullScreenWidget()
 {
+    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     m_isFullScreen=true;
     this->setContentsMargins(0,0,0,0);
     int position=Style::panelPosition;
@@ -290,23 +291,23 @@ void MainWindow::showFullScreenWidget()
     QRect endRect;
     if(position==0)
     {
-        startRect.setRect(x+4,y+height-panelSize-Style::minh-3,Style::minw,Style::minh);
-        endRect.setRect(x,y,width,height-panelSize);
+        startRect.setRect(x+4,y+availableGeometry.height()-Style::minh-3,Style::minw,Style::minh);
+        endRect.setRect(x,y,availableGeometry.width(),availableGeometry.height());
     }
     else if(position==1)
     {
         startRect.setRect(x+4,y+panelSize+4,Style::minw,Style::minh);
-        endRect.setRect(x,y+panelSize,width,height-panelSize);
+        endRect.setRect(x,y+panelSize,availableGeometry.width(),availableGeometry.height());
     }
     else if(position==2)
     {
         startRect.setRect(x+panelSize+4,y+4,Style::minw,Style::minh);
-        endRect.setRect(x+panelSize,y,width-panelSize,height);
+        endRect.setRect(x+panelSize,y,availableGeometry.width(),availableGeometry.height());
     }
     else
     {
-        startRect.setRect(x+width-panelSize-Style::minw-4,y+4,Style::minw,Style::minh);
-        endRect.setRect(x,y,width-panelSize,height);
+        startRect.setRect(x+availableGeometry.width()-Style::minw-4,y+4,Style::minw,Style::minh);
+        endRect.setRect(x,y,availableGeometry.width(),availableGeometry.height());
     }
 
     this->centralWidget()->layout()->removeWidget(m_mainViewWid);
@@ -336,6 +337,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
  */
 void MainWindow::showDefaultWidget()
 {
+    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     m_isFullScreen=false;
     this->setContentsMargins(0,0,0,0);
     int position=Style::panelPosition;
@@ -348,7 +350,7 @@ void MainWindow::showDefaultWidget()
     QRect endRect;
     if(position==0)
     {
-        endRect.setRect(x+4,y+height-panelSize-Style::minh-3,Style::minw,Style::minh);
+        endRect.setRect(x+4,y+availableGeometry.height()-Style::minh-3,Style::minw,Style::minh);
         startRect.setRect(x,y,width,height-panelSize);
     }
     else if(position==1)
@@ -363,7 +365,7 @@ void MainWindow::showDefaultWidget()
     }
     else
     {
-        endRect.setRect(x+width-panelSize-Style::minw-4,y+4,Style::minw,Style::minh);
+        endRect.setRect(x+availableGeometry.width()-Style::minw-4,y+4,Style::minw,Style::minh);
         startRect.setRect(x,y,width-panelSize,height);
     }
 
@@ -412,6 +414,7 @@ void MainWindow::animationValueFinishedSlot()
 
 void MainWindow::activeWindowSolt(bool flag)
 {
+//    qDebug() << "void MainWindow::activeWindowSolt(bool flag)";
     QTimer::singleShot(30,this, SLOT(mainWinShowSlot()));
 }
 
@@ -472,6 +475,8 @@ void MainWindow::loadMainWindow()
 {
     cleanTimeoutApp();
 
+    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+
     int position=Style::panelPosition;
     int panelSize=Style::panelSize;
     int x = Style::primaryScreenX;
@@ -486,23 +491,23 @@ void MainWindow::loadMainWindow()
         QRect endRect;
         if(position==0)
         {
-            startRect.setRect(x+4,y+height-panelSize-Style::minh-3,Style::minw,Style::minh);
-            endRect.setRect(x,y,width,height-panelSize);
+            startRect.setRect(x+4,y+availableGeometry.height()-Style::minh-3,Style::minw,Style::minh);
+            endRect.setRect(x,y,availableGeometry.width(),availableGeometry.height());
         }
         else if(position==1)
         {
             startRect.setRect(x+4,y+panelSize+4,Style::minw,Style::minh);
-            endRect.setRect(x,y+panelSize,width,height-panelSize);
+            endRect.setRect(x,y+panelSize,availableGeometry.width(),availableGeometry.height());
         }
         else if(position==2)
         {
             startRect.setRect(x+panelSize+4,y+4,Style::minw,Style::minh);
-            endRect.setRect(x+panelSize,y,width-panelSize,height);
+            endRect.setRect(x+panelSize,y,availableGeometry.width(),availableGeometry.height());
         }
         else
         {
-            startRect.setRect(x+width-panelSize-Style::minw-4,y+4,Style::minw,Style::minh);
-            endRect.setRect(x,y,width-panelSize,height);
+            startRect.setRect(x+availableGeometry.width()-Style::minw-4,y+4,Style::minw,Style::minh);
+            endRect.setRect(x,y,availableGeometry.width(),availableGeometry.height());
         }
 
         this->centralWidget()->layout()->removeWidget(m_mainViewWid);
@@ -521,15 +526,19 @@ void MainWindow::loadMainWindow()
     }
     else
     {
+//        QGSettings* setting1 = new QGSettings(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit());
+//        QString value1 = setting1->get("scaling-factor").toString();
+//        double scaling = value1.toDouble();
+        qDebug() << "availableGeometry.height();" <<availableGeometry.height();
         if(position==0)
-            this->setGeometry(QRect(x+4,y+height-panelSize-Style::minh-3,
+            this->setGeometry(QRect(x+4,y + availableGeometry.height() - Style::minh - 3,
                                       Style::minw,Style::minh));
         else if(position==1)
             this->setGeometry(QRect(x+4,y+panelSize+4,Style::minw,Style::minh));
         else if(position==2)
             this->setGeometry(QRect(x+panelSize+4,y+4,Style::minw,Style::minh));
         else
-            this->setGeometry(QRect(x+width-panelSize-Style::minw-4,y+4,
+            this->setGeometry(QRect(x+availableGeometry.width()-Style::minw-4,y+4,
                                       Style::minw,Style::minh));
 
         m_sideBarWid->loadMinSidebar();
@@ -551,6 +560,7 @@ void MainWindow::primaryScreenChangeSlot()
 void MainWindow::repaintWidget()
 {
     Style::initWidStyle();
+    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
     m_mainViewWid->repaintWidget();
@@ -566,13 +576,13 @@ void MainWindow::repaintWidget()
         if(m_isFullScreen)
         {
             if(position==0)
-                this->setGeometry(QRect(x,y,width,height-panelSize));
+                this->setGeometry(QRect(x,y,availableGeometry.width(),availableGeometry.height()));
             else if(position==1)
-                this->setGeometry(QRect(x,y+panelSize,width,height-panelSize));
+                this->setGeometry(QRect(x,y+panelSize,availableGeometry.width(),availableGeometry.height()));
             else if(position==2)
-                this->setGeometry(QRect(x+panelSize,y,width-panelSize,height));
+                this->setGeometry(QRect(x+panelSize,y,availableGeometry.width(),availableGeometry.height()));
             else
-                this->setGeometry(QRect(x,y,width-panelSize,height));
+                this->setGeometry(QRect(x,y,availableGeometry.width(),availableGeometry.height()));
             m_sideBarWid->loadMaxSidebar();
             m_sideBarWid->setSideBarBtnGeometry();
             m_mainViewWid->resizeControl();
@@ -580,14 +590,14 @@ void MainWindow::repaintWidget()
         else
         {
             if(position==0)
-                this->setGeometry(QRect(x+4,y+height-panelSize-Style::minh-3,
+                this->setGeometry(QRect(x+4,y+availableGeometry.height()-Style::minh-3,
                                           Style::minw,Style::minh));
             else if(position==1)
                 this->setGeometry(QRect(x+4,y+panelSize+4,Style::minw,Style::minh));
             else if(position==2)
                 this->setGeometry(QRect(x+panelSize+4,y+4,Style::minw,Style::minh));
             else
-                this->setGeometry(QRect(x+width-panelSize-Style::minw-4,y+4,
+                this->setGeometry(QRect(x+availableGeometry.width()-Style::minw-4,y+4,
                                           Style::minw,Style::minh));
 
             m_sideBarWid->loadMinSidebar();
