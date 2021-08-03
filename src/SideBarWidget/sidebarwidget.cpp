@@ -520,6 +520,8 @@ void SideBarWidget::setMaxBtn()
 
     m_minMaxBtn->setFixedSize(37,37);
     m_minMaxBtn->setIcon(QIcon(pixmap));
+    m_minMaxBtn->setToolTip(tr("Max"));
+
 //    m_minMaxBtn->setFocus();
 }
 
@@ -596,6 +598,8 @@ void SideBarWidget::setMinBtn()
 
     m_minMaxBtn->setFixedSize(Style::MinMaxBtnWidth,Style::MinMaxBtnWidth);
     m_minMaxBtn->setIcon(QIcon(pixmap));
+    m_minMaxBtn->setToolTip("");
+
 //    m_minMaxBtn->setFocus();
 }
 
