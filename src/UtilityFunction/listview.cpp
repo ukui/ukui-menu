@@ -158,7 +158,6 @@ void ListView::dragMoveEvent(QDragMoveEvent *e)
 
 void ListView::dropEvent(QDropEvent *e)
 {
-    qDebug() << "fdasfdsafsdafdsafdas";
     Q_UNUSED(e);
 }
 
