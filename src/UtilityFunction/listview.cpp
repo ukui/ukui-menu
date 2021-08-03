@@ -195,7 +195,6 @@ void ListView::paintEvent(QPaintEvent *e)
 
 void ListView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    qDebug() << "void ListView::mouseReleaseEvent(QMouseEvent *event)";
     QVariant pressApp = listmodel->data(this->indexAt(startPos), Qt::DisplayRole);
     QStringList m_desktopfp = pressApp.value<QStringList>();
     QString path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
