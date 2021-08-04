@@ -112,17 +112,139 @@
         <translation>Sistem</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="148"/>
         <source>Others</source>
-        <translation>Diğer</translation>
+        <translation type="vanished">Diğer</translation>
+    </message>
+</context>
+<context>
+    <name>GetModelData</name>
+    <message>
+        <location filename="../getmodeldata.cpp" line="82"/>
+        <source>Mobile</source>
+        <translation type="unfinished">Mobil</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="88"/>
+        <source>Internet</source>
+        <translation type="unfinished">İnternet</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="94"/>
+        <source>Social</source>
+        <translation type="unfinished">Sosyal</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="100"/>
+        <source>Video</source>
+        <translation type="unfinished">Video</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="106"/>
+        <source>Development</source>
+        <translation type="unfinished">Programlama</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="112"/>
+        <source>Image</source>
+        <translation type="unfinished">Grafik</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="118"/>
+        <source>Game</source>
+        <translation type="unfinished">Oyunlar</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="124"/>
+        <source>Office</source>
+        <translation type="unfinished">Ofis Uygulamaları</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="130"/>
+        <source>Education</source>
+        <translation type="unfinished">Eğitim</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="137"/>
+        <source>System</source>
+        <translation type="unfinished">Sistem</translation>
+    </message>
+    <message>
+        <location filename="../getmodeldata.cpp" line="143"/>
+        <source>Others</source>
+        <translation type="unfinished">Diğer</translation>
     </message>
 </context>
 <context>
     <name>MainViewWidget</name>
     <message>
-        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="226"/>
+        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="760"/>
+        <source>All</source>
+        <translation type="unfinished">Tümü</translation>
+    </message>
+    <message>
+        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="786"/>
+        <source>Letter</source>
+        <translation type="unfinished">Alfabetik</translation>
+    </message>
+    <message>
+        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="810"/>
+        <source>Function</source>
+        <translation type="unfinished">Kategori</translation>
+    </message>
+    <message>
         <source>Search</source>
-        <translation>Ara</translation>
+        <translation type="vanished">Ara</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../mainwindow.ui" line="26"/>
+        <source>MainWindow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="152"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="201"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="510"/>
+        <source>collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="532"/>
+        <source>recent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="750"/>
+        <source>&quot;&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow/mainwindow.cpp" line="115"/>
+        <location filename="../src/MainWindow/mainwindow.cpp" line="243"/>
+        <source>All</source>
+        <translation type="unfinished">Tümü</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow/mainwindow.cpp" line="117"/>
+        <location filename="../src/MainWindow/mainwindow.cpp" line="252"/>
+        <source>Letter</source>
+        <translation type="unfinished">Alfabetik</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow/mainwindow.cpp" line="119"/>
+        <location filename="../src/MainWindow/mainwindow.cpp" line="261"/>
+        <source>Function</source>
+        <translation type="unfinished">Kategori</translation>
     </message>
 </context>
 <context>
@@ -175,32 +297,42 @@
 <context>
     <name>RightClickMenu</name>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="216"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="235"/>
         <source>Pin to all</source>
         <translation>Tümünü sabitle</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="219"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="238"/>
         <source>Unpin from all</source>
         <translation>Tüm sabitlemeleri kaldır</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="228"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="247"/>
         <source>Pin to taskbar</source>
         <translation>Görev çubuğuna sabitle</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="231"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="250"/>
         <source>Unpin from taskbar</source>
         <translation>Görev çubuğundan sabitlemeyi kaldır</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="234"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="253"/>
         <source>Add to desktop shortcuts</source>
         <translation>Masaüstü kısayollarına ekle</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="245"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="258"/>
+        <source>Pin to collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="263"/>
+        <source>Remove from collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="274"/>
         <source>Uninstall</source>
         <translation>Kaldır</translation>
     </message>
@@ -209,7 +341,7 @@
         <translation type="vanished">Beklemeye Al</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="259"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="291"/>
         <source>Sleep</source>
         <translation>Uyku Modu</translation>
     </message>
@@ -222,22 +354,22 @@
         <translation type="vanished">Kullanıcı Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="261"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="293"/>
         <source>Log Out</source>
         <translation>Çıkış</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="263"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="295"/>
         <source>Restart</source>
         <translation>Yeniden Başlat</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="265"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="297"/>
         <source>Power Off</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="292"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="327"/>
         <source>Personalize this list</source>
         <translation>Bu listeyi özelleştirin</translation>
     </message>
@@ -245,42 +377,42 @@
 <context>
     <name>SideBarWidget</name>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="95"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="144"/>
         <source>All</source>
         <translation>Tümü</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="97"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="146"/>
         <source>Letter</source>
         <translation>Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="99"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="148"/>
         <source>Function</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="113"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="162"/>
         <source>Trash</source>
         <translation type="unfinished">Çöp</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="115"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="164"/>
         <source>Computer</source>
         <translation>Bilgisayar</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="469"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="524"/>
         <source>Max</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="111"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="160"/>
         <source>Personal</source>
         <translation>Kişisel</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="117"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="166"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
@@ -289,7 +421,7 @@
         <translation type="vanished">Çöp</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="119"/>
+        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="168"/>
         <source>Power</source>
         <translation>Kapat</translation>
     </message>

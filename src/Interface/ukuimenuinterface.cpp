@@ -30,10 +30,12 @@
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
+
 }
 
 QVector<QStringList> UkuiMenuInterface::appInfoVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::desktopfpVector=QVector<QString>();
+QVector<QString> UkuiMenuInterface::collectAppVector=QVector<QString>();
 QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
 QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::allAppVector=QVector<QString>();
@@ -550,6 +552,24 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
         data.append(desktopfp);
     }
 
+    return data;
+}
+
+QVector<QString> UkuiMenuInterface::getCollectApp()
+{
+    QVector<QString> data;
+    Q_FOREACH(QString desktopfn,getCollectAppList())
+    {
+        QString desktopfp;
+        if(androidDesktopfnList.contains(desktopfn))
+            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+        else
+            desktopfp=QString("/usr/share/applications/"+desktopfn);
+        QFileInfo fileInfo(desktopfp);
+        if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp))
+            continue;
+        data.append(desktopfp);
+    }
     return data;
 }
 

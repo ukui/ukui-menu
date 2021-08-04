@@ -72,7 +72,7 @@ void LetterWidget::initUi()
  */
 void LetterWidget::initAppListWidget()
 {
-    m_appListView=new ListView(this,this->width()-6,this->height()-6,1);
+    m_appListView=new ListView(this);
     m_appListView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_appListView->show();
     fillAppListView();
@@ -111,7 +111,7 @@ void LetterWidget::fillAppListView()
         }
     }
 
-    m_appListView->addData(m_data);
+//    m_appListView->addData(m_data);
 }
 
 void LetterWidget::recvItemClickedSlot(QStringList arg)

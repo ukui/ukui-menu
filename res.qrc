@@ -83,5 +83,56 @@
         <file>data/img/mainviewwidget/Mobile-Normal.svg</file>
         <file>src/SearchResultWidget/pinyinWithTone.txt</file>
         <file>src/SearchResultWidget/pinyinWithoutTone.txt</file>
+        <file>data/img/mainviewwidget/全屏 icon- 下拉.png</file>
+        <file>data/img/mainviewwidget/全屏 icon- 下拉.svg</file>
+        <file>data/img/mainviewwidget/全屏 icon- 下拉@2x.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-功能排序.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-功能排序.svg</file>
+        <file>data/img/mainviewwidget/全屏 icon-功能排序@2x.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-关闭.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-关闭.svg</file>
+        <file>data/img/mainviewwidget/全屏 icon-关闭@2x.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-搜索.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-搜索.svg</file>
+        <file>data/img/mainviewwidget/全屏 icon-搜索@2x.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-缩小.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-缩小.svg</file>
+        <file>data/img/mainviewwidget/全屏 icon-缩小@2x.png</file>
+        <file>data/img/mainviewwidget/fullicon-all.png</file>
+        <file>data/img/mainviewwidget/fullicon-all.svg</file>
+        <file>data/img/mainviewwidget/全屏 icon-所有应用@2x.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-字母排序.png</file>
+        <file>data/img/mainviewwidget/全屏 icon-字母排序.svg</file>
+        <file>data/img/mainviewwidget/全屏 icon-字母排序@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon- arrow.png</file>
+        <file>data/img/mainviewwidget/DM-icon- arrow.svg</file>
+        <file>data/img/mainviewwidget/DM-icon- arrow@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-返回.png</file>
+        <file>data/img/mainviewwidget/DM-icon-返回.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-返回@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-放大.png</file>
+        <file>data/img/mainviewwidget/DM-icon-放大.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-放大@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-功能排序.png</file>
+        <file>data/img/mainviewwidget/DM-icon-功能排序.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-功能排序@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-关闭.png</file>
+        <file>data/img/mainviewwidget/DM-icon-关闭.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-关闭@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-所有应用.png</file>
+        <file>data/img/mainviewwidget/DM-icon-所有应用.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-所有应用@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-选项.png</file>
+        <file>data/img/mainviewwidget/DM-icon-选项.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-选项@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-字母排序.png</file>
+        <file>data/img/mainviewwidget/DM-icon-字母排序.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-字母排序@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-check.png</file>
+        <file>data/img/mainviewwidget/DM-icon-check.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-check@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-search.png</file>
+        <file>data/img/mainviewwidget/DM-icon-search.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-search@2x.png</file>
     </qresource>
 </RCC>

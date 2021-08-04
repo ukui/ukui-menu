@@ -20,14 +20,15 @@
 #include "utility.h"
 #include <QDebug>
 
-ListView::ListView(QWidget *parent, int width, int height, int module):
+ListView::ListView(QWidget *parent/*, int width, int height, int module*/):
     QListView(parent)
 {
-    this->w=width;
-    this->h=height;
-    this->module=module;
+    this->w=300;
+    this->h=540;
+    this->module=1;
     initWidget();
-
+    listmodel=new QStandardItemModel(this);
+    this->setModel(listmodel);
     pUkuiMenuInterface=new UkuiMenuInterface;
 }
 ListView::~ListView()
@@ -39,6 +40,7 @@ void ListView::initWidget()
 {
     setAttribute(Qt::WA_TranslucentBackground);
     viewport()->setAttribute(Qt::WA_TranslucentBackground);
+    viewport()->setAutoFillBackground(false);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -61,10 +63,9 @@ void ListView::initWidget()
     connect(this,&ListView::clicked,this,&ListView::onClicked);
 }
 
-void ListView::addData(QVector<QStringList> data)
+void ListView::addData(QVector<QStringList> data, int module)
 {
-    listmodel=new QStandardItemModel(this);
-    this->setModel(listmodel);
+    this->module = module;
     Q_FOREACH(QStringList desktopfp,data)
     {
         QStandardItem* item=new QStandardItem;
@@ -92,7 +93,8 @@ void ListView::onClicked(QModelIndex index)
      QVariant var = listmodel->data(index, Qt::DisplayRole);
      if(var.isValid())
      {
-         Q_EMIT sendItemClickedSignal(var.value<QStringList>());
+         QString desktopfp = var.value<QStringList>().at(0);
+         execApp(desktopfp);
      }
 }
 
@@ -101,7 +103,6 @@ void ListView::rightClickedSlot(const QPoint &pos)
     if(!this->selectionModel()->selectedIndexes().isEmpty())
     {
         QModelIndex index=this->currentIndex();
-//        QRect center = visualRect(index);
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QStringList strlist=var.value<QStringList>();
         if(strlist.at(1).toInt()==1)
@@ -119,6 +120,12 @@ void ListView::rightClickedSlot(const QPoint &pos)
                         break;
                     case 7:
                         Q_EMIT sendHideMainWindowSignal();
+                        break;
+                    case 18:
+                        Q_EMIT sendUpdateCollectSignal();
+                        break;
+                    case 1:
+                        Q_EMIT sendUpdateAppListSignal();
                         break;
                     default:
                         break;
@@ -138,6 +145,9 @@ void ListView::rightClickedSlot(const QPoint &pos)
                     break;
                 case 7:
                     Q_EMIT sendHideMainWindowSignal();
+                    break;
+                case 18:
+                    Q_EMIT sendUpdateCollectSignal();
                     break;
                 default:
                     break;
@@ -164,12 +174,6 @@ void ListView::leaveEvent(QEvent *e)
 
 void ListView::paintEvent(QPaintEvent *e)
 {
-    double transparency=getTransparency();
-    QPainter painter(this->viewport());
-    painter.setOpacity(transparency);
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(this->palette().base());
-    painter.fillRect(this->rect(), this->palette().base());
 
     //滚动条
     QPalette p=this->verticalScrollBar()->palette();

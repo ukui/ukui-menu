@@ -29,6 +29,7 @@
 #define DBUS_NAME       "org.ukui.panel"
 #define DBUS_PATH       "/panel/position"
 #define DBUS_INTERFACE  "org.ukui.panel"
+static int collectCount = 0;
 
 const QPixmap loadSvg(const QString &fileName, const int size);
 
@@ -53,6 +54,10 @@ bool updateDataBaseTableType(QString desktopfn, int type);//更新是否锁定
 bool updateDataBaseTableRecent(QString desktopfn);//更新最近添加
 bool checkIfLocked(QString desktopfn);//检查是否被锁定
 bool checkIfRecent(QString desktopfn);//检查是否最近安装
+bool checkIfCollected(QString desktopfn);
+QStringList getCollectAppList();
+void changeCollectSort(QString dragDesktopfn, QString dropDesktopfn);
+bool updateDataBaseCollect(QString desktopfn, int type);
 QStringList getLockAppList();//获取被锁定应用
 QStringList getUnlockAllList();//获取未被锁定应用
 void cleanTimeoutApp();//清理超时应用

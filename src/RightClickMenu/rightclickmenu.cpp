@@ -89,6 +89,23 @@ void RightClickMenu::unfixedFromAllActionTriggerSlot()
     updateDataBaseTableType(desktopfn,0);
 }
 
+void RightClickMenu::pincToCollectionActionTriggerSlot()
+{
+    QFileInfo fileInfo(m_desktopfp);
+    QString desktopfn=fileInfo.fileName();
+    collectCount++;
+    updateDataBaseCollect(desktopfn,collectCount);
+    m_actionNumber = 18;
+}
+
+void RightClickMenu::removeFromCollectionActionTriggerSlot()
+{
+    QFileInfo fileInfo(m_desktopfp);
+    QString desktopfn=fileInfo.fileName();
+    updateDataBaseCollect(desktopfn,0);
+    m_actionNumber = 18;
+}
+
 void RightClickMenu::fixToTaskbarActionTriggerSlot()
 {
     QDBusInterface iface("com.ukui.panel.desktop",
@@ -236,6 +253,18 @@ int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
 
     m_showAppMenu.addAction(tr("Add to desktop shortcuts"),
                    this,SLOT(addToDesktopActionTriggerSlot()));
+
+    if(!checkIfCollected(desktopfn))
+    {
+        m_showAppMenu.addAction(tr("Pin to collection"),
+                                          this,SLOT(pincToCollectionActionTriggerSlot()));
+    }
+    else
+    {
+        m_showAppMenu.addAction(tr("Remove from collection"),
+                                          this,SLOT(removeFromCollectionActionTriggerSlot()));
+    }
+
     //检查桌面快捷方式是否存在
     QString desktopPath=QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     QString path=QString(desktopPath+"/"+QFileInfo(m_desktopfp).fileName());

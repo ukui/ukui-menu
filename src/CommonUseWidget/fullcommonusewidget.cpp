@@ -25,6 +25,7 @@
 FullCommonUseWidget::FullCommonUseWidget(QWidget *parent) :
     QWidget(parent)
 {
+    Style::initWidStyle();
     initUi();
 }
 
@@ -62,7 +63,6 @@ void FullCommonUseWidget::initUi()
 
     initAppListWidget();
     fillAppList();
-
     flag = true;
     //翻页灵敏度时间调节
     time = new QTimer(this);
@@ -115,6 +115,7 @@ void FullCommonUseWidget::fillAppList()
     m_data.clear();
     Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
         m_data.append(desktopfp);
+    qDebug() << "void FullCommonUseWidget::fillAppList()" << m_data;
     m_listView->addData(m_data);
     resizeScrollAreaControls();
 }

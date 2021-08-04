@@ -25,6 +25,8 @@
 #include <thread>
 #include <KWindowInfo>
 #include <KWindowSystem>
+#include <KWindowEffects>
+#include <QCheckBox>
 
 MainViewWidget::MainViewWidget(QWidget *parent) :
     QWidget(parent)
@@ -45,86 +47,8 @@ void MainViewWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
+    this->setAutoFillBackground(false);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    QVBoxLayout* mainLayout=new QVBoxLayout;
-    mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(0);
-    m_topWidget=new QWidget;
-    m_contentWid=new QWidget;
-
-    mainLayout->addWidget(m_topWidget);
-    mainLayout->addWidget(m_contentWid);
-    this->setLayout(mainLayout);
-
-    this->setFocusPolicy(Qt::NoFocus);
-
-    m_commonUseWid=new CommonUseWidget(m_contentWid);
-    m_fullCommonUseWid=new FullCommonUseWidget(m_contentWid);
-    m_letterWid=new LetterWidget(m_contentWid);
-    m_functionWid=new FunctionWidget(m_contentWid);
-    m_fullLetterWid=new FullLetterWidget(m_contentWid);
-    m_fullFunctionWid=new FullFunctionWidget(m_contentWid);
-    m_fullSearchResultWid=new FullSearchResultWidget(m_contentWid);
-    m_searchResultWid=new SearchResultWidget(m_contentWid);
-    hideWidget();
-
-    m_ukuiMenuInterface=new UkuiMenuInterface;
-
-    //监控.desktop文件目录
-    m_fileWatcher=new QFileSystemWatcher;
-    m_fileWatcher->addPaths(QStringList()<<QString("/usr/share/applications")
-                                      <<QString(QDir::homePath()+"/.local/share/applications/"));
-    connect(m_fileWatcher,&QFileSystemWatcher::directoryChanged,this,&MainViewWidget::directoryChangedSlot);
-    m_directoryChangedThread=new DirectoryChangedThread;
-    connect(m_directoryChangedThread,&DirectoryChangedThread::requestUpdateSignal,this,&MainViewWidget::requestUpdateSlot);
-    connect(this,&MainViewWidget::directoryChangedSignal,m_letterWid,&LetterWidget::updateAppListView);
-    connect(this,&MainViewWidget::directoryChangedSignal,m_fullLetterWid,&FullLetterWidget::updateAppListView);
-    connect(this,&MainViewWidget::directoryChangedSignal,m_functionWid,&FunctionWidget::updateAppListView);
-    connect(this,&MainViewWidget::directoryChangedSignal,m_fullFunctionWid,&FullFunctionWidget::updateAppListView);
-    connect(this,&MainViewWidget::directoryChangedSignal,m_commonUseWid,&CommonUseWidget::updateListViewSlot);
-    connect(this,&MainViewWidget::directoryChangedSignal,m_fullCommonUseWid,&FullCommonUseWidget::updateListViewSlot);
-    connect(this, &MainViewWidget::selectFirstItem, m_commonUseWid, &CommonUseWidget::selectFirstItem);
-    connect(this, &MainViewWidget::selectFirstItem, m_fullCommonUseWid, &FullCommonUseWidget::selectFirstItem);
-    connect(this, &MainViewWidget::selectFirstItemTab, m_commonUseWid, &CommonUseWidget::selectFirstItemTab);
-    connect(this, &MainViewWidget::selectFirstItemTab, m_letterWid, &LetterWidget::setFocusToThis);
-    connect(this, &MainViewWidget::selectFirstItemTab, m_functionWid, &FunctionWidget::setFocusToThis);
-    connect(this, &MainViewWidget::selectFirstItemTab, m_fullCommonUseWid, &FullCommonUseWidget::selectFirstItemTab);
-    connect(this, &MainViewWidget::selectFirstItemTab, m_fullLetterWid, &FullLetterWidget::setFocusToThis);
-    connect(this, &MainViewWidget::selectFirstItemTab, m_fullFunctionWid, &FullFunctionWidget::setFocusToThis);
-
-
-    connect(this, &MainViewWidget::setSlideBar, m_fullCommonUseWid, &FullCommonUseWidget::onSetSlider);
-    connect(m_fullLetterWid,&FullLetterWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
-    connect(m_fullFunctionWid,&FullFunctionWidget::setFocusToSideWin,this,&MainViewWidget::setFocusToSideWin);
-    //发送隐藏主界面信号
-    connect(m_commonUseWid,&CommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_fullCommonUseWid,&FullCommonUseWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_letterWid,&LetterWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_fullLetterWid,&FullLetterWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_functionWid,&FunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_fullFunctionWid,&FullFunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_searchResultWid,&SearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_fullSearchResultWid,&FullSearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
-    connect(m_commonUseWid, &CommonUseWidget::sendMainWinActiveSignal, this, &MainViewWidget::sendMainWinActiveSignal);
-
-    addTopControl();
-    //加载默认视图
-    //搜索区
-    this->setFixedSize(Style::defaultMainViewWidWidth,Style::minh);
-    m_topWidget->setFixedSize(this->width(),Style::defaultTopWidHeight);
-    m_topLayout->setContentsMargins(0,0,0,0);
-    m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
-    m_queryLineEdit->setFixedSize(Style::defaultQueryLineEditWidth,Style::defaultQueryLineEditHeight);
-    m_queryText->adjustSize();
-    m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-                                  m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-    m_queryWid->show();
-    //内容区
-    m_contentWid->setFixedSize(this->width(),this->height()-m_topWidget->height());
-    m_commonUseWid->setGeometry(0,0,Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
-    m_commonUseWid->show();
-    m_widgetState=1;
-    m_saveCurrentWidState=1;
 
     //监控应用进程开启
     connect(KWindowSystem::self(),&KWindowSystem::windowAdded,[=](WId id)
@@ -196,22 +120,60 @@ void MainViewWidget::initUi()
  */
 void MainViewWidget::addTopControl()
 {
-    m_topLayout=new QHBoxLayout;
-    m_topLayout->setSpacing(0);
-    m_queryLineEdit=new QLineEdit;
-    m_topLayout->addWidget(m_queryLineEdit);
-    m_topWidget->setLayout(m_topLayout);
-    char style[200];
-    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
-    if(gsetting.get("style-name").toString()=="ukui-light")
-    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
-            QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
-    else
-        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
-                QueryLineEditClickedBorder,QueryLineEditBackground);
-    m_queryLineEdit->setStyleSheet(style);
+//    m_topLayout=new QHBoxLayout;
+//    m_topSearchLayout = new QHBoxLayout;
+////    m_topSearchLayout->setSpacing(0);
+////    m_topLayout->setSpacing(10);
+//    m_topLayout->setContentsMargins(0,0,200,0);
+//    m_queryLineEdit=new QLineEdit;
+//    m_selectButton = new QToolButton;
+    m_topSearchLayout->addWidget(m_queryLineEdit);
+//    m_topSearchLayout->addWidget(&m_searchCloseButton);
+//    m_topLayout->addWidget(&m_label);
+//    m_label.setContentsMargins(20,0,0,0);
+//    m_topLayout->addWidget(&m_searchButton);
+//    m_topLayout->addWidget(m_selectButton);
+//    QMenu *m_menu = new QMenu;
+//    m_allAction = new QAction(m_menu);
+//    m_letterAction = new QAction(m_menu);
+//    m_funcAction = new QAction(m_menu);
+//    m_allAction->setText(tr("All"));
+//    m_allAction->setCheckable(true);
+//    m_letterAction->setText(tr("Letter"));
+//    m_letterAction->setCheckable(true);
+//    m_funcAction->setText(tr("Function"));
+//    m_funcAction->setCheckable(true);
+//    m_menu->addAction(m_allAction);
+//    m_menu->addAction(m_letterAction);
+//    m_menu->addAction(m_funcAction);
+//    m_selectButton->setMenu(m_menu);
+//    m_selectButton->setPopupMode(QToolButton::MenuButtonPopup);
+//    m_selectButton->setFixedSize(60,30);
+//    m_searchButton.setFixedSize(30,30);
+//    m_searchButton.setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-search.svg"));
+//    m_searchCloseButton.setFixedSize(30,30);
+//    m_searchCloseButton.setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-关闭.png"));
+//    m_topWidget->setLayout(m_topLayout);
+//    m_topWidget->setContentsMargins(0,0,10,0);
+//    m_topSearchWidget->setLayout(m_topSearchLayout);
 
-    initQueryLineEdit();
+//    connect(m_allAction,&QAction::triggered,this,&MainViewWidget::loadCommonUseWidget);
+//    connect(m_letterAction,&QAction::triggered,this,&MainViewWidget::loadLetterWidget);
+//    connect(m_funcAction,&QAction::triggered,this,&MainViewWidget::loadFunctionWidget);
+//    connect(m_selectButton,&QToolButton::clicked,this,&MainViewWidget::switchWidget);
+//    connect(&m_searchButton,&QPushButton::clicked,this,&MainViewWidget::onSearchButtClicked);
+//    connect(&m_searchCloseButton,&QPushButton::clicked,this,&MainViewWidget::onSearchCloseButtonClicked);
+//    char style[200];
+//    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+//    if(gsetting.get("style-name").toString()=="ukui-light")
+//    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+//            QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
+//    else
+//        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+//                QueryLineEditClickedBorder,QueryLineEditBackground);
+//    m_queryLineEdit->setStyleSheet(style);
+
+//    initQueryLineEdit();
 
 }
 
@@ -230,44 +192,149 @@ void MainViewWidget::addTopControl()
  */
 void MainViewWidget::initQueryLineEdit()
 {
-    m_queryWid=new QWidget;
-    m_queryWid->setParent(m_queryLineEdit);
-    m_queryWid->setFocusPolicy(Qt::NoFocus);
-    QHBoxLayout* queryWidLayout=new QHBoxLayout;
-    queryWidLayout->setContentsMargins(0,0,0,0);
-    queryWidLayout->setSpacing(5);
-    m_queryWid->setLayout(queryWidLayout);
-    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
-    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
-    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
-        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
-    else
-        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
-    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-    m_queryIcon=new QLabel;
-    m_queryIcon->setFixedSize(pixmap.size());
-    m_queryIcon->setPixmap(pixmap);
-    m_queryText=new QLabel;
-    m_queryText->setText(tr("Search"));
-    m_queryText->adjustSize();
-    queryWidLayout->addWidget(m_queryIcon);
-    queryWidLayout->addWidget(m_queryText);
-    queryWidLayout->setAlignment(m_queryIcon,Qt::AlignVCenter);
-    queryWidLayout->setAlignment(m_queryText,Qt::AlignVCenter);
-    m_queryLineEdit->setFocusPolicy(Qt::ClickFocus);
-    m_queryLineEdit->installEventFilter(this);
-    m_queryLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
+//    m_queryWid=new QWidget;
+//    m_queryWid->setParent(m_queryLineEdit);
+//    m_queryWid->setFocusPolicy(Qt::NoFocus);
+//    QHBoxLayout* queryWidLayout=new QHBoxLayout;
+//    queryWidLayout->setContentsMargins(0,0,0,0);
+//    queryWidLayout->setSpacing(5);
+//    m_queryWid->setLayout(queryWidLayout);
+//    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+//    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+//    if(gsetting.get("style-name").toString()=="ukui-light")//反黑
+//        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+//    else
+//        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+//    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+//    m_queryIcon=new QLabel;
+//    m_queryIcon->setFixedSize(pixmap.size());
+//    m_queryIcon->setPixmap(pixmap);
+//    m_queryText=new QLabel;
+//    m_queryText->setText(tr("Search"));
+//    m_queryText->adjustSize();
+//    queryWidLayout->addWidget(m_queryIcon);
+//    queryWidLayout->addWidget(m_queryText);
+//    queryWidLayout->setAlignment(m_queryIcon,Qt::AlignVCenter);
+//    queryWidLayout->setAlignment(m_queryText,Qt::AlignVCenter);
+//    m_queryLineEdit->setFocusPolicy(Qt::ClickFocus);
+//    m_queryLineEdit->installEventFilter(this);
+//    m_queryLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
-    m_animation= new QPropertyAnimation(m_queryWid,"geometry");
-    m_animation->setDuration(100);
-    connect(m_animation,&QPropertyAnimation::finished,this,&MainViewWidget::animationFinishedSlot);
+//    m_animation= new QPropertyAnimation(m_queryWid,"geometry");
+//    m_animation->setDuration(100);
+//    connect(m_animation,&QPropertyAnimation::finished,this,&MainViewWidget::animationFinishedSlot);
 
-    m_searchAppThread=new SearchAppThread;
-    connect(this,&MainViewWidget::sendSearchKeyword,
-            m_searchAppThread,&SearchAppThread::recvSearchKeyword);
-    connect(m_searchAppThread,&SearchAppThread::sendSearchResult,
-            this,&MainViewWidget::recvSearchResult);
-    connect(m_queryLineEdit, &QLineEdit::textChanged, this, &MainViewWidget::searchAppSlot);
+//    m_searchAppThread=new SearchAppThread;
+//    connect(this,&MainViewWidget::sendSearchKeyword,
+//            m_searchAppThread,&SearchAppThread::recvSearchKeyword);
+//    connect(m_searchAppThread,&SearchAppThread::sendSearchResult,
+//            this,&MainViewWidget::recvSearchResult);
+//    connect(m_queryLineEdit, &QLineEdit::textChanged, this, &MainViewWidget::searchAppSlot);
+}
+
+void MainViewWidget::switchWidget()
+{
+    if(m_curretWidget == 1)
+    {
+        loadLetterWidget();
+    }
+    else if(m_curretWidget ==2)
+    {
+        loadFunctionWidget();
+    }
+    else if(m_curretWidget == 3)
+    {
+        loadCommonUseWidget();
+    }
+}
+
+void MainViewWidget::paintEvent(QPaintEvent *event)
+{
+    double transparency=getTransparency();
+
+    QRect rect = this->rect();
+    QPainterPath path;
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+    painter.setPen(Qt::transparent);
+    if(!m_isFullScreen)
+    {
+        qreal radius=10;
+        path.moveTo(rect.topRight() - QPointF(radius, 0));
+        path.lineTo(rect.topLeft() + QPointF(radius, 0));
+        path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
+        path.lineTo(rect.bottomLeft() + QPointF(0, -radius));
+        path.quadTo(rect.bottomLeft(), rect.bottomLeft() + QPointF(radius, 0));
+        path.lineTo(rect.bottomRight() - QPointF(radius, 0));
+        path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
+        path.lineTo(rect.topRight() + QPointF(0, radius));
+        path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
+
+        painter.setBrush(this->palette().base());
+        painter.setPen(Qt::transparent);
+        painter.setOpacity(transparency + 0.1);
+        painter.fillPath(path,this->palette().base());
+//        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+      //  KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    }
+    else//全屏固定背景色(黑底白字)
+    {
+//        if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
+//        {
+//            QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
+//            if(gsetting.keys().contains(QString("effect")))
+//            {
+//                if(gsetting.get("effect").toBool())
+//                {
+//                    painter.setBrush(Qt::black);
+//                    painter.setPen(Qt::transparent);
+//                    painter.setOpacity(0.25);
+//                    painter.drawRect(this->rect());
+//                }
+//                else
+//                {
+//                    painter.setBrush(this->palette().base());
+//                    painter.setPen(Qt::transparent);
+//                    painter.setOpacity(transparency);
+//                    painter.drawRect(this->rect());
+//                }
+//            }
+//            else
+//            {
+//                painter.setBrush(this->palette().base());
+//                painter.setPen(Qt::transparent);
+//                painter.setOpacity(transparency);
+//                painter.drawRect(this->rect());
+//            }
+//        }
+//        else
+//        {
+            painter.setBrush(this->palette().base());
+            painter.setPen(Qt::transparent);
+            painter.setOpacity(transparency);
+            painter.drawRect(this->rect());
+//        }
+
+        QPainterPath path;
+        path.addRect(this->rect());
+        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    }
+    QWidget::paintEvent(event);
+}
+
+void MainViewWidget::onSearchButtClicked()
+{
+    m_topSearchWidget->show();
+    m_topWidget->hide();
+    m_queryLineEdit->setFocus();
+}
+
+void MainViewWidget::onSearchCloseButtonClicked()
+{
+    m_topSearchWidget->hide();
+    m_topWidget->show();
+    m_queryLineEdit->clear();
 }
 
 bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
@@ -689,6 +756,12 @@ void MainViewWidget::resetQueryLine()
  */
 void MainViewWidget::loadCommonUseWidget()
 {
+    m_curretWidget = 1;
+    m_label.setText(tr("All"));
+    m_allAction->setChecked(true);
+    m_letterAction->setChecked(false);
+    m_funcAction->setChecked(false);
+    m_selectButton->setIcon(QIcon(QString(":/data/img/mainviewwidget/DM-icon-所有应用.svg")));
     m_fullCommonUseWid->widgetMakeZero();
     m_letterWid->widgetMakeZero();
     m_fullLetterWid->widgetMakeZero();
@@ -709,6 +782,12 @@ void MainViewWidget::loadCommonUseWidget()
  */
 void MainViewWidget::loadLetterWidget()
 {
+    m_curretWidget = 2;
+    m_label.setText(tr("Letter"));
+    m_letterAction->setChecked(true);
+    m_allAction->setChecked(false);
+    m_funcAction->setChecked(false);
+    m_selectButton->setIcon(QIcon(QString(":/data/img/mainviewwidget/DM-icon-字母排序.svg")));
     m_commonUseWid->widgetMakeZero();
     m_fullCommonUseWid->widgetMakeZero();
     m_fullLetterWid->widgetMakeZero();
@@ -727,6 +806,12 @@ void MainViewWidget::loadLetterWidget()
  */
 void MainViewWidget::loadFunctionWidget()
 {
+    m_curretWidget = 3;
+    m_label.setText(tr("Function"));
+    m_funcAction->setChecked(true);
+    m_letterAction->setChecked(false);
+    m_allAction->setChecked(false);
+    m_selectButton->setIcon(QIcon(QString(":/data/img/mainviewwidget/DM-icon-功能排序.svg")));
     m_commonUseWid->widgetMakeZero();
     m_fullCommonUseWid->widgetMakeZero();
     m_letterWid->widgetMakeZero();
@@ -802,6 +887,8 @@ void MainViewWidget::loadFullFunctionWidget()
 void MainViewWidget::loadSearchResultWidget()
 {
     hideWidget();
+    m_topWidget->hide();
+    m_topSearchWidget->show();
     m_searchResultWid->setGeometry(0,0,this->width(),this->height()-m_topWidget->height());
     m_searchResultWid->show();
 }

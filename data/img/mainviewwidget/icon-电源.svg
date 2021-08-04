@@ -1,0 +1,5 @@
+<svg id="icon-电源" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <rect id="矩形" width="24" height="24" fill="#d8d8d8" opacity="0"/>
+  <path id="路径" d="M3.574,0A8.853,8.853,0,0,0,0,7.1,8.95,8.95,0,0,0,9,16a8.95,8.95,0,0,0,9-8.9A8.852,8.852,0,0,0,14.442.011" transform="translate(3 6)" fill="none" stroke="#f75d4f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+  <path id="路径_3" data-name="路径 3" d="M.694,8V0" transform="translate(11 3)" fill="none" stroke="#f75d4f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+</svg>

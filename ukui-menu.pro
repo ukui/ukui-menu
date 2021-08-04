@@ -45,6 +45,8 @@ INSTALLS += qm_files
 DEFINES += QM_FILES_INSTALL_PATH='\\"$${QM_FILES_INSTALL_PATH}\\"'
 
 SOURCES += \
+    fullmainwindow.cpp \
+    getmodeldata.cpp \
     src/CommonUseWidget/commonusewidget.cpp \
     src/CommonUseWidget/fullcommonusewidget.cpp \
     src/FunctionWidget/fullfunctionwidget.cpp \
@@ -62,7 +64,9 @@ SOURCES += \
     src/SearchResultWidget/fullsearchresultwidget.cpp \
     src/SearchResultWidget/searchappthread.cpp \
     src/SearchResultWidget/searchresultwidget.cpp \
+    src/SideBarWidget/rightlistview.cpp \
     src/SideBarWidget/sidebarwidget.cpp \
+    src/SideBarWidget/tabviewwidget.cpp \
     src/Style/style.cpp \
     src/UtilityFunction/classifybtnscrollarea.cpp \
     src/UtilityFunction/fullitemdelegate.cpp \
@@ -72,6 +76,7 @@ SOURCES += \
     src/UtilityFunction/letterclassifybutton.cpp \
     src/UtilityFunction/listview.cpp \
     src/UtilityFunction/proxystyle.cpp \
+    src/UtilityFunction/rightitemdelegate.cpp \
     src/UtilityFunction/scrollarea.cpp \
     src/UtilityFunction/splitbarframe.cpp \
     src/UtilityFunction/toolbutton.cpp \
@@ -83,6 +88,8 @@ SOURCES += \
     src/DBus/dbus-adaptor.cpp
 
 HEADERS  += \
+    fullmainwindow.h \
+    getmodeldata.h \
     src/CommonUseWidget/commonusewidget.h \
     src/CommonUseWidget/fullcommonusewidget.h \
     src/FunctionWidget/fullfunctionwidget.h \
@@ -100,7 +107,9 @@ HEADERS  += \
     src/SearchResultWidget/fullsearchresultwidget.h \
     src/SearchResultWidget/searchappthread.h \
     src/SearchResultWidget/searchresultwidget.h \
+    src/SideBarWidget/rightlistview.h \
     src/SideBarWidget/sidebarwidget.h \
+    src/SideBarWidget/tabviewwidget.h \
     src/Style/style.h \
     src/UtilityFunction/classifybtnscrollarea.h \
     src/UtilityFunction/fullitemdelegate.h \
@@ -110,6 +119,7 @@ HEADERS  += \
     src/UtilityFunction/letterclassifybutton.h \
     src/UtilityFunction/listview.h \
     src/UtilityFunction/proxystyle.h \
+    src/UtilityFunction/rightitemdelegate.h \
     src/UtilityFunction/scrollarea.h \
     src/UtilityFunction/splitbarframe.h \
     src/UtilityFunction/toolbutton.h \
@@ -133,3 +143,7 @@ desktop_file.path = /etc/xdg/autostart
 
 INSTALLS += \
     target desktop_file
+
+FORMS += \
+    fullmainwindow.ui \
+    mainwindow.ui

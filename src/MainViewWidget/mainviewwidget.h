@@ -42,6 +42,8 @@
 #include "src/SearchResultWidget/searchappthread.h"
 #include "directorychangedthread.h"
 #include "src/Style/style.h"
+#include <QComboBox>
+#include <QCheckBox>
 
 class MainViewWidget : public QWidget
 {
@@ -93,30 +95,39 @@ public:
 
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
-    QWidget *m_topWidget=nullptr;
-    QHBoxLayout *m_topLayout=nullptr;
-
-    QWidget *m_contentWid=nullptr;
-
-    QLineEdit *m_queryLineEdit=nullptr;
-    QWidget *m_queryWid=nullptr;
-    QLabel *m_queryIcon=nullptr;
-    QLabel *m_queryText=nullptr;
+    QWidget *m_topSearchWidget = nullptr;
+    QWidget *m_topWidget = nullptr;
+    QMenu *m_menu = nullptr;
+    QLabel m_label;
+    QPushButton m_searchButton;
+    QPushButton m_searchCloseButton;
+    QHBoxLayout *m_topLayout = nullptr;
+    QHBoxLayout *m_topSearchLayout = nullptr;
+    QToolButton *m_selectButton = nullptr;
+    QWidget *m_contentWid = nullptr;
+    QAction *m_allAction = nullptr;
+    QAction *m_letterAction = nullptr;
+    QAction *m_funcAction = nullptr;
+    int m_curretWidget;
+    QLineEdit *m_queryLineEdit = nullptr;
+    QWidget *m_queryWid = nullptr;
+    QLabel *m_queryIcon = nullptr;
+    QLabel *m_queryText = nullptr;
     bool m_isSearching;
     QString m_searchKeyWords;
-    QPropertyAnimation *m_animation=nullptr;
+    QPropertyAnimation *m_animation = nullptr;
 
-    FullSearchResultWidget *m_fullSearchResultWid=nullptr;
-    SearchResultWidget *m_searchResultWid=nullptr;
-    SearchAppThread *m_searchAppThread=nullptr;
-    CommonUseWidget *m_commonUseWid=nullptr;
-    LetterWidget *m_letterWid=nullptr;
-    FunctionWidget *m_functionWid=nullptr;
-    FullCommonUseWidget *m_fullCommonUseWid=nullptr;
-    FullLetterWidget *m_fullLetterWid=nullptr;
-    FullFunctionWidget *m_fullFunctionWid=nullptr;
+    FullSearchResultWidget *m_fullSearchResultWid = nullptr;
+    SearchResultWidget *m_searchResultWid = nullptr;
+    SearchAppThread *m_searchAppThread = nullptr;
+    CommonUseWidget *m_commonUseWid = nullptr;
+    LetterWidget *m_letterWid = nullptr;
+    FunctionWidget *m_functionWid = nullptr;
+    FullCommonUseWidget *m_fullCommonUseWid = nullptr;
+    FullLetterWidget *m_fullLetterWid = nullptr;
+    FullFunctionWidget *m_fullFunctionWid = nullptr;
 
-    DirectoryChangedThread *m_directoryChangedThread=nullptr;
+    DirectoryChangedThread *m_directoryChangedThread = nullptr;
 
     int m_widgetState=1;//Classification window number
     int m_saveCurrentWidState=-1;//Store the current category window number
@@ -141,7 +152,7 @@ protected:
      * @brief Initializes the query box
      */
     void initQueryLineEdit();
-//    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent* event);
     void loadSearchResultWidget();
     void loadFullSearchResultWidget();
     void hideWidget();
@@ -211,10 +222,16 @@ public Q_SLOTS:
 
     void setFocusToThis();
 
+    void onSearchButtClicked();
+
     /**
      * @brief changeFocuDown
      */
     void changeFocuDown();
+
+    void switchWidget();
+
+    void onSearchCloseButtonClicked();
 
 Q_SIGNALS:
     /**

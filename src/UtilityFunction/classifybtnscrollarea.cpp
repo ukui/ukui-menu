@@ -103,8 +103,8 @@ ClassifyBtnScrollArea::ClassifyBtnScrollArea(QWidget *parent):
 
 void ClassifyBtnScrollArea::initWid()
 {
-    this->verticalScrollBar()->setHidden(true);
-    this->horizontalScrollBar()->setHidden(true);
+    this->verticalScrollBar()->setHidden(false);
+    this->horizontalScrollBar()->setHidden(false);
     this->setWidgetResizable(true);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

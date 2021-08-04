@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24.499" height="24.5" viewBox="0 0 24.499 24.5">
+  <g id="全屏_icon-缩小_" data-name="全屏 icon-缩小 " transform="translate(0.25 0.25)">
+    <rect id="尺寸-24" width="24" height="24" rx="4" fill="none"/>
+    <g id="缩小" transform="translate(1 1.999)" opacity="0.852">
+      <path id="路径_16" data-name="路径 16" d="M6.95,16.5V10H.45" transform="translate(-0.95 5.001)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="路径_17" data-name="路径 17" d="M0,0V6.5H6.5" transform="translate(15.999 -1.499)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <circle id="椭圆_12" data-name="椭圆 12" cx="2.5" cy="2.5" r="2.5" transform="translate(8.5 7.501)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

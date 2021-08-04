@@ -198,10 +198,10 @@ void openDataBase(QString connectionName)
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
     db.setDatabaseName(DATABASENAME);
-
+    qDebug() << "11111111111111111111111";
     if (false == db.open())
     {
-        qDebug() << db.lastError().text();
+        qDebug() << db.lastError().text() << "11111111111111111111111";
     }
 }
 
@@ -221,6 +221,7 @@ void initDatabase()
     sql.exec("select count(*) from sqlite_master where type='table' and name='appInfo'");
     if(sql.next())
     {
+        qDebug() << "进入去111111111111111111";
         if(sql.value(0).toInt()==0)
         {
             QSettings* setting=new QSettings("/var/lib/ukui-menu/ukui-menu.ini",QSettings::IniFormat);
@@ -245,18 +246,24 @@ void initDatabase()
             delete setting;
         }
     }
-    sql.exec("create table if not exists appInfo(desktop char primary key, times int, time int, type int, recent int)");
+    qDebug() << "desktopfnList是否为空"<< desktopfnList;
+    bool b = sql.exec("create table if not exists appInfo(desktop char primary key, times int, time int, type int, recent int, num int, collect int)");
+    qDebug() << "创建数据库是否成功"<< b;
     Q_FOREACH(QString desktopfn,desktopfnList)
     {
+        qDebug() << "void initDatabase()" << desktopfn;
         QDateTime dt=QDateTime::currentDateTime();
         int datetime=dt.toTime_t();
-        QString cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4)")
+        QString cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
                 .arg(desktopfn)
                 .arg(0)
                 .arg(datetime)
                 .arg(1)
+                .arg(0)
+                .arg(0)
                 .arg(0);
-        sql.exec(cmd);
+        bool a = sql.exec(cmd);
+        qDebug() <<"数据库执行是否成功"<< a;
     }
 }
 
@@ -282,16 +289,152 @@ bool updateDataBaseTableTimes(QString desktopfn)
         }
         else
         {
-            cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4)")
+            cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
                     .arg(desktopfn)
                     .arg(1)
                     .arg(datetime)
+                    .arg(0)
+                    .arg(0)
                     .arg(0)
                     .arg(0);
         }
         ret=sql.exec(cmd);
     }
     return ret;
+}
+
+bool updateDataBaseCollect(QString desktopfn, int type)
+{
+    bool ret=false;
+    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlQuery sql(db);
+    QString cmd;
+    switch (type) {
+    case 0://取消收藏
+    {
+        cmd=QString("update appInfo set collect=%1 where desktop=\"%2\"")
+                .arg(type)
+                .arg(desktopfn);
+        ret=sql.exec(cmd);
+    }
+        break;
+    default://收藏
+    {
+        cmd=QString("select type from appInfo where desktop=\"%1\"")
+                .arg(desktopfn);
+        if(sql.exec(cmd))
+        {
+            if(sql.next())//更新记录
+            {
+                cmd=QString("update appInfo set collect=%1 where desktop=\"%2\"")
+                        .arg(type)
+                        .arg(desktopfn);
+            }
+            else//添加记录
+            {
+                QDateTime dt=QDateTime::currentDateTime();
+                int datetime=dt.toTime_t();
+                cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
+                        .arg(desktopfn)
+                        .arg(0)
+                        .arg(datetime)
+                        .arg(0)
+                        .arg(0)
+                        .arg(0)
+                        .arg(type);
+            }
+            ret=sql.exec(cmd);
+        }
+    }
+        break;
+    }
+    return ret;
+}
+
+QStringList getCollectAppList()
+{
+    QStringList list;
+    int count = 0;
+    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlQuery sql(db);
+    QSqlQuery sqlque(db);
+    QString cmd=QString("select desktop from appInfo where collect!=0 order by collect");
+    if(sql.exec(cmd))
+    {
+        while(sql.next())
+        {
+            list.append(sql.value(0).toString());
+            sqlque.exec(QString("update appInfo set collect=%1 where desktop=\"%2\"")
+                        .arg(++count)
+                        .arg(sql.value(0).toString()));
+        }
+    }
+    collectCount = list.size() + 1;
+    return list;
+}
+
+int getCollectAppCount(QString desktopfn)
+{
+    int appCount = 0;
+    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlQuery sql(db);
+    QString cmd=QString("select collect from appInfo where desktop=\"%1\"")
+            .arg(desktopfn);
+    if(sql.exec(cmd))
+    {
+        if(sql.next())
+        {
+            appCount = sql.value(0).toInt();
+        }
+    }
+    return appCount;
+}
+
+void changeCollectSort(QString dragDesktopfn, QString dropDesktopfn)
+{
+    int endNum = getCollectAppCount(dropDesktopfn);
+    int startNum = getCollectAppCount(dragDesktopfn);
+    QStringList applist = getCollectAppList();
+    if(startNum < endNum)
+    {
+        updateDataBaseCollect(dragDesktopfn, endNum + 1);
+        for(int i = endNum; i < applist.count(); i++)
+        {
+             updateDataBaseCollect(applist.at(i), i+2);
+        }
+    }
+    else
+    {
+        updateDataBaseCollect(dragDesktopfn, endNum);
+        for(int i = endNum - 1; i < applist.count(); i++)
+        {
+            if(dragDesktopfn != applist.at(i))
+            {
+                updateDataBaseCollect(applist.at(i), i+2);
+            }
+        }
+    }
+}
+
+bool checkIfCollected(QString desktopfn)
+{
+    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlQuery sql(db);
+    QString cmd=QString("select collect from appInfo where desktop=\"%1\"")
+            .arg(desktopfn);
+    if(sql.exec(cmd))
+    {
+        if(!sql.next())
+            return false;
+        else
+        {
+            if(sql.value(0).toInt()==0)
+                return false;
+            else
+                return true;
+        }
+    }
+    return false;
 }
 
 bool updateDataBaseTableType(QString desktopfn, int type)
@@ -303,7 +446,9 @@ bool updateDataBaseTableType(QString desktopfn, int type)
     switch (type) {
     case 0://解除锁定
     {
-        cmd=QString("delete from appInfo where desktop=\"%1\"")
+        cmd=QString("update appInfo set times=%1,type=%2 where desktop=\"%3\"")
+                .arg(1)
+                .arg(type)
                 .arg(desktopfn);
         ret=sql.exec(cmd);
     }
@@ -324,11 +469,13 @@ bool updateDataBaseTableType(QString desktopfn, int type)
             {
                 QDateTime dt=QDateTime::currentDateTime();
                 int datetime=dt.toTime_t();
-                cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4)")
+                cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
                         .arg(desktopfn)
                         .arg(0)
                         .arg(datetime)
                         .arg(type)
+                        .arg(0)
+                        .arg(0)
                         .arg(0);
             }
             ret=sql.exec(cmd);
@@ -349,12 +496,13 @@ bool updateDataBaseTableRecent(QString desktopfn)
     QString cmd;
     QDateTime dt=QDateTime::currentDateTime();
     int datetime=dt.toTime_t();
-    cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4)")
+    cmd=QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5)")
             .arg(desktopfn)
             .arg(0)
             .arg(datetime)
             .arg(0)
-            .arg(1);
+            .arg(1)
+            .arg(0);
     ret=sql.exec(cmd);
     return ret;
 }

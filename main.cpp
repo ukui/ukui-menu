@@ -34,7 +34,7 @@
 
 int main(int argc, char *argv[])
 {
-    initUkuiLog4qt("ukui-menu");
+ //   initUkuiLog4qt("ukui-menu");
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))

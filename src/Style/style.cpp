@@ -100,7 +100,6 @@ int Style::SideBarSpaceBetweenItem=0;
 
 void Style::initWidStyle()
 {
-
     QVariantList list=getScreenGeometry();
     if(list.count()>=6)
     {
@@ -147,7 +146,7 @@ void Style::initWidStyle()
     }
     else
     {
-        minw=376;
+        minw=652;
         minh=590;
         defaultMainViewWidWidth=320;
         defaultTopWidHeight=54;

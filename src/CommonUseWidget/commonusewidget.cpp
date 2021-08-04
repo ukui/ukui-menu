@@ -39,7 +39,7 @@ void CommonUseWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    this->setAttribute(Qt::WA_TranslucentBackground);
+//    this->setAttribute(Qt::AA_AttributeCount);
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
@@ -53,7 +53,7 @@ void CommonUseWidget::initUi()
  */
 void CommonUseWidget::initAppListWidget()
 {
-    m_listView=new ListView(this,this->width()-6,this->height()-6,0);
+    m_listView=new ListView(this);
     m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_listView->show();
     connect(m_listView,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
@@ -70,7 +70,7 @@ void CommonUseWidget::fillAppList()
     m_data.clear();
     Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
         m_data.append(QStringList()<<desktopfp<<"1");
-    m_listView->addData(m_data);
+//    m_listView->addData(m_data);
 }
 
 void CommonUseWidget::selectFirstItem()

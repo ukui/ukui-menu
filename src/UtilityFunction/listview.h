@@ -30,15 +30,16 @@
 #include <QKeyEvent>
 #include "src/Interface/ukuimenuinterface.h"
 #include "itemdelegate.h"
+#include <KWindowEffects>
 
 class ListView : public QListView
 {
     Q_OBJECT
 public:
-    ListView(QWidget *parent, int width, int height, int module);
+    ListView(QWidget *parent/*, int width, int height, int module*/);
     ~ListView();
 
-    void addData(QVector<QStringList> data);
+    void addData(QVector<QStringList> data, int module);
     void updateData(QVector<QStringList> data);
 
 protected:
@@ -69,6 +70,7 @@ Q_SIGNALS:
     void sendHideMainWindowSignal();
     void sendUpdateAppListSignal();
     void sendMainWinActiveSignal(bool flag);
+    void sendUpdateCollectSignal();
 };
 
 #endif // LISTVIEW_H

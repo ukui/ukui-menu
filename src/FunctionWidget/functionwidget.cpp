@@ -62,7 +62,7 @@ void FunctionWidget::initUi()
  */
 void FunctionWidget::initAppListWidget()
 {
-    m_appListView=new ListView(this,this->width()-6,this->height()-6,2);
+    m_appListView=new ListView(this);
     m_appListView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_appListView->show();
     fillAppListView(0);
@@ -72,7 +72,7 @@ void FunctionWidget::initAppListWidget()
 
 
 /**
- * 填充应用列表
+ * 填充应用列表m_appListView
  */
 void FunctionWidget::fillAppListView(int type)
 {
@@ -145,12 +145,12 @@ void FunctionWidget::fillAppListView(int type)
     QStringList otherlist=vector.at(10);
     if(!otherlist.isEmpty())
     {
-        insertClassificationBtn(tr("Others"));
+//        insertClassificationBtn(tr("Others"execApplication));
         insertAppList(otherlist);
     }
 
     if(type==0)
-        m_appListView->addData(m_data);
+        m_appListView->addData(m_data,2);
     else
         m_appListView->updateData(m_data);
 }

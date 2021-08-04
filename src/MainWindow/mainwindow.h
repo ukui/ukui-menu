@@ -37,9 +37,20 @@
 #include "src/Style/style.h"
 #include "src/SideBarWidget/sidebarwidget.h"
 #include "src/MainViewWidget/mainviewwidget.h"
+#include "src/SideBarWidget/tabviewwidget.h"
 #include "src/DBus/dbus.h"
 #include "src/DBus/dbus-adaptor.h"
 #include <KWindowEffects>
+#include <QTabWidget>
+#include <QSpacerItem>
+#include "ui_mainwindow.h"
+#include "src/UtilityFunction/listview.h"
+#include "getmodeldata.h"
+#include "fullmainwindow.h"
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -55,64 +66,71 @@ public:
     /**
      * @brief Load the main window
      */
-    void loadMainWindow();
+//    void loadMainWindow();
 
 private:
 
     bool m_isFullScreen=false;
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
 
-    QFrame *m_line=nullptr;//Vertical dividing line
-    QFrame *m_frame=nullptr;
-    SideBarWidget *m_sideBarWid=nullptr;
-    MainViewWidget *m_mainViewWid=nullptr;
-
     QPropertyAnimation *m_animation=nullptr;
     bool m_winFlag = false;
     DBus *m_dbus=nullptr;
+    GetModelData *modaldata = nullptr;
+    QAction *m_allAction = nullptr;
+    QAction *m_letterAction = nullptr;
+    QAction *m_funcAction = nullptr;
+    SearchAppThread *m_searchAppThread=nullptr;
+    int m_state = 0;
+    FullMainWindow *fullWindow = nullptr;
 
 protected:
     void initUi();
-    /**
-     * @brief Handle events clicking on the outside of the window
-     */
+//    /**
+//     * @brief Handle events clicking on the outside of the window
+//     */
     bool event(QEvent *event);
     void paintEvent(QPaintEvent* event);
-    /**
-     * @brief The query box responds to keyboard events
-     */
+//    /**
+//     * @brief The query box responds to keyboard events
+//     */
     void keyPressEvent(QKeyEvent* e);
-    /**
-     * @brief Repaint window
-     */
-    void repaintWidget();
+//    /**
+//     * @brief Repaint window
+//     */
+//    void repaintWidget();
+    void searchAppSlot(QString arg);
+    void recvSearchResult(QVector<QStringList> arg);
 
-    void mouseReleaseEvent(QMouseEvent *event);
-
-public Q_SLOTS:
-    /**
-     * @brief Load the full screen window
-     */
-    void showFullScreenWidget();
-    /**
-     * @brief Load the default window
-     */
-    void showDefaultWidget();
-    void recvHideMainWindowSlot();//接收隐藏主窗口信号
-    /**
-     * @brief Monitor taskbar key changes
-     * @param key: Key
-     */
-    void panelChangedSlot(QString key);
-    void animationValueChangedSlot(const QVariant &value);//动画当前值变化监控
-    void animationValueFinishedSlot();
-    void primaryScreenChangeSlot();
-    void activeWindowSolt(bool flag);
-    void mainWinShowSlot();
+//    void mouseReleaseEvent(QMouseEvent *event);
 
 public:
 Q_SIGNALS:
-    void setFocusSignal();
+    void sendSearchKeyword(QString arg);
+
+public Q_SLOTS:
+    void updateCollectView();
+    void on_minSelectButton_clicked();
+    void updateMinAllView();
+    void showNormalWindow();
+
+private Q_SLOTS:
+    void on_selectMenuButton_triggered(QAction *arg1);
+
+    void on_collectPushButton_clicked();
+
+    void on_recentPushButton_clicked();
+
+    void on_cancelSearchPushButton_clicked();
+
+    void on_searchPushButton_clicked();
+
+    void on_minMaxChangeButton_clicked();
+
+    void on_powerOffButton_customContextMenuRequested(const QPoint &pos);
+
+private:
+    Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H

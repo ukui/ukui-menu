@@ -1,0 +1,13 @@
+<svg id="icon-_关闭" data-name="icon- 关闭" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <clipPath id="clip-path">
+      <rect x="1" y="1" width="16" height="16" fill="none"/>
+    </clipPath>
+  </defs>
+  <rect id="尺寸-16" width="16" height="16" fill="none"/>
+  <g id="icon-关闭" transform="translate(-1 -1)" clip-path="url(#clip-path)" style="isolation: isolate">
+    <g id="icon-关闭-2" data-name="icon-关闭" transform="translate(-261.743 -495)">
+      <path id="联合_10" data-name="联合 10" d="M6.5,6.5h0v0h0v0Z" transform="translate(261.743 504.194) rotate(-45)" fill="none" stroke="#262626" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

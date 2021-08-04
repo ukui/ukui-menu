@@ -108,6 +108,7 @@ void SideBarWidget::addSidebarBtn()
     m_mainWidgetLayout=new QVBoxLayout;
     m_mainWidgetLayout->setContentsMargins(0,0,0,6);
     m_mainWidgetLayout->setSpacing(10);
+//    m_mainWidget->setFixedSize(352,540);
     m_mainWidget->setLayout(m_mainWidgetLayout);
   //  m_mainWidget->setFocusPolicy(Qt::StrongFocus);
 //    m_mainWidget->setAutoFillBackground(true);
@@ -482,7 +483,7 @@ void SideBarWidget::loadMinSidebar()
     setMaxBtn();
 
     m_animation->stop();
-    this->setFixedSize(Style::defaultSideBarWidWidth,Style::minh);
+//    this->setFixedSize(Style::defaultSideBarWidWidth,Style::minh);
     m_mainWidget->setGeometry(QRect(0,0,this->width(),this->height()));
     m_mainWidget->show();
     m_minMaxWidget->setFixedSize(37,70);

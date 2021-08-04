@@ -143,6 +143,8 @@ private Q_SLOTS:
      * @brief Personalize this list
      */
     void otherListActionTriggerSlot();
+    void pincToCollectionActionTriggerSlot();
+    void removeFromCollectionActionTriggerSlot();
 
 public:
 Q_SIGNALS:

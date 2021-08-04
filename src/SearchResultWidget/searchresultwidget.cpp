@@ -40,12 +40,12 @@ void SearchResultWidget::initUi()
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
     this->setFocusPolicy(Qt::StrongFocus);
-    m_listView=new ListView(this,this->width()-6,this->height()-6,3);
+    m_listView=new ListView(this);
     m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_listView->show();
 
     m_data.clear();
-    m_listView->addData(m_data);
+//    m_listView->addData(m_data);
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
     connect(m_listView,&ListView::sendItemClickedSignal,this,&SearchResultWidget::execApplication);

@@ -1,0 +1,8 @@
+<svg id="DM-icon-放大" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <rect id="尺寸" width="16" height="16" fill="none"/>
+  <g id="icon" transform="translate(-622.5 -494.5)">
+    <path id="路径_16" data-name="路径 16" d="M.45,10v4.5h4.5" transform="translate(623.551 494.5)" fill="none" stroke="#e6e6e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <path id="路径_17" data-name="路径 17" d="M0,0V4.5H4.5" transform="translate(636.999 500.5) rotate(180)" fill="none" stroke="#e6e6e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <circle id="椭圆_12" data-name="椭圆 12" cx="2" cy="2" r="2" transform="translate(628.5 500.5)" fill="#e6e6e6"/>
+  </g>
+</svg>
