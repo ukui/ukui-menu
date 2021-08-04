@@ -93,8 +93,8 @@ void RightClickMenu::pincToCollectionActionTriggerSlot()
 {
     QFileInfo fileInfo(m_desktopfp);
     QString desktopfn=fileInfo.fileName();
-    collectCount++;
-    updateDataBaseCollect(desktopfn,collectCount);
+    QStringList appList = getCollectAppList();
+    updateDataBaseCollect(desktopfn, appList.size()+1);
     m_actionNumber = 18;
 }
 
