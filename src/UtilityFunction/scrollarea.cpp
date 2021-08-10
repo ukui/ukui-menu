@@ -22,7 +22,8 @@
 #include <QGSettings>
 #include "utility.h"
 
-ScrollAreaWid::ScrollAreaWid()
+ScrollAreaWid::ScrollAreaWid(QWidget *parent):
+    QWidget(parent)
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);

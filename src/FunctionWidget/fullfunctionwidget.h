@@ -93,7 +93,7 @@ private:
     QWidget* m_iconListWid=nullptr;
     ClassifyBtnScrollArea* m_iconListScrollArea=nullptr;
     ClassifyBtnScrollAreaWid* m_iconListScrollAreaWid=nullptr;
-    QVBoxLayout* m_iconListScrollAreaWidLayout=nullptr;
+    QVBoxLayout* m_iconListWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;
     QSpacerItem* m_topSpacerItem=nullptr;

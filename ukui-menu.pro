@@ -76,6 +76,7 @@ SOURCES += \
     src/UtilityFunction/letterclassifybutton.cpp \
     src/UtilityFunction/listview.cpp \
     src/UtilityFunction/proxystyle.cpp \
+    src/UtilityFunction/recentitemdelegate.cpp \
     src/UtilityFunction/rightitemdelegate.cpp \
     src/UtilityFunction/scrollarea.cpp \
     src/UtilityFunction/splitbarframe.cpp \
@@ -119,6 +120,7 @@ HEADERS  += \
     src/UtilityFunction/letterclassifybutton.h \
     src/UtilityFunction/listview.h \
     src/UtilityFunction/proxystyle.h \
+    src/UtilityFunction/recentitemdelegate.h \
     src/UtilityFunction/rightitemdelegate.h \
     src/UtilityFunction/scrollarea.h \
     src/UtilityFunction/splitbarframe.h \
@@ -144,6 +146,4 @@ desktop_file.path = /etc/xdg/autostart
 INSTALLS += \
     target desktop_file
 
-FORMS += \
-    fullmainwindow.ui \
-    mainwindow.ui
+FORMS +=

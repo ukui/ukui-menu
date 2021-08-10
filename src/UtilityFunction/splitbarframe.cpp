@@ -19,7 +19,7 @@
 #include "splitbarframe.h"
 
 SplitBarFrame::SplitBarFrame(QWidget *parent, QString category, int width, int height, int module):
-    QFrame(parent),
+    QWidget(parent),
     m_category(category),
     m_width(width),
     m_height(height),
@@ -41,6 +41,7 @@ void SplitBarFrame::initAppBtn()
     //按钮透明
     this->setFocusPolicy(Qt::NoFocus);
     this->setAttribute(Qt::WA_TranslucentBackground);
+
     QHBoxLayout* layout=new QHBoxLayout;
     layout->setContentsMargins(15,0,0,0);
     layout->setSpacing(6);
@@ -110,3 +111,15 @@ void SplitBarFrame::setLabelText()
         break;
     }
 }
+
+void SplitBarFrame::paintEvent(QPaintEvent *event)
+{
+    double transparency=getTransparency();
+    QPainter painter(this);
+    painter.setBrush(Qt::transparent);
+    painter.setPen(Qt::transparent);
+    painter.setOpacity(transparency);
+    painter.drawRect(this->rect());
+    QWidget::paintEvent(event);
+}
+

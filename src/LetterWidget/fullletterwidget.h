@@ -98,12 +98,11 @@ private:
     int m_index = 0;
     /*Alphabetic classification list interface*/
     QWidget* m_letterListWid=nullptr;
-    ClassifyBtnScrollArea* m_letterListScrollArea=nullptr;
-    ClassifyBtnScrollAreaWid* m_letterListScrollAreaWid=nullptr;
-    QVBoxLayout* m_letterListScrollAreaWidLayout=nullptr;
+    QVBoxLayout* m_letterListWidLayout=nullptr;
     QList<QAbstractButton*> m_buttonList;
     QButtonGroup* m_btnGroup=nullptr;
     QSpacerItem* m_letterListBottomSpacer=nullptr;
+    QSpacerItem* m_topSpacerItem=nullptr;
     QSpacerItem* m_appListBottomSpacer=nullptr;
 
     /*Animation*/

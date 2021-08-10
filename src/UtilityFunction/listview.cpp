@@ -30,6 +30,7 @@ ListView::ListView(QWidget *parent/*, int width, int height, int module*/):
     listmodel=new QStandardItemModel(this);
     this->setModel(listmodel);
     pUkuiMenuInterface=new UkuiMenuInterface;
+    this->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
 ListView::~ListView()
 {
@@ -66,6 +67,7 @@ void ListView::initWidget()
 void ListView::addData(QVector<QStringList> data, int module)
 {
     this->module = module;
+    listmodel->clear();
     Q_FOREACH(QStringList desktopfp,data)
     {
         QStandardItem* item=new QStandardItem;

@@ -29,7 +29,7 @@
 #include "src/RightClickMenu/rightclickmenu.h"
 #include "utility.h"
 
-class SplitBarFrame : public QFrame //全屏分隔栏
+class SplitBarFrame : public QWidget //全屏分隔栏
 {
     Q_OBJECT
 public:
@@ -66,6 +66,7 @@ private:
 protected:
     void initAppBtn();
     void setLabelText();
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // PUSHBUTTON_H

@@ -25,7 +25,7 @@
 class ClassifyBtnScrollAreaWid: public QWidget
 {
 public:
-    ClassifyBtnScrollAreaWid();
+    ClassifyBtnScrollAreaWid(QWidget *parent);
 
 protected:
     void paintEvent(QPaintEvent* event);

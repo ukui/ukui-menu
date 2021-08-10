@@ -42,21 +42,20 @@ void FullCommonUseWidget::initUi()
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
     this->setFocusPolicy(Qt::NoFocus);
-    QHBoxLayout* mainLayout=new QHBoxLayout;
+    QHBoxLayout* mainLayout=new QHBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
-    this->setLayout(mainLayout);
     m_spaceItem=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
     mainLayout->addItem(m_spaceItem);
     m_scrollArea=new ScrollArea;
-    m_scrollAreaWid=new ScrollAreaWid;
+    m_scrollAreaWid=new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
     m_scrollArea->setFixedSize(Style::AppListWidWidth,this->height());
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
-    m_scrollAreaWidLayout=new QVBoxLayout;
+    m_scrollAreaWidLayout=new QVBoxLayout(m_scrollAreaWid);
     m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_scrollAreaWidLayout->setSpacing(10);
-    m_scrollAreaWid->setLayout(m_scrollAreaWidLayout);
+
     mainLayout->addWidget(m_scrollArea);
 
     m_ukuiMenuInterface=new UkuiMenuInterface;

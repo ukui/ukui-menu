@@ -2,10 +2,13 @@
 #define FULLMAINWINDOW_H
 
 #include <QMainWindow>
-
-namespace Ui {
-class FullMainWindow;
-}
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QStackedWidget>
+#include "src/CommonUseWidget/fullcommonusewidget.h"
+#include "src/FunctionWidget/fullfunctionwidget.h"
+#include "src/LetterWidget/fullletterwidget.h"
 
 class FullMainWindow : public QMainWindow
 {
@@ -33,7 +36,20 @@ private:
     QAction *m_letterAction = nullptr;
     QAction *m_funcAction = nullptr;
     QMenu *m_menu = nullptr;
-    Ui::FullMainWindow *ui;
+
+    QWidget *centralwidget;
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *topHorizontalLayout;
+    QSpacerItem *horizontalSpacer;
+    QLineEdit *lineEdit;
+    QSpacerItem *horizontalSpacer_2;
+    QToolButton *fullSelectToolButton;
+    QToolButton *fullSelectMenuButton;
+    QPushButton *minPushButton;
+    QStackedWidget *fullStackedWidget;
+    FullCommonUseWidget *fullCommonPage;
+    FullLetterWidget *fullLetterPage;
+    FullFunctionWidget *fullFunctionPage;
 };
 
 #endif // FULLMAINWINDOW_H

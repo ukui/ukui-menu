@@ -42,6 +42,8 @@ void FullFunctionWidget::initUi()
     this->setAttribute(Qt::WA_TranslucentBackground);
     m_applistWid=new QWidget(this);
     m_iconListWid=new QWidget(this);
+    m_iconListWid->setAttribute(Qt::WA_TranslucentBackground);
+    m_iconListWid->setAutoFillBackground(false);
     this->setFixedSize(Style::MainViewWidWidth,
                        Style::AppListWidHeight);
     m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
@@ -81,15 +83,14 @@ void FullFunctionWidget::initAppListWidget()
     m_applistWid->setLayout(layout);
 
     m_scrollArea=new ScrollArea;
-    m_scrollAreaWid=new ScrollAreaWid;
+    m_scrollAreaWid=new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
     m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
-    m_scrollAreaWidLayout=new QVBoxLayout;
+    m_scrollAreaWidLayout=new QVBoxLayout(m_scrollAreaWid);
     m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_scrollAreaWidLayout->setSpacing(10);
-    m_scrollAreaWid->setLayout(m_scrollAreaWidLayout);
     layout->addWidget(m_scrollArea);
     connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&FullFunctionWidget::valueChangedSlot);
@@ -179,9 +180,10 @@ void FullFunctionWidget::fillAppList()
 void FullFunctionWidget::insertClassificationBtn(QString category)
 {
     SplitBarFrame* classificationbtn=new SplitBarFrame(this,category,m_scrollArea->width()-12,30,2);
+    classificationbtn->setAttribute(Qt::WA_TranslucentBackground);
+    classificationbtn->setAutoFillBackground(false);
     m_scrollAreaWidLayout->addWidget(classificationbtn);
     m_classificationList.append(category);
-
 }
 
 void FullFunctionWidget::insertAppList(QStringList desktopfplist)
@@ -234,11 +236,11 @@ void FullFunctionWidget::updateAppListView()
         m_btnGroup->removeButton(button);
     }
     m_buttonList.clear();
-    m_iconListScrollAreaWidLayout->removeItem(m_topSpacerItem);
-    m_iconListScrollAreaWidLayout->removeItem(m_bottomSpacerItem);
-    while ((child = m_iconListScrollAreaWidLayout->takeAt(0)) != 0) {
+    m_iconListWidLayout->removeItem(m_topSpacerItem);
+    m_iconListWidLayout->removeItem(m_bottomSpacerItem);
+    while ((child = m_iconListWidLayout->takeAt(0)) != 0) {
         QWidget* wid=child->widget();
-        m_iconListScrollAreaWidLayout->removeWidget(wid);
+        m_iconListWidLayout->removeWidget(wid);
         wid->setParent(nullptr);
         delete wid;
         delete child;
@@ -282,23 +284,18 @@ void FullFunctionWidget::resizeScrollAreaControls()
  */
 void FullFunctionWidget::initIconListWidget()
 {
-    m_iconListScrollArea=new ClassifyBtnScrollArea(m_iconListWid);
-//    m_iconListScrollArea->resize(Style::LeftBtnWidth,
-//                                       m_iconListWid->height());
-    m_iconListScrollAreaWid=new ClassifyBtnScrollAreaWid;
-    m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
-                                          m_iconListWid->height());
-    m_iconListScrollAreaWidLayout=new QVBoxLayout;
-    m_iconListScrollAreaWidLayout->setContentsMargins(0,0,0,0);
-    m_iconListScrollAreaWidLayout->setSpacing(Style::LeftSpaceBetweenItem);
-    m_iconListScrollAreaWid->setLayout(m_iconListScrollAreaWidLayout);
-    m_iconListScrollArea->setWidget(m_iconListScrollAreaWid);
+//    m_iconListScrollAreaWid=new ClassifyBtnScrollAreaWid(this);
+//    m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
+//                                          m_iconListWid->height());
+    m_iconListWidLayout=new QVBoxLayout(m_iconListWid);
+    m_iconListWidLayout->setContentsMargins(0,0,0,0);
+    m_iconListWidLayout->setSpacing(Style::LeftSpaceBetweenItem);
 
     m_topSpacerItem=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     m_bottomSpacerItem=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
 
-    m_btnGroup=new QButtonGroup(m_iconListScrollAreaWid);
-    m_animation = new QPropertyAnimation(m_iconListScrollArea, "geometry");
+    m_btnGroup=new QButtonGroup(m_iconListWid);
+    m_animation = new QPropertyAnimation(m_iconListWid, "geometry");
 
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
@@ -313,7 +310,7 @@ void FullFunctionWidget::initIconListWidget()
  */
 void FullFunctionWidget::initIconListScrollArea()
 {
-    m_iconListScrollAreaWidLayout->addItem(m_topSpacerItem);
+    m_iconListWidLayout->addItem(m_topSpacerItem);
     for(int i=0;i<m_classificationList.size();i++)
     {
         FunctionClassifyButton* iconbtn=new FunctionClassifyButton(
@@ -325,9 +322,9 @@ void FullFunctionWidget::initIconListScrollArea()
                     true);
         iconbtn->setChecked(false);
         m_buttonList.append(iconbtn);
-        m_iconListScrollAreaWidLayout->addWidget(iconbtn);
+        m_iconListWidLayout->addWidget(iconbtn);
     }
-    m_iconListScrollAreaWidLayout->addItem(m_bottomSpacerItem);
+    m_iconListWidLayout->addItem(m_bottomSpacerItem);
 
     int id=0;
     Q_FOREACH (QAbstractButton* btn, m_buttonList) {
@@ -363,13 +360,13 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
 
 void FullFunctionWidget::animationFinishSlot()
 {
-    if(m_scrollArea->verticalScrollBar()->value()==m_endPos ||
-            m_scrollArea->verticalScrollBar()->value()==m_scrollArea->verticalScrollBar()->maximum())
-    {
-        m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
-                this,&FullFunctionWidget::valueChangedSlot);
-    }
+//    if(m_scrollArea->verticalScrollBar()->value()==m_endPos ||
+//            m_scrollArea->verticalScrollBar()->value()==m_scrollArea->verticalScrollBar()->maximum())
+//    {
+//        m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+//        connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
+//                this,&FullFunctionWidget::valueChangedSlot);
+//    }
 }
 
 void FullFunctionWidget::animationValueChangedSlot(const QVariant &value)
@@ -431,29 +428,29 @@ void FullFunctionWidget::enterAnimation()
                                   m_iconListWid->height()));
     m_animation->setEasingCurve(QEasingCurve::InQuart);
     m_animation->start();
-    m_iconListScrollArea->show();
+    m_iconListScrollAreaWid->show();
 }
 
 void FullFunctionWidget::setFunctionBtnGeometry()
 {
 //    int height=m_classificationList.size()*Style::LeftBtnHeight+(m_classificationList.size()-1)*Style::LeftSpaceBetweenItem;
-    m_iconListScrollArea->setGeometry(QRect(Style::LeftMargin,
+    m_iconListScrollAreaWid->setGeometry(QRect(Style::LeftMargin,
                                             0,
                                             Style::LeftBtnWidth,
                                             m_iconListWid->height()));
-    m_iconListScrollArea->show();
+    m_iconListScrollAreaWid->show();
 
 }
 
 void FullFunctionWidget::repaintWidget()
 {
-    this->setFixedSize(Style::MainViewWidWidth,
-                       Style::AppListWidHeight);
-    m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
-    m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
-    m_iconListWid->setFixedSize(Style::LeftWidWidth,this->height());
-    m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
-                                          m_iconListWid->height());
+//    this->setFixedSize(Style::MainViewWidWidth,
+//                       Style::AppListWidHeight);
+//    m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
+//    m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
+//    m_iconListWid->setFixedSize(Style::LeftWidWidth,this->height());
+//    m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
+//                                          m_iconListWid->height());
     updateAppListView();
 }
 

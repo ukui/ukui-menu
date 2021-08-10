@@ -82,7 +82,7 @@ void FullLetterWidget::initAppListWidget()
     m_applistWid->setLayout(layout);
 
     m_scrollArea=new ScrollArea;
-    m_scrollAreaWid=new ScrollAreaWid;
+    m_scrollAreaWid=new ScrollAreaWid(this);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
     m_scrollArea->setWidgetResizable(true);
@@ -186,10 +186,11 @@ void FullLetterWidget::updateAppListView()
         m_btnGroup->removeButton(button);
     }
     m_buttonList.clear();
-    m_letterListScrollAreaWidLayout->removeItem(m_letterListBottomSpacer);
-    while ((child = m_letterListScrollAreaWidLayout->takeAt(0)) != 0) {
+    m_letterListWidLayout->removeItem(m_topSpacerItem);
+    m_letterListWidLayout->removeItem(m_letterListBottomSpacer);
+    while ((child = m_letterListWidLayout->takeAt(0)) != 0) {
         QWidget* wid=child->widget();
-        m_letterListScrollAreaWidLayout->removeWidget(wid);
+        m_letterListWidLayout->removeWidget(wid);
         wid->setParent(nullptr);
         delete wid;
         delete child;
@@ -236,18 +237,14 @@ void FullLetterWidget::resizeScrollAreaControls()
  */
 void FullLetterWidget::initLetterListWidget()
 {
-    m_letterListScrollArea=new ClassifyBtnScrollArea(m_letterListWid);
-    m_letterListScrollAreaWid=new ClassifyBtnScrollAreaWid;
-    m_letterListScrollAreaWidLayout=new QVBoxLayout;
-    m_letterListScrollAreaWidLayout->setContentsMargins(0,0,0,0);
-    m_letterListScrollAreaWidLayout->setSpacing(0);
-    m_letterListScrollAreaWid->setLayout(m_letterListScrollAreaWidLayout);
-    m_letterListScrollArea->setWidget(m_letterListScrollAreaWid);
-    m_letterListScrollArea->setWidgetResizable(true);
+    m_letterListWidLayout=new QVBoxLayout(m_letterListWid);
+    m_letterListWidLayout->setContentsMargins(0,0,0,0);
+    m_letterListWidLayout->setSpacing(0);
 
+    m_topSpacerItem=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     m_letterListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    m_btnGroup=new QButtonGroup(m_letterListScrollAreaWid);
-    m_animation = new QPropertyAnimation(m_letterListScrollArea, "geometry");
+    m_btnGroup=new QButtonGroup(m_letterListWid);
+    m_animation = new QPropertyAnimation(m_letterListWid, "geometry");
 
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
@@ -262,20 +259,21 @@ void FullLetterWidget::initLetterListWidget()
  */
 void FullLetterWidget::initLetterListScrollArea()
 {
+    m_letterListWidLayout->addItem(m_topSpacerItem);
     if(m_letterList.contains("&"))
         m_letterList.replace(m_letterList.indexOf("&"),"&&");
     for(int i=0;i<m_letterList.size();i++)
     {
-        LetterClassifyButton* letterbtn=new LetterClassifyButton(m_letterListScrollAreaWid,
+        LetterClassifyButton* letterbtn=new LetterClassifyButton(m_letterListWid,
                                                                  true,
                                                                  m_letterList.at(i));
         letterbtn->setFixedSize(Style::LeftLetterBtnHeight,Style::LeftLetterBtnHeight);
         m_buttonList.append(letterbtn);
-        m_letterListScrollAreaWidLayout->addWidget(letterbtn);
-        m_letterListScrollAreaWidLayout->setAlignment(letterbtn,Qt::AlignHCenter);
+        m_letterListWidLayout->addWidget(letterbtn);
+        m_letterListWidLayout->setAlignment(letterbtn,Qt::AlignHCenter);
         connect(letterbtn,&LetterClassifyButton::buttonClicked,m_btnGroup, static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked));
     }
-    m_letterListScrollAreaWidLayout->addItem(m_letterListBottomSpacer);
+    m_letterListWidLayout->addItem(m_letterListBottomSpacer);
 
     int id=0;
     Q_FOREACH (QAbstractButton* btn, m_buttonList) {
@@ -283,7 +281,7 @@ void FullLetterWidget::initLetterListScrollArea()
     }
 
     connect(m_btnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&FullLetterWidget::btnGroupClickedSlot);
-    m_letterListScrollArea->widget()->adjustSize();
+//    m_letterListWid->widget()->adjustSize();
     if(m_btnGroup->button(0)!=nullptr)
         m_btnGroup->button(0)->click();
 }
@@ -399,25 +397,20 @@ void FullLetterWidget::enterAnimation()
                             (m_letterList.size()+1)*Style::LeftLetterBtnHeight));
     m_animation->setEasingCurve(QEasingCurve::InQuart);
     m_animation->start();
-    m_letterListScrollArea->show();
+//    m_letterListScrollArea->show();
 }
 
 void FullLetterWidget::setLetterBtnGeometry()
 {
-    m_letterListScrollArea->setGeometry(QRect(Style::LeftMargin,
-                                              (m_letterListWid->height()-(m_letterList.size()+1)*Style::LeftLetterBtnHeight)/2,
-                                              Style::LeftLetterBtnHeight*2,
-                                        (m_letterList.size()+1)*Style::LeftLetterBtnHeight));
-    m_letterListScrollArea->show();
+//    m_letterListScrollArea->setGeometry(QRect(Style::LeftMargin,
+//                                              (m_letterListWid->height()-(m_letterList.size()+1)*Style::LeftLetterBtnHeight)/2,
+//                                              Style::LeftLetterBtnHeight*2,
+//                                        (m_letterList.size()+1)*Style::LeftLetterBtnHeight));
+//    m_letterListScrollArea->show();
 }
 
 void FullLetterWidget::repaintWidget()
 {
-    this->setFixedSize(Style::MainViewWidWidth,
-                       Style::AppListWidHeight);
-    m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
-    m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
-    m_letterListWid->setFixedSize(Style::LeftWidWidth,this->height());
     updateAppListView();
 }
 
@@ -429,7 +422,7 @@ void FullLetterWidget::widgetMakeZero()
         if(num!=-1)
         {
             m_btnGroup->button(num)->click();
-            m_letterListScrollArea->verticalScrollBar()->setSliderPosition(0);
+//            m_letterListScrollArea->verticalScrollBar()->setSliderPosition(0);
             break;
         }
     }

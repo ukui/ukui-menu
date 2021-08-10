@@ -22,10 +22,12 @@
 #include <QVariant>
 #include <QKeyEvent>
 
-ClassifyBtnScrollAreaWid::ClassifyBtnScrollAreaWid()
+ClassifyBtnScrollAreaWid::ClassifyBtnScrollAreaWid(QWidget *parent):
+    QWidget(parent)
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setAutoFillBackground(false);
 }
 
 void ClassifyBtnScrollAreaWid::paintEvent(QPaintEvent *event)

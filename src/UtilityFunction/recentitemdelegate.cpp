@@ -1,28 +1,6 @@
-/*
- * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
- *
- */
+#include "recentitemdelegate.h"
 
-#include "itemdelegate.h"
-#include <QPushButton>
-#include <syslog.h>
-#include <QToolTip>
-#include "src/UtilityFunction/utility.h"
-
-ItemDelegate::ItemDelegate(QObject* parent, int module):
+recentitemdelegate::recentitemdelegate(QObject* parent, int module):
     QStyledItemDelegate(parent)
 {
     this->module=module;
@@ -30,12 +8,12 @@ ItemDelegate::ItemDelegate(QObject* parent, int module):
 
 }
 
-ItemDelegate::~ItemDelegate()
+recentitemdelegate::~recentitemdelegate()
 {
     delete pUkuiMenuInterface;
 }
 
-void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if(index.isValid())
     {
@@ -78,7 +56,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             if(strlist.at(1).toInt()==1)
             {
                 QRect iconRect=QRect(rect.x()+11,rect.y()+(rect.height()-32)/2,32,32);
-                QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
+//                QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
+                QString iconstr = "wps-office2019-etmain";
                 QIcon icon;
                 QFileInfo iconFileInfo(iconstr);
                 if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg")))
@@ -108,7 +87,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 }
                 painter->save();
                 icon.paint(painter,iconRect,Qt::AlignLeft);
-                QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
+//                QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
+                QString appname = "这是一个测试文件.xlsx";
                 QFontMetrics fm=painter->fontMetrics();
                 QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-62,Qt::TextShowMnemonic);
                 painter->drawText(QRect(iconRect.right()+15,rect.y(),
@@ -227,7 +207,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
 }
 
-QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize recentitemdelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 //    QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
 //    if(strlist.at(1).toInt()==1)

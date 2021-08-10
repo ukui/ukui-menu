@@ -105,20 +105,11 @@ void RightListView::onClicked(QModelIndex index)
 
 void RightListView::dropEvent(QDropEvent *event)
 {
-    //qDebug() << "-----" << "dropEvent" << "-----";
     RightListView *source = qobject_cast<RightListView *>(event->source());
     if (source && source == this)
     {
         dropPos=event->pos();
-//        if(dropPos.x() % Style::AppListItemSizeWidth >= Style::AppLeftSpace &
-//                dropPos.x() % Style::AppListItemSizeWidth <= Style::AppLeftSpace+ Style::AppListIconSize &
-//                dropPos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &
-//                dropPos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace+ Style::AppListIconSize)
 
-//        {
-////            mergeApplication(startPos,dropPos);
-//        }
-//        else
         if(this->indexAt(dropPos).isValid())
         {
             QVariant var=listmodel->data(indexAt(dropPos), Qt::DisplayRole);
@@ -132,7 +123,6 @@ void RightListView::dropEvent(QDropEvent *event)
         }
     }
     Q_EMIT sendCollectViewUpdate();
-//    this->model()->setData(this->indexAt(pressedpos),QVariant::fromValue<bool>(0),Qt::UserRole);
 }
 
 void RightListView::rightClickedSlot(const QPoint &pos)
@@ -193,11 +183,6 @@ void RightListView::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->verticalScrollBar()->setVisible(false);
-//    QWidget *current_focus_widget;
-   // current_focus_widget = QApplication::focusWidget();
-//    current_focus_widget = QWidget::focusWidget();
-//    QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
-
 }
 
 void RightListView::selectFirstItem()
@@ -214,41 +199,11 @@ void RightListView::paintEvent(QPaintEvent *e)
     double transparency=getTransparency();
     QPainter painter(this->viewport());
 
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-//    {
-//        QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
-//        if(gsetting.keys().contains(QString("effect")))
-//        {
-//            if(gsetting.get("effect").toBool())
-//            {
-//                painter.setBrush(Qt::black);
-//                painter.setPen(Qt::transparent);
-//                painter.setOpacity(0.25);
-//                painter.drawRect(this->rect());
-//            }
-//            else
-//            {
-//                painter.setBrush(this->palette().base());
-//                painter.setPen(Qt::transparent);
-//                painter.setOpacity(transparency);
-//                painter.drawRect(this->rect());
-//            }
-//        }
-//        else
-//        {
-//            painter.setBrush(this->palette().base());
-//            painter.setPen(Qt::transparent);
-//            painter.setOpacity(transparency);
-//            painter.drawRect(this->rect());
-//        }
-//    }
-//    else
-//    {
-        painter.setBrush(this->palette().base());
-        painter.setPen(Qt::transparent);
-        painter.setOpacity(transparency);
-        painter.drawRect(this->rect());
-//    }
+    painter.setBrush(this->palette().base());
+    painter.setPen(Qt::transparent);
+    painter.setOpacity(transparency);
+    painter.drawRect(this->rect());
+
     QListView::paintEvent(e);
 }
 

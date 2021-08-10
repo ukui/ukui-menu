@@ -43,14 +43,10 @@
 #include <KWindowEffects>
 #include <QTabWidget>
 #include <QSpacerItem>
-#include "ui_mainwindow.h"
+#include <QStackedWidget>
 #include "src/UtilityFunction/listview.h"
 #include "getmodeldata.h"
 #include "fullmainwindow.h"
-
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -130,7 +126,57 @@ private Q_SLOTS:
     void on_powerOffButton_customContextMenuRequested(const QPoint &pos);
 
 private:
-    Ui::MainWindow *ui;
+
+    QAction *searchIconAction;
+    QAction *PowerOffAction;
+    QWidget *centralwidget;
+    QHBoxLayout *centerLayout_0;
+    MainViewWidget *widget;
+    QGridLayout *gridLayout;
+    QVBoxLayout *mainLeftVerticalLayout_1;
+    QStackedWidget *topStackedWidget;
+    QWidget *minMenuPage;
+    QVBoxLayout *verticalLayout_4;
+    QHBoxLayout *letfTopSelectHorizontalLayout;
+    QLabel *minSelectTextLabel;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *searchPushButton;
+    QToolButton *minSelectButton;
+    QToolButton *selectMenuButton;
+    QWidget *minSearchPage;
+    QVBoxLayout *verticalLayout_5;
+    QHBoxLayout *leftTopSearchHorizontalLayout;
+    QLineEdit *lineEdit;
+    QPushButton *cancelSearchPushButton;
+    QStackedWidget *leftStackedWidget;
+    QWidget *minAllPage;
+    ListView *minAllListView;
+    QWidget *minLetterPage;
+    ListView *minLetterListView;
+    QWidget *minFuncPage;
+    ListView *minFuncListView;
+    QWidget *minSearchResultPage;
+    ListView *minSearchResultListView;
+    QVBoxLayout *mainRightVerticalLayout_1;
+    QVBoxLayout *mainRightVerticalLayout_2;
+    QHBoxLayout *rightTopHorizontalLayout_3;
+    QVBoxLayout *rightCollectLayout;
+    QPushButton *collectPushButton;
+    QPushButton *recentPushButton;
+    QSpacerItem *horizontalSpacer_3;
+    QPushButton *minMaxChangeButton;
+    QSpacerItem *verticalSpacer;
+    QStackedWidget *rightStackedWidget;
+    QWidget *collectPage;
+    RightListView *collectListView;
+    QWidget *recentPage;
+    ListView *recentListView;
+    QSpacerItem *verticalSpacer_2;
+    QSpacerItem *verticalSpacer_3;
+    QHBoxLayout *rightBottomHorizontalLayout_2;
+    QSpacerItem *horizontalSpacer_2;
+    QPushButton *powerOffButton;
+   // Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H

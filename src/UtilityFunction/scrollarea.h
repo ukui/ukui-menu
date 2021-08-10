@@ -28,7 +28,7 @@
 class ScrollAreaWid: public QWidget
 {
 public:
-    ScrollAreaWid();
+    ScrollAreaWid(QWidget *parent);
 
 protected:
     void paintEvent(QPaintEvent* event);
