@@ -39,44 +39,44 @@ void SearchAppThread::run()
     {
         QString str=m_ukuiMenuInterface->getAppNamePinyin(m_keyWord);
         int index=0;
-        if(str.size()==1)
-        {
-            int num=static_cast<int>(str.toLocal8Bit().at(0));
-            QStringList searchDesktopList;
-            searchDesktopList.clear();
-            if(num>=65 && num<=90)
-            {
-                for(int i=0;i<UkuiMenuInterface::alphabeticVector.at(num-65).size();i++)
-                    searchDesktopList.append(UkuiMenuInterface::alphabeticVector.at(num-65).at(i));
-            }
-            else{
-                while(index<m_appInfoVector.size())
-                {
-//                    QString appNamePy=m_ukuiMenuInterface->getAppNamePinyin(m_appInfoVector.at(index).at(1));
-//                    QString appEnglishName=m_appInfoVector.at(index).at(2);
-                    QString appNameFl=m_appInfoVector.at(index).at(3);
+//        if(str.size()==1)
+//        {
+//            int num=static_cast<int>(str.toLocal8Bit().at(0));
+//            QStringList searchDesktopList;
+//            searchDesktopList.clear();
+//            if(num>=65 && num<=90)
+//            {
+//                for(int i=0;i<UkuiMenuInterface::alphabeticVector.at(num-65).size();i++)
+//                    searchDesktopList.append(UkuiMenuInterface::alphabeticVector.at(num-65).at(i));
+//            }
+//            else{
+//                while(index<m_appInfoVector.size())
+//                {
+////                    QString appNamePy=m_ukuiMenuInterface->getAppNamePinyin(m_appInfoVector.at(index).at(1));
+////                    QString appEnglishName=m_appInfoVector.at(index).at(2);
+//                   QString appNameFl=m_appInfoVector.at(index).at(3);
 
-                    if(appNameFl==str)//匹配首字母
-                    {
-                        m_searchResultVector.append(m_appInfoVector.at(index));
-                    }
-                    index++;
-                }
-            }
-//            else if(num<48 || (num>57 && num<65) || num>90)
-//                for(int i=0;i<UkuiMenuInterface::alphabeticVector.at(26).size();i++)
-//                    searchDesktopList.append(UkuiMenuInterface::alphabeticVector.at(26).at(i));
-//            else
-//                for(int i=0;i<UkuiMenuInterface::alphabeticVector.at(27).size();i++)
-//                    searchDesktopList.append(UkuiMenuInterface::alphabeticVector.at(27).at(i));
+//                    if(appNameFl==str)//匹配首字母
+//                    {
+//                        m_searchResultVector.append(m_appInfoVector.at(index));
+//                    }
+//                    index++;
+//                }
+//            }
+////            else if(num<48 || (num>57 && num<65) || num>90)
+////                for(int i=0;i<UkuiMenuInterface::alphabeticVector.at(26).size();i++)
+////                    searchDesktopList.append(UkuiMenuInterface::alphabeticVector.at(26).at(i));
+////            else
+////                for(int i=0;i<UkuiMenuInterface::alphabeticVector.at(27).size();i++)
+////                    searchDesktopList.append(UkuiMenuInterface::alphabeticVector.at(27).at(i));
 
-            if(!searchDesktopList.isEmpty())
-            {
-                for(int i=0;i<searchDesktopList.size();i++)
-                    m_searchResultVector.append(QStringList()<<searchDesktopList.at(i)<<m_ukuiMenuInterface->getAppName(searchDesktopList.at(i)));
-            }
-        }
-        else
+//            if(!searchDesktopList.isEmpty())
+//            {
+//                for(int i=0;i<searchDesktopList.size();i++)
+//                    m_searchResultVector.append(QStringList()<<searchDesktopList.at(i)<<m_ukuiMenuInterface->getAppName(searchDesktopList.at(i)));
+//            }
+//        }
+//        else
         {
             while(index<m_appInfoVector.size())
             {

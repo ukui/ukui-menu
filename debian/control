@@ -14,7 +14,9 @@ Build-Depends: debhelper-compat (=12),
                libbamf3-dev,
                libkf5windowsystem-dev,
                libuchardet-dev,
-               libukui-log4qt-dev
+               libukui-log4qt-dev,
+               libx11-dev,
+	       libxtst-dev
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/ukui-menu
