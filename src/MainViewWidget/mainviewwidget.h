@@ -91,6 +91,8 @@ public:
 
     void resetQueryLine();
 
+    QLineEdit* getQueryLineEditer() {return m_queryLineEdit;}
+
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
     QWidget *m_topWidget=nullptr;
