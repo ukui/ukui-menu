@@ -294,9 +294,9 @@ void MainWindow::showFullScreenWidget()
     int panelSize=Style::panelSize;
     int x = Style::primaryScreenX;
     int y = Style::primaryScreenY;
-    if(availableGeometry.height())
-    int width = Style::primaryScreenWidth;
-    int height = Style::primaryScreenHeight;
+
+//    int width = Style::primaryScreenWidth;
+//    int height = Style::primaryScreenHeight;
     QRect startRect;
     QRect endRect;
     if(position==0)

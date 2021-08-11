@@ -190,7 +190,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             if(checkIfLocked(desktopfn))
             {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
-                icon.paint(painter,QRect(rect.topRight().x()-22,rect.y()+(rect.height()-16)/2,16,16));
+                icon.paint(painter,QRect(rect.topRight().x() - 30,rect.y()+(rect.height()-16)/2,16,16));
             }
             painter->setOpacity(1);
             painter->save();
@@ -198,7 +198,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             {
                 painter->setPen(QPen(Qt::NoPen));
                 painter->setBrush(QColor("#4d94ff"));
-                painter->drawEllipse(QPoint(rect.topRight().x()-22,rect.y()+(rect.height()-8)/2+4),4,4);
+                painter->drawEllipse(QPoint(rect.topRight().x() - 30,rect.y()+(rect.height()-8)/2+4),4,4);
             }
             painter->restore();
             painter->save();
