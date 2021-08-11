@@ -95,6 +95,29 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source)
     return QPixmap::fromImage(img);
 }
 
+QRect getScreenAvailableGeometry()
+{
+    QRect rect;
+    QVariantList list;
+    list.clear();
+    QDBusInterface iface(DBUS_NAME,
+                         DBUS_PATH,
+                         DBUS_INTERFACE,
+                         QDBusConnection::sessionBus());
+    QDBusReply<QVariantList> reply=iface.call("GetPrimaryScreenAvailableGeometry");
+    if(iface.isValid() && reply.isValid())
+    {
+        list=reply.value();
+        rect = QRect(list.at(0).toInt(),list.at(1).toInt(),list.at(2).toInt(),list.at(3).toInt());
+
+    }
+    else
+    {
+        rect = qApp->primaryScreen()->availableGeometry();
+    }
+    return rect;
+}
+
 QVariantList getScreenGeometry()
 {
     QVariantList list;

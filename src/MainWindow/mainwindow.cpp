@@ -29,6 +29,7 @@
 #include <QJsonParseError>
 #include <QJsonValue>
 #include "src/Style/style.h"
+#include "src/UtilityFunction/utility.h"
 #include <QPalette>
 
 #include <QX11Info>
@@ -285,15 +286,17 @@ void MainWindow::paintEvent(QPaintEvent *event)
  */
 void MainWindow::showFullScreenWidget()
 {
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect availableGeometry = getScreenAvailableGeometry();
+
     m_isFullScreen=true;
     this->setContentsMargins(0,0,0,0);
     int position=Style::panelPosition;
     int panelSize=Style::panelSize;
     int x = Style::primaryScreenX;
     int y = Style::primaryScreenY;
-    int width = Style::primaryScreenWidth;
-    int height = Style::primaryScreenHeight;
+
+//    int width = Style::primaryScreenWidth;
+//    int height = Style::primaryScreenHeight;
     QRect startRect;
     QRect endRect;
     if(position==0)
@@ -344,7 +347,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
  */
 void MainWindow::showDefaultWidget()
 {
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect availableGeometry = getScreenAvailableGeometry();
     m_isFullScreen=false;
     this->setContentsMargins(0,0,0,0);
     int position=Style::panelPosition;
@@ -481,8 +484,8 @@ void MainWindow::recvHideMainWindowSlot()
 void MainWindow::loadMainWindow()
 {
     cleanTimeoutApp();
-
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+//    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect availableGeometry = getScreenAvailableGeometry();
 
     int position=Style::panelPosition;
     int panelSize=Style::panelSize;
