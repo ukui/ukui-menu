@@ -43,6 +43,8 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     m_whiteList.append("ukui-control-center.desktop");
     m_whiteList.append("peony.desktop");
     m_whiteList.append("engrampa.desktop");
+    m_whiteList.append("mate-terminal.desktop");
+    m_whiteList.append("hwaudioui.desktop");
 
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
