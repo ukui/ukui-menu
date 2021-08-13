@@ -504,7 +504,8 @@ void MainViewWidget::loadMinMainView()
 
     char style[200];
     QPalette pe = m_queryText->palette();
-    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+    const auto ratio=devicePixelRatioF();
+    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16 * ratio);
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
     if(gsetting.get("style-name").toString()=="ukui-light")
     {
@@ -574,8 +575,8 @@ void MainViewWidget::loadMaxMainView()
     sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
             QueryLineEditClickedBorder,QueryLineEditBackground);
     m_queryLineEdit->setStyleSheet(style);
-
-    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+    const auto ratio=devicePixelRatioF();
+    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16 * ratio);
     pixmap=drawSymbolicColoredPixmap(pixmap);//反白
     QPalette pe = m_queryText->palette();
     pe.setColor(QPalette::Text,QColor(Qt::white));
@@ -648,8 +649,9 @@ void MainViewWidget::resetQueryLine()
         m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
                                       m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
         char style[200];
+        const auto ratio=devicePixelRatioF();
         QPalette pe = m_queryText->palette();
-        QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+        QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16 * ratio);
         if(!m_isFullScreen)
         {
 
