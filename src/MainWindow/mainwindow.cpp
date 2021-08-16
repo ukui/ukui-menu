@@ -29,7 +29,15 @@
 #include <QJsonParseError>
 #include <QJsonValue>
 #include "src/Style/style.h"
+#include "src/UtilityFunction/utility.h"
 #include <QPalette>
+
+#include <QX11Info>
+#include <X11/Xlib.h>
+#include <X11/extensions/XTest.h>
+
+//和QEvent键值冲突，取消KeyPress的宏定义
+#undef KeyPress
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -278,15 +286,17 @@ void MainWindow::paintEvent(QPaintEvent *event)
  */
 void MainWindow::showFullScreenWidget()
 {
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect availableGeometry = getScreenAvailableGeometry();
+
     m_isFullScreen=true;
     this->setContentsMargins(0,0,0,0);
     int position=Style::panelPosition;
     int panelSize=Style::panelSize;
     int x = Style::primaryScreenX;
     int y = Style::primaryScreenY;
-    int width = Style::primaryScreenWidth;
-    int height = Style::primaryScreenHeight;
+
+//    int width = Style::primaryScreenWidth;
+//    int height = Style::primaryScreenHeight;
     QRect startRect;
     QRect endRect;
     if(position==0)
@@ -337,7 +347,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
  */
 void MainWindow::showDefaultWidget()
 {
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect availableGeometry = getScreenAvailableGeometry();
     m_isFullScreen=false;
     this->setContentsMargins(0,0,0,0);
     int position=Style::panelPosition;
@@ -474,8 +484,8 @@ void MainWindow::recvHideMainWindowSlot()
 void MainWindow::loadMainWindow()
 {
     cleanTimeoutApp();
-
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+//    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect availableGeometry = getScreenAvailableGeometry();
 
     int position=Style::panelPosition;
     int panelSize=Style::panelSize;
@@ -662,7 +672,26 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
     {
         if((e->key() >= 0x30 && e->key() <= 0x39) || (e->key() >= 0x41 && e->key() <= 0x5a))
         {
-            m_mainViewWid->setLineEditFocus(e->text());
+            if (m_mainViewWid->getQueryLineEditer() != nullptr
+                    && !m_mainViewWid->getQueryLineEditer()->hasFocus()
+                    && m_mainViewWid->getQueryLineEditer()->text().isEmpty())
+            {
+                m_mainViewWid->getQueryLineEditer()->setFocus();
+
+                /**
+                 * @brief loop
+                 * 设置焦点后立即发送按键模拟，输入法尚未定位到有聚焦的输入状态，无法正常调起
+                 * 所以需要延后150ms保证模拟按键的会被正常接收
+                 * 延迟模拟有一定风险，其实需要配合输入法一起改动，暂无输入法的方案同步，按照该方式实现，需改进
+                 */
+                QEventLoop loop;
+                QTimer::singleShot(150, &loop, SLOT(quit()));
+                loop.exec();
+
+                XTestFakeKeyEvent(QX11Info::display(), XKeysymToKeycode(QX11Info::display(), e->key()), True, 1);
+                XTestFakeKeyEvent(QX11Info::display(), XKeysymToKeycode(QX11Info::display(), e->key()), False, 1);
+                XFlush(QX11Info::display());
+            }
         }
         if(e->key() == Qt::Key_Backspace)
         {
@@ -673,12 +702,5 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             this->hide();
             m_mainViewWid->widgetMakeZero();
         }
-//        if(e->key() == Qt::Key_Up || e->key() == Qt::Key_Down ||
-//                e->key() == Qt::Key_Left || e->key() == Qt::Key_Right)
-//        {
-//          qDebug() << "11111111111111111";
-//          m_sideBarWid->setFocus();
-//          Q_EMIT setFocusSignal();
-//        }
     }
 }

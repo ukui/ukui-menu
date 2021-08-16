@@ -461,8 +461,8 @@ void SideBarWidget::userAccountsChanged()
     if(!QFile::exists(usericon))
         usericon=QString("/usr/share/ukui/faces/default.png");
     QPixmap facePixmap(usericon);
-    facePixmap = facePixmap.scaled((Style::SideBarIconSize+4)*ratio,(Style::SideBarIconSize+4)*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize+4)*ratio/2);
+    facePixmap = facePixmap.scaled((Style::SideBarIconSize + 2)*ratio,(Style::SideBarIconSize + 2)*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    facePixmap = PixmapToRound(facePixmap, (Style::SideBarIconSize + 2)*ratio/2);
 
     QLabel* labelicon=m_userIconBtn->findChild<QLabel*>("faceLabel");
     facePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
@@ -520,6 +520,8 @@ void SideBarWidget::setMaxBtn()
 
     m_minMaxBtn->setFixedSize(37,37);
     m_minMaxBtn->setIcon(QIcon(pixmap));
+    m_minMaxBtn->setToolTip(tr("Max"));
+
 //    m_minMaxBtn->setFocus();
 }
 
@@ -596,6 +598,8 @@ void SideBarWidget::setMinBtn()
 
     m_minMaxBtn->setFixedSize(Style::MinMaxBtnWidth,Style::MinMaxBtnWidth);
     m_minMaxBtn->setIcon(QIcon(pixmap));
+    m_minMaxBtn->setToolTip("");
+
 //    m_minMaxBtn->setFocus();
 }
 
@@ -809,7 +813,7 @@ void SideBarWidget::changeIconColor(bool isFullScreen)
         if(m_buttonList.indexOf(button)!=3)
         {
             const auto ratio=devicePixelRatioF();
-            QPixmap pixmap=loadSvg(iconStr,19*ratio);
+            QPixmap pixmap=loadSvg(iconStr,18*ratio);
             if(gsetting->get("style-name").toString()=="ukui-light" && !isFullScreen)//反黑
                 pixmap=drawSymbolicBlackColoredPixmap(pixmap);
             else

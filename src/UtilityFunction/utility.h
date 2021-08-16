@@ -23,6 +23,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QScreen>
 #include <gio/gdesktopappinfo.h>
 #include "src/Interface/ukuimenuinterface.h"
 
@@ -42,6 +43,7 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
 void debugLog(QString strMsg);
 
 QVariantList getScreenGeometry();
+QRect getScreenAvailableGeometry();
 double getTransparency();
 QString getEnvOverriddenDesktopFile(int pid);
 //数据库操作

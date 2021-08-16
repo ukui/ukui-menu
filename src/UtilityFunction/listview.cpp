@@ -19,6 +19,7 @@
 #include "listview.h"
 #include "utility.h"
 #include <QDebug>
+#include <QDrag>
 
 ListView::ListView(QWidget *parent, int width, int height, int module):
     QListView(parent)
@@ -49,7 +50,8 @@ void ListView::initWidget()
     this->setViewMode(QListView::ListMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setFocusPolicy(Qt::StrongFocus);
-    this->setMovement(QListView::Static);
+    this->setMovement(QListView::Free);
+    this->setDragEnabled(QListView::Free);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setUpdatesEnabled(true);
     this->setSpacing(0);
@@ -149,6 +151,16 @@ void ListView::rightClickedSlot(const QPoint &pos)
     }
 }
 
+void ListView::dragMoveEvent(QDragMoveEvent *e)
+{
+    Q_UNUSED(e);
+}
+
+void ListView::dropEvent(QDropEvent *e)
+{
+    Q_UNUSED(e);
+}
+
 void ListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
@@ -179,6 +191,30 @@ void ListView::paintEvent(QPaintEvent *e)
     p.setColor(QPalette::Active,QPalette::Button,color);
     this->verticalScrollBar()->setPalette(p);
     QListView::paintEvent(e);
+}
+
+void ListView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    QVariant pressApp = listmodel->data(this->indexAt(startPos), Qt::DisplayRole);
+    QStringList m_desktopfp = pressApp.value<QStringList>();
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QFileInfo fileInfo(m_desktopfp.at(0));
+    QString desktopfn=fileInfo.fileName();
+    QFile file(m_desktopfp.at(0));
+    QString newname=QString(path+"/"+desktopfn);
+    bool ret=file.copy(QString(path+"/"+desktopfn));
+    if(ret)
+    {
+        char command[200];
+        sprintf(command,"chmod a+x %s",newname.toLocal8Bit().data());
+        QProcess::startDetached(QString::fromLocal8Bit(command));
+    }
+}
+
+void ListView::mousePressEvent(QMouseEvent *event)
+{
+    startPos = event->pos();
+    return QListView::mousePressEvent(event);
 }
 
 void ListView::keyPressEvent(QKeyEvent* e)

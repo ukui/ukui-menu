@@ -174,7 +174,7 @@ void Style::initWidStyle()
         RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
         LeftFontSize=fontSize;
         LeftLetterFontSize=14;
-        LeftIconSize=19;
+        LeftIconSize=17;
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=15;
@@ -220,7 +220,7 @@ void Style::initWidStyle()
         RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
         LeftFontSize=fontSize;
         LeftLetterFontSize=14;
-        LeftIconSize=19;
+        LeftIconSize=17;
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=15;
@@ -266,7 +266,7 @@ void Style::initWidStyle()
         RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
         LeftFontSize=fontSize;
         LeftLetterFontSize=11;
-        LeftIconSize=19;
+        LeftIconSize=17;
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=10;
@@ -312,7 +312,7 @@ void Style::initWidStyle()
         RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
         LeftFontSize=fontSize;
         LeftLetterFontSize=11;
-        LeftIconSize=19;
+        LeftIconSize=17;
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=10;
@@ -358,7 +358,7 @@ void Style::initWidStyle()
         RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
         LeftFontSize=fontSize;
         LeftLetterFontSize=11;
-        LeftIconSize=19;
+        LeftIconSize=17;
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=10;
@@ -404,7 +404,7 @@ void Style::initWidStyle()
         RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
         LeftFontSize=fontSize;
         LeftLetterFontSize=11;
-        LeftIconSize=19;
+        LeftIconSize=17;
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=10;
@@ -450,7 +450,7 @@ void Style::initWidStyle()
         RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
         LeftFontSize=fontSize;
         LeftLetterFontSize=11;
-        LeftIconSize=19;
+        LeftIconSize=17;
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=10;
@@ -496,7 +496,7 @@ void Style::initWidStyle()
         RightMargin=LeftWidWidth-LeftMargin-LeftBtnWidth;
         LeftFontSize=fontSize;
         LeftLetterFontSize=11;
-        LeftIconSize=19;
+        LeftIconSize=17;
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=10;
