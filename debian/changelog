@@ -1,8 +1,14 @@
-ukui-menu (3.0.2-1~0802) focal; urgency=medium
+ukui-menu (3.0.2-1) unstable; urgency=medium
 
-  * Fixed: no response on click the first application icon in ukui-menu
+  * New upstream release.
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Sun, 18 Jul 2021 10:27:02 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 16 Aug 2021 20:10:48 +0800
+
+ukui-menu (3.0.1.1-1) unstable; urgency=medium
+
+  *  New upstream bugfix release.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 22 Mar 2021 19:30:48 +0800
 
 ukui-menu (3.0.1-1) unstable; urgency=medium
 
