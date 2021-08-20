@@ -30,6 +30,9 @@
 
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
 
+bool isHuaWeiPC = false;
+bool isHuaWei9006C = false;
+
 const QPixmap loadSvg(const QString &fileName, const int size)
 {
     QPixmap pixmap(size, size);
