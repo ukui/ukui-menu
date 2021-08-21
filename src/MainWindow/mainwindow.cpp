@@ -484,7 +484,6 @@ void MainWindow::recvHideMainWindowSlot()
 void MainWindow::loadMainWindow()
 {
     cleanTimeoutApp();
-//    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     QRect availableGeometry = getScreenAvailableGeometry();
 
     int position=Style::panelPosition;
@@ -570,7 +569,7 @@ void MainWindow::primaryScreenChangeSlot()
 void MainWindow::repaintWidget()
 {
     Style::initWidStyle();
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect availableGeometry = getScreenAvailableGeometry();/*qApp->primaryScreen()->availableGeometry();*/
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
     m_mainViewWid->repaintWidget();
