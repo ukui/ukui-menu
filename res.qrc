@@ -81,8 +81,6 @@
         <file>data/img/mainviewwidget/Mobile-Disabled.svg</file>
         <file>data/img/mainviewwidget/Mobile-Enabled.svg</file>
         <file>data/img/mainviewwidget/Mobile-Normal.svg</file>
-        <file>src/SearchResultWidget/pinyinWithTone.txt</file>
-        <file>src/SearchResultWidget/pinyinWithoutTone.txt</file>
         <file>data/img/mainviewwidget/全屏 icon- 下拉.png</file>
         <file>data/img/mainviewwidget/全屏 icon- 下拉.svg</file>
         <file>data/img/mainviewwidget/全屏 icon- 下拉@2x.png</file>

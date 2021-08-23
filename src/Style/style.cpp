@@ -223,17 +223,17 @@ void Style::initWidStyle()
         LeftSpaceIconLeft=15;
         LeftSpaceIconText=14;
         LeftSpaceBetweenItem=15;
-        AppListWidWidth=1314;
+        AppListWidWidth=1330;
         AppListWidHeight=heightavailable-TopWidgetHeight;
         AppListFontSize=fontSize;
         AppListIconSize=86;
         AppListItemSizeWidth=150;
-        AppListGridSizeWidth=186;
+        AppListGridSizeWidth=220;
         AppLeftSpace=32;
         AppTopSpace=13;
         AppSpaceBetweenIconText=18;
 //        AppBottomSpace=27;
-        SliderSize=12;
+        SliderSize=0;
 
         SideBarWidWidth=round((widthavailable-1314)/2);
         SideBarMargin=20;

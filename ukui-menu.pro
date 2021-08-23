@@ -45,91 +45,84 @@ INSTALLS += qm_files
 DEFINES += QM_FILES_INSTALL_PATH='\\"$${QM_FILES_INSTALL_PATH}\\"'
 
 SOURCES += \
-    fullmainwindow.cpp \
-    getmodeldata.cpp \
-    src/CommonUseWidget/commonusewidget.cpp \
-    src/CommonUseWidget/fullcommonusewidget.cpp \
-    src/FunctionWidget/fullfunctionwidget.cpp \
-    src/FunctionWidget/functionbuttonwidget.cpp \
-    src/FunctionWidget/functionwidget.cpp \
-    src/LetterWidget/fullletterwidget.cpp \
-    src/LetterWidget/letterbuttonwidget.cpp \
-    src/LetterWidget/letterwidget.cpp \
-    src/MainViewWidget/directorychangedthread.cpp \
-    src/MainViewWidget/mainviewwidget.cpp \
-    src/MainWindow/mainwindow.cpp \
-    src/RightClickMenu/menubox.cpp \
-    src/RightClickMenu/rightclickmenu.cpp \
-    src/SearchResultWidget/file-utils.cpp \
-    src/SearchResultWidget/fullsearchresultwidget.cpp \
-    src/SearchResultWidget/searchappthread.cpp \
-    src/SearchResultWidget/searchresultwidget.cpp \
-    src/SideBarWidget/rightlistview.cpp \
-    src/SideBarWidget/sidebarwidget.cpp \
-    src/SideBarWidget/tabviewwidget.cpp \
-    src/Style/style.cpp \
-    src/UtilityFunction/classifybtnscrollarea.cpp \
-    src/UtilityFunction/fullitemdelegate.cpp \
-    src/UtilityFunction/fulllistview.cpp \
-    src/UtilityFunction/functionclassifybutton.cpp \
-    src/UtilityFunction/itemdelegate.cpp \
-    src/UtilityFunction/letterclassifybutton.cpp \
-    src/UtilityFunction/listview.cpp \
-    src/UtilityFunction/proxystyle.cpp \
-    src/UtilityFunction/recentitemdelegate.cpp \
-    src/UtilityFunction/rightitemdelegate.cpp \
-    src/UtilityFunction/scrollarea.cpp \
-    src/UtilityFunction/splitbarframe.cpp \
-    src/UtilityFunction/toolbutton.cpp \
+    main.cpp \
+    src/DBus/dbus-adaptor.cpp \
+    src/DBus/dbus.cpp \
+    src/DataProcess/getmodeldata.cpp \
+    src/FileWatcher/desktopwatcher.cpp \
+    src/FileWatcher/directorychangedthread.cpp \
     src/Interface/ukuichineseletter.cpp \
     src/Interface/ukuimenuinterface.cpp \
-    main.cpp \
+    src/ListView/fulllistview.cpp \
+    src/ListView/listview.cpp \
+    src/ListView/rightlistview.cpp \
+    src/RightClickMenu/menubox.cpp \
+    src/RightClickMenu/rightclickmenu.cpp \
+    src/Search/file-utils.cpp \
+    src/Search/fullsearchresultwidget.cpp \
+    src/Search/searchappthread.cpp \
+    src/Style/style.cpp \
+    src/UtilityFunction/proxystyle.cpp \
     src/UtilityFunction/utility.cpp \
-    src/DBus/dbus.cpp \
-    src/DBus/dbus-adaptor.cpp
+    src/ViewItem/fullitemdelegate.cpp \
+    src/ViewItem/itemdelegate.cpp \
+    src/ViewItem/recentitemdelegate.cpp \
+    src/ViewItem/rightitemdelegate.cpp \
+    src/Widget/classifybtnscrollarea.cpp \
+    src/Widget/fullcommonusewidget.cpp \
+    src/Widget/fullfunctionwidget.cpp \
+    src/Widget/fullletterwidget.cpp \
+    src/Widget/fullmainwindow.cpp \
+    src/Widget/functionbuttonwidget.cpp \
+    src/Widget/functionclassifybutton.cpp \
+    src/Widget/letterbuttonwidget.cpp \
+    src/Widget/letterclassifybutton.cpp \
+    src/Widget/mainviewwidget.cpp \
+    src/Widget/mainwindow.cpp \
+    src/Widget/scrollarea.cpp \
+    src/Widget/splitbarframe.cpp \
+    src/Widget/tabviewwidget.cpp \
+    src/Widget/toolbutton.cpp
+
 
 HEADERS  += \
-    fullmainwindow.h \
-    getmodeldata.h \
-    src/CommonUseWidget/commonusewidget.h \
-    src/CommonUseWidget/fullcommonusewidget.h \
-    src/FunctionWidget/fullfunctionwidget.h \
-    src/FunctionWidget/functionbuttonwidget.h \
-    src/FunctionWidget/functionwidget.h \
-    src/LetterWidget/fullletterwidget.h \
-    src/LetterWidget/letterbuttonwidget.h \
-    src/LetterWidget/letterwidget.h \
-    src/MainViewWidget/directorychangedthread.h \
-    src/MainViewWidget/mainviewwidget.h \
-    src/MainWindow/mainwindow.h \
-    src/RightClickMenu/menubox.h \
-    src/RightClickMenu/rightclickmenu.h \
-    src/SearchResultWidget/file-utils.h \
-    src/SearchResultWidget/fullsearchresultwidget.h \
-    src/SearchResultWidget/searchappthread.h \
-    src/SearchResultWidget/searchresultwidget.h \
-    src/SideBarWidget/rightlistview.h \
-    src/SideBarWidget/sidebarwidget.h \
-    src/SideBarWidget/tabviewwidget.h \
-    src/Style/style.h \
-    src/UtilityFunction/classifybtnscrollarea.h \
-    src/UtilityFunction/fullitemdelegate.h \
-    src/UtilityFunction/fulllistview.h \
-    src/UtilityFunction/functionclassifybutton.h \
-    src/UtilityFunction/itemdelegate.h \
-    src/UtilityFunction/letterclassifybutton.h \
-    src/UtilityFunction/listview.h \
-    src/UtilityFunction/proxystyle.h \
-    src/UtilityFunction/recentitemdelegate.h \
-    src/UtilityFunction/rightitemdelegate.h \
-    src/UtilityFunction/scrollarea.h \
-    src/UtilityFunction/splitbarframe.h \
-    src/UtilityFunction/toolbutton.h \
+    src/DBus/dbus-adaptor.h \
+    src/DBus/dbus.h \
+    src/DataProcess/getmodeldata.h \
+    src/FileWatcher/desktopwatcher.h \
+    src/FileWatcher/directorychangedthread.h \
     src/Interface/ukuichineseletter.h \
     src/Interface/ukuimenuinterface.h \
+    src/ListView/fulllistview.h \
+    src/ListView/listview.h \
+    src/ListView/rightlistview.h \
+    src/RightClickMenu/menubox.h \
+    src/RightClickMenu/rightclickmenu.h \
+    src/Search/file-utils.h \
+    src/Search/fullsearchresultwidget.h \
+    src/Search/searchappthread.h \
+    src/Style/style.h \
+    src/UtilityFunction/proxystyle.h \
     src/UtilityFunction/utility.h \
-    src/DBus/dbus.h \
-    src/DBus/dbus-adaptor.h
+    src/ViewItem/fullitemdelegate.h \
+    src/ViewItem/itemdelegate.h \
+    src/ViewItem/recentitemdelegate.h \
+    src/ViewItem/rightitemdelegate.h \
+    src/Widget/classifybtnscrollarea.h \
+    src/Widget/fullcommonusewidget.h \
+    src/Widget/fullfunctionwidget.h \
+    src/Widget/fullletterwidget.h \
+    src/Widget/fullmainwindow.h \
+    src/Widget/functionbuttonwidget.h \
+    src/Widget/functionclassifybutton.h \
+    src/Widget/letterbuttonwidget.h \
+    src/Widget/letterclassifybutton.h \
+    src/Widget/mainviewwidget.h \
+    src/Widget/mainwindow.h \
+    src/Widget/scrollarea.h \
+    src/Widget/splitbarframe.h \
+    src/Widget/tabviewwidget.h \
+    src/Widget/toolbutton.h
 
 RESOURCES += \
     res.qrc
@@ -147,3 +140,6 @@ INSTALLS += \
     target desktop_file
 
 FORMS +=
+
+DISTFILES += \
+    src/DBus/org.ukui.menu.xml

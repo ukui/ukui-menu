@@ -46,7 +46,7 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
-#include "src/MainWindow/mainwindow.h"
+#include "src/Widget/mainwindow.h"
 
 
 /*!

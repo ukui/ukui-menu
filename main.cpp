@@ -16,7 +16,7 @@
  *
  */
 
-#include "src/MainWindow/mainwindow.h"
+#include "src/Widget/mainwindow.h"
 #include <QtSingleApplication>
 #include <QDesktopWidget>
 #include <QFile>
@@ -28,13 +28,13 @@
 #include "src/UtilityFunction/proxystyle.h"
 #include <KWindowEffects>
 #include "src/UtilityFunction/utility.h"
-#include "src/SearchResultWidget/file-utils.h"
+#include "src/Search/file-utils.h"
 
 #include <ukui-log4qt.h>
 
 int main(int argc, char *argv[])
 {
- //   initUkuiLog4qt("ukui-menu");
+    initUkuiLog4qt("ukui-menu");
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
