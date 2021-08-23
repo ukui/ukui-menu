@@ -42,6 +42,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    getCurrentCPU();
     openDataBase("MainThread");
     m_ukuiMenuInterface=new UkuiMenuInterface;
     UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
@@ -52,8 +53,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Style::initWidStyle();
     initUi();
-
-
     m_dbus=new DBus;
     new MenuAdaptor(m_dbus);
     QDBusConnection con=QDBusConnection::sessionBus();
@@ -205,6 +204,26 @@ void MainWindow::initUi()
     }
 }
 
+void MainWindow::getCurrentCPU()
+{
+    QProcess *processCpuInfo = new QProcess(this);
+    processCpuInfo->start(QString("cat /proc/cpuinfo"));
+    connect(processCpuInfo,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,[=](){
+        processCpuInfo->deleteLater();
+    });
+    processCpuInfo->waitForFinished();
+    QString ctrCpuInfo = processCpuInfo->readAll();
+    if(ctrCpuInfo.indexOf("HUAWEI Kirin") != -1)
+    {
+        isHuaWeiPC = true;
+    }
+    if(ctrCpuInfo.indexOf("HUAWEI kirin 9006C") != -1)
+    {
+        isHuaWei9006C = true;
+    }
+}
+
+
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     double transparency=getTransparency();
@@ -327,11 +346,22 @@ void MainWindow::showFullScreenWidget()
     this->centralWidget()->layout()->removeWidget(m_sideBarWid);
     m_sideBarWid->setParent(nullptr);
 
-    m_animation->setDuration(100);//动画总时间
-    m_animation->setStartValue(startRect);
-    m_animation->setEndValue(endRect);
-    m_animation->setEasingCurve(QEasingCurve::Linear);
-    m_animation->start();
+    if(isHuaWei9006C || isHuaWeiPC)
+    {
+        QEventLoop loop;
+        QTimer::singleShot(10, &loop, SLOT(quit()));
+        loop.exec();
+        this->setGeometry(endRect);
+        animationValueFinishedSlot();
+    }
+    else
+    {
+        m_animation->setDuration(100);//动画总时间
+        m_animation->setStartValue(startRect);
+        m_animation->setEndValue(endRect);
+        m_animation->setEasingCurve(QEasingCurve::Linear);
+        m_animation->start();
+    }
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
@@ -384,11 +414,19 @@ void MainWindow::showDefaultWidget()
     this->centralWidget()->layout()->removeWidget(m_sideBarWid);
     m_sideBarWid->setParent(nullptr);
 
-    m_animation->setDuration(100);//动画总时间
-    m_animation->setStartValue(startRect);
-    m_animation->setEndValue(endRect);
-    m_animation->setEasingCurve(QEasingCurve::Linear);
-    m_animation->start();
+    if(isHuaWei9006C || isHuaWeiPC)
+    {
+        this->setGeometry(endRect);
+        animationValueFinishedSlot();
+    }
+    else
+    {
+        m_animation->setDuration(100);//动画总时间
+        m_animation->setStartValue(startRect);
+        m_animation->setEndValue(endRect);
+        m_animation->setEasingCurve(QEasingCurve::Linear);
+        m_animation->start();
+    }
 }
 
 void MainWindow::animationValueChangedSlot(const QVariant &value)

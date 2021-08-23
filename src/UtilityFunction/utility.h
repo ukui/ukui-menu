@@ -31,6 +31,9 @@
 #define DBUS_PATH       "/panel/position"
 #define DBUS_INTERFACE  "org.ukui.panel"
 
+extern bool isHuaWeiPC;
+extern bool isHuaWei9006C;
+
 const QPixmap loadSvg(const QString &fileName, const int size);
 
 //图片反白

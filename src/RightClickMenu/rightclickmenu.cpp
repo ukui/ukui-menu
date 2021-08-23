@@ -44,6 +44,12 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     m_whiteList.append("peony.desktop");
     m_whiteList.append("engrampa.desktop");
 
+    if(isHuaWei9006C || isHuaWeiPC)
+    {
+        m_whiteList.append("mate-terminal.desktop");
+        m_whiteList.append("hwaudioui.desktop");
+    }
+
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
 }

@@ -56,6 +56,7 @@ public:
      * @brief Load the main window
      */
     void loadMainWindow();
+    void getCurrentCPU();
 
 private:
 

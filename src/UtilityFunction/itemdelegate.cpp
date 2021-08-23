@@ -102,6 +102,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                             icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
                         else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg")))
                             icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
+                        else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm")))
+                            icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm"));
                         else
                             icon=QIcon::fromTheme(QString("application-x-desktop"));
                     }
@@ -179,6 +181,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                         icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
                     else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg")))
                         icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
+                    else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm")))
+                        icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm"));
                     else
                         icon=QIcon::fromTheme(QString("application-x-desktop"));
                 }
