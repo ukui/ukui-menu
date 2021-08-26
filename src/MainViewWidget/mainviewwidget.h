@@ -97,6 +97,7 @@ private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
     QWidget *m_topWidget=nullptr;
     QHBoxLayout *m_topLayout=nullptr;
+    QHBoxLayout *m_queryLineLayout=nullptr;
 
     QWidget *m_contentWid=nullptr;
 

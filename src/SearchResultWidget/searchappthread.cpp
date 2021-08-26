@@ -35,6 +35,9 @@ void SearchAppThread::run()
     m_appInfoVector.clear();
     m_appInfoVector=UkuiMenuInterface::appInfoVector;
     m_searchResultVector.clear();
+    m_searchFirstVector.clear();
+    m_searchRestVector.clear();
+
     if(!this->m_keyWord.isEmpty())
     {
         QString str=m_ukuiMenuInterface->getAppNamePinyin(m_keyWord);
@@ -77,48 +80,63 @@ void SearchAppThread::run()
 //            }
 //        }
 //        else
+        //{
+        while(index<m_appInfoVector.size())
         {
-            while(index<m_appInfoVector.size())
+            // QString appNamePy=m_ukuiMenuInterface->getAppNamePinyin(m_appInfoVector.at(index).at(1));
+            QStringList appNameLs;
+            QStringList appNameFls;
+            QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords(m_appInfoVector.at(index).at(1));
+            // QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords("奇安信可信");
+            for(int i = 0; i < appNamePyLst.size()/2; i++)
             {
-               // QString appNamePy=m_ukuiMenuInterface->getAppNamePinyin(m_appInfoVector.at(index).at(1));
-                QStringList appNameLs;
-                QStringList appNameFls;
-                QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords(m_appInfoVector.at(index).at(1));
-               // QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords("奇安信可信");
-                for(int i = 0; i < appNamePyLst.size()/2; i++)
-                {
-                   appNameLs.append(appNamePyLst.at(i * 2));
-                   appNameFls.append(appNamePyLst.at(i * 2 + 1));
-                }
+                appNameLs.append(appNamePyLst.at(i * 2));
+                appNameFls.append(appNamePyLst.at(i * 2 + 1));
+            }
 
-                QString appName = m_appInfoVector.at(index).at(1);
-                QString appEnglishName=m_appInfoVector.at(index).at(2);
-                //QString appNameFls=m_appInfoVector.at(index).at(4);
+            QString appName = m_appInfoVector.at(index).at(1);
+            QString appEnglishName=m_appInfoVector.at(index).at(2);
+            //QString appNameFls=m_appInfoVector.at(index).at(4);
 
-                if(m_keyWord.contains(QRegExp("[\\x4e00-\\x9fa5]+")))//中文正则表达式
+            if(m_keyWord.contains(QRegExp("[\\x4e00-\\x9fa5]+")))//中文正则表达式
+            {
+                if(appName.toUpper().contains(m_keyWord.toUpper()))
+                    m_searchResultVector.append(m_appInfoVector.at(index));
+            }
+            else
+            {
+                for (int var = 0; var < appNameLs.size(); ++var)
                 {
-                    if(appName.toUpper().contains(m_keyWord.toUpper()))
-                        m_searchResultVector.append(m_appInfoVector.at(index));
-                }
-                else
-                {
-                    for (int var = 0; var < appNameLs.size(); ++var)
+                    if(appNameLs[var].left(str.length()).contains(str,Qt::CaseInsensitive) ||
+                            appNameFls[var].left(str.length()).contains(str,Qt::CaseInsensitive))
                     {
-                        if(appNameLs[var].contains(str,Qt::CaseInsensitive) ||
-                                appNameFls[var].contains(str,Qt::CaseInsensitive) ||
-                                appEnglishName.contains(str,Qt::CaseInsensitive))
-                        {
-                            m_searchResultVector.append(m_appInfoVector.at(index));
-                            break;
-                        }
+                        m_searchFirstVector.append(m_appInfoVector.at(index));
+                        break;
+                    }
+                    else if(appNameLs[var].contains(str,Qt::CaseInsensitive) ||
+                            appNameFls[var].contains(str,Qt::CaseInsensitive) ||
+                            appEnglishName.contains(str,Qt::CaseInsensitive))
+                    {
+                        m_searchRestVector.append(m_appInfoVector.at(index));
+                        break;
                     }
                 }
-                index++;
             }
+            index++;
+            //}
         }
     }
-
-    qSort(m_searchResultVector.begin(),m_searchResultVector.end(),UkuiMenuInterface::cmpApp);
+    qSort(m_searchFirstVector.begin(),m_searchFirstVector.end(),UkuiMenuInterface::cmpApp);
+    qSort(m_searchRestVector.begin(),m_searchRestVector.end(),UkuiMenuInterface::cmpApp);
+    if(m_searchResultVector.size() != 0){
+         qSort(m_searchResultVector.begin(),m_searchResultVector.end(),UkuiMenuInterface::cmpApp);
+    }
+    for(int i = 0; i < m_searchFirstVector.size(); i++){
+        m_searchResultVector.append(m_searchFirstVector.at(i));
+    }
+    for(int i = 0; i < m_searchRestVector.size(); i++){
+        m_searchResultVector.append(m_searchRestVector.at(i));
+    }
     Q_EMIT sendSearchResult(m_searchResultVector);
 }
 
