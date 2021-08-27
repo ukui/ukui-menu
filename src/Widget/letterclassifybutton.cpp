@@ -76,10 +76,10 @@ void LetterClassifyButton::paintEvent(QPaintEvent* e)
 
     QStyleOptionButton subopt = option;
     subopt.rect = painter.style()->subElementRect(QStyle::SE_PushButtonContents, &option, this);
-    if(m_fullscreen)
-        subopt.palette.setBrush(QPalette::ButtonText, QColor(Qt::white));
-    else
-        subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
+//    if(m_fullscreen)
+//        subopt.palette.setBrush(QPalette::ButtonText, QColor(Qt::white));
+//    else
+//        subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
     painter.style()->drawControl(QStyle::CE_PushButtonLabel, &subopt, &painter, this);
     return;
 }
@@ -89,10 +89,16 @@ void LetterClassifyButton::enterEvent(QEvent *e)
     Q_UNUSED(e);
     if(m_fullscreen)
     {
-        QFont font;
-        font.setPixelSize(Style::LeftLetterFontSize*3);
-        this->setFont(font);
-        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+//        QFont font;
+//        font.setPixelSize(Style::LeftLetterFontSize*3);
+//        this->setFont(font);
+//        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+        tooltip  = new LetterToolTip();
+        QPoint oPoint = this->mapToGlobal(QPoint(this->rect().x() + 35 , this->rect().y() - 10));
+        tooltip->setText(this->text());
+        tooltip->raise();
+        tooltip->move(oPoint);
+        tooltip->show();
     }
 }
 
@@ -105,6 +111,9 @@ void LetterClassifyButton::leaveEvent(QEvent *e)
         font.setPixelSize(Style::LeftLetterFontSize);
         this->setFont(font);
         this->setFixedSize(Style::LeftLetterBtnHeight,Style::LeftLetterBtnHeight);
+        tooltip->close();
+        delete tooltip;
+        tooltip = nullptr;
     }
 }
 
@@ -113,10 +122,10 @@ void LetterClassifyButton::mousePressEvent(QMouseEvent *event)
     Q_UNUSED(event);
     if(m_fullscreen)
     {
-        QFont font;
-        font.setPixelSize(Style::LeftLetterFontSize*3);
-        this->setFont(font);
-        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+//        QFont font;
+//        font.setPixelSize(Style::LeftLetterFontSize*3);
+//        this->setFont(font);
+//        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
         is_pressed=true;
     }
 }
@@ -138,10 +147,10 @@ void LetterClassifyButton::mouseReleaseEvent(QMouseEvent *event)
     Q_UNUSED(event);
     if(m_fullscreen)
     {
-        QFont font;
-        font.setPixelSize(Style::LeftLetterFontSize*3);
-        this->setFont(font);
-        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+//        QFont font;
+//        font.setPixelSize(Style::LeftLetterFontSize*3);
+//        this->setFont(font);
+//        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
     }
     Q_EMIT buttonClicked(this);
 }

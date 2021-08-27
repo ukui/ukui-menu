@@ -39,7 +39,7 @@ void FullCommonUseWidget::initUi()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    this->setFixedSize(/*Style::MainViewWidWidth*/1860,
+    this->setFixedSize(/*Style::MainViewWidWidth*/1855,
                        Style::AppListWidHeight);
     this->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* mainLayout=new QHBoxLayout(this);
@@ -50,7 +50,7 @@ void FullCommonUseWidget::initUi()
     m_scrollArea=new ScrollArea();
     m_scrollAreaWid=new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
-    m_scrollArea->setFixedSize(Style::AppListWidWidth,/*this->height()*/880);
+    m_scrollArea->setFixedSize(/*Style::AppListWidWidth*/1325,/*this->height()*/880);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
 //    m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -91,7 +91,7 @@ void FullCommonUseWidget::initUi()
                                      );
     mainLayout->addWidget(m_scrollArea);
     QSpacerItem *m_spaceItem1=nullptr;
-    m_spaceItem1=new QSpacerItem(20,10,QSizePolicy::Expanding,QSizePolicy::Minimum);
+    m_spaceItem1=new QSpacerItem(30,10,QSizePolicy::Expanding,QSizePolicy::Minimum);
     mainLayout->addItem(m_spaceItem1);
     mainLayout->addWidget(verticalScrollBar);
 
@@ -122,7 +122,7 @@ void FullCommonUseWidget::initAppListWidget()
 //    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
 //    mainLayout->insertWidget(1,m_listView);
     m_scrollAreaWidLayout->addWidget(m_listView);
-    m_listView->setFixedWidth(1340);
+//    m_listView->setFixedWidth(1340);
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
@@ -179,8 +179,10 @@ void FullCommonUseWidget::selectFirstItem()
 
 void FullCommonUseWidget::on_setScrollBarValue(int value)
 {
-    verticalScrollBar->setMaximum(/*m_scrollArea->verticalScrollBar()->maximum()*/m_scrollAreaWidHeight - 880);
+    disconnect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);
+    verticalScrollBar->setMaximum(m_scrollAreaWidHeight - 880);
     verticalScrollBar->setValue(value);
+    connect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);
 }
 
 void FullCommonUseWidget::selectFirstItemTab()
@@ -194,7 +196,9 @@ void FullCommonUseWidget::selectFirstItemTab()
 
 void FullCommonUseWidget::on_setAreaScrollBarValue(int value)
 {
+    disconnect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setScrollBarValue);
     m_scrollArea->verticalScrollBar()->setValue(value);
+    connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setScrollBarValue);
 }
 /**
  * 更新应用列表
@@ -214,9 +218,9 @@ void FullCommonUseWidget::updateListView()
 
 void FullCommonUseWidget::repaintWidget()
 {
-    this->setFixedSize(/*Style::MainViewWidWidth*/1860,
+    this->setFixedSize(/*Style::MainViewWidWidth*/1855,
                        Style::AppListWidHeight);
-    m_scrollArea->setFixedSize(/*Style::AppListWidWidth*/1340,this->height());
+    m_scrollArea->setFixedSize(/*Style::AppListWidWidth*/1325,this->height());
     m_scrollAreaWidLayout->removeWidget(m_listView);
     m_listView->setParent(nullptr);
     delete m_listView;

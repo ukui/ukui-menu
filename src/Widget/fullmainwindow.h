@@ -9,6 +9,8 @@
 #include "fullcommonusewidget.h"
 #include "fullfunctionwidget.h"
 #include "fullletterwidget.h"
+#include "src/Search/searchappthread.h"
+#include "fullsearchresultwidget.h"
 
 class FullMainWindow : public QMainWindow
 {
@@ -23,6 +25,7 @@ public:
 Q_SIGNALS:
 
     void showNormalWindow();
+    void sendSearchKeyword(QString arg);
 
 private Q_SLOTS:
 
@@ -30,10 +33,13 @@ private Q_SLOTS:
     void on_fullSelectToolButton_clicked();
     void on_fullSelectMenuButton_triggered(QAction *arg1);
     void on_setScrollBarValue(int value, int maximumValue);
+    void searchAppSlot(QString arg);
+    void recvSearchResult(QVector<QStringList> arg);
 
 protected:
     void paintEvent(QPaintEvent *event);
     bool event ( QEvent * event);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     QAction *m_allAction = nullptr;
@@ -56,6 +62,13 @@ private:
     FullCommonUseWidget *fullCommonPage;
     FullLetterWidget *fullLetterPage;
     FullFunctionWidget *fullFunctionPage;
+    FullSearchResultWidget *fullResultPage;
+
+    SearchAppThread *m_searchAppThread=nullptr;
+    int m_state = 0;
+    QWidget* m_queryWid = nullptr;
+    QLabel *m_queryIcon = nullptr;
+    QLabel *m_queryText = nullptr;
 };
 
 #endif // FULLMAINWINDOW_H

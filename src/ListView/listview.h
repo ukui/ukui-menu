@@ -71,6 +71,7 @@ Q_SIGNALS:
     void sendUpdateAppListSignal();
     void sendMainWinActiveSignal(bool flag);
     void sendUpdateCollectSignal();
+    void sendAppClassificationBtnClicked();
 };
 
 #endif // LISTVIEW_H

@@ -132,5 +132,7 @@
         <file>data/img/mainviewwidget/DM-icon-search.png</file>
         <file>data/img/mainviewwidget/DM-icon-search.svg</file>
         <file>data/img/mainviewwidget/DM-icon-search@2x.png</file>
+        <file>src/Search/pinyinWithTone.txt</file>
+        <file>src/Search/pinyinWithoutTone.txt</file>
     </qresource>
 </RCC>

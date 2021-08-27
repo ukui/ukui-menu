@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     else
         qDebug() << "Load translations file" << QLocale() << "failed!";
 
-    Zeeker::FileUtils::loadHanziTable(":/src/SearchResultWidget/pinyinWithoutTone.txt");
+    Zeeker::FileUtils::loadHanziTable(":/src/Search/pinyinWithoutTone.txt");
     MainWindow w;
     app.setActivationWindow(&w);
 

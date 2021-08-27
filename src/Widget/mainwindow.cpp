@@ -92,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
     icon3.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon- arrow.svg"), QSize(), QIcon::Normal, QIcon::Off);
     selectMenuButton->setIcon(icon3);
     selectMenuButton->setPopupMode(QToolButton::InstantPopup);
+//    selectMenuButton->setStyleSheet(QString::fromUtf8("QToolButton::menu-indicator { image: None; }"));
 
     //搜索框展开页
     minSearchPage = new QWidget();
@@ -100,14 +101,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     lineEdit = new QLineEdit(minSearchPage);
     lineEdit->setMinimumSize(QSize(30, 26));
-    lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 12px;/*\350\256\276\347\275\256\345\234\206\350\247\222\347\232\204\345\244\247\345\260\217*/"));
+    lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 12px;"));
     lineEdit->setFrame(false);
-
+    lineEdit->setPlaceholderText("搜索应用");
 
     cancelSearchPushButton = new QPushButton(minSearchPage);
     cancelSearchPushButton->setFixedSize(QSize(26, 26));
-    cancelSearchPushButton->setStyleSheet(QString::fromUtf8("border-radius: 10px;/*\350\256\276\347\275\256\345\234\206\350\247\222\347\232\204\345\244\247\345\260\217*/\n"
-"background-color: darkgray;"));
+    cancelSearchPushButton->setStyleSheet(QString::fromUtf8("border-radius: 10px;"
+                                                            "background-color: darkgray;"));
     QIcon icon4;
     icon4.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-\345\205\263\351\227\255.png"), QSize(), QIcon::Normal, QIcon::Off);
     cancelSearchPushButton->setIcon(icon4);
@@ -275,6 +276,20 @@ MainWindow::MainWindow(QWidget *parent) :
     rightStackedWidget->setCurrentIndex(0);
 
     initUi();
+
+    m_functionBtnWid = new FunctionButtonWidget(minFuncPage);
+    m_functionBtnWid->hide();
+    m_enterAnimation=new QPropertyAnimation;
+    m_enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
+    m_leaveAnimation=new QPropertyAnimation;
+    m_leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
+
+    connect(this,&MainWindow::sendClassificationbtnList,m_functionBtnWid,&FunctionButtonWidget::recvClassificationBtnList);
+ //   connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&FunctionWidget::recvFunctionBtnSignal);
+    connect(minFuncListView, &ListView::sendAppClassificationBtnClicked, this, &MainWindow::appClassificationBtnClickedSlot);
+    connect(m_leaveAnimation,&QPropertyAnimation::finished,this,&MainWindow::animationFinishedSLot);
+    connect(m_enterAnimation,&QPropertyAnimation::finished,this,&MainWindow::animationFinishedSLot);
+    connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&MainWindow::recvFunctionBtnSignal);
     m_searchAppThread=new SearchAppThread;
     m_dbus=new DBus;
     new MenuAdaptor(m_dbus);
@@ -315,11 +330,27 @@ MainWindow::MainWindow(QWidget *parent) :
         if(this->isVisible())
         {
             this->hide();
+            m_isFullScreen = false;
         }
-        else{
-            this->show();
-            this->raise();
-            this->activateWindow();
+        else if(fullWindow->isVisible())
+        {
+            fullWindow->hide();
+            m_isFullScreen = true;
+        }
+        else
+        {
+            if(!m_isFullScreen)
+            {
+                this->show();
+                this->raise();
+                this->activateWindow();
+            }
+            else
+            {
+                fullWindow->show();
+//                fullWindow->raise();
+                fullWindow->activateWindow();
+            }
         }
     });
 
@@ -330,6 +361,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(minSelectButton,&QToolButton::clicked,this,&MainWindow::on_minSelectButton_clicked);
     connect(selectMenuButton,&QToolButton::triggered,this,&MainWindow::on_selectMenuButton_triggered);
     connect(powerOffButton,&QPushButton::customContextMenuRequested,this,&MainWindow::on_powerOffButton_customContextMenuRequested);
+    connect(powerOffButton,&QPushButton::clicked,this,&MainWindow::on_powerOffButton_clicked);
     connect(collectPushButton,&QPushButton::clicked,this,&MainWindow::on_collectPushButton_clicked);
     connect(recentPushButton,&QPushButton::clicked,this,&MainWindow::on_recentPushButton_clicked);
     connect(cancelSearchPushButton,&QPushButton::clicked,this,&MainWindow::on_cancelSearchPushButton_clicked);
@@ -423,15 +455,14 @@ void MainWindow::paintEvent(QPaintEvent *event)
  */
 bool MainWindow::event ( QEvent * event )
 {
-   if (event->type() == QEvent::ActivationChange)
-  // if(QEvent::WindowDeactivate == event->type() && m_canHide)//窗口停用
+//   if (event->type() == QEvent::ActivationChange && m_canHide)
+   if(QEvent::WindowDeactivate == event->type() && m_canHide)//窗口停用
    {
-       qDebug() << " * 鼠标点击窗口外部事件";
-        if(QApplication::activeWindow() != this)
-        {
-            this->hide();
-           //m_mainViewWid->widgetMakeZero();
-        }
+       if(QApplication::activeWindow() != this)
+       {
+           qDebug() << " * 鼠标点击窗口外部事件";
+           this->hide();
+       }
    }
 
    if (event->type() == QEvent::KeyPress)
@@ -453,6 +484,67 @@ bool MainWindow::event ( QEvent * event )
        }
    }
    return QWidget::event(event);
+}
+
+/**
+ * 接收FunctionButtonWidget界面按钮信号
+ */
+void MainWindow::recvFunctionBtnSignal(QString btnname)
+{
+    //此处需实现将功能为btnname的应用列表移动到applistWid界面最顶端
+    int index = modaldata->getClassificationList().indexOf(btnname);
+    if(index!=-1)
+    {
+        int row = modaldata->getClassificationBtnRowList().at(index).toInt();
+        minFuncListView->verticalScrollBar()->setValue(row);
+    }
+
+    m_leaveAnimation->setStartValue(QRect(0, 0, minFuncPage->width(), minFuncPage->height()));
+    m_leaveAnimation->setEndValue(QRect(0, 0, 0, 0));
+    m_enterAnimation->setStartValue(QRect(0,0,0,0));
+    m_enterAnimation->setEndValue(QRect(0,0,minFuncPage->width(),minFuncPage->height()));
+    m_leaveAnimation->setDuration(10);
+    m_enterAnimation->setDuration(100);
+
+    m_leaveAnimation->setTargetObject(m_functionBtnWid);
+    m_enterAnimation->setTargetObject(minFuncListView);
+    m_leaveAnimation->start();
+    m_widgetState=0;
+}
+
+void MainWindow::appClassificationBtnClickedSlot()
+{
+    m_leaveAnimation->setStartValue(QRect(0,0,minFuncPage->width(),minFuncPage->height()));
+    m_leaveAnimation->setEndValue(QRect(0,0,0,0));
+    m_enterAnimation->setStartValue(QRect(-40,-40,minFuncPage->width()+80,minFuncPage->height()+80));
+    m_enterAnimation->setEndValue(QRect(10, 0, minFuncPage->width() - 20, minFuncPage->height() - 60));
+    m_leaveAnimation->setDuration(10);
+    m_enterAnimation->setDuration(100);
+
+    //加载FunctionButtonWidget界面
+    Q_EMIT sendClassificationbtnList();
+    m_leaveAnimation->setTargetObject(minFuncListView);
+    m_enterAnimation->setTargetObject(m_functionBtnWid);
+    m_leaveAnimation->start();
+    m_widgetState=1;
+}
+
+void MainWindow::animationFinishedSLot()
+{
+    if(m_widgetState==1)
+    {
+        minFuncListView->hide();
+        m_enterAnimation->start();
+        m_widgetState=-1;
+        m_functionBtnWid->show();
+    }
+    if(m_widgetState==0)
+    {
+        m_functionBtnWid->hide();
+        m_enterAnimation->start();
+        m_widgetState=-1;
+        minFuncListView->show();
+    }
 }
 
 void MainWindow::on_minSelectButton_clicked()
@@ -610,16 +702,64 @@ void MainWindow::on_searchPushButton_clicked()
 
 void MainWindow::on_minMaxChangeButton_clicked()
 {
-//    this->setGeometry(0,0,1920,1080);
-//    this->setFixedSize(1920,1080);
+    m_canHide = false;
     this->hide();
-    fullWindow->show();
+    QEventLoop loop;
+    QTimer::singleShot(10, &loop, SLOT(quit()));
+    loop.exec();
+    fullWindow->raise();
+    fullWindow->showNormal();
+    fullWindow->activateWindow();
+    m_canHide = true;
+    m_isFullScreen = true;
+}
+
+void MainWindow::showWindow()
+{
+    if(m_isFullScreen)
+    {
+        fullWindow->raise();
+        fullWindow->showNormal();
+        fullWindow->activateWindow();
+    }
+    else
+    {
+        this->raise();
+        this->showNormal();
+        this->activateWindow();
+    }
+}
+
+void MainWindow::hideWindow()
+{
+    if(fullWindow->isVisible())
+    {
+        fullWindow->hide();
+        m_isFullScreen = true;
+    }
+    else
+    {
+        this->hide();
+        m_isFullScreen = false;
+    }
 }
 
 void MainWindow::showNormalWindow()
 {
+    m_canHide = false;
+    QEventLoop loop;
+    QTimer::singleShot(10, &loop, SLOT(quit()));
+    loop.exec();
     this->show();
+    this->raise();
     this->activateWindow();
+    m_isFullScreen = false;
+    m_canHide = true;
+}
+
+void MainWindow::on_powerOffButton_clicked()
+{
+    QProcess::startDetached(QString("ukui-session-tools"));
 }
 
 void MainWindow::on_powerOffButton_customContextMenuRequested(const QPoint &pos)

@@ -4,6 +4,8 @@
 
 class GetModelData : public QObject
 {
+    Q_OBJECT
+
 public:
     GetModelData();
 
@@ -12,6 +14,9 @@ public:
     QVector<QStringList> getMinLetterData();
     QVector<QStringList> getMinFuncData();
     QVector<QString> getcollectData();
+    QStringList getClassificationList();
+    QStringList getClassificationBtnRowList();
+
     void loadDesktopVercor();
 
 protected:

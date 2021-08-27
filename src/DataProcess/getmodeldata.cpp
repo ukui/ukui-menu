@@ -39,6 +39,16 @@ QVector<QString> GetModelData::getcollectData()
     return m_collectData;
 }
 
+QStringList GetModelData::getClassificationList()
+{
+    return m_classificationList;
+}
+
+QStringList GetModelData::getClassificationBtnRowList()
+{
+    return m_classificationBtnRowList;
+}
+
 QVector<QStringList> GetModelData::getMinLetterData()
 {
     m_minLetterData.clear();

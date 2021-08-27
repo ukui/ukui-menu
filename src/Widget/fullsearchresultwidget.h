@@ -30,7 +30,7 @@
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/ListView/fulllistview.h"
 #include "src/Style/style.h"
-#include "src/Widget/scrollarea.h"
+#include "scrollarea.h"
 
 class FullSearchResultWidget : public QWidget
 {

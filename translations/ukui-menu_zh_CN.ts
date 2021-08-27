@@ -2,59 +2,82 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>FullMainWindow</name>
+    <message>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="73"/>
+        <source>Search</source>
+        <translation>搜索应用</translation>
+    </message>
+    <message>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="138"/>
+        <source>All</source>
+        <translation>所有软件</translation>
+    </message>
+    <message>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="140"/>
+        <source>Letter</source>
+        <translation>字母排序</translation>
+    </message>
+    <message>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="142"/>
+        <source>Function</source>
+        <translation>功能分类</translation>
+    </message>
+</context>
+<context>
     <name>FunctionClassifyButton</name>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="268"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="268"/>
         <source>Mobile</source>
         <translation>移动</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="271"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="271"/>
         <source>Internet</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="274"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="274"/>
         <source>Social</source>
         <translation>社交</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="277"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="277"/>
         <source>Video</source>
         <translation>影音</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="280"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="280"/>
         <source>Development</source>
         <translation>开发</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="283"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="283"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="286"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="286"/>
         <source>Game</source>
         <translation>游戏</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="289"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="289"/>
         <source>Office</source>
         <translation>办公</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="292"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="292"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="295"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="295"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/functionclassifybutton.cpp" line="298"/>
+        <location filename="../src/Widget/functionclassifybutton.cpp" line="298"/>
         <source>Others</source>
         <translation>其它</translation>
     </message>
@@ -62,54 +85,44 @@
 <context>
     <name>FunctionWidget</name>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="87"/>
         <source>Mobile</source>
-        <translation>移动</translation>
+        <translation type="vanished">移动</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="93"/>
         <source>Internet</source>
-        <translation>网络</translation>
+        <translation type="vanished">网络</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="99"/>
         <source>Social</source>
-        <translation>社交</translation>
+        <translation type="vanished">社交</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="105"/>
         <source>Video</source>
-        <translation>影音</translation>
+        <translation type="vanished">影音</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="111"/>
         <source>Development</source>
-        <translation>开发</translation>
+        <translation type="vanished">开发</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="117"/>
         <source>Image</source>
-        <translation>图像</translation>
+        <translation type="vanished">图像</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="123"/>
         <source>Game</source>
-        <translation>游戏</translation>
+        <translation type="vanished">游戏</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="129"/>
         <source>Office</source>
-        <translation>办公</translation>
+        <translation type="vanished">办公</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="135"/>
         <source>Education</source>
-        <translation>教育</translation>
+        <translation type="vanished">教育</translation>
     </message>
     <message>
-        <location filename="../src/FunctionWidget/functionwidget.cpp" line="142"/>
         <source>System</source>
-        <translation>系统</translation>
+        <translation type="vanished">系统</translation>
     </message>
     <message>
         <source>Others</source>
@@ -119,57 +132,57 @@
 <context>
     <name>GetModelData</name>
     <message>
-        <location filename="../getmodeldata.cpp" line="82"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="92"/>
         <source>Mobile</source>
         <translation>移动</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="88"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="98"/>
         <source>Internet</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="94"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="104"/>
         <source>Social</source>
         <translation>社交</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="100"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="110"/>
         <source>Video</source>
         <translation>影音</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="106"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="116"/>
         <source>Development</source>
         <translation>开发</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="112"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="122"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="118"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="128"/>
         <source>Game</source>
         <translation>游戏</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="124"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="134"/>
         <source>Office</source>
         <translation>办公</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="130"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="140"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="137"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="147"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../getmodeldata.cpp" line="143"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="153"/>
         <source>Others</source>
         <translation>其它</translation>
     </message>
@@ -177,19 +190,16 @@
 <context>
     <name>MainViewWidget</name>
     <message>
-        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="760"/>
         <source>All</source>
-        <translation>所有软件</translation>
+        <translation type="vanished">所有软件</translation>
     </message>
     <message>
-        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="786"/>
         <source>Letter</source>
-        <translation>字母排序</translation>
+        <translation type="vanished">字母排序</translation>
     </message>
     <message>
-        <location filename="../src/MainViewWidget/mainviewwidget.cpp" line="810"/>
         <source>Function</source>
-        <translation>功能分类</translation>
+        <translation type="vanished">功能分类</translation>
     </message>
     <message>
         <source>Search</source>
@@ -199,50 +209,46 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.ui" line="26"/>
-        <source>MainWindow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="152"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="201"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="263"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="510"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="266"/>
         <source>collection</source>
         <translation>收藏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="532"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="267"/>
         <source>recent</source>
         <translation>最近</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="750"/>
-        <source>&quot;&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow/mainwindow.cpp" line="115"/>
-        <location filename="../src/MainWindow/mainwindow.cpp" line="243"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="261"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="396"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="628"/>
         <source>All</source>
         <translation>所有软件</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow/mainwindow.cpp" line="117"/>
-        <location filename="../src/MainWindow/mainwindow.cpp" line="252"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="268"/>
+        <source>Max</source>
+        <translation>放大</translation>
+    </message>
+    <message>
+        <location filename="../src/Widget/mainwindow.cpp" line="270"/>
+        <source>PowerOff</source>
+        <translation>关机</translation>
+    </message>
+    <message>
+        <location filename="../src/Widget/mainwindow.cpp" line="398"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="638"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow/mainwindow.cpp" line="119"/>
-        <location filename="../src/MainWindow/mainwindow.cpp" line="261"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="400"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="648"/>
         <source>Function</source>
         <translation>功能分类</translation>
     </message>
@@ -297,42 +303,42 @@
 <context>
     <name>RightClickMenu</name>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="235"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="236"/>
         <source>Pin to all</source>
         <translation>固定到“所有软件”</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="238"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="239"/>
         <source>Unpin from all</source>
         <translation>从“所有软件”取消固定</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="247"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="248"/>
         <source>Pin to taskbar</source>
         <translation>固定到任务栏</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="250"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="251"/>
         <source>Unpin from taskbar</source>
         <translation>从任务栏取消固定</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="253"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="254"/>
         <source>Add to desktop shortcuts</source>
         <translation>添加到桌面快捷方式</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="258"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="259"/>
         <source>Pin to collection</source>
         <translation>固定到“收藏”</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="263"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="264"/>
         <source>Remove from collection</source>
         <translation>从收藏移除</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="274"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="275"/>
         <source>Uninstall</source>
         <translation>卸载</translation>
     </message>
@@ -341,7 +347,7 @@
         <translation type="vanished">休眠</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="291"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="292"/>
         <source>Sleep</source>
         <translation>睡眠</translation>
     </message>
@@ -354,22 +360,22 @@
         <translation type="vanished">切换用户</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="293"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="294"/>
         <source>Log Out</source>
         <translation>注销</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="295"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="296"/>
         <source>Restart</source>
         <translation>重启</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="297"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="298"/>
         <source>Power Off</source>
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="327"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="328"/>
         <source>Personalize this list</source>
         <translation>设置开始菜单显示列表</translation>
     </message>
@@ -377,109 +383,100 @@
 <context>
     <name>SideBarWidget</name>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="144"/>
         <source>All</source>
-        <translation>所有软件</translation>
+        <translation type="vanished">所有软件</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="146"/>
         <source>Letter</source>
-        <translation>字母排序</translation>
+        <translation type="vanished">字母排序</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="148"/>
         <source>Function</source>
-        <translation>功能分类</translation>
+        <translation type="vanished">功能分类</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="162"/>
         <source>Trash</source>
-        <translation>回收站</translation>
+        <translation type="vanished">回收站</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="164"/>
         <source>Computer</source>
-        <translation>计算机</translation>
+        <translation type="vanished">计算机</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="524"/>
         <source>Max</source>
-        <translation>放大</translation>
+        <translation type="vanished">放大</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="160"/>
         <source>Personal</source>
-        <translation>个人</translation>
+        <translation type="vanished">个人</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="166"/>
         <source>Settings</source>
-        <translation>设置</translation>
+        <translation type="vanished">设置</translation>
     </message>
     <message>
         <source>Recycle Bin</source>
         <translation type="vanished">回收站</translation>
     </message>
     <message>
-        <location filename="../src/SideBarWidget/sidebarwidget.cpp" line="168"/>
         <source>Power</source>
-        <translation>电源</translation>
+        <translation type="vanished">电源</translation>
     </message>
 </context>
 <context>
     <name>SplitBarFrame</name>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="79"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="80"/>
         <source>Mobile</source>
         <translation>移动</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="82"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="83"/>
         <source>Internet</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="85"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="86"/>
         <source>Social</source>
         <translation>社交</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="88"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="89"/>
         <source>Video</source>
         <translation>影音</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="91"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="92"/>
         <source>Development</source>
         <translation>开发</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="94"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="95"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="97"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="98"/>
         <source>Game</source>
         <translation>游戏</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="100"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="101"/>
         <source>Office</source>
         <translation>办公</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="103"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="104"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="106"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="107"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../src/UtilityFunction/splitbarframe.cpp" line="109"/>
+        <location filename="../src/Widget/splitbarframe.cpp" line="110"/>
         <source>Others</source>
         <translation>其它</translation>
     </message>

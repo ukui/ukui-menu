@@ -47,7 +47,7 @@ void FullLetterWidget::initUi()
     this->setFixedSize(/*Style::MainViewWidWidth*/1855,
                        Style::AppListWidHeight);
 //    m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
-    m_letterListWid->setFixedSize(Style::LeftWidWidth,this->height());
+    m_letterListWid->setFixedSize(/*Style::LeftWidWidth*/150,this->height());
 
     verticalScrollBar = new QScrollBar(m_scrollArea);
     verticalScrollBar->setOrientation(Qt::Vertical);
@@ -84,6 +84,9 @@ void FullLetterWidget::initUi()
     mainLayout->setSpacing(0);
     mainLayout->addWidget(m_letterListWid);
 //    mainLayout->addWidget(m_applistWid);
+    QSpacerItem * m_spaceItem0=nullptr;
+    m_spaceItem0 = new QSpacerItem(10,10,QSizePolicy::Expanding,QSizePolicy::Minimum);
+    mainLayout->addItem(m_spaceItem0);
 
 
     this->setLayout(mainLayout);

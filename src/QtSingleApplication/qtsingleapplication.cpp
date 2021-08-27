@@ -343,19 +343,21 @@ QWidget* QtSingleApplication::activationWindow() const
 void QtSingleApplication::activateWindow()
 {
     if (actWin) {
+        MainWindow* w=qobject_cast<MainWindow*>(actWin);
         if(this->applicationState() & Qt::ApplicationInactive)
         {
-            MainWindow* w=qobject_cast<MainWindow*>(actWin);
-//            w->loadMainWindow();
-            actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
-            actWin->raise();
-            actWin->showNormal();
-            actWin->activateWindow();
 
+//          w->loadMainWindow();
+
+            actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
+//          actWin->raise();
+//          actWin->showNormal();
+//          actWin->activateWindow();
+            w->showWindow();
         }
         else {
             actWin->setWindowState(actWin->windowState() & Qt::WindowMinimized);
-            actWin->hide();
+            w->hideWindow();
         }
 
     }

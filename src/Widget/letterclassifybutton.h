@@ -22,6 +22,7 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include "src/Style/style.h"
+#include "lettertooltip.h"
 
 class LetterClassifyButton : public QPushButton
 {
@@ -36,6 +37,7 @@ public:
 
 private:
     bool m_fullscreen=false;
+    LetterToolTip *tooltip = nullptr;
 
 protected:
     void enterEvent(QEvent* e);

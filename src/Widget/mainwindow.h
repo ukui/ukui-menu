@@ -47,6 +47,8 @@
 #include "src/DataProcess/getmodeldata.h"
 #include "src/Widget/fullmainwindow.h"
 #include "src/FileWatcher/desktopwatcher.h"
+#include "functionbuttonwidget.h"
+#include "letterbuttonwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -64,6 +66,10 @@ public:
      */
 //    void loadMainWindow();
 
+    void showWindow();
+
+    void hideWindow();
+
 private:
 
     bool m_isFullScreen=false;
@@ -80,6 +86,10 @@ private:
     int m_state = 0;
     FullMainWindow *fullWindow = nullptr;
     DesktopWatcher *m_desktopWatcher = nullptr;
+    QPropertyAnimation* m_enterAnimation = nullptr;
+    QPropertyAnimation* m_leaveAnimation = nullptr;
+    int m_widgetState=-1;
+    FunctionButtonWidget *m_functionBtnWid = nullptr;
 
 protected:
     void initUi();
@@ -104,6 +114,7 @@ protected:
 public:
 Q_SIGNALS:
     void sendSearchKeyword(QString arg);
+    void sendClassificationbtnList();
 
 public Q_SLOTS:
     void updateCollectView();
@@ -111,6 +122,7 @@ public Q_SLOTS:
     void updateMinAllView();
     void showNormalWindow();
     void updateView();
+    void recvFunctionBtnSignal(QString btnname);
 
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
@@ -125,7 +137,13 @@ private Q_SLOTS:
 
     void on_minMaxChangeButton_clicked();
 
+    void on_powerOffButton_clicked();
+
     void on_powerOffButton_customContextMenuRequested(const QPoint &pos);
+
+    void appClassificationBtnClickedSlot();
+
+    void animationFinishedSLot();
 
 private:
 
@@ -178,6 +196,7 @@ private:
     QHBoxLayout *rightBottomHorizontalLayout_2;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *powerOffButton;
+    bool m_canHide = true;
    // Ui::MainWindow *ui;
 };
 

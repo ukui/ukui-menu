@@ -1,5 +1,7 @@
 #include "fullmainwindow.h"
 #include <KWindowEffects>
+#include <QAction>
+#include <QTranslator>
 
 FullMainWindow::FullMainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -7,6 +9,8 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
+
+    m_searchAppThread=new SearchAppThread;
 
     Style::initWidStyle();
     this->resize(1920, 1024);
@@ -30,6 +34,48 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     lineEdit->setMinimumSize(QSize(372, 36));
     lineEdit->setMaximumSize(QSize(372, 36));
     lineEdit->setLayoutDirection(Qt::LeftToRight);
+    lineEdit->installEventFilter(this);
+    lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 17px;"));
+    lineEdit->setFrame(false);
+
+    m_queryWid=new QWidget;
+    m_queryWid->setParent(lineEdit);
+    m_queryWid->setFocusPolicy(Qt::NoFocus);
+    m_queryWid->setFixedSize(372,36);
+    QHBoxLayout* queryWidLayout=new QHBoxLayout;
+    queryWidLayout->setContentsMargins(0,0,0,0);
+    queryWidLayout->setSpacing(5);
+    m_queryWid->setLayout(queryWidLayout);
+
+    char style[200];
+    QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
+    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+    if(gsetting.get("style-name").toString()=="ukui-light")
+    {
+        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
+    }
+    else
+    {
+        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                QueryLineEditClickedBorder,QueryLineEditBackground);
+    }
+
+//    lineEdit->setStyleSheet(style);
+
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_queryIcon=new QLabel;
+    m_queryIcon->setFixedSize(pixmap.size());
+    m_queryIcon->setPixmap(pixmap);
+    m_queryText=new QLabel;
+    m_queryText->setText(tr("Search"));
+    m_queryText->adjustSize();
+    queryWidLayout->addWidget(m_queryIcon);
+    queryWidLayout->addWidget(m_queryText);
+    queryWidLayout->setAlignment(Qt::AlignCenter);
+    lineEdit->setFocusPolicy(Qt::ClickFocus);
 
     horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -66,8 +112,8 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     fullStackedWidget->addWidget(fullLetterPage);
     fullFunctionPage = new FullFunctionWidget();
     fullStackedWidget->addWidget(fullFunctionPage);
-
-
+    fullResultPage = new FullSearchResultWidget();
+    fullStackedWidget->addWidget(fullResultPage);
 
     bottomHorizonLayout->addWidget(fullStackedWidget);
 //    bottomHorizonLayout->addWidget(verticalScrollBar);
@@ -101,6 +147,13 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     m_allAction->setChecked(true);
     fullSelectMenuButton->setMenu(m_menu);
 
+//    QAction *action = new QAction(this);
+//    action->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-search.svg"));
+//    lineEdit->addAction(action,QLineEdit::TrailingPosition);
+
+    connect(lineEdit, &QLineEdit::textChanged, this,&FullMainWindow::searchAppSlot);
+    connect(this,&FullMainWindow::sendSearchKeyword,m_searchAppThread,&SearchAppThread::recvSearchKeyword);
+    connect(m_searchAppThread,&SearchAppThread::sendSearchResult,this,&FullMainWindow::recvSearchResult);
     connect(minPushButton,&QPushButton::clicked,this,&FullMainWindow::on_minPushButton_clicked);
     connect(fullSelectToolButton,&QToolButton::clicked,this,&FullMainWindow::on_fullSelectToolButton_clicked);
     connect(fullSelectMenuButton,&QToolButton::triggered,this,&FullMainWindow::on_fullSelectMenuButton_triggered);
@@ -153,6 +206,43 @@ void FullMainWindow::paintEvent(QPaintEvent *event)
     QMainWindow::paintEvent(event);
 }
 
+bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if(watched == lineEdit)
+    {
+        char style[200];
+        if(event->type()==QEvent::FocusIn)
+        {
+            qDebug() << "MainViewWidget::eventFilter(QObject *watched, QEvent *event)iiiiiiiiiiiiii";
+            sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                    QueryLineEditClickedBorder,QueryLineEditClickedBackground);
+             if(lineEdit->text().isEmpty())
+             {
+                qDebug() << "bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)" << m_queryWid->layout()->count();
+                 if(m_queryWid->layout()->count() == 2)
+                 {
+                     m_queryWid->layout()->removeWidget(m_queryText);
+                     m_queryText->setParent(nullptr);
+                 }
+                 m_queryWid->setGeometry(6,2,m_queryIcon->width()+5,Style::QueryLineEditHeight);
+                 m_queryWid->layout()->setAlignment(Qt::AlignVCenter);
+                 lineEdit->setTextMargins(26,0,0,0);
+             }
+        }
+        else if(event->type()==QEvent::FocusOut)
+        {
+            lineEdit->clear();
+            m_queryWid->layout()->addWidget(m_queryIcon);
+            m_queryWid->layout()->addWidget(m_queryText);
+            m_queryIcon->adjustSize();
+            m_queryText->adjustSize();
+            m_queryWid->layout()->setAlignment(Qt::AlignCenter);
+            m_queryWid->setFixedSize(372,36);
+        }
+    }
+   return QWidget::eventFilter(watched,event);     // 最后将事件交给上层对话框
+}
+
 bool FullMainWindow::event ( QEvent * event )
 {
    if (event->type() == QEvent::ActivationChange)
@@ -162,12 +252,40 @@ bool FullMainWindow::event ( QEvent * event )
         {
             this->hide();
         }
+        else
+        {
+            fullLetterPage->repaintWidget();
+            fullFunctionPage->repaintWidget();
+        }
    }
    return QWidget::event(event);
 }
 
+void FullMainWindow::searchAppSlot(QString arg)
+{
+    if(!arg.isEmpty())//切换至搜索模块
+    {
+        Q_EMIT sendSearchKeyword(arg);
+        m_searchAppThread->start();
+        fullStackedWidget->setCurrentIndex(3);
+    }
+    else
+    {
+        fullStackedWidget->setCurrentIndex(m_state);
+        fullFunctionPage->repaintWidget();
+        fullLetterPage->repaintWidget();
+    }
+}
+
+void FullMainWindow::recvSearchResult(QVector<QStringList> arg)
+{
+    m_searchAppThread->quit();
+    fullResultPage->updateAppListView(arg);
+}
+
 void FullMainWindow::on_fullSelectToolButton_clicked()
 {
+    fullSelectToolButton->setFocus();
     if(fullStackedWidget->currentIndex() == 0)
     {
         on_fullSelectMenuButton_triggered(m_letterAction);
@@ -189,7 +307,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
     {
         fullStackedWidget->setCurrentIndex(0);
         fullCommonPage->repaintWidget();
-//        m_state = 0;
+        m_state = 0;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/fullicon-all.svg"));
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
@@ -199,7 +317,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
     {
         fullStackedWidget->setCurrentIndex(1);
         fullLetterPage->repaintWidget();
-//        m_state = 1;
+        m_state = 1;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/全屏 icon-字母排序.svg"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
@@ -209,6 +327,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
     {
         fullStackedWidget->setCurrentIndex(2);
         fullFunctionPage->repaintWidget();
+        m_state = 2;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/全屏 icon-功能排序.svg"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(false);

@@ -17,6 +17,7 @@
  */
 
 #include "listview.h"
+#include "src/Widget/functionbuttonwidget.h"
 #include "src/UtilityFunction/utility.h"
 #include <QDebug>
 
@@ -93,10 +94,15 @@ void ListView::updateData(QVector<QStringList> data)
 void ListView::onClicked(QModelIndex index)
 {
      QVariant var = listmodel->data(index, Qt::DisplayRole);
+     QString desktopfp = var.value<QStringList>().at(0);
      if(var.isValid())
      {
-         QString desktopfp = var.value<QStringList>().at(0);
-         execApp(desktopfp);
+         if(var.value<QStringList>().at(1).toInt() == 0)
+             Q_EMIT sendAppClassificationBtnClicked();
+         else
+         {
+             execApp(desktopfp);
+         }
      }
 }
 

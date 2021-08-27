@@ -47,7 +47,7 @@ void FullFunctionWidget::initUi()
     this->setFixedSize(/*Style::MainViewWidWidth*/1855,
                        Style::AppListWidHeight);
     m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
-    m_iconListWid->setFixedSize(Style::LeftWidWidth,this->height());
+    m_iconListWid->setFixedSize(/*Style::LeftWidWidth*/150,this->height());
 
     verticalScrollBar = new QScrollBar(m_scrollArea);
     verticalScrollBar->setOrientation(Qt::Vertical);
@@ -83,6 +83,9 @@ void FullFunctionWidget::initUi()
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     mainLayout->addWidget(m_iconListWid);
+    QSpacerItem * m_spaceItem0=nullptr;
+    m_spaceItem0 = new QSpacerItem(10,10,QSizePolicy::Expanding,QSizePolicy::Minimum);
+    mainLayout->addItem(m_spaceItem0);
     mainLayout->addWidget(m_applistWid);
 
     QSpacerItem *m_spaceItem1=nullptr;
@@ -336,7 +339,7 @@ void FullFunctionWidget::initIconListWidget()
 //    m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
 //                                          m_iconListWid->height());
     m_iconListWidLayout=new QVBoxLayout(m_iconListWid);
-    m_iconListWidLayout->setContentsMargins(0,0,0,0);
+    m_iconListWidLayout->setContentsMargins(30,0,0,0);
     m_iconListWidLayout->setSpacing(Style::LeftSpaceBetweenItem);
 
     m_topSpacerItem=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);

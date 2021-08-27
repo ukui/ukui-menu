@@ -59,7 +59,6 @@ SOURCES += \
     src/RightClickMenu/menubox.cpp \
     src/RightClickMenu/rightclickmenu.cpp \
     src/Search/file-utils.cpp \
-    src/Search/fullsearchresultwidget.cpp \
     src/Search/searchappthread.cpp \
     src/Style/style.cpp \
     src/UtilityFunction/proxystyle.cpp \
@@ -73,10 +72,12 @@ SOURCES += \
     src/Widget/fullfunctionwidget.cpp \
     src/Widget/fullletterwidget.cpp \
     src/Widget/fullmainwindow.cpp \
+    src/Widget/fullsearchresultwidget.cpp \
     src/Widget/functionbuttonwidget.cpp \
     src/Widget/functionclassifybutton.cpp \
     src/Widget/letterbuttonwidget.cpp \
     src/Widget/letterclassifybutton.cpp \
+    src/Widget/lettertooltip.cpp \
     src/Widget/mainviewwidget.cpp \
     src/Widget/mainwindow.cpp \
     src/Widget/scrollarea.cpp \
@@ -99,7 +100,6 @@ HEADERS  += \
     src/RightClickMenu/menubox.h \
     src/RightClickMenu/rightclickmenu.h \
     src/Search/file-utils.h \
-    src/Search/fullsearchresultwidget.h \
     src/Search/searchappthread.h \
     src/Style/style.h \
     src/UtilityFunction/proxystyle.h \
@@ -113,10 +113,12 @@ HEADERS  += \
     src/Widget/fullfunctionwidget.h \
     src/Widget/fullletterwidget.h \
     src/Widget/fullmainwindow.h \
+    src/Widget/fullsearchresultwidget.h \
     src/Widget/functionbuttonwidget.h \
     src/Widget/functionclassifybutton.h \
     src/Widget/letterbuttonwidget.h \
     src/Widget/letterclassifybutton.h \
+    src/Widget/lettertooltip.h \
     src/Widget/mainviewwidget.h \
     src/Widget/mainwindow.h \
     src/Widget/scrollarea.h \
