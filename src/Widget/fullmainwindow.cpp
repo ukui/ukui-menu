@@ -83,7 +83,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     fullSelectToolButton->setObjectName(QString::fromUtf8("fullSelectToolButton"));
     fullSelectToolButton->setMinimumSize(QSize(48, 48));
     QIcon icon;
-    icon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/\345\205\250\345\261\217 icon-\345\212\237\350\203\275\346\216\222\345\272\217.png"), QSize(), QIcon::Normal, QIcon::Off);
+    icon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-所有应用.png"), QSize(), QIcon::Normal, QIcon::Off);
     fullSelectToolButton->setIcon(icon);
 
     fullSelectMenuButton = new QToolButton(centralwidget);

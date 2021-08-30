@@ -90,6 +90,7 @@ private:
     QPropertyAnimation* m_leaveAnimation = nullptr;
     int m_widgetState=-1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;
+    LetterButtonWidget *m_letterBtnWid = nullptr;
 
 protected:
     void initUi();
@@ -115,6 +116,7 @@ public:
 Q_SIGNALS:
     void sendSearchKeyword(QString arg);
     void sendClassificationbtnList();
+    void sendLetterClassificationList(QStringList list);
 
 public Q_SLOTS:
     void updateCollectView();

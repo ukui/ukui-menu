@@ -23,6 +23,7 @@
 #include <QMouseEvent>
 #include "src/Style/style.h"
 #include "lettertooltip.h"
+#include <QToolButton>
 
 class LetterClassifyButton : public QPushButton
 {

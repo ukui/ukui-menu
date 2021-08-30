@@ -14,8 +14,10 @@ public:
     QVector<QStringList> getMinLetterData();
     QVector<QStringList> getMinFuncData();
     QVector<QString> getcollectData();
-    QStringList getClassificationList();
-    QStringList getClassificationBtnRowList();
+    QStringList getFuncClassificationList();
+    QStringList getLetterClassificationList();
+    QStringList getFuncClassificationBtnRowList();
+    QStringList getLetterClassificationBtnRowList();
 
     void loadDesktopVercor();
 

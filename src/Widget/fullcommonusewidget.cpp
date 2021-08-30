@@ -179,10 +179,8 @@ void FullCommonUseWidget::selectFirstItem()
 
 void FullCommonUseWidget::on_setScrollBarValue(int value)
 {
-    disconnect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);
     verticalScrollBar->setMaximum(m_scrollAreaWidHeight - 880);
     verticalScrollBar->setValue(value);
-    connect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);
 }
 
 void FullCommonUseWidget::selectFirstItemTab()
@@ -196,9 +194,7 @@ void FullCommonUseWidget::selectFirstItemTab()
 
 void FullCommonUseWidget::on_setAreaScrollBarValue(int value)
 {
-    disconnect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setScrollBarValue);
     m_scrollArea->verticalScrollBar()->setValue(value);
-    connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setScrollBarValue);
 }
 /**
  * 更新应用列表

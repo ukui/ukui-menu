@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     minSelectButton = new QToolButton(minMenuPage);
     minSelectButton->setFixedSize(QSize(26, 26));
     QIcon icon2;
-    icon2.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-\345\212\237\350\203\275\346\216\222\345\272\217.png"), QSize(), QIcon::Normal, QIcon::Off);
+    icon2.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-所有应用.png"), QSize(), QIcon::Normal, QIcon::Off);
     minSelectButton->setIcon(icon2);
 
     selectMenuButton = new QToolButton(minMenuPage);
@@ -279,17 +279,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_functionBtnWid = new FunctionButtonWidget(minFuncPage);
     m_functionBtnWid->hide();
+
+    m_letterBtnWid = new LetterButtonWidget(minLetterPage);
+    m_letterBtnWid->hide();
+
     m_enterAnimation=new QPropertyAnimation;
     m_enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
     m_leaveAnimation=new QPropertyAnimation;
     m_leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
 
     connect(this,&MainWindow::sendClassificationbtnList,m_functionBtnWid,&FunctionButtonWidget::recvClassificationBtnList);
+    connect(this,&MainWindow::sendLetterClassificationList,m_letterBtnWid,&LetterButtonWidget::recvLetterBtnList);
  //   connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&FunctionWidget::recvFunctionBtnSignal);
     connect(minFuncListView, &ListView::sendAppClassificationBtnClicked, this, &MainWindow::appClassificationBtnClickedSlot);
+    connect(minLetterListView,&ListView::sendAppClassificationBtnClicked, this, &MainWindow::appClassificationBtnClickedSlot);
     connect(m_leaveAnimation,&QPropertyAnimation::finished,this,&MainWindow::animationFinishedSLot);
     connect(m_enterAnimation,&QPropertyAnimation::finished,this,&MainWindow::animationFinishedSLot);
     connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&MainWindow::recvFunctionBtnSignal);
+    connect(m_letterBtnWid, &LetterButtonWidget::sendLetterBtnSignal, this,&MainWindow::recvFunctionBtnSignal);
     m_searchAppThread=new SearchAppThread;
     m_dbus=new DBus;
     new MenuAdaptor(m_dbus);
@@ -492,11 +499,27 @@ bool MainWindow::event ( QEvent * event )
 void MainWindow::recvFunctionBtnSignal(QString btnname)
 {
     //此处需实现将功能为btnname的应用列表移动到applistWid界面最顶端
-    int index = modaldata->getClassificationList().indexOf(btnname);
-    if(index!=-1)
+    if(m_state == 1)
     {
-        int row = modaldata->getClassificationBtnRowList().at(index).toInt();
-        minFuncListView->verticalScrollBar()->setValue(row);
+        int index = modaldata->getLetterClassificationList().indexOf(btnname);
+        if(index != -1)
+        {
+            int row = modaldata->getLetterClassificationBtnRowList().at(index).toInt();
+            minLetterListView->verticalScrollBar()->setValue(row);
+            m_leaveAnimation->setTargetObject(m_letterBtnWid);
+            m_enterAnimation->setTargetObject(minLetterListView);
+        }
+    }
+    else
+    {
+        int index = modaldata->getFuncClassificationList().indexOf(btnname);
+        if(index!=-1)
+        {
+            int row = modaldata->getFuncClassificationBtnRowList().at(index).toInt();
+            minFuncListView->verticalScrollBar()->setValue(row);
+            m_leaveAnimation->setTargetObject(m_functionBtnWid);
+            m_enterAnimation->setTargetObject(minFuncListView);
+        }
     }
 
     m_leaveAnimation->setStartValue(QRect(0, 0, minFuncPage->width(), minFuncPage->height()));
@@ -506,11 +529,11 @@ void MainWindow::recvFunctionBtnSignal(QString btnname)
     m_leaveAnimation->setDuration(10);
     m_enterAnimation->setDuration(100);
 
-    m_leaveAnimation->setTargetObject(m_functionBtnWid);
-    m_enterAnimation->setTargetObject(minFuncListView);
     m_leaveAnimation->start();
     m_widgetState=0;
 }
+
+
 
 void MainWindow::appClassificationBtnClickedSlot()
 {
@@ -521,10 +544,21 @@ void MainWindow::appClassificationBtnClickedSlot()
     m_leaveAnimation->setDuration(10);
     m_enterAnimation->setDuration(100);
 
-    //加载FunctionButtonWidget界面
-    Q_EMIT sendClassificationbtnList();
-    m_leaveAnimation->setTargetObject(minFuncListView);
-    m_enterAnimation->setTargetObject(m_functionBtnWid);
+
+    if(m_state == 1)
+    {
+        Q_EMIT sendLetterClassificationList(modaldata->getLetterClassificationList());
+        m_leaveAnimation->setTargetObject(minLetterListView);
+        m_enterAnimation->setTargetObject(m_letterBtnWid);
+    }
+    else if(m_state == 2)
+    {
+        //加载FunctionButtonWidget界面
+        Q_EMIT sendClassificationbtnList();
+        m_leaveAnimation->setTargetObject(minFuncListView);
+        m_enterAnimation->setTargetObject(m_functionBtnWid);
+    }
+
     m_leaveAnimation->start();
     m_widgetState=1;
 }
@@ -533,17 +567,35 @@ void MainWindow::animationFinishedSLot()
 {
     if(m_widgetState==1)
     {
-        minFuncListView->hide();
+        if(m_state == 1)
+        {
+            minLetterListView->hide();
+            m_letterBtnWid->show();
+        }
+        else
+        {
+            minFuncListView->hide();
+            m_functionBtnWid->show();
+        }
+
         m_enterAnimation->start();
         m_widgetState=-1;
-        m_functionBtnWid->show();
+
     }
     if(m_widgetState==0)
     {
-        m_functionBtnWid->hide();
+        if(m_state == 1)
+        {
+            m_letterBtnWid->hide();
+            minLetterListView->show();
+        }
+        else
+        {
+            m_functionBtnWid->hide();
+            minFuncListView->show();
+        }
         m_enterAnimation->start();
         m_widgetState=-1;
-        minFuncListView->show();
     }
 }
 
