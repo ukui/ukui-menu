@@ -28,48 +28,28 @@
 #include <QStandardItemModel>
 #include "src/ViewItem/fullitemdelegate.h"
 #include "src/Style/style.h"
+#include "klistview.h"
 
-class FullListView : public QListView
+class FullListView : public KListView
 {
     Q_OBJECT
 public:
-    FullListView(QWidget *parent,int module);
+    explicit FullListView(QWidget *parent,int module);
     ~FullListView();
-
-    void addData(QStringList data);//字母排序模块添加数据
-    void updateData(QStringList data);
 
 protected:
     void initWidget();
     void keyPressEvent(QKeyEvent* e);
-    void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *e) override;
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
-    void mousePressEvent(QMouseEvent *event);
 
 private:
-    FullItemDelegate* m_delegate=nullptr;
-    QStandardItemModel* listmodel=nullptr;
-    int module=0;
-    double transparency;
     RightClickMenu* menu=nullptr;//右键菜单
     QStringList data;
     QGSettings* gsetting;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-
-//    bool inCurView;
 
 public Q_SLOTS:
-    void onClicked(QModelIndex index);//点击item
-    void rightClickedSlot(const QPoint &pos);//右键菜单
     void selectFirstItem();
 
 Q_SIGNALS:
-    void sendItemClickedSignal(QString arg);//发送item点击信号
-    void sendHideMainWindowSignal();
-    void sendUpdateAppListSignal();
     void sendSetslidebar(int value);
 };
 

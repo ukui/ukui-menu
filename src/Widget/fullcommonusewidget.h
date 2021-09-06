@@ -96,6 +96,8 @@ protected:
     void fillAppList();
     void resizeScrollAreaControls();
 
+    bool eventFilter(QObject *watched, QEvent *event);
+
 public Q_SLOTS:
     /**
      * @brief Open the application
@@ -109,6 +111,8 @@ public Q_SLOTS:
 
     void on_setScrollBarValue(int value);
 
+    void onSetSlider(int value);
+
     void selectFirstItem();
 
     void selectFirstItemTab();
@@ -121,6 +125,7 @@ Q_SIGNALS:
      */
     void sendHideMainWindowSignal();
     void changeScrollValue(int value,int maximumValue);
+    void setFocusToSideWin();
 };
 
 #endif // FULLCOMMONUSEWIDGET_H

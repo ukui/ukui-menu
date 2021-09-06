@@ -149,8 +149,11 @@ void FullLetterWidget::initAppListWidget()
 
 void FullLetterWidget::setFocusToThis()
 {
+    QLayoutItem* widItemTop = m_scrollAreaWidLayout->itemAt(1);
+    QWidget* widTop = widItemTop->widget();
+    FullListView* m_listviewTop = qobject_cast<FullListView*>(widTop);
     letterButtonClick();
-    this->setFocus();
+    m_listviewTop->setFocus();
     Q_EMIT selectFirstItem();
 }
 
@@ -179,7 +182,7 @@ void FullLetterWidget::fillAppList()
             m_scrollAreaWidLayout->addWidget(letterbtn);
 
             //插入应用列表
-            FullListView* listview=new FullListView(this,1);
+            FullListView* listview = new FullListView(this,1);
             connect(listview, &FullListView::sendSetslidebar,this,&FullLetterWidget::onSetSlider);
             connect(this, &FullLetterWidget::selectFirstItem, listview, &FullListView::selectFirstItem);
             listview->installEventFilter(this);
@@ -534,6 +537,7 @@ bool FullLetterWidget::eventFilter(QObject *watched, QEvent *event)
            // m_letterListScrollArea->setFocus();
            // return true;
            Q_EMIT setFocusToSideWin();
+            return true;
         }
         if(ke->key() == Qt::Key_Up)
         {

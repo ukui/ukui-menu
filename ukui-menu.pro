@@ -54,6 +54,7 @@ SOURCES += \
     src/Interface/ukuichineseletter.cpp \
     src/Interface/ukuimenuinterface.cpp \
     src/ListView/fulllistview.cpp \
+    src/ListView/klistview.cpp \
     src/ListView/listview.cpp \
     src/ListView/rightlistview.cpp \
     src/RightClickMenu/menubox.cpp \
@@ -65,6 +66,7 @@ SOURCES += \
     src/UtilityFunction/utility.cpp \
     src/ViewItem/fullitemdelegate.cpp \
     src/ViewItem/itemdelegate.cpp \
+    src/ViewItem/kitemdelegate.cpp \
     src/ViewItem/recentitemdelegate.cpp \
     src/ViewItem/rightitemdelegate.cpp \
     src/Widget/classifybtnscrollarea.cpp \
@@ -95,6 +97,7 @@ HEADERS  += \
     src/Interface/ukuichineseletter.h \
     src/Interface/ukuimenuinterface.h \
     src/ListView/fulllistview.h \
+    src/ListView/klistview.h \
     src/ListView/listview.h \
     src/ListView/rightlistview.h \
     src/RightClickMenu/menubox.h \
@@ -106,6 +109,7 @@ HEADERS  += \
     src/UtilityFunction/utility.h \
     src/ViewItem/fullitemdelegate.h \
     src/ViewItem/itemdelegate.h \
+    src/ViewItem/kitemdelegate.h \
     src/ViewItem/recentitemdelegate.h \
     src/ViewItem/rightitemdelegate.h \
     src/Widget/classifybtnscrollarea.h \

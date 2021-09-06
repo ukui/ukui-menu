@@ -35,6 +35,7 @@ MainViewWidget::MainViewWidget(QWidget *parent) :
     this->setAttribute(Qt::WA_StyledBackground,true);
     this->setAutoFillBackground(false);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setFocusPolicy(Qt::StrongFocus);
 }
 
 MainViewWidget::~MainViewWidget()

@@ -73,19 +73,22 @@ protected:
      */
     void initUi();
     void resizeScrollAreaControls();
+    bool eventFilter(QObject *watched, QEvent *event);
 
-private Q_SLOTS:
+public Q_SLOTS:
     /**
      * @brief Open the application
      * @param arg: Desktop file path
      */
     void execApplication(QString desktopfp);
+    void selectFirstItemTab();
 
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+    void setFocusToSideWin();
 };
 
 #endif // FULLSEARCHRESULTWIDGET_H

@@ -28,8 +28,9 @@
 #include <QHelpEvent>
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
+#include "kitemdelegate.h"
 
-class FullItemDelegate : public QStyledItemDelegate
+class FullItemDelegate : public KItemDelegate
 {
     Q_OBJECT
 public:
@@ -37,13 +38,6 @@ public:
     ~FullItemDelegate();
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-private:
-    int module=0;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-
-protected:
-//    bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);
 };
 
 #endif // FULLITEMDELEGATE_H

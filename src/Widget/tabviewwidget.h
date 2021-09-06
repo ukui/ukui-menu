@@ -19,7 +19,7 @@ private:
     QWidget *collectionTab = nullptr;
     QWidget *recentTab = nullptr;
     RightListView * m_collectListView = nullptr;
-    QVector<QString> m_data;
+    QStringList m_data;
 };
 
 #endif // TABVIEWWIDGET_H

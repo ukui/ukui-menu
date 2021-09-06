@@ -21,11 +21,16 @@ public:
     ~FullMainWindow();
 public:
     void updateView();
+    void resetEditline();
 
 Q_SIGNALS:
 
     void showNormalWindow();
     void sendSearchKeyword(QString arg);
+    void sendSetFocusToCom();
+    void sendSetFocusToFun();
+    void sendSetFocusToLet();
+    void sendSetFocusToResult();
 
 private Q_SLOTS:
 
@@ -35,11 +40,14 @@ private Q_SLOTS:
     void on_setScrollBarValue(int value, int maximumValue);
     void searchAppSlot(QString arg);
     void recvSearchResult(QVector<QStringList> arg);
+    void setFocusToButton();
+    void on_fullSelectMenuButton_clicked();
 
 protected:
     void paintEvent(QPaintEvent *event);
     bool event ( QEvent * event);
     bool eventFilter(QObject *watched, QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     QAction *m_allAction = nullptr;
@@ -69,6 +77,7 @@ private:
     QWidget* m_queryWid = nullptr;
     QLabel *m_queryIcon = nullptr;
     QLabel *m_queryText = nullptr;
+    bool isSearching = false;
 };
 
 #endif // FULLMAINWINDOW_H

@@ -13,7 +13,7 @@ public:
     QVector<QStringList> getMinAllData();
     QVector<QStringList> getMinLetterData();
     QVector<QStringList> getMinFuncData();
-    QVector<QString> getcollectData();
+    QStringList getcollectData();
     QStringList getFuncClassificationList();
     QStringList getLetterClassificationList();
     QStringList getFuncClassificationBtnRowList();
@@ -28,7 +28,7 @@ protected:
 private:
     UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
     QVector<QStringList> m_minAllData;
-    QVector<QString> m_collectData;
+    QStringList m_collectData;
     QVector<QStringList> m_minLetterData;
     QStringList m_letterList;
     QStringList m_letterBtnRowList;

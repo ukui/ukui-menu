@@ -31,7 +31,7 @@ QVector<QStringList> GetModelData::getMinAllData()
     return m_minAllData;
 }
 
-QVector<QString> GetModelData::getcollectData()
+QStringList GetModelData::getcollectData()
 {
     m_collectData.clear();
     Q_FOREACH(QString desktopfp,UkuiMenuInterface::collectAppVector)

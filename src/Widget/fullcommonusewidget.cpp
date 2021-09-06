@@ -109,6 +109,7 @@ void FullCommonUseWidget::initUi()
             time->stop();
         }
     });
+    m_listView->installEventFilter(this);
     m_scrollAreaWidHeight = m_scrollAreaWid->height();
     connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setScrollBarValue);
     connect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);
@@ -117,7 +118,7 @@ void FullCommonUseWidget::initUi()
 void FullCommonUseWidget::initAppListWidget()
 {
     m_listView=new FullListView(this,0);
-
+    m_listView->installEventFilter(this);
 //    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
 //    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
 //    mainLayout->insertWidget(1,m_listView);
@@ -126,7 +127,7 @@ void FullCommonUseWidget::initAppListWidget()
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
-//    connect(m_listView,&FullListView::sendSetslidebar,this,&FullCommonUseWidget::onSetSlider);
+    connect(m_listView,&FullListView::sendSetslidebar,this,&FullCommonUseWidget::onSetSlider);
 }
 
 void FullCommonUseWidget::resizeScrollAreaControls()
@@ -172,7 +173,6 @@ void FullCommonUseWidget::execApplication(QString desktopfp)
 
 void FullCommonUseWidget::selectFirstItem()
 {
-  //  this->focusNextChild();
     qDebug() << "void FullCommonUseWidget::selectFirstItem()";
     m_listView->setCurrentIndex(m_listView->model()->index(0,0));
 }
@@ -183,13 +183,38 @@ void FullCommonUseWidget::on_setScrollBarValue(int value)
     verticalScrollBar->setValue(value);
 }
 
+bool FullCommonUseWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if( ke->key() == Qt::Key_Tab )
+        {
+           Q_EMIT setFocusToSideWin();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(watched,event);
+}
+
+void FullCommonUseWidget::onSetSlider(int value)
+{
+    if(value == 0)
+    {
+        m_scrollArea->verticalScrollBar()->setValue(0);
+    }
+    else
+    {
+        int curvalue = m_scrollArea->verticalScrollBar()->value();
+        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+    }
+}
+
 void FullCommonUseWidget::selectFirstItemTab()
 {
-    this->setFocus();
-    if(m_listView->currentIndex().row() == -1)
-    {
-        m_listView->setCurrentIndex(m_listView->model()->index(0,0));
-    }
+    m_listView->setFocus();
+    m_listView->setCurrentIndex(m_listView->model()->index(0,0));
+    onSetSlider(0);
 }
 
 void FullCommonUseWidget::on_setAreaScrollBarValue(int value)

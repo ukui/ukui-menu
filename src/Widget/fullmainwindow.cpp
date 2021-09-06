@@ -2,6 +2,7 @@
 #include <KWindowEffects>
 #include <QAction>
 #include <QTranslator>
+#include "src/UtilityFunction/utility.h"
 
 FullMainWindow::FullMainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -13,7 +14,8 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     m_searchAppThread=new SearchAppThread;
 
     Style::initWidStyle();
-    this->resize(1920, 1024);
+    QRect rect = getScreenAvailableGeometry();
+    this->resize(QSize(rect.width(), /*rect.height()*/1080));
 
     centralwidget = new QWidget(this);
     verticalLayout = new QVBoxLayout(centralwidget);
@@ -30,9 +32,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     bottomHorizonLayout->setContentsMargins(0, 0, 0, 0);
 
     lineEdit = new QLineEdit(centralwidget);
-    lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
-    lineEdit->setMinimumSize(QSize(372, 36));
-    lineEdit->setMaximumSize(QSize(372, 36));
+    lineEdit->setFixedSize(QSize(372, 36));
     lineEdit->setLayoutDirection(Qt::LeftToRight);
     lineEdit->installEventFilter(this);
     lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 17px;"));
@@ -63,8 +63,6 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
                 QueryLineEditClickedBorder,QueryLineEditBackground);
     }
 
-//    lineEdit->setStyleSheet(style);
-
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_queryIcon=new QLabel;
     m_queryIcon->setFixedSize(pixmap.size());
@@ -83,8 +81,9 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     fullSelectToolButton->setObjectName(QString::fromUtf8("fullSelectToolButton"));
     fullSelectToolButton->setMinimumSize(QSize(48, 48));
     QIcon icon;
-    icon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-所有应用.png"), QSize(), QIcon::Normal, QIcon::Off);
+    icon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/fullicon-all.svg"), QSize(), QIcon::Normal, QIcon::Off);
     fullSelectToolButton->setIcon(icon);
+    fullSelectToolButton->installEventFilter(this);
 
     fullSelectMenuButton = new QToolButton(centralwidget);
     fullSelectMenuButton->setObjectName(QString::fromUtf8("fullSelectMenuButton"));
@@ -95,6 +94,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     fullSelectMenuButton->setIcon(icon1);
     fullSelectMenuButton->setPopupMode(QToolButton::InstantPopup);
     fullSelectMenuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    fullSelectMenuButton->installEventFilter(this);
 
     minPushButton = new QPushButton(centralwidget);
     minPushButton->setObjectName(QString::fromUtf8("minPushButton"));
@@ -103,9 +103,10 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     icon2.addFile(QString::fromUtf8(":/data/img/mainviewwidget/\345\205\250\345\261\217 icon-\347\274\251\345\260\217.png"), QSize(), QIcon::Normal, QIcon::Off);
     minPushButton->setIcon(icon2);
     minPushButton->setFlat(true);
+    minPushButton->installEventFilter(this);
 
     fullStackedWidget = new QStackedWidget(centralwidget);
-    fullStackedWidget->setFixedSize(1900,910);
+//    fullStackedWidget->setFixedSize(1900,910);
     fullCommonPage = new FullCommonUseWidget();
     fullStackedWidget->addWidget(fullCommonPage);
     fullLetterPage = new FullLetterWidget();
@@ -147,6 +148,10 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     m_allAction->setChecked(true);
     fullSelectMenuButton->setMenu(m_menu);
 
+    setTabOrder(lineEdit, fullSelectToolButton);
+    setTabOrder(fullSelectToolButton, fullSelectMenuButton);
+    setTabOrder(fullSelectMenuButton, minPushButton);
+
 //    QAction *action = new QAction(this);
 //    action->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-search.svg"));
 //    lineEdit->addAction(action,QLineEdit::TrailingPosition);
@@ -160,9 +165,15 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     connect(fullCommonPage,&FullCommonUseWidget::changeScrollValue,this,&FullMainWindow::on_setScrollBarValue);
     connect(fullFunctionPage,&FullFunctionWidget::changeScrollValue,this,&FullMainWindow::on_setScrollBarValue);
     connect(fullLetterPage,&FullLetterWidget::changeScrollValue,this,&FullMainWindow::on_setScrollBarValue);
-//    connect(verticalScrollBar,&QScrollBar::valueChanged,fullCommonPage,&FullCommonUseWidget::on_setScrollBarValue);
-//    connect(verticalScrollBar,&QScrollBar::valueChanged,fullFunctionPage,&FullFunctionWidget::on_setScrollBarValue);
-//    connect(verticalScrollBar,&QScrollBar::valueChanged,fullLetterPage,&FullLetterWidget::on_setScrollBarValue);
+    connect(fullFunctionPage,&FullFunctionWidget::setFocusToSideWin,this,&FullMainWindow::setFocusToButton);
+    connect(fullLetterPage,&FullLetterWidget::setFocusToSideWin,this,&FullMainWindow::setFocusToButton);
+    connect(fullCommonPage,&FullCommonUseWidget::setFocusToSideWin,this,&FullMainWindow::setFocusToButton);
+    connect(fullResultPage,&FullSearchResultWidget::setFocusToSideWin,this,&FullMainWindow::setFocusToButton);
+    connect(this,&FullMainWindow::sendSetFocusToCom,fullCommonPage,&FullCommonUseWidget::selectFirstItemTab);
+    connect(this,&FullMainWindow::sendSetFocusToLet,fullLetterPage,&FullLetterWidget::setFocusToThis);
+    connect(this,&FullMainWindow::sendSetFocusToFun,fullFunctionPage,&FullFunctionWidget::setFocusToThis);
+    connect(this,&FullMainWindow::sendSetFocusToResult,fullResultPage,&FullSearchResultWidget::selectFirstItemTab);
+    connect(fullSelectMenuButton,&QToolButton::clicked,this,&FullMainWindow::on_fullSelectMenuButton_clicked);
 }
 
 FullMainWindow::~FullMainWindow()
@@ -210,6 +221,7 @@ bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if(watched == lineEdit)
     {
+        isSearching = true;
         char style[200];
         if(event->type()==QEvent::FocusIn)
         {
@@ -229,18 +241,73 @@ bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
                  lineEdit->setTextMargins(26,0,0,0);
              }
         }
-        else if(event->type()==QEvent::FocusOut)
+        else if(event->type()==QEvent::FocusOut && lineEdit->text().isEmpty())
         {
-            lineEdit->clear();
-            m_queryWid->layout()->addWidget(m_queryIcon);
-            m_queryWid->layout()->addWidget(m_queryText);
-            m_queryIcon->adjustSize();
-            m_queryText->adjustSize();
-            m_queryWid->layout()->setAlignment(Qt::AlignCenter);
-            m_queryWid->setFixedSize(372,36);
+            resetEditline();
+        }
+
+        if( event->type() == QEvent::KeyPress )
+        {
+            QKeyEvent *ke = (QKeyEvent *)event;
+            if( ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return)
+            {
+                Q_EMIT sendSetFocusToResult();
+            }
         }
     }
-   return QWidget::eventFilter(watched,event);     // 最后将事件交给上层对话框
+    if(watched == minPushButton)
+    {
+        if( event->type() == QEvent::KeyPress )
+        {
+            QKeyEvent *ke = (QKeyEvent *)event;
+            if( ke->key() == Qt::Key_Tab)
+            {
+                if(fullStackedWidget->currentIndex() == 0)
+                {
+                     Q_EMIT sendSetFocusToCom();
+                }
+                else if(fullStackedWidget->currentIndex() == 1)
+                {
+                     Q_EMIT sendSetFocusToLet();
+                }
+                else if(fullStackedWidget->currentIndex() == 2)
+                {
+                     Q_EMIT sendSetFocusToFun();
+                }
+                else
+                {
+                     Q_EMIT sendSetFocusToResult();
+                }
+                return true;
+            }
+        }
+    }
+
+    if(watched == minPushButton || watched == fullSelectToolButton || watched == fullSelectMenuButton)
+    {
+        if( event->type() == QEvent::KeyPress )
+        {
+            QKeyEvent *ke = (QKeyEvent *)event;
+            if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
+                    ke->key() == Qt::Key_Right || ke->key() == Qt::Key_Left)
+            {
+                return true;
+            }
+        }
+    }
+   return QWidget::eventFilter(watched,event);
+}
+
+void FullMainWindow::resetEditline()
+{
+    lineEdit->clear();
+    lineEdit->clearFocus();
+    m_queryWid->layout()->addWidget(m_queryIcon);
+    m_queryWid->layout()->addWidget(m_queryText);
+    m_queryIcon->adjustSize();
+    m_queryText->adjustSize();
+    m_queryWid->layout()->setAlignment(Qt::AlignCenter);
+    m_queryWid->setFixedSize(372,36);
 }
 
 bool FullMainWindow::event ( QEvent * event )
@@ -258,7 +325,42 @@ bool FullMainWindow::event ( QEvent * event )
             fullFunctionPage->repaintWidget();
         }
    }
+
+   if (event->type() == QEvent::KeyPress)
+   {
+       QKeyEvent *keyEvent = (QKeyEvent *) event;
+       if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+       {
+           if(fullSelectToolButton->hasFocus())
+           {
+               fullSelectToolButton->click();
+           }
+           else if(fullSelectMenuButton->hasFocus())
+           {
+               fullSelectMenuButton->click();
+           }
+           if(lineEdit->hasFocus())
+           {
+               fullResultPage->setFocus();
+           }
+           else
+           {
+               QWidget *current_focus_widget;
+               current_focus_widget = QWidget::focusWidget();
+               QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
+               if(le != nullptr)
+               {
+                   le->clicked();
+               }
+           }
+       }
+   }
    return QWidget::event(event);
+}
+
+void FullMainWindow::setFocusToButton()
+{
+    lineEdit->setFocus();
 }
 
 void FullMainWindow::searchAppSlot(QString arg)
@@ -277,6 +379,11 @@ void FullMainWindow::searchAppSlot(QString arg)
     }
 }
 
+void FullMainWindow::mousePressEvent(QMouseEvent *event)
+{
+    resetEditline();
+}
+
 void FullMainWindow::recvSearchResult(QVector<QStringList> arg)
 {
     m_searchAppThread->quit();
@@ -285,6 +392,7 @@ void FullMainWindow::recvSearchResult(QVector<QStringList> arg)
 
 void FullMainWindow::on_fullSelectToolButton_clicked()
 {
+    resetEditline();
     fullSelectToolButton->setFocus();
     if(fullStackedWidget->currentIndex() == 0)
     {
@@ -298,6 +406,11 @@ void FullMainWindow::on_fullSelectToolButton_clicked()
     {
         on_fullSelectMenuButton_triggered(m_allAction);
     }
+}
+
+void FullMainWindow::on_fullSelectMenuButton_clicked()
+{
+     resetEditline();
 }
 
 void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)

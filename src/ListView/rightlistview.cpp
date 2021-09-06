@@ -24,15 +24,16 @@
 #include <QGSettings>
 
 RightListView::RightListView(QWidget *parent):
-    QListView(parent)
+    KListView(parent)
 {
     initWidget();
+    m_delegate= new RightItemDelegate(this);
+    this->setItemDelegate(m_delegate);
     pUkuiMenuInterface=new UkuiMenuInterface;
 }
 
 RightListView::~RightListView()
 {
-//    delete menu;
     delete pUkuiMenuInterface;
 }
 
@@ -57,52 +58,6 @@ void RightListView::initWidget()
     connect(this,&RightListView::clicked,this,&RightListView::onClicked);
 }
 
-void RightListView::addData(QVector<QString> data)
-{
-    listmodel=new QStandardItemModel(this);
-    this->setModel(listmodel);
-
-    Q_FOREACH(QString desktopfp,data)
-    {
-        QStandardItem* item=new QStandardItem;
-        item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-        listmodel->appendRow(item);
-    }
-    m_delegate= new RightItemDelegate(this);
-    this->setItemDelegate(m_delegate);
-}
-
-void RightListView::focusInEvent(QFocusEvent *event)
-{
-    return QListView::focusInEvent(event);
-}
-
-void RightListView::focusOutEvent(QFocusEvent *event)
-{
-    return QListView::focusOutEvent(event);
-}
-
-void RightListView::updateData(QVector<QString> data)
-{
-    listmodel->clear();
-    Q_FOREACH(QString desktopfp,data)
-    {
-        QStandardItem* item=new QStandardItem;
-        item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-        listmodel->appendRow(item);
-    }
-}
-
-void RightListView::onClicked(QModelIndex index)
-{
-     QVariant var = listmodel->data(index, Qt::DisplayRole);
-     if(var.isValid())
-     {
-         QString desktopfp=var.value<QString>();
-         execApp(desktopfp);
-     }
-}
-
 void RightListView::dropEvent(QDropEvent *event)
 {
     RightListView *source = qobject_cast<RightListView *>(event->source());
@@ -125,66 +80,6 @@ void RightListView::dropEvent(QDropEvent *event)
     Q_EMIT sendCollectViewUpdate();
 }
 
-void RightListView::rightClickedSlot(const QPoint &pos)
-{
-    Q_UNUSED(pos)
-    if(!(this->selectionModel()->selectedIndexes().isEmpty()))
-    {
-        QModelIndex index=this->currentIndex();
-        QVariant var=listmodel->data(index, Qt::DisplayRole);
-        QString desktopfp=var.value<QString>();
-        RightClickMenu menu;
-        int ret=menu.showAppBtnMenu(this->mapToGlobal(pos), desktopfp);
-        if(module>0)
-        {
-            switch (ret) {
-            case 6:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            case 7:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            default:
-                break;
-            }
-        }
-        else{
-            switch (ret) {
-            case 1:
-                Q_EMIT sendUpdateAppListSignal();
-                break;
-            case 2:
-                Q_EMIT sendUpdateAppListSignal();
-                break;
-            case 6:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            case 7:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            case 18:
-                Q_EMIT sendCollectViewUpdate();
-            default:
-                break;
-            }
-        }
-        //this->selectionModel()->clear();
-    }
-}
-
-void RightListView::enterEvent(QEvent *e)
-{
-    Q_UNUSED(e);
-    this->selectionModel()->clear();
-    this->verticalScrollBar()->setVisible(true);
-}
-
-void RightListView::leaveEvent(QEvent *e)
-{
-    Q_UNUSED(e);
-    this->verticalScrollBar()->setVisible(false);
-}
-
 void RightListView::selectFirstItem()
 {
     qDebug() << "void FullListView::selectFirstItem()";
@@ -194,97 +89,77 @@ void RightListView::selectFirstItem()
     }
 }
 
-void RightListView::paintEvent(QPaintEvent *e)
-{
-    double transparency=getTransparency();
-    QPainter painter(this->viewport());
-
-    painter.setBrush(this->palette().base());
-    painter.setPen(Qt::transparent);
-    painter.setOpacity(transparency);
-    painter.drawRect(this->rect());
-
-    QListView::paintEvent(e);
-}
-
 void RightListView::keyPressEvent(QKeyEvent* e)
 {
-     QRect center = visualRect(currentIndex());
-    if(e->type() == QEvent::KeyPress)
-    {
-        switch(e->key())
-        {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        {
-            QModelIndex index = this->currentIndex();
-            Q_EMIT clicked(index);
-            break;
-        }
-        case Qt::Key_Left:
-        {
-            this->clearFocus();
-            if(mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::AppListGridSizeWidth)
-            {
-               Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
-            }
-            this->setFocus();
-            return QListView::keyPressEvent(e);
-            break;
-        }
-        case Qt::Key_Right:
-        {
+//     QRect center = visualRect(currentIndex());
+//    if(e->type() == QEvent::KeyPress)
+//    {
+//        switch(e->key())
+//        {
+//        case Qt::Key_Enter:
+//        case Qt::Key_Return:
+//        {
+//            QModelIndex index = this->currentIndex();
+//            Q_EMIT clicked(index);
+//            break;
+//        }
+//        case Qt::Key_Left:
+//        {
+//            this->clearFocus();
+//            if(mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::AppListGridSizeWidth)
+//            {
+//               Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+//            }
+//            this->setFocus();
+//            return QListView::keyPressEvent(e);
+//            break;
+//        }
+//        case Qt::Key_Right:
+//        {
 
-            this->clearFocus();
-            if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
-            {
-                Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
-            }
-            this->setFocus();
-            return QListView::keyPressEvent(e);
-            break;
-        }
-        case Qt::Key_Up:
-        {
-            if(module == 0)
-            {
-                if(mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::AppListGridSizeWidth))
-                {
-                   Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
-                }
-            }
-            return QListView::keyPressEvent(e);
-            break;
-        }
-        case Qt::Key_Down:
-        {
-            if(module == 0)
-            {
-                if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
-                {
-                    Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
-                }
-            }
-            return QListView::keyPressEvent(e);
-            break;
-        }
+//            this->clearFocus();
+//            if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
+//            {
+//                Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+//            }
+//            this->setFocus();
+//            return QListView::keyPressEvent(e);
+//            break;
+//        }
+//        case Qt::Key_Up:
+//        {
+//            if(module == 0)
+//            {
+//                if(mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::AppListGridSizeWidth))
+//                {
+//                   Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+//                }
+//            }
+//            return QListView::keyPressEvent(e);
+//            break;
+//        }
+//        case Qt::Key_Down:
+//        {
+//            if(module == 0)
+//            {
+//                if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
+//                {
+//                    Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+//                }
+//            }
+//            return QListView::keyPressEvent(e);
+//            break;
+//        }
 
-        default:
+//        default:
             return QListView::keyPressEvent(e);
-            break;
-        }
-    }
+//            break;
+//        }
+//    }
 }
 
-void RightListView::mousePressEvent(QMouseEvent *event)
+void RightListView::enterEvent(QEvent *e)
 {
-    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
-    {
-        Q_EMIT sendHideMainWindowSignal();
-    }
-    else
-    {
-        pressApp = listmodel->data(this->indexAt(event->pos()), Qt::DisplayRole);
-        return QListView::mousePressEvent(event);
-    }
+    Q_UNUSED(e);
+    this->selectionModel()->clear();
 }

@@ -99,6 +99,9 @@ public:
     static int minw;
     static int minh;
     static int defaultMainViewWidWidth;
+    static int defaultMainViewWidHeight;
+    static int leftPageWidth;
+    static int leftPageHeight;
     static int defaultTopWidHeight;
     static int defaultQueryLineEditWidth;
     static int defaultQueryLineEditHeight;

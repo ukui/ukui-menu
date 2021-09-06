@@ -70,7 +70,6 @@ void ToolButton::enterEvent(QEvent *e)
         sprintf(style,"border:0px;padding-left:16px;background-color:%s;color:#ffffff;font-size:14px;",hover);
     else
         sprintf(style,"border:0px;padding-left:0px;background-color:%s;",hover);
-//    this->setStyleSheet(QString::fromLocal8Bit(style));
     delete svgRender;
     svgRender=new QSvgRenderer(this);
     svgRender->load(piconstr);

@@ -34,7 +34,10 @@ int Style::panelSize=0;
 //默认窗口
 int Style::minw=0;
 int Style::minh=0;
-int Style::defaultMainViewWidWidth=0;
+int Style::leftPageWidth = 0;
+int Style::leftPageHeight = 0;
+int Style::defaultMainViewWidWidth = 0;
+int Style::defaultMainViewWidHeight = 0;
 int Style::defaultTopWidHeight=0;
 int Style::defaultQueryLineEditWidth=0;
 int Style::defaultQueryLineEditHeight=0;
@@ -146,9 +149,12 @@ void Style::initWidStyle()
     }
     else
     {
-        minw=652;
-        minh=590;
-        defaultMainViewWidWidth=320;
+        minw=652;//1
+        minh=590;//1
+        defaultMainViewWidWidth= 308;//1
+        defaultMainViewWidHeight = 540;//1
+        leftPageWidth = 292;
+        leftPageHeight = 517;
         defaultTopWidHeight=54;
         defaultQueryLineEditWidth=288;
         defaultQueryLineEditHeight=30;

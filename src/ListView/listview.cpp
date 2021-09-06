@@ -22,7 +22,7 @@
 #include <QDebug>
 
 ListView::ListView(QWidget *parent/*, int width, int height, int module*/):
-    QListView(parent)
+    KListView(parent)
 {
     this->w=300;
     this->h=540;
@@ -60,7 +60,6 @@ void ListView::initWidget()
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);
     this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
-   // this->setFocus();
     connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
     connect(this,&ListView::clicked,this,&ListView::onClicked);
 }
@@ -88,7 +87,6 @@ void ListView::updateData(QVector<QStringList> data)
         item->setData(QVariant::fromValue<QStringList>(desktopfp),Qt::DisplayRole);
         listmodel->appendRow(item);
     }
-//    Q_EMIT dataChanged(createIndex(0,0), createIndex(listmodel->rowCount()-1,0));
 }
 
 void ListView::onClicked(QModelIndex index)
@@ -106,67 +104,6 @@ void ListView::onClicked(QModelIndex index)
      }
 }
 
-void ListView::rightClickedSlot(const QPoint &pos)
-{
-    if(!this->selectionModel()->selectedIndexes().isEmpty())
-    {
-        QModelIndex index=this->currentIndex();
-        QVariant var=listmodel->data(index, Qt::DisplayRole);
-        QStringList strlist=var.value<QStringList>();
-        if(strlist.at(1).toInt()==1)
-        {
-            RightClickMenu menu(this);
-            connect(&menu, &RightClickMenu::sendMainWinActiveSignal, this, &ListView::sendMainWinActiveSignal);
-            int ret = menu.showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
-            if(module>0)
-            {
-                if(strlist.at(1).toInt()==1)
-                {
-                    switch (ret) {
-                    case 6:
-                        Q_EMIT sendHideMainWindowSignal();
-                        break;
-                    case 7:
-                        Q_EMIT sendHideMainWindowSignal();
-                        break;
-                    case 18:
-                        Q_EMIT sendUpdateCollectSignal();
-                        break;
-                    case 1:
-                        Q_EMIT sendUpdateAppListSignal();
-                        break;
-                    default:
-                        break;
-                    }
-                }
-            }
-            else{
-                switch (ret) {
-                case 1:
-                    Q_EMIT sendUpdateAppListSignal();
-                    break;
-                case 2:
-                    Q_EMIT sendUpdateAppListSignal();
-                    break;
-                case 6:
-                    Q_EMIT sendHideMainWindowSignal();
-                    break;
-                case 7:
-                    Q_EMIT sendHideMainWindowSignal();
-                    break;
-                case 18:
-                    Q_EMIT sendUpdateCollectSignal();
-                    break;
-                default:
-                    break;
-                }
-            }
-
-          //  this->selectionModel()->clear();
-        }
-    }
-}
-
 void ListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
@@ -182,11 +119,10 @@ void ListView::leaveEvent(QEvent *e)
 
 void ListView::paintEvent(QPaintEvent *e)
 {
-
     //滚动条
     QPalette p=this->verticalScrollBar()->palette();
     QColor color(255, 255, 255);
-//    QColor color=p.color(QPalette::Active,QPalette::Button);
+
     color.setAlphaF(0.25);
     p.setColor(QPalette::Active,QPalette::Button,color);
     this->verticalScrollBar()->setPalette(p);

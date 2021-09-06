@@ -21,7 +21,7 @@
 #include <QDebug>
 
 FullItemDelegate::FullItemDelegate(QObject *parent, int module):
-    QStyledItemDelegate(parent)
+    KItemDelegate(parent)
 {
     this->module=module;
     pUkuiMenuInterface=new UkuiMenuInterface;

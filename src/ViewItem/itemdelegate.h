@@ -24,8 +24,9 @@
 #include <QPainterPath>
 #include <QSettings>
 #include "src/Interface/ukuimenuinterface.h"
+#include "kitemdelegate.h"
 
-class ItemDelegate : public QStyledItemDelegate
+class ItemDelegate : public KItemDelegate
 {
     Q_OBJECT
 public:
@@ -36,11 +37,6 @@ public:
     ~ItemDelegate();
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-private:
-    int module=0;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-
 };
 
 #endif // ITEMDELEGATE_H

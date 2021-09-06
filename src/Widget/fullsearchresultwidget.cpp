@@ -65,6 +65,8 @@ void FullSearchResultWidget::initUi()
     m_listView->addData(m_data);
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
+    m_listView->installEventFilter(this);
+
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullSearchResultWidget::execApplication);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullSearchResultWidget::sendHideMainWindowSignal);
 }
@@ -107,6 +109,26 @@ void FullSearchResultWidget::resizeScrollAreaControls()
 
     listview->setFixedSize(m_scrollArea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
     m_scrollArea->widget()->adjustSize();
+}
+
+bool FullSearchResultWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if( ke->key() == Qt::Key_Tab )
+        {
+           Q_EMIT setFocusToSideWin();
+            return true;
+        }
+    }
+}
+
+void FullSearchResultWidget::selectFirstItemTab()
+{
+    m_listView->setFocus();
+    m_listView->setCurrentIndex(m_listView->model()->index(0,0));
+    m_scrollArea->verticalScrollBar()->setValue(0);
 }
 
 void FullSearchResultWidget::repaintWidget()

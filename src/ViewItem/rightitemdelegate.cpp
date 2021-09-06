@@ -3,7 +3,7 @@
 #include <QDebug>
 
 RightItemDelegate::RightItemDelegate(QObject *parent):
-    QStyledItemDelegate(parent)
+    KItemDelegate(parent)
 {
     pUkuiMenuInterface=new UkuiMenuInterface;
 }
@@ -38,17 +38,26 @@ void RightItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
 
         painter->setRenderHint(QPainter::Antialiasing);
-        if(/*(option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)*/1)
+
+        painter->save();
+        painter->setPen(QPen(Qt::NoPen));
+        painter->setBrush(Qt::black);
+
+        if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus))
         {
-//            QColor color = option.palette.text().color();
-//            color.setAlphaF(0.15);
-            painter->save();
-            painter->setPen(QPen(Qt::NoPen));
-            painter->setBrush(Qt::white);
-            painter->setOpacity(0.15);
-            painter->drawPath(path);
-            painter->restore();
+            painter->setOpacity(0.6);
         }
+//        else if(option.state & QStyle::State_DownArrow)
+//        {
+//            painter->setOpacity(0.8);
+//        }
+        else
+        {
+            painter->setOpacity(0.4);
+        }
+        painter->drawPath(path);
+        painter->restore();
+
 
         painter->save();
         painter->setOpacity(1);

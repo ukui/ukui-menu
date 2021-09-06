@@ -5,8 +5,9 @@
 #include <syslog.h>
 #include <QToolTip>
 #include "src/UtilityFunction/utility.h"
+#include "kitemdelegate.h"
 
-class recentitemdelegate : public QStyledItemDelegate
+class recentitemdelegate : public KItemDelegate
 {
     Q_OBJECT
 public:
@@ -17,10 +18,6 @@ public:
     ~recentitemdelegate();
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-private:
-    int module=0;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
 };
 
 #endif // RECENTITEMDELEGATE_H

@@ -23,11 +23,10 @@
 #include "src/UtilityFunction/utility.h"
 
 ItemDelegate::ItemDelegate(QObject* parent, int module):
-    QStyledItemDelegate(parent)
+    KItemDelegate(parent)
 {
     this->module=module;
     pUkuiMenuInterface=new UkuiMenuInterface;
-
 }
 
 ItemDelegate::~ItemDelegate()

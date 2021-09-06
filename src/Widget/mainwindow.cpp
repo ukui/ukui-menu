@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     openDataBase("MainThread");
     initDatabase();
 
-    this->resize(652, 590);
+    this->resize(Style::minw, Style::minh);
     this->setAutoFillBackground(false);
 
     centralwidget = new QWidget(this);
@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //左侧
     widget = new MainViewWidget(centralwidget);
-    widget->resize(QSize(308, 540));
+    widget->resize(QSize(Style::defaultMainViewWidWidth, Style::defaultMainViewWidHeight));
 
     mainLeftVerticalLayout_1 = new QVBoxLayout(widget);
     mainLeftVerticalLayout_1->setSpacing(0);
@@ -84,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QIcon icon2;
     icon2.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-所有应用.png"), QSize(), QIcon::Normal, QIcon::Off);
     minSelectButton->setIcon(icon2);
+    minSelectButton->installEventFilter(this);
 
     selectMenuButton = new QToolButton(minMenuPage);
     selectMenuButton->setFixedSize(QSize(16, 26));
@@ -109,6 +110,8 @@ MainWindow::MainWindow(QWidget *parent) :
     cancelSearchPushButton->setFixedSize(QSize(26, 26));
     cancelSearchPushButton->setStyleSheet(QString::fromUtf8("border-radius: 10px;"
                                                             "background-color: darkgray;"));
+    cancelSearchPushButton->installEventFilter(this);
+
     QIcon icon4;
     icon4.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-\345\205\263\351\227\255.png"), QSize(), QIcon::Normal, QIcon::Off);
     cancelSearchPushButton->setIcon(icon4);
@@ -118,32 +121,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //左侧列表区
     leftStackedWidget = new QStackedWidget(widget);
-    leftStackedWidget->setFixedSize(QSize(300, 517));
+    leftStackedWidget->setFixedSize(QSize(300, Style::leftPageHeight));
 
     minAllPage = new QWidget();
-    minAllPage->setFixedSize(QSize(292, 517));
+    minAllPage->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
     minAllListView = new ListView(minAllPage);
-    minAllListView->setFixedSize(QSize(292, 517));
+    minAllListView->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
     minAllListView->setFrameShape(QFrame::NoFrame);
     leftStackedWidget->addWidget(minAllPage);
+    minAllListView->installEventFilter(this);
 
     minLetterPage = new QWidget();
-    minLetterPage->setFixedSize(QSize(292, 517));
+    minLetterPage->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
     minLetterListView = new ListView(minLetterPage);
-    minLetterListView->setFixedSize(QSize(292, 517));
+    minLetterListView->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
     minLetterListView->setFrameShape(QFrame::NoFrame);
     leftStackedWidget->addWidget(minLetterPage);
+    minLetterListView->installEventFilter(this);
 
     minFuncPage = new QWidget();
-    minFuncPage->setFixedSize(QSize(292, 517));
+    minFuncPage->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
     minFuncListView = new ListView(minFuncPage);
-    minFuncListView->setFixedSize(QSize(292, 517));
+    minFuncListView->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
     minFuncListView->setFrameShape(QFrame::NoFrame);
     leftStackedWidget->addWidget(minFuncPage);
+    minFuncListView->installEventFilter(this);
+
     minSearchResultPage = new QWidget();
-    minSearchResultPage->setFixedSize(QSize(292, 517));
+    minSearchResultPage->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
     minSearchResultListView = new ListView(minSearchResultPage);
-    minSearchResultListView->setFixedSize(QSize(292, 517));
+    minSearchResultListView->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
+    minSearchResultListView->installEventFilter(this);
     leftStackedWidget->addWidget(minSearchResultPage);
 
     //右侧窗口
@@ -157,12 +165,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //收藏按键
     collectPushButton = new QPushButton(centralwidget);
-    collectPushButton->setFixedSize(QSize(40, 34));
+    collectPushButton->setFixedHeight(34);
     collectPushButton->setFlat(true);
+    collectPushButton->installEventFilter(this);
     //最近按键
-    recentPushButton = new QPushButton(centralwidget);
-    recentPushButton->setFixedSize(QSize(40, 34));
-    recentPushButton->setFlat(true);
+//    recentPushButton = new QPushButton(centralwidget);
+//    recentPushButton->setFixedSize(QSize(40, 34));
+//    recentPushButton->setFlat(true);
 
     horizontalSpacer_3 = new QSpacerItem(332, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     //放大缩小按键
@@ -174,7 +183,7 @@ MainWindow::MainWindow(QWidget *parent) :
     minMaxChangeButton->setFlat(true);
 
     rightTopHorizontalLayout_3->addWidget(collectPushButton);
-    rightTopHorizontalLayout_3->addWidget(recentPushButton);
+//    rightTopHorizontalLayout_3->addWidget(recentPushButton);
     rightTopHorizontalLayout_3->addItem(horizontalSpacer_3);
     rightTopHorizontalLayout_3->addWidget(minMaxChangeButton);
 
@@ -183,6 +192,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //右侧列表区
     rightStackedWidget = new QStackedWidget(centralwidget);
     rightStackedWidget->setFixedSize(QSize(324, 490));
+    rightStackedWidget->setFocusPolicy(Qt::StrongFocus);
 
     collectPage = new QWidget();
     collectPage->setFixedSize(QSize(324, 480));
@@ -204,6 +214,7 @@ MainWindow::MainWindow(QWidget *parent) :
     collectListView->setProperty("isWrapping", QVariant(true));
     collectListView->setWordWrap(true);
     collectListView->setSelectionRectVisible(true);
+    collectListView->installEventFilter(this);
 
     recentPage = new QWidget();
     recentPage->setFixedSize(QSize(324, 480));
@@ -229,6 +240,7 @@ MainWindow::MainWindow(QWidget *parent) :
     icon6.addFile(QString::fromUtf8(":/data/img/sidebarwidget/shutdown.svg"), QSize(), QIcon::Normal, QIcon::Off);
     powerOffButton->setIcon(icon6);
     powerOffButton->setFlat(true);
+    powerOffButton->installEventFilter(this);
 
     letfTopSelectHorizontalLayout->addWidget(minSelectTextLabel);
     letfTopSelectHorizontalLayout->addItem(horizontalSpacer);
@@ -264,7 +276,7 @@ MainWindow::MainWindow(QWidget *parent) :
     selectMenuButton->setText(QString());
     cancelSearchPushButton->setText(QString());
     collectPushButton->setText(QApplication::translate("MainWindow", "collection", nullptr));
-    recentPushButton->setText(QApplication::translate("MainWindow", "recent", nullptr));
+//    recentPushButton->setText(QApplication::translate("MainWindow", "recent", nullptr));
     minMaxChangeButton->setToolTip(QApplication::translate("MainWindow", "Max", nullptr));
     minMaxChangeButton->setText(QString());
     powerOffButton->setToolTip(QApplication::translate("MainWindow", "PowerOff", nullptr));
@@ -274,7 +286,14 @@ MainWindow::MainWindow(QWidget *parent) :
     leftStackedWidget->setCurrentIndex(0);
     minMaxChangeButton->setDefault(false);
     rightStackedWidget->setCurrentIndex(0);
-
+//    setTabOrder(widget, searchPushButton);
+    setTabOrder(searchPushButton, minSelectButton);
+    setTabOrder(minSelectButton, selectMenuButton);
+    setTabOrder(selectMenuButton, collectPushButton);
+//    setTabOrder(collectPushButton, recentPushButton);
+    setTabOrder(collectPushButton, minMaxChangeButton);
+    setTabOrder(minMaxChangeButton, powerOffButton);
+    setTabOrder(powerOffButton, collectListView);
     initUi();
 
     m_functionBtnWid = new FunctionButtonWidget(minFuncPage);
@@ -323,6 +342,7 @@ MainWindow::MainWindow(QWidget *parent) :
         {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
             if(gsetting.keys().contains("win-key-release"))
+//                qDebug() << "ffdafdsafdasfdas";
                 if(gsetting.get("win-key-release").toBool())
                     return;
         }
@@ -337,11 +357,13 @@ MainWindow::MainWindow(QWidget *parent) :
         if(this->isVisible())
         {
             this->hide();
+            this->clearFocus();
             m_isFullScreen = false;
         }
         else if(fullWindow->isVisible())
         {
             fullWindow->hide();
+            fullWindow->clearFocus();
             m_isFullScreen = true;
         }
         else
@@ -351,6 +373,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 this->show();
                 this->raise();
                 this->activateWindow();
+                widget->setFocus();
             }
             else
             {
@@ -370,10 +393,30 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(powerOffButton,&QPushButton::customContextMenuRequested,this,&MainWindow::on_powerOffButton_customContextMenuRequested);
     connect(powerOffButton,&QPushButton::clicked,this,&MainWindow::on_powerOffButton_clicked);
     connect(collectPushButton,&QPushButton::clicked,this,&MainWindow::on_collectPushButton_clicked);
-    connect(recentPushButton,&QPushButton::clicked,this,&MainWindow::on_recentPushButton_clicked);
+//    connect(recentPushButton,&QPushButton::clicked,this,&MainWindow::on_recentPushButton_clicked);
     connect(cancelSearchPushButton,&QPushButton::clicked,this,&MainWindow::on_cancelSearchPushButton_clicked);
     connect(searchPushButton,&QPushButton::clicked,this,&MainWindow::on_searchPushButton_clicked);
     connect(minMaxChangeButton,&QPushButton::clicked,this,&MainWindow::on_minMaxChangeButton_clicked);
+
+    QDBusConnection::sessionBus().connect(DBUS_NAME,DBUS_PATH,DBUS_INTERFACE,QString("PanelGeometryRefresh"),this,SLOT(primaryScreenChangeSlot()));
+
+    //监听屏幕缩放
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit()))
+    {
+        QGSettings* m_gsetting=new QGSettings(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit());
+        connect(m_gsetting,&QGSettings::changed,this,[=](const QString &key)
+        {
+            if(key=="scalingFactor")
+                repaintWidget();
+        });
+    }
+
+    if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit()))
+    {
+        QGSettings* gsetting=new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        connect(gsetting,&QGSettings::changed,
+                this,&MainWindow::repaintWidget);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -412,7 +455,7 @@ void MainWindow::initUi()
     m_allAction->setChecked(true);
     selectMenuButton->setMenu(m_menu);
     collectPushButton->setStyleSheet("color:#3790FA");
-    recentPushButton->setStyleSheet("color:white");
+//    recentPushButton->setStyleSheet("color:white");
 
     QAction *action = new QAction(this);
     action->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-search.svg"));
@@ -420,7 +463,7 @@ void MainWindow::initUi()
 
     m_desktopWatcher = new DesktopWatcher();
     connect(minAllListView,&ListView::sendUpdateAppListSignal,this,&MainWindow::updateMinAllView);
-    connect(minAllListView,&ListView::sendUpdateCollectSignal,this,&MainWindow::updateCollectView);
+    connect(minAllListView,&ListView::sendCollectViewUpdate,this,&MainWindow::updateCollectView);
     connect(collectListView,&RightListView::sendCollectViewUpdate,this,&MainWindow::updateCollectView);
     connect(m_desktopWatcher,&DesktopWatcher::directoryChangedSignal,this,&MainWindow::updateView);
 }
@@ -463,7 +506,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 bool MainWindow::event ( QEvent * event )
 {
 //   if (event->type() == QEvent::ActivationChange && m_canHide)
-   if(QEvent::WindowDeactivate == event->type() && m_canHide)//窗口停用
+        if(QEvent::WindowDeactivate == event->type() && m_canHide)//窗口停用
    {
        if(QApplication::activeWindow() != this)
        {
@@ -475,19 +518,56 @@ bool MainWindow::event ( QEvent * event )
    if (event->type() == QEvent::KeyPress)
    {
        QKeyEvent *keyEvent = (QKeyEvent *) event;
-//       if (keyEvent->key() == Qt::Key_Tab)
-//       {
-//           m_mainViewWid->setFocus();
-//           Q_EMIT setFocusSignal();
-//           return true;
-//       }
+
        if(keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down ||
                keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right ||
                keyEvent->key() == Qt::Key_Tab)
        {
- //        m_mainViewWid->setFocus();
-//         Q_EMIT setFocusSignal();
-        // return true;
+           if(!collectListView->hasFocus())
+           {
+               widget->setFocus();
+               if(m_state == 0)
+               {
+                   minAllListView->setFocus();
+                   minAllListView->setCurrentIndex(minAllListView->model()->index(0,0));
+               }
+               else if(m_state == 1)
+               {
+                   minLetterListView->setFocus();
+                   minLetterListView->setCurrentIndex(minLetterListView->model()->index(0,0));
+               }
+               else
+               {
+                   minFuncListView->setFocus();
+                   minFuncListView->setCurrentIndex(minFuncListView->model()->index(0,0));
+               }
+           }
+           return true;
+       }
+       if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+       {
+           if(minSelectButton->hasFocus())
+           {
+               minSelectButton->click();
+           }
+           else if(selectMenuButton->hasFocus())
+           {
+               selectMenuButton->click();
+           }
+           if(lineEdit->hasFocus())
+           {
+               minSearchResultListView->setFocus();
+           }
+           else
+           {
+               QWidget *current_focus_widget;
+               current_focus_widget = QWidget::focusWidget();
+               QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
+               if(le != nullptr)
+               {
+                   le->clicked();
+               }
+           }
        }
    }
    return QWidget::event(event);
@@ -533,7 +613,10 @@ void MainWindow::recvFunctionBtnSignal(QString btnname)
     m_widgetState=0;
 }
 
-
+void MainWindow::primaryScreenChangeSlot()
+{
+    repaintWidget();
+}
 
 void MainWindow::appClassificationBtnClickedSlot()
 {
@@ -543,7 +626,6 @@ void MainWindow::appClassificationBtnClickedSlot()
     m_enterAnimation->setEndValue(QRect(10, 0, minFuncPage->width() - 20, minFuncPage->height() - 60));
     m_leaveAnimation->setDuration(10);
     m_enterAnimation->setDuration(100);
-
 
     if(m_state == 1)
     {
@@ -613,6 +695,115 @@ void MainWindow::on_minSelectButton_clicked()
     {
         on_selectMenuButton_triggered(m_allAction);
     }
+}
+
+bool MainWindow::eventFilter(QObject * target , QEvent * event )
+{
+    if( event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = (QKeyEvent *)event;
+        if(target == powerOffButton)
+        {
+            if( ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Right)
+            {
+                if(topStackedWidget->currentIndex() == 0)
+                {
+                    topStackedWidget->setFocus();
+                }
+                else
+                {
+                    lineEdit->setFocus();
+                    return true;
+                }
+
+            }
+            if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down)
+            {
+                return true;
+            }
+        }
+
+        if(target == collectPushButton)
+        {
+            if(ke->key() == Qt::Key_Down)
+            {
+                collectListView->setFocus();
+                return true;
+            }
+            if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Right || ke->key() == Qt::Key_Left)
+            {
+                return true;
+            }
+        }
+
+        if(target == collectListView)
+        {
+            if(ke->key() == Qt::Key_Tab)
+            {
+                collectPushButton->setFocus();
+                return true;
+            }
+        }
+
+        if(target == minAllListView || target == minLetterListView || target == minFuncListView)
+        {
+            if(ke->key() == Qt::Key_Tab)
+            {
+                searchPushButton->setFocus();
+            }
+        }
+
+        if(target == cancelSearchPushButton)
+        {
+            if(ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Right)
+            {
+                collectPushButton->setFocus();
+                return true;
+            }
+            if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down)
+            {
+                return true;
+            }
+        }
+
+        if(target == minSearchResultListView)
+        {
+            if(ke->key() == Qt::Key_Tab)
+            {
+                lineEdit->setFocus();
+                return true;
+            }
+        }
+
+        if(target == minSelectButton)
+        {
+            if(ke->key() == Qt::Key_Down)
+            {
+                if(m_state == 0)
+                {
+                    minAllListView->setFocus();
+                    minAllListView->setCurrentIndex(minAllListView->model()->index(0,0));
+                }
+                else if(m_state == 1)
+                {
+                    minLetterListView->setFocus();
+                    minLetterListView->setCurrentIndex(minLetterListView->model()->index(0,0));
+                }
+                else
+                {
+                    minFuncListView->setFocus();
+                    minFuncListView->setCurrentIndex(minFuncListView->model()->index(0,0));
+                }
+                return true;
+            }
+            if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Right || ke->key() == Qt::Key_Left)
+            {
+                return true;
+            }
+        }
+    }
+
+    return QWidget::eventFilter(target , event);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -730,14 +921,14 @@ void MainWindow::on_collectPushButton_clicked()
 {
     rightStackedWidget->setCurrentIndex(0);
     collectPushButton->setStyleSheet("color:#3790FA");
-    recentPushButton->setStyleSheet("color:white");
+//    recentPushButton->setStyleSheet("color:white");
 }
 
 void MainWindow::on_recentPushButton_clicked()
 {
     rightStackedWidget->setCurrentIndex(1);
     collectPushButton->setStyleSheet("color:white");
-    recentPushButton->setStyleSheet("color:#3790FA");
+//    recentPushButton->setStyleSheet("color:#3790FA");
 }
 
 void MainWindow::on_cancelSearchPushButton_clicked()
@@ -779,6 +970,7 @@ void MainWindow::showWindow()
         this->raise();
         this->showNormal();
         this->activateWindow();
+        widget->setFocus();
     }
 }
 
@@ -787,12 +979,46 @@ void MainWindow::hideWindow()
     if(fullWindow->isVisible())
     {
         fullWindow->hide();
+        this->clearFocus();
         m_isFullScreen = true;
     }
     else
     {
         this->hide();
+        this->clearFocus();
         m_isFullScreen = false;
+    }
+}
+
+void MainWindow::repaintWidget()
+{
+    Style::initWidStyle();
+    QRect availableGeometry = getScreenAvailableGeometry();
+    this->setMinimumSize(Style::minw,Style::minh);
+    int position=Style::panelPosition;
+    int panelSize=Style::panelSize;
+    int x = Style::primaryScreenX;
+    int y = Style::primaryScreenY;
+
+    if(position==0)
+    {
+        this->setGeometry(QRect(x+4, y+availableGeometry.height()-Style::minh-3, Style::minw, Style::minh));
+        fullWindow->setGeometry(QRect(x, y, availableGeometry.width(), /*availableGeometry.height()*/1080));
+    }
+    else if(position==1)
+    {
+        this->setGeometry(QRect(x+4, y+panelSize+4, Style::minw, Style::minh));
+        fullWindow->setGeometry(QRect(x, y+panelSize, availableGeometry.width(), availableGeometry.height()));
+    }
+    else if(position==2)
+    {
+        this->setGeometry(QRect(x+panelSize+4, y+4, Style::minw, Style::minh));
+        fullWindow->setGeometry(QRect(x+panelSize,y,availableGeometry.width(), availableGeometry.height()));
+    }
+    else
+    {
+        this->setGeometry(QRect(x+availableGeometry.width()-Style::minw-4, y+4, Style::minw, Style::minh));
+        fullWindow->setGeometry(QRect(x,y,availableGeometry.width(),availableGeometry.height()));
     }
 }
 
@@ -805,6 +1031,7 @@ void MainWindow::showNormalWindow()
     this->show();
     this->raise();
     this->activateWindow();
+    widget->setFocus();
     m_isFullScreen = false;
     m_canHide = true;
 }

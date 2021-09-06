@@ -346,9 +346,6 @@ void QtSingleApplication::activateWindow()
         MainWindow* w=qobject_cast<MainWindow*>(actWin);
         if(this->applicationState() & Qt::ApplicationInactive)
         {
-
-//          w->loadMainWindow();
-
             actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
 //          actWin->raise();
 //          actWin->showNormal();

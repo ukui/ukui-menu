@@ -70,6 +70,7 @@ public:
 
     void hideWindow();
 
+
 private:
 
     bool m_isFullScreen=false;
@@ -108,7 +109,10 @@ protected:
 //     */
 //    void repaintWidget();
     void searchAppSlot(QString arg);
+
     void recvSearchResult(QVector<QStringList> arg);
+
+    bool eventFilter(QObject * target , QEvent * event );
 
 //    void mouseReleaseEvent(QMouseEvent *event);
 
@@ -125,6 +129,8 @@ public Q_SLOTS:
     void showNormalWindow();
     void updateView();
     void recvFunctionBtnSignal(QString btnname);
+    void primaryScreenChangeSlot();
+    void repaintWidget();
 
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);

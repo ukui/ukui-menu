@@ -40,6 +40,7 @@ void FullFunctionWidget::initUi()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setFocusPolicy(Qt::NoFocus);
     m_applistWid=new QWidget(this);
     m_iconListWid=new QWidget(this);
     m_iconListWid->setAttribute(Qt::WA_TranslucentBackground);
@@ -555,34 +556,8 @@ bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
         if( ke->key() == Qt::Key_Tab )
         {
            Q_EMIT setFocusToSideWin();
+            return true;
         }
-//        if(ke->key() == Qt::Key_Up)
-//        {
-//            QLayoutItem* widItemTop = m_scrollAreaWidLayout->itemAt(1);
-//            QWidget* widTop = widItemTop->widget();
-//            FullListView* m_listviewTop = qobject_cast<FullListView*>(widTop);
-//            if(!m_listviewTop->hasFocus())
-//            {
-//                QAbstractButton* buttonTop = getCurLetterButton(( --m_index) % m_buttonList.size());
-//                btnGroupClickedSlot(buttonTop);
-//                this->m_scrollArea->setFocusToPreChild();
-//                return true;
-//            }
-//        }
-//        if(ke->key() == Qt::Key_Down)
-//        {
-//            QLayoutItem* widItem = m_scrollAreaWidLayout->itemAt(2 * m_buttonList.size() - 1);
-//            QWidget* wid = widItem->widget();
-//            FullListView* m_listview = qobject_cast<FullListView*>(wid);
-
-//            if(!m_listview->hasFocus())
-//            {
-//                QAbstractButton* button = getCurLetterButton(( ++m_index) % m_buttonList.size());
-//                btnGroupClickedSlot(button);
-//                this->m_scrollArea->setFocusToNextChild();
-//                return true;
-//            }
-//        }
 
         if(ke->key() == Qt::Key_Up)
         {
@@ -634,7 +609,10 @@ void FullFunctionWidget::functionButtonClick()
 
 void FullFunctionWidget::setFocusToThis()
 {
+    QLayoutItem* widItemTop = m_scrollAreaWidLayout->itemAt(1);
+    QWidget* widTop = widItemTop->widget();
+    FullListView* m_listviewTop = qobject_cast<FullListView*>(widTop);
     functionButtonClick();
-    this->setFocus();
+    m_listviewTop->setFocus();
     Q_EMIT selectFirstItem();
 }

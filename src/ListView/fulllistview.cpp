@@ -24,18 +24,18 @@
 #include <QGSettings>
 
 FullListView::FullListView(QWidget *parent, int module):
-    QListView(parent)
+    KListView(parent)
 {
     this->module=module;
     initWidget();
-//    inCurView = false;
+    m_delegate= new FullItemDelegate(this,module);
+    this->setItemDelegate(m_delegate);
+
     pUkuiMenuInterface=new UkuiMenuInterface;
-//    menu=new RightClickMenu;
 }
 
 FullListView::~FullListView()
 {
-//    delete menu;
     delete pUkuiMenuInterface;
 }
 
@@ -44,14 +44,12 @@ void FullListView::initWidget()
     viewport()->setAttribute(Qt::WA_TranslucentBackground);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    if(module==1 || module==2)s
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setViewMode(QListView::IconMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setResizeMode(QListView::Adjust);
     this->setTextElideMode(Qt::ElideRight);
     this->setMouseTracking(true);
-  //  this->setFocusPolicy(Qt::StrongFocus);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setGridSize(QSize(Style::AppListGridSizeWidth,Style::AppListGridSizeWidth));
@@ -61,184 +59,14 @@ void FullListView::initWidget()
     connect(this,&FullListView::customContextMenuRequested,this,&FullListView::rightClickedSlot);
 
     connect(this,&FullListView::clicked,this,&FullListView::onClicked);
-
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-//    {
-//        gsetting = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-//        if(gsetting->keys().contains(QString("transparency")))
-//            transparency = gsetting->get("transparency").toDouble();
-//        connect(gsetting,&QGSettings::changed,[this] (const QString &key)
-//        {
-//            if (key == "transparency")
-//            {
-//                transparency = gsetting->get("transparency").toDouble();
-//            }
-//        });
-//    }
-}
-
-void FullListView::addData(QStringList data)
-{
-    listmodel=new QStandardItemModel(this);
-    this->setModel(listmodel);
-
-    Q_FOREACH(QString desktopfp,data)
-    {
-        QStandardItem* item=new QStandardItem;
-        item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-        listmodel->appendRow(item);
-    }
-    m_delegate= new FullItemDelegate(this,module);
-    this->setItemDelegate(m_delegate);
-}
-
-void FullListView::focusInEvent(QFocusEvent *event)
-{
-    //inCurView = true;
-    return QListView::focusInEvent(event);
-}
-
-void FullListView::focusOutEvent(QFocusEvent *event)
-{
-    //inCurView = false;
-    return QListView::focusOutEvent(event);
-}
-
-void FullListView::updateData(QStringList data)
-{
-    listmodel->clear();
-    Q_FOREACH(QString desktopfp,data)
-    {
-        QStandardItem* item=new QStandardItem;
-        item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-        listmodel->appendRow(item);
-    }
-}
-
-void FullListView::onClicked(QModelIndex index)
-{
-     QVariant var = listmodel->data(index, Qt::DisplayRole);
-     if(var.isValid())
-     {
-         QString desktopfp=var.value<QString>();
-         Q_EMIT sendItemClickedSignal(desktopfp);
-
-     }
-}
-
-void FullListView::rightClickedSlot(const QPoint &pos)
-{
-    Q_UNUSED(pos)
-    if(!(this->selectionModel()->selectedIndexes().isEmpty()))
-    {
-        QModelIndex index=this->currentIndex();
-        QVariant var=listmodel->data(index, Qt::DisplayRole);
-        QString desktopfp=var.value<QString>();
-        RightClickMenu menu;
-        int ret=menu.showAppBtnMenu(this->mapToGlobal(pos), desktopfp);
-        if(module>0)
-        {
-            switch (ret) {
-            case 6:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            case 7:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            default:
-                break;
-            }
-        }
-        else{
-            switch (ret) {
-            case 1:
-                Q_EMIT sendUpdateAppListSignal();
-                break;
-            case 2:
-                Q_EMIT sendUpdateAppListSignal();
-                break;
-            case 6:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            case 7:
-                Q_EMIT sendHideMainWindowSignal();
-                break;
-            default:
-                break;
-            }
-        }
-        //this->selectionModel()->clear();
-    }
-}
-
-void FullListView::enterEvent(QEvent *e)
-{
-    Q_UNUSED(e);
-    this->selectionModel()->clear();
-    this->verticalScrollBar()->setVisible(true);
-}
-
-void FullListView::leaveEvent(QEvent *e)
-{
-    Q_UNUSED(e);
-    this->verticalScrollBar()->setVisible(false);
-//    QWidget *current_focus_widget;
-   // current_focus_widget = QApplication::focusWidget();
-//    current_focus_widget = QWidget::focusWidget();
-//    QPushButton *le= qobject_cast<QPushButton*>(current_focus_widget);
-
 }
 
 void FullListView::selectFirstItem()
 {
-    qDebug() << "void FullListView::selectFirstItem()";
     if(this->currentIndex().row() == -1)
     {
         this->setCurrentIndex(this->model()->index(0,0));
     }
-}
-
-void FullListView::paintEvent(QPaintEvent *e)
-{
-    double transparency=getTransparency();
-    QPainter painter(this->viewport());
-
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-//    {
-//        QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
-//        if(gsetting.keys().contains(QString("effect")))
-//        {
-//            if(gsetting.get("effect").toBool())
-//            {
-//                painter.setBrush(Qt::black);
-//                painter.setPen(Qt::transparent);
-//                painter.setOpacity(0.25);
-//                painter.drawRect(this->rect());
-//            }
-//            else
-//            {
-//                painter.setBrush(this->palette().base());
-//                painter.setPen(Qt::transparent);
-//                painter.setOpacity(transparency);
-//                painter.drawRect(this->rect());
-//            }
-//        }
-//        else
-//        {
-//            painter.setBrush(this->palette().base());
-//            painter.setPen(Qt::transparent);
-//            painter.setOpacity(transparency);
-//            painter.drawRect(this->rect());
-//        }
-//    }
-//    else
-//    {
-        painter.setBrush(this->palette().base());
-        painter.setPen(Qt::transparent);
-        painter.setOpacity(transparency);
-        painter.drawRect(this->rect());
-//    }
-    QListView::paintEvent(e);
 }
 
 void FullListView::keyPressEvent(QKeyEvent* e)
@@ -302,22 +130,8 @@ void FullListView::keyPressEvent(QKeyEvent* e)
             return QListView::keyPressEvent(e);
             break;
         }
-
         default:
             return QListView::keyPressEvent(e);
-            break;
         }
-    }
-}
-
-void FullListView::mousePressEvent(QMouseEvent *event)
-{
-    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
-    {
-        Q_EMIT sendHideMainWindowSignal();
-    }
-    else
-    {
-        return QListView::mousePressEvent(event);
     }
 }
