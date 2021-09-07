@@ -108,6 +108,9 @@ void MainViewWidget::initUi()
     connect(m_fullFunctionWid,&FullFunctionWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
     connect(m_searchResultWid,&SearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
     connect(m_fullSearchResultWid,&FullSearchResultWidget::sendHideMainWindowSignal,this,&MainViewWidget::sendHideMainWindowSignal);
+    connect(m_commonUseWid,&CommonUseWidget::sendMainWinActiveSignal,this,&MainViewWidget::sendMainWinActiveSignal);
+    connect(m_functionWid,&FunctionWidget::sendMainWinActiveSignal,this,&MainViewWidget::sendMainWinActiveSignal);
+    connect(m_letterWid,&LetterWidget::sendMainWinActiveSignal,this,&MainViewWidget::sendMainWinActiveSignal);
 
     addTopControl();
     //加载默认视图

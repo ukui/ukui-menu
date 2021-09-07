@@ -340,9 +340,8 @@ void SideBarWidget::shutdownBtnRightClickSlot(const QPoint &pos)
 {
 
     RightClickMenu m_otherMenu(this);
-    connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
-    Q_EMIT sendShowMainWindowSignal(false);
     int ret = m_otherMenu.showShutdownMenu(m_shutDownBtn->mapToGlobal(pos));
+    Q_EMIT sendShowMainWindowSignal(false);
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
     if(ret>=10 && ret<=17)
     {
@@ -406,7 +405,6 @@ void SideBarWidget::otherBtnRightClickSlot(const QPoint &pos)
         break;
     }
     RightClickMenu m_otherMenu;
-    connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
     int ret = m_otherMenu.showOtherMenu(btn->mapToGlobal(pos), desktopfp);
     Q_EMIT sendShowMainWindowSignal(false);
     if(ret==15)

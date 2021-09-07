@@ -62,7 +62,7 @@ RightClickMenu::~RightClickMenu()
 
 QPixmap RightClickMenu::getIconPixmap(QString iconstr, int type)
 {
-    const auto ratio=devicePixelRatioF();
+    const auto ratio = devicePixelRatioF();
     QPixmap pixmap;
 
     if(type==0)
@@ -307,6 +307,7 @@ int RightClickMenu::showOtherMenu(const QPoint &pos, QString desktopfp)
     m_showOtherMenu.setAttribute(Qt::WA_TranslucentBackground);
     m_showOtherMenu.setAttribute(Qt::WA_DeleteOnClose);
     m_showOtherMenu.exec(pos);
+
     qDebug() << "RightClickMenu::showOtherMenu(QString desktopfp)";
 
     return m_actionNumber;

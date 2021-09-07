@@ -75,6 +75,7 @@ Q_SIGNALS:
     void sendItemClickedSignal(QStringList arg);//发送item点击信号
     void sendHideMainWindowSignal();
     void sendUpdateAppListSignal();
+    void sendMainWinActiveSignal(bool flag);
 };
 
 #endif // LISTVIEW_H
