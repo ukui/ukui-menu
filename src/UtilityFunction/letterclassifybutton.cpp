@@ -36,6 +36,7 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
     this->setText(letter);
     this->setFocusPolicy(Qt::NoFocus);
     this->setCheckable(true);
+    this->setStyleSheet("padding: 0px;");
     connect(this,&LetterClassifyButton::toggled,this,&LetterClassifyButton::reactToToggle);
 }
 
