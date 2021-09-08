@@ -118,8 +118,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
         QRect iconRect;
         QRect textRect;
-        iconRect=QRect(rect.x()+/*Style::AppLeftSpace*/66 ,
-                       rect.y()+/*Style::AppTopSpace*/40,
+        iconRect=QRect(/*rect.x()+66*/rect.x() + (rect.width() - Style::AppListIconSize)/2 ,
+                       /*rect.y()+40*/rect.y() + 40,
                        Style::AppListIconSize,
                        Style::AppListIconSize);
         icon.paint(painter,iconRect);
