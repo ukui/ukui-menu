@@ -37,6 +37,7 @@
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Style/style.h"
 #include "menubox.h"
+#include <QWidget>
 
 class RightClickMenu : public QWidget
 {

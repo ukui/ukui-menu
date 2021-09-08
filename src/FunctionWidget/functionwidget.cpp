@@ -68,6 +68,7 @@ void FunctionWidget::initAppListWidget()
     fillAppListView(0);
     connect(m_appListView,&ListView::sendItemClickedSignal,this,&FunctionWidget::recvItemClickedSlot);
     connect(m_appListView,&ListView::sendHideMainWindowSignal,this,&FunctionWidget::sendHideMainWindowSignal);
+    connect(m_appListView,&ListView::sendMainWinActiveSignal,this,&FunctionWidget::sendMainWinActiveSignal);
 }
 
 

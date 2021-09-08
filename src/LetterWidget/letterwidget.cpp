@@ -78,6 +78,7 @@ void LetterWidget::initAppListWidget()
     fillAppListView();
     connect(m_appListView,&ListView::sendItemClickedSignal,this,&LetterWidget::recvItemClickedSlot);
     connect(m_appListView,&ListView::sendHideMainWindowSignal,this,&LetterWidget::sendHideMainWindowSignal);
+    connect(m_appListView,&ListView::sendMainWinActiveSignal,this,&LetterWidget::sendMainWinActiveSignal);
 }
 
 

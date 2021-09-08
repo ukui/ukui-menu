@@ -111,6 +111,7 @@ void ListView::rightClickedSlot(const QPoint &pos)
         if(strlist.at(1).toInt()==1)
         {
             int ret = menu->showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
+            Q_EMIT sendMainWinActiveSignal(false);
             if(module>0)
             {
                 if(strlist.at(1).toInt()==1)
