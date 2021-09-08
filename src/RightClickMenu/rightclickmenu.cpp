@@ -46,6 +46,7 @@ RightClickMenu::RightClickMenu(QWidget *parent):
 
     if(isHuaWei9006C || isHuaWeiPC)
     {
+        m_whiteList.append("org.gnome.FileRoller.desktop");
         m_whiteList.append("mate-terminal.desktop");
         m_whiteList.append("hwaudioui.desktop");
     }
