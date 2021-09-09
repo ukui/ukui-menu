@@ -70,6 +70,7 @@ private:
 
     QPropertyAnimation *m_animation=nullptr;
     bool m_winFlag = false;
+    bool is_repaint = true;
     DBus *m_dbus=nullptr;
 
 protected:
