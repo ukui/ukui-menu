@@ -20,6 +20,11 @@
 #include "utility.h"
 #include <QDebug>
 #include <QDrag>
+#include <QSlider>
+#include <QAbstractSlider>
+#include <QScrollEvent>
+#include <QWheelEvent>
+
 
 ListView::ListView(QWidget *parent, int width, int height, int module):
     QListView(parent)
@@ -257,3 +262,18 @@ void ListView::keyPressEvent(QKeyEvent* e)
         }
     }
 }
+
+//void ListView::wheelEvent(QWheelEvent *e)
+//{
+//    if(isHuaWei9006C || isHuaWeiPC){
+//        if (qAbs(e->angleDelta().y()) > qAbs(e->angleDelta().x())) {
+//            if ((e->angleDelta().y() >= 120) ) { //上翻
+//                verticalScrollBar()->setValue(verticalScrollBar()->value()-1);
+//            } else if ((e->angleDelta().y() <= -120) ) { //下翻
+//                verticalScrollBar()->setValue(verticalScrollBar()->value()+1);
+//            }
+//        }
+//        e->accept();
+//    }
+//    QListView::wheelEvent(e);
+//}
