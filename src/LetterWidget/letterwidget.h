@@ -122,6 +122,7 @@ Q_SIGNALS:
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+    void sendMainWinActiveSignal(bool flag);
 };
 
 #endif // LETTERWIDGET_H

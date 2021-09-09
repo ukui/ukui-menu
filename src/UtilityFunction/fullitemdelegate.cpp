@@ -89,6 +89,10 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
                     icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
                 else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png")))
                     icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
+                else if(QFile::exists(QString("/usr/share/icons/hicolor/128x128/apps/%1.%2").arg(iconstr).arg("png")))
+                    icon=QIcon(QString("/usr/share/icons/hicolor/128x128/apps/%1.%2").arg(iconstr).arg("png"));
+                else if(QFile::exists(QString("/usr/share/icons/hicolor/128x128/apps/%1.%2").arg(iconstr).arg("svg")))
+                    icon=QIcon(QString("/usr/share/icons/hicolor/128x128/apps/%1.%2").arg(iconstr).arg("svg"));
                 else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png")))
                     icon=QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"));
                 else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg")))
@@ -109,6 +113,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
                     icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
                 else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg")))
                     icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
+                else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm")))
+                    icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm"));
                 else
                     icon=QIcon::fromTheme(QString("application-x-desktop"));
             }

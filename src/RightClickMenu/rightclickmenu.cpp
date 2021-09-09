@@ -44,6 +44,13 @@ RightClickMenu::RightClickMenu(QWidget *parent):
     m_whiteList.append("peony.desktop");
     m_whiteList.append("engrampa.desktop");
 
+    if(isHuaWei9006C || isHuaWeiPC)
+    {
+        m_whiteList.append("org.gnome.FileRoller.desktop");
+        m_whiteList.append("mate-terminal.desktop");
+        m_whiteList.append("hwaudioui.desktop");
+    }
+
     m_ukuiMenuInterface=new UkuiMenuInterface;
 
 }
@@ -56,7 +63,7 @@ RightClickMenu::~RightClickMenu()
 
 QPixmap RightClickMenu::getIconPixmap(QString iconstr, int type)
 {
-    const auto ratio=devicePixelRatioF();
+    const auto ratio = devicePixelRatioF();
     QPixmap pixmap;
 
     if(type==0)
@@ -301,6 +308,7 @@ int RightClickMenu::showOtherMenu(const QPoint &pos, QString desktopfp)
     m_showOtherMenu.setAttribute(Qt::WA_TranslucentBackground);
     m_showOtherMenu.setAttribute(Qt::WA_DeleteOnClose);
     m_showOtherMenu.exec(pos);
+
     qDebug() << "RightClickMenu::showOtherMenu(QString desktopfp)";
 
     return m_actionNumber;

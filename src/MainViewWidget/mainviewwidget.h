@@ -97,6 +97,7 @@ private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
     QWidget *m_topWidget=nullptr;
     QHBoxLayout *m_topLayout=nullptr;
+    QHBoxLayout *m_queryLineLayout=nullptr;
 
     QWidget *m_contentWid=nullptr;
 
@@ -236,6 +237,8 @@ Q_SIGNALS:
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
+
+    void sendMainWinActiveSignal(bool flag);
 
     void setFocusToSideWin();
 

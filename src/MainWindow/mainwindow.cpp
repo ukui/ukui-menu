@@ -42,6 +42,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    getCurrentCPU();
     openDataBase("MainThread");
     m_ukuiMenuInterface=new UkuiMenuInterface;
     UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
@@ -52,8 +53,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Style::initWidStyle();
     initUi();
-
-
     m_dbus=new DBus;
     new MenuAdaptor(m_dbus);
     QDBusConnection con=QDBusConnection::sessionBus();
@@ -168,11 +167,14 @@ void MainWindow::initUi()
     connect(m_sideBarWid,&SideBarWidget::sendFullScreenBtnSignal,this,&MainWindow::showFullScreenWidget);
     connect(m_sideBarWid,&SideBarWidget::sendDefaultBtnSignal,this,&MainWindow::showDefaultWidget);
     connect(m_sideBarWid, &SideBarWidget::sendShowMainWindowSignal, this, &MainWindow::activeWindowSolt);
+
     connect(m_mainViewWid,&MainViewWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
     connect(m_sideBarWid,&SideBarWidget::sendHideMainWindowSignal,this,&MainWindow::recvHideMainWindowSlot);
 
     connect(m_mainViewWid,&MainViewWidget::setFocusToSideWin,m_sideBarWid,&SideBarWidget::setFocusToThis);
     connect(this, &MainWindow::setFocusSignal, m_mainViewWid, &MainViewWidget::selectFirstItem);
+
+    connect(m_mainViewWid,&MainViewWidget::sendMainWinActiveSignal,this,&MainWindow::activeWindowSolt);
 //    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
 //        repaintWidget();
 //    });
@@ -204,6 +206,26 @@ void MainWindow::initUi()
                 this,&MainWindow::panelChangedSlot);
     }
 }
+
+void MainWindow::getCurrentCPU()
+{
+    QProcess *processCpuInfo = new QProcess(this);
+    processCpuInfo->start(QString("cat /proc/cpuinfo"));
+    connect(processCpuInfo,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,[=](){
+        processCpuInfo->deleteLater();
+    });
+    processCpuInfo->waitForFinished();
+    QString ctrCpuInfo = processCpuInfo->readAll();
+    if(ctrCpuInfo.indexOf("HUAWEI Kirin") != -1)
+    {
+        isHuaWeiPC = true;
+    }
+    if(ctrCpuInfo.indexOf("HUAWEI kirin 9006C") != -1)
+    {
+        isHuaWei9006C = true;
+    }
+}
+
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
@@ -327,11 +349,22 @@ void MainWindow::showFullScreenWidget()
     this->centralWidget()->layout()->removeWidget(m_sideBarWid);
     m_sideBarWid->setParent(nullptr);
 
-    m_animation->setDuration(100);//动画总时间
-    m_animation->setStartValue(startRect);
-    m_animation->setEndValue(endRect);
-    m_animation->setEasingCurve(QEasingCurve::Linear);
-    m_animation->start();
+    if(isHuaWei9006C || isHuaWeiPC)
+    {
+        QEventLoop loop;
+        QTimer::singleShot(10, &loop, SLOT(quit()));
+        loop.exec();
+        this->setGeometry(endRect);
+        animationValueFinishedSlot();
+    }
+    else
+    {
+        m_animation->setDuration(100);//动画总时间
+        m_animation->setStartValue(startRect);
+        m_animation->setEndValue(endRect);
+        m_animation->setEasingCurve(QEasingCurve::Linear);
+        m_animation->start();
+    }
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
@@ -384,11 +417,19 @@ void MainWindow::showDefaultWidget()
     this->centralWidget()->layout()->removeWidget(m_sideBarWid);
     m_sideBarWid->setParent(nullptr);
 
-    m_animation->setDuration(100);//动画总时间
-    m_animation->setStartValue(startRect);
-    m_animation->setEndValue(endRect);
-    m_animation->setEasingCurve(QEasingCurve::Linear);
-    m_animation->start();
+    if(isHuaWei9006C || isHuaWeiPC)
+    {
+        this->setGeometry(endRect);
+        animationValueFinishedSlot();
+    }
+    else
+    {
+        m_animation->setDuration(100);//动画总时间
+        m_animation->setStartValue(startRect);
+        m_animation->setEndValue(endRect);
+        m_animation->setEasingCurve(QEasingCurve::Linear);
+        m_animation->start();
+    }
 }
 
 void MainWindow::animationValueChangedSlot(const QVariant &value)
@@ -425,12 +466,19 @@ void MainWindow::animationValueFinishedSlot()
 void MainWindow::activeWindowSolt(bool flag)
 {
 //    qDebug() << "void MainWindow::activeWindowSolt(bool flag)";
-    QTimer::singleShot(30,this, SLOT(mainWinShowSlot()));
+    if(isHuaWei9006C || isHuaWeiPC)
+    {
+        QTimer::singleShot(50,this, SLOT(mainWinShowSlot()));
+    }
 }
 
 void MainWindow::mainWinShowSlot()
 {
-     this->activateWindow();
+    this->activateWindow();
+    if(!this->geometry().contains(QCursor::pos()))
+    {
+        this->hide();
+    }
      qDebug() << "void MainWindow::activeWindowSolt()";
 }
 
@@ -484,7 +532,6 @@ void MainWindow::recvHideMainWindowSlot()
 void MainWindow::loadMainWindow()
 {
     cleanTimeoutApp();
-//    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     QRect availableGeometry = getScreenAvailableGeometry();
 
     int position=Style::panelPosition;
@@ -570,7 +617,7 @@ void MainWindow::primaryScreenChangeSlot()
 void MainWindow::repaintWidget()
 {
     Style::initWidStyle();
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect availableGeometry = getScreenAvailableGeometry();/*qApp->primaryScreen()->availableGeometry();*/
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
     m_mainViewWid->repaintWidget();

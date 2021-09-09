@@ -144,7 +144,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
     } while(i < list.size());
 }
 
-//获取系统deskyop文件路径
+//获取系统desktop文件路径
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
     filePathList.clear();
@@ -250,6 +250,21 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
     filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
 
+    QStringList desktopList;
+    for(int i = 0; i < filePathList.count(); ++i)
+    {
+        QString filepath = filePathList.at(i);
+        int list_index = filepath.lastIndexOf('/');
+        QString desktopName = filepath.right(filepath.length() - list_index - 1);
+        if(desktopList.contains(desktopName)){
+            filePathList.removeAll(filepath);
+            i--;
+        }
+        else
+        {
+            desktopList.append(desktopName);
+        }
+    }
     return filePathList;
 }
 
@@ -277,6 +292,7 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
         QStringList appInfoList;
         QString desktopfp=desktopfpList.at(i);
         QString name=getAppName(desktopfpList.at(i));
+
         if(!name.isEmpty())
         {
             QString englishName=getAppEnglishName(desktopfpList.at(i));
