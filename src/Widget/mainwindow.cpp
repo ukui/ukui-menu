@@ -31,6 +31,7 @@
 #include "src/Style/style.h"
 #include <QPalette>
 #include <QGroupBox>
+#include <QEventLoop>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -341,8 +342,7 @@ MainWindow::MainWindow(QWidget *parent) :
         if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
         {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-            if(gsetting.keys().contains("win-key-release"))
-//                qDebug() << "ffdafdsafdasfdas";
+//            if(gsetting.keys().contains("win-key-release"))
                 if(gsetting.get("win-key-release").toBool())
                     return;
         }
@@ -464,6 +464,8 @@ void MainWindow::initUi()
     m_desktopWatcher = new DesktopWatcher();
     connect(minAllListView,&ListView::sendUpdateAppListSignal,this,&MainWindow::updateMinAllView);
     connect(minAllListView,&ListView::sendCollectViewUpdate,this,&MainWindow::updateCollectView);
+    connect(minFuncListView,&ListView::sendCollectViewUpdate,this,&MainWindow::updateCollectView);
+    connect(minLetterListView,&ListView::sendCollectViewUpdate,this,&MainWindow::updateCollectView);
     connect(collectListView,&RightListView::sendCollectViewUpdate,this,&MainWindow::updateCollectView);
     connect(m_desktopWatcher,&DesktopWatcher::directoryChangedSignal,this,&MainWindow::updateView);
 }

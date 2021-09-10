@@ -88,6 +88,8 @@ void KListView::rightClickedSlot(const QPoint &pos)
                 case 6:
                 case 7:
                     Q_EMIT sendHideMainWindowSignal();
+                case 18:
+                    Q_EMIT sendCollectViewUpdate();
                 default:
                     break;
                 }

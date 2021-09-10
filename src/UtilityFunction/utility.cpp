@@ -471,7 +471,7 @@ bool updateDataBaseTableType(QString desktopfn, int type)
     case 0://解除锁定
     {
         cmd=QString("update appInfo set times=%1,type=%2 where desktop=\"%3\"")
-                .arg(1)
+                .arg(0)
                 .arg(type)
                 .arg(desktopfn);
         ret=sql.exec(cmd);
