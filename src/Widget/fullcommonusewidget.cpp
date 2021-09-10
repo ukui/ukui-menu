@@ -109,7 +109,6 @@ void FullCommonUseWidget::initUi()
             time->stop();
         }
     });
-    m_listView->installEventFilter(this);
     m_scrollAreaWidHeight = m_scrollAreaWid->height();
     connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setScrollBarValue);
     connect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);

@@ -113,15 +113,19 @@ void FullSearchResultWidget::resizeScrollAreaControls()
 
 bool FullSearchResultWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    if( event->type() == QEvent::KeyPress )
+    if(watched == m_listView)
     {
-        QKeyEvent *ke = (QKeyEvent *)event;
-        if( ke->key() == Qt::Key_Tab )
+        if( event->type() == QEvent::KeyPress )
         {
-           Q_EMIT setFocusToSideWin();
-            return true;
+            QKeyEvent *ke = (QKeyEvent *)event;
+            if( ke->key() == Qt::Key_Tab )
+            {
+               Q_EMIT setFocusToSideWin();
+                return true;
+            }
         }
     }
+    return QWidget::eventFilter(watched,event);
 }
 
 void FullSearchResultWidget::selectFirstItemTab()

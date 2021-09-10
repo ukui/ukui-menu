@@ -42,9 +42,9 @@ protected:
     void keyPressEvent(QKeyEvent* e);
 
 private:
-    RightClickMenu* menu=nullptr;//右键菜单
+    RightClickMenu* menu = nullptr;//右键菜单
     QStringList data;
-    QGSettings* gsetting;
+    QGSettings* gsetting = nullptr;
 
 public Q_SLOTS:
     void selectFirstItem();

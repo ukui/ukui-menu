@@ -10,6 +10,13 @@ KListView::KListView(QWidget *parent):
 
 }
 
+KListView::~KListView()
+{
+    delete m_delegate;
+    delete listmodel;
+    delete pUkuiMenuInterface;
+}
+
 void KListView::addData(QStringList data)
 {
     listmodel=new QStandardItemModel(this);

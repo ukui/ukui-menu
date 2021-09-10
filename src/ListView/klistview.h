@@ -11,7 +11,7 @@ class KListView : public QListView
     Q_OBJECT
 public:
     KListView(QWidget *parent);
-
+    ~KListView();
     void initWidget();
 
     KItemDelegate* m_delegate=nullptr;

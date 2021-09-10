@@ -36,7 +36,8 @@ FullListView::FullListView(QWidget *parent, int module):
 
 FullListView::~FullListView()
 {
-    delete pUkuiMenuInterface;
+    delete menu;
+    delete gsetting;
 }
 
 void FullListView::initWidget()

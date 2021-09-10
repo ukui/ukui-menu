@@ -73,7 +73,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     queryWidLayout->addWidget(m_queryIcon);
     queryWidLayout->addWidget(m_queryText);
     queryWidLayout->setAlignment(Qt::AlignCenter);
-    lineEdit->setFocusPolicy(Qt::ClickFocus);
+    lineEdit->setFocusPolicy(Qt::StrongFocus);
 
     horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -382,6 +382,7 @@ void FullMainWindow::searchAppSlot(QString arg)
 void FullMainWindow::mousePressEvent(QMouseEvent *event)
 {
     resetEditline();
+    return QMainWindow::mousePressEvent(event);
 }
 
 void FullMainWindow::recvSearchResult(QVector<QStringList> arg)
