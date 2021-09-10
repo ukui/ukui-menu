@@ -518,14 +518,14 @@ void execApp(QString desktopfp)
 
 bool checkOsRelease()
 {
-    QFile file("/etc/os-release");
-    if(file.open(QFile::ReadOnly))
-    {
-        QByteArray line=file.readLine();
-        file.close();
-        if(QString(line).contains("Ubuntu"))
-            return true;
-    }
+//    QFile file("/etc/os-release");
+//    if(file.open(QFile::ReadOnly))
+//    {
+//        QByteArray line=file.readLine();
+//        file.close();
+//        if(QString(line).contains("Ubuntu"))
+//            return true;
+//    }
     return false;
 }
 
