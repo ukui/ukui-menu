@@ -84,6 +84,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     icon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/fullicon-all.svg"), QSize(), QIcon::Normal, QIcon::Off);
     fullSelectToolButton->setIcon(icon);
     fullSelectToolButton->installEventFilter(this);
+    fullSelectToolButton->setFocus();
 
     fullSelectMenuButton = new QToolButton(centralwidget);
     fullSelectMenuButton->setObjectName(QString::fromUtf8("fullSelectMenuButton"));
@@ -360,6 +361,7 @@ bool FullMainWindow::event ( QEvent * event )
 
 void FullMainWindow::setFocusToButton()
 {
+    qDebug() << "设置lineEdit焦点";
     lineEdit->setFocus();
 }
 
