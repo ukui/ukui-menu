@@ -43,6 +43,19 @@
 #include "directorychangedthread.h"
 #include "src/Style/style.h"
 
+class MyLineEdit : public QLineEdit{
+    Q_OBJECT
+
+public:
+    explicit MyLineEdit(QLineEdit *parent = nullptr){unsetCursor();}
+    ~MyLineEdit(){}
+
+    void simulateFocusOutEvent(QKeyEvent *e){
+        QApplication::postEvent(this, new QEvent(QEvent::FocusOut));
+        this->focusOutEvent(new QFocusEvent(QEvent::FocusOut));
+    }
+};
+
 class MainViewWidget : public QWidget
 {
     Q_OBJECT
@@ -91,7 +104,7 @@ public:
 
     void resetQueryLine();
 
-    QLineEdit* getQueryLineEditer() {return m_queryLineEdit;}
+    MyLineEdit* getQueryLineEditer() {return m_queryLineEdit;}
 
 private:
     UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
@@ -100,7 +113,7 @@ private:
 
     QWidget *m_contentWid=nullptr;
 
-    QLineEdit *m_queryLineEdit=nullptr;
+    MyLineEdit *m_queryLineEdit=nullptr;
     QWidget *m_queryWid=nullptr;
     QLabel *m_queryIcon=nullptr;
     QLabel *m_queryText=nullptr;
