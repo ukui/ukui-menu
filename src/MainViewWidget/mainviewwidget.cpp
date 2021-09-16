@@ -281,7 +281,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
     {
         if((m_queryIcon->x() == 0) && (event->type() == QEvent::KeyPress || event->type() == QEvent::MouseButtonPress || event->type() == QEvent::InputMethod))
         {
-            if (m_queryLineEdit->text().isEmpty() && (m_queryWid->layout()->count() != 2)) {
+            if (m_queryLineEdit->text().isEmpty() || (m_queryWid->layout()->count() != 2)) {
                 QApplication::postEvent(m_queryLineEdit, new QEvent(QEvent::FocusIn));
                 return false;
             }
