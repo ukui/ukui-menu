@@ -288,7 +288,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
         }
 
         char style[200];
-        if(event->type()==QEvent::FocusIn)
+        if(event->type()==QEvent::FocusIn && m_queryLineEdit->hasFocus())
         {
             if(!m_isFullScreen)
             {
