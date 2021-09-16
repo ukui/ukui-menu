@@ -203,16 +203,16 @@ void MainViewWidget::addTopControl()
 {
     m_topLayout=new QHBoxLayout;
     m_topLayout->setSpacing(0);
-    m_queryLineEdit=new QLineEdit;
+    m_queryLineEdit=new MyLineEdit;
     m_topLayout->addWidget(m_queryLineEdit);
     m_topWidget->setLayout(m_topLayout);
     char style[200];
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
     if(gsetting.get("style-name").toString()=="ukui-light")
-    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+    sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
             QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
     else
-        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+        sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                 QueryLineEditClickedBorder,QueryLineEditBackground);
     m_queryLineEdit->setStyleSheet(style);
 
@@ -272,13 +272,21 @@ void MainViewWidget::initQueryLineEdit()
             m_searchAppThread,&SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread,&SearchAppThread::sendSearchResult,
             this,&MainViewWidget::recvSearchResult);
-    connect(m_queryLineEdit, &QLineEdit::textChanged, this, &MainViewWidget::searchAppSlot);
+    connect(m_queryLineEdit, &MyLineEdit::textChanged, this, &MainViewWidget::searchAppSlot);
 }
 
 bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if(watched==m_queryLineEdit)
     {
+        if((m_queryIcon->x() == 0) && (event->type() == QEvent::KeyPress || event->type() == QEvent::MouseButtonPress || event->type() == QEvent::InputMethod))
+        {
+            if (m_queryLineEdit->text().isEmpty() && (m_queryWid->layout()->count() != 2)) {
+                QApplication::postEvent(m_queryLineEdit, new QEvent(QEvent::FocusIn));
+                return false;
+            }
+        }
+
         char style[200];
         if(event->type()==QEvent::FocusIn)
         {
@@ -286,17 +294,17 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
             {
                 QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
                 if(gsetting.get("style-name").toString()=="ukui-light")
-                    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                    sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
                             QueryLineEditClickedBorderDefault,QueryLineEditClickedDefaultBackground);
                 else
-                    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                    sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                             QueryLineEditClickedBorder,QueryLineEditClickedBackground);
             }
             else
-                sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                         QueryLineEditClickedBorder,QueryLineEditClickedBackground);
             m_queryLineEdit->setStyleSheet(style);
-             if(!m_queryLineEdit->text().isEmpty())
+             if(!m_queryLineEdit->text().isEmpty() && (m_queryLineEdit->text().size() > 1))
              {
                  if(m_searchKeyWords.isEmpty())
                     searchAppSlot(m_queryLineEdit->text());
@@ -315,34 +323,32 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                  m_queryLineEdit->setTextMargins(-5,0,0,0);
              }
              m_isSearching=true;
-        }
-        else if(event->type()==QEvent::FocusOut)
-        {
+        } else if (event->type() == QEvent::FocusOut) {
             m_searchKeyWords.clear();
             if(m_queryLineEdit->text().isEmpty())
             {
-                if(m_isSearching)
+                if(m_isSearching || m_queryLineEdit->hasFocus())
                 {
                     if(!m_isFullScreen)
                     {
                         QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
                         if(gsetting.get("style-name").toString()=="ukui-light")
-                        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
-                                QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
+                            sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                                    QueryLineEditClickedBorderDefault,QueryLineEditDefaultBackground);
                         else
-                            sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                            sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                                     QueryLineEditClickedBorder,QueryLineEditBackground);
                     }
                     else
-                        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                        sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                                 QueryLineEditClickedBorder,QueryLineEditBackground);
                     m_queryLineEdit->setStyleSheet(style);
                     m_animation->stop();
                     m_queryText->adjustSize();
                     m_animation->setStartValue(QRect(0,0,
-                                                    m_queryIcon->width()+5,Style::QueryLineEditHeight));
+                                                     m_queryIcon->width()+5,Style::QueryLineEditHeight));
                     m_animation->setEndValue(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-                                                 m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+                                                   m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
                     m_animation->setEasingCurve(QEasingCurve::InQuad);
                     m_animation->start();
                 }
@@ -353,10 +359,10 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                 {
                     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
                     if(gsetting.get("style-name").toString()=="ukui-light")
-                    sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
+                    sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
                             QueryLineEditClickedDefaultBackground,QueryLineEditDefaultBackground);
                     else
-                        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
+                        sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                                 QueryLineEditClickedBorder,QueryLineEditBackground);
                 }
                 else
@@ -397,6 +403,24 @@ void MainViewWidget::searchAppSlot(QString arg)
             else
                 loadFullSearchResultWidget();
         }
+
+        // 如果搜索时依然还有搜索框和搜索的文字描述两个组件，则进行处理；置为搜索状态
+        if (m_queryWid->layout()->count() == 2) {
+            QApplication::postEvent(m_queryLineEdit, new QEvent(QEvent::FocusIn));
+            m_queryWid->layout()->removeWidget(m_queryText);
+            m_queryText->setParent(nullptr);
+            m_animation->stop();
+            m_animation->setStartValue(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
+                                             m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+            m_animation->setEndValue(QRect(0,0,
+                                           m_queryIcon->width()+5,Style::QueryLineEditHeight));
+            m_animation->setEasingCurve(QEasingCurve::OutQuad);
+            m_animation->start();
+            m_queryLineEdit->setTextMargins(-5,0,0,0);
+        }
+
+        qDebug() << QTime::currentTime() <<"m_queryWid(x, y) = (" << m_queryWid->x() << ","<< m_queryWid->y() << ")";
+
         Q_EMIT sendSearchKeyword(arg);
         m_searchAppThread->start();
     }
@@ -638,7 +662,6 @@ void MainViewWidget::resetQueryLine()
 {
     if(!m_queryLineEdit->text().isEmpty())
     {
-        m_queryLineEdit->clearFocus();
         m_queryLineEdit->clear();
         m_isSearching = false;
 
@@ -687,6 +710,8 @@ void MainViewWidget::resetQueryLine()
         m_queryText->setPalette(pe);
     }
 
+    m_queryLineEdit->setFocus();
+    QTimer::singleShot(1, this, [=](){m_queryLineEdit->simulateFocusOutEvent(nullptr);});
 }
 
 /**

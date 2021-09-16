@@ -31,13 +31,7 @@
 #include "src/Style/style.h"
 #include "src/UtilityFunction/utility.h"
 #include <QPalette>
-
-#include <QX11Info>
-#include <X11/Xlib.h>
-#include <X11/extensions/XTest.h>
-
-//和QEvent键值冲突，取消KeyPress的宏定义
-#undef KeyPress
+#include <QEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -145,7 +139,6 @@ void MainWindow::initUi()
     mainlayout->addWidget(m_sideBarWid);
     m_sideBarWid->loadMinSidebar();
     m_mainViewWid->loadMinMainView();
-
 
     m_animation = new QPropertyAnimation(this, "geometry");
     connect(m_animation,&QPropertyAnimation::finished,this,&MainWindow::animationValueFinishedSlot);
@@ -461,6 +454,12 @@ void MainWindow::animationValueFinishedSlot()
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
     }
+
+    m_mainViewWid->getQueryLineEditer()->setFocus();
+    if (m_mainViewWid->getQueryLineEditer()->text().isEmpty()) {
+        qDebug() << "there is no letter in search lineEditer";
+        QTimer::singleShot(1,this,[=](){m_mainViewWid->getQueryLineEditer()->simulateFocusOutEvent(nullptr);});
+    }
 }
 
 void MainWindow::activeWindowSolt(bool flag)
@@ -515,6 +514,14 @@ bool MainWindow::event ( QEvent * event )
          Q_EMIT setFocusSignal();
         // return true;
        }
+   }
+
+   if (event->type() == QEvent::FocusIn)
+   {
+       m_mainViewWid->getQueryLineEditer()->setFocus();
+       QTimer::singleShot(1, this, [=](){
+           m_mainViewWid->getQueryLineEditer()->simulateFocusOutEvent(nullptr);
+       });
    }
    return QWidget::event(event);
 }
@@ -600,6 +607,11 @@ void MainWindow::loadMainWindow()
 
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
+
+        m_mainViewWid->getQueryLineEditer()->setFocus();
+        QTimer::singleShot(1, this, [=](){
+            m_mainViewWid->getQueryLineEditer()->simulateFocusOutEvent(nullptr);
+        });
     }
 }
 
@@ -723,21 +735,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
                     && !m_mainViewWid->getQueryLineEditer()->hasFocus()
                     && m_mainViewWid->getQueryLineEditer()->text().isEmpty())
             {
-                m_mainViewWid->getQueryLineEditer()->setFocus();
-
-                /**
-                 * @brief loop
-                 * 设置焦点后立即发送按键模拟，输入法尚未定位到有聚焦的输入状态，无法正常调起
-                 * 所以需要延后150ms保证模拟按键的会被正常接收
-                 * 延迟模拟有一定风险，其实需要配合输入法一起改动，暂无输入法的方案同步，按照该方式实现，需改进
-                 */
-                QEventLoop loop;
-                QTimer::singleShot(150, &loop, SLOT(quit()));
-                loop.exec();
-
-                XTestFakeKeyEvent(QX11Info::display(), XKeysymToKeycode(QX11Info::display(), e->key()), True, 1);
-                XTestFakeKeyEvent(QX11Info::display(), XKeysymToKeycode(QX11Info::display(), e->key()), False, 1);
-                XFlush(QX11Info::display());
+                //To do
             }
         }
         if(e->key() == Qt::Key_Backspace)
