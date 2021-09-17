@@ -251,7 +251,7 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 {
 //    QStringList strlist=index.model()->data(index,Qt::DisplayRole).toStringList();
 //    if(strlist.at(1).toInt()==1)
-        return QSize(310,44);
+        return QSize(298,44);
 //    else
 //        return QSize(310,48);
 

@@ -90,6 +90,7 @@ void FullFunctionWidget::initAppListWidget()
     m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_scrollAreaWidLayout->setSpacing(10);
     m_scrollAreaWid->setLayout(m_scrollAreaWidLayout);
+//    m_scrollAreaWid->setStyleSheet("border:1px solid red;");
     layout->addWidget(m_scrollArea);
     connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&FullFunctionWidget::valueChangedSlot);
@@ -178,7 +179,7 @@ void FullFunctionWidget::fillAppList()
 
 void FullFunctionWidget::insertClassificationBtn(QString category)
 {
-    SplitBarFrame* classificationbtn=new SplitBarFrame(this,category,m_scrollArea->width()-12,30,2);
+    SplitBarFrame* classificationbtn=new SplitBarFrame(this,category,m_scrollArea->width()-16,30,2);
     m_scrollAreaWidLayout->addWidget(classificationbtn);
     m_classificationList.append(category);
 
@@ -271,7 +272,7 @@ void FullFunctionWidget::resizeScrollAreaControls()
 
         }
 
-        listview->setFixedSize(m_scrollArea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
+        listview->setFixedSize(m_scrollArea->width()-Style::SliderSize + 1,listview->gridSize().height()*rowcount);
         row++;
     }
     m_scrollArea->widget()->adjustSize();

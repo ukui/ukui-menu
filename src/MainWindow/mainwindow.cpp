@@ -354,7 +354,7 @@ void MainWindow::showFullScreenWidget()
         is_repaint = false;
         this->hide();
         QEventLoop loop;
-        QTimer::singleShot(10, &loop, SLOT(quit()));
+        QTimer::singleShot(150, &loop, SLOT(quit()));
         loop.exec();
         m_animation->setDuration(1);//动画总时间
         m_animation->setStartValue(startRect);

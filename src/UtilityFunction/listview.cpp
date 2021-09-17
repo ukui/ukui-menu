@@ -47,6 +47,7 @@ void ListView::initWidget()
 {
     setAttribute(Qt::WA_TranslucentBackground);
     viewport()->setAttribute(Qt::WA_TranslucentBackground);
+//    this->setFixedSize(w - 10, h - 10);//自己加的
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

@@ -126,7 +126,7 @@ void FullLetterWidget::fillAppList()
                 letterstr="#";
             m_letterList.append(letterstr);//存储分类字符
             //插入字母分类按钮
-            SplitBarFrame* letterbtn=new SplitBarFrame(this,letterstr,m_scrollArea->width()-12,30,1);
+            SplitBarFrame* letterbtn=new SplitBarFrame(this,letterstr,m_scrollArea->width()-16,30,1);
             m_scrollAreaWidLayout->addWidget(letterbtn);
 
             //插入应用列表
@@ -225,7 +225,7 @@ void FullLetterWidget::resizeScrollAreaControls()
 
         }
 
-        listview->setFixedSize(m_scrollArea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
+        listview->setFixedSize(m_scrollArea->width()-Style::SliderSize + 1,listview->gridSize().height()*rowcount);
         row++;
     }
     m_scrollArea->widget()->adjustSize();

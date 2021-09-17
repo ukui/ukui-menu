@@ -53,8 +53,9 @@ void CommonUseWidget::initUi()
  */
 void CommonUseWidget::initAppListWidget()
 {
-    m_listView=new ListView(this,this->width()-6,this->height()-6,0);
-    m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
+    m_listView=new ListView(this,this->width(),this->height()-6,0);
+    m_listView->setFixedSize(this->width(), this->height()-6);
+//m_listView->setGeometry(QRect(6,0,this->width()-6,this->height()-6));
     m_listView->show();
     connect(m_listView,&ListView::sendItemClickedSignal,this,&CommonUseWidget::execApplication);
     connect(m_listView,&ListView::sendUpdateAppListSignal,this,&CommonUseWidget::updateListViewSlot);

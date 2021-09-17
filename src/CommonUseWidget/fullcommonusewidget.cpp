@@ -106,7 +106,7 @@ void FullCommonUseWidget::resizeScrollAreaControls()
 
     }
 
-    listview->setFixedSize(m_scrollArea->width()-Style::SliderSize+1,listview->gridSize().height()*rowcount);
+    listview->setFixedSize(m_scrollArea->width()-Style::SliderSize + 1,listview->gridSize().height()*rowcount);
     m_scrollArea->widget()->adjustSize();
 }
 
