@@ -126,7 +126,7 @@ PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt
 
 CONFIG += no_keywords link_pkgconfig
 
-LIBS+=-pthread -luchardet -lukui-log4qt -lX11 -lXtst
+LIBS+=-pthread -luchardet -lukui-log4qt
 
 desktop_file.files = ukui-menu.desktop
 desktop_file.path = /etc/xdg/autostart
