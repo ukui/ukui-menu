@@ -33,6 +33,8 @@ public:
 private:
     QString m_keyWord;
     QVector<QStringList> m_searchResultVector;
+    QVector<QStringList> m_searchFirstVector;
+    QVector<QStringList> m_searchRestVector;
 
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
     QVector<QStringList> m_appInfoVector;

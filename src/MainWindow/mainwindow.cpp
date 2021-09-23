@@ -344,11 +344,19 @@ void MainWindow::showFullScreenWidget()
 
     if(isHuaWei9006C || isHuaWeiPC)
     {
+        is_repaint = false;
+        this->hide();
         QEventLoop loop;
-        QTimer::singleShot(10, &loop, SLOT(quit()));
+        QTimer::singleShot(150, &loop, SLOT(quit()));
         loop.exec();
-        this->setGeometry(endRect);
-        animationValueFinishedSlot();
+        m_animation->setDuration(1);//动画总时间
+        m_animation->setStartValue(startRect);
+        m_animation->setEndValue(endRect);
+        m_animation->setEasingCurve(QEasingCurve::Linear);
+        m_animation->start();
+        this->show();
+        this->activateWindow();
+        is_repaint = true;
     }
     else
     {
@@ -486,7 +494,7 @@ void MainWindow::mainWinShowSlot()
  */
 bool MainWindow::event ( QEvent * event )
 {
-   if (event->type() == QEvent::ActivationChange)
+   if (event->type() == QEvent::ActivationChange && is_repaint)
   // if(QEvent::WindowDeactivate == event->type() && m_canHide)//窗口停用
    {
        qDebug() << " * 鼠标点击窗口外部事件";

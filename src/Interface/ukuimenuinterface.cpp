@@ -144,7 +144,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
     } while(i < list.size());
 }
 
-//获取系统deskyop文件路径
+//获取系统desktop文件路径
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
     filePathList.clear();
@@ -250,6 +250,21 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
     filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
 
+    QStringList desktopList;
+    for(int i = 0; i < filePathList.count(); ++i)
+    {
+        QString filepath = filePathList.at(i);
+        int list_index = filepath.lastIndexOf('/');
+        QString desktopName = filepath.right(filepath.length() - list_index - 1);
+        if(desktopList.contains(desktopName)){
+            filePathList.removeAll(filepath);
+            i--;
+        }
+        else
+        {
+            desktopList.append(desktopName);
+        }
+    }
     return filePathList;
 }
 
@@ -271,16 +286,15 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
     vector.append(QStringList()<<"System"<<"Settings"<<"Security");//9系统
 
     QStringList desktopfpList=getDesktopFilePath();
-    QStringList appNameList;
 
     for(int i=0;i<desktopfpList.count();i++)
     {
         QStringList appInfoList;
         QString desktopfp=desktopfpList.at(i);
         QString name=getAppName(desktopfpList.at(i));
-        if(!name.isEmpty() && !appNameList.contains(name))
+
+        if(!name.isEmpty())
         {
-            appNameList.append(name);
             QString englishName=getAppEnglishName(desktopfpList.at(i));
             QString letter=getAppNameInitial(desktopfpList.at(i));
             QString letters=getAppNameInitials(desktopfpList.at(i));
@@ -928,7 +942,7 @@ QStringList UkuiMenuInterface::getSpecifiedCategoryAppList(QString categorystr)
                 if(strncmp(appcategory+i,category,strlen(category))==0)
                 {
                     QString appname=getAppName(desktopfpList.at(index));
-                    if(QString::compare(appname,"访问提示")==0 && !appnameList.contains(appname))
+                    if(QString::compare(appname,"访问提示")==0)
                     appnameList.append(appname);
                     break;
                 }
