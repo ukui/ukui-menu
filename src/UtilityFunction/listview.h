@@ -52,7 +52,6 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent *e);
     void dragMoveEvent(QDragMoveEvent *event);
 
-
 private:
     QStandardItemModel* listmodel=nullptr;
     int w=0;

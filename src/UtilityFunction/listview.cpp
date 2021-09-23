@@ -20,11 +20,6 @@
 #include "utility.h"
 #include <QDebug>
 #include <QDrag>
-#include <QSlider>
-#include <QAbstractSlider>
-#include <QScrollEvent>
-#include <QWheelEvent>
-
 
 ListView::ListView(QWidget *parent, int width, int height, int module):
     QListView(parent)
