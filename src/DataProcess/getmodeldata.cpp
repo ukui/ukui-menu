@@ -15,11 +15,11 @@ void GetModelData::loadDesktopVercor()
     UkuiMenuInterface::functionalVector.clear();
     UkuiMenuInterface::allAppVector.clear();
     UkuiMenuInterface::collectAppVector.clear();
-    UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
-    UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
-    UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
-    UkuiMenuInterface::allAppVector=m_ukuiMenuInterface->getAllClassification();
-    UkuiMenuInterface::collectAppVector=m_ukuiMenuInterface->getCollectApp();
+    UkuiMenuInterface::appInfoVector = m_ukuiMenuInterface->createAppInfoVector();
+    UkuiMenuInterface::alphabeticVector = m_ukuiMenuInterface->getAlphabeticClassification();
+    UkuiMenuInterface::functionalVector = m_ukuiMenuInterface->getFunctionalClassification();
+    UkuiMenuInterface::allAppVector = m_ukuiMenuInterface->getAllClassification();
+    UkuiMenuInterface::collectAppVector = m_ukuiMenuInterface->getCollectApp();
 }
 
 

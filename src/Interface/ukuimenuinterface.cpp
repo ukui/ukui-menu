@@ -26,10 +26,22 @@
 #include <QJsonObject>
 #include <unistd.h>
 #include "ukuichineseletter.h"
-#include "src/UtilityFunction/utility.h"
+
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
+    if(projectCodeName == "V10SP1")
+    {
+
+    }
+    else
+    {
+        QString path = QDir::homePath()+"/.config/ukui/ukui-menu.ini";
+        setting = new QSettings(path,QSettings::IniFormat);
+
+        QString syspath = QDir::homePath()+"/.config/ukui/menusysapplist.ini";
+        syssetting = new QSettings(syspath,QSettings::IniFormat);
+    }
 
 }
 
@@ -40,9 +52,25 @@ QVector<QStringList> UkuiMenuInterface::alphabeticVector=QVector<QStringList>();
 QVector<QStringList> UkuiMenuInterface::functionalVector=QVector<QStringList>();
 QVector<QString> UkuiMenuInterface::allAppVector=QVector<QString>();
 QStringList UkuiMenuInterface::androidDesktopfnList=QStringList();
+QVector<QString> UkuiMenuInterface::tencentInitVector = QVector<QString>();
+QVector<QString> UkuiMenuInterface::customizedVector = QVector<QString>();
+QVector<QString> UkuiMenuInterface::thirdPartyVector = QVector<QString>();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
+    if(projectCodeName == "V10SP1")
+    {
+
+    }
+    else
+    {
+        if(setting)
+            delete setting;
+        if(syssetting)
+            delete syssetting;
+        setting=nullptr;
+        syssetting=nullptr;
+    }
 }
 
 //文件递归查询
@@ -137,101 +165,263 @@ void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
 //获取系统deskyop文件路径
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
-    filePathList.clear();
-
-    QString jsonPath=QDir::homePath()+"/.config/ukui-menu-security-config.json";
-    QFile file(jsonPath);
-    if(file.exists())
+    if(projectCodeName == "V10SP1")
     {
-        file.open(QIODevice::ReadOnly);
-        QByteArray readBy=file.readAll();
-        QJsonParseError error;
-        QJsonDocument readDoc=QJsonDocument::fromJson(readBy,&error);
-        if(!readDoc.isNull() && error.error==QJsonParseError::NoError)
+        filePathList.clear();
+
+        QString jsonPath=QDir::homePath()+"/.config/ukui-menu-security-config.json";
+        QFile file(jsonPath);
+        if(file.exists())
         {
-            QJsonObject obj=readDoc.object().value("ukui-menu").toObject();
-            if(obj.value("mode").toString()=="whitelist")
+            file.open(QIODevice::ReadOnly);
+            QByteArray readBy=file.readAll();
+            QJsonParseError error;
+            QJsonDocument readDoc=QJsonDocument::fromJson(readBy,&error);
+            if(!readDoc.isNull() && error.error==QJsonParseError::NoError)
             {
-                QJsonArray blArray=obj.value("whitelist").toArray();
-                QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
-                for(int index=0;index<enArray.size();index++)
+                QJsonObject obj=readDoc.object().value("ukui-menu").toObject();
+                if(obj.value("mode").toString()=="whitelist")
                 {
-                    QJsonObject obj=enArray.at(index).toObject();
-                    filePathList.append(obj.value("path").toString());
-//                    qDebug()<<obj.value("path").toString();
+                    QJsonArray blArray=obj.value("whitelist").toArray();
+                    QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
+                    for(int index=0;index<enArray.size();index++)
+                    {
+                        QJsonObject obj=enArray.at(index).toObject();
+                        filePathList.append(obj.value("path").toString());
+    //                    qDebug()<<obj.value("path").toString();
+                    }
+                    return filePathList;
                 }
-                return filePathList;
-            }
-            else if(obj.value("mode").toString()=="blacklist")
-            {
-                getAndroidApp();
-                recursiveSearchFile("/usr/share/applications/");
-                QJsonArray blArray=obj.value("blacklist").toArray();
-                QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
-                for(int index=0;index<enArray.size();index++)
+                else if(obj.value("mode").toString()=="blacklist")
                 {
-                    QJsonObject obj=enArray.at(index).toObject();
-                    filePathList.removeAll(obj.value("path").toString());
-//                    qDebug()<<obj.value("path").toString();
+                    getAndroidApp();
+                    recursiveSearchFile("/usr/share/applications/");
+                    QJsonArray blArray=obj.value("blacklist").toArray();
+                    QJsonArray enArray=blArray.at(0).toObject().value("entries").toArray();
+                    for(int index=0;index<enArray.size();index++)
+                    {
+                        QJsonObject obj=enArray.at(index).toObject();
+                        filePathList.removeAll(obj.value("path").toString());
+    //                    qDebug()<<obj.value("path").toString();
+                    }
                 }
-            }
-            else
-            {
-                getAndroidApp();
-                recursiveSearchFile("/usr/share/applications/");
+                else
+                {
+                    getAndroidApp();
+                    recursiveSearchFile("/usr/share/applications/");
+                }
+
             }
 
+            file.close();
+        }
+        else
+        {
+            getAndroidApp();
+            recursiveSearchFile("/usr/share/applications/");
         }
 
-        file.close();
+        filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
+        filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
+        filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
+        filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
+        filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
+        filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
+        filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
+        filePathList.removeAll("/usr/share/applications/im-config.desktop");
+        filePathList.removeAll("/usr/share/applications/fcitx.desktop");
+        filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
+        filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
+        filePathList.removeAll("/usr/share/applications/info.desktop");
+        filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
+        filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
+        filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
+        filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
+        filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
+        filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
+        filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
+        filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
+        filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
+        filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
+        filePathList.removeAll("/usr/share/applications/mpv.desktop");
+        filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
+        filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
+        filePathList.removeAll("/usr/share/applications/yelp.desktop");
+
+        //v10
+        filePathList.removeAll("/usr/share/applications/mate-about.desktop");
+        filePathList.removeAll("/usr/share/applications/time.desktop");
+        filePathList.removeAll("/usr/share/applications/network.desktop");
+        filePathList.removeAll("/usr/share/applications/shares.desktop");
+        filePathList.removeAll("/usr/share/applications/mate-power-statistics.desktop");
+        filePathList.removeAll("/usr/share/applications/display-im6.desktop");
+        filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
+        filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
+        filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
+        filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
+        filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
+
+        return filePathList;
     }
     else
     {
-        getAndroidApp();
+        filePathList.clear();
+        //getAndroidApp();
         recursiveSearchFile("/usr/share/applications/");
+        filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
+        filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
+        filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
+        filePathList.removeAll("/usr/share/applications/blueman-manager.desktop");
+        filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
+        filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
+        filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
+        filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
+        filePathList.removeAll("/usr/share/applications/im-config.desktop");
+        filePathList.removeAll("/usr/share/applications/fcitx.desktop");
+        filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
+        filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
+        filePathList.removeAll("/usr/share/applications/info.desktop");
+        filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
+        filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
+        filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
+        filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
+        filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
+        filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
+        filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
+        filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
+        filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
+        filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
+        filePathList.removeAll("/usr/share/applications/mpv.desktop");
+        filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
+        filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
+        filePathList.removeAll("/usr/share/applications/yelp.desktop");
+        filePathList.removeAll("/usr/share/applications/peony-computer.desktop");
+        filePathList.removeAll("/usr/share/applications/peony-home.desktop");
+        filePathList.removeAll("/usr/share/applications/peony-trash.desktop");
+        //filePathList.removeAll("/usr/share/applications/peony.desktop");
+        //*过滤*//
+        filePathList.removeAll("/usr/share/applications/recoll-searchgui.desktop");
+        filePathList.removeAll("/usr/share/applications/ukui-about.desktop");
+        filePathList.removeAll("/usr/share/applications/org.gnome.dfeet.desktop");
+        filePathList.removeAll("/usr/share/applications/ukui-feedback.desktop");
+        filePathList.removeAll("/usr/share/applications/users.desktop");
+    //    filePathList.removeAll("/usr/share/applications/mate-terminal.desktop");
+        filePathList.removeAll("/usr/share/applications/vim.desktop");
+        filePathList.removeAll("/usr/share/applications/mpv.desktop");
+
+        filePathList.removeAll("/usr/share/applications/engrampa.desktop");
+        filePathList.removeAll("/usr/share/applications/hp-document.desktop");
+    //    filePathList.removeAll("/usr/share/applications/kylin-user-guide.desktop");
+
+        filePathList.removeAll("/usr/share/applications/wps-office-prometheus.desktop");
+    //    filePathList.removeAll("/usr/share/applications/indicator-china-weather.desktop");    //禁用麒麟天气
+
+        //v10
+        filePathList.removeAll("/usr/share/applications/mate-about.desktop");
+        filePathList.removeAll("/usr/share/applications/time.desktop");
+        filePathList.removeAll("/usr/share/applications/network.desktop");
+        filePathList.removeAll("/usr/share/applications/shares.desktop");
+        filePathList.removeAll("/usr/share/applications/mate-power-statistics.desktop");
+        filePathList.removeAll("/usr/share/applications/display-im6.desktop");
+        filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
+        filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
+        filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
+        filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
+        filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
+        /*加入的*/
+        filePathList.append("/usr/share/applications/mate-calc.desktop");
+
+        filePathList=getInstalledAppList();
+        return filePathList;
+    }
+}
+
+QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列表
+{
+    /*显示的应用列表*/
+    //1、系统默认应用
+    //2、腾讯应用与安装的系统应用
+    //3、考虑用户隔离
+    //应用列表的所有应用由：系统应用+应用商店安装了的应用
+
+//    QDBusInterface desktopfpListiface("cn.kylinos.SSOBackend",
+//                             "/cn/kylinos/SSOBackend",
+//                             "cn.kylinos.SSOBackend.applications",
+//                             QDBusConnection::systemBus());
+//    QString username=getUserName();
+//    QDBusReply<QString> reply = desktopfpListiface.call("GetDesktopAppList",username);
+
+
+
+
+    //1、获取系统应用列表
+    //filePathList;
+    QStringList ifFileDesktopList;
+    /*新的应用列表*/
+    qDebug() << "sysapplistnum初始化默认应用列表1" << filePathList.count();
+    for(int i=0;i<filePathList.count();i++)//过滤 得到真实存在的应用
+    {
+        QString tmp=filePathList.at(i);
+        QFileInfo fileInfo(tmp);
+        if(!fileInfo.isFile())//判断是否存在
+        {
+            //qDebug()<<tmp;
+            continue;
+        }
+
+        ifFileDesktopList.append(tmp);
+    }
+//ifFileDesktopList  所有当前存在的应用
+
+    /*得到系统默认应用*/
+    //判断当前是否已经得到了默认应用
+    syssetting->beginGroup("ukui-menu-sysapplist");
+    int sysapplistnum=syssetting->allKeys().count();
+    syssetting->sync();
+    syssetting->endGroup();
+
+
+    //qDebug()<<"sysapplistnum初始化默认应用列表3"<<ifFileDesktopList.count();
+    int num = ifFileDesktopList.count();
+    for(int i = 0;i<num;i++)
+    {
+        QString tmp = ifFileDesktopList.at(i);
+        qDebug() << "filePathList.at(i)"<< ifFileDesktopList.at(i) << tmp.indexOf("tencent");
+        QString str = ifFileDesktopList.at(i);
+        QStringList list = str.split('/');
+        str = list[list.size()-1];
+
+        if(tmp.indexOf("tencent")==-1)//所有不是腾讯的系统应用7
+        {
+            if(sysapplistnum == 0)//没有初始化默认应用列表
+            {
+                syssetting->beginGroup("ukui-menu-sysapplist");
+                qDebug()<<"isnottencent"<<str;
+                syssetting->setValue(str,0);
+                syssetting->sync();
+                syssetting->endGroup();
+            }
+
+        }/*else{
+
+
+            //用户隔离/etc/skel/桌面
+            QString tmp=QString("%1%2").arg("/usr/share/applications/").arg(str);
+            QString appid=getTencentAppid(tmp);
+            qDebug()<<"appid"<<tmp<<appid;
+            if(reply.value().indexOf(appid)!=-1)
+            {
+                qDebug()<<"当前用户可见的腾讯应用"<<tmp;
+                //ifFileDesktopList.append(QString("%1%2").arg("/usr/share/applications/").arg(str));//tmp
+            }else{
+                ifFileDesktopList.removeAll(tmp);
+            }
+        }*/
     }
 
-    filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
-    filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
-    filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
-    filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
-    filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
-    filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
-    filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
-    filePathList.removeAll("/usr/share/applications/im-config.desktop");
-    filePathList.removeAll("/usr/share/applications/fcitx.desktop");
-    filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
-    filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
-    filePathList.removeAll("/usr/share/applications/info.desktop");
-    filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
-    filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
-    filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
-    filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
-    filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
-    filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
-    filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
-    filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
-    filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
-    filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
-    filePathList.removeAll("/usr/share/applications/mpv.desktop");
-    filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
-    filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
-    filePathList.removeAll("/usr/share/applications/yelp.desktop");
 
-    //v10
-    filePathList.removeAll("/usr/share/applications/mate-about.desktop");
-    filePathList.removeAll("/usr/share/applications/time.desktop");
-    filePathList.removeAll("/usr/share/applications/network.desktop");
-    filePathList.removeAll("/usr/share/applications/shares.desktop");
-    filePathList.removeAll("/usr/share/applications/mate-power-statistics.desktop");
-    filePathList.removeAll("/usr/share/applications/display-im6.desktop");
-    filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
-    filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
-    filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
-    filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
-    filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
-
-    return filePathList;
+    filePathList.clear();
+    return ifFileDesktopList;
 }
 
 //创建应用信息容器
@@ -286,6 +476,22 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
     return appInfoVector;
 }
 
+
+//获取tencent应用名
+QString UkuiMenuInterface::getTencentAppid(QString desktopfp)
+{
+    GError** error=nullptr;
+    GKeyFileFlags flags=G_KEY_FILE_NONE;
+    GKeyFile* keyfile=g_key_file_new ();
+
+    QByteArray fpbyte=desktopfp.toLocal8Bit();
+    char* filepath=fpbyte.data();
+    g_key_file_load_from_file(keyfile,filepath,flags,error);
+    char* Appid=g_key_file_get_locale_string(keyfile,"Desktop Entry","Appid", nullptr, nullptr);
+    g_key_file_free(keyfile);
+    return QString::fromLocal8Bit(Appid);
+}
+
 //获取应用名称
 QString UkuiMenuInterface::getAppName(QString desktopfp)
 {
@@ -336,7 +542,7 @@ QString UkuiMenuInterface::getAppCategories(QString desktopfp)
 
 //获取应用图标
 QString UkuiMenuInterface::getAppIcon(QString desktopfp)
-{   
+{
     GError** error=nullptr;
     GKeyFileFlags flags=G_KEY_FILE_NONE;
     GKeyFile* keyfile=g_key_file_new ();
@@ -408,6 +614,141 @@ bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
         return true;
     else
         return false;
+}
+
+bool UkuiMenuInterface::initAppIni()
+{
+    QVector<QStringList> appInitVector;
+    QVector<QStringList> tencentInitVectorList;
+    QVector<QStringList> customizedVectorList;
+    QVector<QStringList> thirdPartyVectorList;
+    QString tencent_math="/usr/share/applications/tencent-math-precise-practice.desktop";
+    QString tencent_chinese="/usr/share/applications/tencent-chinese-precise-practice.desktop";
+    QString tencent_english="/usr/share/applications/tencent-english-precise-practice.desktop";
+    QVector<QStringList> precise_practiceVector;
+    QStringList math;
+    QStringList english;
+    QStringList chainese;
+
+    setting->beginGroup("application");
+    QStringList desktopfnList = setting->allKeys();
+    setting->endGroup();
+    if(desktopfnList.count() == 0)
+    {
+        for(int i = 0; i < appInfoVector.count(); i++)
+        {
+            //qDebug()<<"appInfoVector"<<appInfoVector.count()<<i;
+            QString tmp = appInfoVector.at(i).at(0);
+
+             if(tmp.indexOf("tencent")!=-1)
+             {
+                 if(tmp==tencent_math )
+                 {
+                     precise_practiceVector.append(appInfoVector.at(i));
+                     math=appInfoVector.at(i);
+
+                     continue;
+                 }
+                 if(tmp==tencent_chinese )
+                 {
+                     precise_practiceVector.append(appInfoVector.at(i));
+
+                     chainese=appInfoVector.at(i);
+                     continue;
+                 }
+                 if(tmp==tencent_english )
+                 {
+                     precise_practiceVector.append(appInfoVector.at(i));
+                     english=appInfoVector.at(i);
+                     continue;
+                 }
+                tencentInitVectorList.append(appInfoVector.at(i));//所有是腾讯的系统应用
+             }
+             else if(tmp.indexOf("wps")!=-1)
+             {
+                thirdPartyVectorList.append(appInfoVector.at(i));
+             }
+             else if(tmp.indexOf("eye")!=-1)
+             {
+                 customizedVectorList.append(appInfoVector.at(i));
+             }
+             else if(tmp.indexOf("mdm")!=-1)
+             {
+                 customizedVectorList.append(appInfoVector.at(i));
+             }
+             else
+             {
+                 appInitVector.append(appInfoVector.at(i));
+             }
+        }
+        qSort(appInitVector.begin(),appInitVector.end(),cmpApp);//按中英文字母排序
+        qSort(tencentInitVectorList.begin(),tencentInitVectorList.end(),cmpApp);//按中英文字母排序
+        //腾讯应用的精准类应用处理
+        if(precise_practiceVector.contains(english))
+        {
+             tencentInitVectorList.insert(0,english);
+        }
+        if(precise_practiceVector.contains(math) )
+        {
+             tencentInitVectorList.insert(0,math);
+        }
+        if(precise_practiceVector.contains(chainese) )
+        {
+            tencentInitVectorList.insert(0,chainese);
+        }
+
+        qSort(customizedVectorList.begin(),customizedVectorList.end(),cmpApp);//按中英文字母排序
+        qSort(thirdPartyVectorList.begin(),thirdPartyVectorList.end(),cmpApp);//按中英文字母排序
+
+
+        setting->beginGroup("tencent");
+        for(int i=0;i<tencentInitVectorList.count();i++)
+        {
+            QString str = tencentInitVectorList.at(i).at(0).section(' ', 0, 0);
+            QStringList list = str.split('/');
+            str = list[list.size()-1];
+            //qDebug()<<str;
+            setting->setValue(str,i);
+        }
+        setting->sync();
+        setting->endGroup();
+//        int a=tencentInitVectorList.count();
+        setting->beginGroup("customized");
+        for(int i=0;i<customizedVectorList.count();i++)
+        {
+            QString str = customizedVectorList.at(i).at(0).section(' ', 0, 0);
+            QStringList list = str.split('/');
+            str = list[list.size()-1];
+            setting->setValue(str,i);
+        }
+        setting->sync();
+        setting->endGroup();
+//        int b=customizedVector.count();
+        setting->beginGroup("thirdParty");
+        for(int i=0;i<thirdPartyVectorList.count();i++)
+        {
+            QString str = thirdPartyVectorList.at(i).at(0).section(' ', 0, 0);
+            QStringList list = str.split('/');
+            str = list[list.size()-1];
+            setting->setValue(str,i);
+        }
+        setting->sync();
+        setting->endGroup();
+//        int c=thirdPartyVectorList.count();
+
+        setting->beginGroup("application");
+        for(int i=0;i<appInitVector.count();i++)//赋值
+        {
+            QString str = appInitVector.at(i).at(0).section(' ', 0, 0);
+            QStringList list = str.split('/');
+            str = list[list.size()-1];
+            setting->setValue(str,i);
+        }
+        setting->sync();
+        setting->endGroup();
+        return 1;
+    }
+    return 0;
 }
 
 QVector<QString> UkuiMenuInterface::getAllClassification()
@@ -524,34 +865,67 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
 //            continue;
 //        data.append(desktopfp);
 //    }
+    if(projectCodeName == "V10SP1")
+    {
+        QVector<QString> data;
+        Q_FOREACH(QString desktopfn, getLockAppList())
+        {
+            QString desktopfp;
+            if(androidDesktopfnList.contains(desktopfn))
+                desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+            else
+                desktopfp=QString("/usr/share/applications/"+desktopfn);
+            QFileInfo fileInfo(desktopfp);
+            if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp))
+                continue;
+            data.append(desktopfp);
+        }
+
+        Q_FOREACH(QString desktopfn, getUnlockAllList())
+        {
+            QString desktopfp;
+            if(androidDesktopfnList.contains(desktopfn))
+                desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+            else
+                desktopfp=QString("/usr/share/applications/"+desktopfn);
+            QFileInfo fileInfo(desktopfp);
+            if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp))
+                continue;
+            data.append(desktopfp);
+        }
+
+        return data;
+    }
+}
+
+QVector<QString> UkuiMenuInterface::sortDesktopList(QString group)
+{
+    setting->beginGroup(group);
+    QStringList desktopfnList=setting->allKeys();
+    for(int i=0;i<desktopfnList.count()-1;i++)
+        for(int j=0;j<desktopfnList.count()-1-i;j++)//冒泡排序常用的应用从大到小排列desktopfnList
+        {
+            int value_1=setting->value(desktopfnList.at(j)).toInt();
+            int value_2=setting->value(desktopfnList.at(j+1)).toInt();
+            if(value_1 > value_2)
+            {
+                QString tmp=desktopfnList.at(j);
+                desktopfnList.replace(j,desktopfnList.at(j+1));
+                desktopfnList.replace(j+1,tmp);
+
+            }
+        }
+    setting->sync();
+    setting->endGroup();
 
     QVector<QString> data;
-    Q_FOREACH(QString desktopfn, getLockAppList())
+
+    Q_FOREACH(QString desktopfn,desktopfnList)
     {
         QString desktopfp;
-        if(androidDesktopfnList.contains(desktopfn))
-            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
-        else
-            desktopfp=QString("/usr/share/applications/"+desktopfn);
-        QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp))
-            continue;
+        desktopfp=QString("/usr/share/applications/"+desktopfn);
         data.append(desktopfp);
     }
-
-    Q_FOREACH(QString desktopfn, getUnlockAllList())
-    {
-        QString desktopfp;
-        if(androidDesktopfnList.contains(desktopfn))
-            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
-        else
-            desktopfp=QString("/usr/share/applications/"+desktopfn);
-        QFileInfo fileInfo(desktopfp);
-        if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp))
-            continue;
-        data.append(desktopfp);
-    }
-
     return data;
 }
 
@@ -571,6 +945,40 @@ QVector<QString> UkuiMenuInterface::getCollectApp()
         data.append(desktopfp);
     }
     return data;
+}
+
+QVector<QString> UkuiMenuInterface::getLockApp()
+{
+    setting->beginGroup("lockapplication");
+    QStringList lockdesktopfnList=setting->allKeys();
+    for(int i=0;i<lockdesktopfnList.count()-1;i++)//冒泡排序锁住的应用从小到大排列lockdesktopfnList
+        for(int j=0;j<lockdesktopfnList.count()-1-i;j++)
+        {
+            int value_1=setting->value(lockdesktopfnList.at(j)).toInt();
+            int value_2=setting->value(lockdesktopfnList.at(j+1)).toInt();
+            if(value_1 > value_2)
+            {
+                QString tmp=lockdesktopfnList.at(j);
+                lockdesktopfnList.replace(j,lockdesktopfnList.at(j+1));
+                lockdesktopfnList.replace(j+1,tmp);
+
+            }
+        }
+    setting->endGroup();
+    QVector<QString> data;
+    Q_FOREACH(QString desktopfn,lockdesktopfnList)
+    {
+        QString desktopfp;
+//        if(androidDesktopfnList.contains(desktopfn))//如果锁的应用在安卓列表
+//            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+//        else
+            desktopfp=QString("/usr/share/applications/"+desktopfn);
+//        QFileInfo fileInfo(desktopfp);
+//        if(!fileInfo.isFile())//判断是否存在
+//            continue;
+        data.append(desktopfp);//加入data
+    }
+     return data;
 }
 
 QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()

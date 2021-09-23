@@ -27,6 +27,7 @@
 #include <QDBusObjectPath>
 #include <QSettings>
 #include <glib.h>
+#include "src/UtilityFunction/utility.h"
 
 class UkuiMenuInterface
 {
@@ -53,6 +54,10 @@ public:
     static QVector<QString> collectAppVector;
     static QStringList androidDesktopfnList;
 
+    static QVector<QString> tencentInitVector;
+    static QVector<QString> customizedVector;
+    static QVector<QString> thirdPartyVector;
+
     /**
      * 获取系统应用名称
      * @param desktopfp 为应用.desktop文件所在路径
@@ -78,6 +83,17 @@ public:
     QString getAppNameInitial(QString desktopfp);//获取应用名所有首字母
     QString getAppNamePinyin(QString appname);//获取应用名拼音
     bool checkKreApp(QString desktopfp);
+
+    QStringList getInstalledAppList();
+    QString getTencentAppid(QString desktopfp);
+    bool initAppIni();
+    QVector<QString> getAllApp();
+    QVector<QString> getLockApp();
+    QVector<QString> sortDesktopList(QString group);
+
+    /**/
+    QSettings* setting=nullptr;
+    QSettings *syssetting=nullptr;
 };
 
 #endif // UKUIMENUINTERFACE_H

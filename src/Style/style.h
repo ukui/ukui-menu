@@ -167,6 +167,44 @@ public:
     static int SideBarSpaceIconText; //按钮图标与文字内边距
     static int SideBarSpaceBetweenItem; //item间距
 
+
+    static int appLine;
+    static int appColumn;
+    static int appNum;
+    static int appPage;
+    static int nowpagenum;
+    static int appRows; //app的总行数
+    static bool ScreenRotation;
+
+    static int AppListItemSizeHeight;
+
+//    static int ScreenWidth;
+//    static int ScreenHeight;
+
+
+    static int LeftWidgetWidth;
+
+    static int AppListViewTopMargin;
+    static int AppListViewLeftMargin;
+    static int AppListViewBottomMargin;
+    static int AppListViewRightMargin;
+
+    static int GroupAppRow;
+    static int GroupAppColumn;
+
+    static int TimeWidgetTop;
+    static int TimeWidgetLeft;
+
+    static int ButtonWidgetWidth;
+
+    //扩展的开始菜单应用列表
+    static int ToolWidgetLeft;
+    static int WideAppListItemSizeWidth;
+    static int WideAppListItemSizeHeight;
+    static int WideAppViewLeftMargin;
+    static bool IsWideScreen;
+
+
 };
 
 #endif // STYLE_H

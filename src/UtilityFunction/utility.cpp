@@ -30,6 +30,7 @@
 #include <QScreen>
 
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
+QString projectCodeName = "V10SP1";
 
 const QPixmap loadSvg(const QString &fileName, const int size)
 {
@@ -222,10 +223,9 @@ void openDataBase(QString connectionName)
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
     db.setDatabaseName(DATABASENAME);
-    qDebug() << "11111111111111111111111";
     if (false == db.open())
     {
-        qDebug() << db.lastError().text() << "11111111111111111111111";
+        qDebug() << db.lastError().text();
     }
 }
 
@@ -245,7 +245,6 @@ void initDatabase()
     sql.exec("select count(*) from sqlite_master where type='table' and name='appInfo'");
     if(sql.next())
     {
-        qDebug() << "进入去111111111111111111";
         if(sql.value(0).toInt()==0)
         {
             QSettings* setting=new QSettings("/var/lib/ukui-menu/ukui-menu.ini",QSettings::IniFormat);
@@ -270,9 +269,7 @@ void initDatabase()
             delete setting;
         }
     }
-    qDebug() << "desktopfnList是否为空"<< desktopfnList;
     bool b = sql.exec("create table if not exists appInfo(desktop char primary key, times int, time int, type int, recent int, num int, collect int)");
-    qDebug() << "创建数据库是否成功"<< b;
     Q_FOREACH(QString desktopfn,desktopfnList)
     {
         qDebug() << "void initDatabase()" << desktopfn;

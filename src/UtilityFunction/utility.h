@@ -67,10 +67,13 @@ bool deleteAppRecord(QString desktopfn);//删除应用记录
 void execApp(QString desktopfp);
 bool checkOsRelease();//区分社区办与商业版
 
+
 //获取用户图像
 QString getUserIcon();
 //获取用户姓名
 QString getUserName();
+
+extern QString projectCodeName;
 
 
 #endif // UTILITY_H
