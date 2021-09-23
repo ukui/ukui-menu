@@ -90,7 +90,6 @@ void FullFunctionWidget::initAppListWidget()
     m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
     m_scrollAreaWidLayout->setSpacing(10);
     m_scrollAreaWid->setLayout(m_scrollAreaWidLayout);
-//    m_scrollAreaWid->setStyleSheet("border:1px solid red;");
     layout->addWidget(m_scrollArea);
     connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&FullFunctionWidget::valueChangedSlot);
