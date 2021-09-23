@@ -25,11 +25,6 @@
 #include <thread>
 #include <KWindowInfo>
 #include <KWindowSystem>
-#include <QGraphicsDropShadowEffect>
-#include "src/MainWindow/mainwindow.h"
-#include <QDebug>
-
-
 
 MainViewWidget::MainViewWidget(QWidget *parent) :
     QWidget(parent)
@@ -49,10 +44,9 @@ MainViewWidget::~MainViewWidget()
 
 void MainViewWidget::initUi()
 {
-    //this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-    //this->setAttribute(Qt::WA_StyledBackground,true);
-    //this->setAttribute(Qt::WA_TranslucentBackground);
-    //个人感觉这仨行没啥意义
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+    this->setAttribute(Qt::WA_StyledBackground,true);
+    this->setAttribute(Qt::WA_TranslucentBackground);
     QVBoxLayout* mainLayout=new QVBoxLayout;
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
@@ -118,20 +112,18 @@ void MainViewWidget::initUi()
     connect(m_functionWid,&FunctionWidget::sendMainWinActiveSignal,this,&MainViewWidget::sendMainWinActiveSignal);
     connect(m_letterWid,&LetterWidget::sendMainWinActiveSignal,this,&MainViewWidget::sendMainWinActiveSignal);
 
-   // addTopControl();
+    addTopControl();
     //加载默认视图
     //搜索区
     this->setFixedSize(Style::defaultMainViewWidWidth,Style::minh);
     m_topWidget->setFixedSize(this->width(),Style::defaultTopWidHeight);
-    addTopControl();
     m_topLayout->setContentsMargins(0,0,0,0);
-    //m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
+    m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
     m_queryLineEdit->setFixedSize(Style::defaultQueryLineEditWidth,Style::defaultQueryLineEditHeight);
     m_queryText->adjustSize();
-//    m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-//                                  m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-    //m_queryWid->show();
-
+    m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
+                                  m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+    m_queryWid->show();
     //内容区
     m_contentWid->setFixedSize(this->width(),this->height()-m_topWidget->height());
     m_commonUseWid->setGeometry(0,0,Style::defaultMainViewWidWidth,Style::defaultContentWidHeight);
@@ -210,18 +202,10 @@ void MainViewWidget::initUi()
 void MainViewWidget::addTopControl()
 {
     m_topLayout=new QHBoxLayout;
-    m_topWidget->setLayout(m_topLayout);
     m_topLayout->setSpacing(0);
-
     m_queryLineEdit=new MyLineEdit;
-
     m_topLayout->addWidget(m_queryLineEdit);
-    m_queryLineEdit->setContentsMargins(0,0,0,0);
-    //m_queryLineEdit->setFixedWidth(300);
-
-    //m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
-    m_queryLineEdit->setFixedSize(Style::defaultQueryLineEditWidth,Style::defaultQueryLineEditHeight);
-
+    m_topWidget->setLayout(m_topLayout);
     char style[200];
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
     if(gsetting.get("style-name").toString()=="ukui-light")
@@ -252,20 +236,12 @@ void MainViewWidget::addTopControl()
 void MainViewWidget::initQueryLineEdit()
 {
     m_queryWid=new QWidget;
-    m_queryLineLayout = new QHBoxLayout;
-    m_queryLineEdit->setLayout(m_queryLineLayout);
-    m_queryLineLayout->addWidget(m_queryWid);
-    m_queryLineLayout->setContentsMargins(0, 0, 0, 0);
-    //m_queryWid->setParent(m_queryLineEdit);
-    m_queryWid->setContentsMargins(0, 0, 0, 0);
+    m_queryWid->setParent(m_queryLineEdit);
     m_queryWid->setFocusPolicy(Qt::NoFocus);
-
     QHBoxLayout* queryWidLayout=new QHBoxLayout;
-    m_queryLineEdit->setLayout(queryWidLayout);//自己加的
-    queryWidLayout->setSpacing(5); //原来为5
+    queryWidLayout->setContentsMargins(0,0,0,0);
+    queryWidLayout->setSpacing(5);
     m_queryWid->setLayout(queryWidLayout);
-    queryWidLayout->setContentsMargins(0, 0, 0, 0);
-
     QPixmap pixmap=loadSvg(QString(":/data/img/mainviewwidget/search.svg"),16);
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
     if(gsetting.get("style-name").toString()=="ukui-light")//反黑
@@ -273,32 +249,16 @@ void MainViewWidget::initQueryLineEdit()
     else
         pixmap=drawSymbolicColoredPixmap(pixmap);//反白
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-
     m_queryIcon=new QLabel;
-    m_queryIcon->setFixedSize(pixmap.width()+2, pixmap.height()); //自己添加了2
-    m_queryIcon->setAlignment(Qt::AlignRight); //自己加的
+    m_queryIcon->setFixedSize(pixmap.size());
     m_queryIcon->setPixmap(pixmap);
     m_queryText=new QLabel;
-
     m_queryText->setText(tr("Search"));
     m_queryText->adjustSize();
-
     queryWidLayout->addWidget(m_queryIcon);
     queryWidLayout->addWidget(m_queryText);
-
-    queryWidLayout->setAlignment(Qt::AlignCenter);
-
-    queryWidLayout->setAlignment(m_queryIcon,Qt::AlignCenter);
+    queryWidLayout->setAlignment(m_queryIcon,Qt::AlignVCenter);
     queryWidLayout->setAlignment(m_queryText,Qt::AlignVCenter);
-
-   // queryWidLayout->setAlignment(m_queryText2,Qt::AlignVCenter);
-
-//    m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-//                                  m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-
-
-    m_searchAppThread=new SearchAppThread;
-
     m_queryLineEdit->setFocusPolicy(Qt::ClickFocus);
     m_queryLineEdit->installEventFilter(this);
     m_queryLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
@@ -307,11 +267,11 @@ void MainViewWidget::initQueryLineEdit()
     m_animation->setDuration(100);
     connect(m_animation,&QPropertyAnimation::finished,this,&MainViewWidget::animationFinishedSlot);
 
+    m_searchAppThread=new SearchAppThread;
     connect(this,&MainViewWidget::sendSearchKeyword,
             m_searchAppThread,&SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread,&SearchAppThread::sendSearchResult,
             this,&MainViewWidget::recvSearchResult);
-
     connect(m_queryLineEdit, &MyLineEdit::textChanged, this, &MainViewWidget::searchAppSlot);
 }
 
@@ -352,18 +312,14 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
              else
              {
                  m_queryWid->layout()->removeWidget(m_queryText);
-                 //queryWidLayout->removeWidget(m_queryText);//自己加的
                  m_queryText->setParent(nullptr);
                  m_animation->stop();
-                 //m_queryWid->layout()->setAlignment(Qt::AlignLeft);
-
                  m_animation->setStartValue(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
                                                 m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
                  m_animation->setEndValue(QRect(0,0,
-                                               m_queryIcon->width(),Style::QueryLineEditHeight)); //原来为width+5
+                                               m_queryIcon->width()+5,Style::QueryLineEditHeight));
                  m_animation->setEasingCurve(QEasingCurve::OutQuad);
                  m_animation->start();
-
                  m_queryLineEdit->setTextMargins(-5,0,0,0);
              }
              m_isSearching=true;
@@ -389,15 +345,12 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                     m_queryLineEdit->setStyleSheet(style);
                     m_animation->stop();
                     m_queryText->adjustSize();
-
                     m_animation->setStartValue(QRect(0,0,
                                                      m_queryIcon->width()+5,Style::QueryLineEditHeight));
-
                     m_animation->setEndValue(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
                                                    m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
                     m_animation->setEasingCurve(QEasingCurve::InQuad);
                     m_animation->start();
-
                 }
             }
             else
@@ -519,7 +472,6 @@ void MainViewWidget::animationFinishedSlot()
     {
 //        m_queryWid->layout()->removeWidget(m_queryText);
 //        m_queryText->setParent(nullptr);
-
         m_queryLineEdit->setTextMargins(20,0,0,0);
         if(!m_searchKeyWords.isEmpty())
         {
@@ -530,11 +482,8 @@ void MainViewWidget::animationFinishedSlot()
     else//退出搜索状态
     {
         m_queryWid->layout()->addWidget(m_queryText);
-        //queryWidLayout->addWidget(m_queryText);
-        m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignCenter);
-        //queryWidLayout->setAlignment(m_queryIcon,Qt::AlignVCenter);
+        m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
         m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
-        //queryWidLayout->setAlignment(m_queryText,Qt::AlignVCenter);
         QPalette pe = m_queryText->palette();
         if(!m_isFullScreen)
         {
@@ -564,29 +513,20 @@ void MainViewWidget::loadMinMainView()
     //搜索区
     m_topWidget->setFixedSize(this->width(),Style::defaultTopWidHeight);
     m_topLayout->setContentsMargins(0,0,0,0);
-    //m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
+    m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
     m_queryLineEdit->setFixedSize(Style::defaultQueryLineEditWidth,Style::defaultQueryLineEditHeight);
     if(m_queryLineEdit->text().isEmpty())
     {
-        m_queryWid->setContentsMargins(0, 0, 0, 0);
-        //queryWidLayout->setContentsMargins(0, 0, 0, 0);
-//        if(m_queryWid->layout()->count()==1)
-//        {
-        m_queryWid->layout()->addWidget(m_queryText);
-        m_queryWid->layout()->setAlignment(Qt::AlignCenter);
-        m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignCenter);
-        m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
-//        }
-
+        if(m_queryWid->layout()->count()==1)
+        {
+            m_queryWid->layout()->addWidget(m_queryText);
+            m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
+            m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
+        }
         m_queryText->adjustSize();
-//        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-//                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-   //     m_queryWid->show();
-    }
-    else
-    {
-        m_queryWid->layout()->setAlignment(Qt::AlignLeft);
-        //m_queryWid->layout()->setAlignment(m_queryIcon ,Qt::AlignCenter);
+        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
+                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+        m_queryWid->show();
     }
 
     char style[200];
@@ -611,7 +551,6 @@ void MainViewWidget::loadMinMainView()
     m_queryLineEdit->setStyleSheet(style);
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_queryIcon->setPixmap(pixmap);
-    //m_queryIcon->setFixedSize(pixmap.width()+2, pixmap.height());//自己加的
     m_queryText->setPalette(pe);
 
     //内容区
@@ -644,27 +583,19 @@ void MainViewWidget::loadMaxMainView()
                                   0,
                                   (m_topWidget->width()-Style::LeftWidWidth-m_queryLineEdit->width())/2,
                                   0);
-    //m_topLayout->setContentsMargins(0, 0, 0, 0);
 
     if(m_queryLineEdit->text().isEmpty())
     {
-//        if(m_queryWid->layout()->count()==1)
-//        {
-        m_queryWid->setContentsMargins(0, 0, 0, 0);
-        m_queryWid->layout()->addWidget(m_queryText);
-        m_queryWid->layout()->setAlignment(Qt::AlignCenter);
-        m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignCenter);
-        m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
-//        }
+        if(m_queryWid->layout()->count()==1)
+        {
+            m_queryWid->layout()->addWidget(m_queryText);
+            m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
+            m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
+        }
         m_queryText->adjustSize();
-//        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-//                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
-//        m_queryWid->show();
-    }
-    else
-    {
-        m_queryWid->layout()->setAlignment(Qt::AlignLeft);
-        //m_queryWid->layout()->setAlignment(m_queryIcon ,Qt::AlignCenter);
+        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
+                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+        m_queryWid->show();
     }
 
     char style[200];
@@ -709,16 +640,11 @@ void MainViewWidget::resizeControl()
                            Style::heightavailable);
         m_topWidget->setFixedSize(this->width(),Style::TopWidgetHeight);
         m_queryLineEdit->setFixedSize(Style::QueryLineEditWidth,Style::QueryLineEditHeight);
-        m_queryLineEdit->setContentsMargins(0, 0, 0, 0);
-        m_queryLineEdit->setFocusPolicy(Qt::ClickFocus);
-        m_queryLineEdit->installEventFilter(this);
-        m_queryLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
         m_topLayout->setContentsMargins((m_topWidget->width()-Style::LeftWidWidth-m_queryLineEdit->width())/2+Style::LeftWidWidth,
                                       0,
                                       (m_topWidget->width()-Style::LeftWidWidth-m_queryLineEdit->width())/2,
                                       0);
-       // m_topLayout->setContentsMargins(0, 0, 0, 0);
         m_contentWid->setFixedSize(this->width(),this->height()-m_topWidget->height());
     }
     else
@@ -726,7 +652,7 @@ void MainViewWidget::resizeControl()
         this->setFixedSize(Style::defaultMainViewWidWidth,Style::minh);
         m_topWidget->setFixedSize(Style::defaultMainViewWidWidth,Style::defaultTopWidHeight);
         m_topLayout->setContentsMargins(0,0,0,0);
-        //m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
+        m_topLayout->setAlignment(m_queryLineEdit,Qt::AlignCenter);
         m_contentWid->setFixedSize(this->width(),this->height()-m_topWidget->height());
     }
 
@@ -742,14 +668,12 @@ void MainViewWidget::resetQueryLine()
         if(m_queryWid->layout()->count()==1)
         {
             m_queryWid->layout()->addWidget(m_queryText);
-            m_queryWid->layout()->setAlignment(Qt::AlignCenter);
-            m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignCenter);
+            m_queryWid->layout()->setAlignment(m_queryIcon,Qt::AlignVCenter);
             m_queryWid->layout()->setAlignment(m_queryText,Qt::AlignVCenter);
         }
-
         m_queryText->adjustSize();
-//        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
-//                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
+        m_queryWid->setGeometry(QRect((m_queryLineEdit->width()-(m_queryIcon->width()+m_queryText->width()+10))/2,0,
+                                      m_queryIcon->width()+m_queryText->width()+10,Style::QueryLineEditHeight));
         char style[200];
         const auto ratio=devicePixelRatioF();
         QPalette pe = m_queryText->palette();
@@ -1006,7 +930,7 @@ void MainViewWidget::repaintWidget()
 void MainViewWidget::widgetMakeZero()
 {
     m_isSearching=false;
-    m_widgetState=m_saveCurrentWidState; //存储当前类别窗口号
+    m_widgetState=m_saveCurrentWidState;
     m_commonUseWid->widgetMakeZero();
     m_fullCommonUseWid->widgetMakeZero();
     m_letterWid->widgetMakeZero();
