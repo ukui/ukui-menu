@@ -20,11 +20,6 @@
 #include "utility.h"
 #include <QDebug>
 #include <QDrag>
-#include <QSlider>
-#include <QAbstractSlider>
-#include <QScrollEvent>
-#include <QWheelEvent>
-
 
 ListView::ListView(QWidget *parent, int width, int height, int module):
     QListView(parent)
@@ -47,7 +42,6 @@ void ListView::initWidget()
 {
     setAttribute(Qt::WA_TranslucentBackground);
     viewport()->setAttribute(Qt::WA_TranslucentBackground);
-//    this->setFixedSize(w - 10, h - 10);//自己加的
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -262,19 +256,4 @@ void ListView::keyPressEvent(QKeyEvent* e)
             break;
         }
     }
-}
-
-void ListView::wheelEvent(QWheelEvent *e)
-{
-    if(isHuaWei9006C || isHuaWeiPC){
-        if (qAbs(e->angleDelta().y()) > qAbs(e->angleDelta().x())) {
-            if ((e->angleDelta().y() >= 120) ) { //上翻
-                verticalScrollBar()->setValue(verticalScrollBar()->value()-1);
-            } else if ((e->angleDelta().y() <= -120) ) { //下翻
-                verticalScrollBar()->setValue(verticalScrollBar()->value()+1);
-            }
-        }
-        e->accept();
-    }
-    QListView::wheelEvent(e);
 }
