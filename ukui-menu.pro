@@ -112,9 +112,6 @@ HEADERS += \
     src/Widget/tabletwidget.h \
     src/Widget/tabviewwidget.h \
     src/Widget/toolbutton.h \
-    src/tablet/GroupListView/grouplistdelegate.h \
-    src/tablet/GroupListView/grouplistview.h \
-    src/tablet/GroupListView/grouplistwidget.h \
     src/tablet/UtilityFunction/AbstractInterface.h \
     src/tablet/UtilityFunction/KySmallPluginInterface.h \
     src/tablet/UtilityFunction/abstractInterface.h \
@@ -177,9 +174,6 @@ SOURCES += \
     src/Widget/tabletwidget.cpp \
     src/Widget/tabviewwidget.cpp \
     src/Widget/toolbutton.cpp \
-    src/tablet/GroupListView/grouplistdelegate.cpp \
-    src/tablet/GroupListView/grouplistview.cpp \
-    src/tablet/GroupListView/grouplistwidget.cpp \
     src/tablet/UtilityFunction/pluginwidget.cpp \
     src/tablet/UtilityFunction/thumbnail.cpp \
     src/tablet/UtilityFunction/timewidget.cpp \

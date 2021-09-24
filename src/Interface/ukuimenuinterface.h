@@ -57,6 +57,7 @@ public:
     static QVector<QString> tencentInitVector;
     static QVector<QString> customizedVector;
     static QVector<QString> thirdPartyVector;
+    static QVector<QString> applicationVector;
 
     /**
      * 获取系统应用名称

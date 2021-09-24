@@ -55,6 +55,7 @@ QStringList UkuiMenuInterface::androidDesktopfnList=QStringList();
 QVector<QString> UkuiMenuInterface::tencentInitVector = QVector<QString>();
 QVector<QString> UkuiMenuInterface::customizedVector = QVector<QString>();
 QVector<QString> UkuiMenuInterface::thirdPartyVector = QVector<QString>();
+QVector<QString> UkuiMenuInterface::applicationVector = QVector<QString>();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {

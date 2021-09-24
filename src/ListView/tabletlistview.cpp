@@ -130,48 +130,20 @@ void TabletListView::initWidget()
     this->setSpacing(0);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     connect(this,&TabletListView::customContextMenuRequested,this,&TabletListView::rightClickedSlot);
-    m_animation = new QVariantAnimation(horizontalScrollBar());
-    m_animation->setEasingCurve(QEasingCurve::Linear);
-    connect(m_animation, &QVariantAnimation::valueChanged, this, [=](const QVariant variant) {
-        int value = variant.toInt();
-        this->horizontalScrollBar()->setValue(value);
-//        qDebug()<<__FUNCTION__<<verticalScrollBar()->value()<<value<<"动画"<<verticalScrollBar()->minimum()<<verticalScrollBar()->maximum();
-        if (value < this->horizontalScrollBar()->minimum() || value > this->horizontalScrollBar()->maximum())
-            m_animation->stop();
-    });
+//    m_animation = new QVariantAnimation(horizontalScrollBar());
+//    m_animation->setEasingCurve(QEasingCurve::Linear);
+//    connect(m_animation, &QVariantAnimation::valueChanged, this, [=](const QVariant variant) {
+//        int value = variant.toInt();
+//        this->horizontalScrollBar()->setValue(value);
+////        qDebug()<<__FUNCTION__<<verticalScrollBar()->value()<<value<<"动画"<<verticalScrollBar()->minimum()<<verticalScrollBar()->maximum();
+//        if (value < this->horizontalScrollBar()->minimum() || value > this->horizontalScrollBar()->maximum())
+//            m_animation->stop();
+//    });
 //    this->setStyleSheet("border:0px solid #ff0000;background:transparent;");
 }
 //添加数据
 void TabletListView::addData(QStringList data)
 {
-//    if (listmodel) {
-//        listmodel->clear();
-//    } else {
-//        listmodel = new QStandardItemModel(this);
-//    }
-
-//    this->setModel(listmodel);
-//    Q_FOREACH(QString desktopfp,data)
-//    {
-//        QStandardItem* item=new QStandardItem;
-//        item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
-//        item->setData(QVariant::fromValue<bool>(0),Qt::UserRole);
-//        bool appDis=appDisable(desktopfp);
-//        item->setData(QVariant::fromValue<bool>(appDis),Qt::UserRole+1);
-//        listmodel->appendRow(item);
-//    }
-//    //空白位置补位
-//    qDebug() << "+++++++++++++(appPage,appColumn,appLine,appNum) = (" << Style::appPage
-//             << "," << Style::appColumn << "," << Style::appLine << "," << Style::appNum << ")";
-//    for(int i=0;i<Style::appPage* Style::appColumn* Style::appLine-Style::appNum;i++)//
-//    {
-//        QStandardItem* items=new QStandardItem;
-//        items->setEnabled(false);
-//        items->setBackground(Qt::NoBrush);
-//        listmodel->appendRow(items);
-//    }
-//    m_delegate= new TabletFullItemDelegate(this,module);
-//    this->setItemDelegate(m_delegate);
     listmodel=new QStandardItemModel(this);
     this->setModel(listmodel);
 
@@ -245,7 +217,6 @@ void TabletListView::insertData(QString desktopfp)
 /*点击执行*/
 void TabletListView::onClicked(QModelIndex index)
 {
-
     QVariant var = listmodel->data(index, Qt::DisplayRole);
     if(var.isValid())
     {
@@ -256,7 +227,7 @@ void TabletListView::onClicked(QModelIndex index)
         bool iscontain=setting->contains(desktopfn);
         setting->endGroup();
 
-        if(desktopfn!="kylin-screenshot.desktop"&&!appDisable(desktopfp))
+        if(/*desktopfn!="kylin-screenshot.desktop"&&*/!appDisable(desktopfp))
         {
             Q_EMIT sendHideMainWindowSignal();
         }
@@ -272,7 +243,6 @@ void TabletListView::onClicked(QModelIndex index)
 }
 bool TabletListView::uninstall(QString desktopfp)//判断是否可以卸载
 {
-
     qDebug()<<"fulllistview"<<desktopfp;
     syssetting->beginGroup("ukui-menu-sysapplist");
     QStringList sysapplist=syssetting->allKeys();
@@ -293,38 +263,17 @@ bool TabletListView::uninstall(QString desktopfp)//判断是否可以卸载
 void TabletListView::rightClickedSlot(const QPoint &pos)
 {
     Q_UNUSED(pos)
-//    qDebug()<<"right"<<right_pressedpos;
-//    if(tabletMode->get(TABLET_MODE).toBool())
-//    {
-//        right_iconClick = false;
-//        return;
-//    }
     this->model()->setData(this->indexAt(right_pressedpos),QVariant::fromValue<bool>(0),Qt::UserRole+2);
     if(!(this->selectionModel()->selectedIndexes().isEmpty()))//选中的item不为空
     {
-//        qDebug()<<"moduel"<<module;
         QModelIndex index=this->currentIndex();
         QVariant var = listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
-//        qDebug()<<" "<<desktopfp;
         bool isinstall = uninstall(desktopfp);//判断是否为安装的应用可卸载
         int ret = menu->showAppBtnMenu(desktopfp,isinstall);
-//        if(module > 0)
-//        {
-//            switch (ret) {
-//            case 6:
-//                Q_EMIT sendHideMainWindowSignal();
-//                break;
-//            case 7:
-//                Q_EMIT sendHideMainWindowSignal();
-//                break;
-//            default:
-//                break;
-//            }
-//        }
-//        else
+
+        switch (ret)
         {
-            switch (ret) {
             case 1:
                 Q_EMIT sendUpdateAppListSignal();
                 break;
@@ -339,7 +288,6 @@ void TabletListView::rightClickedSlot(const QPoint &pos)
                 break;
             default:
                 break;
-            }
         }
         right_iconClick=false;
         this->selectionModel()->clear();
@@ -348,13 +296,11 @@ void TabletListView::rightClickedSlot(const QPoint &pos)
 
 void TabletListView::mousePressEvent(QMouseEvent *event)
 {
-    if (m_animation->state() == QVariantAnimation::Running)
-        return;
     pressedpos = event->pos();
     if(event->button() == Qt::LeftButton)
     {//左键
         qDebug() << "当前点坐标" << event->pos();
-        if(((this->indexAt(event->pos()).isValid()) && (module == 0) && (pressedpos.x() % Style::AppListItemSizeWidth >= 60 &
+        if(((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x() % Style::AppListItemSizeWidth) >= 60 &
            pressedpos.x() % Style::AppListItemSizeWidth <= 60 + Style::AppListIconSize &
            pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &
            pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace+ Style::AppListIconSize)) ||
@@ -363,23 +309,21 @@ void TabletListView::mousePressEvent(QMouseEvent *event)
           pressedpos.x() % 318 <= 111 + Style::AppListIconSize &
           pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &
           pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace+ Style::AppListIconSize)))
-
         {
             pressApp = listmodel->data(this->indexAt(pressedpos), Qt::DisplayRole);
             iconClick = true;
             startPos = event->pos();
             listmodel->setData(this->indexAt(pressedpos),1,Qt::UserRole+2);
             repaint();
-
-        }else{
+        }
+        else
+        {
             iconClick = false;
             listmodel->setData(this->indexAt(pressedpos),QVariant::fromValue<bool>(0),Qt::UserRole+2);
             pressedpos = event->pos();
             moveing_pressedpos = pressedpos;
             press_time = event->timestamp();
-
         }
-
     }
     else if(event->button() == Qt::RightButton)
     {//右键
@@ -411,8 +355,8 @@ void TabletListView::mousePressEvent(QMouseEvent *event)
 
 void TabletListView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_animation->state() == QVariantAnimation::Running)
-        return;
+//    if (m_animation->state() == QVariantAnimation::Running)
+//        return;
     if(event->buttons()&Qt::LeftButton & this->indexAt(event->pos()).isValid())
     {
         if(iconClick)
@@ -452,90 +396,40 @@ void TabletListView::mouseMoveEvent(QMouseEvent *event)
             }
         }
     }
-    if (event->buttons() & Qt::LeftButton && iconClick!=true) {
-        int distance = (event->pos() - moveing_pressedpos).y();
-        int x_distance = (event->pos() - moveing_pressedpos).x();
-        //qDebug()<<"x:y"<<distance<<x_distance;
-        if(qAbs(distance)>=qAbs(x_distance))
-        {
-            return;
-        }
-        //qDebug()<<"y:max"<<verticalScrollBar()->value() - distance<<verticalScrollBar()->maximum()<<verticalScrollBar()->value();
 
-//        int dis = Style::appLine*(Style::AppListItemSizeHeight);
-//        qDebug()<<dis;
-
-        if(x_distance>0)
-        {
-//            qDebug()<<"11111";//上翻页
-//            if((horizontalScrollBar()->value() - x_distance) <= horizontalScrollBar()->minimum())
-//            {
-//                horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
-//            }
-//            else
-//            {
-//                horizontalScrollBar()->setValue(horizontalScrollBar()->value() - x_distance);
-//            }
-
-        }else{
-//            qDebug()<<"22222";//下翻页
-//            qDebug()<<"verticalScrollBar()->value()"<<verticalScrollBar()->value()<<verticalScrollBar()->maximum()-dis;
-//            if((horizontalScrollBar()->value() - x_distance) >= horizontalScrollBar()->maximum())
-//            {
-//                horizontalScrollBar()->setValue(horizontalScrollBar()->maximum());
-//            }
-//            else
-//            {
-//                horizontalScrollBar()->setValue(horizontalScrollBar()->value() - x_distance);
-//            }
-        }
-//        if(verticalScrollBar()->value()>=verticalScrollBar()->maximum()-dis)
-//            return ;
-//        verticalScrollBar()->setValue(verticalScrollBar()->value() - distance);
-        moveing_pressedpos = event->pos();
-    }
     event->accept();
 }
 void TabletListView::dragMoveEvent(QDragMoveEvent *event)
 {
-    //qDebug() << "-----" << "dragMoveEvent" << "-----";
     moveing_pressedpos=event->pos();
     //拖拽特效绘制
-
-//添加拖动时的自动翻页
     if(flat == true)
     {
-//        qDebug()<<"flat"<<flat;
         flat=false;
         time->start(500);
-        if(event->pos().y() >= (Style::AppListItemSizeHeight*Style::appLine - 50) || event->pos().y() <= Style::AppListItemSizeHeight)
+        if(event->pos().x() >= (1920 - 50) || event->pos().x() <= 50)
         {
-            if(Style::nowpagenum != 1 && event->pos().y() <= 50)
+            if(event->pos().x() <= 50)
             {
-                 Style::nowpagenum = Style::nowpagenum-1;
-                 Q_EMIT pagenumchanged(true);
-                 this->verticalScrollBar()->setValue((Style::nowpagenum-1)*Style::appLine*(Style::AppListItemSizeHeight));//dis
-            }
-            if(Style::nowpagenum != Style::appPage && event->pos().y() >= (Style::AppListItemSizeHeight*Style::appLine - 50))
-            {
-                 Style::nowpagenum =Style::nowpagenum+1;
                  Q_EMIT pagenumchanged(false);
-                 this->verticalScrollBar()->setValue((Style::nowpagenum-1)*Style::appLine*(Style::AppListItemSizeHeight));//dis
+            }
+            if(event->pos().x() >= (1920 - 50))
+            {
+                 Q_EMIT pagenumchanged(true);
             }
         }
     }
-
-    if(moveing_pressedpos.x() % Style::AppListItemSizeWidth >= 60 &
-            moveing_pressedpos.x() % Style::AppListItemSizeWidth <= 60 + Style::AppListIconSize &
-            moveing_pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &
-            moveing_pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace+ Style::AppListIconSize)
-    {
-        this->model()->setData(this->indexAt(moveing_pressedpos),QVariant::fromValue<bool>(0),Qt::UserRole);
-    }
-    else
-    {
-        this->model()->setData(this->indexAt(moveing_pressedpos),QVariant::fromValue<bool>(0),Qt::UserRole);
-    }
+//    if(moveing_pressedpos.x() % Style::AppListItemSizeWidth >= 60 &
+//            moveing_pressedpos.x() % Style::AppListItemSizeWidth <= 60 + Style::AppListIconSize &
+//            moveing_pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &
+//            moveing_pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace+ Style::AppListIconSize)
+//    {
+//        this->model()->setData(this->indexAt(moveing_pressedpos),QVariant::fromValue<bool>(0),Qt::UserRole);
+//    }
+//    else
+//    {
+//        this->model()->setData(this->indexAt(moveing_pressedpos),QVariant::fromValue<bool>(0),Qt::UserRole);
+//    }
 }
 void TabletListView::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -547,35 +441,17 @@ void TabletListView::dragEnterEvent(QDragEnterEvent *event)
 }
 void TabletListView::dropEvent(QDropEvent *event)
 {
-    //qDebug() << "-----" << "dropEvent" << "-----";
     TabletListView *source = qobject_cast<TabletListView *>(event->source());
-    if (source && source == this)
+    if (source /*&& source == this*/)
     {
         dropPos=event->pos();
-        if(((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x()) % Style::AppListItemSizeWidth >= 60 &
-           (pressedpos.x()) % Style::AppListItemSizeWidth <= 60 + Style::AppListIconSize &
-           pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &
-           pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace+ Style::AppListIconSize)) ||
-            ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
-             (pressedpos.x() % 318 >= 111 &
-              pressedpos.x() % 318 <= 111 + Style::AppListIconSize &
-              pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &
-              pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace+ Style::AppListIconSize)))
-        {
-//            mergeApplication(startPos,dropPos);
-        }
-        else
-        {
-            insertApplication(startPos,dropPos);
-        }
+        insertApplication(startPos,dropPos);
     }
 
     this->model()->setData(this->indexAt(pressedpos),QVariant::fromValue<bool>(0),Qt::UserRole+2);
 }
 void TabletListView::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (m_animation->state() == QVariantAnimation::Running)
-        return;
     releasepos=e->pos();//释放的位置坐标
     if(iconClick)
     {
@@ -642,11 +518,11 @@ void TabletListView::wheelEvent(QWheelEvent *e)
     if (qAbs(e->angleDelta().y()) > qAbs(e->angleDelta().x()))
     {
         if ((e->angleDelta().y() >= 120) )
-        { //上翻
+        {
             Q_EMIT pagenumchanged(true);
         }
         else if ((e->angleDelta().y() <= -120) )
-        { //下翻
+        {
             Q_EMIT pagenumchanged(false);
         }
         e->accept();
@@ -661,12 +537,28 @@ void TabletListView::insertApplication(QPoint pressedpos,QPoint releasepos)
     QFileInfo fileInfo2(desktopfp2);
     QString desktopfn2 = fileInfo2.fileName();
     qDebug()<<"2pre"<<desktopfn2;
-    releasepos.setX(releasepos.x() + 111);
+    if(module == 0)
+    {
+        releasepos.setX(releasepos.x() + 111);
+    }
+    else
+    {
+        releasepos.setX(releasepos.x() + 60);
+    }
+
     QVariant var3 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//释放位置右侧有应用
     QString desktopfp3 = var3.value<QString>();//释放位置的应用
     QFileInfo fileInfo3(desktopfp3);
     QString desktopfn3 = fileInfo3.fileName();
-    releasepos.setX(releasepos.x() - 222);
+    if(module == 0)
+    {
+        releasepos.setX(releasepos.x() - 222);
+    }
+    else
+    {
+        releasepos.setX(releasepos.x() - 120);
+    }
+
     QVariant var4 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//右侧没有左侧有
     QString desktopfp4=var4.value<QString>();//释放位置的应用
     QFileInfo fileInfo4(desktopfp4);
@@ -703,6 +595,16 @@ void TabletListView::insertApplication(QPoint pressedpos,QPoint releasepos)
         editString = "thirdParty";
     }
 
+    setting->beginGroup("customized");
+    QStringList customizedList=setting->allKeys();
+    setting->sync();
+    setting->endGroup();
+
+    if(customizedList.contains(desktopfn2))
+    {
+        editString = "customized";
+    }
+
     if(var3.isValid()&&desktopfp3!=desktopfp2)
     {
         setting->beginGroup(editString);
@@ -720,14 +622,8 @@ void TabletListView::insertApplication(QPoint pressedpos,QPoint releasepos)
                 }
             }
             setting->setValue(desktopfn2,indexRel);
-
-//                listmodel->removeRow(this->indexAt(pressedpos).row());
-//                listmodel->insertRow(this->indexAt(releasepos).row());
-//                listmodel->setData(this->indexAt(releasepos),var2);
-
-
         }
-        else if(indexPre<indexRel){
+        else if(indexPre < indexRel){
 
             qDebug()<<"<";
             for(int i=0;i<keyList.count();i++)
@@ -738,24 +634,20 @@ void TabletListView::insertApplication(QPoint pressedpos,QPoint releasepos)
                 }
             }
             setting->setValue(desktopfn2,indexRel-1);
-//                listmodel->insertRow(this->indexAt(releasepos).row());
-//                listmodel->setData(this->indexAt(releasepos),var2);
-//                listmodel->removeRow(this->indexAt(pressedpos).row());
         }
 
         setting->sync();
         setting->endGroup();
 
     }
-    else if(var4.isValid()&&desktopfp4!=desktopfp2)//最后一个
+    else if(var4.isValid()&&desktopfp4!=desktopfp2)
     {
         setting->beginGroup(editString);
         int indexPre=setting->value(desktopfn2).toInt();
         int indexRel=setting->value(desktopfn4).toInt();
         QStringList keyList=setting->allKeys();
 
-        if(indexPre<indexRel){
-//         qDebug()<<"4 <";
+        if(indexPre < indexRel){
             for(int i=0;i<keyList.count();i++)
             {
                 if(setting->value(keyList.at(i)).toInt()>indexPre&&setting->value(keyList.at(i)).toInt()<=indexRel)
@@ -764,10 +656,20 @@ void TabletListView::insertApplication(QPoint pressedpos,QPoint releasepos)
                 }
             }
             setting->setValue(desktopfn2,indexRel);
-//                listmodel->insertRow(this->indexAt(relpos).row());
-//                listmodel->setData(this->indexAt(relpos),var2);
-//                listmodel->removeRow(this->indexAt(prepos).row());
         }
+        else if(indexPre > indexRel)
+        {
+            qDebug()<<">";
+            for(int i=0;i<keyList.count();i++)
+            {
+                if(setting->value(keyList.at(i)).toInt() > indexRel && setting->value(keyList.at(i)).toInt()<indexPre)
+                {
+                    setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()+1);
+                }
+            }
+            setting->setValue(desktopfn2,indexRel + 1);
+        }
+
         setting->sync();
         setting->endGroup();
     }

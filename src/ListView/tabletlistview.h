@@ -37,6 +37,7 @@
 #include <QVariantAnimation>
 #include "src/ViewItem/fullitemdelegate.h"
 #include "src/RightClickMenu/tabletrightclickmenu.h"
+#include "klistview.h"
 
 class TabletListView : public QListView
 {

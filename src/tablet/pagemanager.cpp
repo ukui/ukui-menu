@@ -56,8 +56,9 @@ QVector<QStringList> PageManager::sortAppInPage(QVector<QString> appvector)
 QVector<QStringList> PageManager::getAppPageVector()
 {
     UkuiMenuInterface::tencentInitVector = m_ukuiMenuInterface->sortDesktopList("tencent");
-    UkuiMenuInterface::customizedVector = m_ukuiMenuInterface->sortDesktopList("thirdParty");
-    UkuiMenuInterface::thirdPartyVector = m_ukuiMenuInterface->sortDesktopList("application");
+    UkuiMenuInterface::customizedVector = m_ukuiMenuInterface->sortDesktopList("customized");
+    UkuiMenuInterface::thirdPartyVector = m_ukuiMenuInterface->sortDesktopList("thirdParty");
+    UkuiMenuInterface::applicationVector = m_ukuiMenuInterface->sortDesktopList("application");
     QVector<QStringList> appPagelist;
     Q_FOREACH(QStringList desktopfp,sortAppInPage(UkuiMenuInterface::tencentInitVector))
     {
@@ -70,6 +71,11 @@ QVector<QStringList> PageManager::getAppPageVector()
     }
 
     Q_FOREACH(QStringList desktopfp,sortAppInPage(UkuiMenuInterface::thirdPartyVector))
+    {
+        appPagelist.append(desktopfp);
+    }
+
+    Q_FOREACH(QStringList desktopfp,sortAppInPage(UkuiMenuInterface::applicationVector))
     {
         appPagelist.append(desktopfp);
     }
