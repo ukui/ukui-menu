@@ -88,7 +88,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                     iconstr.remove(".png");
                     iconstr.remove(".svg");
                     icon=QIcon::fromTheme(iconstr);
-                    if(icon.isNull())
+                    if(icon.isNull() || icon.actualSize(QSize(32, 32)).width() < 32)
                     {
                         if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
                             icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
@@ -117,7 +117,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                     }
                 }
                 painter->save();
-                icon.paint(painter,iconRect,Qt::AlignLeft);
+                icon.paint(painter,iconRect,Qt::AlignCenter);
                 QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
                 QFontMetrics fm=painter->fontMetrics();
                 QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-62,Qt::TextShowMnemonic);
@@ -175,7 +175,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 iconstr.remove(".png");
                 iconstr.remove(".svg");
                 icon=QIcon::fromTheme(iconstr);
-                if(icon.isNull())
+                if(icon.isNull() || icon.actualSize(QSize(32, 32)).width() < 32)
                 {
                     if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
                         icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
@@ -203,7 +203,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                         icon=QIcon::fromTheme(QString("application-x-desktop"));
                 }
             }
-            icon.paint(painter,iconRect,Qt::AlignLeft);
+            icon.paint(painter,iconRect,Qt::AlignCenter);
             QString appname=pUkuiMenuInterface->getAppName(strlist.at(0));
             QFileInfo fileInfo(strlist.at(0));
             QString desktopfn=fileInfo.fileName();

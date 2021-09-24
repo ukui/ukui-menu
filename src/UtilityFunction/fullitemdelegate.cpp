@@ -83,7 +83,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             iconstr.remove(".png");
             iconstr.remove(".svg");
             icon=QIcon::fromTheme(iconstr);
-            if(icon.isNull())
+            if(icon.isNull() || icon.actualSize(QSize(Style::AppListIconSize,
+                                                      Style::AppListIconSize)).width() < Style::AppListIconSize)
             {
                 if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
                     icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
