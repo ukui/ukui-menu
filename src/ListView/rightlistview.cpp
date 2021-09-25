@@ -91,18 +91,18 @@ void RightListView::selectFirstItem()
 
 void RightListView::keyPressEvent(QKeyEvent* e)
 {
-//     QRect center = visualRect(currentIndex());
-//    if(e->type() == QEvent::KeyPress)
-//    {
-//        switch(e->key())
-//        {
-//        case Qt::Key_Enter:
-//        case Qt::Key_Return:
-//        {
-//            QModelIndex index = this->currentIndex();
-//            Q_EMIT clicked(index);
-//            break;
-//        }
+     QRect center = visualRect(currentIndex());
+    if(e->type() == QEvent::KeyPress)
+    {
+        switch(e->key())
+        {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        {
+            QModelIndex index = this->currentIndex();
+            Q_EMIT clicked(index);
+            break;
+        }
 //        case Qt::Key_Left:
 //        {
 //            this->clearFocus();
@@ -151,11 +151,11 @@ void RightListView::keyPressEvent(QKeyEvent* e)
 //            break;
 //        }
 
-//        default:
+        default:
             return QListView::keyPressEvent(e);
-//            break;
-//        }
-//    }
+            break;
+        }
+    }
 }
 
 void RightListView::enterEvent(QEvent *e)

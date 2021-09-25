@@ -62,6 +62,8 @@ QStringList GetModelData::getLetterClassificationBtnRowList()
 QVector<QStringList> GetModelData::getMinLetterData()
 {
     m_minLetterData.clear();
+    m_letterList.clear();
+    m_letterBtnRowList.clear();
     int row=0;
     QVector<QStringList> vector=UkuiMenuInterface::alphabeticVector;
     for(int i=0;i<vector.size();i++)
