@@ -187,6 +187,7 @@ void TabletRightClickMenu::addToDesktopActionTriggerSlot()
 void TabletRightClickMenu::uninstallActionTriggerSlot()
 {
     QString cmd=QString("dpkg -S "+m_desktopfp);
+    qDebug() << "void TabletRightClickMenu::uninstallActionTriggerSlot()" << m_desktopfp;
     m_cmdProc->setReadChannel(QProcess::StandardOutput);
     m_cmdProc->start("sh",QStringList()<<"-c"<<cmd);
     m_cmdProc->waitForFinished();
@@ -200,7 +201,7 @@ void TabletRightClickMenu::onReadOutput()
     QString packagestr=QString::fromLocal8Bit(m_cmdProc->readAllStandardOutput().data());
     QString packageName=packagestr.split(":").at(0);
     char command[100];
-    sprintf(command,"ubuntu-kylin-software-center -remove %s",packageName.toLocal8Bit().data());
+    sprintf(command,"kylin-software-center -remove %s",packageName.toLocal8Bit().data());
     QProcess::startDetached(command);
 }
 
