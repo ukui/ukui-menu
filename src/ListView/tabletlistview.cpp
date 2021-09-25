@@ -157,7 +157,6 @@ void TabletListView::addData(QStringList data)
     this->setItemDelegate(m_delegate);
 }
 
-
 void TabletListView::updateData(QStringList data)
 {
     listmodel->clear();
@@ -206,6 +205,7 @@ bool TabletListView::appDisable(QString desktopfp)//判断是否是禁用应用(
     }
     return 0;
 }
+
 void TabletListView::insertData(QString desktopfp)
 {
     QStandardItem* item=new QStandardItem;
@@ -214,6 +214,7 @@ void TabletListView::insertData(QString desktopfp)
     listmodel->appendRow(item);
 
 }
+
 /*点击执行*/
 void TabletListView::onClicked(QModelIndex index)
 {
@@ -241,6 +242,7 @@ void TabletListView::onClicked(QModelIndex index)
         }
     }
 }
+
 bool TabletListView::uninstall(QString desktopfp)//判断是否可以卸载
 {
     qDebug()<<"fulllistview"<<desktopfp;
@@ -259,6 +261,7 @@ bool TabletListView::uninstall(QString desktopfp)//判断是否可以卸载
     }
     return 1;
 }
+
 /*右键*/
 void TabletListView::rightClickedSlot(const QPoint &pos)
 {
@@ -532,149 +535,260 @@ void TabletListView::wheelEvent(QWheelEvent *e)
 //拖拽移动的时候，如果不是应用的话，就交换位置
 void TabletListView::insertApplication(QPoint pressedpos,QPoint releasepos)
 {
-    QVariant var2 = pressApp;
-    QString desktopfp2 = var2.value<QString>();
-    QFileInfo fileInfo2(desktopfp2);
-    QString desktopfn2 = fileInfo2.fileName();
-    qDebug()<<"2pre"<<desktopfn2;
-    if(module == 0)
+    if(false)
     {
-        releasepos.setX(releasepos.x() + 111);
-    }
-    else
-    {
-        releasepos.setX(releasepos.x() + 60);
-    }
-
-    QVariant var3 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//释放位置右侧有应用
-    QString desktopfp3 = var3.value<QString>();//释放位置的应用
-    QFileInfo fileInfo3(desktopfp3);
-    QString desktopfn3 = fileInfo3.fileName();
-    if(module == 0)
-    {
-        releasepos.setX(releasepos.x() - 222);
-    }
-    else
-    {
-        releasepos.setX(releasepos.x() - 120);
-    }
-
-    QVariant var4 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//右侧没有左侧有
-    QString desktopfp4=var4.value<QString>();//释放位置的应用
-    QFileInfo fileInfo4(desktopfp4);
-    QString desktopfn4=fileInfo4.fileName();
-    //qDebug()<<"4rel"<<desktopfn4;
-    QString editString;
-    setting->beginGroup("application");
-    QStringList keyList=setting->allKeys();
-    setting->sync();
-    setting->endGroup();
-
-    if(keyList.contains(desktopfn2))
-    {
-        editString = "application";
-    }
-
-    setting->beginGroup("tencent");
-    QStringList keyTecentList=setting->allKeys();
-    setting->sync();
-    setting->endGroup();
-
-    if(keyTecentList.contains(desktopfn2))
-    {
-        editString = "tencent";
-    }
-
-    setting->beginGroup("thirdParty");
-    QStringList keyThirdList=setting->allKeys();
-    setting->sync();
-    setting->endGroup();
-
-    if(keyThirdList.contains(desktopfn2))
-    {
-        editString = "thirdParty";
-    }
-
-    setting->beginGroup("customized");
-    QStringList customizedList=setting->allKeys();
-    setting->sync();
-    setting->endGroup();
-
-    if(customizedList.contains(desktopfn2))
-    {
-        editString = "customized";
-    }
-
-    if(var3.isValid()&&desktopfp3!=desktopfp2)
-    {
-        setting->beginGroup(editString);
-        int indexPre=setting->value(desktopfn2).toInt();
-        int indexRel=setting->value(desktopfn3).toInt();
-        QStringList keyList=setting->allKeys();
-        if(indexPre>indexRel)
+        QVariant var2 = pressApp;
+        QString desktopfp2 = var2.value<QString>();
+        QFileInfo fileInfo2(desktopfp2);
+        QString desktopfn2 = fileInfo2.fileName();
+        qDebug()<<"2pre"<<desktopfn2;
+        if(module == 0)
         {
-            qDebug()<<">";
-            for(int i=0;i<keyList.count();i++)
-            {
-                if(setting->value(keyList.at(i)).toInt()>=indexRel && setting->value(keyList.at(i)).toInt()<indexPre)
-                {
-                    setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()+1);
-                }
-            }
-            setting->setValue(desktopfn2,indexRel);
+            releasepos.setX(releasepos.x() + 111);
         }
-        else if(indexPre < indexRel){
-
-            qDebug()<<"<";
-            for(int i=0;i<keyList.count();i++)
-            {
-                if(setting->value(keyList.at(i)).toInt()>indexPre && setting->value(keyList.at(i)).toInt()<indexRel)
-                {
-                    setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()-1);
-                }
-            }
-            setting->setValue(desktopfn2,indexRel-1);
+        else
+        {
+            releasepos.setX(releasepos.x() + 60);
         }
 
+        QVariant var3 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//释放位置右侧有应用
+        QString desktopfp3 = var3.value<QString>();//释放位置的应用
+        QFileInfo fileInfo3(desktopfp3);
+        QString desktopfn3 = fileInfo3.fileName();
+        if(module == 0)
+        {
+            releasepos.setX(releasepos.x() - 222);
+        }
+        else
+        {
+            releasepos.setX(releasepos.x() - 120);
+        }
+
+        QVariant var4 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//右侧没有左侧有
+        QString desktopfp4=var4.value<QString>();//释放位置的应用
+        QFileInfo fileInfo4(desktopfp4);
+        QString desktopfn4=fileInfo4.fileName();
+        //qDebug()<<"4rel"<<desktopfn4;
+        QString editString;
+        setting->beginGroup("application");
+        QStringList keyList=setting->allKeys();
         setting->sync();
         setting->endGroup();
 
-    }
-    else if(var4.isValid()&&desktopfp4!=desktopfp2)
-    {
-        setting->beginGroup(editString);
-        int indexPre=setting->value(desktopfn2).toInt();
-        int indexRel=setting->value(desktopfn4).toInt();
-        QStringList keyList=setting->allKeys();
-
-        if(indexPre < indexRel){
-            for(int i=0;i<keyList.count();i++)
-            {
-                if(setting->value(keyList.at(i)).toInt()>indexPre&&setting->value(keyList.at(i)).toInt()<=indexRel)
-                {
-                    setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()-1);
-                }
-            }
-            setting->setValue(desktopfn2,indexRel);
-        }
-        else if(indexPre > indexRel)
+        if(keyList.contains(desktopfn2))
         {
-            qDebug()<<">";
-            for(int i=0;i<keyList.count();i++)
-            {
-                if(setting->value(keyList.at(i)).toInt() > indexRel && setting->value(keyList.at(i)).toInt()<indexPre)
-                {
-                    setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()+1);
-                }
-            }
-            setting->setValue(desktopfn2,indexRel + 1);
+            editString = "application";
         }
 
+        setting->beginGroup("tencent");
+        QStringList keyTecentList=setting->allKeys();
         setting->sync();
         setting->endGroup();
-    }
 
-    Q_EMIT sendUpdateAppListSignal();
+        if(keyTecentList.contains(desktopfn2))
+        {
+            editString = "tencent";
+        }
+
+        setting->beginGroup("thirdParty");
+        QStringList keyThirdList=setting->allKeys();
+        setting->sync();
+        setting->endGroup();
+
+        if(keyThirdList.contains(desktopfn2))
+        {
+            editString = "thirdParty";
+        }
+
+        setting->beginGroup("customized");
+        QStringList customizedList=setting->allKeys();
+        setting->sync();
+        setting->endGroup();
+
+        if(customizedList.contains(desktopfn2))
+        {
+            editString = "customized";
+        }
+
+        if(var3.isValid()&&desktopfp3!=desktopfp2)
+        {
+            setting->beginGroup(editString);
+            int indexPre=setting->value(desktopfn2).toInt();
+            int indexRel=setting->value(desktopfn3).toInt();
+            QStringList keyList=setting->allKeys();
+            if(indexPre>indexRel)
+            {
+                qDebug()<<">";
+                for(int i=0;i<keyList.count();i++)
+                {
+                    if(setting->value(keyList.at(i)).toInt()>=indexRel && setting->value(keyList.at(i)).toInt()<indexPre)
+                    {
+                        setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()+1);
+                    }
+                }
+                setting->setValue(desktopfn2,indexRel);
+            }
+            else if(indexPre < indexRel){
+
+                qDebug()<<"<";
+                for(int i=0;i<keyList.count();i++)
+                {
+                    if(setting->value(keyList.at(i)).toInt()>indexPre && setting->value(keyList.at(i)).toInt()<indexRel)
+                    {
+                        setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()-1);
+                    }
+                }
+                setting->setValue(desktopfn2,indexRel-1);
+            }
+
+            setting->sync();
+            setting->endGroup();
+
+        }
+        else if(var4.isValid()&&desktopfp4!=desktopfp2)
+        {
+            setting->beginGroup(editString);
+            int indexPre=setting->value(desktopfn2).toInt();
+            int indexRel=setting->value(desktopfn4).toInt();
+            QStringList keyList=setting->allKeys();
+
+            if(indexPre < indexRel){
+                for(int i=0;i<keyList.count();i++)
+                {
+                    if(setting->value(keyList.at(i)).toInt()>indexPre&&setting->value(keyList.at(i)).toInt()<=indexRel)
+                    {
+                        setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()-1);
+                    }
+                }
+                setting->setValue(desktopfn2,indexRel);
+            }
+            else if(indexPre > indexRel)
+            {
+                qDebug()<<">";
+                for(int i=0;i<keyList.count();i++)
+                {
+                    if(setting->value(keyList.at(i)).toInt() > indexRel && setting->value(keyList.at(i)).toInt()<indexPre)
+                    {
+                        setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()+1);
+                    }
+                }
+                setting->setValue(desktopfn2,indexRel + 1);
+            }
+
+            setting->sync();
+            setting->endGroup();
+        }
+
+        Q_EMIT sendUpdateAppListSignal();
+    }
+    else
+    {
+        //    QVariant var1 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);
+            QVariant var2 =pressApp;//= listmodel->data(this->indexAt(pressedpos), Qt::DisplayRole);
+
+            QString desktopfp2=var2.value<QString>();//drag_desktopfp;//点击位置的应用
+            QFileInfo fileInfo2(desktopfp2);
+            QString desktopfn2=fileInfo2.fileName();
+        //    qDebug()<<"2pre"<<desktopfn2;
+            releasepos.setX(releasepos.x()+70);
+            QVariant var3 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//释放位置右侧有应用
+            QString desktopfp3=var3.value<QString>();//释放位置的应用
+            QFileInfo fileInfo3(desktopfp3);
+            QString desktopfn3=fileInfo3.fileName();
+            releasepos.setX(releasepos.x()-140);
+            QVariant var4 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//右侧没有左侧有
+            QString desktopfp4=var4.value<QString>();//释放位置的应用
+            QFileInfo fileInfo4(desktopfp4);
+            QString desktopfn4=fileInfo4.fileName();
+            //qDebug()<<"4rel"<<desktopfn4;
+
+            if(var3.isValid()&&desktopfp3!=desktopfp2)
+            {
+
+                setting->beginGroup("application");
+                int indexPre=setting->value(desktopfn2).toInt();
+                int indexRel=setting->value(desktopfn3).toInt();
+                QStringList keyList=setting->allKeys();
+                if(indexPre>indexRel)
+                {
+                    qDebug()<<">";
+                    for(int i=0;i<keyList.count();i++)
+                    {
+                        if(setting->value(keyList.at(i)).toInt()>=indexRel&&setting->value(keyList.at(i)).toInt()<indexPre)
+                        {
+                            setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()+1);
+                        }
+                    }
+                    setting->setValue(desktopfn2,indexRel);
+
+        //                listmodel->removeRow(this->indexAt(pressedpos).row());
+        //                listmodel->insertRow(this->indexAt(releasepos).row());
+        //                listmodel->setData(this->indexAt(releasepos),var2);
+
+
+                }
+                else if(indexPre<indexRel){
+
+                    qDebug()<<"<";
+                    for(int i=0;i<keyList.count();i++)
+                    {
+                        if(setting->value(keyList.at(i)).toInt()>indexPre&&setting->value(keyList.at(i)).toInt()<indexRel)
+                        {
+                            setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()-1);
+                        }
+                    }
+                    setting->setValue(desktopfn2,indexRel-1);
+        //                listmodel->insertRow(this->indexAt(releasepos).row());
+        //                listmodel->setData(this->indexAt(releasepos),var2);
+        //                listmodel->removeRow(this->indexAt(pressedpos).row());
+                }
+
+                setting->sync();
+                setting->endGroup();
+
+            }
+            else if(var4.isValid()&&desktopfp4!=desktopfp2)//最后一个
+            {
+                setting->beginGroup("application");
+                int indexPre=setting->value(desktopfn2).toInt();
+                int indexRel=setting->value(desktopfn4).toInt();
+                QStringList keyList=setting->allKeys();
+
+                if(indexPre<indexRel){
+        //         qDebug()<<"4 <";
+                    for(int i=0;i<keyList.count();i++)
+                    {
+                        if(setting->value(keyList.at(i)).toInt()>indexPre&&setting->value(keyList.at(i)).toInt()<=indexRel)
+                        {
+                            setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()-1);
+                        }
+                    }
+                    setting->setValue(desktopfn2,indexRel);
+        //                listmodel->insertRow(this->indexAt(relpos).row());
+        //                listmodel->setData(this->indexAt(relpos),var2);
+        //                listmodel->removeRow(this->indexAt(prepos).row());
+                }
+                else if(indexPre > indexRel)
+                {
+                    qDebug()<<">";
+                    for(int i=0;i<keyList.count();i++)
+                    {
+                        if(setting->value(keyList.at(i)).toInt() > indexRel && setting->value(keyList.at(i)).toInt()<indexPre)
+                        {
+                            setting->setValue(keyList.at(i),setting->value(keyList.at(i)).toInt()+1);
+                        }
+                    }
+                    setting->setValue(desktopfn2,indexRel + 1);
+                }
+                setting->sync();
+                setting->endGroup();
+
+            }
+
+        //    }
+
+             Q_EMIT sendUpdateAppListSignal();
+    }
 }
 
 
@@ -749,7 +863,6 @@ void TabletListView::mergeApplication(QPoint pressedpos,QPoint releasepos)
                 setting->sync();
                 setting->endGroup();
 
-
                 setting->beginGroup(group);
                 setting->setValue(desktopfn2,0);
                 setting->setValue(desktopfn1,1);
@@ -780,10 +893,8 @@ void TabletListView::mergeApplication(QPoint pressedpos,QPoint releasepos)
                 QVariant variant= QVariant::fromValue<QString>(QString("usr/share/application/%1").arg(group));
                 listmodel->setData(this->indexAt(releasepos),variant);
             }
-
         }
- }
-
+    }
 }
 
 

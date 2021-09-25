@@ -619,137 +619,268 @@ bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
 
 bool UkuiMenuInterface::initAppIni()
 {
-    QVector<QStringList> appInitVector;
-    QVector<QStringList> tencentInitVectorList;
-    QVector<QStringList> customizedVectorList;
-    QVector<QStringList> thirdPartyVectorList;
-    QString tencent_math="/usr/share/applications/tencent-math-precise-practice.desktop";
-    QString tencent_chinese="/usr/share/applications/tencent-chinese-precise-practice.desktop";
-    QString tencent_english="/usr/share/applications/tencent-english-precise-practice.desktop";
-    QVector<QStringList> precise_practiceVector;
-    QStringList math;
-    QStringList english;
-    QStringList chainese;
-
-    setting->beginGroup("application");
-    QStringList desktopfnList = setting->allKeys();
-    setting->endGroup();
-    if(desktopfnList.count() == 0)
+    if(false)
     {
-        for(int i = 0; i < appInfoVector.count(); i++)
-        {
-            //qDebug()<<"appInfoVector"<<appInfoVector.count()<<i;
-            QString tmp = appInfoVector.at(i).at(0);
-
-             if(tmp.indexOf("tencent")!=-1)
-             {
-                 if(tmp==tencent_math )
-                 {
-                     precise_practiceVector.append(appInfoVector.at(i));
-                     math=appInfoVector.at(i);
-
-                     continue;
-                 }
-                 if(tmp==tencent_chinese )
-                 {
-                     precise_practiceVector.append(appInfoVector.at(i));
-
-                     chainese=appInfoVector.at(i);
-                     continue;
-                 }
-                 if(tmp==tencent_english )
-                 {
-                     precise_practiceVector.append(appInfoVector.at(i));
-                     english=appInfoVector.at(i);
-                     continue;
-                 }
-                tencentInitVectorList.append(appInfoVector.at(i));//所有是腾讯的系统应用
-             }
-             else if(tmp.indexOf("wps")!=-1)
-             {
-                thirdPartyVectorList.append(appInfoVector.at(i));
-             }
-             else if(tmp.indexOf("eye")!=-1)
-             {
-                 customizedVectorList.append(appInfoVector.at(i));
-             }
-             else if(tmp.indexOf("mdm")!=-1)
-             {
-                 customizedVectorList.append(appInfoVector.at(i));
-             }
-             else
-             {
-                 appInitVector.append(appInfoVector.at(i));
-             }
-        }
-        qSort(appInitVector.begin(),appInitVector.end(),cmpApp);//按中英文字母排序
-        qSort(tencentInitVectorList.begin(),tencentInitVectorList.end(),cmpApp);//按中英文字母排序
-        //腾讯应用的精准类应用处理
-        if(precise_practiceVector.contains(english))
-        {
-             tencentInitVectorList.insert(0,english);
-        }
-        if(precise_practiceVector.contains(math) )
-        {
-             tencentInitVectorList.insert(0,math);
-        }
-        if(precise_practiceVector.contains(chainese) )
-        {
-            tencentInitVectorList.insert(0,chainese);
-        }
-
-        qSort(customizedVectorList.begin(),customizedVectorList.end(),cmpApp);//按中英文字母排序
-        qSort(thirdPartyVectorList.begin(),thirdPartyVectorList.end(),cmpApp);//按中英文字母排序
-
-
-        setting->beginGroup("tencent");
-        for(int i=0;i<tencentInitVectorList.count();i++)
-        {
-            QString str = tencentInitVectorList.at(i).at(0).section(' ', 0, 0);
-            QStringList list = str.split('/');
-            str = list[list.size()-1];
-            //qDebug()<<str;
-            setting->setValue(str,i);
-        }
-        setting->sync();
-        setting->endGroup();
-//        int a=tencentInitVectorList.count();
-        setting->beginGroup("customized");
-        for(int i=0;i<customizedVectorList.count();i++)
-        {
-            QString str = customizedVectorList.at(i).at(0).section(' ', 0, 0);
-            QStringList list = str.split('/');
-            str = list[list.size()-1];
-            setting->setValue(str,i);
-        }
-        setting->sync();
-        setting->endGroup();
-//        int b=customizedVector.count();
-        setting->beginGroup("thirdParty");
-        for(int i=0;i<thirdPartyVectorList.count();i++)
-        {
-            QString str = thirdPartyVectorList.at(i).at(0).section(' ', 0, 0);
-            QStringList list = str.split('/');
-            str = list[list.size()-1];
-            setting->setValue(str,i);
-        }
-        setting->sync();
-        setting->endGroup();
-//        int c=thirdPartyVectorList.count();
+        QVector<QStringList> appInitVector;
+        QVector<QStringList> tencentInitVectorList;
+        QVector<QStringList> customizedVectorList;
+        QVector<QStringList> thirdPartyVectorList;
+        QString tencent_math="/usr/share/applications/tencent-math-precise-practice.desktop";
+        QString tencent_chinese="/usr/share/applications/tencent-chinese-precise-practice.desktop";
+        QString tencent_english="/usr/share/applications/tencent-english-precise-practice.desktop";
+        QVector<QStringList> precise_practiceVector;
+        QStringList math;
+        QStringList english;
+        QStringList chainese;
 
         setting->beginGroup("application");
-        for(int i=0;i<appInitVector.count();i++)//赋值
-        {
-            QString str = appInitVector.at(i).at(0).section(' ', 0, 0);
-            QStringList list = str.split('/');
-            str = list[list.size()-1];
-            setting->setValue(str,i);
-        }
-        setting->sync();
+        QStringList desktopfnList = setting->allKeys();
         setting->endGroup();
-        return 1;
+        if(desktopfnList.count() == 0)
+        {
+            for(int i = 0; i < appInfoVector.count(); i++)
+            {
+                //qDebug()<<"appInfoVector"<<appInfoVector.count()<<i;
+                QString tmp = appInfoVector.at(i).at(0);
+
+                 if(tmp.indexOf("tencent")!=-1)
+                 {
+                     if(tmp==tencent_math )
+                     {
+                         precise_practiceVector.append(appInfoVector.at(i));
+                         math=appInfoVector.at(i);
+
+                         continue;
+                     }
+                     if(tmp==tencent_chinese )
+                     {
+                         precise_practiceVector.append(appInfoVector.at(i));
+
+                         chainese=appInfoVector.at(i);
+                         continue;
+                     }
+                     if(tmp==tencent_english )
+                     {
+                         precise_practiceVector.append(appInfoVector.at(i));
+                         english=appInfoVector.at(i);
+                         continue;
+                     }
+                    tencentInitVectorList.append(appInfoVector.at(i));//所有是腾讯的系统应用
+                 }
+                 else if(tmp.indexOf("wps")!=-1)
+                 {
+                    thirdPartyVectorList.append(appInfoVector.at(i));
+                 }
+                 else if(tmp.indexOf("eye")!=-1)
+                 {
+                     customizedVectorList.append(appInfoVector.at(i));
+                 }
+                 else if(tmp.indexOf("mdm")!=-1)
+                 {
+                     customizedVectorList.append(appInfoVector.at(i));
+                 }
+                 else
+                 {
+                     appInitVector.append(appInfoVector.at(i));
+                 }
+            }
+            qSort(appInitVector.begin(),appInitVector.end(),cmpApp);//按中英文字母排序
+            qSort(tencentInitVectorList.begin(),tencentInitVectorList.end(),cmpApp);//按中英文字母排序
+            //腾讯应用的精准类应用处理
+            if(precise_practiceVector.contains(english))
+            {
+                 tencentInitVectorList.insert(0,english);
+            }
+            if(precise_practiceVector.contains(math) )
+            {
+                 tencentInitVectorList.insert(0,math);
+            }
+            if(precise_practiceVector.contains(chainese) )
+            {
+                tencentInitVectorList.insert(0,chainese);
+            }
+
+            qSort(customizedVectorList.begin(),customizedVectorList.end(),cmpApp);//按中英文字母排序
+            qSort(thirdPartyVectorList.begin(),thirdPartyVectorList.end(),cmpApp);//按中英文字母排序
+
+
+            setting->beginGroup("tencent");
+            for(int i=0;i<tencentInitVectorList.count();i++)
+            {
+                QString str = tencentInitVectorList.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size()-1];
+                //qDebug()<<str;
+                setting->setValue(str,i);
+            }
+            setting->sync();
+            setting->endGroup();
+    //        int a=tencentInitVectorList.count();
+            setting->beginGroup("customized");
+            for(int i=0;i<customizedVectorList.count();i++)
+            {
+                QString str = customizedVectorList.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size()-1];
+                setting->setValue(str,i);
+            }
+            setting->sync();
+            setting->endGroup();
+    //        int b=customizedVector.count();
+            setting->beginGroup("thirdParty");
+            for(int i=0;i<thirdPartyVectorList.count();i++)
+            {
+                QString str = thirdPartyVectorList.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size()-1];
+                setting->setValue(str,i);
+            }
+            setting->sync();
+            setting->endGroup();
+    //        int c=thirdPartyVectorList.count();
+
+            setting->beginGroup("application");
+            for(int i=0;i<appInitVector.count();i++)//赋值
+            {
+                QString str = appInitVector.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size()-1];
+                setting->setValue(str,i);
+            }
+            setting->sync();
+            setting->endGroup();
+            return 1;
+        }
+        return 0;
     }
-    return 0;
+    else
+    {
+        QVector<QStringList> appInitVector;
+        QVector<QStringList> tencentInitVector;
+        QVector<QStringList> customizedVector;
+        QVector<QStringList> thirdPartyVector;
+
+        QString tencent_math="/usr/share/applications/tencent-math-precise-practice.desktop";
+        QString tencent_chinese="/usr/share/applications/tencent-chinese-precise-practice.desktop";
+        QString tencent_english="/usr/share/applications/tencent-english-precise-practice.desktop";
+        QVector<QStringList> precise_practiceVector;
+        QStringList math;
+        QStringList english;
+        QStringList chainese;
+
+        setting->beginGroup("application");
+        QStringList desktopfnList = setting->allKeys();
+        setting->endGroup();
+        if(desktopfnList.count() == 0)
+        {
+            for(int i = 0; i < desktopfpVector.count(); i++)
+            {
+                //qDebug()<<"appInfoVector"<<appInfoVector.count()<<i;
+                QString tmp = appInfoVector.at(i).at(0);
+
+                 if(tmp.indexOf("tencent")!=-1)
+                 {
+                     if(tmp==tencent_math )
+                     {
+                         precise_practiceVector.append(appInfoVector.at(i));
+                         math=appInfoVector.at(i);
+
+                         continue;
+                     }
+                     if(tmp==tencent_chinese )
+                     {
+                         precise_practiceVector.append(appInfoVector.at(i));
+
+                         chainese=appInfoVector.at(i);
+                         continue;
+                     }
+                     if(tmp==tencent_english )
+                     {
+                         precise_practiceVector.append(appInfoVector.at(i));
+                         english=appInfoVector.at(i);
+                         continue;
+                     }
+                    tencentInitVector.append(appInfoVector.at(i));//所有是腾讯的系统应用
+                 }
+                 else if(tmp.indexOf("wps")!=-1)
+                 {
+                    thirdPartyVector.append(appInfoVector.at(i));
+                 }
+                 else if(tmp.indexOf("eye")!=-1)
+                 {
+                     customizedVector.append(appInfoVector.at(i));
+                 }
+                 else if(tmp.indexOf("mdm")!=-1)
+                 {
+                     customizedVector.append(appInfoVector.at(i));
+                 }
+                 else
+                 {
+                     appInitVector.append(appInfoVector.at(i));
+                 }
+            }
+            qSort(appInitVector.begin(),appInitVector.end(),cmpApp);//按中英文字母排序
+            qSort(tencentInitVector.begin(),tencentInitVector.end(),cmpApp);//按中英文字母排序
+            //腾讯应用的精准类应用处理
+            if(precise_practiceVector.contains(english))
+            {
+                 tencentInitVector.insert(0,english);
+            }
+            if(precise_practiceVector.contains(math) )
+            {
+                 tencentInitVector.insert(0,math);
+            }
+            if(precise_practiceVector.contains(chainese) )
+            {
+                tencentInitVector.insert(0,chainese);
+            }
+
+            qSort(customizedVector.begin(),customizedVector.end(),cmpApp);//按中英文字母排序
+            qSort(thirdPartyVector.begin(),thirdPartyVector.end(),cmpApp);//按中英文字母排序
+
+
+            setting->beginGroup("application");
+            for(int i=0;i<tencentInitVector.count();i++)
+            {
+                QString str = tencentInitVector.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size()-1];
+                //qDebug()<<str;
+                setting->setValue(str,i);
+            }
+            int a=tencentInitVector.count();
+
+            for(int i=0;i<customizedVector.count();i++)
+            {
+                QString str = customizedVector.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size()-1];
+                setting->setValue(str,i+a);
+            }
+            int b=customizedVector.count();
+
+            for(int i=0;i<thirdPartyVector.count();i++)
+            {
+                QString str = thirdPartyVector.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size()-1];
+                setting->setValue(str,i+a+b);
+            }
+
+            int c=thirdPartyVector.count();
+            for(int i=0;i<appInitVector.count();i++)//赋值
+            {
+                QString str = appInitVector.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size()-1];
+                setting->setValue(str,i+a+b+c);
+            }
+            setting->sync();
+            setting->endGroup();
+            return 1;
+        }
+        return 0;
+    }
 }
 
 QVector<QString> UkuiMenuInterface::getAllClassification()
