@@ -46,6 +46,7 @@
 #include "src/tablet/UtilityFunction/timewidget.h"
 #include "src/ListView/tabletlistview.h"
 #include "src/tablet/pagemanager.h"
+#include "src/FileWatcher/tabletdirectorychangedthread.h"
 
 class TabletWindow : public QWidget
 {
@@ -67,7 +68,6 @@ private:
     ScrollArea* m_scrollArea=nullptr;
     ScrollAreaWid* m_scrollAreaWid=nullptr;
     QHBoxLayout* m_scrollAreaWidLayout=nullptr;
-    QStringList m_classificationList;//Store the list of category buttons
     QStringList m_data;
     QTimer *time = nullptr;
     bool flag;
@@ -123,6 +123,10 @@ private:
     QPushButton* button=nullptr;
     PageManager *m_pagemanager = nullptr;
 
+    QFileSystemWatcher* m_fileWatcher=nullptr;
+    QFileSystemWatcher* m_fileWatcher1=nullptr;
+    TabletDirectoryChangedThread* m_directoryChangedThread=nullptr;
+
 protected:
     /**
      * @brief Initializes UI
@@ -155,6 +159,8 @@ protected:
     QImage applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent = 0);
 
     void buttonWidgetShow();
+
+    bool appListFile();
 
 public Q_SLOTS:
     /**
@@ -192,6 +198,9 @@ public Q_SLOTS:
     void on_pageNumberChanged(bool nextPage);
     void buttonClicked(QAbstractButton *button);
     void pageNumberChanged(int pageNum);
+    void requestDeleteAppSlot();
+    void requestUpdateSlot(QString desktopfp);
+    void directoryChangedSlot();
 
 Q_SIGNALS:
     /**
@@ -206,6 +215,10 @@ Q_SIGNALS:
     void changeScrollValue(int value, int maximumValue);
 
     void pagenumchanged(int pageNum); //翻页信号
+
+    void sendDirectoryPath(QString arg);
+
+    void UpdateSignal();
 };
 
 #endif // FULLFUNCTIONWIDGET_H
