@@ -4,22 +4,22 @@
 <context>
     <name>FullMainWindow</name>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="73"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="71"/>
         <source>Search</source>
         <translation type="unfinished">Ara</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="138"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="140"/>
         <source>All</source>
         <translation type="unfinished">Tümü</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="140"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="142"/>
         <source>Letter</source>
         <translation type="unfinished">Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="142"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="144"/>
         <source>Function</source>
         <translation type="unfinished">Kategori</translation>
     </message>
@@ -132,57 +132,57 @@
 <context>
     <name>GetModelData</name>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="92"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="104"/>
         <source>Mobile</source>
         <translation type="unfinished">Mobil</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="98"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="110"/>
         <source>Internet</source>
         <translation type="unfinished">İnternet</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="104"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="116"/>
         <source>Social</source>
         <translation type="unfinished">Sosyal</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="110"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="122"/>
         <source>Video</source>
         <translation type="unfinished">Video</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="116"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="128"/>
         <source>Development</source>
         <translation type="unfinished">Programlama</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="122"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="134"/>
         <source>Image</source>
         <translation type="unfinished">Grafik</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="128"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="140"/>
         <source>Game</source>
         <translation type="unfinished">Oyunlar</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="134"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="146"/>
         <source>Office</source>
         <translation type="unfinished">Ofis Uygulamaları</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="140"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="152"/>
         <source>Education</source>
         <translation type="unfinished">Eğitim</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="147"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="159"/>
         <source>System</source>
         <translation type="unfinished">Sistem</translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="153"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="165"/>
         <source>Others</source>
         <translation type="unfinished">Diğer</translation>
     </message>
@@ -209,46 +209,41 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="263"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="276"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="266"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="279"/>
         <source>collection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="267"/>
-        <source>recent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="261"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="396"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="628"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="274"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="446"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="873"/>
         <source>All</source>
         <translation type="unfinished">Tümü</translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="268"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="281"/>
         <source>Max</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="270"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="283"/>
         <source>PowerOff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="398"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="638"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="448"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="883"/>
         <source>Letter</source>
         <translation type="unfinished">Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="400"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="648"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="450"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="893"/>
         <source>Function</source>
         <translation type="unfinished">Kategori</translation>
     </message>
@@ -475,6 +470,37 @@
         <location filename="../src/Widget/splitbarframe.cpp" line="110"/>
         <source>Others</source>
         <translation type="unfinished">Diğer</translation>
+    </message>
+</context>
+<context>
+    <name>TabletRightClickMenu</name>
+    <message>
+        <location filename="../src/RightClickMenu/tabletrightclickmenu.cpp" line="239"/>
+        <source>Pin to taskbar</source>
+        <translation type="unfinished">Görev çubuğuna sabitle</translation>
+    </message>
+    <message>
+        <location filename="../src/RightClickMenu/tabletrightclickmenu.cpp" line="242"/>
+        <source>Unpin from taskbar</source>
+        <translation type="unfinished">Görev çubuğundan sabitlemeyi kaldır</translation>
+    </message>
+    <message>
+        <location filename="../src/RightClickMenu/tabletrightclickmenu.cpp" line="249"/>
+        <source>Add to desktop shortcuts</source>
+        <translation type="unfinished">Masaüstü kısayollarına ekle</translation>
+    </message>
+    <message>
+        <location filename="../src/RightClickMenu/tabletrightclickmenu.cpp" line="268"/>
+        <source>Uninstall</source>
+        <translation type="unfinished">Kaldır</translation>
+    </message>
+</context>
+<context>
+    <name>TimeWidget</name>
+    <message>
+        <location filename="../src/tablet/UtilityFunction/timewidget.cpp" line="181"/>
+        <source>Search</source>
+        <translation type="unfinished">Ara</translation>
     </message>
 </context>
 </TS>
