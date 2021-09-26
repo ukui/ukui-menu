@@ -405,18 +405,29 @@ void TabletListView::mouseMoveEvent(QMouseEvent *event)
 void TabletListView::dragMoveEvent(QDragMoveEvent *event)
 {
     moveing_pressedpos=event->pos();
+    qDebug() << "11111111111111111" << event->pos();
     //拖拽特效绘制
     if(flat == true)
     {
         flat=false;
         time->start(500);
-        if(event->pos().x() >= (1920 - 50) || event->pos().x() <= 50)
+        if(module == 1)
         {
-            if(event->pos().x() <= 50)
+            if(event->pos().x() >= (1920 - 50) || event->pos().x() <= 50)
             {
-                 Q_EMIT pagenumchanged(false);
+                if(event->pos().x() <= 50)
+                {
+                     Q_EMIT pagenumchanged(false);
+                }
+                if(event->pos().x() >= (1920 - 50))
+                {
+                     Q_EMIT pagenumchanged(true);
+                }
             }
-            if(event->pos().x() >= (1920 - 50))
+        }
+        else
+        {
+            if(event->pos().x() >= (1920 - 620))
             {
                  Q_EMIT pagenumchanged(true);
             }

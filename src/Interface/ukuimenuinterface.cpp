@@ -456,8 +456,6 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
 //    QDBusReply<QString> reply = desktopfpListiface.call("GetDesktopAppList",username);
 
 
-
-
     //1、获取系统应用列表
     //filePathList;
     QStringList ifFileDesktopList;
@@ -475,7 +473,6 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
 
         ifFileDesktopList.append(tmp);
     }
-    ifFileDesktopList.append("/usr/share/applications/kylin-user-guide.desktop");
 //ifFileDesktopList  所有当前存在的应用
 
     /*得到系统默认应用*/
@@ -978,6 +975,8 @@ bool UkuiMenuInterface::initAppIni()
                 str = list[list.size()-1];
                 setting->setValue(str,i+a+b+c);
             }
+            int d=appInitVector.count();
+            setting->setValue("mate-terminal.desktop",a+b+c+d);
             setting->sync();
             setting->endGroup();
             return 1;
@@ -1147,7 +1146,6 @@ QVector<QString> UkuiMenuInterface::sortDesktopList(QString group)
                 QString tmp=desktopfnList.at(j);
                 desktopfnList.replace(j,desktopfnList.at(j+1));
                 desktopfnList.replace(j+1,tmp);
-
             }
         }
     setting->sync();
