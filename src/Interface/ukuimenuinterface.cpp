@@ -474,6 +474,7 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
         }
 
         ifFileDesktopList.append(tmp);
+        ifFileDesktopList.append("/usr/share/applications/kylin-user-guide.desktop");
     }
 //ifFileDesktopList  所有当前存在的应用
 

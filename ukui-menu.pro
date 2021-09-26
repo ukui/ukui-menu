@@ -48,7 +48,7 @@ RESOURCES += \
     res.qrc \
     res.qrc
 
-PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt libbamf3 x11 xrandr xtst
+PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt libbamf3 x11 xtst
 
 CONFIG += no_keywords link_pkgconfig
 
