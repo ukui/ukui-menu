@@ -38,8 +38,6 @@ QT_END_NAMESPACE
 TabletWindow::TabletWindow(QWidget *parent) :
     QWidget(parent)
 {
-//    openDataBase("MainThread");
-//    initDatabase();
     QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
     setting=new QSettings(path,QSettings::IniFormat);
     m_pagemanager = new PageManager();
@@ -82,6 +80,45 @@ void TabletWindow::initUi()
     buttonBoxLayout->setContentsMargins(0,0,0,0);
 
     setOpacityEffect(0.7);
+    bool isfile=appListFile();//判断监控看、路径是否存在
+    m_fileWatcher=new QFileSystemWatcher;
+ //   m_fileWatcher->addPath(QDir::homePath()+"/.cache/uksc/applist");
+ //   connect(m_fileWatcher,&QFileSystemWatcher::fileChanged,this,&MainWindow::directoryChangedSlot);
+
+    m_fileWatcher->addPaths(QStringList()<<QString("/usr/share/applications")
+                                      <<QString(QDir::homePath()+"/.local/share/applications/"));
+    connect(m_fileWatcher,&QFileSystemWatcher::directoryChanged,this,&TabletWindow::directoryChangedSlot);
+
+
+    m_fileWatcher1=new QFileSystemWatcher;
+    bool ismonitor=m_fileWatcher1->addPath(QDir::homePath()+"/.config/ukui/desktop_applist");
+    //m_fileWatcher1->addPaths(QStringList()<<QDir::homePath()+"/.config/ukui/desktop_applist");
+    connect(m_fileWatcher1,&QFileSystemWatcher::fileChanged,this,&TabletWindow::directoryChangedSlot);
+//    if(isfile)
+//    {
+//        QString filepath=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
+//        QSettings *filetsetting=new QSettings(filepath,QSettings::IniFormat);
+//        filetsetting->beginGroup("ukui-menu-sysapplist");
+//        filetsetting->setValue("desktop_applist",1);
+//        filetsetting->sync();
+//        filetsetting->endGroup();
+//        if(ismonitor)
+//        {
+//            filetsetting->beginGroup("ukui-menu-sysapplist");
+//            filetsetting->setValue("desktop_applist",0);
+//            filetsetting->sync();
+//            filetsetting->endGroup();
+//        }
+//        filetsetting->beginGroup("application");
+//        filetsetting->setValue("kylin-user-guide.desktop",1000);
+//        filetsetting->sync();
+//        filetsetting->endGroup();
+//    }
+
+    m_directoryChangedThread=new TabletDirectoryChangedThread;
+    connect(this,&TabletWindow::sendDirectoryPath,m_directoryChangedThread,&TabletDirectoryChangedThread::recvDirectoryPath);
+    connect(m_directoryChangedThread,&TabletDirectoryChangedThread::requestUpdateSignal,this,&TabletWindow::requestUpdateSlot);
+    connect(m_directoryChangedThread,&TabletDirectoryChangedThread::deleteAppSignal,this,&TabletWindow::requestDeleteAppSlot);
 
     initAppListWidget();
 
@@ -166,46 +203,6 @@ void TabletWindow::initUi()
          this,SLOT(XkbEventsRelease(QString)));
     connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
          this,SLOT(XkbEventsPress(QString)));
-
-    bool isfile=appListFile();//判断监控看、路径是否存在
-    m_fileWatcher=new QFileSystemWatcher;
- //   m_fileWatcher->addPath(QDir::homePath()+"/.cache/uksc/applist");
- //   connect(m_fileWatcher,&QFileSystemWatcher::fileChanged,this,&MainWindow::directoryChangedSlot);
-
-    m_fileWatcher->addPaths(QStringList()<<QString("/usr/share/applications")
-                                      <<QString(QDir::homePath()+"/.local/share/applications/"));
-    connect(m_fileWatcher,&QFileSystemWatcher::directoryChanged,this,&TabletWindow::directoryChangedSlot);
-
-
-    m_fileWatcher1=new QFileSystemWatcher;
-    bool ismonitor=m_fileWatcher1->addPath(QDir::homePath()+"/.config/ukui/desktop_applist");
-    //m_fileWatcher1->addPaths(QStringList()<<QDir::homePath()+"/.config/ukui/desktop_applist");
-    connect(m_fileWatcher1,&QFileSystemWatcher::fileChanged,this,&TabletWindow::directoryChangedSlot);
-    if(isfile)
-    {
-        QString filepath=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-        QSettings *filetsetting=new QSettings(filepath,QSettings::IniFormat);
-        filetsetting->beginGroup("ukui-menu-sysapplist");
-        filetsetting->setValue("desktop_applist",1);
-        filetsetting->sync();
-        filetsetting->endGroup();
-        if(ismonitor)
-        {
-            filetsetting->beginGroup("ukui-menu-sysapplist");
-            filetsetting->setValue("desktop_applist",0);
-            filetsetting->sync();
-            filetsetting->endGroup();
-        }
-        filetsetting->beginGroup("application");
-        filetsetting->setValue("kylin-user-guide.desktop",1000);
-        filetsetting->sync();
-        filetsetting->endGroup();
-    }
-
-    m_directoryChangedThread=new TabletDirectoryChangedThread;
-    connect(this,&TabletWindow::sendDirectoryPath,m_directoryChangedThread,&TabletDirectoryChangedThread::recvDirectoryPath);
-    connect(m_directoryChangedThread,&TabletDirectoryChangedThread::requestUpdateSignal,this,&TabletWindow::requestUpdateSlot);
-    connect(m_directoryChangedThread,&TabletDirectoryChangedThread::deleteAppSignal,this,&TabletWindow::requestDeleteAppSlot);
 
     ways();
     buttonWidgetShow();
@@ -317,6 +314,31 @@ void TabletWindow::reloadAppList()
         }
     }
 }
+
+void TabletWindow::reloadWidget()
+{
+    QLayoutItem* child;
+    if(firstPageLayout->count() == 2)
+    {
+        QLayoutItem* widItem = firstPageLayout->itemAt(1);
+        QWidget* wid = widItem->widget();
+        TabletListView* m_listview = qobject_cast<TabletListView*>(wid);
+        delete m_listview;
+        firstPageLayout->removeWidget(leftWidget);
+    }
+
+    while((child = m_scrollAreaWidLayout->takeAt(1)) != 0)
+    {
+        if(child->widget() != 0)
+        {
+            delete child->widget();
+        }
+        delete child;
+    }
+    isFirstPage = true;
+    fillAppList();
+    buttonWidgetShow();
+}
 /**
  * 填充应用列表
  */
@@ -359,14 +381,14 @@ void TabletWindow::directoryChangedSlot()
 void TabletWindow::requestUpdateSlot(QString desktopfp)
 {
     m_directoryChangedThread->quit();
-    reloadAppList();
+    reloadWidget();
     connect(m_fileWatcher1,&QFileSystemWatcher::fileChanged,this,&TabletWindow::directoryChangedSlot);
 }
 
 void TabletWindow::requestDeleteAppSlot()
 {
     m_directoryChangedThread->quit();
-    reloadAppList();
+    reloadWidget();
     connect(m_fileWatcher1,&QFileSystemWatcher::fileChanged,this,&TabletWindow::directoryChangedSlot);
 }
 
@@ -691,7 +713,7 @@ void TabletWindow::buttonWidgetShow()
                                  "QPushButton:hover{border-image: url(:/img/mainviewwidget/select.svg);}"
                                  "QPushButton:pressed{border-image:url(:/img/mainviewwidget/select.svg);}");
 
-         if(page==1)
+         if(page == 1)
          {
              button->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
                                      "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
@@ -700,6 +722,8 @@ void TabletWindow::buttonWidgetShow()
          buttonBoxLayout->addWidget(button);
          buttonGroup->addButton(button,page);
     }
+    btnGroupClickedSlot(0);
+    curPageNum = 0;
     connect(buttonGroup,QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked),this,&TabletWindow::buttonClicked);
 }
 

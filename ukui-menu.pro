@@ -109,7 +109,6 @@ HEADERS += \
     src/Widget/mainwindow.h \
     src/Widget/scrollarea.h \
     src/Widget/splitbarframe.h \
-    src/Widget/tabletwidget.h \
     src/Widget/tabviewwidget.h \
     src/Widget/toolbutton.h \
     src/tablet/UtilityFunction/AbstractInterface.h \
@@ -171,7 +170,6 @@ SOURCES += \
     src/Widget/mainwindow.cpp \
     src/Widget/scrollarea.cpp \
     src/Widget/splitbarframe.cpp \
-    src/Widget/tabletwidget.cpp \
     src/Widget/tabviewwidget.cpp \
     src/Widget/toolbutton.cpp \
     src/tablet/UtilityFunction/pluginwidget.cpp \

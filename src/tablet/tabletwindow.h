@@ -201,6 +201,7 @@ public Q_SLOTS:
     void requestDeleteAppSlot();
     void requestUpdateSlot(QString desktopfp);
     void directoryChangedSlot();
+    void reloadWidget();
 
 Q_SIGNALS:
     /**

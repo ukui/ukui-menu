@@ -27,7 +27,6 @@
 #include <unistd.h>
 #include "ukuichineseletter.h"
 
-
 UkuiMenuInterface::UkuiMenuInterface()
 {
     if(projectCodeName == "V10SP1")
@@ -77,90 +76,194 @@ UkuiMenuInterface::~UkuiMenuInterface()
 //文件递归查询
 void UkuiMenuInterface::recursiveSearchFile(const QString& _filePath)
 {
-    QDir dir(_filePath);
-    if (!dir.exists()) {
-        return;
-    }
-
-    dir.setFilter(QDir::Dirs|QDir::Files|QDir::NoDotAndDotDot);
-    dir.setSorting(QDir::DirsFirst);
-    QFileInfoList list = dir.entryInfoList();
-    list.removeAll(QFileInfo("/usr/share/applications/screensavers"));
-    if(list.size()< 1 ) {
-        return;
-    }
-    int i=0;
-
-    //递归算法的核心部分
-    do{
-        QFileInfo fileInfo = list.at(i);
-        //如果是文件夹，递归
-        bool isDir = fileInfo.isDir();
-        if(isDir) {
-            recursiveSearchFile(fileInfo.filePath());
+    if(projectCodeName == "V10SP1")
+    {
+        QDir dir(_filePath);
+        if (!dir.exists()) {
+            return;
         }
-        else{
-            //过滤后缀不是.desktop的文件
-            QString filePathStr=fileInfo.filePath();
-            if(!filePathStr.endsWith(".desktop"))
-            {
-                i++;
-                continue;
-            }
 
-            QByteArray fpbyte=filePathStr.toLocal8Bit();
-            char* filepath=fpbyte.data();
-            if(0!=access(filepath,R_OK))//判断文件是否可读
-            {
-                i++;
-                continue;
-            }
-
-            keyfile=g_key_file_new();
-            if(!g_key_file_load_from_file(keyfile,filepath,flags,error))
-                return;
-            char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","NoDisplay", nullptr, nullptr);
-            if(ret_1!=nullptr)
-            {
-                QString str=QString::fromLocal8Bit(ret_1);
-                if(str.contains("true"))
-                {
-                    g_key_file_free(keyfile);
-                    i++;
-                    continue;
-                }
-            }
-            char* ret_2=g_key_file_get_locale_string(keyfile,"Desktop Entry","NotShowIn", nullptr, nullptr);
-            if(ret_2!=nullptr)
-            {
-                QString str=QString::fromLocal8Bit(ret_2);
-                if(str.contains("UKUI"))
-                {
-                    g_key_file_free(keyfile);
-                    i++;
-                    continue;
-                }
-            }
-
-            //过滤LXQt、KDE
-            char* ret=g_key_file_get_locale_string(keyfile,"Desktop Entry","OnlyShowIn", nullptr, nullptr);
-            if(ret!=nullptr)
-            {
-                QString str=QString::fromLocal8Bit(ret);
-                if(str.contains("LXQt") || str.contains("KDE"))
-                {
-                    g_key_file_free(keyfile);
-                    i++;
-                    continue;
-                }
-            }
-
-            g_key_file_free(keyfile);
-            filePathList.append(filePathStr);
+        dir.setFilter(QDir::Dirs|QDir::Files|QDir::NoDotAndDotDot);
+        dir.setSorting(QDir::DirsFirst);
+        QFileInfoList list = dir.entryInfoList();
+        list.removeAll(QFileInfo("/usr/share/applications/screensavers"));
+        if(list.size()< 1 ) {
+            return;
         }
-        i++;
+        int i=0;
 
-    } while(i < list.size());
+        //递归算法的核心部分
+        do{
+            QFileInfo fileInfo = list.at(i);
+            //如果是文件夹，递归
+            bool isDir = fileInfo.isDir();
+            if(isDir) {
+                recursiveSearchFile(fileInfo.filePath());
+            }
+            else{
+                //过滤后缀不是.desktop的文件
+                QString filePathStr=fileInfo.filePath();
+                if(!filePathStr.endsWith(".desktop"))
+                {
+                    i++;
+                    continue;
+                }
+
+                QByteArray fpbyte=filePathStr.toLocal8Bit();
+                char* filepath=fpbyte.data();
+                if(0!=access(filepath,R_OK))//判断文件是否可读
+                {
+                    i++;
+                    continue;
+                }
+
+                keyfile=g_key_file_new();
+                if(!g_key_file_load_from_file(keyfile,filepath,flags,error))
+                    return;
+                char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","NoDisplay", nullptr, nullptr);
+                if(ret_1!=nullptr)
+                {
+                    QString str=QString::fromLocal8Bit(ret_1);
+                    if(str.contains("true"))
+                    {
+                        g_key_file_free(keyfile);
+                        i++;
+                        continue;
+                    }
+                }
+                char* ret_2=g_key_file_get_locale_string(keyfile,"Desktop Entry","NotShowIn", nullptr, nullptr);
+                if(ret_2!=nullptr)
+                {
+                    QString str=QString::fromLocal8Bit(ret_2);
+                    if(str.contains("UKUI"))
+                    {
+                        g_key_file_free(keyfile);
+                        i++;
+                        continue;
+                    }
+                }
+
+                //过滤LXQt、KDE
+                char* ret=g_key_file_get_locale_string(keyfile,"Desktop Entry","OnlyShowIn", nullptr, nullptr);
+                if(ret!=nullptr)
+                {
+                    QString str=QString::fromLocal8Bit(ret);
+                    if(str.contains("LXQt") || str.contains("KDE"))
+                    {
+                        g_key_file_free(keyfile);
+                        i++;
+                        continue;
+                    }
+                }
+
+                g_key_file_free(keyfile);
+                filePathList.append(filePathStr);
+            }
+            i++;
+
+        } while(i < list.size());
+    }
+    else
+    {
+        GError** error = nullptr;
+        GKeyFileFlags flags = G_KEY_FILE_NONE;
+        GKeyFile* keyfile = g_key_file_new();
+
+        QDir dir(_filePath);
+        if (!dir.exists()) {
+            return;
+        }
+
+        dir.setFilter(QDir::Dirs|QDir::Files|QDir::NoDotAndDotDot);
+        dir.setSorting(QDir::DirsFirst);
+        QFileInfoList list = dir.entryInfoList();
+        list.removeAll(QFileInfo("/usr/share/applications/screensavers"));
+        if(list.size() < 1 ) {
+            return;
+        }
+        int i = 0;
+
+        //递归算法的核心部分
+        do{
+            QFileInfo fileInfo = list.at(i);
+            //如果是文件夹，递归
+            bool isDir = fileInfo.isDir();
+            if(isDir) {
+                recursiveSearchFile(fileInfo.filePath());
+            }
+            else{
+                //过滤后缀不是.desktop的文件
+                QString filePathStr=fileInfo.filePath();
+                if(!filePathStr.endsWith(".desktop"))
+                {
+                    i++;
+                    continue;
+                }
+                QByteArray fpbyte=filePathStr.toLocal8Bit();
+                char* filepath=fpbyte.data();
+                g_key_file_load_from_file(keyfile,filepath,flags,error);
+                char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","NoDisplay", nullptr, nullptr);
+                if(ret_1!=nullptr)
+                {
+                    QString str=QString::fromLocal8Bit(ret_1);
+                    if(str.contains("true"))
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+                char* ret_2=g_key_file_get_locale_string(keyfile,"Desktop Entry","NotShowIn", nullptr, nullptr);
+                if(ret_2!=nullptr)
+                {
+                    QString str=QString::fromLocal8Bit(ret_2);
+                    if(str.contains("UKUI"))
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+
+                //过滤LXQt、KDE
+                char* ret=g_key_file_get_locale_string(keyfile,"Desktop Entry","OnlyShowIn", nullptr, nullptr);
+                if(ret!=nullptr)
+                {
+                    QString str=QString::fromLocal8Bit(ret);
+                    if(str.contains("LXQt") || str.contains("KDE"))
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+                //过滤中英文名为空的情况
+                QLocale cn;
+                QString language=cn.languageToString(cn.language());
+                if(QString::compare(language,"Chinese")==0)
+                {
+                    char* nameCh=g_key_file_get_string(keyfile,"Desktop Entry","Name[zh_CN]", nullptr);
+                    char* nameEn=g_key_file_get_string(keyfile,"Desktop Entry","Name", nullptr);
+                    if(QString::fromLocal8Bit(nameCh).isEmpty() && QString::fromLocal8Bit(nameEn).isEmpty())
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+                else {
+                    char* name=g_key_file_get_string(keyfile,"Desktop Entry","Name", nullptr);
+                    if(QString::fromLocal8Bit(name).isEmpty())
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+
+                filePathList.append(filePathStr);
+            }
+            i++;
+
+        } while(i < list.size());
+
+        g_key_file_free(keyfile);
+    }
 }
 
 //获取系统deskyop文件路径
@@ -759,7 +862,6 @@ bool UkuiMenuInterface::initAppIni()
         QVector<QStringList> tencentInitVector;
         QVector<QStringList> customizedVector;
         QVector<QStringList> thirdPartyVector;
-
         QString tencent_math="/usr/share/applications/tencent-math-precise-practice.desktop";
         QString tencent_chinese="/usr/share/applications/tencent-chinese-precise-practice.desktop";
         QString tencent_english="/usr/share/applications/tencent-english-precise-practice.desktop";

@@ -21,7 +21,6 @@
 #include <QIcon>
 #include <QtDBus>
 #include "src/ListView/tabletlistview.h"
-#include "src/Widget/tabletwidget.h"
 #include <QDebug>
 
 TabletDirectoryChangedThread::TabletDirectoryChangedThread()
@@ -135,7 +134,6 @@ void TabletDirectoryChangedThread::run()
                         setting->setValue(desktopfnList.at(i),setting->value(desktopfnList.at(i)).toInt()-1);
                     }
                 }
-
 
                 setting->sync();
                 setting->endGroup();
