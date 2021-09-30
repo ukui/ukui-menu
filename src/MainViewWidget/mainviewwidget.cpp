@@ -304,7 +304,7 @@ bool MainViewWidget::eventFilter(QObject *watched, QEvent *event)
                 sprintf(style, "MyLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                         QueryLineEditClickedBorder,QueryLineEditClickedBackground);
             m_queryLineEdit->setStyleSheet(style);
-             if(!m_queryLineEdit->text().isEmpty() && (m_queryLineEdit->text().size() > 1))
+             if(!m_queryLineEdit->text().isEmpty() && (m_queryLineEdit->text().size() >= 1))
              {
                  if(m_searchKeyWords.isEmpty())
                     searchAppSlot(m_queryLineEdit->text());

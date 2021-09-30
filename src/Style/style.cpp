@@ -41,6 +41,7 @@ int Style::defaultQueryLineEditHeight=0;
 int Style::defaultQueryLineEditIconSize=0;
 int Style::defaultContentWidHeight=0;
 int Style::defaultSideBarWidWidth=0;
+int Style::defaultIconSize=32;
 /**
   * 全屏窗口
   */
