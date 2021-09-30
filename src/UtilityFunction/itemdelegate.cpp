@@ -77,7 +77,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         {
             if(strlist.at(1).toInt()==1)
             {
-                QRect iconRect=QRect(rect.x()+11,rect.y()+(rect.height()-32)/2,32,32);
+                QRect iconRect=QRect(rect.x()+11,rect.y()+(rect.height()-32)/2,Style::defaultIconSize,Style::defaultIconSize);
                 QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
                 QIcon icon;
                 QFileInfo iconFileInfo(iconstr);
@@ -88,7 +88,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                     iconstr.remove(".png");
                     iconstr.remove(".svg");
                     icon=QIcon::fromTheme(iconstr);
-                    if(icon.isNull() || icon.actualSize(QSize(32, 32)).width() < 32)
+                    if(icon.isNull() || icon.actualSize(QSize(Style::defaultIconSize, Style::defaultIconSize)).width() < Style::defaultIconSize)
                     {
                         if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
                             icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
