@@ -227,6 +227,7 @@ void TabletWindow::initAppListWidget()
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setStyleSheet("border:0px; background:transparent;");
+    m_scrollArea->setProperty("notUseSlideGesture",true);
 
     m_scrollAreaWidLayout=new QHBoxLayout(m_scrollAreaWid);
     m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);

@@ -44,7 +44,7 @@ void FullLetterWidget::initUi()
 
 //    m_applistWid=new QWidget(this);
     m_letterListWid=new QWidget(this);
-    this->setFixedSize(/*Style::MainViewWidWidth*/1855,
+    this->setFixedSize(/*Style::MainViewWidWidth*/1920,
                        Style::AppListWidHeight);
 //    m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
     m_letterListWid->setFixedSize(/*Style::LeftWidWidth*/150,this->height());
@@ -80,7 +80,7 @@ void FullLetterWidget::initUi()
                                      );
 
     mainLayout=new QHBoxLayout;
-    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setContentsMargins(0,0,40,0);
     mainLayout->setSpacing(0);
     mainLayout->addWidget(m_letterListWid);
 //    mainLayout->addWidget(m_applistWid);
@@ -108,6 +108,8 @@ void FullLetterWidget::initUi()
 
     connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,this,&FullLetterWidget::on_setScrollBarValue);
     connect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullLetterWidget::on_setAreaScrollBarValue);
+    connect(powerOffButton,&QPushButton::customContextMenuRequested,this,&FullLetterWidget::on_powerOffButton_customContextMenuRequested);
+    connect(powerOffButton,&QPushButton::clicked,this,&FullLetterWidget::on_powerOffButton_clicked);
 }
 
 /**
@@ -136,7 +138,26 @@ void FullLetterWidget::initAppListWidget()
     m_spaceItem1=new QSpacerItem(20,10,QSizePolicy::Expanding,QSizePolicy::Minimum);
     mainLayout->addItem(m_spaceItem1);
 
-    mainLayout->addWidget(verticalScrollBar);
+    QVBoxLayout* rightButtonLayout = new QVBoxLayout(this);
+    rightButtonLayout->setContentsMargins(0,300,0,20);
+    rightButtonLayout->setSpacing(0);
+
+    powerOffButton = new QPushButton(this);
+    powerOffButton->setFixedSize(QSize(24, 24));
+    powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
+    QIcon icon6;
+    icon6.addFile(QString::fromUtf8(":/data/img/sidebarwidget/shutdown.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    powerOffButton->setIcon(icon6);
+    powerOffButton->setFlat(true);
+
+    rightButtonLayout->addWidget(verticalScrollBar);
+    QSpacerItem *m_spaceItem2 = nullptr;
+    m_spaceItem2 = new QSpacerItem(1,50,QSizePolicy::Minimum,QSizePolicy::Expanding);
+    rightButtonLayout->addItem(m_spaceItem2);
+    rightButtonLayout->addWidget(powerOffButton);
+    rightButtonLayout->setAlignment(verticalScrollBar, Qt::AlignHCenter);
+
+    mainLayout->addLayout(rightButtonLayout);
 
     connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&FullLetterWidget::valueChangedSlot);
@@ -145,6 +166,52 @@ void FullLetterWidget::initAppListWidget()
     fillAppList();
 
     m_scrollAreaWidHeight = m_scrollAreaWid->height();
+}
+
+
+void FullLetterWidget::on_powerOffButton_clicked()
+{
+    QProcess::startDetached(QString("ukui-session-tools"));
+}
+
+void FullLetterWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
+{
+    RightClickMenu m_otherMenu(this);
+   // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
+  //  Q_EMIT sendShowMainWindowSignal(false);
+    int ret = m_otherMenu.showShutdownMenu(powerOffButton->mapToGlobal(pos));
+    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
+    if(ret>=10 && ret<=17)
+    {
+//        Q_EMIT sendHideMainWindowSignal();
+        switch (ret) {
+        case 10:
+            QProcess::startDetached(QString("ukui-screensaver-command -l"));
+            break;
+        case 11:
+            QProcess::startDetached(QString("ukui-session-tools --switchuser"));
+            break;
+        case 12:
+            QProcess::startDetached(QString("ukui-session-tools --logout"));
+            break;
+        case 13:
+            QProcess::startDetached(QString("ukui-session-tools --reboot"));
+            break;
+        case 14:
+            QProcess::startDetached(QString("ukui-session-tools --shutdown"));
+            break;
+        case 16:
+            QProcess::startDetached(QString("ukui-session-tools --suspend"));
+            break;
+        case 17:
+            QProcess::startDetached(QString("ukui-session-tools --sleep"));
+            break;
+        default:
+            break;
+        }
+
+    }
+    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
 }
 
 void FullLetterWidget::setFocusToThis()

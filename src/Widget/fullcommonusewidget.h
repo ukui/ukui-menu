@@ -80,6 +80,7 @@ private:
     GetModelData *modaldata = nullptr;
     QScrollBar *verticalScrollBar=nullptr;
     int m_scrollAreaWidHeight = 0;
+    QPushButton *powerOffButton = nullptr;
 
 protected:
     /**
@@ -118,6 +119,10 @@ public Q_SLOTS:
     void selectFirstItemTab();
 
     void on_setAreaScrollBarValue(int value);
+
+    void on_powerOffButton_clicked();
+
+    void on_powerOffButton_customContextMenuRequested(const QPoint &pos);
 
 Q_SIGNALS:
     /**

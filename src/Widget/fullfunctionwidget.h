@@ -108,6 +108,7 @@ private:
     int m_index = 0;
     QScrollBar *verticalScrollBar=nullptr;
     int m_scrollAreaWidHeight = 0;
+    QPushButton *powerOffButton = nullptr;
 
 protected:
     /**
@@ -181,6 +182,10 @@ public Q_SLOTS:
     void on_setScrollBarValue(int value);
 
     void on_setAreaScrollBarValue(int value);
+
+    void on_powerOffButton_clicked();
+
+    void on_powerOffButton_customContextMenuRequested(const QPoint &pos);
 
 Q_SIGNALS:
     /**
