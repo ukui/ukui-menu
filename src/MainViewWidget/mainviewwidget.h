@@ -259,6 +259,8 @@ Q_SIGNALS:
     void selectFirstItemTab();
 
     void setSlideBar(int value);
+
+    void setMainWinHideSignal();
 };
 
 #endif // MAINVIEWWIDGET_H

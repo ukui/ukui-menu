@@ -978,8 +978,14 @@ void MainViewWidget::moveScrollBar(int type)
 
 void MainViewWidget::keyPressEvent(QKeyEvent *e)
 {
+
     if(e->type()==QEvent::KeyPress)
     {
+        if(e->key() == Qt::Key_Escape)
+        {
+            Q_EMIT setMainWinHideSignal();
+        }
+
         switch(e->key())
         {
             case Qt::Key_Enter:

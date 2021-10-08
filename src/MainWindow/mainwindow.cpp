@@ -168,6 +168,8 @@ void MainWindow::initUi()
     connect(this, &MainWindow::setFocusSignal, m_mainViewWid, &MainViewWidget::selectFirstItem);
 
     connect(m_mainViewWid,&MainViewWidget::sendMainWinActiveSignal,this,&MainWindow::activeWindowSolt);
+
+    connect(m_mainViewWid, &MainViewWidget::setMainWinHideSignal, this, &MainWindow::mainWinHideSlot);
 //    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
 //        repaintWidget();
 //    });
@@ -733,27 +735,9 @@ void MainWindow::repaintWidget()
 //    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 //}
 
-void MainWindow::keyPressEvent(QKeyEvent *e)
+void MainWindow::mainWinHideSlot()
 {
-    if(e->type() == QEvent::KeyPress)
-    {
-        if((e->key() >= 0x30 && e->key() <= 0x39) || (e->key() >= 0x41 && e->key() <= 0x5a))
-        {
-            if (m_mainViewWid->getQueryLineEditer() != nullptr
-                    && !m_mainViewWid->getQueryLineEditer()->hasFocus()
-                    && m_mainViewWid->getQueryLineEditer()->text().isEmpty())
-            {
-                //To do
-            }
-        }
-        if(e->key() == Qt::Key_Backspace)
-        {
-            m_mainViewWid->setLineEditFocus("");
-        }
-        if(e->key() == Qt::Key_Escape)
-        {
-            this->hide();
-            m_mainViewWid->widgetMakeZero();
-        }
-    }
+    this->hide();
+    m_mainViewWid->widgetMakeZero();
 }
+
