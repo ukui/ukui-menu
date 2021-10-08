@@ -83,10 +83,7 @@ protected:
     /**
      * @brief The query box responds to keyboard events
      */
-    void keyPressEvent(QKeyEvent* e);
-    /**
-     * @brief Repaint window
-     */
+
     void repaintWidget();
 
     void mouseReleaseEvent(QMouseEvent *event);
@@ -111,6 +108,7 @@ public Q_SLOTS:
     void primaryScreenChangeSlot();
     void activeWindowSolt(bool flag);
     void mainWinShowSlot();
+    void mainWinHideSlot();
 
 public:
 Q_SIGNALS:
