@@ -143,11 +143,12 @@ void FullLetterWidget::initAppListWidget()
     rightButtonLayout->setSpacing(0);
 
     powerOffButton = new QPushButton(this);
-    powerOffButton->setFixedSize(QSize(24, 24));
+    powerOffButton->setMinimumSize(QSize(24, 24));
     powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
     QIcon icon6;
-    icon6.addFile(QString::fromUtf8(":/data/img/sidebarwidget/shutdown.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    icon6.addFile(QString::fromUtf8(":/data/img/mainviewwidget/icon-电源@2x.png"), QSize(), QIcon::Normal, QIcon::Off);
     powerOffButton->setIcon(icon6);
+    powerOffButton->setIconSize(QSize(24,24));
     powerOffButton->setFlat(true);
 
     rightButtonLayout->addWidget(verticalScrollBar);

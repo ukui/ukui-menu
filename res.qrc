@@ -136,5 +136,7 @@
         <file>src/Search/pinyinWithoutTone.txt</file>
         <file>data/img/mainviewwidget/select.svg</file>
         <file>data/img/mainviewwidget/selected.svg</file>
+        <file>data/img/mainviewwidget/icon-电源.svg</file>
+        <file>data/img/mainviewwidget/icon-电源@2x.png</file>
     </qresource>
 </RCC>

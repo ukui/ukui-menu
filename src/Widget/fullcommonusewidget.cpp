@@ -43,7 +43,7 @@ void FullCommonUseWidget::initUi()
                        Style::AppListWidHeight);
     this->setFocusPolicy(Qt::NoFocus);
     QHBoxLayout* mainLayout=new QHBoxLayout(this);
-    mainLayout->setContentsMargins(35,0,35,0);
+    mainLayout->setContentsMargins(35,0,40,0);
     mainLayout->setSpacing(0);
     m_spaceItem=new QSpacerItem(50,10,QSizePolicy::Expanding,QSizePolicy::Fixed);
     mainLayout->addItem(m_spaceItem);
@@ -60,7 +60,7 @@ void FullCommonUseWidget::initUi()
     m_scrollAreaWidLayout->setSpacing(10);
 
     QVBoxLayout* rightButtonLayout = new QVBoxLayout(this);
-    rightButtonLayout->setContentsMargins(0,300,0,17);
+    rightButtonLayout->setContentsMargins(0,300,0,20);
     rightButtonLayout->setSpacing(0);
 
     verticalScrollBar = new QScrollBar(m_scrollArea);
@@ -102,8 +102,9 @@ void FullCommonUseWidget::initUi()
     powerOffButton->setMinimumSize(QSize(24, 24));
     powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
     QIcon icon6;
-    icon6.addFile(QString::fromUtf8(":/data/img/sidebarwidget/shutdown.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    icon6.addFile(QString::fromUtf8(":/data/img/mainviewwidget/icon-电源.svg"), QSize(), QIcon::Normal, QIcon::Off);
     powerOffButton->setIcon(icon6);
+    powerOffButton->setIconSize(QSize(24,24));
     powerOffButton->setFlat(true);
 
     rightButtonLayout->addWidget(verticalScrollBar);
@@ -306,7 +307,7 @@ void FullCommonUseWidget::repaintWidget()
 {
     this->setFixedSize(/*Style::MainViewWidWidth*/1920,
                        Style::AppListWidHeight);
-    m_scrollArea->setFixedSize(/*Style::AppListWidWidth*/1325,this->height());
+    m_scrollArea->setFixedSize(/*Style::AppListWidWidth*/1325,/*this->height()*/880);
     m_scrollAreaWidLayout->removeWidget(m_listView);
     m_listView->setParent(nullptr);
     delete m_listView;

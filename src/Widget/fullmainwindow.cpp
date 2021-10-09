@@ -226,7 +226,6 @@ bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
         char style[200];
         if(event->type()==QEvent::FocusIn)
         {
-            qDebug() << "MainViewWidget::eventFilter(QObject *watched, QEvent *event)iiiiiiiiiiiiii";
             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                     QueryLineEditClickedBorder,QueryLineEditClickedBackground);
              if(lineEdit->text().isEmpty())
