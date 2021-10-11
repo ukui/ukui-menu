@@ -91,7 +91,6 @@ void FunctionButtonWidget::functionBtnClickedSlot()
     FunctionClassifyButton* btn=dynamic_cast<FunctionClassifyButton*>(sender());
     QWidget* wid=btn->layout()->itemAt(1)->widget();
     QLabel* label=qobject_cast<QLabel*>(wid);
-    m_isEnterSelectWindow = false;
     Q_EMIT sendFunctionBtnSignal(label->text());
 }
 
@@ -100,7 +99,6 @@ void FunctionButtonWidget::functionBtnClickedSlot()
  */
 void FunctionButtonWidget::recvClassificationBtnList()
 {
-    m_isEnterSelectWindow = true;
     QGridLayout* gridLayout=qobject_cast<QGridLayout*>(this->layout());
     for(int row=0;row<6;row++)
         for(int col=0;col<2;col++)
@@ -116,4 +114,16 @@ void FunctionButtonWidget::recvClassificationBtnList()
 
             if(row*2+col==10)break;
         }
+}
+
+bool FunctionButtonWidget::event(QEvent *event)
+{
+    if(event->type() == QEvent::Show)
+    {
+        Q_EMIT sendWidgetRepaintSignal(false);
+    }
+    if(event->type() == QEvent::Hide)
+    {
+        Q_EMIT sendWidgetRepaintSignal(true);
+    }
 }

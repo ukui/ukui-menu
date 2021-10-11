@@ -58,6 +58,7 @@ void LetterWidget::initUi()
     m_letterBtnWid->hide();
     connect(this,&LetterWidget::sendLetterBtnList,m_letterBtnWid,&LetterButtonWidget::recvLetterBtnList);
     connect(m_letterBtnWid, &LetterButtonWidget::sendLetterBtnSignal,this,&LetterWidget::recvLetterBtnSlot);
+    connect(m_letterBtnWid, &LetterButtonWidget::sendWidgetRepaintSignal, this, &LetterWidget::sendRepaintWidgetSignal);
 
     m_enterAnimation=new QPropertyAnimation;
     m_enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
@@ -258,4 +259,9 @@ void LetterWidget::repaintWidget()
 void LetterWidget::setFocusToThis()
 {
     this->setFocus();
+}
+
+bool LetterWidget::isBtnWidgetHidden()
+{
+    return m_letterBtnWid->isHidden();
 }

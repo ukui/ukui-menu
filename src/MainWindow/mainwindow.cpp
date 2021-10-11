@@ -30,6 +30,7 @@
 #include <QJsonValue>
 #include "src/Style/style.h"
 #include "src/UtilityFunction/utility.h"
+#include "src/LetterWidget/fullletterwidget.h"
 #include <QPalette>
 #include <QEvent>
 
@@ -171,6 +172,7 @@ void MainWindow::initUi()
     connect(m_mainViewWid,&MainViewWidget::sendMainWinActiveSignal,this,&MainWindow::activeWindowSolt);
 
     connect(m_mainViewWid, &MainViewWidget::setMainWinHideSignal, this, &MainWindow::mainWinHideSlot);
+    connect(m_mainViewWid, &MainViewWidget::sendRepaintWidgetSignal, this, &MainWindow::setRepaintFlagsSlot);
 //    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
 //        repaintWidget();
 //    });
@@ -643,7 +645,7 @@ void MainWindow::repaintWidget()
     QRect availableGeometry = getScreenAvailableGeometry();/*qApp->primaryScreen()->availableGeometry();*/
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
-    if(!m_isEnterSelectWindow)
+    if(m_MainViewWidRepaint)
     {
         m_mainViewWid->repaintWidget();
     }
@@ -745,3 +747,14 @@ void MainWindow::mainWinHideSlot()
     m_mainViewWid->widgetMakeZero();
 }
 
+void MainWindow::setRepaintFlagsSlot(bool isrepaint)
+{
+    if(isrepaint)
+    {
+        m_MainViewWidRepaint = true;
+    }
+    else
+    {
+        m_MainViewWidRepaint = false;
+    }
+}

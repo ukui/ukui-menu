@@ -134,6 +134,7 @@ Q_SIGNALS:
     void sendHideMainWindowSignal();
 
     void sendMainWinActiveSignal(bool flag);
+    void sendRepaintWidgetSignal(bool isrepaint);
 };
 
 #endif // FUNCTIONWIDGET_H

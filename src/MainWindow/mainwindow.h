@@ -71,6 +71,7 @@ private:
     QPropertyAnimation *m_animation=nullptr;
     bool m_winFlag = false;
     bool is_repaint = true;
+    bool m_MainViewWidRepaint = true;
     DBus *m_dbus=nullptr;
 
 protected:
@@ -109,6 +110,7 @@ public Q_SLOTS:
     void activeWindowSolt(bool flag);
     void mainWinShowSlot();
     void mainWinHideSlot();
+    void setRepaintFlagsSlot(bool isrepaint);
 
 public:
 Q_SIGNALS:

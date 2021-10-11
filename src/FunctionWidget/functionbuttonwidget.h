@@ -46,6 +46,7 @@ protected:
      * @brief Initializes UI
      */
     void initUi();
+    bool event(QEvent *event);
 
 Q_SIGNALS:
     /**
@@ -53,6 +54,7 @@ Q_SIGNALS:
      * @param btnname: Category button name
      */
     void sendFunctionBtnSignal(QString btnname);
+    void sendWidgetRepaintSignal(bool isrepaint);
 
 public Q_SLOTS:
     /**
