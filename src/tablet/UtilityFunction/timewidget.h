@@ -74,6 +74,10 @@ private Q_SLOTS:
 public Q_SLOTS:
 
     void changeSearchBoxBackground(QString styleName);
+public:
+    Q_SIGNALS:
+    void hideTabletWindow();
+
 
 
 };

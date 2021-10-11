@@ -508,7 +508,7 @@
     <message>
         <location filename="../src/tablet/UtilityFunction/timewidget.cpp" line="181"/>
         <source>Search</source>
-        <translation>搜索</translation>
+        <translation>全局搜索</translation>
     </message>
 </context>
 </TS>

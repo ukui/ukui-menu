@@ -236,6 +236,7 @@ void TimeWidget::obtainSearchResult()
 {
     //获取搜索框内容
 //    QString searchContent= searchEdit->text();
+    Q_EMIT hideTabletWindow();
     QProcess p;
     p.setProgram(QString("ukui-search"));
     p.startDetached(p.program());

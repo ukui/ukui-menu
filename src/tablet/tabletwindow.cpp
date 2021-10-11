@@ -207,6 +207,7 @@ void TabletWindow::initUi()
     ways();
     buttonWidgetShow();
     connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
+    connect(leftWidget,&TimeWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
 }
 
 /**
