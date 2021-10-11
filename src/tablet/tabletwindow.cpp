@@ -82,8 +82,8 @@ void TabletWindow::initUi()
     setOpacityEffect(0.7);
     bool isfile=appListFile();//判断监控看、路径是否存在
     m_fileWatcher=new QFileSystemWatcher;
- //   m_fileWatcher->addPath(QDir::homePath()+"/.cache/uksc/applist");
- //   connect(m_fileWatcher,&QFileSystemWatcher::fileChanged,this,&MainWindow::directoryChangedSlot);
+    m_fileWatcher->addPath(QDir::homePath()+"/.cache/ukui-menu/ukui-menu.ini");
+    connect(m_fileWatcher,&QFileSystemWatcher::fileChanged,this,&TabletWindow::reloadAppList);
 
     m_fileWatcher->addPaths(QStringList()<<QString("/usr/share/applications")
                                       <<QString(QDir::homePath()+"/.local/share/applications/"));
@@ -476,8 +476,69 @@ void TabletWindow::recvStartMenuSlot()
  */
 void TabletWindow::execApplication(QString desktopfp)
 {
-    Q_EMIT sendHideMainWindowSignal();
-    execApp(desktopfp);
+//    Q_EMIT sendHideMainWindowSignal();
+//    execApp(desktopfp);
+    QString str;
+    //打开文件.desktop
+    GError** error=nullptr;
+    GKeyFileFlags flags=G_KEY_FILE_NONE;
+    GKeyFile* keyfile=g_key_file_new ();
+
+    QByteArray fpbyte=desktopfp.toLocal8Bit();
+    char* filepath=fpbyte.data();
+    g_key_file_load_from_file(keyfile,filepath,flags,error);
+
+    char* name=g_key_file_get_locale_string(keyfile,"Desktop Entry","Exec", nullptr, nullptr);
+    //取出value值
+    QString execnamestr=QString::fromLocal8Bit(name);
+    str=execnamestr;
+    //qDebug()<<"2 exec"<<str;
+
+   //关闭文件
+    g_key_file_free(keyfile);
+    //打开ini文件
+    QString pathini=QDir::homePath()+"/.cache/ukui-menu/ukui-menu.ini";
+    settt=new QSettings(pathini,QSettings::IniFormat);
+    settt->beginGroup("application");
+    QString desktopfp1=str;
+   //判断
+    bool bo=settt->contains(desktopfp1.toLocal8Bit().data());// iskey
+    bool bo1=settt->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool();//isvalue
+    settt->endGroup();
+
+    if(bo && bo1==false)//都存在//存在并且为false，从filepathlist中去掉
+    {
+        //qDebug()<<"bool"<<bo<<bo1;
+
+        return;
+    }
+    QString exe=execnamestr;
+    QStringList parameters;
+    if (exe.indexOf("%") != -1) {
+        exe = exe.left(exe.indexOf("%") - 1);
+        //qDebug()<<"=====dd====="<<exe;
+    }
+    if (exe.indexOf("-") != -1) {
+        parameters = exe.split(" ");
+        exe = parameters[0];
+        parameters.removeAt(0);
+        //qDebug()<<"===qqq==="<<exe;
+    }
+
+    if(exe=="/usr/bin/indicator-china-weather")
+    {
+        parameters.removeAt(0);
+        parameters.append("showmainwindow");
+    }
+    qDebug()<<"5 exe"<<exe<<parameters;
+    QDBusInterface session("org.gnome.SessionManager", "/com/ukui/app", "com.ukui.app");
+    if (parameters.isEmpty())
+        session.call("app_open", exe, parameters);
+    else
+        session.call("app_open", exe, parameters);
+
+    //Q_EMIT sendHideMainWindowSignal();
+    return;
 }
 
 void TabletWindow::paintEvent(QPaintEvent *event)

@@ -225,9 +225,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         painter->drawText(textRect,Qt::TextWordWrap | Qt::AlignCenter, appname);
 
         painter->restore();
-
     }
-
 }
 
 QSize TabletFullItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

@@ -126,6 +126,7 @@ private:
     QFileSystemWatcher* m_fileWatcher=nullptr;
     QFileSystemWatcher* m_fileWatcher1=nullptr;
     TabletDirectoryChangedThread* m_directoryChangedThread=nullptr;
+    QSettings* settt;
 
 protected:
     /**

@@ -151,6 +151,8 @@ void TabletListView::addData(QStringList data)
     {
         QStandardItem* item=new QStandardItem;
         item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
+        bool appDis = appDisable(desktopfp);
+        item->setData(QVariant::fromValue<bool>(appDis),Qt::UserRole+2);
         listmodel->appendRow(item);
     }
     m_delegate= new TabletFullItemDelegate(this,module);
@@ -164,6 +166,8 @@ void TabletListView::updateData(QStringList data)
     {
         QStandardItem* item=new QStandardItem;
         item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
+        bool appDis=appDisable(desktopfp);
+        item->setData(QVariant::fromValue<bool>(appDis),Qt::UserRole+2);
         listmodel->appendRow(item);
     }
     m_delegate= new TabletFullItemDelegate(this,module);
