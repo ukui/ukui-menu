@@ -32,6 +32,7 @@
 
 bool isHuaWeiPC = false;
 bool isHuaWei9006C = false;
+bool m_isEnterSelectWindow = false;
 
 const QPixmap loadSvg(const QString &fileName, const int size)
 {

@@ -36,6 +36,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+
     getCurrentCPU();
     openDataBase("MainThread");
     m_ukuiMenuInterface=new UkuiMenuInterface;
@@ -181,7 +182,7 @@ void MainWindow::initUi()
 //        repaintWidget();
 //    });
 
-    QDBusConnection::sessionBus().connect(DBUS_NAME,DBUS_PATH,DBUS_INTERFACE,QString("PanelGeometryRefresh"),this,SLOT(primaryScreenChangeSlot()));
+  QDBusConnection::sessionBus().connect(DBUS_NAME,DBUS_PATH,DBUS_INTERFACE,QString("PanelGeometryRefresh"),this,SLOT(primaryScreenChangeSlot()));
 
     //监听屏幕缩放
     if(QGSettings::isSchemaInstalled(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit()))
@@ -642,7 +643,10 @@ void MainWindow::repaintWidget()
     QRect availableGeometry = getScreenAvailableGeometry();/*qApp->primaryScreen()->availableGeometry();*/
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
-    m_mainViewWid->repaintWidget();
+    if(!m_isEnterSelectWindow)
+    {
+        m_mainViewWid->repaintWidget();
+    }
 
     if(QApplication::activeWindow() == this)
     {

@@ -17,6 +17,7 @@
  */
 
 #include "letterbuttonwidget.h"
+#include "src/UtilityFunction/utility.h"
 #include "src/Style/style.h"
 #include "letterwidget.h"
 #include <QDebug>
@@ -80,6 +81,7 @@ void LetterButtonWidget::letterBtnClickedSlot()
 {
     LetterClassifyButton* btn=dynamic_cast<LetterClassifyButton *>(QObject::sender());
     QString btnname=btn->text();
+    m_isEnterSelectWindow = false;
     Q_EMIT sendLetterBtnSignal(btnname);
 }
 
@@ -88,6 +90,7 @@ void LetterButtonWidget::letterBtnClickedSlot()
  */
 void LetterButtonWidget::recvLetterBtnList(QStringList list)
 {
+    m_isEnterSelectWindow = true;
     QGridLayout* gridLayout=qobject_cast<QGridLayout*>(this->layout());
     for(int row=0;row<7;row++)
     {

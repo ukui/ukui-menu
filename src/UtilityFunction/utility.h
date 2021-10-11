@@ -33,6 +33,7 @@
 
 extern bool isHuaWeiPC;
 extern bool isHuaWei9006C;
+extern bool m_isEnterSelectWindow;
 
 const QPixmap loadSvg(const QString &fileName, const int size);
 
