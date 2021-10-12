@@ -261,8 +261,6 @@ Q_SIGNALS:
     void setSlideBar(int value);
 
     void setMainWinHideSignal();
-
-    void sendRepaintWidgetSignal(bool isrepaint);
 };
 
 #endif // MAINVIEWWIDGET_H

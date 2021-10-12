@@ -48,7 +48,6 @@ void FunctionWidget::initUi()
     m_functionBtnWid->hide();
     connect(this,&FunctionWidget::sendClassificationbtnList,m_functionBtnWid,&FunctionButtonWidget::recvClassificationBtnList);
     connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&FunctionWidget::recvFunctionBtnSignal);
-    connect(m_functionBtnWid, &FunctionButtonWidget::sendWidgetRepaintSignal, this, &FunctionWidget::sendRepaintWidgetSignal);
 
     m_enterAnimation=new QPropertyAnimation;
     m_enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());

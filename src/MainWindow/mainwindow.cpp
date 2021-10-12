@@ -30,14 +30,12 @@
 #include <QJsonValue>
 #include "src/Style/style.h"
 #include "src/UtilityFunction/utility.h"
-#include "src/LetterWidget/fullletterwidget.h"
 #include <QPalette>
 #include <QEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-
     getCurrentCPU();
     openDataBase("MainThread");
     m_ukuiMenuInterface=new UkuiMenuInterface;
@@ -172,7 +170,6 @@ void MainWindow::initUi()
     connect(m_mainViewWid,&MainViewWidget::sendMainWinActiveSignal,this,&MainWindow::activeWindowSolt);
 
     connect(m_mainViewWid, &MainViewWidget::setMainWinHideSignal, this, &MainWindow::mainWinHideSlot);
-    connect(m_mainViewWid, &MainViewWidget::sendRepaintWidgetSignal, this, &MainWindow::setRepaintFlagsSlot);
 //    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
 //        repaintWidget();
 //    });
@@ -347,7 +344,8 @@ void MainWindow::showFullScreenWidget()
     this->centralWidget()->layout()->removeWidget(m_sideBarWid);
     m_sideBarWid->setParent(nullptr);
 
-    if(isHuaWei9006C || isHuaWeiPC)
+    if(isHuaWei9006C || isHuaWeiPC)          //  this->hide();
+        //  m_mainViewWid->widgetMakeZero();
     {
         is_repaint = false;
         this->hide();
@@ -636,20 +634,22 @@ void MainWindow::panelChangedSlot(QString key)
 
 void MainWindow::primaryScreenChangeSlot()
 {
-    repaintWidget();
+    Style::initWidStyle();
+    resizeWidget();
 }
 
 void MainWindow::repaintWidget()
 {
-    Style::initWidStyle();
     QRect availableGeometry = getScreenAvailableGeometry();/*qApp->primaryScreen()->availableGeometry();*/
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
-    if(m_MainViewWidRepaint)
-    {
-        m_mainViewWid->repaintWidget();
-    }
+    m_mainViewWid->repaintWidget();
+    resizeWidget();
+}
 
+void MainWindow::resizeWidget()
+{
+    QRect availableGeometry = getScreenAvailableGeometry();
     if(QApplication::activeWindow() == this)
     {
         int position=Style::panelPosition;
@@ -745,16 +745,4 @@ void MainWindow::mainWinHideSlot()
 {
     this->hide();
     m_mainViewWid->widgetMakeZero();
-}
-
-void MainWindow::setRepaintFlagsSlot(bool isrepaint)
-{
-    if(isrepaint)
-    {
-        m_MainViewWidRepaint = true;
-    }
-    else
-    {
-        m_MainViewWidRepaint = false;
-    }
 }

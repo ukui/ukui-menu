@@ -86,6 +86,7 @@ protected:
      */
 
     void repaintWidget();
+    void resizeWidget();
 
     void mouseReleaseEvent(QMouseEvent *event);
 
@@ -110,7 +111,6 @@ public Q_SLOTS:
     void activeWindowSolt(bool flag);
     void mainWinShowSlot();
     void mainWinHideSlot();
-    void setRepaintFlagsSlot(bool isrepaint);
 
 public:
 Q_SIGNALS:

@@ -105,15 +105,3 @@ void LetterButtonWidget::recvLetterBtnList(QStringList list)
         }
     }
 }
-
-bool LetterButtonWidget::event(QEvent *event)
-{
-    if(event->type() == QEvent::Show)
-    {
-        Q_EMIT sendWidgetRepaintSignal(false);
-    }
-    if(event->type() == QEvent::Hide)
-    {
-        Q_EMIT sendWidgetRepaintSignal(true);
-    }
-}

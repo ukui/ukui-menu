@@ -115,15 +115,3 @@ void FunctionButtonWidget::recvClassificationBtnList()
             if(row*2+col==10)break;
         }
 }
-
-bool FunctionButtonWidget::event(QEvent *event)
-{
-    if(event->type() == QEvent::Show)
-    {
-        Q_EMIT sendWidgetRepaintSignal(false);
-    }
-    if(event->type() == QEvent::Hide)
-    {
-        Q_EMIT sendWidgetRepaintSignal(true);
-    }
-}

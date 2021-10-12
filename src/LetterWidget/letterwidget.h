@@ -53,7 +53,6 @@ public:
      * @brief Repaint window
      */
     void repaintWidget();
-    bool isBtnWidgetHidden();
 
 private:
     UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
@@ -124,7 +123,6 @@ Q_SIGNALS:
      */
     void sendHideMainWindowSignal();
     void sendMainWinActiveSignal(bool flag);
-    void sendRepaintWidgetSignal(bool isrepaint);
 };
 
 #endif // LETTERWIDGET_H
