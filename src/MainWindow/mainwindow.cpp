@@ -344,8 +344,7 @@ void MainWindow::showFullScreenWidget()
     this->centralWidget()->layout()->removeWidget(m_sideBarWid);
     m_sideBarWid->setParent(nullptr);
 
-    if(isHuaWei9006C || isHuaWeiPC)          //  this->hide();
-        //  m_mainViewWid->widgetMakeZero();
+    if(isHuaWei9006C || isHuaWeiPC)   
     {
         is_repaint = false;
         this->hide();
@@ -640,6 +639,7 @@ void MainWindow::primaryScreenChangeSlot()
 
 void MainWindow::repaintWidget()
 {
+    Style::initWidStyle();
     QRect availableGeometry = getScreenAvailableGeometry();/*qApp->primaryScreen()->availableGeometry();*/
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
