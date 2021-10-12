@@ -71,7 +71,6 @@ private:
     QPropertyAnimation *m_animation=nullptr;
     bool m_winFlag = false;
     bool is_repaint = true;
-    bool m_MainViewWidRepaint = true;
     DBus *m_dbus=nullptr;
 
 protected:
