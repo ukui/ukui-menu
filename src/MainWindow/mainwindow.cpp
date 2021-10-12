@@ -344,7 +344,7 @@ void MainWindow::showFullScreenWidget()
     this->centralWidget()->layout()->removeWidget(m_sideBarWid);
     m_sideBarWid->setParent(nullptr);
 
-    if(isHuaWei9006C || isHuaWeiPC)   
+    if(isHuaWei9006C || isHuaWeiPC)
     {
         is_repaint = false;
         this->hide();
