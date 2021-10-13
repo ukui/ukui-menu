@@ -85,6 +85,7 @@ protected:
      */
 
     void repaintWidget();
+    void resizeWidget();
 
     void mouseReleaseEvent(QMouseEvent *event);
 

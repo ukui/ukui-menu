@@ -181,7 +181,7 @@ void MainWindow::initUi()
 //        repaintWidget();
 //    });
 
-    QDBusConnection::sessionBus().connect(DBUS_NAME,DBUS_PATH,DBUS_INTERFACE,QString("PanelGeometryRefresh"),this,SLOT(primaryScreenChangeSlot()));
+  QDBusConnection::sessionBus().connect(DBUS_NAME,DBUS_PATH,DBUS_INTERFACE,QString("PanelGeometryRefresh"),this,SLOT(primaryScreenChangeSlot()));
 
     //监听屏幕缩放
     if(QGSettings::isSchemaInstalled(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit()))
@@ -633,7 +633,8 @@ void MainWindow::panelChangedSlot(QString key)
 
 void MainWindow::primaryScreenChangeSlot()
 {
-    repaintWidget();
+    Style::initWidStyle();
+    resizeWidget();
 }
 
 void MainWindow::repaintWidget()
@@ -643,7 +644,12 @@ void MainWindow::repaintWidget()
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
     m_mainViewWid->repaintWidget();
+    resizeWidget();
+}
 
+void MainWindow::resizeWidget()
+{
+    QRect availableGeometry = getScreenAvailableGeometry();
     if(QApplication::activeWindow() == this)
     {
         int position=Style::panelPosition;
@@ -740,4 +746,3 @@ void MainWindow::mainWinHideSlot()
     this->hide();
     m_mainViewWid->widgetMakeZero();
 }
-

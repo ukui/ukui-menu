@@ -870,7 +870,6 @@ void MainViewWidget::changeFocuDown()
  */
 void MainViewWidget::ViewOpenedSlot(QString desktopfp)
 {
-    qDebug()<<"open software:"<<desktopfp;
     QVector<QString> desktopfpVec=UkuiMenuInterface::desktopfpVector;
     if(desktopfpVec.contains(desktopfp))
     {
