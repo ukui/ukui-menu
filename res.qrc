@@ -138,5 +138,6 @@
         <file>data/img/mainviewwidget/selected.svg</file>
         <file>data/img/mainviewwidget/icon-电源.svg</file>
         <file>data/img/mainviewwidget/icon-电源@2x.png</file>
+        <file>data/img/mainviewwidget/ukui-search-blue.svg</file>
     </qresource>
 </RCC>

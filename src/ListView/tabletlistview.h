@@ -58,7 +58,7 @@ protected:
    void initWidget();
    void mouseReleaseEvent(QMouseEvent *e);
    void mousePressEvent(QMouseEvent *event);
-   void wheelEvent(QWheelEvent *e);
+//   void wheelEvent(QWheelEvent *e);
    void mouseMoveEvent(QMouseEvent *event);
    void paintGroupItem(const QModelIndex &index,QString group);
 
@@ -121,6 +121,8 @@ private:
     QGSettings *tabletMode=nullptr;
 
     bool m_isDraging = false;
+
+    QString pressDesktopfp;
 
 private Q_SLOTS:
     void onClicked(QModelIndex index);//点击item

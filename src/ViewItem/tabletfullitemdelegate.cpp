@@ -179,6 +179,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         QString desktopfp1=str;//不带desktop
         settt->beginGroup("application");
         //判断禁用
+        settt->sync();
         bool bo=settt->contains(desktopfp1.toLocal8Bit().data());// iskey
         bool bo1=settt->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool();//isvalue
         settt->endGroup();

@@ -65,7 +65,7 @@ public:
 
 private:
     /*Application list interface*/
-    ScrollArea* m_scrollArea=nullptr;
+    QScrollArea* m_scrollArea=nullptr;
     ScrollAreaWid* m_scrollAreaWid=nullptr;
     QHBoxLayout* m_scrollAreaWidLayout=nullptr;
     QStringList m_data;
@@ -125,8 +125,10 @@ private:
 
     QFileSystemWatcher* m_fileWatcher=nullptr;
     QFileSystemWatcher* m_fileWatcher1=nullptr;
+    QFileSystemWatcher* m_fileWatcher2 = nullptr;
     TabletDirectoryChangedThread* m_directoryChangedThread=nullptr;
     QSettings* settt;
+    QWidget *widget;
 
 protected:
     /**
@@ -162,6 +164,12 @@ protected:
     void buttonWidgetShow();
 
     bool appListFile();
+
+    bool event ( QEvent * event );
+
+    void wheelEvent(QWheelEvent *e);
+
+    bool eventFilter(QObject * target , QEvent * event );
 
 public Q_SLOTS:
     /**

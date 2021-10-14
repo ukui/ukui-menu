@@ -82,13 +82,15 @@ void TabletWindow::initUi()
     setOpacityEffect(0.7);
     bool isfile=appListFile();//判断监控看、路径是否存在
     m_fileWatcher=new QFileSystemWatcher;
-    m_fileWatcher->addPath(QDir::homePath()+"/.cache/ukui-menu/ukui-menu.ini");
-    connect(m_fileWatcher,&QFileSystemWatcher::fileChanged,this,&TabletWindow::reloadAppList);
+    m_fileWatcher2 = new QFileSystemWatcher;
+    m_fileWatcher2->addPath(QDir::homePath()+"/.cache/ukui-menu/ukui-menu.ini");
+    connect(m_fileWatcher2,&QFileSystemWatcher::fileChanged,this,[=](){
+                m_fileWatcher2->addPath(QDir::homePath()+"/.cache/ukui-menu/ukui-menu.ini");
+                this->repaint();});
 
     m_fileWatcher->addPaths(QStringList()<<QString("/usr/share/applications")
                                       <<QString(QDir::homePath()+"/.local/share/applications/"));
     connect(m_fileWatcher,&QFileSystemWatcher::directoryChanged,this,&TabletWindow::directoryChangedSlot);
-
 
     m_fileWatcher1=new QFileSystemWatcher;
     bool ismonitor=m_fileWatcher1->addPath(QDir::homePath()+"/.config/ukui/desktop_applist");
@@ -123,20 +125,20 @@ void TabletWindow::initUi()
     initAppListWidget();
 
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
-    m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
+    m_scrollAnimation->setEasingCurve(QEasingCurve::InOutSine);
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
-    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
+//    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
 
     flag = true;
     //翻页灵敏度时间调节
-    time = new QTimer(this);
-    connect(time,&QTimer::timeout,[=](){
-        if(flag == false)
-        {
-            flag = true;
-            time->stop();
-        }
-    });
+//    time = new QTimer(this);
+//    connect(time,&QTimer::timeout,[=](){
+//        if(flag == false)
+//        {
+//            flag = true;
+//            time->stop();
+//        }
+//    });
 
     if(QGSettings::isSchemaInstalled(QString("org.mate.background").toLocal8Bit()))
     {
@@ -206,8 +208,51 @@ void TabletWindow::initUi()
 
     ways();
     buttonWidgetShow();
-    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
+//    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
     connect(leftWidget,&TimeWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
+}
+
+bool TabletWindow::eventFilter(QObject * target , QEvent * event )
+{
+    if(target == m_scrollArea->viewport())
+    {
+        if(event->type() == QEvent::Wheel)
+        {
+            return true;
+        }    
+    }
+    return false;
+}
+
+
+void TabletWindow::wheelEvent(QWheelEvent *e)
+{
+    if (!(m_scrollAnimation->state() == QPropertyAnimation::Running))
+    {
+        if (qAbs(e->angleDelta().y()) > qAbs(e->angleDelta().x()))
+        {
+            if ((e->angleDelta().y() >= 120) )
+            {
+                on_pageNumberChanged(false);
+            }
+            else if ((e->angleDelta().y() <= -120) )
+            {
+                on_pageNumberChanged(true);
+            }
+        }
+        else if(qAbs(e->angleDelta().y()) < qAbs(e->angleDelta().x()))
+        {
+            if ((e->angleDelta().x() >= 120) )
+            {
+                on_pageNumberChanged(false);
+            }
+            else if ((e->angleDelta().x() <= -120) )
+            {
+                on_pageNumberChanged(true);
+            }
+        }
+    }
+    e->ignore();
 }
 
 /**
@@ -221,14 +266,17 @@ void TabletWindow::initAppListWidget()
 
     firstPageLayout =new QHBoxLayout();
 
-    m_scrollArea=new ScrollArea;
+    m_scrollArea=new QScrollArea(this);
     m_scrollAreaWid=new ScrollAreaWid(this);
     m_scrollAreaWid->setStyleSheet("border:0px; background:transparent;");
+    m_scrollAreaWid->setFixedHeight(m_height - 20);
     m_scrollArea->setFixedSize(m_width,m_height - 20);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setStyleSheet("border:0px; background:transparent;");
     m_scrollArea->setProperty("notUseSlideGesture",true);
+    m_scrollArea->setFocusPolicy(Qt::NoFocus);
+    m_scrollArea->viewport()->installEventFilter(this);
 
     m_scrollAreaWidLayout=new QHBoxLayout(m_scrollAreaWid);
     m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
@@ -291,6 +339,7 @@ void TabletWindow::setOpacityEffect(const qreal& num)
 
 void TabletWindow::reloadAppList()
 {
+    qDebug() << "void TabletWindow::reloadAppList()";
     QVector<QStringList> vector;
 
     m_data.clear();
@@ -396,24 +445,45 @@ void TabletWindow::requestDeleteAppSlot()
 
 void TabletWindow::on_pageNumberChanged(bool nextPage)
 {
-    if(nextPage)
+    qDebug() << "void TabletWindow::on_pageNumberChanged(bool nextPage)";
+     if (!(m_scrollAnimation->state() == QPropertyAnimation::Running))
+     {
+         if(nextPage)
+         {
+             curPageNum++;
+             if(curPageNum > (m_scrollAreaWidLayout->count() -1) / 2)
+             {
+                 curPageNum = (m_scrollAreaWidLayout->count() -1) / 2;
+             }
+         }
+         else
+         {
+             curPageNum--;
+             if(curPageNum < 0)
+             {
+                 curPageNum = 0;
+             }
+         }
+         m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
+         btnGroupClickedSlot(curPageNum * 2);
+         pageNumberChanged(curPageNum + 1);
+     }
+}
+
+bool TabletWindow::event ( QEvent * event )
+{
+    if (event->type() == QEvent::ActivationChange /*&& m_canHide*/)
+    //if(QEvent::WindowDeactivate == event->type())//窗口停用
     {
-        curPageNum++;
-        if(curPageNum > (m_scrollAreaWidLayout->count() -1) / 2)
+        if(leftWidget->isActiveWindow())
+            qDebug() << "leftWidget激活了";
+        if(QApplication::activeWindow() != this)
         {
-            curPageNum = (m_scrollAreaWidLayout->count() -1) / 2;
+            qDebug() << " * 鼠标点击窗口外部事件";
+            this->hide();
         }
     }
-    else
-    {
-        curPageNum--;
-        if(curPageNum < 0)
-        {
-            curPageNum = 0;
-        }
-    }
-    btnGroupClickedSlot(curPageNum * 2);
-    pageNumberChanged(curPageNum + 1);
+    return QWidget::event(event);
 }
 
 void TabletWindow::insertAppList(QStringList desktopfplist)
@@ -438,12 +508,12 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
         listview->setGridSize(QSize(318,(this->height() - 20)/4));
         m_scrollAreaWidLayout->addWidget(listview);
     }
-    //修复异常黑框问题
-    connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
-        listview->repaint(listview->rect());
-    });
+//    //修复异常黑框问题
+//    connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
+//        listview->repaint(listview->rect());
+//    });
     connect(listview,&TabletListView::pagenumchanged,this,&TabletWindow::on_pageNumberChanged);
-
+    listview->setProperty("notUseSlideGesture",true);
     m_data.clear();
     for(int i=0;i<desktopfplist.count();i++)
         m_data.append(desktopfplist.at(i));
@@ -609,7 +679,6 @@ void TabletWindow::ways()
         bgOption = "scaled";
     if (bgOption == "centered") //居中
     {
-        qDebug() << "---------" << "centered" << "----------";
         pixmap->load(bgPath);
 
     }
@@ -700,7 +769,6 @@ void TabletWindow::backgroundPic()//const QString &bgPath,QRect rect
     }
     else if (bgOption == "scaled") //填充
     {
-        qDebug() << "---------" << "scaled" << "---------";
         painter.drawPixmap(this->geometry(), getPaddingPixmap(*pixmap, this->size().width(),this->size().height()));
     }
     else if (bgOption == "wallpaper") //平铺
@@ -739,10 +807,11 @@ void TabletWindow::recvHideMainWindowSlot()
 
 void TabletWindow::btnGroupClickedSlot(int pageNum)
 {
+    qDebug() << "void TabletWindow::btnGroupClickedSlot(int pageNum)";
     m_beginPos=m_scrollArea->horizontalScrollBar()->sliderPosition();
 
     m_endPos=m_scrollAreaWidLayout->itemAt(pageNum)->widget()->x();
-    m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scrollAnimation->stop();
     m_scrollAnimation->setDuration(500);
     m_scrollAnimation->setStartValue(m_beginPos);
@@ -817,11 +886,11 @@ void TabletWindow::buttonClicked(QAbstractButton *button)
 
 void TabletWindow::animationFinishSlot()
 {
-    if(m_scrollArea->horizontalScrollBar()->value()==m_endPos ||
-            m_scrollArea->horizontalScrollBar()->value()==m_scrollArea->horizontalScrollBar()->maximum())
-    {
-        m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    }
+//    if(m_scrollArea->horizontalScrollBar()->value()==m_endPos ||
+//            m_scrollArea->horizontalScrollBar()->value()==m_scrollArea->horizontalScrollBar()->maximum())
+//    {
+//        m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+//    }
 }
 
 void TabletWindow::animationValueChangedSlot(const QVariant &value)
@@ -853,6 +922,7 @@ void TabletWindow::XkbEventsPress(const QString &keycode)
 
 void TabletWindow::XkbEventsRelease(const QString &keycode)
 {
+    qDebug() << "触发按键释放";
     QString KeyName;
     static bool winFlag=false;
     if (keycode.length() >= 8){
@@ -881,8 +951,10 @@ void TabletWindow::XkbEventsRelease(const QString &keycode)
 //            if (m_CommonUseWidget->m_listView->isDraging()) {
 //                qWarning() << "Icon is been draging";
 //            }
+            qDebug() << "win键触发窗口隐藏事件";
             this->hide();
         } else {
+            qDebug() << "win键触发窗口显示事件";
             this->showPCMenu();
         }
     }

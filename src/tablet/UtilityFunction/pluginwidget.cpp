@@ -22,7 +22,6 @@ pluginwidget::pluginwidget(QWidget *parent) : QWidget(parent)
                                          this,
                                          SLOT(changeSearchBoxBackground(QString))
                                          );
-
     init();
 }
 void pluginwidget::init()

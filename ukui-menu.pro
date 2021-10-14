@@ -116,7 +116,6 @@ HEADERS += \
     src/tablet/UtilityFunction/pluginwidget.h \
     src/tablet/UtilityFunction/thumbnail.h \
     src/tablet/UtilityFunction/timewidget.h \
-    src/tablet/UtilityFunction/toolbox.h \
     src/tablet/XEventMonitor/xeventmonitor.h \
     src/tablet/pagemanager.h \
     src/tablet/tabletwindow.h
@@ -174,7 +173,6 @@ SOURCES += \
     src/tablet/UtilityFunction/pluginwidget.cpp \
     src/tablet/UtilityFunction/thumbnail.cpp \
     src/tablet/UtilityFunction/timewidget.cpp \
-    src/tablet/UtilityFunction/toolbox.cpp \
     src/tablet/XEventMonitor/xeventmonitor.cpp \
     src/tablet/pagemanager.cpp \
     src/tablet/tabletwindow.cpp

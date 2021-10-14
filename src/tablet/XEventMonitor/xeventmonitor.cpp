@@ -64,7 +64,7 @@ protected:
     XEventMonitor *q_ptr;
     QSet<KeySym> modifiers;
 
-    bool filterWheelEvent(int detail);
+//    bool filterWheelEvent(int detail);
     static void callback(XPointer trash, XRecordInterceptData* data);
     void handleRecordEvent(XRecordInterceptData *);
     void emitKeySignal(const char *member, xEvent *event);
@@ -193,10 +193,10 @@ void XEventMonitorPrivate::handleRecordEvent(XRecordInterceptData* data)
     XRecordFreeData(data);
 }
 
-bool XEventMonitorPrivate::filterWheelEvent(int detail)
-{
-    return detail != WheelUp && detail != WheelDown && detail != WheelLeft && detail != WheelRight;
-}
+//bool XEventMonitorPrivate::filterWheelEvent(int detail)
+//{
+//    return detail != WheelUp && detail != WheelDown && detail != WheelLeft && detail != WheelRight;
+//}
 
 void XEventMonitorPrivate::updateModifier(xEvent *event, bool isAdd)
 {

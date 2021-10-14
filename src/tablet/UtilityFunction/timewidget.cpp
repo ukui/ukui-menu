@@ -176,8 +176,8 @@ void TimeWidget::initUi()
     searchEditBtn=new QPushButton();
     searchEditBtn->setFocusPolicy(Qt::NoFocus);
     searchEditBtn->setFixedSize(400,80);
-    searchEditBtn->setIcon(QIcon(":/img/ukui-search-blue.svg"));
-    searchEditBtn->setIconSize(QPixmap(":/img/ukui-search-blue.svg").size());
+    searchEditBtn->setIcon(QIcon(":/data/img/mainviewwidget/ukui-search-blue.svg"));
+    searchEditBtn->setIconSize(QPixmap(":/data/img/mainviewwidget/ukui-search-blue.svg").size());
     searchEditBtn->setText(tr("Search"));
     QDBusReply<QString> styleName = usrInterface->call(QString("get_current_stylename"));
     changeSearchBoxBackground(styleName);
@@ -188,7 +188,7 @@ void TimeWidget::initUi()
     upLayout->addWidget(downWidget);
     mainLayout->addWidget(upWidget);
 
-    focusPlug=new pluginwidget();
+    focusPlug=new pluginwidget(this);
     //加入专注模式
 //    if(plugin)
 //    {
