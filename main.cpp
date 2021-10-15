@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
         centerToScreen(&w);
         w.setAttribute(Qt::WA_TranslucentBackground,true);
         w.setAttribute(Qt::WA_X11NetWmWindowTypeDesktop,false);
-        w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+        w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint /*| Qt::X11BypassWindowManagerHint*/);
         w.raise();
         w.activateWindow();
         //拉起后通知session

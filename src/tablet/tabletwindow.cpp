@@ -55,7 +55,7 @@ QVector<int> TabletWindow::keyValueVector=QVector<int>();
 
 void TabletWindow::initUi()
 {
-    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     this->setAttribute(Qt::WA_TranslucentBackground,true);
     this->setAutoFillBackground(false);
@@ -799,9 +799,9 @@ void TabletWindow::backgroundPic()//const QString &bgPath,QRect rect
 
 void TabletWindow::recvHideMainWindowSlot()
 {
-    this->setAttribute(Qt::WA_TranslucentBackground,true);
-    this->setAttribute(Qt::WA_X11NetWmWindowTypeDesktop,false);
-    this->setWindowFlags(Qt::CustomizeWindowHint |Qt::FramelessWindowHint|Qt::X11BypassWindowManagerHint);
+//    this->setAttribute(Qt::WA_TranslucentBackground,true);
+//    this->setAttribute(Qt::WA_X11NetWmWindowTypeDesktop,false);
+//    this->setWindowFlags(Qt::CustomizeWindowHint |Qt::FramelessWindowHint|Qt::X11BypassWindowManagerHint);
     this->hide();
 }
 
