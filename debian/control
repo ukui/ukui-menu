@@ -32,7 +32,8 @@ Depends: ${shlibs:Depends},
          accountsservice,
          libgsettings-qt1,
          libqt5x11extras5,
-         bamfdaemon
+         bamfdaemon,
+         kylin-status-manager
 Description: Advanced ukui menu
  UKUI menu provides start menu development library and advanced
  graphical user interface.
