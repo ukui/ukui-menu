@@ -135,29 +135,29 @@ void RightClickMenu::addToDesktopActionTriggerSlot()
 
 void RightClickMenu::uninstallActionTriggerSlot()
 {
-    if(!checkOsRelease())
-    {
+//    if(!checkOsRelease())
+//    {
         QString cmd=QString("kylin-uninstaller %1")
                 .arg(m_desktopfp.toLocal8Bit().data());
         bool ret=QProcess::startDetached(cmd);
         qDebug()<<"卸载："<<cmd<<ret;
         qDebug() << "kylin-uninstaller";
 
-    }
-    else
-    {
-        QString cmd=QString("dpkg -S "+m_desktopfp);
-        m_cmdProc->start("sh",QStringList()<<"-c"<<cmd);
-        m_cmdProc->waitForFinished();
-        QString output=m_cmdProc->readAllStandardOutput().trimmed();
-        QString packageName=output.split(":").at(0);
-        cmd.clear();
-        cmd=QString("kylin-installer -remove %1")
-                .arg(packageName.toLocal8Bit().data());
-        bool ret=QProcess::startDetached(cmd);
-        qDebug()<<"卸载："<<cmd<<ret;
-        qDebug() << "dpkg -S";
-    }
+//    }
+//    else
+//    {
+//        QString cmd=QString("dpkg -S "+m_desktopfp);
+//        m_cmdProc->start("sh",QStringList()<<"-c"<<cmd);
+//        m_cmdProc->waitForFinished();
+//        QString output=m_cmdProc->readAllStandardOutput().trimmed();
+//        QString packageName=output.split(":").at(0);
+//        cmd.clear();
+//        cmd=QString("kylin-installer -remove %1")
+//                .arg(packageName.toLocal8Bit().data());
+//        bool ret=QProcess::startDetached(cmd);
+//        qDebug()<<"卸载："<<cmd<<ret;
+//        qDebug() << "dpkg -S";
+//    }
     m_actionNumber=6;
 }
 
