@@ -128,6 +128,7 @@ CONFIG += no_keywords link_pkgconfig
 
 LIBS+=-pthread -luchardet -lukui-log4qt
 
+
 desktop_file.files = ukui-menu.desktop
 desktop_file.path = /etc/xdg/autostart
 
