@@ -70,6 +70,7 @@ private:
 
     QPropertyAnimation *m_animation=nullptr;
     bool m_winFlag = false;
+    bool is_repaint = true;
     DBus *m_dbus=nullptr;
 
 protected:
@@ -82,11 +83,9 @@ protected:
     /**
      * @brief The query box responds to keyboard events
      */
-    void keyPressEvent(QKeyEvent* e);
-    /**
-     * @brief Repaint window
-     */
+
     void repaintWidget();
+    void resizeWidget();
 
     void mouseReleaseEvent(QMouseEvent *event);
 
@@ -110,6 +109,7 @@ public Q_SLOTS:
     void primaryScreenChangeSlot();
     void activeWindowSolt(bool flag);
     void mainWinShowSlot();
+    void mainWinHideSlot();
 
 public:
 Q_SIGNALS:

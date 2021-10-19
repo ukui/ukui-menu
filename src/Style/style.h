@@ -100,6 +100,7 @@ public:
     static int minh;
     static int defaultMainViewWidWidth;
     static int defaultTopWidHeight;
+    static int defaultIconSize;
     static int defaultQueryLineEditWidth;
     static int defaultQueryLineEditHeight;
     static int defaultQueryLineEditIconSize;

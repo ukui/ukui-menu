@@ -27,7 +27,7 @@
 #include <QToolTip>
 #include <QHelpEvent>
 #include "src/Interface/ukuimenuinterface.h"
-#include "src/Style/style.h"
+
 
 class FullItemDelegate : public QStyledItemDelegate
 {

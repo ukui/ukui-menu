@@ -51,7 +51,6 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void dragLeaveEvent(QDragLeaveEvent *e);
     void dragMoveEvent(QDragMoveEvent *event);
-    //void wheelEvent(QWheelEvent *e); //自己加的
 
 private:
     QStandardItemModel* listmodel=nullptr;

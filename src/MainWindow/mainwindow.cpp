@@ -31,13 +31,7 @@
 #include "src/Style/style.h"
 #include "src/UtilityFunction/utility.h"
 #include <QPalette>
-
-#include <QX11Info>
-#include <X11/Xlib.h>
-#include <X11/extensions/XTest.h>
-
-//和QEvent键值冲突，取消KeyPress的宏定义
-#undef KeyPress
+#include <QEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -76,8 +70,11 @@ MainWindow::MainWindow(QWidget *parent) :
         if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
         {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-            if(gsetting.keys().contains("win-key-release"))
-                if(gsetting.get("win-key-release").toBool())
+//            if(gsetting.keys().contains("win-key-release"))
+//                if(gsetting.get("win-key-release").toBool())
+//                    return;
+            if(gsetting.keys().contains("winKeyRelease"))
+                if(gsetting.get("winKeyRelease").toBool())
                     return;
         }
         if(QGSettings::isSchemaInstalled(QString("org.ukui.screenshot").toLocal8Bit()))
@@ -146,7 +143,6 @@ void MainWindow::initUi()
     m_sideBarWid->loadMinSidebar();
     m_mainViewWid->loadMinMainView();
 
-
     m_animation = new QPropertyAnimation(this, "geometry");
     connect(m_animation,&QPropertyAnimation::finished,this,&MainWindow::animationValueFinishedSlot);
 
@@ -175,6 +171,8 @@ void MainWindow::initUi()
     connect(this, &MainWindow::setFocusSignal, m_mainViewWid, &MainViewWidget::selectFirstItem);
 
     connect(m_mainViewWid,&MainViewWidget::sendMainWinActiveSignal,this,&MainWindow::activeWindowSolt);
+
+    connect(m_mainViewWid, &MainViewWidget::setMainWinHideSignal, this, &MainWindow::mainWinHideSlot);
 //    connect(QApplication::desktop(),&QDesktopWidget::resized,this, [=]{
 //        repaintWidget();
 //    });
@@ -186,7 +184,7 @@ void MainWindow::initUi()
 //        repaintWidget();
 //    });
 
-    QDBusConnection::sessionBus().connect(DBUS_NAME,DBUS_PATH,DBUS_INTERFACE,QString("PanelGeometryRefresh"),this,SLOT(primaryScreenChangeSlot()));
+  QDBusConnection::sessionBus().connect(DBUS_NAME,DBUS_PATH,DBUS_INTERFACE,QString("PanelGeometryRefresh"),this,SLOT(primaryScreenChangeSlot()));
 
     //监听屏幕缩放
     if(QGSettings::isSchemaInstalled(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit()))
@@ -351,11 +349,19 @@ void MainWindow::showFullScreenWidget()
 
     if(isHuaWei9006C || isHuaWeiPC)
     {
+        is_repaint = false;
+        this->hide();
         QEventLoop loop;
-        QTimer::singleShot(10, &loop, SLOT(quit()));
+        QTimer::singleShot(150, &loop, SLOT(quit()));
         loop.exec();
-        this->setGeometry(endRect);
-        animationValueFinishedSlot();
+        m_animation->setDuration(1);//动画总时间
+        m_animation->setStartValue(startRect);
+        m_animation->setEndValue(endRect);
+        m_animation->setEasingCurve(QEasingCurve::Linear);
+        m_animation->start();
+        this->show();
+        this->activateWindow();
+        is_repaint = true;
     }
     else
     {
@@ -461,6 +467,12 @@ void MainWindow::animationValueFinishedSlot()
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
     }
+
+    m_mainViewWid->getQueryLineEditer()->setFocus();
+    if (m_mainViewWid->getQueryLineEditer()->text().isEmpty()) {
+        qDebug() << "there is no letter in search lineEditer";
+        QTimer::singleShot(1,this,[=](){m_mainViewWid->getQueryLineEditer()->simulateFocusOutEvent(nullptr);});
+    }
 }
 
 void MainWindow::activeWindowSolt(bool flag)
@@ -487,7 +499,7 @@ void MainWindow::mainWinShowSlot()
  */
 bool MainWindow::event ( QEvent * event )
 {
-   if (event->type() == QEvent::ActivationChange)
+   if (event->type() == QEvent::ActivationChange && is_repaint)
   // if(QEvent::WindowDeactivate == event->type() && m_canHide)//窗口停用
    {
        qDebug() << " * 鼠标点击窗口外部事件";
@@ -515,6 +527,14 @@ bool MainWindow::event ( QEvent * event )
          Q_EMIT setFocusSignal();
         // return true;
        }
+   }
+
+   if (event->type() == QEvent::FocusIn)
+   {
+       m_mainViewWid->getQueryLineEditer()->setFocus();
+       QTimer::singleShot(1, this, [=](){
+           m_mainViewWid->getQueryLineEditer()->simulateFocusOutEvent(nullptr);
+       });
    }
    return QWidget::event(event);
 }
@@ -600,6 +620,11 @@ void MainWindow::loadMainWindow()
 
         m_sideBarWid->loadMinSidebar();
         m_mainViewWid->loadMinMainView();
+
+        m_mainViewWid->getQueryLineEditer()->setFocus();
+        QTimer::singleShot(1, this, [=](){
+            m_mainViewWid->getQueryLineEditer()->simulateFocusOutEvent(nullptr);
+        });
     }
 }
 
@@ -611,7 +636,8 @@ void MainWindow::panelChangedSlot(QString key)
 
 void MainWindow::primaryScreenChangeSlot()
 {
-    repaintWidget();
+    Style::initWidStyle();
+    resizeWidget();
 }
 
 void MainWindow::repaintWidget()
@@ -621,7 +647,12 @@ void MainWindow::repaintWidget()
     this->setMinimumSize(Style::minw,Style::minh);
     m_line->setFixedSize(1,this->height()-1);
     m_mainViewWid->repaintWidget();
+    resizeWidget();
+}
 
+void MainWindow::resizeWidget()
+{
+    QRect availableGeometry = getScreenAvailableGeometry();
     if(QApplication::activeWindow() == this)
     {
         int position=Style::panelPosition;
@@ -713,41 +744,8 @@ void MainWindow::repaintWidget()
 //    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 //}
 
-void MainWindow::keyPressEvent(QKeyEvent *e)
+void MainWindow::mainWinHideSlot()
 {
-    if(e->type() == QEvent::KeyPress)
-    {
-        if((e->key() >= 0x30 && e->key() <= 0x39) || (e->key() >= 0x41 && e->key() <= 0x5a))
-        {
-            if (m_mainViewWid->getQueryLineEditer() != nullptr
-                    && !m_mainViewWid->getQueryLineEditer()->hasFocus()
-                    && m_mainViewWid->getQueryLineEditer()->text().isEmpty())
-            {
-                m_mainViewWid->getQueryLineEditer()->setFocus();
-
-                /**
-                 * @brief loop
-                 * 设置焦点后立即发送按键模拟，输入法尚未定位到有聚焦的输入状态，无法正常调起
-                 * 所以需要延后150ms保证模拟按键的会被正常接收
-                 * 延迟模拟有一定风险，其实需要配合输入法一起改动，暂无输入法的方案同步，按照该方式实现，需改进
-                 */
-                QEventLoop loop;
-                QTimer::singleShot(150, &loop, SLOT(quit()));
-                loop.exec();
-
-                XTestFakeKeyEvent(QX11Info::display(), XKeysymToKeycode(QX11Info::display(), e->key()), True, 1);
-                XTestFakeKeyEvent(QX11Info::display(), XKeysymToKeycode(QX11Info::display(), e->key()), False, 1);
-                XFlush(QX11Info::display());
-            }
-        }
-        if(e->key() == Qt::Key_Backspace)
-        {
-            m_mainViewWid->setLineEditFocus("");
-        }
-        if(e->key() == Qt::Key_Escape)
-        {
-            this->hide();
-            m_mainViewWid->widgetMakeZero();
-        }
-    }
+    this->hide();
+    m_mainViewWid->widgetMakeZero();
 }

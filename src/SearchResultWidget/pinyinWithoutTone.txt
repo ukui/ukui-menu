@@ -6669,7 +6669,7 @@ gang 冈
 dan,nan,ran 冉
 ce 冊
 jiong 冋
-zha,ce 册
+ce 册
 zai 再
 gua 冎
 jiong 冏
