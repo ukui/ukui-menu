@@ -976,7 +976,7 @@ bool UkuiMenuInterface::initAppIni()
                 setting->setValue(str,i+a+b+c);
             }
             int d=appInitVector.count();
-            setting->setValue("mate-terminal.desktop",a+b+c+d);
+            setting->setValue("kylin-user-guide.desktop",a+b+c+d);
             setting->sync();
             setting->endGroup();
             return 1;

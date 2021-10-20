@@ -69,6 +69,7 @@ void TabletWindow::initUi()
     leftWidget = new TimeWidget(this);
     leftWidget->setFixedSize(512,m_height);
     firstPageWidget = new QWidget(this);
+    firstPageWidget->installEventFilter(this);
 
     buttonGroup = new QButtonGroup;
 
@@ -210,7 +211,40 @@ void TabletWindow::initUi()
     buttonWidgetShow();
 //    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
     connect(leftWidget,&TimeWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
+
+    if(checkapplist()){
+       directoryChangedSlot();//更新应用列表
+    }
 }
+
+
+bool TabletWindow::checkapplist()
+{
+    qDebug()<<"MainWindow   checkapplist";
+    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
+    QSettings *setting=new QSettings(path,QSettings::IniFormat);
+    setting->beginGroup("application");
+    QStringList keyList=setting->allKeys();
+
+    setting->sync();
+    setting->endGroup();
+    delete setting;
+//    if(keyList.count() == UkuiMenuInterface::desktopfpVector.count())
+//    {
+//        return false;
+//    }else
+    {
+        UkuiMenuInterface::desktopfpVector.clear();
+        for(int i=0;i<keyList.count();i++)
+        {
+           QString tmp=QString("%1%2").arg("/usr/share/applications/").arg(keyList.at(i));
+           UkuiMenuInterface::desktopfpVector.append(tmp);
+        }
+        return true;
+    }
+
+}
+
 
 bool TabletWindow::eventFilter(QObject * target , QEvent * event )
 {
@@ -220,6 +254,13 @@ bool TabletWindow::eventFilter(QObject * target , QEvent * event )
         {
             return true;
         }    
+    }
+    if(target == firstPageWidget)
+    {
+        if(event->type() == QEvent::MouseMove)
+        {
+            return true;
+        }
     }
     return false;
 }

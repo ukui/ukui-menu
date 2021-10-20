@@ -171,6 +171,8 @@ protected:
 
     bool eventFilter(QObject * target , QEvent * event );
 
+    bool checkapplist();
+
 public Q_SLOTS:
     /**
      * @brief Open the application
