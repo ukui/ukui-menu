@@ -455,7 +455,6 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
 //    QString username=getUserName();
 //    QDBusReply<QString> reply = desktopfpListiface.call("GetDesktopAppList",username);
 
-
     //1、获取系统应用列表
     //filePathList;
     QStringList ifFileDesktopList;
@@ -506,11 +505,11 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
 
         }/*else{
 
-
             //用户隔离/etc/skel/桌面
             QString tmp=QString("%1%2").arg("/usr/share/applications/").arg(str);
             QString appid=getTencentAppid(tmp);
             qDebug()<<"appid"<<tmp<<appid;
+
             if(reply.value().indexOf(appid)!=-1)
             {
                 qDebug()<<"当前用户可见的腾讯应用"<<tmp;
@@ -520,7 +519,6 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
             }
         }*/
     }
-
 
     filePathList.clear();
     return ifFileDesktopList;

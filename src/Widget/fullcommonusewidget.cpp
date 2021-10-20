@@ -106,6 +106,7 @@ void FullCommonUseWidget::initUi()
     powerOffButton->setIcon(icon6);
     powerOffButton->setIconSize(QSize(24,24));
     powerOffButton->setFlat(true);
+    powerOffButton->setStyleSheet("padding: 0px;");
 
     rightButtonLayout->addWidget(verticalScrollBar);
     QSpacerItem *m_spaceItem2 = nullptr;

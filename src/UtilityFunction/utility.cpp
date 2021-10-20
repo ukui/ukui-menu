@@ -704,12 +704,12 @@ QString getUserName()
                              objPath.value().path(),
                              "org.freedesktop.DBus.Properties",
                              QDBusConnection::systemBus());
-    QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","RealName");
-    name=var.value().toString();
-    if(name.isEmpty())
-    {
-        var=useriface.call("Get","org.freedesktop.Accounts.User","UserName");
+//    QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","RealName");
+//    name=var.value().toString();
+//    if(name.isEmpty())
+//    {
+        QDBusReply<QVariant> var=useriface.call("Get","org.freedesktop.Accounts.User","UserName");
         name=var.value().toString();
-    }
+//    }
     return name;
 }
