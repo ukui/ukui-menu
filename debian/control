@@ -21,7 +21,6 @@ Rules-Requires-Root: no
 Homepage: https://github.com/ukui/ukui-menu
 Vcs-Git: https://github.com/ukui/ukui-menu
 Vcs-Browser: https://github.com/ukui/ukui-menu
-
 Package: ukui-menu
 Architecture: any
 Depends: ${shlibs:Depends},
