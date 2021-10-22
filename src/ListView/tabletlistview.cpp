@@ -37,7 +37,7 @@ TabletListView::TabletListView(QWidget *parent, int module):
 
     QGraphicsDropShadowEffect *shadow_effect = new QGraphicsDropShadowEffect(this);
     shadow_effect->setOffset(0, 0);
-    shadow_effect->setColor(QColor(26,26,28,70));
+    shadow_effect->setColor(QColor(26,26,28,150));
     shadow_effect->setBlurRadius(15);
     this->setGraphicsEffect(shadow_effect);
     this->setAcceptDrops(true);

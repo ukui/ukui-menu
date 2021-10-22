@@ -370,7 +370,7 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
     else
     {
         filePathList.clear();
-        //getAndroidApp();
+        getAndroidApp();
         recursiveSearchFile("/usr/share/applications/");
         filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
         filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
@@ -1154,7 +1154,10 @@ QVector<QString> UkuiMenuInterface::sortDesktopList(QString group)
     Q_FOREACH(QString desktopfn,desktopfnList)
     {
         QString desktopfp;
-        desktopfp=QString("/usr/share/applications/"+desktopfn);
+        if(androidDesktopfnList.contains(desktopfn))
+            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
+        else
+            desktopfp=QString("/usr/share/applications/"+desktopfn);
         data.append(desktopfp);
     }
     return data;

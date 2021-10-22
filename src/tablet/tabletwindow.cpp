@@ -237,7 +237,11 @@ bool TabletWindow::checkapplist()
         UkuiMenuInterface::desktopfpVector.clear();
         for(int i=0;i<keyList.count();i++)
         {
-           QString tmp=QString("%1%2").arg("/usr/share/applications/").arg(keyList.at(i));
+            QString tmp;
+            if(UkuiMenuInterface::androidDesktopfnList.contains(keyList.at(i)))
+                tmp=QString(QDir::homePath()+"/.local/share/applications/"+keyList.at(i));
+            else
+                tmp=QString("%1%2").arg("/usr/share/applications/").arg(keyList.at(i));
            UkuiMenuInterface::desktopfpVector.append(tmp);
         }
         return true;
@@ -336,6 +340,9 @@ void TabletWindow::modelChanged(bool value)
         ways();
         recvHideMainWindowSlot();
     }
+
+    reloadAppList();
+    qDebug() << "平板模式切换";
 }
 
 bool TabletWindow::appListFile()

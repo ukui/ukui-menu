@@ -147,8 +147,11 @@ void ThumbNail::setupthumbnail(QString desktopfp)
 
                 if(k<keyList.size())
                 {
-
-                    QString fp="/usr/share/applications/"+keyList.at(k);
+                    QString fp;
+                    if(UkuiMenuInterface::androidDesktopfnList.contains(keyList.at(k)))
+                        fp=QString(QDir::homePath()+"/.local/share/applications/"+keyList.at(i));
+                    else
+                        fp="/usr/share/applications/"+keyList.at(k);
                     m_icon=new QLabel;
                     m_icon->setFixedSize(28,28);
                     QPixmap pixmap=getIcon(fp,28,28);

@@ -66,12 +66,14 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         rect.setHeight(option.rect.height());
 
         painter->setOpacity(1);
-        QString desktopfp=index.data(Qt::DisplayRole).value<QString>();
+        QString desktopfp=index.model()->data(index,Qt::DisplayRole).value<QString>();
         QString iconstr=pUkuiMenuInterface->getAppIcon(desktopfp);
         QIcon icon;
         QFileInfo iconFileInfo(iconstr);
 
         QString appname=pUkuiMenuInterface->getAppName(desktopfp);
+
+        qDebug() << "应用名称" << appname << "icon名称" << iconstr;
         QRect iconRect;
         QRect textRect;
 //        QString desktopfn=desktopfp.split('/').last();
