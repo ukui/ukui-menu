@@ -151,6 +151,77 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             }
 
         }
+        else if(module == -1)
+        {
+            QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);
+            QString iconstr=strlist.at(3);
+            QIcon icon;
+            QFileInfo iconFileInfo(iconstr);
+            if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg")))
+                icon=QIcon(iconstr);
+            else
+            {
+                iconstr.remove(".png");
+                iconstr.remove(".svg");
+                icon=QIcon::fromTheme(iconstr);
+                if(icon.isNull())
+                {
+                    if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
+                        icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
+                    else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png")))
+                        icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
+                    else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png")))
+                        icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
+                    else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg")))
+                        icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
+                    else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png")))
+                        icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
+                    else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg")))
+                        icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
+                    else
+                        icon=QIcon::fromTheme(QString("application-x-desktop"));
+                }
+            }
+            icon.paint(painter,iconRect,Qt::AlignLeft);
+            QString appname=strlist.at(1);
+//            QFileInfo fileInfo(strlist.at(0));
+//            QString desktopfn=fileInfo.fileName();
+//            if(checkIfLocked(desktopfn))
+//            {
+//                QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
+//                icon.paint(painter,QRect(rect.topRight().x()-22,rect.y()+(rect.height()-16)/2,16,16));
+//            }
+            painter->setOpacity(1);
+//            painter->save();
+//            if(checkIfRecent(desktopfn) && !checkIfLocked(desktopfn))
+//            {
+//                painter->setPen(QPen(Qt::NoPen));
+//                painter->setBrush(QColor("#4d94ff"));
+//                painter->drawEllipse(QPoint(rect.topRight().x()-22,rect.y()+(rect.height()-8)/2+4),4,4);
+//            }
+//            painter->restore();
+            painter->save();
+            painter->setPen(QPen(option.palette.text().color()));
+            painter->setBrush(Qt::NoBrush);
+            painter->setOpacity(1);
+            QFontMetrics fm=painter->fontMetrics();
+            QString appnameElidedText=fm.elidedText(appname,Qt::ElideRight,rect.width()-62,Qt::TextShowMnemonic);
+            painter->drawText(QRect(iconRect.right()+15,rect.y(),
+                                    rect.width()-62,rect.height()),Qt::AlignVCenter,appnameElidedText);
+            painter->restore();
+
+            if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus))
+            {
+                int len=fm.boundingRect(appname).width();
+                if(len>rect.width()-62)
+                {
+                    QToolTip::showText(QCursor::pos(),appname);
+                }
+                else {
+                    QToolTip::hideText();
+                }
+            }
+        }
         else
         {
             QRect iconRect=QRect(rect.left()+11,rect.y()+(rect.height()-32)/2,32,32);

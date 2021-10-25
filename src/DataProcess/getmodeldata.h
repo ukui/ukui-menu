@@ -1,6 +1,9 @@
 #ifndef GETMODELDATA_H
 #define GETMODELDATA_H
 #include "src/Interface/ukuimenuinterface.h"
+#include <peony-qt/file-enumerator.h>
+#include <peony-qt/file-info-job.h>
+#include <peony-qt/file-info.h>
 
 class GetModelData : public QObject
 {
@@ -18,12 +21,14 @@ public:
     QStringList getLetterClassificationList();
     QStringList getFuncClassificationBtnRowList();
     QStringList getLetterClassificationBtnRowList();
+    QVector<QStringList> getRecentData();
 
     void loadDesktopVercor();
 
 protected:
     void insertClassificationBtn(QString btnname);
     void insertAppList(QStringList appnamelist);
+    static bool cmpApp(QStringList &arg_1, QStringList &arg_2);
 
 private:
     UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
@@ -36,6 +41,8 @@ private:
     QStringList m_classificationList;
     QStringList m_classificationBtnRowList;
     int m_funcRow;
+    Peony::FileEnumerator *enumerator = nullptr;
+    QList<std::shared_ptr<Peony::FileInfo>> m_childrens;
 };
 
 #endif // GETMODELDATA_H

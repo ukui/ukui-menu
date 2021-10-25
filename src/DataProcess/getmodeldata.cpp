@@ -1,5 +1,6 @@
 #include "getmodeldata.h"
 #include <QTranslator>
+#include <QDir>
 #include "src/UtilityFunction/utility.h"
 
 GetModelData::GetModelData()
@@ -37,6 +38,41 @@ QStringList GetModelData::getcollectData()
     Q_FOREACH(QString desktopfp,UkuiMenuInterface::collectAppVector)
         m_collectData.append(QString(desktopfp));
     return m_collectData;
+}
+
+bool GetModelData::cmpApp(QStringList &arg_1, QStringList &arg_2)
+{
+    if(arg_1.at(4) >= arg_2.at(4))
+        return true;
+    else
+        return false;
+}
+
+QVector<QStringList> GetModelData::getRecentData()
+{
+    QVector<QStringList> recentDataVector = QVector<QStringList>();
+    enumerator = new Peony::FileEnumerator(this);
+    enumerator->setEnumerateDirectory("recent:///");
+    enumerator->enumerateSync();
+    QString uri;
+    for (auto fileInfo : enumerator->getChildren()) {
+        QStringList recentData;
+        Peony::FileInfoJob infoJob(fileInfo);
+        infoJob.querySync();
+
+        QString targetUri = fileInfo.get()->targetUri();
+        QString displayName = fileInfo.get()->displayName();
+        QString symlinkTarget = fileInfo.get()->symlinkTarget();
+        QString iconName = fileInfo.get()->iconName();
+        QString accessDate = fileInfo.get()->accessDate();
+        recentData << targetUri << displayName << symlinkTarget << iconName << accessDate;
+        if(!displayName.endsWith(".desktop"))
+        {
+            recentDataVector.append(recentData);
+        }
+    }
+    qSort(recentDataVector.begin(),recentDataVector.end(),cmpApp);
+    return recentDataVector;
 }
 
 QStringList GetModelData::getFuncClassificationList()

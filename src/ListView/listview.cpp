@@ -20,6 +20,7 @@
 #include "src/Widget/functionbuttonwidget.h"
 #include "src/UtilityFunction/utility.h"
 #include <QDebug>
+#include <QDesktopServices>
 
 ListView::ListView(QWidget *parent/*, int width, int height, int module*/):
     KListView(parent)
@@ -93,7 +94,15 @@ void ListView::onClicked(QModelIndex index)
 {
      QVariant var = listmodel->data(index, Qt::DisplayRole);
      QString desktopfp = var.value<QStringList>().at(0);
-     if(var.isValid())
+
+//     QDesktopServices::openUrl(QUrl::fromLocalFile(desktopfp));
+     if(!desktopfp.endsWith(".desktop"))
+     {
+         QUrl url(desktopfp);
+         QDesktopServices::openUrl(url);
+         return;
+     }
+     else if(var.isValid())
      {
          if(var.value<QStringList>().at(1).toInt() == 0)
              Q_EMIT sendAppClassificationBtnClicked();

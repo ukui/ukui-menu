@@ -85,57 +85,57 @@
 <context>
     <name>GetModelData</name>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="104"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="140"/>
         <source>Mobile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="110"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="146"/>
         <source>Internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="116"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="152"/>
         <source>Social</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="122"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="158"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="128"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="164"/>
         <source>Development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="134"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="170"/>
         <source>Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="140"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="176"/>
         <source>Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="146"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="182"/>
         <source>Office</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="152"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="188"/>
         <source>Education</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="159"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="195"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DataProcess/getmodeldata.cpp" line="165"/>
+        <location filename="../src/DataProcess/getmodeldata.cpp" line="201"/>
         <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
@@ -154,9 +154,14 @@
     </message>
     <message>
         <location filename="../src/Widget/mainwindow.cpp" line="274"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="446"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="873"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="447"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="874"/>
         <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widget/mainwindow.cpp" line="280"/>
+        <source>recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -170,14 +175,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="448"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="883"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="449"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="884"/>
         <source>Letter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="450"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="893"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="451"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="894"/>
         <source>Function</source>
         <translation type="unfinished"></translation>
     </message>

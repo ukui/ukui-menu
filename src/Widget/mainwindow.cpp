@@ -170,9 +170,9 @@ MainWindow::MainWindow(QWidget *parent) :
     collectPushButton->setFlat(true);
     collectPushButton->installEventFilter(this);
     //最近按键
-//    recentPushButton = new QPushButton(centralwidget);
-//    recentPushButton->setFixedSize(QSize(40, 34));
-//    recentPushButton->setFlat(true);
+    recentPushButton = new QPushButton(centralwidget);
+    recentPushButton->setFixedHeight(34);
+    recentPushButton->setFlat(true);
 
     horizontalSpacer_3 = new QSpacerItem(332, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     //放大缩小按键
@@ -184,7 +184,7 @@ MainWindow::MainWindow(QWidget *parent) :
     minMaxChangeButton->setFlat(true);
 
     rightTopHorizontalLayout_3->addWidget(collectPushButton);
-//    rightTopHorizontalLayout_3->addWidget(recentPushButton);
+    rightTopHorizontalLayout_3->addWidget(recentPushButton);
     rightTopHorizontalLayout_3->addItem(horizontalSpacer_3);
     rightTopHorizontalLayout_3->addWidget(minMaxChangeButton);
 
@@ -277,7 +277,7 @@ MainWindow::MainWindow(QWidget *parent) :
     selectMenuButton->setText(QString());
     cancelSearchPushButton->setText(QString());
     collectPushButton->setText(QApplication::translate("MainWindow", "collection", nullptr));
-//    recentPushButton->setText(QApplication::translate("MainWindow", "recent", nullptr));
+    recentPushButton->setText(QApplication::translate("MainWindow", "recent", nullptr));
     minMaxChangeButton->setToolTip(QApplication::translate("MainWindow", "Max", nullptr));
     minMaxChangeButton->setText(QString());
     powerOffButton->setToolTip(QApplication::translate("MainWindow", "PowerOff", nullptr));
@@ -291,8 +291,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setTabOrder(searchPushButton, minSelectButton);
     setTabOrder(minSelectButton, selectMenuButton);
     setTabOrder(selectMenuButton, collectPushButton);
-//    setTabOrder(collectPushButton, recentPushButton);
-    setTabOrder(collectPushButton, minMaxChangeButton);
+    setTabOrder(collectPushButton, recentPushButton);
+    setTabOrder(recentPushButton, minMaxChangeButton);
     setTabOrder(minMaxChangeButton, powerOffButton);
     setTabOrder(powerOffButton, collectListView);
     initUi();
@@ -342,8 +342,8 @@ MainWindow::MainWindow(QWidget *parent) :
         if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
         {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-//            if(gsetting.keys().contains("win-key-release"))
-                if(gsetting.get("win-key-release").toBool())
+            if(gsetting.keys().contains("winKeyRelease"))
+                if(gsetting.get("winKeyRelease").toBool())
                     return;
         }
         if(QGSettings::isSchemaInstalled(QString("org.ukui.screenshot").toLocal8Bit()))
@@ -393,7 +393,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(powerOffButton,&QPushButton::customContextMenuRequested,this,&MainWindow::on_powerOffButton_customContextMenuRequested);
     connect(powerOffButton,&QPushButton::clicked,this,&MainWindow::on_powerOffButton_clicked);
     connect(collectPushButton,&QPushButton::clicked,this,&MainWindow::on_collectPushButton_clicked);
-//    connect(recentPushButton,&QPushButton::clicked,this,&MainWindow::on_recentPushButton_clicked);
+    connect(recentPushButton,&QPushButton::clicked,this,&MainWindow::on_recentPushButton_clicked);
     connect(cancelSearchPushButton,&QPushButton::clicked,this,&MainWindow::on_cancelSearchPushButton_clicked);
     connect(searchPushButton,&QPushButton::clicked,this,&MainWindow::on_searchPushButton_clicked);
     connect(minMaxChangeButton,&QPushButton::clicked,this,&MainWindow::on_minMaxChangeButton_clicked);
@@ -433,11 +433,12 @@ void MainWindow::initUi()
     this->setFocusPolicy(Qt::NoFocus);
     modaldata = new GetModelData;
 
+    modaldata->getRecentData();
     minAllListView->addData(modaldata->getMinAllData(),0);
     minFuncListView->addData(modaldata->getMinFuncData(),1);
     minLetterListView->addData(modaldata->getMinLetterData(),2);
     collectListView->addData(modaldata->getcollectData());
-    recentListView->addData(modaldata->getMinAllData(),0);
+    recentListView->addData(modaldata->getRecentData(),-1);
 
     QMenu *m_menu = new QMenu;
     m_allAction = new QAction(m_menu);
@@ -455,7 +456,7 @@ void MainWindow::initUi()
     m_allAction->setChecked(true);
     selectMenuButton->setMenu(m_menu);
     collectPushButton->setStyleSheet("color:#3790FA");
-//    recentPushButton->setStyleSheet("color:white");
+    recentPushButton->setStyleSheet("color:white");
 
     QAction *action = new QAction(this);
     action->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-search.svg"));
@@ -923,14 +924,14 @@ void MainWindow::on_collectPushButton_clicked()
 {
     rightStackedWidget->setCurrentIndex(0);
     collectPushButton->setStyleSheet("color:#3790FA");
-//    recentPushButton->setStyleSheet("color:white");
+    recentPushButton->setStyleSheet("color:white");
 }
 
 void MainWindow::on_recentPushButton_clicked()
 {
     rightStackedWidget->setCurrentIndex(1);
     collectPushButton->setStyleSheet("color:white");
-//    recentPushButton->setStyleSheet("color:#3790FA");
+    recentPushButton->setStyleSheet("color:#3790FA");
 }
 
 void MainWindow::on_cancelSearchPushButton_clicked()
