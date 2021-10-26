@@ -165,7 +165,6 @@ void Style::initWidStyle()
             len=0;
         else
             len=10;
-
         if(primaryScreenWidth==800 && primaryScreenHeight==600)
         {
             minw=320;
@@ -200,7 +199,7 @@ void Style::initWidStyle()
             QueryLineEditHeight=30;
             QueryLineEditFontSize=fontSize;
             QueryLineEditIconSize=16;
-            LeftWidWidth=round((widthavailable-1644)/2);
+            //LeftWidWidth=round((widthavailable-1644)/2);
             LeftWidHeight=heightavailable-TopWidgetHeight;
             LeftMargin=20;
             LeftBtnWidth=100+5*len;
@@ -213,12 +212,10 @@ void Style::initWidStyle()
             LeftSpaceIconLeft=15;
             LeftSpaceIconText=14;
             LeftSpaceBetweenItem=15;
-            AppListWidWidth=1644;
-            AppListWidHeight=heightavailable-TopWidgetHeight;
             AppListFontSize=fontSize;
             AppListIconSize=96;
             AppListItemSizeWidth=168;
-            AppListGridSizeWidth=204;
+            AppListGridSizeWidth=240;
             AppLeftSpace=36;
             AppTopSpace=15;
             AppSpaceBetweenIconText=20;
@@ -246,7 +243,7 @@ void Style::initWidStyle()
             QueryLineEditHeight=30;
             QueryLineEditFontSize=fontSize;
             QueryLineEditIconSize=16;
-            LeftWidWidth=round((widthavailable-1314)/2);
+            //LeftWidWidth=round((widthavailable-1314)/2);
             LeftWidHeight=heightavailable-TopWidgetHeight;
             LeftMargin=20;
             LeftBtnWidth=100+5*len;
@@ -259,8 +256,6 @@ void Style::initWidStyle()
             LeftSpaceIconLeft=15;
             LeftSpaceIconText=14;
             LeftSpaceBetweenItem=15;
-            AppListWidWidth=1330;
-            AppListWidHeight=heightavailable-TopWidgetHeight;
             AppListFontSize=fontSize;
             AppListIconSize=86;
             AppListItemSizeWidth=150;
@@ -292,7 +287,7 @@ void Style::initWidStyle()
             QueryLineEditHeight=30;
             QueryLineEditFontSize=fontSize;
             QueryLineEditIconSize=14;
-            LeftWidWidth=round((widthavailable-1090)/2);
+            //LeftWidWidth=round((widthavailable-1090)/2);
             LeftWidHeight=heightavailable-TopWidgetHeight;
             LeftMargin=10;
             LeftBtnWidth=100+5*len;
@@ -305,8 +300,6 @@ void Style::initWidStyle()
             LeftSpaceIconLeft=15;
             LeftSpaceIconText=14;
             LeftSpaceBetweenItem=10;
-            AppListWidWidth=1090;
-            AppListWidHeight=heightavailable-TopWidgetHeight;
             AppListFontSize=fontSize;
             AppListIconSize=86;
             AppListItemSizeWidth=150;
@@ -338,7 +331,7 @@ void Style::initWidStyle()
             QueryLineEditHeight=30;
             QueryLineEditFontSize=fontSize;
             QueryLineEditIconSize=14;
-            LeftWidWidth=round((widthavailable-850)/2);
+            //LeftWidWidth=round((widthavailable-850)/2);
             LeftWidHeight=heightavailable-TopWidgetHeight;
             LeftMargin=10;
             LeftBtnWidth=100+5*len;
@@ -351,8 +344,6 @@ void Style::initWidStyle()
             LeftSpaceIconLeft=15;
             LeftSpaceIconText=14;
             LeftSpaceBetweenItem=10;
-            AppListWidWidth=850;
-            AppListWidHeight=heightavailable-TopWidgetHeight;
             AppListFontSize=fontSize;
             AppListIconSize=64;
             AppListItemSizeWidth=112;
@@ -384,7 +375,7 @@ void Style::initWidStyle()
             QueryLineEditHeight=30;
             QueryLineEditFontSize=fontSize;
             QueryLineEditIconSize=14;
-            LeftWidWidth=round((widthavailable-718)/2);
+            //LeftWidWidth=round((widthavailable-718)/2);
             LeftWidHeight=heightavailable-TopWidgetHeight;
             LeftMargin=10;
             LeftBtnWidth=100+5*len;
@@ -397,8 +388,6 @@ void Style::initWidStyle()
             LeftSpaceIconLeft=15;
             LeftSpaceIconText=14;
             LeftSpaceBetweenItem=10;
-            AppListWidWidth=718;
-            AppListWidHeight=heightavailable-TopWidgetHeight;
             AppListFontSize=fontSize;
             AppListIconSize=64;
             AppListItemSizeWidth=112;
@@ -430,7 +419,7 @@ void Style::initWidStyle()
             QueryLineEditHeight=30;
             QueryLineEditFontSize=fontSize;
             QueryLineEditIconSize=14;
-            LeftWidWidth=round((widthavailable-718)/2);
+            //LeftWidWidth=round((widthavailable-718)/2);
             LeftWidHeight=heightavailable-TopWidgetHeight;
             LeftMargin=10;
             LeftBtnWidth=100+5*len;
@@ -443,8 +432,6 @@ void Style::initWidStyle()
             LeftSpaceIconLeft=15;
             LeftSpaceIconText=14;
             LeftSpaceBetweenItem=10;
-            AppListWidWidth=718;
-            AppListWidHeight=heightavailable-TopWidgetHeight;
             AppListFontSize=fontSize;
             AppListIconSize=64;
             AppListItemSizeWidth=112;
@@ -476,7 +463,7 @@ void Style::initWidStyle()
             QueryLineEditHeight=30;
             QueryLineEditFontSize=fontSize;
             QueryLineEditIconSize=14;
-            LeftWidWidth=round((widthavailable-572)/2);
+            //LeftWidWidth=round((widthavailable-572)/2);
             LeftWidHeight=heightavailable-TopWidgetHeight;
             LeftMargin=10;
             LeftBtnWidth=100+5*len;
@@ -489,8 +476,6 @@ void Style::initWidStyle()
             LeftSpaceIconLeft=15;
             LeftSpaceIconText=14;
             LeftSpaceBetweenItem=10;
-            AppListWidWidth=572;
-            AppListWidHeight=heightavailable-TopWidgetHeight;
             AppListFontSize=fontSize;
             AppListIconSize=64;
             AppListItemSizeWidth=112;
@@ -522,7 +507,7 @@ void Style::initWidStyle()
             QueryLineEditHeight=30;
             QueryLineEditFontSize=fontSize;
             QueryLineEditIconSize=14;
-            LeftWidWidth=round((widthavailable-560)/2);
+            //LeftWidWidth=round((widthavailable-560)/2);
             LeftWidHeight=heightavailable-TopWidgetHeight;
             LeftMargin=10;
             LeftBtnWidth=100+5*len;
@@ -535,8 +520,6 @@ void Style::initWidStyle()
             LeftSpaceIconLeft=15;
             LeftSpaceIconText=14;
             LeftSpaceBetweenItem=10;
-            AppListWidWidth=560;
-            AppListWidHeight=heightavailable-TopWidgetHeight;
             AppListFontSize=fontSize;
             AppListIconSize=64;
             AppListItemSizeWidth=112;
@@ -577,5 +560,12 @@ void Style::initWidStyle()
         ButtonWidgetWidth=56;
         AppListIconSize=96;
     }
+
+    AppListWidWidth = primaryScreenWidth / 1.25;
+    AppListWidWidth = AppListWidWidth - (AppListWidWidth % AppListGridSizeWidth) + 1;
+    AppListWidHeight = primaryScreenHeight - 130;
+    AppListWidHeight = AppListWidHeight - (AppListWidHeight % AppListGridSizeWidth) + 1;
+    LeftWidWidth = (primaryScreenWidth - AppListWidWidth) / 2 + 1;
+    AppListGridSizeWidth = 220;
 
 }

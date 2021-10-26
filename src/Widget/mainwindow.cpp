@@ -438,7 +438,6 @@ void MainWindow::initUi()
     this->setFocusPolicy(Qt::NoFocus);
     modaldata = new GetModelData;
 
-    modaldata->getRecentData();
     minAllListView->addData(modaldata->getMinAllData(),0);
     minFuncListView->addData(modaldata->getMinFuncData(),1);
     minLetterListView->addData(modaldata->getMinLetterData(),2);
@@ -944,7 +943,6 @@ void MainWindow::on_recentPushButton_clicked()
     rightStackedWidget->setCurrentIndex(1);
     collectPushButton->setStyleSheet("color:white");
     recentPushButton->setStyleSheet("color:#3790FA");
-    updateRecentView();
 }
 
 void MainWindow::on_cancelSearchPushButton_clicked()

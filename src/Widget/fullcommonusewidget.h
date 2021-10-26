@@ -96,6 +96,7 @@ protected:
      */
     void fillAppList();
     void resizeScrollAreaControls();
+    void initVerticalScrollBar();
 
     bool eventFilter(QObject *watched, QEvent *event);
 

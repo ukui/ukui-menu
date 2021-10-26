@@ -15,7 +15,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
 
     Style::initWidStyle();
     QRect rect = getScreenAvailableGeometry();
-    this->resize(QSize(rect.width(), /*rect.height()*/1080));
+    this->setFixedSize(QSize(rect.width(), rect.height()));
 
     centralwidget = new QWidget(this);
     verticalLayout = new QVBoxLayout(centralwidget);
@@ -107,14 +107,13 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     minPushButton->installEventFilter(this);
 
     fullStackedWidget = new QStackedWidget(centralwidget);
-//    fullStackedWidget->setFixedSize(1900,910);
-    fullCommonPage = new FullCommonUseWidget();
+    fullCommonPage = new FullCommonUseWidget(fullStackedWidget);
     fullStackedWidget->addWidget(fullCommonPage);
-    fullLetterPage = new FullLetterWidget();
+    fullLetterPage = new FullLetterWidget(fullStackedWidget);
     fullStackedWidget->addWidget(fullLetterPage);
-    fullFunctionPage = new FullFunctionWidget();
+    fullFunctionPage = new FullFunctionWidget(fullStackedWidget);
     fullStackedWidget->addWidget(fullFunctionPage);
-    fullResultPage = new FullSearchResultWidget();
+    fullResultPage = new FullSearchResultWidget(fullStackedWidget);
     fullStackedWidget->addWidget(fullResultPage);
 
     bottomHorizonLayout->addWidget(fullStackedWidget);
@@ -417,7 +416,6 @@ void FullMainWindow::on_fullSelectMenuButton_clicked()
 
 void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
 {
-    qDebug() << "void MainWindow::on_selectMenuButton_triggered(QAction *arg1)" << m_allAction << arg1;
     if(arg1 == m_allAction)
     {
         fullStackedWidget->setCurrentIndex(0);

@@ -103,7 +103,6 @@ private:
     QButtonGroup* m_btnGroup=nullptr;
     QSpacerItem* m_letterListBottomSpacer=nullptr;
     QSpacerItem* m_topSpacerItem=nullptr;
-    QSpacerItem* m_appListBottomSpacer=nullptr;
 
     /*Animation*/
     QPropertyAnimation* m_animation=nullptr;//Letter category button animation
@@ -138,6 +137,7 @@ protected:
      * @brief Set the control size in qscrollarea
      */
     void resizeScrollAreaControls();
+    void initVerticalScrollBar();
 
     bool eventFilter(QObject *watched, QEvent *event);
 
