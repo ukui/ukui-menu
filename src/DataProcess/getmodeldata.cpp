@@ -64,7 +64,7 @@ QVector<QStringList> GetModelData::getRecentData()
         QString displayName = fileInfo.get()->displayName();
         QString symlinkTarget = fileInfo.get()->symlinkTarget();
         QString iconName = fileInfo.get()->iconName();
-        QString accessDate = fileInfo.get()->accessDate();
+        QString accessDate = fileInfo.get()->modifiedDate();
         recentData << targetUri << displayName << symlinkTarget << iconName << accessDate;
         if(!displayName.endsWith(".desktop"))
         {

@@ -131,6 +131,7 @@ public Q_SLOTS:
     void recvFunctionBtnSignal(QString btnname);
     void primaryScreenChangeSlot();
     void repaintWidget();
+    void updateRecentView();
 
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
@@ -189,6 +190,7 @@ private:
     QVBoxLayout *mainRightVerticalLayout_2;
     QHBoxLayout *rightTopHorizontalLayout_3;
     QVBoxLayout *rightCollectLayout;
+    QVBoxLayout *rightRecentLayout;
     QPushButton *collectPushButton;
     QPushButton *recentPushButton;
     QSpacerItem *horizontalSpacer_3;

@@ -219,6 +219,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     recentPage = new QWidget();
     recentPage->setFixedSize(QSize(324, 480));
+    rightRecentLayout = new QVBoxLayout(recentPage);
+    rightRecentLayout->setContentsMargins(0,20,0,0);
+
     //最近视图
     recentListView = new ListView(recentPage);
 
@@ -258,6 +261,7 @@ MainWindow::MainWindow(QWidget *parent) :
     rightCollectLayout->addItem(verticalSpacer);
     rightCollectLayout->addWidget(collectListView);
     rightCollectLayout->addItem(verticalSpacer_2);
+    rightRecentLayout->addWidget(recentListView);
     mainRightVerticalLayout_2->addWidget(rightStackedWidget);
 
     rightBottomHorizontalLayout_2->addItem(horizontalSpacer_2);
@@ -373,6 +377,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 this->show();
                 this->raise();
                 this->activateWindow();
+                collectPushButton->clicked(true);
                 widget->setFocus();
             }
             else
@@ -469,6 +474,7 @@ void MainWindow::initUi()
     connect(minLetterListView,&ListView::sendCollectViewUpdate,this,&MainWindow::updateCollectView);
     connect(collectListView,&RightListView::sendCollectViewUpdate,this,&MainWindow::updateCollectView);
     connect(m_desktopWatcher,&DesktopWatcher::directoryChangedSignal,this,&MainWindow::updateView);
+    connect(m_desktopWatcher,&DesktopWatcher::updateRecentList,this,&MainWindow::updateRecentView);
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)
@@ -910,6 +916,12 @@ void MainWindow::updateMinAllView()
     minAllListView->updateData(modaldata->getMinAllData());
 }
 
+void MainWindow::updateRecentView()
+{
+    modaldata->loadDesktopVercor();
+    recentListView->updateData(modaldata->getRecentData());
+}
+
 void MainWindow::updateView()
 {
     modaldata->loadDesktopVercor();
@@ -932,6 +944,7 @@ void MainWindow::on_recentPushButton_clicked()
     rightStackedWidget->setCurrentIndex(1);
     collectPushButton->setStyleSheet("color:white");
     recentPushButton->setStyleSheet("color:#3790FA");
+    updateRecentView();
 }
 
 void MainWindow::on_cancelSearchPushButton_clicked()
@@ -973,6 +986,7 @@ void MainWindow::showWindow()
         this->raise();
         this->showNormal();
         this->activateWindow();
+        collectPushButton->clicked(true);
         widget->setFocus();
     }
 }
@@ -1037,6 +1051,7 @@ void MainWindow::showNormalWindow()
     widget->setFocus();
     m_isFullScreen = false;
     m_canHide = true;
+    collectPushButton->clicked(true);
 }
 
 void MainWindow::on_powerOffButton_clicked()

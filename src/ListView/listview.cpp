@@ -95,17 +95,19 @@ void ListView::onClicked(QModelIndex index)
      QVariant var = listmodel->data(index, Qt::DisplayRole);
      QString desktopfp = var.value<QStringList>().at(0);
 
-//     QDesktopServices::openUrl(QUrl::fromLocalFile(desktopfp));
-     if(!desktopfp.endsWith(".desktop"))
+     if(var.isValid())
      {
-         QUrl url(desktopfp);
-         QDesktopServices::openUrl(url);
-         return;
-     }
-     else if(var.isValid())
-     {
+         if((var.value<QStringList>().size() == 5) && (!desktopfp.endsWith(".desktop")))//专用于处理最近页的uri
+         {
+             QUrl url(desktopfp);
+             QDesktopServices::openUrl(url);
+             return;
+         }
+
          if(var.value<QStringList>().at(1).toInt() == 0)
+         {
              Q_EMIT sendAppClassificationBtnClicked();
+         }
          else
          {
              execApp(desktopfp);

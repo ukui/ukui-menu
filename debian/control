@@ -19,7 +19,7 @@ Build-Depends: debhelper-compat (=12),
                libx11-dev,
                libukui-common0,
                libukui-common-dev,
-			   libpeony-dev
+               libpeony-dev
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/ukui-menu

@@ -16,6 +16,7 @@ Q_SIGNALS:
      * @brief Desktop file directory change signal
      */
     void directoryChangedSignal();
+    void updateRecentList();
 
 public Q_SLOTS:
 
@@ -24,6 +25,7 @@ public Q_SLOTS:
 
 private:
     QFileSystemWatcher *m_fileWatcher=nullptr;//Monitor desktop folder status
+//    QFileSystemWatcher *m_recentFile=nullptr;
     DirectoryChangedThread *m_directoryChangedThread=nullptr;
 };
 
