@@ -70,8 +70,11 @@ MainWindow::MainWindow(QWidget *parent) :
         if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
         {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-            if(gsetting.keys().contains("win-key-release"))
-                if(gsetting.get("win-key-release").toBool())
+//            if(gsetting.keys().contains("win-key-release"))
+//                if(gsetting.get("win-key-release").toBool())
+//                    return;
+            if(gsetting.keys().contains("winKeyRelease"))
+                if(gsetting.get("winKeyRelease").toBool())
                     return;
         }
         if(QGSettings::isSchemaInstalled(QString("org.ukui.screenshot").toLocal8Bit()))
