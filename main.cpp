@@ -51,7 +51,7 @@ void centerToScreen(QWidget* widget)
 
 int main(int argc, char *argv[])
 {
-    initUkuiLog4qt("ukui-menu");
+//    initUkuiLog4qt("ukui-menu");
     projectCodeName = KDKGetPrjCodeName().c_str();
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
 

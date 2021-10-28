@@ -173,6 +173,7 @@ MainWindow::MainWindow(QWidget *parent) :
     recentPushButton = new QPushButton(centralwidget);
     recentPushButton->setFixedHeight(34);
     recentPushButton->setFlat(true);
+    recentPushButton->installEventFilter(this);
 
     horizontalSpacer_3 = new QSpacerItem(332, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     //放大缩小按键
@@ -218,13 +219,13 @@ MainWindow::MainWindow(QWidget *parent) :
     collectListView->installEventFilter(this);
 
     recentPage = new QWidget();
-    recentPage->setFixedSize(QSize(324, 480));
+    recentPage->setFixedSize(QSize(324, 490));
     rightRecentLayout = new QVBoxLayout(recentPage);
     rightRecentLayout->setContentsMargins(0,20,0,0);
 
     //最近视图
     recentListView = new ListView(recentPage);
-
+    recentListView->installEventFilter(this);
     recentListView->setFixedSize(QSize(324, 470));
 
     rightStackedWidget->addWidget(collectPage);
@@ -735,9 +736,17 @@ bool MainWindow::eventFilter(QObject * target , QEvent * event )
         {
             if(ke->key() == Qt::Key_Down)
             {
-                collectListView->setFocus();
-                return true;
+                if(rightStackedWidget->currentIndex() == 0)
+                {
+                    collectListView->setFocus();
+                    return true;
+                }
+                else
+                {
+                    return true;
+                }
             }
+
             if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Right || ke->key() == Qt::Key_Left)
             {
                 return true;
@@ -749,6 +758,19 @@ bool MainWindow::eventFilter(QObject * target , QEvent * event )
             if(ke->key() == Qt::Key_Tab)
             {
                 collectPushButton->setFocus();
+                return true;
+            }
+        }
+
+        if(target == recentListView)
+        {
+            if(ke->key() == Qt::Key_Tab)
+            {
+                recentPushButton->setFocus();
+                return true;
+            }
+            if(ke->key() == Qt::Key_Left || ke->key() == Qt::Key_Right)
+            {
                 return true;
             }
         }
@@ -804,6 +826,27 @@ bool MainWindow::eventFilter(QObject * target , QEvent * event )
                 }
                 return true;
             }
+            if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Right || ke->key() == Qt::Key_Left)
+            {
+                return true;
+            }
+        }
+
+        if(target == recentPushButton)
+        {
+            if(ke->key() == Qt::Key_Down)
+            {
+                if(rightStackedWidget->currentIndex() == 1)
+                {
+                    recentListView->setFocus();
+                    return true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
             if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Right || ke->key() == Qt::Key_Left)
             {
                 return true;

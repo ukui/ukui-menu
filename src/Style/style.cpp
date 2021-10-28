@@ -544,6 +544,11 @@ void Style::initWidStyle()
             SideBarSpaceIconText=10;
             SideBarSpaceBetweenItem=16;
         }
+        AppListWidWidth = primaryScreenWidth / 1.25;
+        AppListWidWidth = AppListWidWidth - (AppListWidWidth % AppListGridSizeWidth) + 1;
+        AppListWidHeight = primaryScreenHeight - 130;
+        AppListWidHeight = AppListWidHeight - (AppListWidHeight % AppListGridSizeWidth) + 1;
+        LeftWidWidth = (primaryScreenWidth - AppListWidWidth) / 2 + 1;
     }
     else
     {
@@ -560,12 +565,4 @@ void Style::initWidStyle()
         ButtonWidgetWidth=56;
         AppListIconSize=96;
     }
-
-    AppListWidWidth = primaryScreenWidth / 1.25;
-    AppListWidWidth = AppListWidWidth - (AppListWidWidth % AppListGridSizeWidth) + 1;
-    AppListWidHeight = primaryScreenHeight - 130;
-    AppListWidHeight = AppListWidHeight - (AppListWidHeight % AppListGridSizeWidth) + 1;
-    LeftWidWidth = (primaryScreenWidth - AppListWidWidth) / 2 + 1;
-    AppListGridSizeWidth = 220;
-
 }

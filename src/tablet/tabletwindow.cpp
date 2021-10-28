@@ -23,7 +23,6 @@
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QPainter>
-#include "src/DataProcess/getmodeldata.h"
 #include "src/ListView/tabletlistview.h"
 #include "src/tablet/XEventMonitor/xeventmonitor.h"
 #include <QGraphicsEffect>
@@ -127,7 +126,7 @@ void TabletWindow::initUi()
 
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::InOutSine);
-    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
+//    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
 //    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
 
     flag = true;
@@ -259,10 +258,12 @@ bool TabletWindow::eventFilter(QObject * target , QEvent * event )
             return true;
         }    
     }
-    if(target == firstPageWidget)
+    if(target == firstPageWidget || target == buttonWidget)
     {
+        qDebug() << "事件名称" << event->type();
         if(event->type() == QEvent::MouseMove)
         {
+            qDebug() << "bool TabletWindow::eventFilter(QObject * target , QEvent * event ) 鼠标移动";
             return true;
         }
     }
@@ -329,6 +330,7 @@ void TabletWindow::initAppListWidget()
     layout->addWidget(m_scrollArea);
     layout->addWidget(buttonWidget);
     buttonWidget->setFixedSize(1920,40);
+    buttonWidget->installEventFilter(this);
     m_appListBottomSpacer=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
     fillAppList();
 }
@@ -374,6 +376,9 @@ bool TabletWindow::appListFile()
 //打开PC模式下的开始菜单
 void TabletWindow::showPCMenu()
 {
+//    this->setAttribute(Qt::WA_TranslucentBackground,true);
+//    this->setAttribute(Qt::WA_X11NetWmWindowTypeDesktop,false);
+//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     this->show();
     this->raise();
     this->activateWindow();
@@ -520,16 +525,20 @@ void TabletWindow::on_pageNumberChanged(bool nextPage)
 
 bool TabletWindow::event ( QEvent * event )
 {
-    if (event->type() == QEvent::ActivationChange /*&& m_canHide*/)
+    if (event->type() == QEvent::ActivationChange)
     //if(QEvent::WindowDeactivate == event->type())//窗口停用
     {
-        if(leftWidget->isActiveWindow())
-            qDebug() << "leftWidget激活了";
         if(QApplication::activeWindow() != this)
         {
             qDebug() << " * 鼠标点击窗口外部事件";
             this->hide();
         }
+    }
+    if(event->type() == QEvent::MouseMove)
+    {
+        qDebug() << "bool TabletWindow::event ( QEvent * event ) 鼠标移动";
+        //return true;
+        event->ignore();
     }
     return QWidget::event(event);
 }
@@ -571,23 +580,23 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
     connect(listview,&TabletListView::sendUpdateAppListSignal,this,&TabletWindow::reloadAppList);
 }
 
-void TabletWindow::recvStartMenuSlot()
-{
-    QDBusReply<bool> res = usrInterface->call("get_current_tabletmode");
-    if(this->isVisible())//wgx
-    {
-        if (!res)//平板模式 下禁止win隐藏菜单
-        {
-            this->hide();
-        }
-    }
-    else{
-        if (!res)//平板模式 下禁止win隐藏菜单
-        {
-            this->showPCMenu();
-        }
-    }
-}
+//void TabletWindow::recvStartMenuSlot()
+//{
+//    QDBusReply<bool> res = usrInterface->call("get_current_tabletmode");
+//    if(this->isVisible())//wgx
+//    {
+//        if (!res)//平板模式 下禁止win隐藏菜单
+//        {
+//            this->hide();
+//        }
+//    }
+//    else{
+//        if (!res)//平板模式 下禁止win隐藏菜单
+//        {
+//            this->showPCMenu();
+//        }
+//    }
+//}
 
 /**
  * 执行应用程序
@@ -849,7 +858,7 @@ void TabletWindow::recvHideMainWindowSlot()
 {
 //    this->setAttribute(Qt::WA_TranslucentBackground,true);
 //    this->setAttribute(Qt::WA_X11NetWmWindowTypeDesktop,false);
-//    this->setWindowFlags(Qt::CustomizeWindowHint |Qt::FramelessWindowHint|Qt::X11BypassWindowManagerHint);
+//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     this->hide();
 }
 

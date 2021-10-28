@@ -42,7 +42,6 @@
 #include "src/Widget/functionclassifybutton.h"
 #include "src/Style/style.h"
 #include <QAbstractButton>
-#include "src/DataProcess/getmodeldata.h"
 #include "src/tablet/UtilityFunction/timewidget.h"
 #include "src/ListView/tabletlistview.h"
 #include "src/tablet/pagemanager.h"
@@ -83,7 +82,6 @@ private:
     QSpacerItem* m_appListBottomSpacer=nullptr;
 
     /*Animation*/
-    QPropertyAnimation* m_animation=nullptr;//Function category button animation
     QPropertyAnimation* m_scrollAnimation=nullptr;//Application list animation
     int m_beginPos= 0;//Application list scrollbar starting value
     int m_endPos= 0;//Application list scrollbar end value
@@ -199,7 +197,7 @@ public Q_SLOTS:
 
     void recvHideMainWindowSlot();
 
-    void recvStartMenuSlot();
+//    void recvStartMenuSlot();
 
     void modelChanged(bool value);
 
