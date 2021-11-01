@@ -1478,17 +1478,17 @@ void UkuiMenuInterface::getAndroidApp()
         char* ret_1=g_key_file_get_locale_string(keyfile,"Desktop Entry","Categories", nullptr, nullptr);
         if(ret_1!=nullptr)
         {
-            QString str=QString::fromLocal8Bit(ret_1);
-            if(!str.contains("Android"))
-            {
-                i++;
-                continue;
-            }
-            else
-            {
+//            QString str=QString::fromLocal8Bit(ret_1);
+//            if(!str.contains("Android"))
+//            {
+//                i++;
+//                continue;
+//            }
+//            else
+//            {
                 filePathList.append(filePathStr);
                 androidDesktopfnList.append(fileInfo.fileName());
-            }
+//            }
         }
 
         i++;

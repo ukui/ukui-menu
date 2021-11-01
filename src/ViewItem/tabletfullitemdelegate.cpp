@@ -73,7 +73,6 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 
         QString appname=pUkuiMenuInterface->getAppName(desktopfp);
 
-        qDebug() << "应用名称" << appname << "icon名称" << iconstr;
         QRect iconRect;
         QRect textRect;
 //        QString desktopfn=desktopfp.split('/').last();

@@ -248,23 +248,27 @@ bool TabletWindow::checkapplist()
 
 }
 
-
 bool TabletWindow::eventFilter(QObject * target , QEvent * event )
 {
     if(target == m_scrollArea->viewport())
     {
         if(event->type() == QEvent::Wheel)
         {
-            return true;
+            event->ignore();
         }    
     }
     if(target == firstPageWidget || target == buttonWidget)
     {
-        qDebug() << "事件名称" << event->type();
         if(event->type() == QEvent::MouseMove)
         {
-            qDebug() << "bool TabletWindow::eventFilter(QObject * target , QEvent * event ) 鼠标移动";
             return true;
+        }
+    }
+    if(target == firstPageWidget)
+    {
+        if(event->type() == QEvent::MouseButtonPress)
+        {
+            recvHideMainWindowSlot();
         }
     }
     return false;
@@ -392,7 +396,7 @@ void TabletWindow::setOpacityEffect(const qreal& num)
 
 void TabletWindow::reloadAppList()
 {
-    qDebug() << "void TabletWindow::reloadAppList()";
+//    qDebug() << "void TabletWindow::reloadAppList()";
     QVector<QStringList> vector;
 
     m_data.clear();
@@ -498,7 +502,7 @@ void TabletWindow::requestDeleteAppSlot()
 
 void TabletWindow::on_pageNumberChanged(bool nextPage)
 {
-    qDebug() << "void TabletWindow::on_pageNumberChanged(bool nextPage)";
+//    qDebug() << "void TabletWindow::on_pageNumberChanged(bool nextPage)";
      if (!(m_scrollAnimation->state() == QPropertyAnimation::Running))
      {
          if(nextPage)
