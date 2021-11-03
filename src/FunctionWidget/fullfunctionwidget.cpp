@@ -189,6 +189,9 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
     FullListView* listview=new FullListView(this,2);
     //修复异常黑框问题
     connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
+        QEventLoop loop;
+        QTimer::singleShot(1, &loop, SLOT(quit()));
+        loop.exec();
         listview->repaint(listview->rect());
     });
     connect(listview, &FullListView::sendSetslidebar, this, &FullFunctionWidget::onSetSlider);

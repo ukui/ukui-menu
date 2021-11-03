@@ -62,17 +62,6 @@ void FullCommonUseWidget::initUi()
 
     initAppListWidget();
     fillAppList();
-
-    flag = true;
-    //翻页灵敏度时间调节
-    time = new QTimer(this);
-    connect(time,&QTimer::timeout,[=](){
-        if(flag == false)
-        {
-            flag = true;
-            time->stop();
-        }
-    });
 }
 
 void FullCommonUseWidget::initAppListWidget()
@@ -82,6 +71,12 @@ void FullCommonUseWidget::initAppListWidget()
 //    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
 //    mainLayout->insertWidget(1,m_listView);
     m_scrollAreaWidLayout->addWidget(m_listView);
+    connect(m_scrollArea, &ScrollArea::requestUpdate, m_listView->viewport(), [=](){
+        QEventLoop loop;
+        QTimer::singleShot(1, &loop, SLOT(quit()));
+        loop.exec();
+        m_listView->repaint();
+    });
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
@@ -96,12 +91,10 @@ void FullCommonUseWidget::resizeScrollAreaControls()
     listview->adjustSize();
     int dividend=(m_scrollArea->width()-Style::SliderSize)/Style::AppListGridSizeWidth;
     int rowcount=0;
-    if(listview->model()->rowCount()%dividend>0)
-    {
+    if(listview->model()->rowCount()%dividend>0){
         rowcount=listview->model()->rowCount()/dividend+1;
     }
-    else
-    {
+    else{
         rowcount=listview->model()->rowCount()/dividend;
 
     }
@@ -138,28 +131,21 @@ void FullCommonUseWidget::selectFirstItem()
 void FullCommonUseWidget::selectFirstItemTab()
 {
     this->setFocus();
-    if(m_listView->currentIndex().row() == -1)
-    {
+    if(m_listView->currentIndex().row() == -1){
         m_listView->setCurrentIndex(m_listView->model()->index(0,0));
     }
 }
 
 void FullCommonUseWidget::onSetSlider(int value)
 {
-//    if(flag)
-//    {
-//        flag = false;
-//        time->start(100);
-        if(value == 0)
-        {
-            m_scrollArea->verticalScrollBar()->setValue(0);
-        }
-        else
-        {
-            int curvalue = m_scrollArea->verticalScrollBar()->value();
-            m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
-        }
-//    }
+
+    if(value == 0){
+        m_scrollArea->verticalScrollBar()->setValue(0);
+    }
+    else{
+        int curvalue = m_scrollArea->verticalScrollBar()->value();
+        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+    }
 }
 /**
  * 更新应用列表
@@ -197,8 +183,10 @@ void FullCommonUseWidget::widgetMakeZero()
 void FullCommonUseWidget::moveScrollBar(int type)
 {
     int height=Style::primaryScreenHeight;
-    if(type==0)
+    if(type==0){
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-height*100/1080);
-    else
+    }   
+    else{
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+height*100/1080);
+    }
 }
