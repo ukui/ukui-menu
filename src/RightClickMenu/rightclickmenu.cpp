@@ -98,11 +98,14 @@ void RightClickMenu::unfixedFromAllActionTriggerSlot()
 
 void RightClickMenu::fixToTaskbarActionTriggerSlot()
 {
-    QDBusInterface iface("com.ukui.panel.desktop",
-                         "/",
-                         "com.ukui.panel.desktop",
-                         QDBusConnection::sessionBus());
-    QDBusReply<QVariant> ret=iface.call("AddToTaskbar",m_desktopfp);
+//    QDBusInterface iface("com.ukui.panel.desktop",
+//                         "/",
+//                         "com.ukui.panel.desktop",
+//                         QDBusConnection::sessionBus());
+//    QDBusReply<QVariant> ret=iface.call("AddToTaskbar",m_desktopfp);
+    QDBusMessage message =QDBusMessage::createSignal("/taskbar/quicklaunch", "org.ukui.panel.taskbar", "AddToTaskbar");
+    message<<m_desktopfp;
+    QDBusConnection::sessionBus().send(message);
     m_actionNumber=3;
 }
 
