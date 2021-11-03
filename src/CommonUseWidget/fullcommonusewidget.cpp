@@ -62,17 +62,6 @@ void FullCommonUseWidget::initUi()
 
     initAppListWidget();
     fillAppList();
-
-    flag = true;
-    //翻页灵敏度时间调节
-    time = new QTimer(this);
-    connect(time,&QTimer::timeout,[=](){
-        if(flag == false)
-        {
-            flag = true;
-            time->stop();
-        }
-    });
 }
 
 void FullCommonUseWidget::initAppListWidget(){
@@ -149,22 +138,15 @@ void FullCommonUseWidget::selectFirstItemTab()
     }
 }
 
-void FullCommonUseWidget::onSetSlider(int value)
-{
-//    if(flag)
-//    {
-//        flag = false;
-//        time->start(100);
-        if(value == 0)
-        {
+void FullCommonUseWidget::onSetSlider(int value){
+
+        if(value == 0){
             m_scrollArea->verticalScrollBar()->setValue(0);
         }
-        else
-        {
+        else{
             int curvalue = m_scrollArea->verticalScrollBar()->value();
             m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
         }
-//    }
 }
 /**
  * 更新应用列表

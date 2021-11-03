@@ -64,19 +64,16 @@ void FullListView::initWidget()
 
     connect(this,&FullListView::clicked,this,&FullListView::onClicked);
 
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-//    {
-//        gsetting = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-//        if(gsetting->keys().contains(QString("transparency")))
-//            transparency = gsetting->get("transparency").toDouble();
-//        connect(gsetting,&QGSettings::changed,[this] (const QString &key)
-//        {
-//            if (key == "transparency")
-//            {
-//                transparency = gsetting->get("transparency").toDouble();
-//            }
-//        });
-//    }
+    flag = true;
+    //翻页灵敏度时间调节
+    time = new QTimer(this);
+    connect(time,&QTimer::timeout,[=](){
+        if(flag == false)
+        {
+            flag = true;
+            time->stop();
+        }
+    });
 }
 
 void FullListView::addData(QStringList data)
@@ -84,12 +81,12 @@ void FullListView::addData(QStringList data)
     listmodel=new QStandardItemModel(this);
     this->setModel(listmodel);
 
-    Q_FOREACH(QString desktopfp,data)
-    {
+    Q_FOREACH(QString desktopfp,data){
         QStandardItem* item=new QStandardItem;
         item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
         listmodel->appendRow(item);
     }
+
     m_delegate= new FullItemDelegate(this,module);
     this->setItemDelegate(m_delegate);
 }
@@ -109,8 +106,7 @@ void FullListView::focusOutEvent(QFocusEvent *event)
 void FullListView::updateData(QStringList data)
 {
     listmodel->clear();
-    Q_FOREACH(QString desktopfp,data)
-    {
+    Q_FOREACH(QString desktopfp,data){
         QStandardItem* item=new QStandardItem;
         item->setData(QVariant::fromValue<QString>(desktopfp),Qt::DisplayRole);
         listmodel->appendRow(item);
@@ -120,26 +116,22 @@ void FullListView::updateData(QStringList data)
 void FullListView::onClicked(QModelIndex index)
 {
      QVariant var = listmodel->data(index, Qt::DisplayRole);
-     if(var.isValid())
-     {
+     if(var.isValid()){
          QString desktopfp=var.value<QString>();
          Q_EMIT sendItemClickedSignal(desktopfp);
-
      }
 }
 
 void FullListView::rightClickedSlot(const QPoint &pos)
 {
     Q_UNUSED(pos)
-    if(!(this->selectionModel()->selectedIndexes().isEmpty()))
-    {
+    if(!(this->selectionModel()->selectedIndexes().isEmpty())) {
         QModelIndex index=this->currentIndex();
         QVariant var=listmodel->data(index, Qt::DisplayRole);
         QString desktopfp=var.value<QString>();
         RightClickMenu menu;
         int ret=menu.showAppBtnMenu(this->mapToGlobal(pos), desktopfp);
-        if(module>0)
-        {
+        if(module>0) {
             switch (ret) {
             case 6:
                 Q_EMIT sendHideMainWindowSignal();
@@ -194,8 +186,7 @@ void FullListView::leaveEvent(QEvent *e)
 void FullListView::selectFirstItem()
 {
     qDebug() << "void FullListView::selectFirstItem()";
-    if(this->currentIndex().row() == -1)
-    {
+    if(this->currentIndex().row() == -1){
         this->setCurrentIndex(this->model()->index(0,0));
     }
 }
@@ -245,81 +236,76 @@ void FullListView::selectFirstItem()
 
 void FullListView::keyPressEvent(QKeyEvent* e)
 {
-     QRect center = visualRect(currentIndex());
-    if(e->type() == QEvent::KeyPress)
-    {
-        switch(e->key())
-        {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        {
-            QModelIndex index = this->currentIndex();
-            Q_EMIT clicked(index);
-            break;
-        }
-        case Qt::Key_Left:
-        {
-            this->clearFocus();
-            if(mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::AppListGridSizeWidth)
-            {
-               Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
-            }
-            this->setFocus();
-            return QListView::keyPressEvent(e);
-            break;
-        }
-        case Qt::Key_Right:
-        {
 
-            this->clearFocus();
-            if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
-            {
-                Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+    if(flag){  //避免长按按键界面滚动过快
+        flag = false;
+        time->start(100);
+        QRect center = visualRect(currentIndex());
+        if(e->type() == QEvent::KeyPress){
+            switch(e->key()){
+            case Qt::Key_Enter:
+            case Qt::Key_Return:{
+                QModelIndex index = this->currentIndex();
+                Q_EMIT clicked(index);
+                break;
             }
-            this->setFocus();
-            return QListView::keyPressEvent(e);
-            break;
-        }
-        case Qt::Key_Up:
-        {
-            if(module == 0)
-            {
-                if(mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::AppListGridSizeWidth))
+            case Qt::Key_Left:{
+                this->clearFocus();
+                if(mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::AppListGridSizeWidth)
                 {
                    Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
                 }
+                this->setFocus();
+                return QListView::keyPressEvent(e);
+                break;
             }
-            return QListView::keyPressEvent(e);
-            break;
-        }
-        case Qt::Key_Down:
-        {
-            if(module == 0)
-            {
-                if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
-                {
+            case Qt::Key_Right:{
+
+                this->clearFocus();
+                if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth)){
                     Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
                 }
+                this->setFocus();
+                return QListView::keyPressEvent(e);
+                break;
             }
-            return QListView::keyPressEvent(e);
-            break;
-        }
+            case Qt::Key_Up:{
+                if(module == 0){
+                    if(mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::AppListGridSizeWidth)){
+                       this->clearFocus();
+                       Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+                       this->setFocus();
+                    }
+                }
+                return QListView::keyPressEvent(e);
+                break;
+            }
+            case Qt::Key_Down:{
+                if(module == 0){
+                    if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth)){
+                        this->clearFocus();
+                        Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+                        this->setFocus();
+                    }
+                }
+                return QListView::keyPressEvent(e);
+                break;
+            }
 
-        default:
-            return QListView::keyPressEvent(e);
-            break;
+            default:
+                return QListView::keyPressEvent(e);
+                break;
+            }
         }
     }
 }
 
 void FullListView::mousePressEvent(QMouseEvent *event)
 {
-    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
-    {
+    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton){
         Q_EMIT sendHideMainWindowSignal();
     }
-    else
-    {
+    else{
         return QListView::mousePressEvent(event);
     }
 }

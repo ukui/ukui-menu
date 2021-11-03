@@ -58,6 +58,8 @@ private:
     QStringList data;
     QGSettings* gsetting;
     UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    bool flag;
+    QTimer *time = nullptr;
 
 //    bool inCurView;
 
