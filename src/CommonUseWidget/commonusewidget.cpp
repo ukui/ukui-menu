@@ -113,7 +113,7 @@ void CommonUseWidget::updateListView()
     Q_FOREACH(QString desktopfp,m_ukuiMenuInterface->getAllClassification())
         m_data.append(QStringList()<<desktopfp<<"1");
     m_listView->updateData(m_data);
- //   m_listView->setFocus();
+//  m_listView->setFocus();
 }
 
 void CommonUseWidget::widgetMakeZero()

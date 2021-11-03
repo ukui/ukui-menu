@@ -75,13 +75,18 @@ void FullCommonUseWidget::initUi()
     });
 }
 
-void FullCommonUseWidget::initAppListWidget()
-{
+void FullCommonUseWidget::initAppListWidget(){
     m_listView=new FullListView(this,0);
 //    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
 //    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
 //    mainLayout->insertWidget(1,m_listView);
     m_scrollAreaWidLayout->addWidget(m_listView);
+    connect(m_scrollArea, &ScrollArea::requestUpdate, m_listView->viewport(), [=](){
+        QEventLoop loop;
+        QTimer::singleShot(1, &loop, SLOT(quit()));
+        loop.exec();
+        m_listView->repaint();
+    });
     connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
     connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
     connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);

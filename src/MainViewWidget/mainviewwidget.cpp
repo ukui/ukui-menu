@@ -781,7 +781,7 @@ void MainViewWidget::loadFullCommonUseWidget()
     m_functionWid->widgetMakeZero();
     m_fullFunctionWid->widgetMakeZero();
     hideWidget();
-    m_fullCommonUseWid->setGeometry(0,0,this->width(),this->height()-m_topWidget->height());
+    m_fullCommonUseWid->setGeometry(0,0,this->width(),this->height() - m_topWidget->height());
     m_fullCommonUseWid->show();
     m_fullCommonUseWid->updateListView();
     m_widgetState=1;

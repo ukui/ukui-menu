@@ -42,6 +42,8 @@ FullListView::~FullListView()
 void FullListView::initWidget()
 {
     viewport()->setAttribute(Qt::WA_TranslucentBackground);
+    viewport()->setStyleSheet("background:transparent");//在paint中绘制，滚动页面会导致透明效果绘制不及时出现黑影，将paintEvent替换为样式表
+    this->setAutoFillBackground(false);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    if(module==1 || module==2)s
@@ -198,10 +200,10 @@ void FullListView::selectFirstItem()
     }
 }
 
-void FullListView::paintEvent(QPaintEvent *e)
-{
-    double transparency=getTransparency();
-    QPainter painter(this->viewport());
+//void FullListView::paintEvent(QPaintEvent *e)
+//{
+//    double transparency=getTransparency();
+//    QPainter painter(this->viewport());
 
 //    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
 //    {
@@ -233,13 +235,13 @@ void FullListView::paintEvent(QPaintEvent *e)
 //    }
 //    else
 //    {
-        painter.setBrush(this->palette().base());
-        painter.setPen(Qt::transparent);
-        painter.setOpacity(transparency);
-        painter.drawRect(this->rect());
+//        painter.setBrush(this->palette().base());
+//        painter.setPen(Qt::transparent);
+//        painter.setOpacity(transparency);
+//        painter.drawRect(this->rect());
 //    }
-    QListView::paintEvent(e);
-}
+//    QListView::paintEvent(e);
+//}
 
 void FullListView::keyPressEvent(QKeyEvent* e)
 {

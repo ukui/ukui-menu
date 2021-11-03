@@ -136,6 +136,9 @@ void FullLetterWidget::fillAppList()
             listview->installEventFilter(this);
             //修复异常黑框问题
             connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
+                QEventLoop loop;
+                QTimer::singleShot(1, &loop, SLOT(quit()));
+                loop.exec();
                 listview->repaint(listview->rect());
             });
 
