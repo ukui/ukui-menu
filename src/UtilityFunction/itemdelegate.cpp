@@ -112,6 +112,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                             icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
                         else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm")))
                             icon=QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm"));
+                        else if(QFile::exists(QString("/usr/share/icons/%1.%2").arg(iconstr).arg("png")))
+                            icon=QIcon(QString("/usr/share/icons/%1.%2").arg(iconstr).arg("png"));
                         else
                             icon=QIcon::fromTheme(QString("application-x-desktop"));
                     }
