@@ -64,7 +64,8 @@ void FullCommonUseWidget::initUi()
     fillAppList();
 }
 
-void FullCommonUseWidget::initAppListWidget(){
+void FullCommonUseWidget::initAppListWidget()
+{
     m_listView=new FullListView(this,0);
 //    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
 //    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
@@ -90,12 +91,10 @@ void FullCommonUseWidget::resizeScrollAreaControls()
     listview->adjustSize();
     int dividend=(m_scrollArea->width()-Style::SliderSize)/Style::AppListGridSizeWidth;
     int rowcount=0;
-    if(listview->model()->rowCount()%dividend>0)
-    {
+    if(listview->model()->rowCount()%dividend>0){
         rowcount=listview->model()->rowCount()/dividend+1;
     }
-    else
-    {
+    else{
         rowcount=listview->model()->rowCount()/dividend;
 
     }
@@ -132,21 +131,21 @@ void FullCommonUseWidget::selectFirstItem()
 void FullCommonUseWidget::selectFirstItemTab()
 {
     this->setFocus();
-    if(m_listView->currentIndex().row() == -1)
-    {
+    if(m_listView->currentIndex().row() == -1){
         m_listView->setCurrentIndex(m_listView->model()->index(0,0));
     }
 }
 
-void FullCommonUseWidget::onSetSlider(int value){
+void FullCommonUseWidget::onSetSlider(int value)
+{
 
-        if(value == 0){
-            m_scrollArea->verticalScrollBar()->setValue(0);
-        }
-        else{
-            int curvalue = m_scrollArea->verticalScrollBar()->value();
-            m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
-        }
+    if(value == 0){
+        m_scrollArea->verticalScrollBar()->setValue(0);
+    }
+    else{
+        int curvalue = m_scrollArea->verticalScrollBar()->value();
+        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+    }
 }
 /**
  * 更新应用列表
@@ -184,8 +183,10 @@ void FullCommonUseWidget::widgetMakeZero()
 void FullCommonUseWidget::moveScrollBar(int type)
 {
     int height=Style::primaryScreenHeight;
-    if(type==0)
+    if(type==0){
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-height*100/1080);
-    else
+    }   
+    else{
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+height*100/1080);
+    }
 }
