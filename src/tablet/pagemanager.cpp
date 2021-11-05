@@ -14,10 +14,13 @@ int PageManager::getPageNum(int appnum)
     int pageNum = 0;
     Style::appColumn = 6;
     Style::appLine = 4;
-    if(appnum % (Style::appColumn * Style::appLine)==0)
+
+    if(appnum % (Style::appColumn * Style::appLine) == 0) {
         pageNum = appnum / (Style::appColumn * Style::appLine);
-    else
+    } else {
         pageNum = appnum / (Style::appColumn * Style::appLine) + 1;
+    }
+
     return pageNum;
 }
 
@@ -26,30 +29,29 @@ QVector<QStringList> PageManager::sortAppInPage(QVector<QString> appvector)
     QVector<QString> m_data;
     QVector<QStringList> pageData;
     QStringList onePageData;
-    Q_FOREACH(QString desktopfp,appvector)
-    {
+
+    Q_FOREACH(QString desktopfp, appvector) {
         m_data.append(desktopfp);
     }
 
     int pageSize = getPageNum(m_data.size());
-    for(int i = 0; i < pageSize; i++)
-    {
+
+    for(int i = 0; i < pageSize; i++) {
         onePageData.clear();
-        for(int j = 0; j < Style::appColumn * Style::appLine; j++)
-        {
-            if(m_data.size() > 0)
-            {
+
+        for(int j = 0; j < Style::appColumn * Style::appLine; j++) {
+            if(m_data.size() > 0) {
                 onePageData.append(m_data.at(0));
                 m_data.pop_front();
-            }
-            else
-            {
-              //  pageData.append(onePageData);
+            } else {
+                //  pageData.append(onePageData);
                 break;
             }
         }
+
         pageData.append(onePageData);
     }
+
     return pageData;
 }
 
@@ -60,10 +62,9 @@ QVector<QStringList> PageManager::getAppPageVector()
     UkuiMenuInterface::thirdPartyVector = m_ukuiMenuInterface->sortDesktopList("thirdParty");
     UkuiMenuInterface::applicationVector = m_ukuiMenuInterface->sortDesktopList("application");
     QVector<QStringList> appPagelist;
-
     QVector<QString> allAppList = UkuiMenuInterface::tencentInitVector + UkuiMenuInterface::customizedVector + UkuiMenuInterface::thirdPartyVector + UkuiMenuInterface::applicationVector;
-    Q_FOREACH(QStringList desktopfp,sortAppInPage(/*UkuiMenuInterface::tencentInitVector*/allAppList))
-    {
+
+    Q_FOREACH(QStringList desktopfp, sortAppInPage(/*UkuiMenuInterface::tencentInitVector*/allAppList)) {
         appPagelist.append(desktopfp);
     }
 
@@ -71,16 +72,13 @@ QVector<QStringList> PageManager::getAppPageVector()
 //    {
 //        appPagelist.append(desktopfp);
 //    }
-
 //    Q_FOREACH(QStringList desktopfp,sortAppInPage(UkuiMenuInterface::thirdPartyVector))
 //    {
 //        appPagelist.append(desktopfp);
 //    }
-
 //    Q_FOREACH(QStringList desktopfp,sortAppInPage(UkuiMenuInterface::applicationVector))
 //    {
 //        appPagelist.append(desktopfp);
 //    }
-
     return appPagelist;
 }

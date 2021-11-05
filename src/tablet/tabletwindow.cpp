@@ -163,7 +163,6 @@ void TabletWindow::initUi()
             if (key == "effect") {
                 if(bg_effect->get("effect").toBool()) {
                     setOpacityEffect(bg_effect->get("transparency").toReal());
-
                 } else {
                     setOpacityEffect(bg_effect->get("transparency").toReal());
                 }
@@ -210,7 +209,6 @@ bool TabletWindow::checkapplist()
 
             if(UkuiMenuInterface::androidDesktopfnList.contains(keyList.at(i))) {
                 tmp = QString(QDir::homePath() + "/.local/share/applications/" + keyList.at(i));
-
             } else {
                 tmp = QString("%1%2").arg("/usr/share/applications/").arg(keyList.at(i));
             }
@@ -252,15 +250,12 @@ void TabletWindow::wheelEvent(QWheelEvent *e)
         if (qAbs(e->angleDelta().y()) > qAbs(e->angleDelta().x())) {
             if ((e->angleDelta().y() >= 120) ) {
                 on_pageNumberChanged(false);
-
             } else if ((e->angleDelta().y() <= -120) ) {
                 on_pageNumberChanged(true);
             }
-
         } else if(qAbs(e->angleDelta().y()) < qAbs(e->angleDelta().x())) {
             if ((e->angleDelta().x() >= 120) ) {
                 on_pageNumberChanged(false);
-
             } else if ((e->angleDelta().x() <= -120) ) {
                 on_pageNumberChanged(true);
             }
@@ -325,7 +320,6 @@ bool TabletWindow::appListFile()
         qDebug() << "文件存在";
         /*        fp.open(QIODevice::ReadOnly); */                  //打开 和 关闭 要紧密相关
         return 1;
-
     } else {                                            //若不存在，则通过open操作新建文件
 //        qDebug()<<"文件不存在";
         fp.open(QIODevice::ReadWrite | QIODevice::Text); //不存在的情况下，打开包含了新建文件的操作
@@ -432,7 +426,6 @@ bool TabletWindow::cmpApp(QString &arg_1, QString &arg_2)
 {
     if(keyValueVector.at(keyVector.indexOf(arg_1)) < keyValueVector.at(keyVector.indexOf(arg_2))) {
         return true;
-
     } else {
         return false;
     }
@@ -467,7 +460,6 @@ void TabletWindow::on_pageNumberChanged(bool nextPage)
             if(curPageNum > (m_scrollAreaWidLayout->count() - 1) / 2) {
                 curPageNum = (m_scrollAreaWidLayout->count() - 1) / 2;
             }
-
         } else {
             curPageNum--;
 
@@ -516,7 +508,6 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
         m_scrollAreaWidLayout->addWidget(firstPageWidget);
         listview->setGridSize(QSize(216, (this->height() - 20) / 4));
         isFirstPage = false;
-
     } else {
         listview = new TabletListView(this, 1);
         listview->setFixedSize(m_width, m_height - 20);
@@ -622,7 +613,6 @@ void TabletWindow::execApplication(QString desktopfp)
 
     if (parameters.isEmpty()) {
         session.call("app_open", exe, parameters);
-
     } else {
         session.call("app_open", exe, parameters);
     }
@@ -683,7 +673,6 @@ void TabletWindow::pageNumberChanged(int pageNum)
                 buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
                         "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
                         "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/selected.svg);}");
-
             } else {
                 buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/select.svg);}"
                         "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/select.svg);}"
@@ -703,17 +692,13 @@ void TabletWindow::ways()
 
     if (m_bgOption == "centered") { //居中
         m_backPixmap->load(m_bgPath);
-
     } else if (m_bgOption == "stretched") { //拉伸
         m_pixmap = m_pixmap.scaled(this->size());
         m_backPixmap = &m_pixmap;
-
     } else if (m_bgOption == "scaled") { //填充
         m_backPixmap->load(m_bgPath);
-
     } else if (m_bgOption == "wallpaper") { //平铺
         m_backPixmap->load(m_bgPath);
-
     } else {
         m_pixmap = m_pixmap.scaled(this->size());
         m_backPixmap = &m_pixmap;
@@ -746,7 +731,6 @@ QPixmap TabletWindow::getPaddingPixmap(QPixmap pixmap, int width, int height)
         scaled = float(height) / float(pixmap.height());
         scaledPixmap = pixmap.scaled(pixmap.width() * scaled, height);
         paddingPixmap = scaledPixmap.copy((pixmap.width() * scaled - width) / 2, 0, width, height);
-
     } else {
         scaled = float(width) / float(pixmap.width());
         scaledPixmap = pixmap.scaled(width, pixmap.height() * scaled);
@@ -766,10 +750,8 @@ void TabletWindow::backgroundPic()   //const QString &bgPath,QRect rect
         cor = "#252729";
         painter.setBrush(cor);
         painter.drawRect(this->rect());
-
     } else if (m_bgOption == "zoom" || m_bgOption == "" || m_bgOption == NULL) {
         m_bgOption = "scaled";
-
     } else if (m_bgOption == "centered") {
         QColor cor;
         cor = "#000000";
@@ -778,14 +760,11 @@ void TabletWindow::backgroundPic()   //const QString &bgPath,QRect rect
         painter.drawPixmap(this->width() / 2 - m_backPixmap->width() / 2,
                            this->height() / 2 - m_backPixmap->height() / 2,
                            *m_backPixmap);
-
     } else if (m_bgOption == "stretched") {
         //qDebug() << "---------" << "stretched" << "----------";
         painter.drawPixmap(this->rect(), *m_backPixmap);
-
     } else if (m_bgOption == "scaled") {
         painter.drawPixmap(this->geometry(), getPaddingPixmap(*m_backPixmap, this->size().width(), this->size().height()));
-
     } else if (m_bgOption == "wallpaper") {
         //qDebug() << "---------" << "wallpaper" << "----------";
         int drawedWidth = 0;
@@ -809,7 +788,6 @@ void TabletWindow::backgroundPic()   //const QString &bgPath,QRect rect
                 break;
             }
         }
-
     } else {
         painter.drawPixmap(this->rect(), *m_backPixmap);
     }
@@ -888,7 +866,6 @@ void TabletWindow::buttonClicked(QAbstractButton *button)
             buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
                     "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
                     "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/selected.svg);}");
-
         } else {
             buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/select.svg);}"
                     "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/select.svg);}"
@@ -959,7 +936,6 @@ void TabletWindow::XkbEventsRelease(const QString &keycode)
     if(winFlag && keycode == "Super_L") {
         winFlag = false;
         return;
-
     } else if(m_winFlag && keycode == "Super_L") {
         return;
     }
@@ -982,7 +958,6 @@ void TabletWindow::XkbEventsRelease(const QString &keycode)
 //            }
             qDebug() << "win键触发窗口隐藏事件";
             this->hide();
-
         } else {
             qDebug() << "win键触发窗口显示事件";
             this->showPCMenu();
@@ -1005,7 +980,6 @@ void TabletWindow::winKeyReleaseSlot(const QString &key)
                            this, SLOT(XkbEventsRelease(QString)));
                 disconnect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
                            this, SLOT(XkbEventsPress(QString)));
-
             } else {
                 connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
                         this, SLOT(XkbEventsRelease(QString)));
