@@ -15,10 +15,10 @@ protected:
 
 private:
 
-    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
     QWidget *collectionTab = nullptr;
     QWidget *recentTab = nullptr;
-    RightListView * m_collectListView = nullptr;
+    RightListView *m_collectListView = nullptr;
     QStringList m_data;
 };
 

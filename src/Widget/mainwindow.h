@@ -57,64 +57,42 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    /**
-     * @brief Set the QFrame style
-     */
-//    void setFrameStyle();
-    /**
-     * @brief Load the main window
-     */
-//    void loadMainWindow();
 
     void showWindow();
 
     void hideWindow();
 
-
-private:
-
-    bool m_isFullScreen=false;
-    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
-
-    QPropertyAnimation *m_animation=nullptr;
-    bool m_winFlag = false;
-    DBus *m_dbus=nullptr;
-    GetModelData *modaldata = nullptr;
-    QAction *m_allAction = nullptr;
-    QAction *m_letterAction = nullptr;
-    QAction *m_funcAction = nullptr;
-    SearchAppThread *m_searchAppThread=nullptr;
-    int m_state = 0;
-    FullMainWindow *fullWindow = nullptr;
-    DesktopWatcher *m_desktopWatcher = nullptr;
-    QPropertyAnimation* m_enterAnimation = nullptr;
-    QPropertyAnimation* m_leaveAnimation = nullptr;
-    int m_widgetState=-1;
-    FunctionButtonWidget *m_functionBtnWid = nullptr;
-    LetterButtonWidget *m_letterBtnWid = nullptr;
-
 protected:
     void initUi();
-//    /**
-//     * @brief Handle events clicking on the outside of the window
-//     */
+    /**
+     * @brief 处理外部点击事件和主窗口键盘控制
+     * @param event
+     * @return
+     */
     bool event(QEvent *event);
-    void paintEvent(QPaintEvent* event);
-//    /**
-//     * @brief The query box responds to keyboard events
-//     */
-    void keyPressEvent(QKeyEvent* e);
-//    /**
-//     * @brief Repaint window
-//     */
-//    void repaintWidget();
+    /**
+     * @brief 主窗口圆角绘制
+     * @param event
+     */
+    void paintEvent(QPaintEvent *event);
+
+    /**
+     * @brief 键盘字符输入处理
+     * @param e
+     */
+    void keyPressEvent(QKeyEvent *e);
+
+    /**
+     * @brief searchAppSlot
+     * @param arg
+     */
     void searchAppSlot(QString arg);
 
     void recvSearchResult(QVector<QStringList> arg);
 
-    bool eventFilter(QObject * target , QEvent * event );
+    bool eventFilter(QObject *target, QEvent *event );
 
-//    void mouseReleaseEvent(QMouseEvent *event);
+    //    void mouseReleaseEvent(QMouseEvent *event);
 
 public:
 Q_SIGNALS:
@@ -156,58 +134,71 @@ private Q_SLOTS:
 
 private:
 
-    QAction *searchIconAction;
-    QAction *PowerOffAction;
-    QWidget *centralwidget;
-    QHBoxLayout *centerLayout_0;
-    MainViewWidget *widget;
-    QGridLayout *gridLayout;
-    QVBoxLayout *mainLeftVerticalLayout_1;
-    QStackedWidget *topStackedWidget;
-    QWidget *minMenuPage;
-    QVBoxLayout *verticalLayout_4;
-    QHBoxLayout *letfTopSelectHorizontalLayout;
-    QLabel *minSelectTextLabel;
-    QSpacerItem *horizontalSpacer;
-    QPushButton *searchPushButton;
-    QToolButton *minSelectButton;
-    QToolButton *selectMenuButton;
-    QWidget *minSearchPage;
-    QVBoxLayout *verticalLayout_5;
-    QHBoxLayout *leftTopSearchHorizontalLayout;
-    QLineEdit *lineEdit;
-    QPushButton *cancelSearchPushButton;
-    QStackedWidget *leftStackedWidget;
-    QWidget *minAllPage;
-    ListView *minAllListView;
-    QWidget *minLetterPage;
-    ListView *minLetterListView;
-    QWidget *minFuncPage;
-    ListView *minFuncListView;
-    QWidget *minSearchResultPage;
-    ListView *minSearchResultListView;
-    QVBoxLayout *mainRightVerticalLayout_1;
-    QVBoxLayout *mainRightVerticalLayout_2;
-    QHBoxLayout *rightTopHorizontalLayout_3;
-    QVBoxLayout *rightCollectLayout;
-    QVBoxLayout *rightRecentLayout;
-    QPushButton *collectPushButton;
-    QPushButton *recentPushButton;
-    QSpacerItem *horizontalSpacer_3;
-    QPushButton *minMaxChangeButton;
-    QSpacerItem *verticalSpacer;
-    QStackedWidget *rightStackedWidget;
-    QWidget *collectPage;
-    RightListView *collectListView;
-    QWidget *recentPage;
-    ListView *recentListView;
-    QSpacerItem *verticalSpacer_2;
-    QSpacerItem *verticalSpacer_3;
-    QHBoxLayout *rightBottomHorizontalLayout_2;
-    QSpacerItem *horizontalSpacer_2;
-    QPushButton *powerOffButton;
+    QWidget *m_centralwidget = nullptr;
+    QHBoxLayout *m_centerLayout = nullptr;
+    MainViewWidget *m_viewWidget = nullptr;
+    QGridLayout *m_gridLayout = nullptr;
+    QVBoxLayout *m_mainLeftVerticalLayout = nullptr;
+    QStackedWidget *m_topStackedWidget = nullptr;
+    QWidget *m_minMenuPage = nullptr;
+    QHBoxLayout *m_letfTopSelectHorizontalLayout = nullptr;
+    QLabel *m_minSelectTextLabel = nullptr;
+    QSpacerItem *m_horizontalSpacer = nullptr;
+    QPushButton *m_searchPushButton = nullptr;
+    QToolButton *m_minSelectButton = nullptr;
+    QToolButton *m_selectMenuButton = nullptr;
+    QWidget *m_minSearchPage = nullptr;
+    QHBoxLayout *m_leftTopSearchHorizontalLayout = nullptr;
+    QLineEdit *m_lineEdit = nullptr;
+    QPushButton *m_cancelSearchPushButton = nullptr;
+    QStackedWidget *m_leftStackedWidget = nullptr;
+    QWidget *m_minAllPage = nullptr;
+    ListView *m_minAllListView = nullptr;
+    QWidget *m_minLetterPage = nullptr;
+    ListView *m_minLetterListView = nullptr;
+    QWidget *m_minFuncPage = nullptr;
+    ListView *m_minFuncListView = nullptr;
+    QWidget *m_minSearchResultPage = nullptr;
+    ListView *m_minSearchResultListView = nullptr;
+    QVBoxLayout *m_mainRightVerticalLayout = nullptr;
+    QVBoxLayout *m_mainRightVerticalLayout_1 = nullptr;
+    QHBoxLayout *m_rightTopHorizontalLayout = nullptr;
+    QVBoxLayout *m_rightCollectLayout = nullptr;
+    QVBoxLayout *m_rightRecentLayout = nullptr;
+    QPushButton *m_collectPushButton = nullptr;
+    QPushButton *m_recentPushButton = nullptr;
+    QSpacerItem *m_horizontalSpacer_3 = nullptr;
+    QPushButton *m_minMaxChangeButton = nullptr;
+    QSpacerItem *m_verticalSpacer = nullptr;
+    QStackedWidget *m_rightStackedWidget = nullptr;
+    QWidget *m_collectPage = nullptr;
+    RightListView *m_collectListView = nullptr;
+    QWidget *m_recentPage = nullptr;
+    ListView *m_recentListView = nullptr;
+    QSpacerItem *m_verticalSpacer_2 = nullptr;
+    QHBoxLayout *m_rightBottomHorizontalLayout = nullptr;
+    QSpacerItem *m_horizontalSpacer_2 = nullptr;
+    QPushButton *m_powerOffButton = nullptr;
+
     bool m_canHide = true;
-   // Ui::MainWindow *ui;
+    bool m_isFullScreen = false;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
+    QPropertyAnimation *m_animation = nullptr;
+    bool m_winFlag = false;
+    DBus *m_dbus = nullptr;
+    GetModelData *m_modaldata = nullptr;
+    QAction *m_allAction = nullptr;
+    QAction *m_letterAction = nullptr;
+    QAction *m_funcAction = nullptr;
+    SearchAppThread *m_searchAppThread = nullptr;
+    int m_state = 0;
+    FullMainWindow *m_fullWindow = nullptr;
+    DesktopWatcher *m_desktopWatcher = nullptr;
+    QPropertyAnimation *m_enterAnimation = nullptr;
+    QPropertyAnimation *m_leaveAnimation = nullptr;
+    int m_widgetState = -1;
+    FunctionButtonWidget *m_functionBtnWid = nullptr;
+    LetterButtonWidget *m_letterBtnWid = nullptr;
 };
 
 #endif // MAINWINDOW_H

@@ -38,77 +38,65 @@ FullFunctionWidget::~FullFunctionWidget()
 void FullFunctionWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-    this->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setFocusPolicy(Qt::NoFocus);
-    m_applistWid=new QWidget(this);
-    m_iconListWid=new QWidget(this);
+    m_applistWid = new QWidget(this);
+    m_iconListWid = new QWidget(this);
     m_iconListWid->setAttribute(Qt::WA_TranslucentBackground);
     m_iconListWid->setAutoFillBackground(false);
     m_applistWid->setFixedSize(Style::AppListWidWidth, Style::AppListWidHeight);
-    m_iconListWid->setFixedSize(Style::LeftWidWidth , Style::AppListWidHeight);
-
+    m_iconListWid->setFixedSize(Style::LeftWidWidth, Style::AppListWidHeight);
     verticalScrollBar = new QScrollBar(m_scrollArea);
     verticalScrollBar->setOrientation(Qt::Vertical);
-
-    QHBoxLayout* mainLayout=new QHBoxLayout(this);
-    mainLayout->setContentsMargins(0,0,40,0);
+    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 40, 0);
     mainLayout->setSpacing(0);
     mainLayout->addWidget(m_iconListWid);
     mainLayout->addWidget(m_applistWid);
-
-    QSpacerItem *m_spaceItem1=nullptr;
-    m_spaceItem1=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Minimum);
+    QSpacerItem *m_spaceItem1 = nullptr;
+    m_spaceItem1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     mainLayout->addItem(m_spaceItem1);
-
-    QVBoxLayout* rightButtonLayout = new QVBoxLayout(this);
-    rightButtonLayout->setContentsMargins(0, 0 ,0, 20);
+    QVBoxLayout *rightButtonLayout = new QVBoxLayout(this);
+    rightButtonLayout->setContentsMargins(0, 0, 0, 20);
     rightButtonLayout->setSpacing(0);
-
     powerOffButton = new QPushButton(this);
     powerOffButton->setMinimumSize(QSize(24, 24));
     powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
     QIcon icon6;
     icon6.addFile(QString::fromUtf8(":/data/img/mainviewwidget/icon-电源@2x.png"), QSize(), QIcon::Normal, QIcon::Off);
     powerOffButton->setIcon(icon6);
-    powerOffButton->setIconSize(QSize(24,24));
+    powerOffButton->setIconSize(QSize(24, 24));
     powerOffButton->setFlat(true);
     powerOffButton->setStyleSheet("padding: 0px;");
-
     QSpacerItem *m_spaceItem2 = nullptr;
-    m_spaceItem2 = new QSpacerItem(20,40,QSizePolicy::Minimum,QSizePolicy::Expanding);
+    m_spaceItem2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     rightButtonLayout->addItem(m_spaceItem2);
-
     rightButtonLayout->addWidget(verticalScrollBar);
     QSpacerItem *m_spaceItem3 = nullptr;
-    m_spaceItem3 = new QSpacerItem(20,40,QSizePolicy::Minimum,QSizePolicy::Expanding);
+    m_spaceItem3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     rightButtonLayout->addItem(m_spaceItem3);
     rightButtonLayout->addWidget(powerOffButton);
     rightButtonLayout->setAlignment(verticalScrollBar, Qt::AlignHCenter);
     mainLayout->addLayout(rightButtonLayout);
-
-//    mainLayout->addWidget(verticalScrollBar);
-//    this->setLayout(mainLayout);
-
-    m_ukuiMenuInterface=new UkuiMenuInterface;
-
+    //    mainLayout->addWidget(verticalScrollBar);
+    //    this->setLayout(mainLayout);
+    m_ukuiMenuInterface = new UkuiMenuInterface;
     initAppListWidget();
     initIconListWidget();
-
     flag = true;
     //翻页灵敏度时间调节
     time = new QTimer(this);
-    connect(time,&QTimer::timeout,[=](){
-        if(flag == false)
-        {
+    connect(time, &QTimer::timeout, [ = ]() {
+        if(flag == false) {
             flag = true;
             time->stop();
         }
     });
-    connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,this,&FullFunctionWidget::on_setScrollBarValue);
+    connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullFunctionWidget::on_setScrollBarValue);
     connect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullFunctionWidget::on_setAreaScrollBarValue);
-    connect(powerOffButton,&QPushButton::customContextMenuRequested,this,&FullFunctionWidget::on_powerOffButton_customContextMenuRequested);
-    connect(powerOffButton,&QPushButton::clicked,this,&FullFunctionWidget::on_powerOffButton_clicked);
+    connect(powerOffButton, &QPushButton::customContextMenuRequested, this, &FullFunctionWidget::on_powerOffButton_customContextMenuRequested);
+    connect(powerOffButton, &QPushButton::clicked, this, &FullFunctionWidget::on_powerOffButton_clicked);
 }
 
 /**
@@ -116,23 +104,21 @@ void FullFunctionWidget::initUi()
  */
 void FullFunctionWidget::initAppListWidget()
 {
-    QHBoxLayout* layout=new QHBoxLayout(m_applistWid);
-    layout->setContentsMargins(0,0,0,0);
+    QHBoxLayout *layout = new QHBoxLayout(m_applistWid);
+    layout->setContentsMargins(0, 0, 0, 0);
     m_applistWid->setLayout(layout);
-
-    m_scrollArea=new ScrollArea;
-    m_scrollAreaWid=new ScrollAreaWid(this);
+    m_scrollArea = new ScrollArea;
+    m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
     m_scrollArea->setFixedSize(m_applistWid->width(), m_applistWid->height());
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
-
-    m_scrollAreaWidLayout=new QVBoxLayout(m_scrollAreaWid);
-    m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
+    m_scrollAreaWidLayout = new QVBoxLayout(m_scrollAreaWid);
+    m_scrollAreaWidLayout->setContentsMargins(0, 0, 0, 0);
     m_scrollAreaWidLayout->setSpacing(10);
     layout->addWidget(m_scrollArea);
-    connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
-            this,&FullFunctionWidget::valueChangedSlot);
+    connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &FullFunctionWidget::valueChangedSlot);
     fillAppList();
     m_scrollAreaWidHeight = m_scrollAreaWid->height();
     initVerticalScrollBar();
@@ -177,40 +163,47 @@ void FullFunctionWidget::on_powerOffButton_clicked()
 void FullFunctionWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
     RightClickMenu m_otherMenu(this);
-   // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
-  //  Q_EMIT sendShowMainWindowSignal(false);
+    // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
+    //  Q_EMIT sendShowMainWindowSignal(false);
     int ret = m_otherMenu.showShutdownMenu(powerOffButton->mapToGlobal(pos));
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
-    if(ret>=10 && ret<=17)
-    {
-//        Q_EMIT sendHideMainWindowSignal();
-        switch (ret) {
-        case 10:
-            QProcess::startDetached(QString("ukui-screensaver-command -l"));
-            break;
-        case 11:
-            QProcess::startDetached(QString("ukui-session-tools --switchuser"));
-            break;
-        case 12:
-            QProcess::startDetached(QString("ukui-session-tools --logout"));
-            break;
-        case 13:
-            QProcess::startDetached(QString("ukui-session-tools --reboot"));
-            break;
-        case 14:
-            QProcess::startDetached(QString("ukui-session-tools --shutdown"));
-            break;
-        case 16:
-            QProcess::startDetached(QString("ukui-session-tools --suspend"));
-            break;
-        case 17:
-            QProcess::startDetached(QString("ukui-session-tools --sleep"));
-            break;
-        default:
-            break;
-        }
 
+    if(ret >= 10 && ret <= 17) {
+        //        Q_EMIT sendHideMainWindowSignal();
+        switch (ret) {
+            case 10:
+                QProcess::startDetached(QString("ukui-screensaver-command -l"));
+                break;
+
+            case 11:
+                QProcess::startDetached(QString("ukui-session-tools --switchuser"));
+                break;
+
+            case 12:
+                QProcess::startDetached(QString("ukui-session-tools --logout"));
+                break;
+
+            case 13:
+                QProcess::startDetached(QString("ukui-session-tools --reboot"));
+                break;
+
+            case 14:
+                QProcess::startDetached(QString("ukui-session-tools --shutdown"));
+                break;
+
+            case 16:
+                QProcess::startDetached(QString("ukui-session-tools --suspend"));
+                break;
+
+            case 17:
+                QProcess::startDetached(QString("ukui-session-tools --sleep"));
+                break;
+
+            default:
+                break;
+        }
     }
+
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
 }
 
@@ -221,81 +214,90 @@ void FullFunctionWidget::on_powerOffButton_customContextMenuRequested(const QPoi
 void FullFunctionWidget::fillAppList()
 {
     m_classificationList.clear();
-    QVector<QStringList> vector=UkuiMenuInterface::functionalVector;
-    QStringList androidlist=vector.at(0);
-    if(!androidlist.isEmpty())
-    {
+    QVector<QStringList> vector = UkuiMenuInterface::functionalVector;
+    QStringList androidlist = vector.at(0);
+
+    if(!androidlist.isEmpty()) {
         insertClassificationBtn("Mobile");
         insertAppList(androidlist);
     }
 
-    QStringList netlist=vector.at(1);
-    if(!netlist.isEmpty())
-    {
+    QStringList netlist = vector.at(1);
+
+    if(!netlist.isEmpty()) {
         insertClassificationBtn("Internet");
         insertAppList(netlist);
     }
-    QStringList sociallist=vector.at(2);
-    if(!sociallist.isEmpty())
-    {
+
+    QStringList sociallist = vector.at(2);
+
+    if(!sociallist.isEmpty()) {
         insertClassificationBtn("Social");
         insertAppList(sociallist);
     }
-    QStringList avlist=vector.at(3);
-    if(!avlist.isEmpty())
-    {
+
+    QStringList avlist = vector.at(3);
+
+    if(!avlist.isEmpty()) {
         insertClassificationBtn("Video");
         insertAppList(avlist);
     }
-    QStringList developlist=vector.at(4);
-    if(!developlist.isEmpty())
-    {
+
+    QStringList developlist = vector.at(4);
+
+    if(!developlist.isEmpty()) {
         insertClassificationBtn("Development");
         insertAppList(developlist);
     }
-    QStringList graphicslist=vector.at(5);
-    if(!graphicslist.isEmpty())
-    {
+
+    QStringList graphicslist = vector.at(5);
+
+    if(!graphicslist.isEmpty()) {
         insertClassificationBtn("Image");
         insertAppList(graphicslist);
     }
-    QStringList gamelist=vector.at(6);
-    if(!gamelist.isEmpty())
-    {
+
+    QStringList gamelist = vector.at(6);
+
+    if(!gamelist.isEmpty()) {
         insertClassificationBtn("Game");
         insertAppList(gamelist);
     }
-    QStringList officelist=vector.at(7);
-    if(!officelist.isEmpty())
-    {
+
+    QStringList officelist = vector.at(7);
+
+    if(!officelist.isEmpty()) {
         insertClassificationBtn("Office");
         insertAppList(officelist);
     }
-    QStringList educationlist=vector.at(8);
-    if(!educationlist.isEmpty())
-    {
+
+    QStringList educationlist = vector.at(8);
+
+    if(!educationlist.isEmpty()) {
         insertClassificationBtn("Education");
         insertAppList(educationlist);
     }
 
-    QStringList systemadminlist=vector.at(9);
-    if(!systemadminlist.isEmpty())
-    {
+    QStringList systemadminlist = vector.at(9);
+
+    if(!systemadminlist.isEmpty()) {
         insertClassificationBtn("System");
         insertAppList(systemadminlist);
     }
-    QStringList otherlist=vector.at(10);
-    if(!otherlist.isEmpty())
-    {
+
+    QStringList otherlist = vector.at(10);
+
+    if(!otherlist.isEmpty()) {
         insertClassificationBtn("Others");
         insertAppList(otherlist);
     }
+
     resizeScrollAreaControls();
 }
 
 void FullFunctionWidget::insertClassificationBtn(QString category)
 {
-    SplitBarFrame* classificationbtn=new SplitBarFrame(this,category,m_scrollArea->width()-12,30,2);
+    SplitBarFrame *classificationbtn = new SplitBarFrame(this, category, m_scrollArea->width() - 12, 30, 2);
     classificationbtn->setAttribute(Qt::WA_TranslucentBackground);
     classificationbtn->setAutoFillBackground(false);
     m_scrollAreaWidLayout->addWidget(classificationbtn);
@@ -304,9 +306,9 @@ void FullFunctionWidget::insertClassificationBtn(QString category)
 
 void FullFunctionWidget::insertAppList(QStringList desktopfplist)
 {
-    FullListView* listview=new FullListView(this,2);
+    FullListView *listview = new FullListView(this, 2);
     //修复异常黑框问题
-    connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [=](){
+    connect(m_scrollArea, &ScrollArea::requestUpdate, listview->viewport(), [ = ]() {
         listview->repaint(listview->rect());
     });
     connect(listview, &FullListView::sendSetslidebar, this, &FullFunctionWidget::onSetSlider);
@@ -314,11 +316,14 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
     listview->installEventFilter(this);
     m_scrollAreaWidLayout->addWidget(listview);
     m_data.clear();
-    for(int i=0;i<desktopfplist.count();i++)
+
+    for(int i = 0; i < desktopfplist.count(); i++) {
         m_data.append(desktopfplist.at(i));
+    }
+
     listview->addData(m_data);
-    connect(listview,&FullListView::sendItemClickedSignal,this,&FullFunctionWidget::execApplication);
-    connect(listview,&FullListView::sendHideMainWindowSignal,this,&FullFunctionWidget::sendHideMainWindowSignal);
+    connect(listview, &FullListView::sendItemClickedSignal, this, &FullFunctionWidget::execApplication);
+    connect(listview, &FullListView::sendHideMainWindowSignal, this, &FullFunctionWidget::sendHideMainWindowSignal);
 }
 
 /**
@@ -332,7 +337,7 @@ void FullFunctionWidget::execApplication(QString desktopfp)
 
 void FullFunctionWidget::on_setAreaScrollBarValue(int value)
 {
-//    m_scrollArea->verticalScrollBar()->setMaximum(maxmumValue);
+    //    m_scrollArea->verticalScrollBar()->setMaximum(maxmumValue);
     m_scrollArea->verticalScrollBar()->setValue(value);
 }
 
@@ -343,29 +348,34 @@ void FullFunctionWidget::updateAppListView()
 {
     //刷新应用列表界面
     QLayoutItem *child;
-     while ((child = m_scrollAreaWidLayout->takeAt(0)) != 0) {
-         QWidget* wid=child->widget();
-         m_scrollAreaWidLayout->removeWidget(wid);
-         wid->setParent(nullptr);
-         delete wid;
-         delete child;
-     }
-     fillAppList();
+
+    while ((child = m_scrollAreaWidLayout->takeAt(0)) != 0) {
+        QWidget *wid = child->widget();
+        m_scrollAreaWidLayout->removeWidget(wid);
+        wid->setParent(nullptr);
+        delete wid;
+        delete child;
+    }
+
+    fillAppList();
 
     //刷新图标列表界面
-    Q_FOREACH (QAbstractButton* button, m_buttonList){
+    Q_FOREACH (QAbstractButton *button, m_buttonList) {
         m_btnGroup->removeButton(button);
     }
+
     m_buttonList.clear();
     m_iconListWidLayout->removeItem(m_topSpacerItem);
     m_iconListWidLayout->removeItem(m_bottomSpacerItem);
+
     while ((child = m_iconListWidLayout->takeAt(0)) != 0) {
-        QWidget* wid=child->widget();
+        QWidget *wid = child->widget();
         m_iconListWidLayout->removeWidget(wid);
         wid->setParent(nullptr);
         delete wid;
         delete child;
     }
+
     initIconListScrollArea();
     m_scrollAreaWidHeight  = m_scrollAreaWid->height();
     initVerticalScrollBar();
@@ -376,31 +386,29 @@ void FullFunctionWidget::updateAppListView()
  */
 void FullFunctionWidget::resizeScrollAreaControls()
 {
-    int row=0;
-    int areaHeight=0;
-    while(row<m_scrollAreaWidLayout->count()/2)
-    {
+    int row = 0;
+    int areaHeight = 0;
+
+    while(row < m_scrollAreaWidLayout->count() / 2) {
         //应用界面
-        QLayoutItem* widItem=m_scrollAreaWidLayout->itemAt(row*2+1);
-        QWidget* wid=widItem->widget();
-        FullListView* listview=qobject_cast<FullListView*>(wid);
+        QLayoutItem *widItem = m_scrollAreaWidLayout->itemAt(row * 2 + 1);
+        QWidget *wid = widItem->widget();
+        FullListView *listview = qobject_cast<FullListView *>(wid);
         listview->adjustSize();
-        int dividend=m_scrollArea->width() / Style::AppListGridSizeWidth;
-        int rowcount=0;
-        if(listview->model()->rowCount()%dividend>0)
-        {
-            rowcount=listview->model()->rowCount()/dividend+1;
-        }
-        else
-        {
-            rowcount=listview->model()->rowCount()/dividend;
+        int dividend = m_scrollArea->width() / Style::AppListGridSizeWidth;
+        int rowcount = 0;
 
+        if(listview->model()->rowCount() % dividend > 0) {
+            rowcount = listview->model()->rowCount() / dividend + 1;
+        } else {
+            rowcount = listview->model()->rowCount() / dividend;
         }
 
-        listview->setFixedSize(m_scrollArea->width(),listview->gridSize().height()*rowcount);
+        listview->setFixedSize(m_scrollArea->width(), listview->gridSize().height()*rowcount);
         areaHeight += listview->height() + 50;
         row++;
     }
+
     m_scrollArea->widget()->setFixedSize(m_scrollArea->width(), areaHeight - 10);
 }
 
@@ -409,21 +417,17 @@ void FullFunctionWidget::resizeScrollAreaControls()
  */
 void FullFunctionWidget::initIconListWidget()
 {
-    m_iconListWidLayout=new QVBoxLayout(m_iconListWid);
+    m_iconListWidLayout = new QVBoxLayout(m_iconListWid);
     m_iconListWidLayout->setSpacing(Style::LeftSpaceBetweenItem);
     m_iconListWidLayout->setContentsMargins(45, 0, 0, 0);
-
-    m_topSpacerItem=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-    m_bottomSpacerItem=new QSpacerItem(20,40,QSizePolicy::Fixed,QSizePolicy::Expanding);
-
-    m_btnGroup=new QButtonGroup(m_iconListWid);
+    m_topSpacerItem = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Expanding);
+    m_bottomSpacerItem = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Expanding);
+    m_btnGroup = new QButtonGroup(m_iconListWid);
     m_animation = new QPropertyAnimation(m_iconListWid, "geometry");
-
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullFunctionWidget::animationFinishSlot);
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullFunctionWidget::animationValueChangedSlot);
-
     initIconListScrollArea();
 }
 
@@ -439,49 +443,52 @@ void FullFunctionWidget::on_setScrollBarValue(int value)
 void FullFunctionWidget::initIconListScrollArea()
 {
     m_iconListWidLayout->addItem(m_topSpacerItem);
-    for(int i=0;i<m_classificationList.size();i++)
-    {
-        FunctionClassifyButton* iconbtn=new FunctionClassifyButton(
-                    Style::LeftBtnWidth,
-                    Style::LeftBtnHeight,
-                    Style::LeftIconSize,
-                    m_classificationList.at(i),
-                    true,
-                    true);
+
+    for(int i = 0; i < m_classificationList.size(); i++) {
+        FunctionClassifyButton *iconbtn = new FunctionClassifyButton(
+            Style::LeftBtnWidth,
+            Style::LeftBtnHeight,
+            Style::LeftIconSize,
+            m_classificationList.at(i),
+            true,
+            true);
         iconbtn->setChecked(false);
         m_buttonList.append(iconbtn);
         m_iconListWidLayout->addWidget(iconbtn);
         m_iconListWidLayout->setAlignment(iconbtn, Qt::AlignLeft);
     }
-    m_iconListWidLayout->addItem(m_bottomSpacerItem);
 
-    int id=0;
-    Q_FOREACH (QAbstractButton* btn, m_buttonList) {
-        m_btnGroup->addButton(btn,id++);
+    m_iconListWidLayout->addItem(m_bottomSpacerItem);
+    int id = 0;
+
+    Q_FOREACH (QAbstractButton *btn, m_buttonList) {
+        m_btnGroup->addButton(btn, id++);
     }
-    connect(m_btnGroup,static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked),this,&FullFunctionWidget::btnGroupClickedSlot);
-//    m_iconListScrollArea->widget()->adjustSize();
-    if(m_btnGroup->button(0)!=nullptr)
+
+    connect(m_btnGroup, static_cast<void(QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked), this, &FullFunctionWidget::btnGroupClickedSlot);
+
+    //    m_iconListScrollArea->widget()->adjustSize();
+    if(m_btnGroup->button(0) != nullptr) {
         m_btnGroup->button(0)->click();
+    }
 }
 
 void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
 {
-    disconnect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
-               this,&FullFunctionWidget::valueChangedSlot);
-    Q_FOREACH (QAbstractButton* button, m_buttonList) {
-        if(m_btnGroup->id(btn)==m_buttonList.indexOf(button))
-        {
-            m_beginPos=m_scrollArea->verticalScrollBar()->sliderPosition();
-            m_endPos=m_scrollAreaWidLayout->itemAt(m_btnGroup->id(btn)*2)->widget()->y();
+    disconnect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged,
+               this, &FullFunctionWidget::valueChangedSlot);
+
+    Q_FOREACH (QAbstractButton *button, m_buttonList) {
+        if(m_btnGroup->id(btn) == m_buttonList.indexOf(button)) {
+            m_beginPos = m_scrollArea->verticalScrollBar()->sliderPosition();
+            m_endPos = m_scrollAreaWidLayout->itemAt(m_btnGroup->id(btn) * 2)->widget()->y();
             m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             m_scrollAnimation->stop();
             m_scrollAnimation->setStartValue(m_beginPos);
             m_scrollAnimation->setEndValue(m_endPos);
             m_scrollAnimation->start();
             button->setChecked(true);
-        }
-        else{
+        } else {
             button->setChecked(false);
         }
     }
@@ -489,58 +496,63 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
 
 void FullFunctionWidget::animationFinishSlot()
 {
-//    if(m_scrollArea->verticalScrollBar()->value()==m_endPos ||
-//            m_scrollArea->verticalScrollBar()->value()==m_scrollArea->verticalScrollBar()->maximum())
-//    {
-//        m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        connect(m_scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
-                this,&FullFunctionWidget::valueChangedSlot);
-//    }
+    //    if(m_scrollArea->verticalScrollBar()->value()==m_endPos ||
+    //            m_scrollArea->verticalScrollBar()->value()==m_scrollArea->verticalScrollBar()->maximum())
+    //    {
+    //        m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &FullFunctionWidget::valueChangedSlot);
+    //    }
 }
 
 void FullFunctionWidget::animationValueChangedSlot(const QVariant &value)
 {
     Q_UNUSED(value);
-    if (sender() != m_scrollAnimation)
+
+    if (sender() != m_scrollAnimation) {
         return;
+    }
 
     QPropertyAnimation *ani = qobject_cast<QPropertyAnimation *>(sender());
 
-    if (m_endPos != ani->endValue())
+    if (m_endPos != ani->endValue()) {
         ani->setEndValue(m_endPos);
+    }
 }
 
 void FullFunctionWidget::valueChangedSlot(int value)
 {
-    int index=0;
-    while(index<=m_classificationList.count()-1)
-    {
-        int min=m_scrollAreaWidLayout->itemAt(2*index)->widget()->y();
-        int max=0;
-        if(index==m_classificationList.count()-1)
-            max=m_scrollAreaWid->height();
-        else
-            max=m_scrollAreaWidLayout->itemAt(2*(index+1))->widget()->y();
-        if(value>=min && value<max)
-        {
-            Q_FOREACH (QAbstractButton* button, m_buttonList) {
-                FunctionClassifyButton* fcbutton=qobject_cast<FunctionClassifyButton*>(button);
-                if(index==m_buttonList.indexOf(button))
-                {
+    int index = 0;
+
+    while(index <= m_classificationList.count() - 1) {
+        int min = m_scrollAreaWidLayout->itemAt(2 * index)->widget()->y();
+        int max = 0;
+
+        if(index == m_classificationList.count() - 1) {
+            max = m_scrollAreaWid->height();
+        } else {
+            max = m_scrollAreaWidLayout->itemAt(2 * (index + 1))->widget()->y();
+        }
+
+        if(value >= min && value < max) {
+            Q_FOREACH (QAbstractButton *button, m_buttonList) {
+                FunctionClassifyButton *fcbutton = qobject_cast<FunctionClassifyButton *>(button);
+
+                if(index == m_buttonList.indexOf(button)) {
                     fcbutton->setChecked(true);
-                }
-                else{
+                } else {
                     fcbutton->setChecked(false);
                 }
             }
+
             break;
-        }
-        else
+        } else {
             index++;
+        }
     }
 }
 
-QAbstractButton* FullFunctionWidget::getCurLetterButton(int value)
+QAbstractButton *FullFunctionWidget::getCurLetterButton(int value)
 {
     return m_buttonList.at(value);
 }
@@ -549,12 +561,12 @@ QAbstractButton* FullFunctionWidget::getCurLetterButton(int value)
 void FullFunctionWidget::enterAnimation()
 {
     m_animation->setDuration(200);//动画总时间
-    m_animation->setStartValue(QRect(0,0,
-                                    0,m_iconListWid->height()));
+    m_animation->setStartValue(QRect(0, 0,
+                                     0, m_iconListWid->height()));
     m_animation->setEndValue(QRect(Style::LeftMargin,
-                                  0,
-                                  Style::LeftBtnWidth,
-                                  m_iconListWid->height()));
+                                   0,
+                                   Style::LeftBtnWidth,
+                                   m_iconListWid->height()));
     m_animation->setEasingCurve(QEasingCurve::InQuart);
     m_animation->start();
     m_iconListScrollAreaWid->show();
@@ -562,118 +574,114 @@ void FullFunctionWidget::enterAnimation()
 
 void FullFunctionWidget::setFunctionBtnGeometry()
 {
-//    int height=m_classificationList.size()*Style::LeftBtnHeight+(m_classificationList.size()-1)*Style::LeftSpaceBetweenItem;
+    //    int height=m_classificationList.size()*Style::LeftBtnHeight+(m_classificationList.size()-1)*Style::LeftSpaceBetweenItem;
     m_iconListScrollAreaWid->setGeometry(QRect(Style::LeftMargin,
-                                            0,
-                                            Style::LeftBtnWidth,
-                                            m_iconListWid->height()));
+                                         0,
+                                         Style::LeftBtnWidth,
+                                         m_iconListWid->height()));
     m_iconListScrollAreaWid->show();
-
 }
 
 void FullFunctionWidget::repaintWidget()
 {
-//    this->setFixedSize(Style::MainViewWidWidth,
-//                       Style::AppListWidHeight);
-//    m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
-//    m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
-//    m_iconListWid->setFixedSize(Style::LeftWidWidth,this->height());
-//    m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
-//                                          m_iconListWid->height());
+    //    this->setFixedSize(Style::MainViewWidWidth,
+    //                       Style::AppListWidHeight);
+    //    m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
+    //    m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
+    //    m_iconListWid->setFixedSize(Style::LeftWidWidth,this->height());
+    //    m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
+    //                                          m_iconListWid->height());
     updateAppListView();
 }
 
 void FullFunctionWidget::widgetMakeZero()
 {
-    if(m_btnGroup->button(0)!=nullptr)
+    if(m_btnGroup->button(0) != nullptr) {
         m_btnGroup->button(0)->click();
+    }
+
     m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
 void FullFunctionWidget::onSetSlider(int value)
 {
-//    if(flag)
-//    {
-//        flag = false;
-//        time->start(100);
-        int curvalue = m_scrollArea->verticalScrollBar()->value();
-        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
-//        qDebug() << "FullFunctionWidget::onSetSlider" << curvalue;
-//    }
+    //    if(flag)
+    //    {
+    //        flag = false;
+    //        time->start(100);
+    int curvalue = m_scrollArea->verticalScrollBar()->value();
+    m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+    //        qDebug() << "FullFunctionWidget::onSetSlider" << curvalue;
+    //    }
 }
 
 bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    if( event->type() == QEvent::KeyPress )
-    {
-        QLayoutItem* widItem = m_scrollAreaWidLayout->itemAt(2 * m_buttonList.size() - 1);
-        QWidget* wid = widItem->widget();
-        FullListView* m_listview = qobject_cast<FullListView*>(wid);
-
-        QLayoutItem* widItemTop = m_scrollAreaWidLayout->itemAt(1);
-        QWidget* widTop = widItemTop->widget();
-        FullListView* m_listviewTop = qobject_cast<FullListView*>(widTop);
-
+    if( event->type() == QEvent::KeyPress ) {
+        QLayoutItem *widItem = m_scrollAreaWidLayout->itemAt(2 * m_buttonList.size() - 1);
+        QWidget *wid = widItem->widget();
+        FullListView *m_listview = qobject_cast<FullListView *>(wid);
+        QLayoutItem *widItemTop = m_scrollAreaWidLayout->itemAt(1);
+        QWidget *widTop = widItemTop->widget();
+        FullListView *m_listviewTop = qobject_cast<FullListView *>(widTop);
         QKeyEvent *ke = (QKeyEvent *)event;
-        if( ke->key() == Qt::Key_Tab )
-        {
-           Q_EMIT setFocusToSideWin();
+
+        if( ke->key() == Qt::Key_Tab ) {
+            Q_EMIT setFocusToSideWin();
             return true;
         }
 
-        if(ke->key() == Qt::Key_Up)
-        {
-            if(!m_listviewTop->hasFocus())
-            {
-                QAbstractButton* buttonTop = getCurLetterButton(( --m_index) % m_buttonList.size());
+        if(ke->key() == Qt::Key_Up) {
+            if(!m_listviewTop->hasFocus()) {
+                QAbstractButton *buttonTop = getCurLetterButton(( --m_index) % m_buttonList.size());
                 btnGroupClickedSlot(buttonTop);
                 this->m_scrollArea->setFocusToPreChild();
+            } else {
+                m_listview->setFocus();
+                QAbstractButton *button = getCurLetterButton(m_buttonList.size() - 1);
+                btnGroupClickedSlot(button);
+                m_index = m_buttonList.size() - 1;
             }
-            else
-            {
-               m_listview->setFocus();
-               QAbstractButton* button = getCurLetterButton(m_buttonList.size() - 1);
-               btnGroupClickedSlot(button);
-               m_index = m_buttonList.size() - 1;
-            }
+
             Q_EMIT selectFirstItem();
             return true;
         }
-        if(ke->key() == Qt::Key_Down)
-        {
-            if(!m_listview->hasFocus())
-            {
-                QAbstractButton* button = getCurLetterButton(( ++m_index) % m_buttonList.size());
+
+        if(ke->key() == Qt::Key_Down) {
+            if(!m_listview->hasFocus()) {
+                QAbstractButton *button = getCurLetterButton(( ++m_index) % m_buttonList.size());
                 btnGroupClickedSlot(button);
                 this->m_scrollArea->setFocusToNextChild();
-            }
-            else
-            {
+            } else {
                 m_listviewTop->setFocus();
-                QAbstractButton* buttonTop = getCurLetterButton(0);
+                QAbstractButton *buttonTop = getCurLetterButton(0);
                 btnGroupClickedSlot(buttonTop);
-                m_listviewTop->setCurrentIndex(m_listviewTop->model()->index(0,0));
+                m_listviewTop->setCurrentIndex(m_listviewTop->model()->index(0, 0));
                 m_index = 0;
             }
+
             Q_EMIT selectFirstItem();
             return true;
         }
     }
-    return QWidget::eventFilter(watched,event);
+
+    return QWidget::eventFilter(watched, event);
 }
 
 void FullFunctionWidget::functionButtonClick()
 {
-    if(m_btnGroup->button(0)!=nullptr)
+    if(m_btnGroup->button(0) != nullptr) {
         m_btnGroup->button(0)->click();
+    }
+
     m_index = 0;
 }
 
 void FullFunctionWidget::setFocusToThis()
 {
-    QLayoutItem* widItemTop = m_scrollAreaWidLayout->itemAt(1);
-    QWidget* widTop = widItemTop->widget();
-    FullListView* m_listviewTop = qobject_cast<FullListView*>(widTop);
+    QLayoutItem *widItemTop = m_scrollAreaWidLayout->itemAt(1);
+    QWidget *widTop = widItemTop->widget();
+    FullListView *m_listviewTop = qobject_cast<FullListView *>(widTop);
     functionButtonClick();
     m_listviewTop->setFocus();
     Q_EMIT selectFirstItem();

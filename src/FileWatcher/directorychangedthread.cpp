@@ -23,7 +23,7 @@
 
 DirectoryChangedThread::DirectoryChangedThread()
 {
-    m_ukuiMenuInterface=new UkuiMenuInterface;
+    m_ukuiMenuInterface = new UkuiMenuInterface;
 }
 
 DirectoryChangedThread::~DirectoryChangedThread()
@@ -35,30 +35,23 @@ void DirectoryChangedThread::run()
 {
     closeDataBase("DirectoryChangedThread");
     openDataBase("DirectoryChangedThread");
-    QStringList desktopfpList=m_ukuiMenuInterface->getDesktopFilePath();
-    if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size())//有新的应用安装
-    {
-        for(int i=0;i<desktopfpList.count();i++)
-        {
-            if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i)))
-            {
+    QStringList desktopfpList = m_ukuiMenuInterface->getDesktopFilePath();
+
+    if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size()) { //有新的应用安装
+        for(int i = 0; i < desktopfpList.count(); i++) {
+            if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i))) {
                 QFileInfo fileInfo(desktopfpList.at(i));
-                QString desktopfn=fileInfo.fileName();
+                QString desktopfn = fileInfo.fileName();
                 updateDataBaseTableRecent(desktopfn);
                 break;
             }
-
         }
-    }
-    else//软件卸载
-    {
-        for(int i=0;i<UkuiMenuInterface::desktopfpVector.size();i++)
-        {
-            if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i)))
-            {
-                QString desktopfp=UkuiMenuInterface::appInfoVector.at(i).at(0);
+    } else { //软件卸载
+        for(int i = 0; i < UkuiMenuInterface::desktopfpVector.size(); i++) {
+            if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i))) {
+                QString desktopfp = UkuiMenuInterface::appInfoVector.at(i).at(0);
                 QFileInfo fileInfo(desktopfp);
-                QString desktopfn=fileInfo.fileName();
+                QString desktopfn = fileInfo.fileName();
                 deleteAppRecord(desktopfn);
                 break;
             }
@@ -68,8 +61,8 @@ void DirectoryChangedThread::run()
     UkuiMenuInterface::appInfoVector.clear();
     UkuiMenuInterface::alphabeticVector.clear();
     UkuiMenuInterface::functionalVector.clear();
-    UkuiMenuInterface::appInfoVector=m_ukuiMenuInterface->createAppInfoVector();
-    UkuiMenuInterface::alphabeticVector=m_ukuiMenuInterface->getAlphabeticClassification();
-    UkuiMenuInterface::functionalVector=m_ukuiMenuInterface->getFunctionalClassification();
+    UkuiMenuInterface::appInfoVector = m_ukuiMenuInterface->createAppInfoVector();
+    UkuiMenuInterface::alphabeticVector = m_ukuiMenuInterface->getAlphabeticClassification();
+    UkuiMenuInterface::functionalVector = m_ukuiMenuInterface->getFunctionalClassification();
     Q_EMIT requestUpdateSignal();
 }

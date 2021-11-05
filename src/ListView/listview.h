@@ -45,14 +45,14 @@ public:
 
 protected:
     void initWidget();
-    void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) override;
-    void keyPressEvent(QKeyEvent* e);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
-    int w=0;
-    int h=0;
+    int w = 0;
+    int h = 0;
     int m_preRowCount;
 
 

@@ -29,6 +29,9 @@
 #define DBUS_NAME       "org.ukui.panel"
 #define DBUS_PATH       "/panel/position"
 #define DBUS_INTERFACE  "org.ukui.panel"
+
+#define myDebug() qDebug() << QString("%1 %2 行 %3").arg(__FILE__).arg(__FUNCTION__).arg(__LINE__)
+
 static int collectCount = 0;
 
 const QPixmap loadSvg(const QString &fileName, const int size);

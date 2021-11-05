@@ -66,19 +66,19 @@ public:
      */
     void moveScrollBar(int type);
 
-    FullListView* m_listView=nullptr;
+    FullListView *m_listView = nullptr;
 
 private:
-    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
     QStringList m_data;
-    QSpacerItem *m_spaceItem=nullptr;
-    ScrollArea* m_scrollArea=nullptr;
-    ScrollAreaWid* m_scrollAreaWid=nullptr;
-    QVBoxLayout* m_scrollAreaWidLayout=nullptr;
+    QSpacerItem *m_spaceItem = nullptr;
+    ScrollArea *m_scrollArea = nullptr;
+    ScrollAreaWid *m_scrollAreaWid = nullptr;
+    QVBoxLayout *m_scrollAreaWidLayout = nullptr;
     bool flag;
     QTimer *time = nullptr;
     GetModelData *modaldata = nullptr;
-    QScrollBar *verticalScrollBar=nullptr;
+    QScrollBar *verticalScrollBar = nullptr;
     int m_scrollAreaWidHeight = 0;
     QPushButton *powerOffButton = nullptr;
 
@@ -130,7 +130,7 @@ Q_SIGNALS:
      * @brief Send a hidden main window signal to the MainViewWidget
      */
     void sendHideMainWindowSignal();
-    void changeScrollValue(int value,int maximumValue);
+    void changeScrollValue(int value, int maximumValue);
     void setFocusToSideWin();
 };
 

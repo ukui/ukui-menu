@@ -37,88 +37,77 @@ FullCommonUseWidget::~FullCommonUseWidget()
 void FullCommonUseWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-    this->setAttribute(Qt::WA_StyledBackground,true);
-    this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    this->setAttribute(Qt::WA_StyledBackground, true);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->setFocusPolicy(Qt::NoFocus);
-    QHBoxLayout* mainLayout=new QHBoxLayout(this);
-    mainLayout->setContentsMargins(40,0,40,0);
+    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    mainLayout->setContentsMargins(40, 0, 40, 0);
     mainLayout->setSpacing(0);
-    m_spaceItem=new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Fixed);
+    m_spaceItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Fixed);
     mainLayout->addItem(m_spaceItem);
-    m_scrollArea=new ScrollArea();
-    m_scrollAreaWid=new ScrollAreaWid(this);
+    m_scrollArea = new ScrollArea();
+    m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
     m_scrollArea->setFixedSize(Style::AppListWidWidth, Style::AppListWidHeight);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_scrollAreaWidLayout=new QVBoxLayout(m_scrollAreaWid);
-    m_scrollAreaWidLayout->setContentsMargins(0,0,0,0);
+    m_scrollAreaWidLayout = new QVBoxLayout(m_scrollAreaWid);
+    m_scrollAreaWidLayout->setContentsMargins(0, 0, 0, 0);
     m_scrollAreaWidLayout->setSpacing(10);
-
-    QVBoxLayout* rightButtonLayout = new QVBoxLayout(this);
+    QVBoxLayout *rightButtonLayout = new QVBoxLayout(this);
     rightButtonLayout->setContentsMargins(0, 0, 0, 20);
     rightButtonLayout->setSpacing(0);
-
     QSpacerItem *m_spaceItem2 = nullptr;
-    m_spaceItem2 = new QSpacerItem(20, 40, QSizePolicy::Minimum,QSizePolicy::Expanding);
+    m_spaceItem2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     rightButtonLayout->addItem(m_spaceItem2);
-
     verticalScrollBar = new QScrollBar(m_scrollArea);
     verticalScrollBar->setOrientation(Qt::Vertical);
-
     mainLayout->addWidget(m_scrollArea);
     QSpacerItem *m_spaceItem1 = nullptr;
-    m_spaceItem1=new QSpacerItem(40,20,QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_spaceItem1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     mainLayout->addItem(m_spaceItem1);
-
     powerOffButton = new QPushButton(this);
     powerOffButton->setMinimumSize(QSize(24, 24));
     powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
     QIcon icon6;
     icon6.addFile(QString::fromUtf8(":/data/img/mainviewwidget/icon-电源.svg"), QSize(), QIcon::Normal, QIcon::Off);
     powerOffButton->setIcon(icon6);
-    powerOffButton->setIconSize(QSize(24,24));
+    powerOffButton->setIconSize(QSize(24, 24));
     powerOffButton->setFlat(true);
     powerOffButton->setStyleSheet("padding: 0px;");
-
     rightButtonLayout->addWidget(verticalScrollBar);
     QSpacerItem *m_spaceItem3 = nullptr;
-    m_spaceItem3 = new QSpacerItem(20, 40, QSizePolicy::Minimum,QSizePolicy::Expanding);
+    m_spaceItem3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     rightButtonLayout->addItem(m_spaceItem3);
     rightButtonLayout->addWidget(powerOffButton);
     rightButtonLayout->setAlignment(verticalScrollBar, Qt::AlignHCenter);
     mainLayout->addLayout(rightButtonLayout);
-
-    m_ukuiMenuInterface=new UkuiMenuInterface;
-
+    m_ukuiMenuInterface = new UkuiMenuInterface;
     initAppListWidget();
     fillAppList();
     m_scrollAreaWid->adjustSize();
     flag = true;
     //翻页灵敏度时间调节
     time = new QTimer(this);
-    connect(time,&QTimer::timeout,[=](){
-        if(flag == false)
-        {
+    connect(time, &QTimer::timeout, [ = ]() {
+        if(flag == false) {
             flag = true;
             time->stop();
         }
     });
     m_scrollAreaWidHeight = m_scrollAreaWid->height();
     initVerticalScrollBar();
-
     connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setScrollBarValue);
     connect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);
-    connect(powerOffButton,&QPushButton::customContextMenuRequested,this,&FullCommonUseWidget::on_powerOffButton_customContextMenuRequested);
-    connect(powerOffButton,&QPushButton::clicked,this,&FullCommonUseWidget::on_powerOffButton_clicked);
+    connect(powerOffButton, &QPushButton::customContextMenuRequested, this, &FullCommonUseWidget::on_powerOffButton_customContextMenuRequested);
+    connect(powerOffButton, &QPushButton::clicked, this, &FullCommonUseWidget::on_powerOffButton_clicked);
 }
 
 void FullCommonUseWidget::initVerticalScrollBar()
 {
     verticalScrollBar->setFixedHeight(200);
     int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
-
     QString scrollBarStyle = QString("QScrollBar:vertical"
                                      "{"
                                      "width:4px;"
@@ -154,84 +143,92 @@ void FullCommonUseWidget::on_powerOffButton_clicked()
 void FullCommonUseWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
     RightClickMenu m_otherMenu(this);
-   // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
-  //  Q_EMIT sendShowMainWindowSignal(false);
+    // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
+    //  Q_EMIT sendShowMainWindowSignal(false);
     int ret = m_otherMenu.showShutdownMenu(powerOffButton->mapToGlobal(pos));
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
-    if(ret>=10 && ret<=17)
-    {
-//        Q_EMIT sendHideMainWindowSignal();
-        switch (ret) {
-        case 10:
-            QProcess::startDetached(QString("ukui-screensaver-command -l"));
-            break;
-        case 11:
-            QProcess::startDetached(QString("ukui-session-tools --switchuser"));
-            break;
-        case 12:
-            QProcess::startDetached(QString("ukui-session-tools --logout"));
-            break;
-        case 13:
-            QProcess::startDetached(QString("ukui-session-tools --reboot"));
-            break;
-        case 14:
-            QProcess::startDetached(QString("ukui-session-tools --shutdown"));
-            break;
-        case 16:
-            QProcess::startDetached(QString("ukui-session-tools --suspend"));
-            break;
-        case 17:
-            QProcess::startDetached(QString("ukui-session-tools --sleep"));
-            break;
-        default:
-            break;
-        }
 
+    if(ret >= 10 && ret <= 17) {
+        //        Q_EMIT sendHideMainWindowSignal();
+        switch (ret) {
+            case 10:
+                QProcess::startDetached(QString("ukui-screensaver-command -l"));
+                break;
+
+            case 11:
+                QProcess::startDetached(QString("ukui-session-tools --switchuser"));
+                break;
+
+            case 12:
+                QProcess::startDetached(QString("ukui-session-tools --logout"));
+                break;
+
+            case 13:
+                QProcess::startDetached(QString("ukui-session-tools --reboot"));
+                break;
+
+            case 14:
+                QProcess::startDetached(QString("ukui-session-tools --shutdown"));
+                break;
+
+            case 16:
+                QProcess::startDetached(QString("ukui-session-tools --suspend"));
+                break;
+
+            case 17:
+                QProcess::startDetached(QString("ukui-session-tools --sleep"));
+                break;
+
+            default:
+                break;
+        }
     }
+
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
 }
 
 void FullCommonUseWidget::initAppListWidget()
 {
-    m_listView=new FullListView(this,0);
+    m_listView = new FullListView(this, 0);
     m_listView->installEventFilter(this);
-//    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
-//    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
-//    mainLayout->insertWidget(1,m_listView);
+    //    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
+    //    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
+    //    mainLayout->insertWidget(1,m_listView);
     m_scrollAreaWidLayout->addWidget(m_listView);
     m_listView->setFixedWidth(m_scrollArea->width());
-    connect(m_listView,&FullListView::sendItemClickedSignal,this,&FullCommonUseWidget::execApplication);
-    connect(m_listView,&FullListView::sendUpdateAppListSignal,this,&FullCommonUseWidget::updateListViewSlot);
-    connect(m_listView,&FullListView::sendHideMainWindowSignal,this,&FullCommonUseWidget::sendHideMainWindowSignal);
-    connect(m_listView,&FullListView::sendSetslidebar,this,&FullCommonUseWidget::onSetSlider);
+    connect(m_listView, &FullListView::sendItemClickedSignal, this, &FullCommonUseWidget::execApplication);
+    connect(m_listView, &FullListView::sendUpdateAppListSignal, this, &FullCommonUseWidget::updateListViewSlot);
+    connect(m_listView, &FullListView::sendHideMainWindowSignal, this, &FullCommonUseWidget::sendHideMainWindowSignal);
+    connect(m_listView, &FullListView::sendSetslidebar, this, &FullCommonUseWidget::onSetSlider);
 }
 
 void FullCommonUseWidget::resizeScrollAreaControls()
 {
-    QLayoutItem* widItem=m_scrollAreaWidLayout->itemAt(0);
-    QWidget* wid=widItem->widget();
-    FullListView* listview=qobject_cast<FullListView*>(wid);
+    QLayoutItem *widItem = m_scrollAreaWidLayout->itemAt(0);
+    QWidget *wid = widItem->widget();
+    FullListView *listview = qobject_cast<FullListView *>(wid);
     listview->adjustSize();
-    int dividend= m_scrollArea->width() / Style::AppListGridSizeWidth;
-    int rowcount=0;
-    if(listview->model()->rowCount()%dividend>0)
-    {
-        rowcount=listview->model()->rowCount()/dividend+1;
-    }
-    else
-    {
-        rowcount=listview->model()->rowCount()/dividend;
+    int dividend = m_scrollArea->width() / Style::AppListGridSizeWidth;
+    int rowcount = 0;
 
+    if(listview->model()->rowCount() % dividend > 0) {
+        rowcount = listview->model()->rowCount() / dividend + 1;
+    } else {
+        rowcount = listview->model()->rowCount() / dividend;
     }
-    listview->setFixedSize(m_listView->width(),listview->gridSize().height()*rowcount);
+
+    listview->setFixedSize(m_listView->width(), listview->gridSize().height()*rowcount);
     m_scrollArea->widget()->setFixedSize(listview->size());
 }
 
 void FullCommonUseWidget::fillAppList()
 {
     m_data.clear();
-    Q_FOREACH(QString desktopfp,UkuiMenuInterface::allAppVector)
+
+    Q_FOREACH(QString desktopfp, UkuiMenuInterface::allAppVector) {
         m_data.append(desktopfp);
+    }
+
     m_listView->addData(m_data);
     resizeScrollAreaControls();
 }
@@ -247,7 +244,7 @@ void FullCommonUseWidget::execApplication(QString desktopfp)
 
 void FullCommonUseWidget::selectFirstItem()
 {
-    m_listView->setCurrentIndex(m_listView->model()->index(0,0));
+    m_listView->setCurrentIndex(m_listView->model()->index(0, 0));
 }
 
 void FullCommonUseWidget::on_setScrollBarValue(int value)
@@ -258,26 +255,23 @@ void FullCommonUseWidget::on_setScrollBarValue(int value)
 
 bool FullCommonUseWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    if( event->type() == QEvent::KeyPress )
-    {
+    if( event->type() == QEvent::KeyPress ) {
         QKeyEvent *ke = (QKeyEvent *)event;
-        if( ke->key() == Qt::Key_Tab )
-        {
-           Q_EMIT setFocusToSideWin();
+
+        if( ke->key() == Qt::Key_Tab ) {
+            Q_EMIT setFocusToSideWin();
             return true;
         }
     }
-    return QWidget::eventFilter(watched,event);
+
+    return QWidget::eventFilter(watched, event);
 }
 
 void FullCommonUseWidget::onSetSlider(int value)
 {
-    if(value == 0)
-    {
+    if(value == 0) {
         m_scrollArea->verticalScrollBar()->setValue(0);
-    }
-    else
-    {
+    } else {
         int curvalue = m_scrollArea->verticalScrollBar()->value();
         m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
     }
@@ -286,7 +280,7 @@ void FullCommonUseWidget::onSetSlider(int value)
 void FullCommonUseWidget::selectFirstItemTab()
 {
     m_listView->setFocus();
-    m_listView->setCurrentIndex(m_listView->model()->index(0,0));
+    m_listView->setCurrentIndex(m_listView->model()->index(0, 0));
     onSetSlider(0);
 }
 
@@ -305,8 +299,11 @@ void FullCommonUseWidget::updateListViewSlot()
 void FullCommonUseWidget::updateListView()
 {
     m_data.clear();
-    Q_FOREACH(QString desktopfp,m_ukuiMenuInterface->getAllClassification())
+
+    Q_FOREACH(QString desktopfp, m_ukuiMenuInterface->getAllClassification()) {
         m_data.append(desktopfp);
+    }
+
     m_listView->updateData(m_data);
     m_data.clear();
     resizeScrollAreaControls();
@@ -333,9 +330,11 @@ void FullCommonUseWidget::widgetMakeZero()
 
 void FullCommonUseWidget::moveScrollBar(int type)
 {
-    int height=Style::primaryScreenHeight;
-    if(type==0)
-        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()-height*100/1080);
-    else
-        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition()+height*100/1080);
+    int height = Style::primaryScreenHeight;
+
+    if(type == 0) {
+        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition() - height * 100 / 1080);
+    } else {
+        m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition() + height * 100 / 1080);
+    }
 }

@@ -32,43 +32,42 @@ ClassifyBtnScrollAreaWid::ClassifyBtnScrollAreaWid(QWidget *parent):
 
 void ClassifyBtnScrollAreaWid::paintEvent(QPaintEvent *event)
 {
-    double transparency=getTransparency();
+    double transparency = getTransparency();
     QPainter painter(this);
-
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-//    {
-//        QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
-//        if(gsetting.keys().contains(QString("effect")))
-//        {
-//            if(gsetting.get("effect").toBool())
-//            {
-//                painter.setBrush(Qt::black);
-//                painter.setPen(Qt::transparent);
-//                painter.setOpacity(0.25);
-//                painter.drawRect(this->rect());
-//            }
-//            else
-//            {
-//                painter.setBrush(this->palette().base());
-//                painter.setPen(Qt::transparent);
-//                painter.setOpacity(transparency);
-//                painter.drawRect(this->rect());
-//            }
-//        }
-//        else
-//        {
-//            painter.setBrush(this->palette().base());
-//            painter.setPen(Qt::transparent);
-//            painter.setOpacity(transparency);
-//            painter.drawRect(this->rect());
-//        }
-//    }
-//    else{
-        painter.setBrush(this->palette().base());
-        painter.setPen(Qt::transparent);
-        painter.setOpacity(transparency);
-        painter.drawRect(this->rect());
-//    }
+    //    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
+    //    {
+    //        QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
+    //        if(gsetting.keys().contains(QString("effect")))
+    //        {
+    //            if(gsetting.get("effect").toBool())
+    //            {
+    //                painter.setBrush(Qt::black);
+    //                painter.setPen(Qt::transparent);
+    //                painter.setOpacity(0.25);
+    //                painter.drawRect(this->rect());
+    //            }
+    //            else
+    //            {
+    //                painter.setBrush(this->palette().base());
+    //                painter.setPen(Qt::transparent);
+    //                painter.setOpacity(transparency);
+    //                painter.drawRect(this->rect());
+    //            }
+    //        }
+    //        else
+    //        {
+    //            painter.setBrush(this->palette().base());
+    //            painter.setPen(Qt::transparent);
+    //            painter.setOpacity(transparency);
+    //            painter.drawRect(this->rect());
+    //        }
+    //    }
+    //    else{
+    painter.setBrush(this->palette().base());
+    painter.setPen(Qt::transparent);
+    painter.setOpacity(transparency);
+    painter.drawRect(this->rect());
+    //    }
     QWidget::paintEvent(event);
 }
 

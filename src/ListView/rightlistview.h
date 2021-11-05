@@ -23,14 +23,14 @@ public:
     void initWidget();
 protected:
 
-    void keyPressEvent(QKeyEvent* e);
+    void keyPressEvent(QKeyEvent *e);
     void dropEvent(QDropEvent *event);
     void enterEvent(QEvent *e);
 
 private:
-    RightClickMenu* menu=nullptr;//右键菜单
+    RightClickMenu *menu = nullptr; //右键菜单
     QStringList data;
-    QGSettings* gsetting;
+    QGSettings *gsetting;
     QPoint dropPos;
 
 //    bool inCurView;

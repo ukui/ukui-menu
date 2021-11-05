@@ -32,7 +32,7 @@ MainViewWidget::MainViewWidget(QWidget *parent) :
     QWidget(parent)
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-    this->setAttribute(Qt::WA_StyledBackground,true);
+    this->setAttribute(Qt::WA_StyledBackground, true);
     this->setAutoFillBackground(false);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setFocusPolicy(Qt::StrongFocus);
@@ -40,21 +40,17 @@ MainViewWidget::MainViewWidget(QWidget *parent) :
 
 MainViewWidget::~MainViewWidget()
 {
-
 }
 
 void MainViewWidget::paintEvent(QPaintEvent *event)
 {
-    double transparency=getTransparency();
-
+    double transparency = getTransparency();
     QRect rect = this->rect();
     QPainterPath path;
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     painter.setPen(Qt::transparent);
-
-    qreal radius=10;
+    qreal radius = 10;
     path.moveTo(rect.topRight() - QPointF(radius, 0));
     path.lineTo(rect.topLeft() + QPointF(radius, 0));
     path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(0, radius));
@@ -64,13 +60,12 @@ void MainViewWidget::paintEvent(QPaintEvent *event)
     path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
     path.lineTo(rect.topRight() + QPointF(0, radius));
     path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
-
     painter.setBrush(this->palette().base());
     painter.setPen(Qt::transparent);
     painter.setOpacity(transparency + 0.1);
-    painter.fillPath(path,this->palette().base());
-//        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-      //  KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    painter.fillPath(path, this->palette().base());
+    //        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+    //  KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     QWidget::paintEvent(event);
 }
 
@@ -79,17 +74,16 @@ void MainViewWidget::paintEvent(QPaintEvent *event)
  */
 void MainViewWidget::ViewOpenedSlot(QString desktopfp)
 {
-    qDebug()<<"open software:"<<desktopfp;
-    QVector<QString> desktopfpVec=UkuiMenuInterface::desktopfpVector;
-    if(desktopfpVec.contains(desktopfp))
-    {
-        QFileInfo fileInfo(desktopfp);
-        QString desktopfn=fileInfo.fileName();
+    qDebug() << "open software:" << desktopfp;
+    QVector<QString> desktopfpVec = UkuiMenuInterface::desktopfpVector;
 
+    if(desktopfpVec.contains(desktopfp)) {
+        QFileInfo fileInfo(desktopfp);
+        QString desktopfn = fileInfo.fileName();
         QString dateTimeKey;
         dateTimeKey.clear();
-        if(!desktopfn.isEmpty())
-        {
+
+        if(!desktopfn.isEmpty()) {
             updateDataBaseTableTimes(desktopfn);
         }
     }

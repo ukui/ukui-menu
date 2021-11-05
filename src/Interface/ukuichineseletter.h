@@ -41,7 +41,7 @@ public:
     static QString getPinyin(int code);
 
     // 获取所有汉字的汉语拼音
-    static QString getPinyins(const QString& text);
+    static QString getPinyins(const QString &text);
 };
 
 #endif // UKUICHINESELETTER_H

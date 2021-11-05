@@ -35,37 +35,37 @@ SplitBarFrame::~SplitBarFrame()
 }
 
 void SplitBarFrame::initAppBtn()
-{   
-    this->setFixedSize(m_width,m_height);
-//    this->setStyleSheet("background:transparent");
+{
+    this->setFixedSize(m_width, m_height);
+    //    this->setStyleSheet("background:transparent");
     //按钮透明
     this->setFocusPolicy(Qt::NoFocus);
     this->setAttribute(Qt::WA_TranslucentBackground);
-
-    QHBoxLayout* layout=new QHBoxLayout;
-    layout->setContentsMargins(15,0,0,0);
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(15, 0, 0, 0);
     layout->setSpacing(6);
-
     m_textLabel->setAutoFillBackground(false);
     m_textLabel->setAlignment(Qt::AlignCenter);
-    if(m_module==1)
+
+    if(m_module == 1) {
         m_textLabel->setText(m_category);
-    else
+    } else {
         setLabelText();
+    }
+
     m_textLabel->adjustSize();
-    QPalette pe=m_textLabel->palette();
-    pe.setColor(QPalette::WindowText,Qt::white);
+    QPalette pe = m_textLabel->palette();
+    pe.setColor(QPalette::WindowText, Qt::white);
     m_textLabel->setPalette(pe);
     m_line->setFrameShape(QFrame::HLine);
     m_line->setFixedHeight(1);
-    m_line->setFixedSize(m_width-m_textLabel->width()-15,1);
+    m_line->setFixedSize(m_width - m_textLabel->width() - 15, 1);
     m_line->setEnabled(false);
-    QPalette linePe=m_line->palette();
-    QColor color(255,255,255);
+    QPalette linePe = m_line->palette();
+    QColor color(255, 255, 255);
     color.setAlphaF(0.10);
-    linePe.setColor(QPalette::WindowText,color);
+    linePe.setColor(QPalette::WindowText, color);
     m_line->setPalette(linePe);
-
     this->setLayout(layout);
     layout->addWidget(m_textLabel);
     layout->addWidget(m_line);
@@ -73,48 +73,58 @@ void SplitBarFrame::initAppBtn()
 
 void SplitBarFrame::setLabelText()
 {
-    QMetaEnum metaEnum=QMetaEnum::fromType<SplitBarFrame::Category>();
-    switch (metaEnum.keyToValue(m_category.toLocal8Bit().data()))
-    {
-    case Mobile:
-        m_textLabel->setText(tr("Mobile"));
-        break;
-    case Internet:
-        m_textLabel->setText(tr("Internet"));
-        break;
-    case Social:
-        m_textLabel->setText(tr("Social"));
-        break;
-    case Video:
-        m_textLabel->setText(tr("Video"));
-        break;
-    case Development:
-        m_textLabel->setText(tr("Development"));
-        break;
-    case Image:
-        m_textLabel->setText(tr("Image"));
-        break;
-    case Game:
-        m_textLabel->setText(tr("Game"));
-        break;
-    case Office:
-        m_textLabel->setText(tr("Office"));
-        break;
-    case Education:
-        m_textLabel->setText(tr("Education"));
-        break;
-    case System:
-        m_textLabel->setText(tr("System"));
-        break;
-    default:
-        m_textLabel->setText(tr("Others"));
-        break;
+    QMetaEnum metaEnum = QMetaEnum::fromType<SplitBarFrame::Category>();
+
+    switch (metaEnum.keyToValue(m_category.toLocal8Bit().data())) {
+        case Mobile:
+            m_textLabel->setText(tr("Mobile"));
+            break;
+
+        case Internet:
+            m_textLabel->setText(tr("Internet"));
+            break;
+
+        case Social:
+            m_textLabel->setText(tr("Social"));
+            break;
+
+        case Video:
+            m_textLabel->setText(tr("Video"));
+            break;
+
+        case Development:
+            m_textLabel->setText(tr("Development"));
+            break;
+
+        case Image:
+            m_textLabel->setText(tr("Image"));
+            break;
+
+        case Game:
+            m_textLabel->setText(tr("Game"));
+            break;
+
+        case Office:
+            m_textLabel->setText(tr("Office"));
+            break;
+
+        case Education:
+            m_textLabel->setText(tr("Education"));
+            break;
+
+        case System:
+            m_textLabel->setText(tr("System"));
+            break;
+
+        default:
+            m_textLabel->setText(tr("Others"));
+            break;
     }
 }
 
 void SplitBarFrame::paintEvent(QPaintEvent *event)
 {
-    double transparency=getTransparency();
+    double transparency = getTransparency();
     QPainter painter(this);
     painter.setBrush(Qt::transparent);
     painter.setPen(Qt::transparent);

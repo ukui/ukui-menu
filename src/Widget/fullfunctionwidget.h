@@ -48,7 +48,7 @@ class FullFunctionWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit FullFunctionWidget(QWidget *parent=nullptr);
+    explicit FullFunctionWidget(QWidget *parent = nullptr);
     ~FullFunctionWidget();
     /**
      * @brief Initializes the interface state
@@ -72,36 +72,36 @@ public:
 
     void functionButtonClick();
 
-    QAbstractButton* getCurLetterButton(int value);
+    QAbstractButton *getCurLetterButton(int value);
 
 private:
     /*Application list interface*/
-    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
-    QWidget* m_applistWid=nullptr;
-    ScrollArea* m_scrollArea=nullptr;
-    ScrollAreaWid* m_scrollAreaWid=nullptr;
-    QVBoxLayout* m_scrollAreaWidLayout=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
+    QWidget *m_applistWid = nullptr;
+    ScrollArea *m_scrollArea = nullptr;
+    ScrollAreaWid *m_scrollAreaWid = nullptr;
+    QVBoxLayout *m_scrollAreaWidLayout = nullptr;
     QStringList m_classificationList;//Store the list of category buttons
     QStringList m_data;
     QTimer *time = nullptr;
     bool flag;
     /*Function classification list interface*/
-    QWidget* m_iconListWid=nullptr;
-    ClassifyBtnScrollArea* m_iconListScrollArea=nullptr;
-    ClassifyBtnScrollAreaWid* m_iconListScrollAreaWid=nullptr;
-    QVBoxLayout* m_iconListWidLayout=nullptr;
-    QList<QAbstractButton*> m_buttonList;
-    QButtonGroup* m_btnGroup=nullptr;
-    QSpacerItem* m_topSpacerItem=nullptr;
-    QSpacerItem* m_bottomSpacerItem=nullptr;
+    QWidget *m_iconListWid = nullptr;
+    ClassifyBtnScrollArea *m_iconListScrollArea = nullptr;
+    ClassifyBtnScrollAreaWid *m_iconListScrollAreaWid = nullptr;
+    QVBoxLayout *m_iconListWidLayout = nullptr;
+    QList<QAbstractButton *> m_buttonList;
+    QButtonGroup *m_btnGroup = nullptr;
+    QSpacerItem *m_topSpacerItem = nullptr;
+    QSpacerItem *m_bottomSpacerItem = nullptr;
 
     /*Animation*/
-    QPropertyAnimation* m_animation=nullptr;//Function category button animation
-    QPropertyAnimation* m_scrollAnimation=nullptr;//Application list animation
-    int m_beginPos= 0;//Application list scrollbar starting value
-    int m_endPos= 0;//Application list scrollbar end value
+    QPropertyAnimation *m_animation = nullptr; //Function category button animation
+    QPropertyAnimation *m_scrollAnimation = nullptr; //Application list animation
+    int m_beginPos = 0; //Application list scrollbar starting value
+    int m_endPos = 0; //Application list scrollbar end value
     int m_index = 0;
-    QScrollBar *verticalScrollBar=nullptr;
+    QScrollBar *verticalScrollBar = nullptr;
     int m_scrollAreaWidHeight = 0;
     QPushButton *powerOffButton = nullptr;
 

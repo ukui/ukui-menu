@@ -30,20 +30,20 @@
 #include "src/Style/style.h"
 #include "src/UtilityFunction/utility.h"
 
-class FunctionClassifyButton :public QPushButton
+class FunctionClassifyButton : public QPushButton
 {
     Q_OBJECT
 public:
     /**
      * @param iconstr正常图片
      */
-     FunctionClassifyButton(int width,
-               int height,
-               int iconSize,
-               QString category,
-               bool fullscreen,
-               bool enabled,
-               QWidget *parent=nullptr);
+    FunctionClassifyButton(int width,
+                           int height,
+                           int iconSize,
+                           QString category,
+                           bool fullscreen,
+                           bool enabled,
+                           QWidget *parent = nullptr);
 
     enum State {
         Enabled,
@@ -52,7 +52,7 @@ public:
         Checked,
     };
 
-    enum Category{
+    enum Category {
         Mobile,
         Internet,
         Social,
@@ -73,17 +73,17 @@ public:
     QString m_category;
     bool m_fullscreen;
     bool m_enabled;
-    QLabel* m_iconLabel=nullptr;
-    QLabel* m_textLabel=nullptr;
-    State m_state=Checked;
+    QLabel *m_iconLabel = nullptr;
+    QLabel *m_textLabel = nullptr;
+    State m_state = Checked;
 
     void updateBtnState();
     void updateIconState();//根据主题修改图标
 
 protected:
-    void enterEvent(QEvent* e);
-    void leaveEvent(QEvent* e);
-    void paintEvent(QPaintEvent* e);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
+    void paintEvent(QPaintEvent *e);
     void updateIconState(const State state);
     void updateTextState(const State state);
     void setLabelText();

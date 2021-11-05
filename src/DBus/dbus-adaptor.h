@@ -32,14 +32,14 @@ class MenuAdaptor: public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.ukui.menu")
     Q_CLASSINFO("D-Bus Introspection", ""
-"  <interface name=\"org.ukui.menu\">\n"
-"    <method name=\"GetSecurityConfigPath\">\n"
-"      <arg direction=\"out\" type=\"s\"/>\n"
-"    </method>\n"
-"    <method name=\"ReloadSecurityConfig\"/>\n"
-"    <method name=\"WinKeyResponse\"/>\n"
-"  </interface>\n"
-        "")
+                "  <interface name=\"org.ukui.menu\">\n"
+                "    <method name=\"GetSecurityConfigPath\">\n"
+                "      <arg direction=\"out\" type=\"s\"/>\n"
+                "    </method>\n"
+                "    <method name=\"ReloadSecurityConfig\"/>\n"
+                "    <method name=\"WinKeyResponse\"/>\n"
+                "  </interface>\n"
+                "")
 public:
     MenuAdaptor(QObject *parent);
     virtual ~MenuAdaptor();

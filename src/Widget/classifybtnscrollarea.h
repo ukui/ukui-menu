@@ -28,13 +28,13 @@ public:
     ClassifyBtnScrollAreaWid(QWidget *parent);
 
 protected:
-    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent *event);
 };
 
 class ClassifyBtnScrollArea : public QScrollArea
 {
 public:
-    explicit ClassifyBtnScrollArea(QWidget* parent=nullptr);
+    explicit ClassifyBtnScrollArea(QWidget *parent = nullptr);
 
 protected:
     void initWid();

@@ -34,12 +34,12 @@ class UkuiMenuInterface
 private:
     QStringList filePathList;
 
-    GError** error=nullptr;
-    GKeyFileFlags flags=G_KEY_FILE_NONE;
-    GKeyFile* keyfile=nullptr;
+    GError **error = nullptr;
+    GKeyFileFlags flags = G_KEY_FILE_NONE;
+    GKeyFile *keyfile = nullptr;
 
 protected:
-    void recursiveSearchFile(const QString& _filePath);//遍历/usr/share/applications/文件夹
+    void recursiveSearchFile(const QString &_filePath);//遍历/usr/share/applications/文件夹
     QStringList getSpecifiedCategoryAppList(QString categorystr);//获取指定类型应用列表
 
 public:
@@ -78,8 +78,8 @@ public:
     QVector<QString> getCommonUseApp();//获取常用App
     QVector<QString> getAllClassification();//所有软件模块
     void getAndroidApp();//获取安卓应用
-    static bool cmpApp(QStringList &arg_1,QStringList &arg_2);
-    bool matchingAppCategories(QString desktopfp,QStringList categorylist);//匹配应用Categories
+    static bool cmpApp(QStringList &arg_1, QStringList &arg_2);
+    bool matchingAppCategories(QString desktopfp, QStringList categorylist); //匹配应用Categories
     QString getAppNameInitials(QString desktopfp);//获取应用名所有首字母
     QString getAppNameInitial(QString desktopfp);//获取应用名所有首字母
     QString getAppNamePinyin(QString appname);//获取应用名拼音
@@ -93,8 +93,8 @@ public:
     QVector<QString> sortDesktopList(QString group);
 
     /**/
-    QSettings* setting=nullptr;
-    QSettings *syssetting=nullptr;
+    QSettings *setting = nullptr;
+    QSettings *syssetting = nullptr;
 };
 
 #endif // UKUIMENUINTERFACE_H

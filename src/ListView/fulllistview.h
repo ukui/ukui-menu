@@ -34,17 +34,17 @@ class FullListView : public KListView
 {
     Q_OBJECT
 public:
-    explicit FullListView(QWidget *parent,int module);
+    explicit FullListView(QWidget *parent, int module);
     ~FullListView();
 
 protected:
     void initWidget();
-    void keyPressEvent(QKeyEvent* e);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
-    RightClickMenu* menu = nullptr;//右键菜单
+    RightClickMenu *menu = nullptr;//右键菜单
     QStringList data;
-    QGSettings* gsetting = nullptr;
+    QGSettings *gsetting = nullptr;
 
 public Q_SLOTS:
     void selectFirstItem();

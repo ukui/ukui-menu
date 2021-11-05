@@ -36,92 +36,87 @@
 
 #include <ukui-log4qt.h>
 
-void centerToScreen(QWidget* widget)
+void centerToScreen(QWidget *widget)
 {
-    if(!widget)
+    if (!widget) {
         return;
-    QDesktopWidget* m=QApplication::desktop();
-    QRect desk_rect=m->screenGeometry(m->screenNumber(QCursor::pos()));
-    int desk_x=desk_rect.width();
-    int desk_y=desk_rect.height();
-    int x=QApplication::primaryScreen()->geometry().width();
-    int y=QApplication::primaryScreen()->geometry().height();
-    widget->move(desk_x/2-x/2+desk_rect.left(),desk_y/2-y/2+desk_rect.top());
+    }
+
+    QDesktopWidget *deskTopWidget = QApplication::desktop();
+    QRect deskRect = deskTopWidget->screenGeometry(deskTopWidget->screenNumber(QCursor::pos()));
+    int deskWidth = deskRect.width();
+    int deskHeight = deskRect.height();
+    int x = QApplication::primaryScreen()->geometry().width();
+    int y = QApplication::primaryScreen()->geometry().height();
+    widget->move(deskWidth / 2 - x / 2 + deskRect.left(), deskHeight / 2 - y / 2 + deskRect.top());
 }
 
 int main(int argc, char *argv[])
 {
-//    initUkuiLog4qt("ukui-menu");
+    // initUkuiLog4qt("ukui-menu");
     projectCodeName = KDKGetPrjCodeName().c_str();
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
-
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
-   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-   QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 #endif
-
     QtSingleApplication app("ukui-menu", argc, argv);
     app.setQuitOnLastWindowClosed(false);
 
-    if(app.isRunning())
-    {
+    if (app.isRunning()) {
         app.sendMessage("raise_window_noop");
         return EXIT_SUCCESS;
     }
 
-//    auto Style=new ProxyStyle;
-//    app.setStyle(Style);
-
     QTranslator translator;
-    if (translator.load(QLocale(), "ukui-menu", "_", QM_FILES_INSTALL_PATH))
-        app.installTranslator(&translator);
-    else
-        qDebug() << "Load translations file" << QLocale() << "failed!";
 
-    if(projectCodeName == "V10SP1")
-    {
+    if (translator.load(QLocale(), "ukui-menu", "_", QM_FILES_INSTALL_PATH)) {
+        app.installTranslator(&translator);
+    } else {
+        myDebug() << "Load translations file" << QLocale() << "failed!";
+    }
+
+    if (projectCodeName == "V10SP1") {
         Zeeker::FileUtils::loadHanziTable(":/src/Search/pinyinWithoutTone.txt");
         MainWindow w;
         app.setActivationWindow(&w);
 
-        if(Style::panelPosition==0)
-            w.setGeometry(QRect(Style::primaryScreenX+4,Style::primaryScreenY+Style::primaryScreenHeight-Style::panelSize-Style::minh-3,
-                                      Style::minw,Style::minh));
-        else if(Style::panelPosition==1)
-            w.setGeometry(QRect(Style::primaryScreenX+4,Style::primaryScreenY+Style::panelSize+4,Style::minw,Style::minh));
-        else if(Style::panelPosition==2)
-            w.setGeometry(QRect(Style::primaryScreenX+Style::panelSize+4,Style::primaryScreenY+4,Style::minw,Style::minh));
-        else
-            w.setGeometry(QRect(Style::primaryScreenX+Style::primaryScreenWidth-Style::panelSize-Style::minw-4,Style::primaryScreenY+4,
-                                      Style::minw,Style::minh));
+        if (Style::panelPosition == 0) {
+            w.setGeometry(QRect(Style::primaryScreenX + 4, Style::primaryScreenY + Style::primaryScreenHeight - Style::panelSize - Style::minh - 3,
+                                Style::minw, Style::minh));
+        } else if (Style::panelPosition == 1) {
+            w.setGeometry(QRect(Style::primaryScreenX + 4, Style::primaryScreenY + Style::panelSize + 4, Style::minw, Style::minh));
+        } else if (Style::panelPosition == 2) {
+            w.setGeometry(QRect(Style::primaryScreenX + Style::panelSize + 4, Style::primaryScreenY + 4, Style::minw, Style::minh));
+        } else {
+            w.setGeometry(QRect(Style::primaryScreenX + Style::primaryScreenWidth - Style::panelSize - Style::minw - 4, Style::primaryScreenY + 4,
+                                Style::minw, Style::minh));
+        }
+
         w.show();
         w.raise();
         w.update();
         w.activateWindow();
         w.hide();
         return app.exec();
-        //测试
-    }
-    else
-    {
+    } else {
         TabletWindow w;
-       // w.removeEventFilter(QMoveEvent);
-        app.setActivationWindow(&w);//单例
+        app.setActivationWindow(&w);
         centerToScreen(&w);
-        w.setAttribute(Qt::WA_TranslucentBackground,true);
-        w.setAttribute(Qt::WA_X11NetWmWindowTypeDesktop,false);
+        w.setAttribute(Qt::WA_TranslucentBackground, true);
+        w.setAttribute(Qt::WA_X11NetWmWindowTypeDesktop, false);
         w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint /*| Qt::X11BypassWindowManagerHint*/);
         w.raise();
         w.activateWindow();
         //拉起后通知session
         QDBusInterface interface(UKUI_SERVICE,
-                                 UKUI_PATH,
-                                 UKUI_INTERFACE,
-                                 QDBusConnection::sessionBus());
-        interface.call("startupfinished","ukui-menu","finish");
+                                     UKUI_PATH,
+                                     UKUI_INTERFACE,
+                                     QDBusConnection::sessionBus());
+        interface.call("startupfinished", "ukui-menu", "finish");
         return app.exec();
     }
 }

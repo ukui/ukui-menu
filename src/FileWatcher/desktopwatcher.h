@@ -24,9 +24,9 @@ public Q_SLOTS:
     void requestUpdateSlot();
 
 private:
-    QFileSystemWatcher *m_fileWatcher=nullptr;//Monitor desktop folder status
+    QFileSystemWatcher *m_fileWatcher = nullptr; //Monitor desktop folder status
 //    QFileSystemWatcher *m_recentFile=nullptr;
-    DirectoryChangedThread *m_directoryChangedThread=nullptr;
+    DirectoryChangedThread *m_directoryChangedThread = nullptr;
 };
 
 #endif // DESKTOPWATCHER_H

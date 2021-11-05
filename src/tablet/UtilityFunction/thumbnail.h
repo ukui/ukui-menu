@@ -14,18 +14,18 @@ public:
     ThumbNail(QWidget *parent = nullptr);
     ~ThumbNail();
     void setupthumbnail(QString desktopfp);
-    QPixmap getIcon(QString desktopfp,int width,int height);
+    QPixmap getIcon(QString desktopfp, int width, int height);
     bool appDisable(QString desktopfp);
 
 private:
-    QLabel *iconLabel=nullptr;
-    QVBoxLayout *layout=nullptr;
-    QLabel *m_icon=nullptr;
+    QLabel *iconLabel = nullptr;
+    QVBoxLayout *layout = nullptr;
+    QLabel *m_icon = nullptr;
     QLabel *textLabel = nullptr;
     UkuiMenuInterface *pUkuiMenuInterface = nullptr;
-    QString appIcon=nullptr;
-    QSettings *setting=nullptr;
-    QSettings *disableSetting=nullptr;
+    QString appIcon = nullptr;
+    QSettings *setting = nullptr;
+    QSettings *disableSetting = nullptr;
 
 private:
     void initUi();

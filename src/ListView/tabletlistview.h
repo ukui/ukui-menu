@@ -43,41 +43,44 @@ class TabletListView : public QListView
 {
     Q_OBJECT
 public:
-    TabletListView(QWidget *parent,int module);
+    TabletListView(QWidget *parent, int module);
     ~TabletListView();
 
     void addData(QStringList data);//字母排序模块添加数据
     void updateData(QStringList data);
     void insertData(QString desktopfp);
     bool appDisable(QString desktopfp);//判断是否是禁用的应用
-    bool isDraging(){return m_isDraging;}
-    QStandardItemModel* listmodel=nullptr;
+    bool isDraging()
+    {
+        return m_isDraging;
+    }
+    QStandardItemModel *listmodel = nullptr;
 //    void paintPixmap(const QModelIndex &index,QPoint position);
 
 protected:
-   void initWidget();
-   void mouseReleaseEvent(QMouseEvent *e);
-   void mousePressEvent(QMouseEvent *event);
+    void initWidget();
+    void mouseReleaseEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *event);
 //   void wheelEvent(QWheelEvent *e);
-   void mouseMoveEvent(QMouseEvent *event);
-   void paintGroupItem(const QModelIndex &index,QString group);
+    void mouseMoveEvent(QMouseEvent *event);
+    void paintGroupItem(const QModelIndex &index, QString group);
 
-   void dropEvent(QDropEvent *event);
-   void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) override;
 //   void dragLeaveEvent(QDragLeaveEvent *event) override;
-   void dragMoveEvent(QDragMoveEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
 
-   void insertApplication(QPoint pressedpos,QPoint releasepos);
-   void mergeApplication(QPoint pressedpos,QPoint releasepos);
+    void insertApplication(QPoint pressedpos, QPoint releasepos);
+    void mergeApplication(QPoint pressedpos, QPoint releasepos);
 
 
 private:
-    QVariantAnimation *m_animation=nullptr; //翻页动画
-    TabletRightClickMenu* menu=nullptr;//右键菜单
-    TabletFullItemDelegate* m_delegate=nullptr;
+    QVariantAnimation *m_animation = nullptr; //翻页动画
+    TabletRightClickMenu *menu = nullptr; //右键菜单
+    TabletFullItemDelegate *m_delegate = nullptr;
     QStringList data;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-    int module=0;
+    UkuiMenuInterface *pUkuiMenuInterface = nullptr;
+    int module = 0;
 
 
     int appLine;//null
@@ -100,8 +103,8 @@ private:
 
     //拖动
     int theDragRow = -1;
-    bool iconClick=false;//是否点钟图标
-    bool right_iconClick=false;//是否右键点中图标
+    bool iconClick = false; //是否点钟图标
+    bool right_iconClick = false; //是否右键点中图标
 
     ulong press_time = -1;
     ulong move_time = -1;
@@ -109,16 +112,16 @@ private:
 
 
 
-    QSettings *setting=nullptr;//应用列表settings
-    QSettings *disableSetting=nullptr;//禁用的settings
-    QSettings *syssetting= nullptr;//不可卸载列表
+    QSettings *setting = nullptr; //应用列表settings
+    QSettings *disableSetting = nullptr; //禁用的settings
+    QSettings *syssetting = nullptr; //不可卸载列表
 
 
     //鼠标滚轮灵密度限制
-    QTimer *time;
-    bool flat=true;
+    QTimer *m_time = nullptr;
+    bool m_flat = true;
 
-    QGSettings *tabletMode=nullptr;
+    QGSettings *tabletMode = nullptr;
 
     bool m_isDraging = false;
 

@@ -37,10 +37,10 @@ public:
      * @param classify为0时为分类按钮、1为应用按钮
      * @param module为0时为常用模块，1为字母模块、2为功能模块
      */
-    SplitBarFrame(QWidget *parent,QString category,int width,int height,int module);
+    SplitBarFrame(QWidget *parent, QString category, int width, int height, int module);
     ~SplitBarFrame();
 
-    enum Category{
+    enum Category {
         Mobile,
         Internet,
         Social,
@@ -60,8 +60,8 @@ private:
     int m_width;
     int m_height;
     int m_module;
-    QLabel* m_textLabel=nullptr;
-    QFrame* m_line=nullptr;
+    QLabel *m_textLabel = nullptr;
+    QFrame *m_line = nullptr;
 
 protected:
     void initAppBtn();

@@ -26,194 +26,175 @@
 TabletFullItemDelegate::TabletFullItemDelegate(QObject *parent, int module):
     QStyledItemDelegate(parent)
 {
-    this->module=module;
-    pUkuiMenuInterface=new UkuiMenuInterface;
+    this->module = module;
+    pUkuiMenuInterface = new UkuiMenuInterface;
     //打开ini文件
-    QString pathini=QDir::homePath()+"/.cache/ukui-menu/ukui-menu.ini";
-    settt=new QSettings(pathini,QSettings::IniFormat);
-
-    QString path=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-    setting=new QSettings(path,QSettings::IniFormat);
-
-//    qDebug() << "---------------------gengxinleziti---------------------";
-
+    QString pathini = QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini";
+    settt = new QSettings(pathini, QSettings::IniFormat);
+    QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
+    setting = new QSettings(path, QSettings::IniFormat);
+    //    qDebug() << "---------------------gengxinleziti---------------------";
 }
 
 TabletFullItemDelegate::~TabletFullItemDelegate()
 {
-    if(pUkuiMenuInterface)
+    if(pUkuiMenuInterface) {
         delete pUkuiMenuInterface;
-    if(settt)
+    }
+
+    if(settt) {
         delete settt;
-    if(setting)
+    }
+
+    if(setting) {
         delete setting;
-    pUkuiMenuInterface=nullptr;
-    settt=nullptr;
-    setting=nullptr;
+    }
+
+    pUkuiMenuInterface = nullptr;
+    settt = nullptr;
+    setting = nullptr;
 }
 
 void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if(index.isValid())
-    {
+    if(index.isValid()) {
         painter->save();
         QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
-
         QRectF rect;
         rect.setX(option.rect.x());
         rect.setY(option.rect.y());
         rect.setWidth(option.rect.width());
         rect.setHeight(option.rect.height());
-
         painter->setOpacity(1);
-        QString desktopfp=index.model()->data(index,Qt::DisplayRole).value<QString>();
-        QString iconstr=pUkuiMenuInterface->getAppIcon(desktopfp);
+        QString desktopfp = index.model()->data(index, Qt::DisplayRole).value<QString>();
+        QString iconstr = pUkuiMenuInterface->getAppIcon(desktopfp);
         QIcon icon;
         QFileInfo iconFileInfo(iconstr);
-
-        QString appname=pUkuiMenuInterface->getAppName(desktopfp);
-
+        QString appname = pUkuiMenuInterface->getAppName(desktopfp);
         QRect iconRect;
         QRect textRect;
-//        QString desktopfn=desktopfp.split('/').last();
-//        setting->beginGroup("groupname");
-//        bool iscontain=setting->contains(desktopfn);
-//        setting->sync();
-//        setting->endGroup();
+        //        QString desktopfn=desktopfp.split('/').last();
+        //        setting->beginGroup("groupname");
+        //        bool iscontain=setting->contains(desktopfn);
+        //        setting->sync();
+        //        setting->endGroup();
 
-        if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg")))
-        {
-            icon=QIcon(iconstr);
+        if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
+            icon = QIcon(iconstr);
             //qDebug()<<"str-----------"<<iconstr;
-        }
-        else
-        {
+        } else {
             //qDebug()<<"else"<<iconstr;
             iconstr.remove(".png");
             iconstr.remove(".svg");
-            icon=QIcon::fromTheme(iconstr);
-            //qDebug()<<"icon"<<icon;
-            if(icon.isNull())
-            {
-//                qDebug()<<"isnottheme";
-                if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
-                else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg")))
-                    icon=QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
-                else
-                   {
+            icon = QIcon::fromTheme(iconstr);
 
-                    icon=QIcon::fromTheme(QString("application-x-desktop"));
+            //qDebug()<<"icon"<<icon;
+            if(icon.isNull()) {
+                //                qDebug()<<"isnottheme";
+                if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
+                } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
+                } else {
+                    icon = QIcon::fromTheme(QString("application-x-desktop"));
                 }
             }
         }
 
+        bool bigIcon = index.data(Qt::UserRole + 2).toBool();
 
-        bool bigIcon = index.data(Qt::UserRole+2).toBool();
-
-
-        if(bigIcon)
-        {
-            iconRect = QRect(rect.x()+Style::AppLeftSpace - 6 ,//94
-                           rect.y()+Style::AppTopSpace - 6,//60
-                           Style::AppListIconSize + 12,//96
-                           Style::AppListIconSize + 12);
+        if(bigIcon) {
+            iconRect = QRect(rect.x() + Style::AppLeftSpace - 6, //94
+                             rect.y() + Style::AppTopSpace - 6, //60
+                             Style::AppListIconSize + 12,//96
+                             Style::AppListIconSize + 12);
             textRect = QRect(rect.x(),
-                           iconRect.bottom() /*- 3*/,
-                           rect.width(),
-                           rect.height()-iconRect.height()-Style::AppTopSpace-30);
-
-//            QPixmap pixmap;
-//            pixmap = icon.pixmap((Style::AppListIconSize+20,Style::AppListIconSize+20));//wgx
-//            icon=QIcon(pixmap);
-
-
-        }else{
-            iconRect = QRect(rect.x()+Style::AppLeftSpace ,
-                           rect.y()+Style::AppTopSpace,
-                           Style::AppListIconSize,
-                           Style::AppListIconSize);
+                             iconRect.bottom() /*- 3*/,
+                             rect.width(),
+                             rect.height() - iconRect.height() - Style::AppTopSpace - 30);
+            //            QPixmap pixmap;
+            //            pixmap = icon.pixmap((Style::AppListIconSize+20,Style::AppListIconSize+20));//wgx
+            //            icon=QIcon(pixmap);
+        } else {
+            iconRect = QRect(rect.x() + Style::AppLeftSpace,
+                             rect.y() + Style::AppTopSpace,
+                             Style::AppListIconSize,
+                             Style::AppListIconSize);
             textRect = QRect(rect.x(),
-                           iconRect.bottom(),
-                           rect.width(),
-                           rect.height()-iconRect.height()-Style::AppTopSpace-30);
-
+                             iconRect.bottom(),
+                             rect.width(),
+                             rect.height() - iconRect.height() - Style::AppTopSpace - 30);
         }
 
         QString str;
         //打开文件.desktop
-        GError** error = nullptr;
+        GError **error = nullptr;
         GKeyFileFlags flags = G_KEY_FILE_NONE;
-        GKeyFile* keyfile = g_key_file_new ();
-
+        GKeyFile *keyfile = g_key_file_new ();
         QByteArray fpbyte = desktopfp.toLocal8Bit();
-        char* filepath = fpbyte.data();
-        g_key_file_load_from_file(keyfile,filepath,flags,error);
-
-        char* name = g_key_file_get_locale_string(keyfile,"Desktop Entry","Exec", nullptr, nullptr);
+        char *filepath = fpbyte.data();
+        g_key_file_load_from_file(keyfile, filepath, flags, error);
+        char *name = g_key_file_get_locale_string(keyfile, "Desktop Entry", "Exec", nullptr, nullptr);
         //取出value值
         QString execnamestr = QString::fromLocal8Bit(name);
         //处理value值
         str = execnamestr;
-//        str = execnamestr.section(' ', 0, 0);
-//        QStringList list = str.split('/');
-//        str = list[list.size()-1];
-       //关闭文件
+        //        str = execnamestr.section(' ', 0, 0);
+        //        QStringList list = str.split('/');
+        //        str = list[list.size()-1];
+        //关闭文件
         g_key_file_free(keyfile);
-
-        QString desktopfp1=str;//不带desktop
+        QString desktopfp1 = str; //不带desktop
         settt->beginGroup("application");
         //判断禁用
         settt->sync();
-        bool bo=settt->contains(desktopfp1.toLocal8Bit().data());// iskey
-        bool bo1=settt->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool();//isvalue
+        bool bo = settt->contains(desktopfp1.toLocal8Bit().data()); // iskey
+        bool bo1 = settt->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool(); //isvalue
         settt->endGroup();
 
-        if (bo && bo1==false)//都存在//存在并且为false
-        {
+        if (bo && bo1 == false) { //都存在//存在并且为false
             QPixmap pixmap;
-            if(bigIcon)
-            {
-                pixmap = icon.pixmap((Style::AppListIconSize+12,Style::AppListIconSize+12),QIcon::Disabled,QIcon::Off);//wgx
-            }else {
-                pixmap = icon.pixmap((Style::AppListIconSize,Style::AppListIconSize),QIcon::Disabled,QIcon::Off);//wgx
+
+            if(bigIcon) {
+                pixmap = icon.pixmap((Style::AppListIconSize + 12, Style::AppListIconSize + 12), QIcon::Disabled, QIcon::Off); //wgx
+            } else {
+                pixmap = icon.pixmap((Style::AppListIconSize, Style::AppListIconSize), QIcon::Disabled, QIcon::Off); //wgx
             }
-        icon = QIcon(pixmap);
-        }
-        else
-        {
+
+            icon = QIcon(pixmap);
+        } else {
             QPixmap mPixmap;
-            if(bigIcon)
-            {
-                mPixmap = icon.pixmap((Style::AppListIconSize+12,Style::AppListIconSize+12));//wgx
-                mPixmap = mPixmap.scaled(108,108);
-            }else {
-                mPixmap = icon.pixmap((Style::AppListIconSize,Style::AppListIconSize));//wgx
+
+            if(bigIcon) {
+                mPixmap = icon.pixmap((Style::AppListIconSize + 12, Style::AppListIconSize + 12)); //wgx
+                mPixmap = mPixmap.scaled(108, 108);
+            } else {
+                mPixmap = icon.pixmap((Style::AppListIconSize, Style::AppListIconSize)); //wgx
             }
-        icon = QIcon(mPixmap);
+
+            icon = QIcon(mPixmap);
         }
 
-//        qDebug()<<"iconRect"<<iconRect;
-        icon.paint(painter,iconRect);
- 
+        //        qDebug()<<"iconRect"<<iconRect;
+        icon.paint(painter, iconRect);
         //文本换行
-        QColor shadow=Qt::black;
+        QColor shadow = Qt::black;
         shadow.setAlpha(127);
         painter->setPen(shadow);
         QRect textLineRect;
@@ -221,22 +202,19 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         textLineRect.setRight(textRect.right() + 1);
         textLineRect.setTop(textRect.top() + 1);
         textLineRect.setBottom(textRect.bottom() + 1);
-        painter->drawText(textLineRect,Qt::TextWordWrap | Qt::AlignCenter,appname);
-
+        painter->drawText(textLineRect, Qt::TextWordWrap | Qt::AlignCenter, appname);
         painter->setPen(QPen(Qt::white));
-        painter->drawText(textRect,Qt::TextWordWrap | Qt::AlignCenter, appname);
-
+        painter->drawText(textRect, Qt::TextWordWrap | Qt::AlignCenter, appname);
         painter->restore();
     }
 }
 
 QSize TabletFullItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-//    if(index.row()>=Style::appNum)
-//    {
-//        return QSize(0,0);
-//    }
-
-    return QSize(Style::AppListItemSizeWidth,Style::AppListItemSizeHeight);
+    //    if(index.row()>=Style::appNum)
+    //    {
+    //        return QSize(0,0);
+    //    }
+    return QSize(Style::AppListItemSizeWidth, Style::AppListItemSizeHeight);
 }
 

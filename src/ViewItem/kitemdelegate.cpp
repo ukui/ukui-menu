@@ -3,5 +3,4 @@
 KItemDelegate::KItemDelegate(QObject *parent):
     QStyledItemDelegate(parent)
 {
-
 }

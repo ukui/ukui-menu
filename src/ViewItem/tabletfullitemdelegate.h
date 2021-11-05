@@ -33,23 +33,23 @@ class TabletFullItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    TabletFullItemDelegate(QObject* parent,int module);
+    TabletFullItemDelegate(QObject *parent, int module);
     ~TabletFullItemDelegate();
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 private:
-    int module=0;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
-    QSettings* settt;
-    QSettings *setting=nullptr;
-//    int i=0;
-//    int j=1;
+    int module = 0;
+    UkuiMenuInterface *pUkuiMenuInterface = nullptr;
+    QSettings *settt;
+    QSettings *setting = nullptr;
+    //    int i=0;
+    //    int j=1;
 
 
 
 protected:
-   // bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);
+    // bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);
 };
 
 #endif // FULLITEMDELEGATE_H

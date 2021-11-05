@@ -65,7 +65,7 @@ Q_SIGNALS:
 
 
 private:
-    QtLocalPeer* peer;
+    QtLocalPeer *peer;
 };
 
 #endif // QTSINGLECOREAPPLICATION_H

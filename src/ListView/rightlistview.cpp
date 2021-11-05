@@ -27,9 +27,9 @@ RightListView::RightListView(QWidget *parent):
     KListView(parent)
 {
     initWidget();
-    m_delegate= new RightItemDelegate(this);
+    m_delegate = new RightItemDelegate(this);
     this->setItemDelegate(m_delegate);
-    pUkuiMenuInterface=new UkuiMenuInterface;
+    pUkuiMenuInterface = new UkuiMenuInterface;
 }
 
 RightListView::~RightListView()
@@ -50,25 +50,24 @@ void RightListView::initWidget()
     this->setMouseTracking(true);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    this->setGridSize(QSize(107,107));
+    this->setGridSize(QSize(107, 107));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);//移除边框
     this->setStyleSheet(QString::fromUtf8("QStandardItemModel#listmodel{border:3px solid #FFFFFF; }QWidget#widget:focus{ border:5px solid #A5A6A1;  } "));
-    connect(this,&RightListView::customContextMenuRequested,this,&RightListView::rightClickedSlot);
-    connect(this,&RightListView::clicked,this,&RightListView::onClicked);
+    connect(this, &RightListView::customContextMenuRequested, this, &RightListView::rightClickedSlot);
+    connect(this, &RightListView::clicked, this, &RightListView::onClicked);
 }
 
 void RightListView::dropEvent(QDropEvent *event)
 {
     RightListView *source = qobject_cast<RightListView *>(event->source());
-    if (source && source == this)
-    {
-        dropPos=event->pos();
 
-        if(this->indexAt(dropPos).isValid())
-        {
-            QVariant var=listmodel->data(indexAt(dropPos), Qt::DisplayRole);
-            QString desktopfp=var.value<QString>();
+    if (source && source == this) {
+        dropPos = event->pos();
+
+        if (this->indexAt(dropPos).isValid()) {
+            QVariant var = listmodel->data(indexAt(dropPos), Qt::DisplayRole);
+            QString desktopfp = var.value<QString>();
             QFileInfo fileInfo(desktopfp);
             QString desktopfn = fileInfo.fileName();
             QString dragDesktopfp = pressApp.value<QString>();
@@ -77,83 +76,33 @@ void RightListView::dropEvent(QDropEvent *event)
             changeCollectSort(dragDesktopfn, desktopfn);
         }
     }
+
     Q_EMIT sendCollectViewUpdate();
 }
 
 void RightListView::selectFirstItem()
 {
-    qDebug() << "void FullListView::selectFirstItem()";
-    if(this->currentIndex().row() == -1)
-    {
-        this->setCurrentIndex(this->model()->index(0,0));
+    myDebug() << "选择首个元素";
+
+    if (this->currentIndex().row() == -1) {
+        this->setCurrentIndex(this->model()->index(0, 0));
     }
 }
 
-void RightListView::keyPressEvent(QKeyEvent* e)
+void RightListView::keyPressEvent(QKeyEvent *e)
 {
-     QRect center = visualRect(currentIndex());
-    if(e->type() == QEvent::KeyPress)
-    {
-        switch(e->key())
-        {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        {
-            QModelIndex index = this->currentIndex();
-            Q_EMIT clicked(index);
-            break;
-        }
-//        case Qt::Key_Left:
-//        {
-//            this->clearFocus();
-//            if(mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::AppListGridSizeWidth)
-//            {
-//               Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
-//            }
-//            this->setFocus();
-//            return QListView::keyPressEvent(e);
-//            break;
-//        }
-//        case Qt::Key_Right:
-//        {
+    if (e->type() == QEvent::KeyPress) {
+        switch(e->key()) {
+            case Qt::Key_Enter:
+            case Qt::Key_Return: {
+                    QModelIndex index = this->currentIndex();
+                    Q_EMIT clicked(index);
+                    break;
+                }
 
-//            this->clearFocus();
-//            if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
-//            {
-//                Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
-//            }
-//            this->setFocus();
-//            return QListView::keyPressEvent(e);
-//            break;
-//        }
-//        case Qt::Key_Up:
-//        {
-//            if(module == 0)
-//            {
-//                if(mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::AppListGridSizeWidth))
-//                {
-//                   Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
-//                }
-//            }
-//            return QListView::keyPressEvent(e);
-//            break;
-//        }
-//        case Qt::Key_Down:
-//        {
-//            if(module == 0)
-//            {
-//                if(mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth))
-//                {
-//                    Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
-//                }
-//            }
-//            return QListView::keyPressEvent(e);
-//            break;
-//        }
-
-        default:
-            return QListView::keyPressEvent(e);
-            break;
+            default:
+                return QListView::keyPressEvent(e);
+                break;
         }
     }
 }

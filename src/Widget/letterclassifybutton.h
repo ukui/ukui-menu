@@ -32,25 +32,25 @@ public:
     LetterClassifyButton(QWidget *parent,
                          bool fullscreen,
                          QString letter
-                         );
+                        );
 
-    bool is_pressed=false;
+    bool is_pressed = false;
 
 private:
-    bool m_fullscreen=false;
+    bool m_fullscreen = false;
     LetterToolTip *tooltip = nullptr;
 
 protected:
-    void enterEvent(QEvent* e);
-    void leaveEvent(QEvent* e);
-    void paintEvent(QPaintEvent* e);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
+    void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-    void focusInEvent(QEvent* e);
-    void focusOutEvent(QEvent* e);
+    void focusInEvent(QEvent *e);
+    void focusOutEvent(QEvent *e);
 
 Q_SIGNALS:
-    void buttonClicked(QAbstractButton* btn);
+    void buttonClicked(QAbstractButton *btn);
 
 private Q_SLOTS:
     void reactToToggle(bool checked);

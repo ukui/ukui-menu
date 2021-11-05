@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef XEVENTMONITOR_H
 #define XEVENTMONITOR_H
@@ -35,12 +35,15 @@ class XEventMonitor : public QThread
     Q_OBJECT
 
 public:
-    static XEventMonitor *instance() { return instance_; }
+    static XEventMonitor *instance()
+    {
+        return instance_;
+    }
 
 private:
     XEventMonitor(QObject *parent = 0);
     ~XEventMonitor();
-    
+
 Q_SIGNALS:
 
     ///
@@ -60,7 +63,7 @@ Q_SIGNALS:
 
 protected:
     void run();
-    
+
 private:
     Q_DECLARE_PRIVATE(XEventMonitor)
     XEventMonitorPrivate *d_ptr;

@@ -47,7 +47,7 @@ public:
                int module,
                QString text);
 
-    bool is_pressed=false;//记录功能分类模块点击状态
+    bool is_pressed = false; //记录功能分类模块点击状态
 
 private:
     QString iconstr;
@@ -55,21 +55,21 @@ private:
     QString hoverbg;
     QString pressedbg;
     int module;
-    QLabel* label;
-    QHBoxLayout* layout;
-    QPixmap* pixmap;
-    QSvgRenderer* svgRender;
+    QLabel *label;
+    QHBoxLayout *layout;
+    QPixmap *pixmap;
+    QSvgRenderer *svgRender;
     QString text;
 
 protected:
-    void enterEvent(QEvent* e);
-    void leaveEvent(QEvent* e);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
 
 Q_SIGNALS:
-    void buttonClicked(QAbstractButton* btn);
+    void buttonClicked(QAbstractButton *btn);
 };
 
 #endif // TOOLBUTTON_H

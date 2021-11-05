@@ -72,8 +72,8 @@ public:
 private:
     QString m_desktopfp;
     int m_actionNumber;
-    QProcess *m_cmdProc=nullptr;
-    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
+    QProcess *m_cmdProc = nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
 
     QStringList m_whiteList;
 

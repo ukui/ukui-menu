@@ -29,12 +29,11 @@ public:
     SearchAppThread();
     ~SearchAppThread();
     void run();
-
 private:
     QString m_keyWord;
     QVector<QStringList> m_searchResultVector;
 
-    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
     QVector<QStringList> m_appInfoVector;
 
 public Q_SLOTS:

@@ -14,7 +14,7 @@ public:
     virtual ~kyMenuPluginInterface() {}
     virtual const QString name() = 0;
     virtual const QString description() = 0;
-    virtual QWidget *createWidget(QWidget *parent)=0;
+    virtual QWidget *createWidget(QWidget *parent) = 0;
 };
 Q_DECLARE_INTERFACE (kyMenuPluginInterface, "org.kyMenuPlugin.AbstractInterface")
 #endif

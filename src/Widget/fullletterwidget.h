@@ -54,7 +54,7 @@ class FullLetterWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit FullLetterWidget(QWidget *parent=nullptr);
+    explicit FullLetterWidget(QWidget *parent = nullptr);
     ~FullLetterWidget();
     /**
      * @brief Initializes the interface state
@@ -82,36 +82,36 @@ public:
 
     void letterButtonClick();
 
-    QAbstractButton* getCurLetterButton(int value);
+    QAbstractButton *getCurLetterButton(int value);
 
 private:
     /*Application list interface*/
-    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
-    QWidget* m_applistWid=nullptr;
-    ScrollArea* m_scrollArea=nullptr;
-    ScrollAreaWid* m_scrollAreaWid=nullptr;
-    QVBoxLayout* m_scrollAreaWidLayout=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
+    QWidget *m_applistWid = nullptr;
+    ScrollArea *m_scrollArea = nullptr;
+    ScrollAreaWid *m_scrollAreaWid = nullptr;
+    QVBoxLayout *m_scrollAreaWidLayout = nullptr;
     QStringList m_letterList;//Store the list of letter buttons
     QStringList m_data;
     bool flag;
     QTimer *time = nullptr;
     int m_index = 0;
     /*Alphabetic classification list interface*/
-    QWidget* m_letterListWid=nullptr;
-    QVBoxLayout* m_letterListWidLayout=nullptr;
-    QList<QAbstractButton*> m_buttonList;
-    QButtonGroup* m_btnGroup=nullptr;
-    QSpacerItem* m_letterListBottomSpacer=nullptr;
-    QSpacerItem* m_topSpacerItem=nullptr;
+    QWidget *m_letterListWid = nullptr;
+    QVBoxLayout *m_letterListWidLayout = nullptr;
+    QList<QAbstractButton *> m_buttonList;
+    QButtonGroup *m_btnGroup = nullptr;
+    QSpacerItem *m_letterListBottomSpacer = nullptr;
+    QSpacerItem *m_topSpacerItem = nullptr;
 
     /*Animation*/
-    QPropertyAnimation* m_animation=nullptr;//Letter category button animation
-    int m_beginPos=0;//Application list scrollbar starting value
-    int m_endPos=0;//Application list scrollbar end value
-    QPropertyAnimation* m_scrollAnimation=nullptr;//Application list animation
-    QScrollBar *verticalScrollBar=nullptr;
+    QPropertyAnimation *m_animation = nullptr; //Letter category button animation
+    int m_beginPos = 0; //Application list scrollbar starting value
+    int m_endPos = 0; //Application list scrollbar end value
+    QPropertyAnimation *m_scrollAnimation = nullptr; //Application list animation
+    QScrollBar *verticalScrollBar = nullptr;
     int m_scrollAreaWidHeight = 0;
-    QHBoxLayout* mainLayout = nullptr;
+    QHBoxLayout *mainLayout = nullptr;
     QPushButton *powerOffButton = nullptr;
 
 protected:
@@ -119,7 +119,7 @@ protected:
      * @brief Initializes UI
      */
     void initUi();
-//    void paintEvent(QPaintEvent *event);
+    //    void paintEvent(QPaintEvent *event);
     /**
      * @brief fill application list
      */

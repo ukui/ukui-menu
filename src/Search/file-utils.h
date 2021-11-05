@@ -40,19 +40,20 @@
 
 #define MAX_CONTENT_LENGTH 20480000
 
-namespace Zeeker {
-class FileUtils {
+namespace Zeeker
+{
+class FileUtils
+{
 public:
 
     //chinese character to pinyin
     static QMap<QString, QStringList> map_chinese2pinyin;
-    static QStringList findMultiToneWords(const QString&);
-    static void loadHanziTable(const QString&);
+    static QStringList findMultiToneWords(const QString &);
+    static void loadHanziTable(const QString &);
 
 private:
     FileUtils();
 };
-
 }
 
 #endif // FILEUTILS_H

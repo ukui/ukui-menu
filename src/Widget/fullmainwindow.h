@@ -45,7 +45,7 @@ private Q_SLOTS:
 
 protected:
     void paintEvent(QPaintEvent *event);
-    bool event ( QEvent * event);
+    bool event ( QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void mousePressEvent(QMouseEvent *event);
 
@@ -72,9 +72,9 @@ private:
     FullFunctionWidget *fullFunctionPage;
     FullSearchResultWidget *fullResultPage;
 
-    SearchAppThread *m_searchAppThread=nullptr;
+    SearchAppThread *m_searchAppThread = nullptr;
     int m_state = 0;
-    QWidget* m_queryWid = nullptr;
+    QWidget *m_queryWid = nullptr;
     QLabel *m_queryIcon = nullptr;
     QLabel *m_queryText = nullptr;
     bool isSearching = false;

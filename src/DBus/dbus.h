@@ -6,7 +6,7 @@
 class DBus : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface","org.ukui.menu")
+    Q_CLASSINFO("D-Bus Interface", "org.ukui.menu")
 public:
     explicit DBus(QObject *parent = 0);
 

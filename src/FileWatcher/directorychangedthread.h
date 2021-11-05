@@ -32,7 +32,7 @@ public:
     void run();
 
 private:
-    UkuiMenuInterface *m_ukuiMenuInterface=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
 
 Q_SIGNALS:
     /**

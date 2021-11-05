@@ -24,9 +24,9 @@ protected:
     void getDateTime(QString timeFormat);
 
 private:
-    QDateTime* dateTime;
-    QTimer* myTimer;
-    QGSettings *timeSetting=nullptr;
+    QDateTime *dateTime;
+    QTimer *myTimer;
+    QGSettings *timeSetting = nullptr;
     QString timeFormat;
     QString timeSlash;
 

@@ -56,7 +56,7 @@ public:
      * @param desktopfp: Application desktop file
      * @return return action number
      */
-    int showAppBtnMenu(QString desktopfp,bool isinstall);
+    int showAppBtnMenu(QString desktopfp, bool isinstall);
     /**
      * @brief Displays the power right-click menu
      * @return return action number
@@ -72,11 +72,11 @@ public:
 private:
     QString m_desktopfp;
     int m_actionNumber;
-    QSettings *m_setting=nullptr;
+    QSettings *m_setting = nullptr;
 
     char m_style[400];
 
-    QProcess *m_cmdProc=nullptr;
+    QProcess *m_cmdProc = nullptr;
 
 protected:
     /**

@@ -7,15 +7,14 @@
 MenuBox::MenuBox(QWidget *parent):
     QMenu(parent)
 {
-
 }
 
 void MenuBox::mousePressEvent(QMouseEvent *event)
 {
-    if(!this->actionAt(event->pos()))
-    {
+    if(!this->actionAt(event->pos())) {
         Q_EMIT sendMainWinActiveSignal(true);
     }
+
     qDebug() << "void MenuBox::mousePressEvent(QMouseEvent *event)";
     return QMenu::mousePressEvent(event);
 }

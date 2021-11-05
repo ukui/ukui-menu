@@ -21,54 +21,55 @@
 #include <QStyleOptionButton>
 
 LetterClassifyButton::LetterClassifyButton(QWidget *parent,
-                                           bool fullscreen,
-                                           QString letter):
+        bool fullscreen,
+        QString letter):
     QPushButton(parent),
     m_fullscreen(fullscreen)
 {
     this->setFlat(true);
-    if(m_fullscreen)
-    {
+
+    if(m_fullscreen) {
         QFont font;
         font.setPixelSize(Style::LeftLetterFontSize);
         this->setFont(font);
     }
+
     this->setText(letter);
     this->setFocusPolicy(Qt::NoFocus);
     this->setCheckable(true);
     this->setStyleSheet("padding: 0px;");
-    connect(this,&LetterClassifyButton::toggled,this,&LetterClassifyButton::reactToToggle);
+    connect(this, &LetterClassifyButton::toggled, this, &LetterClassifyButton::reactToToggle);
 }
 
-void LetterClassifyButton::paintEvent(QPaintEvent* e)
+void LetterClassifyButton::paintEvent(QPaintEvent *e)
 {
     QStylePainter painter(this);
     QStyleOptionButton option;
     initStyleOption(&option);
+
     if ((option.state & QStyle::State_Enabled) && (option.state & QStyle::State_MouseOver || option.state & QStyle::State_HasFocus)) {
         painter.save();
         painter.setPen(Qt::NoPen);
-        if(!m_fullscreen)
-        {
+
+        if(!m_fullscreen) {
             QColor color = option.palette.color(QPalette::Text);
             color.setAlphaF(0.15);
             painter.setBrush(color);
-        }
-        else
-        {
+        } else {
             painter.setOpacity(0.15);
             painter.setBrush(Qt::white);
         }
+
         painter.drawRoundedRect(option.rect, 4, 4);
         painter.restore();
     }
-    if(m_fullscreen && (option.state & QStyle::State_On))
-    {
+
+    if(m_fullscreen && (option.state & QStyle::State_On)) {
         painter.save();
         painter.setPen(Qt::NoPen);
-//        QColor color = option.palette.color(QPalette::Text);
-//        color.setAlphaF(0.15);
-//        painter.setBrush(color);
+        //        QColor color = option.palette.color(QPalette::Text);
+        //        color.setAlphaF(0.15);
+        //        painter.setBrush(color);
         painter.setOpacity(0.15);
         painter.setBrush(Qt::white);
         painter.drawRoundedRect(option.rect, 4, 4);
@@ -77,10 +78,10 @@ void LetterClassifyButton::paintEvent(QPaintEvent* e)
 
     QStyleOptionButton subopt = option;
     subopt.rect = painter.style()->subElementRect(QStyle::SE_PushButtonContents, &option, this);
-//    if(m_fullscreen)
-//        subopt.palette.setBrush(QPalette::ButtonText, QColor(Qt::white));
-//    else
-//        subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
+    //    if(m_fullscreen)
+    //        subopt.palette.setBrush(QPalette::ButtonText, QColor(Qt::white));
+    //    else
+    //        subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
     painter.style()->drawControl(QStyle::CE_PushButtonLabel, &subopt, &painter, this);
     return;
 }
@@ -88,14 +89,14 @@ void LetterClassifyButton::paintEvent(QPaintEvent* e)
 void LetterClassifyButton::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    if(m_fullscreen)
-    {
-//        QFont font;
-//        font.setPixelSize(Style::LeftLetterFontSize*3);
-//        this->setFont(font);
-//        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+
+    if(m_fullscreen) {
+        //        QFont font;
+        //        font.setPixelSize(Style::LeftLetterFontSize*3);
+        //        this->setFont(font);
+        //        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
         tooltip  = new LetterToolTip();
-        QPoint oPoint = this->mapToGlobal(QPoint(this->rect().x() + 35 , this->rect().y() - 10));
+        QPoint oPoint = this->mapToGlobal(QPoint(this->rect().x() + 35, this->rect().y() - 10));
         tooltip->setText(this->text());
         tooltip->raise();
         tooltip->move(oPoint);
@@ -106,12 +107,12 @@ void LetterClassifyButton::enterEvent(QEvent *e)
 void LetterClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    if(m_fullscreen)
-    {
+
+    if(m_fullscreen) {
         QFont font;
         font.setPixelSize(Style::LeftLetterFontSize);
         this->setFont(font);
-        this->setFixedSize(Style::LeftLetterBtnHeight,Style::LeftLetterBtnHeight);
+        this->setFixedSize(Style::LeftLetterBtnHeight, Style::LeftLetterBtnHeight);
         tooltip->close();
         delete tooltip;
         tooltip = nullptr;
@@ -121,49 +122,47 @@ void LetterClassifyButton::leaveEvent(QEvent *e)
 void LetterClassifyButton::mousePressEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-    if(m_fullscreen)
-    {
-//        QFont font;
-//        font.setPixelSize(Style::LeftLetterFontSize*3);
-//        this->setFont(font);
-//        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
-        is_pressed=true;
+
+    if(m_fullscreen) {
+        //        QFont font;
+        //        font.setPixelSize(Style::LeftLetterFontSize*3);
+        //        this->setFont(font);
+        //        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+        is_pressed = true;
     }
 }
 
-void LetterClassifyButton::focusInEvent(QEvent* e)
+void LetterClassifyButton::focusInEvent(QEvent *e)
 {
     Q_UNUSED(e);
-    if(m_fullscreen)
-    {
+
+    if(m_fullscreen) {
         QFont font;
-        font.setPixelSize(Style::LeftLetterFontSize*3);
+        font.setPixelSize(Style::LeftLetterFontSize * 3);
         this->setFont(font);
-        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+        this->setFixedSize(Style::LeftLetterBtnHeight * 2, Style::LeftLetterBtnHeight * 2);
     }
 }
 
 void LetterClassifyButton::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-    if(m_fullscreen)
-    {
-//        QFont font;
-//        font.setPixelSize(Style::LeftLetterFontSize*3);
-//        this->setFont(font);
-//        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
+
+    if(m_fullscreen) {
+        //        QFont font;
+        //        font.setPixelSize(Style::LeftLetterFontSize*3);
+        //        this->setFont(font);
+        //        this->setFixedSize(Style::LeftLetterBtnHeight*2,Style::LeftLetterBtnHeight*2);
     }
+
     Q_EMIT buttonClicked(this);
 }
 
 void LetterClassifyButton::reactToToggle(bool checked)
 {
-    if(checked)
-    {
-        this->is_pressed=true;
-    }
-    else
-    {
-        this->is_pressed=false;
+    if(checked) {
+        this->is_pressed = true;
+    } else {
+        this->is_pressed = false;
     }
 }

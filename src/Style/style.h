@@ -31,7 +31,6 @@
 //颜色
 #define BORDERCOLOR "rgba(37,41,43)" //边框
 #define SHADOWCOLOR "#80000000" //阴影
-
 #define UserIconBackground "#ffffff"
 #define UserIconOpacity 0.20
 #define RightClickMenuBackground "rgba(12, 12, 13, 0.7)"//右键菜单背景

@@ -4,7 +4,6 @@
 
 DBus::DBus(QObject *parent) : QObject(parent)
 {
-
 }
 
 void DBus::ReloadSecurityConfig()
@@ -14,7 +13,7 @@ void DBus::ReloadSecurityConfig()
 
 QString DBus::GetSecurityConfigPath()
 {
-    QString path=QDir::homePath()+"/.config/ukui-menu-security-config.json";
+    QString path = QDir::homePath() + "/.config/ukui-menu-security-config.json";
     return path;
 }
 

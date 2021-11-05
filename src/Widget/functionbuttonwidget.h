@@ -39,7 +39,7 @@ public:
 
 private:
     QStringList m_categoryList;
-    QList<QAbstractButton*> m_buttonList;
+    QList<QAbstractButton *> m_buttonList;
 
 protected:
     /**

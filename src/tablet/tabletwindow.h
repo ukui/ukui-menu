@@ -52,7 +52,8 @@ class TabletWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit TabletWindow(QWidget *parent=nullptr);
+    explicit TabletWindow(QWidget *parent = nullptr);
+
     ~TabletWindow();
 
     void repaintWidget();
@@ -60,72 +61,67 @@ public:
     void showPCMenu();          //打开pc的开始菜单
 
     static bool cmpApp(QString &arg_1, QString &arg_2);
-    void setOpacityEffect(const qreal& num);
+
+    void setOpacityEffect(const qreal &num);
 
 private:
     /*Application list interface*/
-    QScrollArea* m_scrollArea=nullptr;
-    ScrollAreaWid* m_scrollAreaWid=nullptr;
-    QHBoxLayout* m_scrollAreaWidLayout=nullptr;
+    QScrollArea *m_scrollArea = nullptr;
+    ScrollAreaWid *m_scrollAreaWid = nullptr;
+    QHBoxLayout *m_scrollAreaWidLayout = nullptr;
     QStringList m_data;
-    QTimer *time = nullptr;
-    bool flag;
     /*Function classification list interface*/
-    QWidget* m_iconListWid=nullptr;
-    ClassifyBtnScrollArea* m_iconListScrollArea=nullptr;
-    ClassifyBtnScrollAreaWid* m_iconListScrollAreaWid=nullptr;
-    QVBoxLayout* m_iconListWidLayout=nullptr;
-    QList<QAbstractButton*> m_buttonList;
-    QButtonGroup* m_btnGroup=nullptr;
-    QSpacerItem* m_topSpacerItem=nullptr;
-    QSpacerItem* m_bottomSpacerItem=nullptr;
-    QSpacerItem* m_appListBottomSpacer=nullptr;
+    QWidget *m_iconListWid = nullptr;
+    ClassifyBtnScrollArea *m_iconListScrollArea = nullptr;
+    ClassifyBtnScrollAreaWid *m_iconListScrollAreaWid = nullptr;
+    QVBoxLayout *m_iconListWidLayout = nullptr;
+    QList<QAbstractButton *> m_buttonList;
+    QButtonGroup *m_btnGroup = nullptr;
+    QSpacerItem *m_topSpacerItem = nullptr;
+    QSpacerItem *m_bottomSpacerItem = nullptr;
+    QSpacerItem *m_appListBottomSpacer = nullptr;
 
     /*Animation*/
-    QPropertyAnimation* m_scrollAnimation=nullptr;//Application list animation
-    int m_beginPos= 0;//Application list scrollbar starting value
-    int m_endPos= 0;//Application list scrollbar end value
+    QPropertyAnimation *m_scrollAnimation = nullptr;//Application list animation
+    int m_beginPos = 0;//Application list scrollbar starting value
+    int m_endPos = 0;//Application list scrollbar end value
     int m_index = 0;
-    QScrollBar *verticalScrollBar=nullptr;
     int m_scrollAreaWidHeight = 0;
 
     int m_width;
     int m_height;
 
-    QString bgPath;
-    QString bgOption;
-    QPixmap pixmap1;
+    QString m_bgPath;
+    QString m_bgOption;
+    QPixmap m_pixmap;
 
-    QPoint  pressedpos;
-    QPoint  releasepos;
-
-    QPixmap *pixmap=nullptr;
-    QGSettings* bg_setting = nullptr;
-    QGSettings* bg_effect = nullptr;
+    QPixmap *m_backPixmap = nullptr;
+    QGSettings *bg_setting = nullptr;
+    QGSettings *bg_effect = nullptr;
 
     QDBusInterface *usrInterface = nullptr;
     bool m_winFlag = false;
     int curPageNum = 0;
-    QVBoxLayout* layout = nullptr;
-    TimeWidget* leftWidget = nullptr;
+    QVBoxLayout *layout = nullptr;
+    TimeWidget *leftWidget = nullptr;
     bool isFirstPage = true;
     QWidget *firstPageWidget = nullptr;
     static QVector<QString> keyVector;
     static QVector<int> keyValueVector;
-    QSettings* setting;
-    TabletListView* m_listView = nullptr;
+    QSettings *setting;
+    TabletListView *m_listView = nullptr;
     QHBoxLayout *firstPageLayout = nullptr;
     QHBoxLayout *buttonBoxLayout = nullptr;
-    QButtonGroup* buttonGroup=nullptr;
-    QWidget* buttonWidget=nullptr;
-    QPushButton* button=nullptr;
+    QButtonGroup *buttonGroup = nullptr;
+    QWidget *buttonWidget = nullptr;
+    QPushButton *button = nullptr;
     PageManager *m_pagemanager = nullptr;
 
-    QFileSystemWatcher* m_fileWatcher=nullptr;
-    QFileSystemWatcher* m_fileWatcher1=nullptr;
-    QFileSystemWatcher* m_fileWatcher2 = nullptr;
-    TabletDirectoryChangedThread* m_directoryChangedThread=nullptr;
-    QSettings* settt;
+    QFileSystemWatcher *m_fileWatcher = nullptr;
+    QFileSystemWatcher *m_fileWatcher1 = nullptr;
+    QFileSystemWatcher *m_fileWatcher2 = nullptr;
+    TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
+    QSettings *settt;
     QWidget *widget;
 
 protected:
@@ -163,11 +159,11 @@ protected:
 
     bool appListFile();
 
-    bool event ( QEvent * event );
+    bool event ( QEvent *event );
 
     void wheelEvent(QWheelEvent *e);
 
-    bool eventFilter(QObject * target , QEvent * event );
+    bool eventFilter(QObject *target, QEvent *event );
 
     bool checkapplist();
 

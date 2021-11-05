@@ -25,15 +25,16 @@
 ListView::ListView(QWidget *parent/*, int width, int height, int module*/):
     KListView(parent)
 {
-    this->w=300;
-    this->h=540;
-    this->module=1;
+    this->w = 300;
+    this->h = 540;
+    this->module = 1;
     initWidget();
-    listmodel=new QStandardItemModel(this);
+    listmodel = new QStandardItemModel(this);
     this->setModel(listmodel);
-    pUkuiMenuInterface=new UkuiMenuInterface;
+    pUkuiMenuInterface = new UkuiMenuInterface;
     this->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
+
 ListView::~ListView()
 {
     delete pUkuiMenuInterface;
@@ -60,59 +61,55 @@ void ListView::initWidget()
     this->setMouseTracking(true);
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);
-    this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
-    connect(this,&ListView::customContextMenuRequested,this,&ListView::rightClickedSlot);
-    connect(this,&ListView::clicked,this,&ListView::onClicked);
+    this->verticalScrollBar()->setProperty("drawScrollBarGroove", false);
+    connect(this, &ListView::customContextMenuRequested, this, &ListView::rightClickedSlot);
+    connect(this, &ListView::clicked, this, &ListView::onClicked);
 }
 
 void ListView::addData(QVector<QStringList> data, int module)
 {
     this->module = module;
     listmodel->clear();
-    Q_FOREACH(QStringList desktopfp,data)
-    {
-        QStandardItem* item=new QStandardItem;
-        item->setData(QVariant::fromValue<QStringList>(desktopfp),Qt::DisplayRole);
+
+    Q_FOREACH(QStringList desktopfp, data) {
+        QStandardItem *item = new QStandardItem;
+        item->setData(QVariant::fromValue<QStringList>(desktopfp), Qt::DisplayRole);
         listmodel->appendRow(item);
     }
-    m_delegate= new ItemDelegate(this,module);
+
+    m_delegate = new ItemDelegate(this, module);
     this->setItemDelegate(m_delegate);
 }
 
 void ListView::updateData(QVector<QStringList> data)
 {
     listmodel->clear();
-    Q_FOREACH(QStringList desktopfp,data)
-    {
-        QStandardItem* item=new QStandardItem;
-        item->setData(QVariant::fromValue<QStringList>(desktopfp),Qt::DisplayRole);
+
+    Q_FOREACH(QStringList desktopfp, data) {
+        QStandardItem *item = new QStandardItem;
+        item->setData(QVariant::fromValue<QStringList>(desktopfp), Qt::DisplayRole);
         listmodel->appendRow(item);
     }
 }
 
 void ListView::onClicked(QModelIndex index)
 {
-     QVariant var = listmodel->data(index, Qt::DisplayRole);
-     QString desktopfp = var.value<QStringList>().at(0);
+    QVariant var = listmodel->data(index, Qt::DisplayRole);
+    QString desktopfp = var.value<QStringList>().at(0);
 
-     if(var.isValid())
-     {
-         if((var.value<QStringList>().size() == 5) && (!desktopfp.endsWith(".desktop")))//专用于处理最近页的uri
-         {
-             QUrl url(desktopfp);
-             QDesktopServices::openUrl(url);
-             return;
-         }
+    if(var.isValid()) {
+        if((var.value<QStringList>().size() == 5) && (!desktopfp.endsWith(".desktop"))) { //专用于处理最近页的uri
+            QUrl url(desktopfp);
+            QDesktopServices::openUrl(url);
+            return;
+        }
 
-         if(var.value<QStringList>().at(1).toInt() == 0)
-         {
-             Q_EMIT sendAppClassificationBtnClicked();
-         }
-         else
-         {
-             execApp(desktopfp);
-         }
-     }
+        if(var.value<QStringList>().at(1).toInt() == 0) {
+            Q_EMIT sendAppClassificationBtnClicked();
+        } else {
+            execApp(desktopfp);
+        }
+    }
 }
 
 void ListView::enterEvent(QEvent *e)
@@ -131,51 +128,48 @@ void ListView::leaveEvent(QEvent *e)
 void ListView::paintEvent(QPaintEvent *e)
 {
     //滚动条
-    QPalette p=this->verticalScrollBar()->palette();
+    QPalette p = this->verticalScrollBar()->palette();
     QColor color(255, 255, 255);
-
     color.setAlphaF(0.25);
-    p.setColor(QPalette::Active,QPalette::Button,color);
+    p.setColor(QPalette::Active, QPalette::Button, color);
     this->verticalScrollBar()->setPalette(p);
     QListView::paintEvent(e);
 }
 
-void ListView::keyPressEvent(QKeyEvent* e)
+void ListView::keyPressEvent(QKeyEvent *e)
 {
-    if(e->type()==QEvent::KeyPress)
-    {
-        switch(e->key())
-        {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        {
-            QModelIndex index=this->currentIndex();
-            Q_EMIT clicked(index);
-        }
-            break;
-        case Qt::Key_Down:
-        {
-            if(currentIndex().row() == this->model()->rowCount() - 1)
-            {
-                setCurrentIndex(this->model()->index(0,0));
+    if(e->type() == QEvent::KeyPress) {
+        switch(e->key()) {
+            case Qt::Key_Enter:
+            case Qt::Key_Return: {
+                    QModelIndex index = this->currentIndex();
+                    Q_EMIT clicked(index);
+                }
                 break;
-            }
-            return QListView::keyPressEvent(e);
-            break;
-        }
-        case Qt::Key_Up:
-        {
-            if(currentIndex().row() == 0)
-            {
-                setCurrentIndex(this->model()->index(this->model()->rowCount()-1,0));
+
+            case Qt::Key_Down: {
+                    if(currentIndex().row() == this->model()->rowCount() - 1) {
+                        setCurrentIndex(this->model()->index(0, 0));
+                        break;
+                    }
+
+                    return QListView::keyPressEvent(e);
+                    break;
+                }
+
+            case Qt::Key_Up: {
+                    if(currentIndex().row() == 0) {
+                        setCurrentIndex(this->model()->index(this->model()->rowCount() - 1, 0));
+                        break;
+                    }
+
+                    return QListView::keyPressEvent(e);
+                    break;
+                }
+
+            default:
+                return QListView::keyPressEvent(e);
                 break;
-            }
-            return QListView::keyPressEvent(e);
-            break;
-        }
-        default:
-            return QListView::keyPressEvent(e);
-            break;
         }
     }
 }

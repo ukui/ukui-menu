@@ -58,14 +58,14 @@ public:
     void setViewFocus();
 
 private:
-    UkuiMenuInterface* m_ukuiMenuInterface=nullptr;
-    FullListView* m_listView=nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
+    FullListView *m_listView = nullptr;
     QStringList m_data;
-    QSpacerItem *m_spaceItem=nullptr;
+    QSpacerItem *m_spaceItem = nullptr;
 
-    ScrollArea* m_scrollArea=nullptr;
-    ScrollAreaWid* m_scrollAreaWid=nullptr;
-    QVBoxLayout* m_scrollAreaWidLayout=nullptr;
+    ScrollArea *m_scrollArea = nullptr;
+    ScrollAreaWid *m_scrollAreaWid = nullptr;
+    QVBoxLayout *m_scrollAreaWidLayout = nullptr;
 
 protected:
     /**

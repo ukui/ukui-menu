@@ -12,11 +12,11 @@ class KySmallPluginInterface
 
 public:
     virtual ~KySmallPluginInterface() {}
-    virtual const QString name() const= 0;
-    virtual const QString nameCN() const= 0;
-    virtual const QString description() const= 0;
-    virtual int sortNum() const= 0;
-    virtual QWidget *createWidget(QWidget *parent)=0;
+    virtual const QString name() const = 0;
+    virtual const QString nameCN() const = 0;
+    virtual const QString description() const = 0;
+    virtual int sortNum() const = 0;
+    virtual QWidget *createWidget(QWidget *parent) = 0;
 };
 QT_BEGIN_NAMESPACE
 /*

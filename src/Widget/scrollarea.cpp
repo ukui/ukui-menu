@@ -31,63 +31,62 @@ ScrollAreaWid::ScrollAreaWid(QWidget *parent):
 
 void ScrollAreaWid::paintEvent(QPaintEvent *event)
 {
-    double transparency=getTransparency();
+    double transparency = getTransparency();
     QPainter painter(this);
-
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
-//    {
-//        QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
-//        if(gsetting.keys().contains(QString("effect")))
-//        {
-//            if(gsetting.get("effect").toBool())
-//            {
-//                painter.setBrush(Qt::black);
-////                painter.setBrush(Qt::red);
-//                painter.setPen(Qt::transparent);
-//                painter.setOpacity(0.25);
-//                painter.drawRect(this->rect());
-//            }
-//            else
-//            {
-//                painter.setBrush(this->palette().base());
-//                painter.setPen(Qt::transparent);
-//                painter.setOpacity(transparency);
-//                painter.drawRect(this->rect());
-//            }
-//        }
-//        else
-//        {
-//            painter.setBrush(this->palette().base());
-//            painter.setPen(Qt::transparent);
-//            painter.setOpacity(transparency);
-//            painter.drawRect(this->rect());
-//        }
-//    }
-//    else
-//    {
-        painter.setBrush(this->palette().base());
-        painter.setPen(Qt::transparent);
-        painter.setOpacity(transparency);
-        painter.drawRect(this->rect());
-//    }
+    //    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
+    //    {
+    //        QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
+    //        if(gsetting.keys().contains(QString("effect")))
+    //        {
+    //            if(gsetting.get("effect").toBool())
+    //            {
+    //                painter.setBrush(Qt::black);
+    ////                painter.setBrush(Qt::red);
+    //                painter.setPen(Qt::transparent);
+    //                painter.setOpacity(0.25);
+    //                painter.drawRect(this->rect());
+    //            }
+    //            else
+    //            {
+    //                painter.setBrush(this->palette().base());
+    //                painter.setPen(Qt::transparent);
+    //                painter.setOpacity(transparency);
+    //                painter.drawRect(this->rect());
+    //            }
+    //        }
+    //        else
+    //        {
+    //            painter.setBrush(this->palette().base());
+    //            painter.setPen(Qt::transparent);
+    //            painter.setOpacity(transparency);
+    //            painter.drawRect(this->rect());
+    //        }
+    //    }
+    //    else
+    //    {
+    painter.setBrush(this->palette().base());
+    painter.setPen(Qt::transparent);
+    painter.setOpacity(transparency);
+    painter.drawRect(this->rect());
+    //    }
     QWidget::paintEvent(event);
 }
 
 ScrollArea::ScrollArea()
 {
-//    this->verticalScrollBar()->setVisible(false);
-//    this->setFocusPolicy(Qt::NoFocus);
-////    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-      this->setFixedWidth(1330);
-//    this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
-      this->setFrameShape(QFrame::NoFrame);
-//    this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
-//    this->verticalScrollBar()->setAttribute(Qt::WA_TranslucentBackground, false);
+    //    this->verticalScrollBar()->setVisible(false);
+    //    this->setFocusPolicy(Qt::NoFocus);
+    ////    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    this->setFixedWidth(1330);
+    //    this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    this->setFrameShape(QFrame::NoFrame);
+    //    this->verticalScrollBar()->setProperty("drawScrollBarGroove",false);
+    //    this->verticalScrollBar()->setAttribute(Qt::WA_TranslucentBackground, false);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->verticalScrollBar()->setVisible(false);
     //滚动条设置
-    QPalette p=this->verticalScrollBar()->palette();
+    QPalette p = this->verticalScrollBar()->palette();
     QColor color(255, 255, 255);
     color.setAlphaF(0.25);
     p.setColor(QPalette::Active, QPalette::Button, color);
@@ -106,7 +105,7 @@ void ScrollArea::setFocusToPreChild()
 void ScrollArea::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
-//    this->verticalScrollBar()->setVisible(true);
+    //    this->verticalScrollBar()->setVisible(true);
 }
 
 //void ScrollArea::keyPressEvent(QKeyEvent* e)
@@ -139,10 +138,8 @@ void ScrollArea::leaveEvent(QEvent *e)
 
 void ScrollArea::scrollContentsBy(int dx, int dy)
 {
-    QScrollArea::scrollContentsBy(dx,dy);
-
+    QScrollArea::scrollContentsBy(dx, dy);
     Q_EMIT requestUpdate();
-
-//    update();
-//    viewport()->update();
+    //    update();
+    //    viewport()->update();
 }

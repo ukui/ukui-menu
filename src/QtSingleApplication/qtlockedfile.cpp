@@ -126,6 +126,7 @@ bool QtLockedFile::open(OpenMode mode)
         qWarning("QtLockedFile::open(): Truncate mode not allowed.");
         return false;
     }
+
     return QFile::open(mode);
 }
 

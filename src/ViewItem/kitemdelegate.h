@@ -3,14 +3,14 @@
 #include <QStyledItemDelegate>
 #include "src/Interface/ukuimenuinterface.h"
 
-class KItemDelegate :public QStyledItemDelegate
+class KItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    KItemDelegate(QObject* parent);
+    KItemDelegate(QObject *parent);
 
-    int module=0;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    int module = 0;
+    UkuiMenuInterface *pUkuiMenuInterface = nullptr;
 };
 
 #endif // KITEMDELEGATE_H

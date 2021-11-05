@@ -16,7 +16,7 @@ class RightItemDelegate : public KItemDelegate
 {
     Q_OBJECT
 public:
-    RightItemDelegate(QObject* parent);
+    RightItemDelegate(QObject *parent);
     ~RightItemDelegate();
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;

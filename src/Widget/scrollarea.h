@@ -31,7 +31,7 @@ public:
     ScrollAreaWid(QWidget *parent);
 
 protected:
-    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent *event);
 };
 
 class ScrollArea : public QScrollArea
@@ -46,9 +46,9 @@ Q_SIGNALS:
     void requestUpdate();
 
 protected:
-    void enterEvent(QEvent* e) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent* e) Q_DECL_OVERRIDE;
-//    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
+    //    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
     void scrollContentsBy(int dx, int dy) override;
 
 private:

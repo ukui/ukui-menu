@@ -14,12 +14,12 @@ public:
     ~KListView();
     void initWidget();
 
-    KItemDelegate* m_delegate=nullptr;
-    QStandardItemModel* listmodel=nullptr;
-    int module=0;
+    KItemDelegate *m_delegate = nullptr;
+    QStandardItemModel *listmodel = nullptr;
+    int module = 0;
     double transparency;
     QVariant pressApp;
-    UkuiMenuInterface* pUkuiMenuInterface=nullptr;
+    UkuiMenuInterface *pUkuiMenuInterface = nullptr;
 protected:
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *event);

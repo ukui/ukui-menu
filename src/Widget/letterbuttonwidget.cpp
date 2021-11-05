@@ -33,39 +33,34 @@ LetterButtonWidget::~LetterButtonWidget()
 void LetterButtonWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-    this->setAttribute(Qt::WA_StyledBackground,true);
+    this->setAttribute(Qt::WA_StyledBackground, true);
     this->setFocusPolicy(Qt::NoFocus);
-    this->resize(235,366);
-
-    QGridLayout* gridLayout=new QGridLayout;
-    gridLayout->setContentsMargins(0,0,0,0);
+    this->resize(235, 366);
+    QGridLayout *gridLayout = new QGridLayout;
+    gridLayout->setContentsMargins(0, 0, 0, 0);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
-
     QStringList letterlist;
     letterlist.clear();
-    for(int i=0;i<26;i++)
-    {
-        char letter=static_cast<char>(65+i);
+
+    for(int i = 0; i < 26; i++) {
+        char letter = static_cast<char>(65 + i);
         letterlist.append(QString(QChar(letter)));
     }
+
     letterlist.append("&&");
     letterlist.append("#");
 
-    for(int row=0;row<7;row++)
-    {
-        for(int col=0;col<4;col++)
-        {
-            if(row*4+col<letterlist.size())
-            {
-                LetterClassifyButton* btn=new LetterClassifyButton(this,false,letterlist.at(row*4+col));
+    for(int row = 0; row < 7; row++) {
+        for(int col = 0; col < 4; col++) {
+            if(row * 4 + col < letterlist.size()) {
+                LetterClassifyButton *btn = new LetterClassifyButton(this, false, letterlist.at(row * 4 + col));
                 btn->setFlat(true);
                 btn->setCheckable(false);
-                btn->setFixedSize(55,48);
-                gridLayout->addWidget(btn,row,col);
-                connect(btn,&LetterClassifyButton::buttonClicked,this, &LetterButtonWidget::letterBtnClickedSlot);
-            }
-            else {
+                btn->setFixedSize(55, 48);
+                gridLayout->addWidget(btn, row, col);
+                connect(btn, &LetterClassifyButton::buttonClicked, this, &LetterButtonWidget::letterBtnClickedSlot);
+            } else {
                 break;
             }
         }
@@ -77,8 +72,8 @@ void LetterButtonWidget::initUi()
  */
 void LetterButtonWidget::letterBtnClickedSlot()
 {
-    LetterClassifyButton* btn=dynamic_cast<LetterClassifyButton *>(QObject::sender());
-    QString btnname=btn->text();
+    LetterClassifyButton *btn = dynamic_cast<LetterClassifyButton *>(QObject::sender());
+    QString btnname = btn->text();
     Q_EMIT sendLetterBtnSignal(btnname);
 }
 
@@ -87,20 +82,23 @@ void LetterButtonWidget::letterBtnClickedSlot()
  */
 void LetterButtonWidget::recvLetterBtnList(QStringList list)
 {
-    QGridLayout* gridLayout=qobject_cast<QGridLayout*>(this->layout());
-    for(int row=0;row<7;row++)
-    {
-        for(int col=0;col<4;col++)
-        {
-            QLayoutItem* item=gridLayout->itemAt(row*4+col);
-            LetterClassifyButton* btn=static_cast<LetterClassifyButton*>(item->widget());
-            QString letterstr=btn->text();
-            if(list.indexOf(letterstr.at(0))==-1)
-                btn->setEnabled(false);
-            else
-                btn->setEnabled(true);
+    QGridLayout *gridLayout = qobject_cast<QGridLayout *>(this->layout());
 
-            if(row*4+col==27) break;
+    for(int row = 0; row < 7; row++) {
+        for(int col = 0; col < 4; col++) {
+            QLayoutItem *item = gridLayout->itemAt(row * 4 + col);
+            LetterClassifyButton *btn = static_cast<LetterClassifyButton *>(item->widget());
+            QString letterstr = btn->text();
+
+            if(list.indexOf(letterstr.at(0)) == -1) {
+                btn->setEnabled(false);
+            } else {
+                btn->setEnabled(true);
+            }
+
+            if(row * 4 + col == 27) {
+                break;
+            }
         }
     }
 }

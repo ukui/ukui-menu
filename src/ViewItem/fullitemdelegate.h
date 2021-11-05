@@ -34,7 +34,7 @@ class FullItemDelegate : public KItemDelegate
 {
     Q_OBJECT
 public:
-    FullItemDelegate(QObject* parent,int module);
+    FullItemDelegate(QObject *parent, int module);
     ~FullItemDelegate();
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
