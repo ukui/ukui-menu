@@ -78,7 +78,7 @@ void TabletWindow::initUi()
     buttonWidget->setLayout(buttonBoxLayout);
     buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
     setOpacityEffect(0.7);
-    bool isfile = appListFile();//判断监控看、路径是否存在
+
     m_fileWatcher = new QFileSystemWatcher;
     m_fileWatcher2 = new QFileSystemWatcher;
     m_fileWatcher2->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
@@ -304,32 +304,7 @@ void TabletWindow::modelChanged(bool value)
     }
 
     reloadAppList();
-    qDebug() << "平板模式切换";
-}
-
-
-bool TabletWindow::appListFile()
-{
-//    qDebug()<<"应用列表文件==============================是否文件存在";
-    QFile fp;//要包含必要的头文件，这里省略
-    QString path = QDir::homePath() + "/.config/ukui/desktop_applist";
-    fp.setFileName(path);                      //为fp指定包含路径的文件名
-
-    if(fp.exists()) {                                   //若存在，读取
-        //QString(text);
-        qDebug() << "文件存在";
-        /*        fp.open(QIODevice::ReadOnly); */                  //打开 和 关闭 要紧密相关
-        return 1;
-    } else {                                            //若不存在，则通过open操作新建文件
-//        qDebug()<<"文件不存在";
-        fp.open(QIODevice::ReadWrite | QIODevice::Text); //不存在的情况下，打开包含了新建文件的操作
-        //fp.write("I am writing file");
-//        qDebug()<<"正在写文件";
-        fp.close();
-        return 1;
-    }
-
-    return 0;
+    myDebug() << "平板模式切换";
 }
 
 //打开PC模式下的开始菜单

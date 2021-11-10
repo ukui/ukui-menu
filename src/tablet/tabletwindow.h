@@ -157,8 +157,6 @@ protected:
 
     void buttonWidgetShow();
 
-    bool appListFile();
-
     bool event ( QEvent *event );
 
     void wheelEvent(QWheelEvent *e);
