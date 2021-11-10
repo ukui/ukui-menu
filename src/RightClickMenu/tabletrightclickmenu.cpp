@@ -35,11 +35,11 @@ TabletRightClickMenu::TabletRightClickMenu(QWidget *parent):
 
 TabletRightClickMenu::~TabletRightClickMenu()
 {
-    if(m_cmdProc) {
+    if (m_cmdProc) {
         delete m_cmdProc;
     }
 
-    if(m_setting) {
+    if (m_setting) {
         delete m_setting;
     }
 
@@ -52,7 +52,7 @@ QPixmap TabletRightClickMenu::getIconPixmap(QString iconstr, int type)
     const auto ratio = devicePixelRatioF();
     QPixmap pixmap;
 
-    if(type == 0) {
+    if (type == 0) {
         pixmap = loadSvg(iconstr, 16 * ratio);
         pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     } else {
@@ -67,7 +67,7 @@ QPixmap TabletRightClickMenu::getIconPixmap(QString iconstr, int type)
 QPixmap TabletRightClickMenu::drawSymbolicColoredPixmap(const QPixmap &source)
 {
     QColor gray(128, 128, 128);
-    QColor standard (31, 32, 34);
+    QColor standard(31, 32, 34);
     QImage img = source.toImage();
 
     for (int x = 0; x < img.width(); x++) {
@@ -80,7 +80,7 @@ QPixmap TabletRightClickMenu::drawSymbolicColoredPixmap(const QPixmap &source)
                     color.setGreen(255);
                     color.setBlue(255);
                     img.setPixelColor(x, y, color);
-                } else if(qAbs(color.red() - standard.red()) < 20 && qAbs(color.green() - standard.green()) < 20 && qAbs(color.blue() - standard.blue()) < 20) {
+                } else if (qAbs(color.red() - standard.red()) < 20 && qAbs(color.green() - standard.green()) < 20 && qAbs(color.blue() - standard.blue()) < 20) {
                     color.setRed(255);
                     color.setGreen(255);
                     color.setBlue(255);
@@ -125,8 +125,8 @@ void TabletRightClickMenu::unfixedFromAllActionTriggerSlot()
     QString desktopfn = fileInfo.fileName();
     m_setting->beginGroup("lockapplication");
 
-    Q_FOREACH(QString desktop, m_setting->allKeys()) {
-        if(m_setting->value(desktop).toInt() > m_setting->value(desktopfn).toInt()) {
+    Q_FOREACH (QString desktop, m_setting->allKeys()) {
+        if (m_setting->value(desktop).toInt() > m_setting->value(desktopfn).toInt()) {
             m_setting->setValue(desktop, m_setting->value(desktop).toInt() - 1);
         }
     }
@@ -174,7 +174,7 @@ void TabletRightClickMenu::addToDesktopActionTriggerSlot()
     QString newname = QString(path + "/" + desktopfn);
     bool ret = file.copy(QString(path + "/" + desktopfn));
 
-    if(ret) {
+    if (ret) {
         char command[200];
         sprintf(command, "chmod a+x %s", newname.toLocal8Bit().data());
         QProcess::startDetached(QString::fromLocal8Bit(command));
@@ -185,22 +185,25 @@ void TabletRightClickMenu::addToDesktopActionTriggerSlot()
 
 void TabletRightClickMenu::uninstallActionTriggerSlot()
 {
-    QString cmd = QString("dpkg -S " + m_desktopfp);
-    qDebug() << "void TabletRightClickMenu::uninstallActionTriggerSlot()" << m_desktopfp;
-    m_cmdProc->setReadChannel(QProcess::StandardOutput);
-    m_cmdProc->start("sh", QStringList() << "-c" << cmd);
-    m_cmdProc->waitForFinished();
-    m_cmdProc->waitForReadyRead();
-    m_cmdProc->close();
+//    QString cmd = QString("dpkg -S " + m_desktopfp);
+//    myDebug() << "void TabletRightClickMenu::uninstallActionTriggerSlot()" << m_desktopfp;
+//    m_cmdProc->setReadChannel(QProcess::StandardOutput);
+//    m_cmdProc->start("sh", QStringList() << "-c" << cmd);
+//    m_cmdProc->waitForFinished();
+//    m_cmdProc->waitForReadyRead();
+//    m_cmdProc->close();
+    onReadOutput();
     m_actionNumber = 6;
 }
 
 void TabletRightClickMenu::onReadOutput()
 {
-    QString packagestr = QString::fromLocal8Bit(m_cmdProc->readAllStandardOutput().data());
-    QString packageName = packagestr.split(":").at(0);
+//    QString packagestr = QString::fromLocal8Bit(m_cmdProc->readAllStandardOutput().data());
+//    QString packageName = packagestr.split(":").at(0);
+//目前仅调用起软件商店，不传递参数
     char command[100];
-    sprintf(command, "kylin-software-center -remove %s", packageName.toLocal8Bit().data());
+//    sprintf(command, "kylin-software-center -remove %s", packageName.toLocal8Bit().data());
+    sprintf(command, "kylin-software-center");
     QProcess::startDetached(command);
 }
 
@@ -234,7 +237,7 @@ int TabletRightClickMenu::showAppBtnMenu(QString desktopfp, bool isinstall)
                          QDBusConnection::sessionBus());
     QDBusReply<bool> ret = iface.call("CheckIfExist", desktopfp);
 
-    if(!ret)
+    if (!ret)
         menu.addAction(QIcon(getIconPixmap(":/img/fixed.svg", 0)), tr("Pin to taskbar"),
                        this, SLOT(fixToTaskbarActionTriggerSlot()));
     else
@@ -248,13 +251,13 @@ int TabletRightClickMenu::showAppBtnMenu(QString desktopfp, bool isinstall)
     clickaction->setIcon(QIcon(getIconPixmap(":/img/fixed.svg", 0)));
     connect(clickaction, &QAction::triggered, this, &TabletRightClickMenu::addToDesktopActionTriggerSlot);
     menu.addAction(clickaction);
-    qDebug() << "desktopfp" << desktopfp;
+    myDebug() << "desktopfp" << desktopfp;
     QFileInfo fileInfo(desktopfp);
     QString desktopfn = fileInfo.fileName();
     QString desktopfp1 = QDir::homePath() + "/桌面/" + desktopfn;
     QFileInfo fileInfo1(desktopfp1);
 
-    if(fileInfo1.exists()) {
+    if (fileInfo1.exists()) {
         clickaction->setEnabled(false);
     } else {
         clickaction->setEnabled(true);
@@ -262,7 +265,7 @@ int TabletRightClickMenu::showAppBtnMenu(QString desktopfp, bool isinstall)
 
     menu.addSeparator();
 
-    if(isinstall) {
+    if (isinstall) {
         menu.addAction(QIcon(getIconPixmap(":/img/uninstall.svg", 0)), tr("Uninstall"),
                        this, SLOT(uninstallActionTriggerSlot()));
     }
