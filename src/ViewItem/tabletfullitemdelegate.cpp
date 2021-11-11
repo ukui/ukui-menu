@@ -38,15 +38,15 @@ TabletFullItemDelegate::TabletFullItemDelegate(QObject *parent, int module):
 
 TabletFullItemDelegate::~TabletFullItemDelegate()
 {
-    if(pUkuiMenuInterface) {
+    if (pUkuiMenuInterface) {
         delete pUkuiMenuInterface;
     }
 
-    if(settt) {
+    if (settt) {
         delete settt;
     }
 
-    if(setting) {
+    if (setting) {
         delete setting;
     }
 
@@ -57,7 +57,7 @@ TabletFullItemDelegate::~TabletFullItemDelegate()
 
 void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if(index.isValid()) {
+    if (index.isValid()) {
         painter->save();
         QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
@@ -79,7 +79,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         //        setting->sync();
         //        setting->endGroup();
 
-        if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
+        if (iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
             icon = QIcon(iconstr);
             //qDebug()<<"str-----------"<<iconstr;
         } else {
@@ -89,27 +89,27 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
             icon = QIcon::fromTheme(iconstr);
 
             //qDebug()<<"icon"<<icon;
-            if(icon.isNull()) {
+            if (icon.isNull()) {
                 //                qDebug()<<"isnottheme";
-                if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
                 } else {
                     icon = QIcon::fromTheme(QString("application-x-desktop"));
@@ -119,7 +119,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 
         bool bigIcon = index.data(Qt::UserRole + 2).toBool();
 
-        if(bigIcon) {
+        if (bigIcon) {
             iconRect = QRect(rect.x() + Style::AppLeftSpace - 6, //94
                              rect.y() + Style::AppTopSpace - 6, //60
                              Style::AppListIconSize + 12,//96
@@ -146,7 +146,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         //打开文件.desktop
         GError **error = nullptr;
         GKeyFileFlags flags = G_KEY_FILE_NONE;
-        GKeyFile *keyfile = g_key_file_new ();
+        GKeyFile *keyfile = g_key_file_new();
         QByteArray fpbyte = desktopfp.toLocal8Bit();
         char *filepath = fpbyte.data();
         g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -171,8 +171,9 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         if (bo && bo1 == false) { //都存在//存在并且为false
             QPixmap pixmap;
 
-            if(bigIcon) {
-                pixmap = icon.pixmap((Style::AppListIconSize + 12, Style::AppListIconSize + 12), QIcon::Disabled, QIcon::Off); //wgx
+            if (bigIcon) {
+                pixmap = icon.pixmap((Style::AppListBigIconSize, Style::AppListBigIconSize), QIcon::Disabled, QIcon::Off); //wgx
+                pixmap = pixmap.scaled(Style::AppListBigIconSize, Style::AppListBigIconSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             } else {
                 pixmap = icon.pixmap((Style::AppListIconSize, Style::AppListIconSize), QIcon::Disabled, QIcon::Off); //wgx
             }
@@ -181,9 +182,9 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         } else {
             QPixmap mPixmap;
 
-            if(bigIcon) {
-                mPixmap = icon.pixmap((Style::AppListIconSize + 12, Style::AppListIconSize + 12)); //wgx
-                mPixmap = mPixmap.scaled(108, 108);
+            if (bigIcon) {
+                mPixmap = icon.pixmap((Style::AppListBigIconSize, Style::AppListBigIconSize)); //wgx
+                mPixmap = mPixmap.scaled(Style::AppListBigIconSize, Style::AppListBigIconSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             } else {
                 mPixmap = icon.pixmap((Style::AppListIconSize, Style::AppListIconSize)); //wgx
             }

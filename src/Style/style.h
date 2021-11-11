@@ -141,6 +141,7 @@ public:
     static int AppListWidHeight; //高度
     static int AppListFontSize; //字体大小
     static int AppListIconSize; //图标大小
+    static int AppListBigIconSize;
     static int AppListItemSizeWidth; //item大小
     static int AppListGridSizeWidth; //网格大小
     static int AppLeftSpace;//左侧边距
