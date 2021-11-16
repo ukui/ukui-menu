@@ -47,7 +47,7 @@ const QPixmap loadSvg(const QString &fileName, const int size)
 QPixmap drawSymbolicColoredPixmap(const QPixmap &source)
 {
     QColor gray(128, 128, 128);
-    QColor standard (31, 32, 34);
+    QColor standard(31, 32, 34);
     QImage img = source.toImage();
 
     for (int x = 0; x < img.width(); x++) {
@@ -60,7 +60,7 @@ QPixmap drawSymbolicColoredPixmap(const QPixmap &source)
                     color.setGreen(255);
                     color.setBlue(255);
                     img.setPixelColor(x, y, color);
-                } else if(qAbs(color.red() - standard.red()) < 20 && qAbs(color.green() - standard.green()) < 20 && qAbs(color.blue() - standard.blue()) < 20) {
+                } else if (qAbs(color.red() - standard.red()) < 20 && qAbs(color.green() - standard.green()) < 20 && qAbs(color.blue() - standard.blue()) < 20) {
                     color.setRed(255);
                     color.setGreen(255);
                     color.setBlue(255);
@@ -108,7 +108,7 @@ QRect getScreenAvailableGeometry()
                          QDBusConnection::sessionBus());
     QDBusReply<QVariantList> reply = iface.call("GetPrimaryScreenAvailableGeometry");
 
-    if(iface.isValid() && reply.isValid()) {
+    if (iface.isValid() && reply.isValid()) {
         list = reply.value();
         rect = QRect(list.at(0).toInt(), list.at(1).toInt(), list.at(2).toInt(), list.at(3).toInt());
     } else {
@@ -128,7 +128,7 @@ QVariantList getScreenGeometry()
                          QDBusConnection::sessionBus());
     QDBusReply<QVariantList> reply = iface.call("GetPrimaryScreenPhysicalGeometry");
 
-    if(iface.isValid() && reply.isValid()) {
+    if (iface.isValid() && reply.isValid()) {
         list = reply.value();
     } else {
         QRect rect = QApplication::desktop()->screenGeometry(0);
@@ -139,16 +139,16 @@ QVariantList getScreenGeometry()
         int position = 0;
         int panelSize = 0;
 
-        if(QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit())) {
+        if (QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit())) {
             QGSettings *gsetting = new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
 
-            if(gsetting->keys().contains(QString("panelposition"))) {
+            if (gsetting->keys().contains(QString("panelposition"))) {
                 position = gsetting->get("panelposition").toInt();
             } else {
                 position = 0;
             }
 
-            if(gsetting->keys().contains(QString("panelsize"))) {
+            if (gsetting->keys().contains(QString("panelsize"))) {
                 panelSize = gsetting->get("panelsize").toInt();
             } else {
                 panelSize = 46;
@@ -171,10 +171,10 @@ double getTransparency()
 {
     double transparency = 0.0;
 
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit())) {
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit())) {
         QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
 
-        if(gsetting.keys().contains(QString("transparency"))) {
+        if (gsetting.keys().contains(QString("transparency"))) {
             transparency = gsetting.get("transparency").toDouble();
         }
     }
@@ -187,7 +187,7 @@ void debugLog(QString strMsg)
     QString path = QDir::homePath() + "/.config/ukui/ukui-menu.log";
     QFile confFile(path);
 
-    if(confFile.open(QIODevice::Text | QIODevice::ReadWrite | QIODevice::Append)) {
+    if (confFile.open(QIODevice::Text | QIODevice::ReadWrite | QIODevice::Append)) {
         QString text = QString("%1 %2")
                        .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"))
                        .arg(strMsg);
@@ -205,11 +205,11 @@ QString getEnvOverriddenDesktopFile(int pid)
                    .arg(pid);
     QFile file(path);
 
-    if(file.open(QIODevice::ReadOnly)) {
+    if (file.open(QIODevice::ReadOnly)) {
         QList<QByteArray> list = file.readLine().split('\x00');
 
-        Q_FOREACH(QByteArray array, list) {
-            if(array.contains("GIO_LAUNCHED_DESKTOP_FILE=")) {
+        Q_FOREACH (QByteArray array, list) {
+            if (array.contains("GIO_LAUNCHED_DESKTOP_FILE=")) {
                 ret = QString(array.split('=').at(1));
                 break;
             }
@@ -247,17 +247,17 @@ void initDatabase()
     QSqlQuery sql(db);
     sql.exec("select count(*) from sqlite_master where type='table' and name='appInfo'");
 
-    if(sql.next()) {
-        if(sql.value(0).toInt() == 0) {
+    if (sql.next()) {
+        if (sql.value(0).toInt() == 0) {
             QSettings *setting = new QSettings("/var/lib/ukui-menu/ukui-menu.ini", QSettings::IniFormat);
             setting->beginGroup("application");
             QString desktopfp;
 
-            Q_FOREACH(QString desktopfn, setting->allKeys()) {
-                if(setting->value(desktopfn).toInt() == 1) {
+            Q_FOREACH (QString desktopfn, setting->allKeys()) {
+                if (setting->value(desktopfn).toInt() == 1) {
                     desktopfp.clear();
 
-                    if(UkuiMenuInterface::androidDesktopfnList.contains(desktopfn)) {
+                    if (UkuiMenuInterface::androidDesktopfnList.contains(desktopfn)) {
                         desktopfp = QString(QDir::homePath() + "/.local/share/applications/" + desktopfn);
                     } else {
                         desktopfp = QString("/usr/share/applications/" + desktopfn);
@@ -265,7 +265,7 @@ void initDatabase()
 
                     QFileInfo info(desktopfp);
 
-                    if(!info.isFile() || !UkuiMenuInterface::desktopfpVector.contains(desktopfp)) {
+                    if (!info.isFile() || !UkuiMenuInterface::desktopfpVector.contains(desktopfp)) {
                         continue;
                     }
 
@@ -280,7 +280,7 @@ void initDatabase()
 
     bool b = sql.exec("create table if not exists appInfo(desktop char primary key, times int, time int, type int, recent int, num int, collect int)");
 
-    Q_FOREACH(QString desktopfn, desktopfnList) {
+    Q_FOREACH (QString desktopfn, desktopfnList) {
         qDebug() << "void initDatabase()" << desktopfn;
         QDateTime dt = QDateTime::currentDateTime();
         int datetime = dt.toTime_t();
@@ -305,11 +305,11 @@ bool updateDataBaseTableTimes(QString desktopfn)
     QString cmd;
     cmd = QString("select times from appInfo where desktop=\"%1\"").arg(desktopfn);
 
-    if(sql.exec(cmd)) {
+    if (sql.exec(cmd)) {
         QDateTime dt = QDateTime::currentDateTime();
         int datetime = dt.toTime_t();
 
-        if(sql.next()) {
+        if (sql.next()) {
             int times = sql.value(0).toInt() + 1;
             cmd = QString("update appInfo set times=%1, time=%2, recent=%3 where desktop=\"%4\"")
                   .arg(times)
@@ -342,39 +342,39 @@ bool updateDataBaseCollect(QString desktopfn, int type)
 
     switch (type) {
         case 0: { //取消收藏
-                cmd = QString("update appInfo set collect=%1 where desktop=\"%2\"")
-                      .arg(type)
-                      .arg(desktopfn);
-                ret = sql.exec(cmd);
-            }
-            break;
+            cmd = QString("update appInfo set collect=%1 where desktop=\"%2\"")
+                  .arg(type)
+                  .arg(desktopfn);
+            ret = sql.exec(cmd);
+        }
+        break;
 
         default: { //收藏
-                cmd = QString("select type from appInfo where desktop=\"%1\"")
-                      .arg(desktopfn);
+            cmd = QString("select type from appInfo where desktop=\"%1\"")
+                  .arg(desktopfn);
 
-                if(sql.exec(cmd)) {
-                    if(sql.next()) { //更新记录
-                        cmd = QString("update appInfo set collect=%1 where desktop=\"%2\"")
-                              .arg(type)
-                              .arg(desktopfn);
-                    } else { //添加记录
-                        QDateTime dt = QDateTime::currentDateTime();
-                        int datetime = dt.toTime_t();
-                        cmd = QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
-                              .arg(desktopfn)
-                              .arg(0)
-                              .arg(datetime)
-                              .arg(0)
-                              .arg(0)
-                              .arg(0)
-                              .arg(type);
-                    }
-
-                    ret = sql.exec(cmd);
+            if (sql.exec(cmd)) {
+                if (sql.next()) { //更新记录
+                    cmd = QString("update appInfo set collect=%1 where desktop=\"%2\"")
+                          .arg(type)
+                          .arg(desktopfn);
+                } else { //添加记录
+                    QDateTime dt = QDateTime::currentDateTime();
+                    int datetime = dt.toTime_t();
+                    cmd = QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
+                          .arg(desktopfn)
+                          .arg(0)
+                          .arg(datetime)
+                          .arg(0)
+                          .arg(0)
+                          .arg(0)
+                          .arg(type);
                 }
+
+                ret = sql.exec(cmd);
             }
-            break;
+        }
+        break;
     }
 
     return ret;
@@ -389,8 +389,8 @@ QStringList getCollectAppList()
     QSqlQuery sqlque(db);
     QString cmd = QString("select desktop from appInfo where collect!=0 order by collect");
 
-    if(sql.exec(cmd)) {
-        while(sql.next()) {
+    if (sql.exec(cmd)) {
+        while (sql.next()) {
             list.append(sql.value(0).toString());
             sqlque.exec(QString("update appInfo set collect=%1 where desktop=\"%2\"")
                         .arg(++count)
@@ -410,8 +410,8 @@ int getCollectAppCount(QString desktopfn)
     QString cmd = QString("select collect from appInfo where desktop=\"%1\"")
                   .arg(desktopfn);
 
-    if(sql.exec(cmd)) {
-        if(sql.next()) {
+    if (sql.exec(cmd)) {
+        if (sql.next()) {
             appCount = sql.value(0).toInt();
         }
     }
@@ -425,17 +425,17 @@ void changeCollectSort(QString dragDesktopfn, QString dropDesktopfn)
     int startNum = getCollectAppCount(dragDesktopfn);
     QStringList applist = getCollectAppList();
 
-    if(startNum < endNum) {
+    if (startNum < endNum) {
         updateDataBaseCollect(dragDesktopfn, endNum + 1);
 
-        for(int i = endNum; i < applist.count(); i++) {
+        for (int i = endNum; i < applist.count(); i++) {
             updateDataBaseCollect(applist.at(i), i + 2);
         }
     } else {
         updateDataBaseCollect(dragDesktopfn, endNum);
 
-        for(int i = endNum - 1; i < applist.count(); i++) {
-            if(dragDesktopfn != applist.at(i)) {
+        for (int i = endNum - 1; i < applist.count(); i++) {
+            if (dragDesktopfn != applist.at(i)) {
                 updateDataBaseCollect(applist.at(i), i + 2);
             }
         }
@@ -449,11 +449,11 @@ bool checkIfCollected(QString desktopfn)
     QString cmd = QString("select collect from appInfo where desktop=\"%1\"")
                   .arg(desktopfn);
 
-    if(sql.exec(cmd)) {
-        if(!sql.next()) {
+    if (sql.exec(cmd)) {
+        if (!sql.next()) {
             return false;
         } else {
-            if(sql.value(0).toInt() == 0) {
+            if (sql.value(0).toInt() == 0) {
                 return false;
             } else {
                 return true;
@@ -473,40 +473,40 @@ bool updateDataBaseTableType(QString desktopfn, int type)
 
     switch (type) {
         case 0: { //解除锁定
-                cmd = QString("update appInfo set times=%1,type=%2 where desktop=\"%3\"")
-                      .arg(0)
-                      .arg(type)
-                      .arg(desktopfn);
-                ret = sql.exec(cmd);
-            }
-            break;
+            cmd = QString("update appInfo set times=%1,type=%2 where desktop=\"%3\"")
+                  .arg(0)
+                  .arg(type)
+                  .arg(desktopfn);
+            ret = sql.exec(cmd);
+        }
+        break;
 
         case 1: { //锁定
-                cmd = QString("select type from appInfo where desktop=\"%1\"")
-                      .arg(desktopfn);
+            cmd = QString("select type from appInfo where desktop=\"%1\"")
+                  .arg(desktopfn);
 
-                if(sql.exec(cmd)) {
-                    if(sql.next()) { //更新记录
-                        cmd = QString("update appInfo set type=%1 where desktop=\"%2\"")
-                              .arg(type)
-                              .arg(desktopfn);
-                    } else { //添加记录
-                        QDateTime dt = QDateTime::currentDateTime();
-                        int datetime = dt.toTime_t();
-                        cmd = QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
-                              .arg(desktopfn)
-                              .arg(0)
-                              .arg(datetime)
-                              .arg(type)
-                              .arg(0)
-                              .arg(0)
-                              .arg(0);
-                    }
-
-                    ret = sql.exec(cmd);
+            if (sql.exec(cmd)) {
+                if (sql.next()) { //更新记录
+                    cmd = QString("update appInfo set type=%1 where desktop=\"%2\"")
+                          .arg(type)
+                          .arg(desktopfn);
+                } else { //添加记录
+                    QDateTime dt = QDateTime::currentDateTime();
+                    int datetime = dt.toTime_t();
+                    cmd = QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
+                          .arg(desktopfn)
+                          .arg(0)
+                          .arg(datetime)
+                          .arg(type)
+                          .arg(0)
+                          .arg(0)
+                          .arg(0);
                 }
+
+                ret = sql.exec(cmd);
             }
-            break;
+        }
+        break;
 
         default:
             break;
@@ -541,11 +541,11 @@ bool checkIfLocked(QString desktopfn)
     QString cmd = QString("select type from appInfo where desktop=\"%1\"")
                   .arg(desktopfn);
 
-    if(sql.exec(cmd)) {
-        if(!sql.next()) {
+    if (sql.exec(cmd)) {
+        if (!sql.next()) {
             return false;
         } else {
-            if(sql.value(0).toInt() == 0) {
+            if (sql.value(0).toInt() == 0) {
                 return false;
             } else {
                 return true;
@@ -563,11 +563,11 @@ bool checkIfRecent(QString desktopfn)
     QString cmd = QString("select recent from appInfo where desktop=\"%1\"")
                   .arg(desktopfn);
 
-    if(sql.exec(cmd)) {
-        if(!sql.next()) {
+    if (sql.exec(cmd)) {
+        if (!sql.next()) {
             return false;
         } else {
-            if(sql.value(0).toInt() == 0) {
+            if (sql.value(0).toInt() == 0) {
                 return false;
             } else {
                 return true;
@@ -585,8 +585,8 @@ QStringList getLockAppList()
     QSqlQuery sql(db);
     QString cmd = QString("select desktop from appInfo where type=1");
 
-    if(sql.exec(cmd)) {
-        while(sql.next()) {
+    if (sql.exec(cmd)) {
+        while (sql.next()) {
             list.append(sql.value(0).toString());
         }
     }
@@ -601,8 +601,8 @@ QStringList getUnlockAllList()
     QSqlQuery sql(db);
     QString cmd = QString("select desktop from appInfo where type=0 and times>=1 order by times desc");
 
-    if(sql.exec(cmd)) {
-        while(sql.next()) {
+    if (sql.exec(cmd)) {
+        while (sql.next()) {
             list.append(sql.value(0).toString());
         }
     }
@@ -620,15 +620,15 @@ void cleanTimeoutApp()
     QStringList list;
     QSqlQuery sql(db);
 
-    if(sql.exec(cmd)) {
-        while(sql.next()) {
-            if(!checkIfLocked(sql.value(0).toString())) {
+    if (sql.exec(cmd)) {
+        while (sql.next()) {
+            if (!checkIfLocked(sql.value(0).toString())) {
                 list.append(sql.value(0).toString());
             }
         }
     }
 
-    Q_FOREACH(QString desktopfn, list) {
+    Q_FOREACH (QString desktopfn, list) {
         cmd = QString("delete from appInfo where desktop=\"%1\"")
               .arg(desktopfn);
         sql.exec(cmd);
@@ -650,7 +650,7 @@ void execApp(QString desktopfp)
 {
     UkuiMenuInterface interface;
 
-    if(interface.checkKreApp(desktopfp)) {
+    if (interface.checkKreApp(desktopfp)) {
         QProcess::startDetached(interface.getAppExec(desktopfp));
     } else {
         QString appName = interface.getAppExec(desktopfp);
@@ -658,7 +658,7 @@ void execApp(QString desktopfp)
 
         //        for(int i = 1; i < strList.size(); i++)
         //        {
-        if(QString(strList.at(0)) == "kmplayer") {
+        if (QString(strList.at(0)) == "kmplayer") {
             QProcess::startDetached(strList.at(0));
             return;
         }
@@ -674,11 +674,11 @@ bool checkOsRelease()
 {
     QFile file("/etc/os-release");
 
-    if(file.open(QFile::ReadOnly)) {
+    if (file.open(QFile::ReadOnly)) {
         QByteArray line = file.readLine();
         file.close();
 
-        if(QString(line).contains("Ubuntu")) {
+        if (QString(line).contains("Ubuntu")) {
             return true;
         }
     }

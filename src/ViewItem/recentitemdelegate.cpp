@@ -14,7 +14,7 @@ recentitemdelegate::~recentitemdelegate()
 
 void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if(index.isValid()) {
+    if (index.isValid()) {
         //        QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
         rect.setX(option.rect.x());
@@ -36,7 +36,7 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         QStringList strlist = index.model()->data(index, Qt::DisplayRole).toStringList();
         painter->setRenderHint(QPainter::Antialiasing);
 
-        if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
+        if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
             QColor color = option.palette.text().color();
             color.setAlphaF(0.15);
             painter->save();
@@ -48,33 +48,33 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
 
         painter->setOpacity(1);
 
-        if(module > 0) {
-            if(strlist.at(1).toInt() == 1) {
+        if (module > 0) {
+            if (strlist.at(1).toInt() == 1) {
                 QRect iconRect = QRect(rect.x() + 11, rect.y() + (rect.height() - 32) / 2, 32, 32);
                 //                QString iconstr=pUkuiMenuInterface->getAppIcon(strlist.at(0));
                 QString iconstr = "wps-office2019-etmain";
                 QIcon icon;
                 QFileInfo iconFileInfo(iconstr);
 
-                if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
+                if (iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
                     icon = QIcon(iconstr);
                 } else {
                     iconstr.remove(".png");
                     iconstr.remove(".svg");
                     icon = QIcon::fromTheme(iconstr);
 
-                    if(icon.isNull()) {
-                        if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                    if (icon.isNull()) {
+                        if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
                             icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
-                        } else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
+                        } else if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
                             icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
-                        } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                        } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
                             icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
-                        } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
+                        } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
                             icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
-                        } else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"))) {
+                        } else if (QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"))) {
                             icon = QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
-                        } else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"))) {
+                        } else if (QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"))) {
                             icon = QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
                         } else {
                             icon = QIcon::fromTheme(QString("application-x-desktop"));
@@ -95,7 +95,7 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
                 QFileInfo fileInfo(strlist.at(0));
                 QString desktopfn = fileInfo.fileName();
 
-                if(checkIfRecent(desktopfn)) {
+                if (checkIfRecent(desktopfn)) {
                     painter->setPen(QPen(Qt::NoPen));
                     painter->setBrush(QColor("#4d94ff"));
                     painter->drawEllipse(QPoint(rect.topRight().x() - 22, rect.y() + (rect.height() - 8) / 2 + 4), 4, 4);
@@ -103,11 +103,15 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
 
                 painter->restore();
 
-                if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
+                if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
                     int len = fm.boundingRect(appname).width();
 
-                    if(len > rect.width() - 62) {
-                        QToolTip::showText(QCursor::pos(), appname);
+                    if (len > rect.width() - 62) {
+                        if (option.state & QStyle::State_MouseOver) {
+                            QToolTip::showText(QCursor::pos(), appname);
+                        } else {
+                            QToolTip::showText(option.widget->mapToGlobal(QPoint(rect.center().x(), rect.center().y() + 15)), appname);
+                        }
                     } else {
                         QToolTip::hideText();
                     }
@@ -130,25 +134,25 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
             QIcon icon;
             QFileInfo iconFileInfo(iconstr);
 
-            if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
+            if (iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
                 icon = QIcon(iconstr);
             } else {
                 iconstr.remove(".png");
                 iconstr.remove(".svg");
                 icon = QIcon::fromTheme(iconstr);
 
-                if(icon.isNull()) {
-                    if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                if (icon.isNull()) {
+                    if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
                         icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
-                    } else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
+                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
                         icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
-                    } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
+                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
                         icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
-                    } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
                         icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
-                    } else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"))) {
+                    } else if (QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"))) {
                         icon = QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
-                    } else if(QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"))) {
+                    } else if (QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"))) {
                         icon = QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
                     } else {
                         icon = QIcon::fromTheme(QString("application-x-desktop"));
@@ -161,7 +165,7 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
             QFileInfo fileInfo(strlist.at(0));
             QString desktopfn = fileInfo.fileName();
 
-            if(checkIfLocked(desktopfn)) {
+            if (checkIfLocked(desktopfn)) {
                 QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
                 icon.paint(painter, QRect(rect.topRight().x() - 22, rect.y() + (rect.height() - 16) / 2, 16, 16));
             }
@@ -169,7 +173,7 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
             painter->setOpacity(1);
             painter->save();
 
-            if(checkIfRecent(desktopfn) && !checkIfLocked(desktopfn)) {
+            if (checkIfRecent(desktopfn) && !checkIfLocked(desktopfn)) {
                 painter->setPen(QPen(Qt::NoPen));
                 painter->setBrush(QColor("#4d94ff"));
                 painter->drawEllipse(QPoint(rect.topRight().x() - 22, rect.y() + (rect.height() - 8) / 2 + 4), 4, 4);
@@ -186,11 +190,15 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
                                     rect.width() - 62, rect.height()), Qt::AlignVCenter, appnameElidedText);
             painter->restore();
 
-            if((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
+            if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
                 int len = fm.boundingRect(appname).width();
 
-                if(len > rect.width() - 62) {
-                    QToolTip::showText(QCursor::pos(), appname);
+                if (len > rect.width() - 62) {
+                    if (option.state & QStyle::State_MouseOver) {
+                        QToolTip::showText(QCursor::pos(), appname);
+                    } else {
+                        QToolTip::showText(option.widget->mapToGlobal(QPoint(rect.center().x(), rect.center().y() + 15)), appname);
+                    }
                 } else {
                     QToolTip::hideText();
                 }
