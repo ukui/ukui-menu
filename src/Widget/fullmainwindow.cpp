@@ -43,7 +43,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/search.svg"), 16);
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
 
-    if(gsetting.get("style-name").toString() == "ukui-light") {
+    if (gsetting.get("style-name").toString() == "ukui-light") {
         pixmap = drawSymbolicBlackColoredPixmap(pixmap);
         sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#000000;}",
                 QueryLineEditClickedBorderDefault, QueryLineEditDefaultBackground);
@@ -194,18 +194,18 @@ void FullMainWindow::paintEvent(QPaintEvent *event)
 
 bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == lineEdit) {
+    if (watched == lineEdit) {
         isSearching = true;
         char style[200];
 
-        if(event->type() == QEvent::FocusIn) {
+        if (event->type() == QEvent::FocusIn) {
             sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:4px;color:#ffffff;}",
                     QueryLineEditClickedBorder, QueryLineEditClickedBackground);
 
-            if(lineEdit->text().isEmpty()) {
+            if (lineEdit->text().isEmpty()) {
                 qDebug() << "bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)" << m_queryWid->layout()->count();
 
-                if(m_queryWid->layout()->count() == 2) {
+                if (m_queryWid->layout()->count() == 2) {
                     m_queryWid->layout()->removeWidget(m_queryText);
                     m_queryText->setParent(nullptr);
                 }
@@ -214,29 +214,29 @@ bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
                 m_queryWid->layout()->setAlignment(Qt::AlignVCenter);
                 lineEdit->setTextMargins(26, 0, 0, 0);
             }
-        } else if(event->type() == QEvent::FocusOut && lineEdit->text().isEmpty()) {
+        } else if (event->type() == QEvent::FocusOut && lineEdit->text().isEmpty()) {
             resetEditline();
         }
 
-        if( event->type() == QEvent::KeyPress ) {
+        if (event->type() == QEvent::KeyPress) {
             QKeyEvent *ke = (QKeyEvent *)event;
 
-            if( ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) {
+            if (ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) {
                 Q_EMIT sendSetFocusToResult();
             }
         }
     }
 
-    if(watched == minPushButton) {
-        if( event->type() == QEvent::KeyPress ) {
+    if (watched == minPushButton) {
+        if (event->type() == QEvent::KeyPress) {
             QKeyEvent *ke = (QKeyEvent *)event;
 
-            if( ke->key() == Qt::Key_Tab) {
-                if(fullStackedWidget->currentIndex() == 0) {
+            if (ke->key() == Qt::Key_Tab) {
+                if (fullStackedWidget->currentIndex() == 0) {
                     Q_EMIT sendSetFocusToCom();
-                } else if(fullStackedWidget->currentIndex() == 1) {
+                } else if (fullStackedWidget->currentIndex() == 1) {
                     Q_EMIT sendSetFocusToLet();
-                } else if(fullStackedWidget->currentIndex() == 2) {
+                } else if (fullStackedWidget->currentIndex() == 2) {
                     Q_EMIT sendSetFocusToFun();
                 } else {
                     Q_EMIT sendSetFocusToResult();
@@ -247,12 +247,12 @@ bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if(watched == minPushButton || watched == fullSelectToolButton || watched == fullSelectMenuButton) {
-        if( event->type() == QEvent::KeyPress ) {
+    if (watched == minPushButton || watched == fullSelectToolButton || watched == fullSelectMenuButton) {
+        if (event->type() == QEvent::KeyPress) {
             QKeyEvent *ke = (QKeyEvent *)event;
 
-            if(ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
-               ke->key() == Qt::Key_Right || ke->key() == Qt::Key_Left) {
+            if (ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
+                ke->key() == Qt::Key_Right || ke->key() == Qt::Key_Left) {
                 return true;
             }
         }
@@ -273,37 +273,38 @@ void FullMainWindow::resetEditline()
     m_queryWid->setFixedSize(372, 36);
 }
 
-bool FullMainWindow::event ( QEvent *event )
+bool FullMainWindow::event(QEvent *event)
 {
     if (event->type() == QEvent::ActivationChange) {
         qDebug() << " * 鼠标点击窗口外部事件";
 
-        if(QApplication::activeWindow() != this) {
+        if (QApplication::activeWindow() != this) {
             this->hide();
-        } else {
+        } /*else {
+
             fullLetterPage->repaintWidget();
             fullFunctionPage->repaintWidget();
-        }
+        }*/
     }
 
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = (QKeyEvent *) event;
 
-        if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
-            if(fullSelectToolButton->hasFocus()) {
+        if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+            if (fullSelectToolButton->hasFocus()) {
                 fullSelectToolButton->click();
-            } else if(fullSelectMenuButton->hasFocus()) {
+            } else if (fullSelectMenuButton->hasFocus()) {
                 fullSelectMenuButton->click();
             }
 
-            if(lineEdit->hasFocus()) {
+            if (lineEdit->hasFocus()) {
                 fullResultPage->setFocus();
             } else {
                 QWidget *current_focus_widget;
                 current_focus_widget = QWidget::focusWidget();
                 QPushButton *le = qobject_cast<QPushButton *>(current_focus_widget);
 
-                if(le != nullptr) {
+                if (le != nullptr) {
                     le->clicked();
                 }
             }
@@ -321,7 +322,7 @@ void FullMainWindow::setFocusToButton()
 
 void FullMainWindow::searchAppSlot(QString arg)
 {
-    if(!arg.isEmpty()) { //切换至搜索模块
+    if (!arg.isEmpty()) { //切换至搜索模块
         Q_EMIT sendSearchKeyword(arg);
         m_searchAppThread->start();
         fullStackedWidget->setCurrentIndex(3);
@@ -349,11 +350,11 @@ void FullMainWindow::on_fullSelectToolButton_clicked()
     resetEditline();
     fullSelectToolButton->setFocus();
 
-    if(fullStackedWidget->currentIndex() == 0) {
+    if (fullStackedWidget->currentIndex() == 0) {
         on_fullSelectMenuButton_triggered(m_letterAction);
-    } else if(fullStackedWidget->currentIndex() == 1) {
+    } else if (fullStackedWidget->currentIndex() == 1) {
         on_fullSelectMenuButton_triggered(m_funcAction);
-    } else if(fullStackedWidget->currentIndex() == 2) {
+    } else if (fullStackedWidget->currentIndex() == 2) {
         on_fullSelectMenuButton_triggered(m_allAction);
     }
 }
@@ -365,7 +366,7 @@ void FullMainWindow::on_fullSelectMenuButton_clicked()
 
 void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
 {
-    if(arg1 == m_allAction) {
+    if (arg1 == m_allAction) {
         fullStackedWidget->setCurrentIndex(0);
         fullCommonPage->repaintWidget();
         m_state = 0;
@@ -373,7 +374,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(false);
-    } else if(arg1 == m_letterAction) {
+    } else if (arg1 == m_letterAction) {
         fullStackedWidget->setCurrentIndex(1);
         fullLetterPage->repaintWidget();
         m_state = 1;
@@ -381,7 +382,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
         m_funcAction->setChecked(false);
-    } else if(arg1 == m_funcAction) {
+    } else if (arg1 == m_funcAction) {
         fullStackedWidget->setCurrentIndex(2);
         fullFunctionPage->repaintWidget();
         m_state = 2;

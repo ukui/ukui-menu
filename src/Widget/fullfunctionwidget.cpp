@@ -88,7 +88,7 @@ void FullFunctionWidget::initUi()
     //翻页灵敏度时间调节
     time = new QTimer(this);
     connect(time, &QTimer::timeout, [ = ]() {
-        if(flag == false) {
+        if (flag == false) {
             flag = true;
             time->stop();
         }
@@ -168,7 +168,7 @@ void FullFunctionWidget::on_powerOffButton_customContextMenuRequested(const QPoi
     int ret = m_otherMenu.showShutdownMenu(powerOffButton->mapToGlobal(pos));
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
 
-    if(ret >= 10 && ret <= 17) {
+    if (ret >= 10 && ret <= 17) {
         //        Q_EMIT sendHideMainWindowSignal();
         switch (ret) {
             case 10:
@@ -217,77 +217,77 @@ void FullFunctionWidget::fillAppList()
     QVector<QStringList> vector = UkuiMenuInterface::functionalVector;
     QStringList androidlist = vector.at(0);
 
-    if(!androidlist.isEmpty()) {
+    if (!androidlist.isEmpty()) {
         insertClassificationBtn("Mobile");
         insertAppList(androidlist);
     }
 
     QStringList netlist = vector.at(1);
 
-    if(!netlist.isEmpty()) {
+    if (!netlist.isEmpty()) {
         insertClassificationBtn("Internet");
         insertAppList(netlist);
     }
 
     QStringList sociallist = vector.at(2);
 
-    if(!sociallist.isEmpty()) {
+    if (!sociallist.isEmpty()) {
         insertClassificationBtn("Social");
         insertAppList(sociallist);
     }
 
     QStringList avlist = vector.at(3);
 
-    if(!avlist.isEmpty()) {
+    if (!avlist.isEmpty()) {
         insertClassificationBtn("Video");
         insertAppList(avlist);
     }
 
     QStringList developlist = vector.at(4);
 
-    if(!developlist.isEmpty()) {
+    if (!developlist.isEmpty()) {
         insertClassificationBtn("Development");
         insertAppList(developlist);
     }
 
     QStringList graphicslist = vector.at(5);
 
-    if(!graphicslist.isEmpty()) {
+    if (!graphicslist.isEmpty()) {
         insertClassificationBtn("Image");
         insertAppList(graphicslist);
     }
 
     QStringList gamelist = vector.at(6);
 
-    if(!gamelist.isEmpty()) {
+    if (!gamelist.isEmpty()) {
         insertClassificationBtn("Game");
         insertAppList(gamelist);
     }
 
     QStringList officelist = vector.at(7);
 
-    if(!officelist.isEmpty()) {
+    if (!officelist.isEmpty()) {
         insertClassificationBtn("Office");
         insertAppList(officelist);
     }
 
     QStringList educationlist = vector.at(8);
 
-    if(!educationlist.isEmpty()) {
+    if (!educationlist.isEmpty()) {
         insertClassificationBtn("Education");
         insertAppList(educationlist);
     }
 
     QStringList systemadminlist = vector.at(9);
 
-    if(!systemadminlist.isEmpty()) {
+    if (!systemadminlist.isEmpty()) {
         insertClassificationBtn("System");
         insertAppList(systemadminlist);
     }
 
     QStringList otherlist = vector.at(10);
 
-    if(!otherlist.isEmpty()) {
+    if (!otherlist.isEmpty()) {
         insertClassificationBtn("Others");
         insertAppList(otherlist);
     }
@@ -317,7 +317,7 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
     m_scrollAreaWidLayout->addWidget(listview);
     m_data.clear();
 
-    for(int i = 0; i < desktopfplist.count(); i++) {
+    for (int i = 0; i < desktopfplist.count(); i++) {
         m_data.append(desktopfplist.at(i));
     }
 
@@ -389,7 +389,7 @@ void FullFunctionWidget::resizeScrollAreaControls()
     int row = 0;
     int areaHeight = 0;
 
-    while(row < m_scrollAreaWidLayout->count() / 2) {
+    while (row < m_scrollAreaWidLayout->count() / 2) {
         //应用界面
         QLayoutItem *widItem = m_scrollAreaWidLayout->itemAt(row * 2 + 1);
         QWidget *wid = widItem->widget();
@@ -398,7 +398,7 @@ void FullFunctionWidget::resizeScrollAreaControls()
         int dividend = m_scrollArea->width() / Style::AppListGridSizeWidth;
         int rowcount = 0;
 
-        if(listview->model()->rowCount() % dividend > 0) {
+        if (listview->model()->rowCount() % dividend > 0) {
             rowcount = listview->model()->rowCount() / dividend + 1;
         } else {
             rowcount = listview->model()->rowCount() / dividend;
@@ -444,7 +444,7 @@ void FullFunctionWidget::initIconListScrollArea()
 {
     m_iconListWidLayout->addItem(m_topSpacerItem);
 
-    for(int i = 0; i < m_classificationList.size(); i++) {
+    for (int i = 0; i < m_classificationList.size(); i++) {
         FunctionClassifyButton *iconbtn = new FunctionClassifyButton(
             Style::LeftBtnWidth,
             Style::LeftBtnHeight,
@@ -468,7 +468,7 @@ void FullFunctionWidget::initIconListScrollArea()
     connect(m_btnGroup, static_cast<void(QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked), this, &FullFunctionWidget::btnGroupClickedSlot);
 
     //    m_iconListScrollArea->widget()->adjustSize();
-    if(m_btnGroup->button(0) != nullptr) {
+    if (m_btnGroup->button(0) != nullptr) {
         m_btnGroup->button(0)->click();
     }
 }
@@ -479,7 +479,7 @@ void FullFunctionWidget::btnGroupClickedSlot(QAbstractButton *btn)
                this, &FullFunctionWidget::valueChangedSlot);
 
     Q_FOREACH (QAbstractButton *button, m_buttonList) {
-        if(m_btnGroup->id(btn) == m_buttonList.indexOf(button)) {
+        if (m_btnGroup->id(btn) == m_buttonList.indexOf(button)) {
             m_beginPos = m_scrollArea->verticalScrollBar()->sliderPosition();
             m_endPos = m_scrollAreaWidLayout->itemAt(m_btnGroup->id(btn) * 2)->widget()->y();
             m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -524,21 +524,21 @@ void FullFunctionWidget::valueChangedSlot(int value)
 {
     int index = 0;
 
-    while(index <= m_classificationList.count() - 1) {
+    while (index <= m_classificationList.count() - 1) {
         int min = m_scrollAreaWidLayout->itemAt(2 * index)->widget()->y();
         int max = 0;
 
-        if(index == m_classificationList.count() - 1) {
+        if (index == m_classificationList.count() - 1) {
             max = m_scrollAreaWid->height();
         } else {
             max = m_scrollAreaWidLayout->itemAt(2 * (index + 1))->widget()->y();
         }
 
-        if(value >= min && value < max) {
+        if (value >= min && value < max) {
             Q_FOREACH (QAbstractButton *button, m_buttonList) {
                 FunctionClassifyButton *fcbutton = qobject_cast<FunctionClassifyButton *>(button);
 
-                if(index == m_buttonList.indexOf(button)) {
+                if (index == m_buttonList.indexOf(button)) {
                     fcbutton->setChecked(true);
                 } else {
                     fcbutton->setChecked(false);
@@ -596,7 +596,7 @@ void FullFunctionWidget::repaintWidget()
 
 void FullFunctionWidget::widgetMakeZero()
 {
-    if(m_btnGroup->button(0) != nullptr) {
+    if (m_btnGroup->button(0) != nullptr) {
         m_btnGroup->button(0)->click();
     }
 
@@ -617,7 +617,7 @@ void FullFunctionWidget::onSetSlider(int value)
 
 bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    if( event->type() == QEvent::KeyPress ) {
+    if (event->type() == QEvent::KeyPress) {
         QLayoutItem *widItem = m_scrollAreaWidLayout->itemAt(2 * m_buttonList.size() - 1);
         QWidget *wid = widItem->widget();
         FullListView *m_listview = qobject_cast<FullListView *>(wid);
@@ -626,14 +626,14 @@ bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
         FullListView *m_listviewTop = qobject_cast<FullListView *>(widTop);
         QKeyEvent *ke = (QKeyEvent *)event;
 
-        if( ke->key() == Qt::Key_Tab ) {
+        if (ke->key() == Qt::Key_Tab) {
             Q_EMIT setFocusToSideWin();
             return true;
         }
 
-        if(ke->key() == Qt::Key_Up) {
-            if(!m_listviewTop->hasFocus()) {
-                QAbstractButton *buttonTop = getCurLetterButton(( --m_index) % m_buttonList.size());
+        if (ke->key() == Qt::Key_Up) {
+            if (!m_listviewTop->hasFocus()) {
+                QAbstractButton *buttonTop = getCurLetterButton((--m_index) % m_buttonList.size());
                 btnGroupClickedSlot(buttonTop);
                 this->m_scrollArea->setFocusToPreChild();
             } else {
@@ -647,9 +647,9 @@ bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
             return true;
         }
 
-        if(ke->key() == Qt::Key_Down) {
-            if(!m_listview->hasFocus()) {
-                QAbstractButton *button = getCurLetterButton(( ++m_index) % m_buttonList.size());
+        if (ke->key() == Qt::Key_Down) {
+            if (!m_listview->hasFocus()) {
+                QAbstractButton *button = getCurLetterButton((++m_index) % m_buttonList.size());
                 btnGroupClickedSlot(button);
                 this->m_scrollArea->setFocusToNextChild();
             } else {
@@ -670,7 +670,7 @@ bool FullFunctionWidget::eventFilter(QObject *watched, QEvent *event)
 
 void FullFunctionWidget::functionButtonClick()
 {
-    if(m_btnGroup->button(0) != nullptr) {
+    if (m_btnGroup->button(0) != nullptr) {
         m_btnGroup->button(0)->click();
     }
 
