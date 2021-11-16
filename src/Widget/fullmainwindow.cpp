@@ -308,6 +308,10 @@ bool FullMainWindow::event ( QEvent *event )
                 }
             }
         }
+
+        if(keyEvent->key() == Qt::Key_Escape){
+            this->hide();
+        }
     }
 
     return QWidget::event(event);
