@@ -78,6 +78,7 @@ int Style::AppListWidWidth = 0;
 int Style::AppListWidHeight = 0;
 int Style::AppListFontSize = 0;
 int Style::AppListIconSize = 0;
+int Style::AppListBigIconSize = 0;
 int Style::AppListItemSizeWidth = 0;
 int Style::AppListGridSizeWidth = 0;
 int Style::AppLeftSpace = 0;
@@ -130,10 +131,10 @@ bool Style::IsWideScreen = false;
 
 void Style::initWidStyle()
 {
-    if(projectCodeName == "V10SP1") {
+    if (projectCodeName == "V10SP1") {
         QVariantList list = getScreenGeometry();
 
-        if(list.count() >= 6) {
+        if (list.count() >= 6) {
             primaryScreenX = list.at(0).toInt();
             primaryScreenY = list.at(1).toInt();
             primaryScreenWidth = list.at(2).toInt();
@@ -147,12 +148,12 @@ void Style::initWidStyle()
         QStringList valstr = value.split(" ");
         int fontSize = valstr.at(valstr.count() - 1).toInt();
 
-        if(panelPosition == 0 || panelPosition == 1) {
+        if (panelPosition == 0 || panelPosition == 1) {
             widthavailable = primaryScreenWidth;
             heightavailable = primaryScreenHeight - panelSize;
         }
 
-        if(panelPosition == 2 || panelPosition == 3) {
+        if (panelPosition == 2 || panelPosition == 3) {
             widthavailable = primaryScreenWidth - panelSize;
             heightavailable = primaryScreenHeight;
         }
@@ -166,7 +167,7 @@ void Style::initWidStyle()
             len = 10;
         }
 
-        if(primaryScreenWidth == 800 && primaryScreenHeight == 600) {
+        if (primaryScreenWidth == 800 && primaryScreenHeight == 600) {
             minw = 320;
             minh = 500;
             defaultMainViewWidWidth = 264;
@@ -189,7 +190,7 @@ void Style::initWidStyle()
             defaultSideBarWidWidth = 55;
         }
 
-        if(widthavailable >= 2000 && widthavailable <= 4000) {
+        if (widthavailable >= 2000 && widthavailable <= 4000) {
             MainViewWidWidth = widthavailable - round((widthavailable - 1644) / 2);
             TopWidgetHeight = 107;
             QueryLineEditWidth = 350;
@@ -545,5 +546,6 @@ void Style::initWidStyle()
         TimeWidgetLeft = 112;
         ButtonWidgetWidth = 56;
         AppListIconSize = 96;
+        AppListBigIconSize = 108;
     }
 }
