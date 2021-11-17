@@ -90,7 +90,7 @@ protected:
 
     void recvSearchResult(QVector<QStringList> arg);
 
-    bool eventFilter(QObject *target, QEvent *event );
+    bool eventFilter(QObject *target, QEvent *event);
 
     //    void mouseReleaseEvent(QMouseEvent *event);
 
@@ -182,6 +182,7 @@ private:
 
     bool m_canHide = true;
     bool m_isFullScreen = false;
+    QString m_buttonStyle;
     UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
     QPropertyAnimation *m_animation = nullptr;
     bool m_winFlag = false;

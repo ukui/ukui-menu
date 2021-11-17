@@ -41,6 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
     initDatabase();
     this->resize(Style::minw, Style::minh);
     this->setAutoFillBackground(false);
+    m_buttonStyle = QString("%1{border-radius:13px; background: rgba(255, 255, 255, 0.1);}"
+                            "%1:hover {border-radius:13px; background: rgba(255, 255, 255, 0.2);}"
+                            "%1:pressed {border-radius:13px; background: rgba(255, 255, 255, 0.3);}");
     m_centralwidget = new QWidget(this);
     m_centerLayout = new QHBoxLayout(m_centralwidget);
     m_centerLayout->setSpacing(0);
@@ -63,37 +66,39 @@ MainWindow::MainWindow(QWidget *parent) :
     m_minSelectTextLabel = new QLabel(m_minMenuPage);
     m_horizontalSpacer = new QSpacerItem(68, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_searchPushButton = new QPushButton(m_minMenuPage);
+    m_searchPushButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
     m_searchPushButton->setFixedSize(QSize(26, 26));
     QIcon icon1;
     icon1.addFile(QString::fromUtf8(":/data/img/mainviewwidget/search.svg"), QSize(), QIcon::Normal, QIcon::Off);
     m_searchPushButton->setIcon(icon1);
     m_minSelectButton = new QToolButton(m_minMenuPage);
+    m_minSelectButton->setStyleSheet(m_buttonStyle.arg("QToolButton"));
     m_minSelectButton->setFixedSize(QSize(26, 26));
     QIcon icon2;
     icon2.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-所有应用.png"), QSize(), QIcon::Normal, QIcon::Off);
     m_minSelectButton->setIcon(icon2);
     m_minSelectButton->installEventFilter(this);
     m_selectMenuButton = new QToolButton(m_minMenuPage);
+    m_selectMenuButton->setStyleSheet("background: transparent;");
     m_selectMenuButton->setFixedSize(QSize(16, 26));
     m_selectMenuButton->setAcceptDrops(true);
     QIcon icon3;
     icon3.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon- arrow.svg"), QSize(), QIcon::Normal, QIcon::Off);
     m_selectMenuButton->setIcon(icon3);
     m_selectMenuButton->setPopupMode(QToolButton::InstantPopup);
-    //    selectMenuButton->setStyleSheet(QString::fromUtf8("QToolButton::menu-indicator { image: None; }"));
+//    m_selectMenuButton->setStyleSheet(QString::fromUtf8("QToolButton::menu-indicator { image: None; }"));
     //搜索框展开页
     m_minSearchPage = new QWidget();
     m_leftTopSearchHorizontalLayout = new QHBoxLayout(m_minSearchPage);
     m_leftTopSearchHorizontalLayout->setContentsMargins(8, 0, 8, 12);
     m_lineEdit = new QLineEdit(m_minSearchPage);
     m_lineEdit->setMinimumSize(QSize(30, 26));
-    m_lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 12px;"));
+    m_lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 13px; border:2px solid rgba(5, 151, 255, 1); background: transparent;"));
     m_lineEdit->setFrame(false);
     m_lineEdit->setPlaceholderText("搜索应用");
     m_cancelSearchPushButton = new QPushButton(m_minSearchPage);
     m_cancelSearchPushButton->setFixedSize(QSize(26, 26));
-    m_cancelSearchPushButton->setStyleSheet(QString::fromUtf8("border-radius: 10px;"
-                                            "background-color: darkgray;"));
+    m_cancelSearchPushButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
     m_cancelSearchPushButton->installEventFilter(this);
     QIcon icon4;
     icon4.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-\345\205\263\351\227\255.png"), QSize(), QIcon::Normal, QIcon::Off);
@@ -199,7 +204,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_rightBottomHorizontalLayout->setContentsMargins(0, 0, 8, 0);
     m_horizontalSpacer_2 = new QSpacerItem(332, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_powerOffButton = new QPushButton(m_centralwidget);
-    m_powerOffButton->setMinimumSize(QSize(24, 24));
+    m_powerOffButton->setFixedSize(QSize(24, 24));
+    m_powerOffButton->setStyleSheet("QPushButton:hover {border-radius:12px; background: rgba(255, 255, 255, 0.2);}"
+                                    "QPushButton:pressed {border-radius:12px; background: rgba(255, 255, 255, 0.3);}");
     m_powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
     QIcon icon6;
     icon6.addFile(QString::fromUtf8(":/data/img/sidebarwidget/shutdown.svg"), QSize(), QIcon::Normal, QIcon::Off);

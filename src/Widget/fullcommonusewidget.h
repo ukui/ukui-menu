@@ -78,9 +78,10 @@ private:
     bool flag;
     QTimer *time = nullptr;
     GetModelData *modaldata = nullptr;
-    QScrollBar *verticalScrollBar = nullptr;
+    QScrollBar *m_verticalScrollBar = nullptr;
     int m_scrollAreaWidHeight = 0;
-    QPushButton *powerOffButton = nullptr;
+    QString m_scrollBarStyle;
+    QPushButton *m_powerOffButton = nullptr;
 
 protected:
     /**

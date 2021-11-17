@@ -109,10 +109,11 @@ private:
     int m_beginPos = 0; //Application list scrollbar starting value
     int m_endPos = 0; //Application list scrollbar end value
     QPropertyAnimation *m_scrollAnimation = nullptr; //Application list animation
-    QScrollBar *verticalScrollBar = nullptr;
+    QScrollBar *m_verticalScrollBar = nullptr;
     int m_scrollAreaWidHeight = 0;
-    QHBoxLayout *mainLayout = nullptr;
-    QPushButton *powerOffButton = nullptr;
+    QString m_scrollBarStyle;
+    QHBoxLayout *m_mainLayout = nullptr;
+    QPushButton *m_powerOffButton = nullptr;
 
 protected:
     /**
