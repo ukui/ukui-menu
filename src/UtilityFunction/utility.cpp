@@ -182,6 +182,21 @@ double getTransparency()
     return transparency;
 }
 
+void centerToScreen(QWidget *widget)
+{
+    if (!widget) {
+        return;
+    }
+
+    QDesktopWidget *deskTopWidget = QApplication::desktop();
+    QRect deskRect = deskTopWidget->screenGeometry(deskTopWidget->screenNumber(QCursor::pos()));
+    int deskWidth = deskRect.width();
+    int deskHeight = deskRect.height();
+    int x = QApplication::primaryScreen()->geometry().width();
+    int y = QApplication::primaryScreen()->geometry().height();
+    widget->move(deskWidth / 2 - x / 2 + deskRect.left(), deskHeight / 2 - y / 2 + deskRect.top());
+}
+
 void debugLog(QString strMsg)
 {
     QString path = QDir::homePath() + "/.config/ukui/ukui-menu.log";

@@ -45,9 +45,6 @@ TabletWindow::TabletWindow(QWidget *parent) :
     initUi();
 }
 
-
-
-
 TabletWindow::~TabletWindow()
 {
 }
@@ -266,7 +263,7 @@ bool TabletWindow::eventFilter(QObject *target, QEvent *event)
     }
 
     if (target == firstPageWidget) {
-        if (event->type() == QEvent::MouseButtonPress) {
+        if (event->type() == QEvent::MouseButtonRelease) {//因触控拖拽会触发press事件，所以改为release时隐藏
             recvHideMainWindowSlot();
         }
     }

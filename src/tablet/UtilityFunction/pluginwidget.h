@@ -22,21 +22,7 @@ class pluginwidget : public QWidget
     Q_OBJECT
 public:
     explicit pluginwidget(QWidget *parent = nullptr);
-    ~pluginwidget();
-    QWidget *widget = nullptr;
     void init();
-    QVBoxLayout *mainvbox = nullptr;
-
-private:
-    QGSettings *themeSetting = nullptr;
-    QString themeName;
-    QWidget *toolbutton_widget;
-    QDBusInterface *usrInterface = nullptr;
-
-public Q_SLOTS:
-
-    void changeSearchBoxBackground(QString styleName);
-
 };
 
 #endif // PLUGINWIDGET_H

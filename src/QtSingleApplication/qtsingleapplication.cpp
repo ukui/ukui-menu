@@ -144,7 +144,7 @@ void QtSingleApplication::sysInit(const QString &appId)
 {
     actWin = 0;
     peer = new QtLocalPeer(this, appId);
-    connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)));
+    connect(peer, SIGNAL(messageReceived(const QString &)), SIGNAL(messageReceived(const QString &)));
 }
 
 
@@ -198,7 +198,7 @@ QtSingleApplication::QtSingleApplication(int &argc, char **argv, Type type)
   will be QCoreApplication::applicationFilePath(). \a dpy, \a visual,
   and \a cmap are passed on to the QApplication constructor.
 */
-QtSingleApplication::QtSingleApplication(Display* dpy, Qt::HANDLE visual, Qt::HANDLE cmap)
+QtSingleApplication::QtSingleApplication(Display *dpy, Qt::HANDLE visual, Qt::HANDLE cmap)
     : QApplication(dpy, visual, cmap)
 {
     sysInit();
@@ -224,7 +224,7 @@ QtSingleApplication::QtSingleApplication(Display *dpy, int &argc, char **argv, Q
   argv, \a visual, and \a cmap are passed on to the QApplication
   constructor.
 */
-QtSingleApplication::QtSingleApplication(Display* dpy, const QString &appId, int argc, char **argv, Qt::HANDLE visual, Qt::HANDLE cmap)
+QtSingleApplication::QtSingleApplication(Display *dpy, const QString &appId, int argc, char **argv, Qt::HANDLE visual, Qt::HANDLE cmap)
     : QApplication(dpy, argc, argv, visual, cmap)
 {
     sysInit(appId);
@@ -306,13 +306,15 @@ QString QtSingleApplication::id() const
   \sa activateWindow(), messageReceived()
 */
 
-void QtSingleApplication::setActivationWindow(QWidget* aw, bool activateOnMessage)
+void QtSingleApplication::setActivationWindow(QWidget *aw, bool activateOnMessage)
 {
     actWin = aw;
-    if (activateOnMessage)
-        connect(peer, SIGNAL(messageReceived(const QString&)), this, SLOT(activateWindow()));
-    else
-        disconnect(peer, SIGNAL(messageReceived(const QString&)), this, SLOT(activateWindow()));
+
+    if (activateOnMessage) {
+        connect(peer, SIGNAL(messageReceived(const QString &)), this, SLOT(activateWindow()));
+    } else {
+        disconnect(peer, SIGNAL(messageReceived(const QString &)), this, SLOT(activateWindow()));
+    }
 }
 
 
@@ -322,7 +324,7 @@ void QtSingleApplication::setActivationWindow(QWidget* aw, bool activateOnMessag
 
     \sa setActivationWindow()
 */
-QWidget* QtSingleApplication::activationWindow() const
+QWidget *QtSingleApplication::activationWindow() const
 {
     return actWin;
 }
@@ -344,28 +346,22 @@ QWidget* QtSingleApplication::activationWindow() const
 */
 void QtSingleApplication::activateWindow()
 {
-    if (actWin)
-    {
-        if(projectCodeName == "V10SP1")
-        {
-            MainWindow* w=qobject_cast<MainWindow*>(actWin);
-            if(this->applicationState() & Qt::ApplicationInactive)
-            {
+    if (actWin) {
+        if (projectCodeName == "V10SP1") {
+            MainWindow *w = qobject_cast<MainWindow *>(actWin);
+
+            if (this->applicationState() & Qt::ApplicationInactive) {
                 actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
-    //          actWin->raise();
-    //          actWin->showNormal();
-    //          actWin->activateWindow();
+                //          actWin->raise();
+                //          actWin->showNormal();
+                //          actWin->activateWindow();
                 w->showWindow();
-            }
-            else
-            {
+            } else {
                 actWin->setWindowState(actWin->windowState() & Qt::WindowMinimized);
                 w->hideWindow();
             }
-        }
-        else
-        {
-            TabletWindow* w=qobject_cast<TabletWindow*>(actWin);
+        } else {
+            TabletWindow *w = qobject_cast<TabletWindow *>(actWin);
             w->showPCMenu();
         }
     }

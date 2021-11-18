@@ -40,13 +40,13 @@ TimeWidget::TimeWidget(QWidget *parent): QWidget(parent)
     initUi();
     myTimer = new QTimer();
     myTimer->start(10000);
-    connect(myTimer, &QTimer::timeout, [this] () {
+    connect(myTimer, &QTimer::timeout, [this]() {
         timeLabel->setText(Time->currentTime);
         weekLabel->setText(Time->currentWeek);
         dateLabel->setText(Time->currentDate);
     });
 
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit())) {
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit())) {
         timeSetting = new QGSettings(TIME_FORMAT);
         connect(timeSetting, &QGSettings::changed, this, [ = ](const QString & key) {
             timeLabel->setText(Time->currentTime);
@@ -58,75 +58,75 @@ TimeWidget::TimeWidget(QWidget *parent): QWidget(parent)
 
 TimeWidget::~TimeWidget()
 {
-    if(themeSetting) {
+    if (themeSetting) {
         delete themeSetting;
     }
 
-    if(myTimer) {
+    if (myTimer) {
         delete myTimer;
     }
 
-    if(upWidget) {
+    if (upWidget) {
         delete upWidget;
     }
 
-    if(upLayout) {
+    if (upLayout) {
         delete upLayout;
     }
 
-    if(leftUpWidget) {
+    if (leftUpWidget) {
         delete leftUpWidget;
     }
 
-    if(leftUpLayout) {
+    if (leftUpLayout) {
         delete leftUpLayout;
     }
 
-    if(upLeftWidget) {
+    if (upLeftWidget) {
         delete upLeftWidget;
     }
 
-    if(upLeftLayout) {
+    if (upLeftLayout) {
         delete upLeftLayout;
     }
 
-    if(upRightWidget) {
+    if (upRightWidget) {
         delete upRightWidget;
     }
 
-    if(upRightLayout) {
+    if (upRightLayout) {
         delete upRightLayout;
     }
 
-    if(downWidget) {
+    if (downWidget) {
         delete downWidget;
     }
 
-    if(downLayout) {
+    if (downLayout) {
         delete downLayout;
     }
 
-    if(timeLabel) {
+    if (timeLabel) {
         delete timeLabel;
     }
 
-    if(weekLabel) {
+    if (weekLabel) {
         delete weekLabel;
     }
 
-    if(dateLabel) {
+    if (dateLabel) {
         delete dateLabel;
     }
 
-    if(searchEditBtn) {
+    if (searchEditBtn) {
         delete searchEditBtn;
     }
 
-    if(focusPlug) {
+    if (focusPlug) {
         delete focusPlug;
     }
 
-    if(effect) {
+    if (effect) {
         delete effect;
     }
 
@@ -273,7 +273,7 @@ void TimeWidget::changeSearchBoxBackground(QString styleName)
                                       "color:rgba(58,67,78,0.25);font-size:24px;text-align:left;padding-left:24px;").arg(opacity);
 
     //    themeName=themeSetting->get("style-name").toString();
-    if(styleName == "ukui-dark") {
+    if (styleName == "ukui-dark") {
         searchEditBtn->setStyleSheet(styleSheetDark);
     } else {
         searchEditBtn->setStyleSheet(styleSheetLight);

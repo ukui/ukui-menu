@@ -36,21 +36,6 @@
 
 #include <ukui-log4qt.h>
 
-void centerToScreen(QWidget *widget)
-{
-    if (!widget) {
-        return;
-    }
-
-    QDesktopWidget *deskTopWidget = QApplication::desktop();
-    QRect deskRect = deskTopWidget->screenGeometry(deskTopWidget->screenNumber(QCursor::pos()));
-    int deskWidth = deskRect.width();
-    int deskHeight = deskRect.height();
-    int x = QApplication::primaryScreen()->geometry().width();
-    int y = QApplication::primaryScreen()->geometry().height();
-    widget->move(deskWidth / 2 - x / 2 + deskRect.left(), deskHeight / 2 - y / 2 + deskRect.top());
-}
-
 int main(int argc, char *argv[])
 {
     // initUkuiLog4qt("ukui-menu");
@@ -108,7 +93,7 @@ int main(int argc, char *argv[])
         centerToScreen(&w);
         w.setAttribute(Qt::WA_TranslucentBackground, true);
         w.setAttribute(Qt::WA_X11NetWmWindowTypeDesktop, false);
-        w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint /*| Qt::X11BypassWindowManagerHint*/);
+        w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
         w.raise();
         w.activateWindow();
         //拉起后通知session
