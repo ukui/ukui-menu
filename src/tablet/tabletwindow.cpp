@@ -41,6 +41,7 @@ TabletWindow::TabletWindow(QWidget *parent) :
     setting = new QSettings(path, QSettings::IniFormat);
     m_pagemanager = new PageManager();
     Style::initWidStyle();
+    setProperty("useStyleWindowManager", false);
     initUi();
 }
 
@@ -169,12 +170,43 @@ void TabletWindow::initUi()
         });
     }
 
+    m_dbus = new DBus;
+    new MenuAdaptor(m_dbus);
+    QDBusConnection con = QDBusConnection::sessionBus();
+
+    if (!con.registerService("org.ukui.menu") ||
+        !con.registerObject("/org/ukui/menu", m_dbus)) {
+        qDebug() << "error:" << con.lastError().message();
+    }
+
+    connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
+
+        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
+        {
+            QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
+
+            if (gsetting.keys().contains("winKeyRelease")) {
+                if (gsetting.get(QString("winKeyRelease")).toBool()) {
+                    return;
+                }
+            }
+        }
+        if (QApplication::activeWindow() == this)
+        {
+            myDebug() << "win键触发窗口隐藏事件";
+            this->hide();
+        } else
+        {
+            myDebug() << "win键触发窗口显示事件";
+            this->showPCMenu();
+        }
+    });
     //pc下鼠标功能
-    XEventMonitor::instance()->start();
-    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-            this, SLOT(XkbEventsRelease(QString)));
-    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-            this, SLOT(XkbEventsPress(QString)));
+//    XEventMonitor::instance()->start();
+//    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+//            this, SLOT(XkbEventsRelease(QString)));
+//    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+//            this, SLOT(XkbEventsPress(QString)));
     ways();
     buttonWidgetShow();
 //    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
@@ -875,92 +907,92 @@ void TabletWindow::animationValueChangedSlot(const QVariant &value)
     }
 }
 
-void TabletWindow::XkbEventsPress(const QString &keycode)
-{
-    QString KeyName;
+//void TabletWindow::XkbEventsPress(const QString &keycode)
+//{
+//    QString KeyName;
 
-    if (keycode.length() >= 8) {
-        KeyName = keycode.left(8);
-    }
+//    if (keycode.length() >= 8) {
+//        KeyName = keycode.left(8);
+//    }
 
-    if (KeyName.compare("Super_L+") == 0) {
-        m_winFlag = true;
-    }
+//    if (KeyName.compare("Super_L+") == 0) {
+//        m_winFlag = true;
+//    }
 
-    if (m_winFlag && keycode == "Super_L") {
-        m_winFlag = false;
-        return;
-    }
-}
+//    if (m_winFlag && keycode == "Super_L") {
+//        m_winFlag = false;
+//        return;
+//    }
+//}
 
-void TabletWindow::XkbEventsRelease(const QString &keycode)
-{
-    qDebug() << "触发按键释放";
-    QString KeyName;
-    static bool winFlag = false;
+//void TabletWindow::XkbEventsRelease(const QString &keycode)
+//{
+//    qDebug() << "触发按键释放";
+//    QString KeyName;
+//    static bool winFlag = false;
 
-    if (keycode.length() >= 8) {
-        KeyName = keycode.left(8);
-    }
+//    if (keycode.length() >= 8) {
+//        KeyName = keycode.left(8);
+//    }
 
-    if (KeyName.compare("Super_L+") == 0) {
-        winFlag = true;
-    }
+//    if (KeyName.compare("Super_L+") == 0) {
+//        winFlag = true;
+//    }
 
-    if (winFlag && keycode == "Super_L") {
-        winFlag = false;
-        return;
-    } else if (m_winFlag && keycode == "Super_L") {
-        return;
-    }
+//    if (winFlag && keycode == "Super_L") {
+//        winFlag = false;
+//        return;
+//    } else if (m_winFlag && keycode == "Super_L") {
+//        return;
+//    }
 
-    QDBusReply<bool> res = usrInterface->call("get_current_tabletmode");
+//    QDBusReply<bool> res = usrInterface->call("get_current_tabletmode");
 
-    if (usrInterface && res) {
-        qWarning() << QTime::currentTime()
-                   << " Now is tablet mode, and it is forbidden to hide or show the menu after 'win'.'Esc'";
-        return;
-    }
+//    if (usrInterface && res) {
+//        qWarning() << QTime::currentTime()
+//                   << " Now is tablet mode, and it is forbidden to hide or show the menu after 'win'.'Esc'";
+//        return;
+//    }
 
-    /**以下代码是非平板模式需要处理的键盘按键**/
-    if ((keycode == "Super_L") || (keycode == "Super_R")) {
-        qDebug() << "(ActiveWindow, SelfWindow):(" << QApplication::activeWindow() << ", " << this << ")";
+//    /**以下代码是非平板模式需要处理的键盘按键**/
+//    if ((keycode == "Super_L") || (keycode == "Super_R")) {
+//        qDebug() << "(ActiveWindow, SelfWindow):(" << QApplication::activeWindow() << ", " << this << ")";
 
-        if (QApplication::activeWindow() == this) {
-//            if (m_CommonUseWidget->m_listView->isDraging()) {
-//                qWarning() << "Icon is been draging";
+//        if (QApplication::activeWindow() == this) {
+////            if (m_CommonUseWidget->m_listView->isDraging()) {
+////                qWarning() << "Icon is been draging";
+////            }
+//            qDebug() << "win键触发窗口隐藏事件";
+//            this->hide();
+//        } else {
+//            qDebug() << "win键触发窗口显示事件";
+//            this->showPCMenu();
+//        }
+//    }
+
+//    if (keycode == "Escape") {
+//        this->hide();
+//    }
+//}
+
+//void TabletWindow::winKeyReleaseSlot(const QString &key)
+//{
+//    if (key == "winKeyRelease" || key == "win-key-release") {
+//        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit())) {
+//            QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
+
+//            if (gsetting.get(QString("win-key-release")).toBool()) {
+//                disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+//                           this, SLOT(XkbEventsRelease(QString)));
+//                disconnect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+//                           this, SLOT(XkbEventsPress(QString)));
+//            } else {
+//                connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+//                        this, SLOT(XkbEventsRelease(QString)));
+//                connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+//                        this, SLOT(XkbEventsPress(QString)));
 //            }
-            qDebug() << "win键触发窗口隐藏事件";
-            this->hide();
-        } else {
-            qDebug() << "win键触发窗口显示事件";
-            this->showPCMenu();
-        }
-    }
-
-    if (keycode == "Escape") {
-        this->hide();
-    }
-}
-
-void TabletWindow::winKeyReleaseSlot(const QString &key)
-{
-    if (key == "winKeyRelease" || key == "win-key-release") {
-        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit())) {
-            QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-
-            if (gsetting.get(QString("win-key-release")).toBool()) {
-                disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-                           this, SLOT(XkbEventsRelease(QString)));
-                disconnect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-                           this, SLOT(XkbEventsPress(QString)));
-            } else {
-                connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-                        this, SLOT(XkbEventsRelease(QString)));
-                connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-                        this, SLOT(XkbEventsPress(QString)));
-            }
-        }
-    }
-}
+//        }
+//    }
+//}
 

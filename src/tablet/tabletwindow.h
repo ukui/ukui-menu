@@ -46,6 +46,8 @@
 #include "src/ListView/tabletlistview.h"
 #include "src/tablet/pagemanager.h"
 #include "src/FileWatcher/tabletdirectorychangedthread.h"
+#include "src/DBus/dbus.h"
+#include "src/DBus/dbus-adaptor.h"
 
 class TabletWindow : public QWidget
 {
@@ -121,8 +123,9 @@ private:
     QFileSystemWatcher *m_fileWatcher1 = nullptr;
     QFileSystemWatcher *m_fileWatcher2 = nullptr;
     TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
-    QSettings *settt;
-    QWidget *widget;
+    QSettings *settt = nullptr;
+    QWidget *widget = nullptr;
+    DBus *m_dbus = nullptr;
 
 protected:
     /**
@@ -157,11 +160,11 @@ protected:
 
     void buttonWidgetShow();
 
-    bool event ( QEvent *event );
+    bool event(QEvent *event);
 
     void wheelEvent(QWheelEvent *e);
 
-    bool eventFilter(QObject *target, QEvent *event );
+    bool eventFilter(QObject *target, QEvent *event);
 
     bool checkapplist();
 
@@ -195,9 +198,9 @@ public Q_SLOTS:
 
     void modelChanged(bool value);
 
-    void XkbEventsPress(const QString &keycode);
-    void XkbEventsRelease(const QString &keycode);
-    void winKeyReleaseSlot(const QString &key);
+//    void XkbEventsPress(const QString &keycode);
+//    void XkbEventsRelease(const QString &keycode);
+//    void winKeyReleaseSlot(const QString &key);
     void on_pageNumberChanged(bool nextPage);
     void buttonClicked(QAbstractButton *button);
     void pageNumberChanged(int pageNum);
