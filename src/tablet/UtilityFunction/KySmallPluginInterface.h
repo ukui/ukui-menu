@@ -25,7 +25,7 @@ QT_BEGIN_NAMESPACE
  * 如果我们稍后更改接口，则必须使用不同的字符串来标识新接口；否则，应用程序可能会崩溃。因此，在字符串中包含一个版本号是一个好主意
 */
 #define SP_PLUGIN_IID "org.Kylin.SmallPlugin.widgetInterface/1.0"
-Q_DECLARE_INTERFACE (KySmallPluginInterface, SP_PLUGIN_IID)
+Q_DECLARE_INTERFACE(KySmallPluginInterface, SP_PLUGIN_IID)
 QT_END_NAMESPACE
 
 #endif // KYSMALLPLUGININTERFACE_H

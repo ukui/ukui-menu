@@ -65,7 +65,7 @@ protected:
     QSet<KeySym> modifiers;
 
 //    bool filterWheelEvent(int detail);
-    static void callback(XPointer trash, XRecordInterceptData* data);
+    static void callback(XPointer trash, XRecordInterceptData *data);
     void handleRecordEvent(XRecordInterceptData *);
     void emitKeySignal(const char *member, xEvent *event);
     void updateModifier(xEvent *event, bool isAdd);
@@ -77,31 +77,29 @@ private:
 XEventMonitorPrivate::XEventMonitorPrivate(XEventMonitor *parent)
     : q_ptr(parent)
 {
-
 }
 
 XEventMonitorPrivate::~XEventMonitorPrivate()
 {
-
 }
 
 void XEventMonitorPrivate::emitKeySignal(const char *member, xEvent *event)
 {
     Display *display = XOpenDisplay(NULL);
-
     int keyCode = event->u.u.detail;
     KeySym keySym = XkbKeycodeToKeysym(display, event->u.u.detail, 0, 0);
-
     QString keyStrSplice;
-    for(auto modifier : modifiers)
-    {
+
+    for (auto modifier : modifiers) {
         keyStrSplice += QString(XKeysymToString(modifier)) + "+";
     }
+
     //按键是修饰键
-    if(ModifiersVec.contains(keySym) && !modifiers.isEmpty())
+    if (ModifiersVec.contains(keySym) && !modifiers.isEmpty()) {
         keyStrSplice.remove(keyStrSplice.length() - 1, 1);
-    else
+    } else {
         keyStrSplice += XKeysymToString(keySym);
+    }
 
     QMetaObject::invokeMethod(q_ptr, member,
                               Qt::AutoConnection,
@@ -109,13 +107,13 @@ void XEventMonitorPrivate::emitKeySignal(const char *member, xEvent *event)
     QMetaObject::invokeMethod(q_ptr, member,
                               Qt::AutoConnection,
                               Q_ARG(QString, keyStrSplice));
-
     XCloseDisplay(display);
 }
 
 void XEventMonitorPrivate::run()
 {
-    Display* display = XOpenDisplay(0);
+    Display *display = XOpenDisplay(0);
+
     if (display == 0) {
         fprintf(stderr, "unable to open display\n");
         XCloseDisplay(display);
@@ -124,7 +122,8 @@ void XEventMonitorPrivate::run()
 
     // Receive from ALL clients, including future clients.
     XRecordClientSpec clients = XRecordAllClients;
-    XRecordRange* range = XRecordAllocRange();
+    XRecordRange *range = XRecordAllocRange();
+
     if (range == 0) {
         fprintf(stderr, "unable to allocate XRecordRange\n");
         XCloseDisplay(display);
@@ -135,25 +134,26 @@ void XEventMonitorPrivate::run()
     memset(range, 0, sizeof(XRecordRange));
     range->device_events.first = KeyPress;
     range->device_events.last  = KeyRelease;
-
     // And create the XRECORD context.
     XRecordContext context = XRecordCreateContext(display, 0, &clients, 1, &range, 1);
+
     if (context == 0) {
         fprintf(stderr, "XRecordCreateContext failed\n");
         XCloseDisplay(display);
         return;
     }
+
     XFree(range);
-
     XSync(display, True);
+    Display *display_datalink = XOpenDisplay(0);
 
-    Display* display_datalink = XOpenDisplay(0);
     if (display_datalink == 0) {
         fprintf(stderr, "unable to open second display\n");
         XCloseDisplay(display_datalink);
         XCloseDisplay(display);
         return;
     }
+
     if (!XRecordEnableContext(display_datalink, context,  callback, (XPointer) this)) {
         fprintf(stderr, "XRecordEnableContext() failed\n");
         XCloseDisplay(display_datalink);
@@ -165,30 +165,32 @@ void XEventMonitorPrivate::run()
     XCloseDisplay(display);
 }
 
-void XEventMonitorPrivate::callback(XPointer ptr, XRecordInterceptData* data)
+void XEventMonitorPrivate::callback(XPointer ptr, XRecordInterceptData *data)
 {
     ((XEventMonitorPrivate *) ptr)->handleRecordEvent(data);
 }
 
-void XEventMonitorPrivate::handleRecordEvent(XRecordInterceptData* data)
+void XEventMonitorPrivate::handleRecordEvent(XRecordInterceptData *data)
 {
-
     if (data->category == XRecordFromServer) {
-        xEvent * event = (xEvent *)data->data;
-        switch (event->u.u.type)
-        {
-        case KeyPress:
-            updateModifier(event, true);
-            emitKeySignal("keyPress", event);
-            break;
-        case KeyRelease:
-            updateModifier(event, false);
-            emitKeySignal("keyRelease", event);
-            break;
-        default:
-            break;
+        xEvent *event = (xEvent *)data->data;
+
+        switch (event->u.u.type) {
+            case KeyPress:
+                updateModifier(event, true);
+                emitKeySignal("keyPress", event);
+                break;
+
+            case KeyRelease:
+                updateModifier(event, false);
+                emitKeySignal("keyRelease", event);
+                break;
+
+            default:
+                break;
         }
     }
+
     fflush(stdout);
     XRecordFreeData(data);
 }
@@ -203,14 +205,10 @@ void XEventMonitorPrivate::updateModifier(xEvent *event, bool isAdd)
     Display *display = XOpenDisplay(NULL);
     KeySym keySym = XkbKeycodeToKeysym(display, event->u.u.detail, 0, 0);
 
-    if(ModifiersVec.contains(keySym))
-    {
-        if(isAdd)
-        {
+    if (ModifiersVec.contains(keySym)) {
+        if (isAdd) {
             modifiers.insert(keySym);
-        }
-        else
-        {
+        } else {
             modifiers.remove(keySym);
         }
     }
@@ -234,8 +232,7 @@ XEventMonitor::~XEventMonitor()
 
 void XEventMonitor::run()
 {
-    if(!isInterruptionRequested())
-    {
+    if (!isInterruptionRequested()) {
         d_ptr->run();
     }
 }

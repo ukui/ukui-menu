@@ -53,8 +53,8 @@ void FunctionButtonWidget::initUi()
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
 
-    for(int row = 0; row < 6; row++)
-        for(int col = 0; col < 2; col++) {
+    for (int row = 0; row < 6; row++)
+        for (int col = 0; col < 2; col++) {
             FunctionClassifyButton *iconbtn = new FunctionClassifyButton(Style::LeftBtnWidth,
                     Style::LeftBtnHeight,
                     Style::LeftIconSize,
@@ -65,12 +65,12 @@ void FunctionButtonWidget::initUi()
             m_buttonList.append(iconbtn);
             connect(iconbtn, &FunctionClassifyButton::buttonClicked, this, &FunctionButtonWidget::functionBtnClickedSlot);
 
-            if(row * 2 + col == 10) {
+            if (row * 2 + col == 10) {
                 break;
             }
         }
 
-    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
         QGSettings *gsetting = new QGSettings(QString("org.ukui.style").toLocal8Bit());
         connect(gsetting, &QGSettings::changed, this, [ = ] {
             Q_FOREACH (QAbstractButton *btn, m_buttonList)
@@ -100,12 +100,12 @@ void FunctionButtonWidget::recvClassificationBtnList()
 {
     QGridLayout *gridLayout = qobject_cast<QGridLayout *>(this->layout());
 
-    for(int row = 0; row < 6; row++)
-        for(int col = 0; col < 2; col++) {
+    for (int row = 0; row < 6; row++)
+        for (int col = 0; col < 2; col++) {
             QLayoutItem *item = gridLayout->itemAtPosition(row, col);
             FunctionClassifyButton *btn = qobject_cast<FunctionClassifyButton *>(item->widget());
 
-            if(UkuiMenuInterface::functionalVector.at(row * 2 + col).isEmpty()) {
+            if (UkuiMenuInterface::functionalVector.at(row * 2 + col).isEmpty()) {
                 btn->m_enabled = false;
             } else {
                 btn->m_enabled = true;
@@ -114,7 +114,7 @@ void FunctionButtonWidget::recvClassificationBtnList()
             btn->setEnabled(btn->m_enabled);
             btn->updateBtnState();
 
-            if(row * 2 + col == 10) {
+            if (row * 2 + col == 10) {
                 break;
             }
         }

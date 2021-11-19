@@ -27,7 +27,7 @@ QVector<QStringList> GetModelData::getMinAllData()
 {
     m_minAllData.clear();
 
-    Q_FOREACH(QString desktopfp, UkuiMenuInterface::allAppVector) {
+    Q_FOREACH (QString desktopfp, UkuiMenuInterface::allAppVector) {
         m_minAllData.append(QStringList() << desktopfp << "1");
     }
 
@@ -38,7 +38,7 @@ QStringList GetModelData::getcollectData()
 {
     m_collectData.clear();
 
-    Q_FOREACH(QString desktopfp, UkuiMenuInterface::collectAppVector) {
+    Q_FOREACH (QString desktopfp, UkuiMenuInterface::collectAppVector) {
         m_collectData.append(QString(desktopfp));
     }
 
@@ -47,7 +47,7 @@ QStringList GetModelData::getcollectData()
 
 bool GetModelData::cmpApp(QStringList &arg_1, QStringList &arg_2)
 {
-    if(arg_1.at(4) >= arg_2.at(4)) {
+    if (arg_1.at(4) >= arg_2.at(4)) {
         return true;
     } else {
         return false;
@@ -74,7 +74,7 @@ QVector<QStringList> GetModelData::getRecentData()
         QString accessDate = fileInfo.get()->modifiedDate();
         recentData << targetUri << displayName << symlinkTarget << iconName << accessDate;
 
-        if(!displayName.endsWith(".desktop")) {
+        if (!displayName.endsWith(".desktop")) {
             recentDataVector.append(recentData);
         }
     }
@@ -111,15 +111,15 @@ QVector<QStringList> GetModelData::getMinLetterData()
     int row = 0;
     QVector<QStringList> vector = UkuiMenuInterface::alphabeticVector;
 
-    for(int i = 0; i < vector.size(); i++) {
+    for (int i = 0; i < vector.size(); i++) {
         QStringList appList = vector.at(i);
 
-        if(!appList.isEmpty()) {
+        if (!appList.isEmpty()) {
             QString letterstr;
 
-            if(i < 26) {
+            if (i < 26) {
                 letterstr = QString(QChar(static_cast<char>(i + 65)));
-            } else if(i == 26) {
+            } else if (i == 26) {
                 letterstr = "&";
             } else {
                 letterstr = "#";
@@ -129,7 +129,7 @@ QVector<QStringList> GetModelData::getMinLetterData()
             m_letterBtnRowList.append(QString::number(row));//存储分类字符所在行
             m_minLetterData.append(QStringList() << letterstr << "0");
 
-            for(int i = 0; i < appList.count(); i++) {
+            for (int i = 0; i < appList.count(); i++) {
                 m_minLetterData.append(QStringList() << appList.at(i) << "1");
             }
 
@@ -150,77 +150,77 @@ QVector<QStringList> GetModelData::getMinFuncData()
     myDebug() << "功能分类数据列表" << vector;
     QStringList androidlist = vector.at(0);
 
-    if(!androidlist.isEmpty()) {
+    if (!androidlist.isEmpty()) {
         insertClassificationBtn(tr("Mobile"));
         insertAppList(androidlist);
     }
 
     QStringList netlist = vector.at(1);
 
-    if(!netlist.isEmpty()) {
+    if (!netlist.isEmpty()) {
         insertClassificationBtn(tr("Internet"));
         insertAppList(netlist);
     }
 
     QStringList sociallist = vector.at(2);
 
-    if(!sociallist.isEmpty()) {
+    if (!sociallist.isEmpty()) {
         insertClassificationBtn(tr("Social"));
         insertAppList(sociallist);
     }
 
     QStringList avlist = vector.at(3);
 
-    if(!avlist.isEmpty()) {
+    if (!avlist.isEmpty()) {
         insertClassificationBtn(tr("Video"));
         insertAppList(avlist);
     }
 
     QStringList developlist = vector.at(4);
 
-    if(!developlist.isEmpty()) {
+    if (!developlist.isEmpty()) {
         insertClassificationBtn(tr("Development"));
         insertAppList(developlist);
     }
 
     QStringList graphicslist = vector.at(5);
 
-    if(!graphicslist.isEmpty()) {
+    if (!graphicslist.isEmpty()) {
         insertClassificationBtn(tr("Image"));
         insertAppList(graphicslist);
     }
 
     QStringList gamelist = vector.at(6);
 
-    if(!gamelist.isEmpty()) {
+    if (!gamelist.isEmpty()) {
         insertClassificationBtn(tr("Game"));
         insertAppList(gamelist);
     }
 
     QStringList officelist = vector.at(7);
 
-    if(!officelist.isEmpty()) {
+    if (!officelist.isEmpty()) {
         insertClassificationBtn(tr("Office"));
         insertAppList(officelist);
     }
 
     QStringList educationlist = vector.at(8);
 
-    if(!educationlist.isEmpty()) {
+    if (!educationlist.isEmpty()) {
         insertClassificationBtn(tr("Education"));
         insertAppList(educationlist);
     }
 
     QStringList systemadminlist = vector.at(9);
 
-    if(!systemadminlist.isEmpty()) {
+    if (!systemadminlist.isEmpty()) {
         insertClassificationBtn(tr("System"));
         insertAppList(systemadminlist);
     }
 
     QStringList otherlist = vector.at(10);
 
-    if(!otherlist.isEmpty()) {
+    if (!otherlist.isEmpty()) {
         insertClassificationBtn(tr("Others"));
         insertAppList(otherlist);
     }
@@ -241,7 +241,7 @@ void GetModelData::insertAppList(QStringList appnamelist)
 {
     m_funcRow += (appnamelist.count() + 1);
 
-    for(int i = 0; i < appnamelist.count(); i++) {
+    for (int i = 0; i < appnamelist.count(); i++) {
         m_minFuncData.append(QStringList() << appnamelist.at(i) << "1");
     }
 }

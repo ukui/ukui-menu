@@ -71,7 +71,7 @@ void ListView::addData(QVector<QStringList> data, int module)
     this->module = module;
     listmodel->clear();
 
-    Q_FOREACH(QStringList desktopfp, data) {
+    Q_FOREACH (QStringList desktopfp, data) {
         QStandardItem *item = new QStandardItem;
         item->setData(QVariant::fromValue<QStringList>(desktopfp), Qt::DisplayRole);
         listmodel->appendRow(item);
@@ -85,7 +85,7 @@ void ListView::updateData(QVector<QStringList> data)
 {
     listmodel->clear();
 
-    Q_FOREACH(QStringList desktopfp, data) {
+    Q_FOREACH (QStringList desktopfp, data) {
         QStandardItem *item = new QStandardItem;
         item->setData(QVariant::fromValue<QStringList>(desktopfp), Qt::DisplayRole);
         listmodel->appendRow(item);
@@ -97,14 +97,14 @@ void ListView::onClicked(QModelIndex index)
     QVariant var = listmodel->data(index, Qt::DisplayRole);
     QString desktopfp = var.value<QStringList>().at(0);
 
-    if(var.isValid()) {
-        if((var.value<QStringList>().size() == 5) && (!desktopfp.endsWith(".desktop"))) { //专用于处理最近页的uri
+    if (var.isValid()) {
+        if ((var.value<QStringList>().size() == 5) && (!desktopfp.endsWith(".desktop"))) { //专用于处理最近页的uri
             QUrl url(desktopfp);
             QDesktopServices::openUrl(url);
             return;
         }
 
-        if(var.value<QStringList>().at(1).toInt() == 0) {
+        if (var.value<QStringList>().at(1).toInt() == 0) {
             Q_EMIT sendAppClassificationBtnClicked();
         } else {
             execApp(desktopfp);
@@ -138,34 +138,34 @@ void ListView::paintEvent(QPaintEvent *e)
 
 void ListView::keyPressEvent(QKeyEvent *e)
 {
-    if(e->type() == QEvent::KeyPress) {
-        switch(e->key()) {
+    if (e->type() == QEvent::KeyPress) {
+        switch (e->key()) {
             case Qt::Key_Enter:
             case Qt::Key_Return: {
-                    QModelIndex index = this->currentIndex();
-                    Q_EMIT clicked(index);
-                }
-                break;
+                QModelIndex index = this->currentIndex();
+                Q_EMIT clicked(index);
+            }
+            break;
 
             case Qt::Key_Down: {
-                    if(currentIndex().row() == this->model()->rowCount() - 1) {
-                        setCurrentIndex(this->model()->index(0, 0));
-                        break;
-                    }
-
-                    return QListView::keyPressEvent(e);
+                if (currentIndex().row() == this->model()->rowCount() - 1) {
+                    setCurrentIndex(this->model()->index(0, 0));
                     break;
                 }
+
+                return QListView::keyPressEvent(e);
+                break;
+            }
 
             case Qt::Key_Up: {
-                    if(currentIndex().row() == 0) {
-                        setCurrentIndex(this->model()->index(this->model()->rowCount() - 1, 0));
-                        break;
-                    }
-
-                    return QListView::keyPressEvent(e);
+                if (currentIndex().row() == 0) {
+                    setCurrentIndex(this->model()->index(this->model()->rowCount() - 1, 0));
                     break;
                 }
+
+                return QListView::keyPressEvent(e);
+                break;
+            }
 
             default:
                 return QListView::keyPressEvent(e);

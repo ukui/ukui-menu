@@ -66,39 +66,39 @@ TabletListView::TabletListView(QWidget *parent, int module):
 
 TabletListView::~TabletListView()
 {
-    if(pUkuiMenuInterface) {
+    if (pUkuiMenuInterface) {
         delete pUkuiMenuInterface;
     }
 
-    if(menu) {
+    if (menu) {
         delete menu;
     }
 
-    if(setting) {
+    if (setting) {
         delete setting;
     }
 
-    if(disableSetting) {
+    if (disableSetting) {
         delete disableSetting;
     }
 
-    if(tabletMode) {
+    if (tabletMode) {
         delete tabletMode;
     }
 
-    if(m_animation) {
+    if (m_animation) {
         delete m_animation;
     }
 
-    if(m_time) {
+    if (m_time) {
         delete m_time;
     }
 
-    if(listmodel) {
+    if (listmodel) {
         delete listmodel;
     }
 
-    if(m_delegate) { //can
+    if (m_delegate) { //can
         delete m_delegate;
     }
 
@@ -112,7 +112,7 @@ TabletListView::~TabletListView()
     listmodel = nullptr;
     m_delegate = nullptr;
 
-    if(syssetting) {
+    if (syssetting) {
         delete syssetting;
     }
 
@@ -150,7 +150,7 @@ void TabletListView::addData(QStringList data)
     listmodel = new QStandardItemModel(this);
     this->setModel(listmodel);
 
-    Q_FOREACH(QString desktopfp, data) {
+    Q_FOREACH (QString desktopfp, data) {
         QStandardItem *item = new QStandardItem;
         item->setData(QVariant::fromValue<QString>(desktopfp), Qt::DisplayRole);
         bool appDis = appDisable(desktopfp);
@@ -166,7 +166,7 @@ void TabletListView::updateData(QStringList data)
 {
     listmodel->clear();
 
-    Q_FOREACH(QString desktopfp, data) {
+    Q_FOREACH (QString desktopfp, data) {
         QStandardItem *p_item = new QStandardItem;
         p_item->setData(QVariant::fromValue<QString>(desktopfp), Qt::DisplayRole);
         bool appDis = appDisable(desktopfp);
@@ -184,7 +184,7 @@ bool TabletListView::appDisable(QString desktopfp)   //判断是否是禁用应�
     //打开文件.desktop
     GError **pp_error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *p_keyfile = g_key_file_new ();
+    GKeyFile *p_keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *p_filepath = fpbyte.data();
     g_key_file_load_from_file(p_keyfile, p_filepath, flags, pp_error);
@@ -256,7 +256,7 @@ bool TabletListView::uninstall(QString desktopfp)   //判断是否可以卸载
     QStringList strlist = appstr.split('/');
     appstr = strlist[strlist.size() - 1];
 
-    if(sysapplist.contains(appstr)) {
+    if (sysapplist.contains(appstr)) {
         myDebug() << "默认应用";
         return 0;
     }
@@ -270,7 +270,7 @@ void TabletListView::rightClickedSlot(const QPoint &pos)
     Q_UNUSED(pos)
     this->model()->setData(this->indexAt(right_pressedpos), QVariant::fromValue<bool>(0), Qt::UserRole + 2);
 
-    if(!(this->selectionModel()->selectedIndexes().isEmpty())) {
+    if (!(this->selectionModel()->selectedIndexes().isEmpty())) {
         QModelIndex index = this->currentIndex();
         QVariant var = listmodel->data(index, Qt::DisplayRole);
         QString desktopfp = var.value<QString>();
@@ -308,19 +308,19 @@ void TabletListView::mousePressEvent(QMouseEvent *event)
     myDebug() << "鼠标点击事件触发";
     pressedpos = event->pos();
 
-    if(event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton) {
         //左键
         myDebug() << "左键点击，当前点坐标" << event->pos();
 
-        if(((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x() % Style::AppListItemSizeWidth) >= 60 &&
+        if (((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x() % Style::AppListItemSizeWidth) >= 60 &&
                 pressedpos.x() % Style::AppListItemSizeWidth <= 60 + Style::AppListIconSize &&
                 pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
                 pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize)) ||
-           ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
-            (pressedpos.x() % 318 >= 111 &&
-             pressedpos.x() % 318 <= 111 + Style::AppListIconSize &&
-             pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
-             pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize))) {
+            ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
+             (pressedpos.x() % 318 >= 111 &&
+              pressedpos.x() % 318 <= 111 + Style::AppListIconSize &&
+              pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
+              pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize))) {
             pressApp = listmodel->data(this->indexAt(pressedpos), Qt::DisplayRole);
             iconClick = true;
             startPos = event->pos();
@@ -333,19 +333,19 @@ void TabletListView::mousePressEvent(QMouseEvent *event)
             moveing_pressedpos = pressedpos;
             press_time = event->timestamp();
         }
-    } else if(event->button() == Qt::RightButton) {
+    } else if (event->button() == Qt::RightButton) {
         //右键
         myDebug() << "右键点击，当前点坐标" << event->pos();
 
-        if(((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x()) % Style::AppListItemSizeWidth >= 60 &&
+        if (((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x()) % Style::AppListItemSizeWidth >= 60 &&
                 (pressedpos.x()) % Style::AppListItemSizeWidth <= 60 + Style::AppListIconSize &&
                 pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
                 pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize)) ||
-           ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
-            (pressedpos.x() % 318 >= 111 &&
-             pressedpos.x() % 318 <= 111 + Style::AppListIconSize &&
-             pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
-             pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize))) {
+            ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
+             (pressedpos.x() % 318 >= 111 &&
+              pressedpos.x() % 318 <= 111 + Style::AppListIconSize &&
+              pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
+              pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize))) {
             pressApp = listmodel->data(this->indexAt(pressedpos), Qt::DisplayRole);
             right_iconClick = true;
             right_pressedpos = pressedpos;
@@ -384,7 +384,7 @@ void TabletListView::mouseMoveEvent(QMouseEvent *event)
                 drag->setHotSpot(QPoint(pixmap.width() / 2, pixmap.height() / 2));
                 m_isDraging = true;
 
-                if(drag->exec(Qt::MoveAction) == Qt::MoveAction) {
+                if (drag->exec(Qt::MoveAction) == Qt::MoveAction) {
                 }
 
                 m_isDraging = false;
@@ -408,12 +408,12 @@ void TabletListView::dragMoveEvent(QDragMoveEvent *event)
         m_time->start(500);
 
         if (module == 1) {
-            if(event->pos().x() >= (1920 - 50) || event->pos().x() <= 50) {
-                if(event->pos().x() <= 50) {
+            if (event->pos().x() >= (1920 - 50) || event->pos().x() <= 50) {
+                if (event->pos().x() <= 50) {
                     Q_EMIT pagenumchanged(false);
                 }
 
-                if(event->pos().x() >= (1920 - 50)) {
+                if (event->pos().x() >= (1920 - 50)) {
                     Q_EMIT pagenumchanged(true);
                 }
             }
@@ -471,7 +471,7 @@ void TabletListView::mouseReleaseEvent(QMouseEvent *e)
                     if (qAbs(dist_x) >= 80) {
                         if ((dist_x >= 80)) {
                             Q_EMIT pagenumchanged(false);
-                        } else if((dist_x <= -80)) {
+                        } else if ((dist_x <= -80)) {
                             Q_EMIT pagenumchanged(true);
                         }
                     }
@@ -539,7 +539,7 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
         setting->sync();
         setting->endGroup();
 
-        if(keyTecentList.contains(desktopfn2)) {
+        if (keyTecentList.contains(desktopfn2)) {
             editString = "tencent";
         }
 
@@ -595,7 +595,7 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
 
             if (indexPre < indexRel) {
                 for (int i = 0; i < keyList.count(); i++) {
-                    if(setting->value(keyList.at(i)).toInt() > indexPre && setting->value(keyList.at(i)).toInt() <= indexRel) {
+                    if (setting->value(keyList.at(i)).toInt() > indexPre && setting->value(keyList.at(i)).toInt() <= indexRel) {
                         setting->setValue(keyList.at(i), setting->value(keyList.at(i)).toInt() - 1);
                     }
                 }
@@ -631,17 +631,17 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
         QString desktopfn4 = fileInfo4.fileName();
 
         //qDebug()<<"4rel"<<desktopfn4;
-        if(var3.isValid() && desktopfp3 != pressDesktopfp) {
+        if (var3.isValid() && desktopfp3 != pressDesktopfp) {
             setting->beginGroup("application");
             int indexPre = setting->value(desktopfn2).toInt();
             int indexRel = setting->value(desktopfn3).toInt();
             QStringList keyList = setting->allKeys();
 
-            if(indexPre > indexRel) {
+            if (indexPre > indexRel) {
                 qDebug() << ">";
 
-                for(int i = 0; i < keyList.count(); i++) {
-                    if(setting->value(keyList.at(i)).toInt() >= indexRel && setting->value(keyList.at(i)).toInt() < indexPre) {
+                for (int i = 0; i < keyList.count(); i++) {
+                    if (setting->value(keyList.at(i)).toInt() >= indexRel && setting->value(keyList.at(i)).toInt() < indexPre) {
                         setting->setValue(keyList.at(i), setting->value(keyList.at(i)).toInt() + 1);
                     }
                 }
@@ -650,11 +650,11 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
                 //                listmodel->removeRow(this->indexAt(pressedpos).row());
                 //                listmodel->insertRow(this->indexAt(releasepos).row());
                 //                listmodel->setData(this->indexAt(releasepos),var2);
-            } else if(indexPre < indexRel) {
+            } else if (indexPre < indexRel) {
                 qDebug() << "<";
 
-                for(int i = 0; i < keyList.count(); i++) {
-                    if(setting->value(keyList.at(i)).toInt() > indexPre && setting->value(keyList.at(i)).toInt() < indexRel) {
+                for (int i = 0; i < keyList.count(); i++) {
+                    if (setting->value(keyList.at(i)).toInt() > indexPre && setting->value(keyList.at(i)).toInt() < indexRel) {
                         setting->setValue(keyList.at(i), setting->value(keyList.at(i)).toInt() - 1);
                     }
                 }
@@ -667,16 +667,16 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
 
             setting->sync();
             setting->endGroup();
-        } else if(var4.isValid() && desktopfp4 != pressDesktopfp) { //最后一个
+        } else if (var4.isValid() && desktopfp4 != pressDesktopfp) { //最后一个
             setting->beginGroup("application");
             int indexPre = setting->value(desktopfn2).toInt();
             int indexRel = setting->value(desktopfn4).toInt();
             QStringList keyList = setting->allKeys();
 
-            if(indexPre < indexRel) {
+            if (indexPre < indexRel) {
                 //         qDebug()<<"4 <";
-                for(int i = 0; i < keyList.count(); i++) {
-                    if(setting->value(keyList.at(i)).toInt() > indexPre && setting->value(keyList.at(i)).toInt() <= indexRel) {
+                for (int i = 0; i < keyList.count(); i++) {
+                    if (setting->value(keyList.at(i)).toInt() > indexPre && setting->value(keyList.at(i)).toInt() <= indexRel) {
                         setting->setValue(keyList.at(i), setting->value(keyList.at(i)).toInt() - 1);
                     }
                 }
@@ -685,11 +685,11 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
                 //                listmodel->insertRow(this->indexAt(relpos).row());
                 //                listmodel->setData(this->indexAt(relpos),var2);
                 //                listmodel->removeRow(this->indexAt(prepos).row());
-            } else if(indexPre > indexRel) {
+            } else if (indexPre > indexRel) {
                 qDebug() << ">";
 
-                for(int i = 0; i < keyList.count(); i++) {
-                    if(setting->value(keyList.at(i)).toInt() > indexRel && setting->value(keyList.at(i)).toInt() < indexPre) {
+                for (int i = 0; i < keyList.count(); i++) {
+                    if (setting->value(keyList.at(i)).toInt() > indexRel && setting->value(keyList.at(i)).toInt() < indexPre) {
                         setting->setValue(keyList.at(i), setting->value(keyList.at(i)).toInt() + 1);
                     }
                 }
@@ -712,7 +712,7 @@ void TabletListView::mergeApplication(QPoint pressedpos, QPoint releasepos)
     QVariant var1 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);
     QVariant var2 = listmodel->data(this->indexAt(pressedpos), Qt::DisplayRole);
 
-    if(var1 != var2) {
+    if (var1 != var2) {
         QString desktopfp1 = var1.value<QString>(); //鼠标释放位置的应用
         QFileInfo fileInfo1(desktopfp1);
         QString desktopfn1 = fileInfo1.fileName();
@@ -723,7 +723,7 @@ void TabletListView::mergeApplication(QPoint pressedpos, QPoint releasepos)
         bool isgroup = setting->contains(desktopfn2);
         setting->endGroup();
 
-        if(!isgroup) {
+        if (!isgroup) {
             //            qDebug() <<"拖拽";
             //合并
             setting->beginGroup("groupname");
@@ -731,7 +731,7 @@ void TabletListView::mergeApplication(QPoint pressedpos, QPoint releasepos)
             bool iscontain = setting->contains(desktopfn1);
             setting->endGroup();
 
-            if(iscontain) { //组存在,把应用加入组中，同时去掉position里的键值。
+            if (iscontain) { //组存在,把应用加入组中，同时去掉position里的键值。
                 qDebug() << "组存在，找到这个组，把应用加入里边";
                 setting->beginGroup(desktopfn1);
                 setting->setValue(desktopfn2, setting->allKeys().count());
@@ -741,8 +741,8 @@ void TabletListView::mergeApplication(QPoint pressedpos, QPoint releasepos)
                 int indexPre = setting->value(desktopfn2).toInt();
                 QStringList appList = setting->allKeys();
 
-                for(int i = 0; i < appList.count(); i++) {
-                    if(setting->value(appList.at(i)).toInt() >= indexPre) {
+                for (int i = 0; i < appList.count(); i++) {
+                    if (setting->value(appList.at(i)).toInt() >= indexPre) {
                         setting->setValue(appList.at(i), setting->value(appList.at(i)).toInt() - 1);
                     }
                 }
@@ -770,8 +770,8 @@ void TabletListView::mergeApplication(QPoint pressedpos, QPoint releasepos)
                 setting->setValue(groupname, indexRel);
                 QStringList appList = setting->allKeys();
 
-                for(int i = 0; i < appList.count(); i++) {
-                    if(setting->value(appList.at(i)).toInt() >= indexPre) {
+                for (int i = 0; i < appList.count(); i++) {
+                    if (setting->value(appList.at(i)).toInt() >= indexPre) {
                         setting->setValue(appList.at(i), setting->value(appList.at(i)).toInt() - 1);
                     }
                 }

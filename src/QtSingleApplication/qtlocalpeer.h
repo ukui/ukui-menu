@@ -56,7 +56,9 @@ public:
     bool isClient();
     bool sendMessage(const QString &message, int timeout);
     QString applicationId() const
-        { return id; }
+    {
+        return id;
+    }
 
 Q_SIGNALS:
     void messageReceived(const QString &message);
@@ -67,11 +69,11 @@ protected Q_SLOTS:
 protected:
     QString id;
     QString socketName;
-    QLocalServer* server;
+    QLocalServer *server;
     QtLP_Private::QtLockedFile lockFile;
 
 private:
-    static const char* ack;
+    static const char *ack;
 };
 
 #endif // QTLOCALPEER_H

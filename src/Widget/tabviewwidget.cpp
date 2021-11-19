@@ -27,7 +27,7 @@ void TabViewWidget::updateListView()
 {
     m_data.clear();
 
-    Q_FOREACH(QString desktopfp, m_ukuiMenuInterface->getAllClassification()) {
+    Q_FOREACH (QString desktopfp, m_ukuiMenuInterface->getAllClassification()) {
         m_data.append(desktopfp);
     }
 

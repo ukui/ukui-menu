@@ -77,13 +77,13 @@ void MainViewWidget::ViewOpenedSlot(QString desktopfp)
     qDebug() << "open software:" << desktopfp;
     QVector<QString> desktopfpVec = UkuiMenuInterface::desktopfpVector;
 
-    if(desktopfpVec.contains(desktopfp)) {
+    if (desktopfpVec.contains(desktopfp)) {
         QFileInfo fileInfo(desktopfp);
         QString desktopfn = fileInfo.fileName();
         QString dateTimeKey;
         dateTimeKey.clear();
 
-        if(!desktopfn.isEmpty()) {
+        if (!desktopfn.isEmpty()) {
             updateDataBaseTableTimes(desktopfn);
         }
     }

@@ -180,7 +180,7 @@ QString UkuiChineseLetter::getFirstLetter(const QString &src)
     //    }
     QString appnamePy = getPinyins(src);
 
-    if(!appnamePy.isEmpty()) {
+    if (!appnamePy.isEmpty()) {
         return QString(appnamePy.at(0));
     } else {
         return QString();
@@ -195,16 +195,16 @@ QString UkuiChineseLetter::getFirstLetters(const QString &src)
         QString str = src.at(i);
         QTextCodec *pCodec = QTextCodec::codecForName("gb2312");
 
-        if(!pCodec) {
+        if (!pCodec) {
             return QChar(' ');
         }
 
         QByteArray arr = pCodec->fromUnicode(str);
         wchar_t wchr = 0;
 
-        if(arr.size() == 1) {
+        if (arr.size() == 1) {
             wchr = arr.at(0) & 0xff;
-        } else if(arr.size() == 2) {
+        } else if (arr.size() == 2) {
             wchr = (arr.at(0) & 0xff) << 8;
             wchr |= (arr.at(1) & 0xff);
         } else {
@@ -213,7 +213,7 @@ QString UkuiChineseLetter::getFirstLetters(const QString &src)
 
         char c = Convert(wchr);
 
-        if(c != 0) {
+        if (c != 0) {
             firstLetters.append(c);
         }
     }
@@ -229,7 +229,7 @@ QString UkuiChineseLetter::getFirstLettersAll(const QString &src)
         QString str = src.at(i);
         QTextCodec *pCodec = QTextCodec::codecForName("gb2312");
 
-        if(!pCodec) {
+        if (!pCodec) {
             return QChar(' ');
         }
 
@@ -238,15 +238,15 @@ QString UkuiChineseLetter::getFirstLettersAll(const QString &src)
         unsigned char low = 0;
         int code = 0;
 
-        if(arr.size() == 1) {
+        if (arr.size() == 1) {
             high = 0;
             low = arr.at(0) & 0xff;
-        } else if(arr.size() == 2) {
+        } else if (arr.size() == 2) {
             high = arr.at(0) & 0xff;
             low = arr.at(1) & 0xff;
         }
 
-        if ( high < 0xa1 || low < 0xa1) {
+        if (high < 0xa1 || low < 0xa1) {
             continue;
         } else {
             code = (high - 0xa0) * 100 + low - 0xa0;
@@ -266,7 +266,7 @@ QString UkuiChineseLetter::getPinyins(const QString &text)
     for (int i = 0; i < text.length(); i++) {
         QChar c = text.at(i);
 
-        if((c >= 0 && c <= 127)) {
+        if ((c >= 0 && c <= 127)) {
             pinyins += c.toUpper();
             continue;
         }
@@ -274,7 +274,7 @@ QString UkuiChineseLetter::getPinyins(const QString &text)
         QString str = text.at(i);
         QTextCodec *pCodec = QTextCodec::codecForName("gb2312");
 
-        if(!pCodec) {
+        if (!pCodec) {
             return QChar(' ');
         }
 
@@ -283,15 +283,15 @@ QString UkuiChineseLetter::getPinyins(const QString &text)
         unsigned char low = 0;
         int code = 0;
 
-        if(arr.size() == 1) {
+        if (arr.size() == 1) {
             high = 0;
             low = arr.at(0) & 0xff;
-        } else if(arr.size() == 2) {
+        } else if (arr.size() == 2) {
             high = arr.at(0) & 0xff;
             low = arr.at(1) & 0xff;
         }
 
-        if ( high < 0xa1 || low < 0xa1) {
+        if (high < 0xa1 || low < 0xa1) {
             continue;
         } else {
             code = (high - 0xa0) * 100 + low - 0xa0;
@@ -308,7 +308,7 @@ QString UkuiChineseLetter::getPinyin(int code)//此方法可以获取所有汉�
 {
     QString pinyin;
 
-    switch(code) {
+    switch (code) {
         case 6325:
         case 6436:
         case 7571:
@@ -4271,1973 +4271,1973 @@ QString UkuiChineseLetter::getPinyin(int code)//此方法可以获取所有汉�
             break;
 
         default:
-            if(code >= 1601 && code <= 1602) {
+            if (code >= 1601 && code <= 1602) {
                 pinyin = "A";
                 break;
             }
 
-            if(code >= 1603 && code <= 1615) {
+            if (code >= 1603 && code <= 1615) {
                 pinyin = "AI";
                 break;
             }
 
-            if(code >= 1616 && code <= 1624) {
+            if (code >= 1616 && code <= 1624) {
                 pinyin = "AN";
                 break;
             }
 
-            if(code >= 1625 && code <= 1627) {
+            if (code >= 1625 && code <= 1627) {
                 pinyin = "ANG";
                 break;
             }
 
-            if(code >= 1628 && code <= 1636) {
+            if (code >= 1628 && code <= 1636) {
                 pinyin = "AO";
                 break;
             }
 
-            if(code >= 1637 && code <= 1654) {
+            if (code >= 1637 && code <= 1654) {
                 pinyin = "BA";
                 break;
             }
 
-            if(code >= 1655 && code <= 1662) {
+            if (code >= 1655 && code <= 1662) {
                 pinyin = "BAI";
                 break;
             }
 
-            if(code >= 1663 && code <= 1677) {
+            if (code >= 1663 && code <= 1677) {
                 pinyin = "BAN";
                 break;
             }
 
-            if(code >= 1678 && code <= 1689) {
+            if (code >= 1678 && code <= 1689) {
                 pinyin = "BANG";
                 break;
             }
 
-            if(code >= 1690 && code <= 1712) {
+            if (code >= 1690 && code <= 1712) {
                 pinyin = "BAO";
                 break;
             }
 
-            if(code >= 1713 && code <= 1727) {
+            if (code >= 1713 && code <= 1727) {
                 pinyin = "BEI";
                 break;
             }
 
-            if(code >= 1728 && code <= 1731) {
+            if (code >= 1728 && code <= 1731) {
                 pinyin = "BEN";
                 break;
             }
 
-            if(code >= 1732 && code <= 1737) {
+            if (code >= 1732 && code <= 1737) {
                 pinyin = "BENG";
                 break;
             }
 
-            if(code > 1738 && code <= 1761) {
+            if (code > 1738 && code <= 1761) {
                 pinyin = "BI";
                 break;
             }
 
-            if(code >= 1762 && code <= 1773) {
+            if (code >= 1762 && code <= 1773) {
                 pinyin = "BIAN";
                 break;
             }
 
-            if(code >= 1774 && code <= 1777) {
+            if (code >= 1774 && code <= 1777) {
                 pinyin = "BIAO";
                 break;
             }
 
-            if(code >= 1778 && code <= 1781) {
+            if (code >= 1778 && code <= 1781) {
                 pinyin = "BIE";
                 break;
             }
 
-            if(code >= 1782 && code <= 1787) {
+            if (code >= 1782 && code <= 1787) {
                 pinyin = "BIN";
                 break;
             }
 
-            if(code >= 1788 && code <= 1794) {
+            if (code >= 1788 && code <= 1794) {
                 pinyin = "BING";
                 break;
             }
 
-            if(code >= 1801 && code <= 1802) {
+            if (code >= 1801 && code <= 1802) {
                 pinyin = "BING";
                 break;
             }
 
-            if(code >= 1803 && code <= 1821) {
+            if (code >= 1803 && code <= 1821) {
                 pinyin = "BO";
                 break;
             }
 
-            if(code >= 1822 && code <= 1832) {
+            if (code >= 1822 && code <= 1832) {
                 pinyin = "BU";
                 break;
             }
 
-            if(code == 1833) {
+            if (code == 1833) {
                 pinyin = "CA";
                 break;
             }
 
-            if(code >= 1834 && code <= 1844) {
+            if (code >= 1834 && code <= 1844) {
                 pinyin = "CAI";
                 break;
             }
 
-            if(code >= 1845 && code <= 1851) {
+            if (code >= 1845 && code <= 1851) {
                 pinyin = "CAN";
                 break;
             }
 
-            if(code >= 1852 && code <= 1856) {
+            if (code >= 1852 && code <= 1856) {
                 pinyin = "CANG";
                 break;
             }
 
-            if(code >= 1857 && code <= 1861) {
+            if (code >= 1857 && code <= 1861) {
                 pinyin = "CAO";
                 break;
             }
 
-            if(code >= 1862 && code <= 1866) {
+            if (code >= 1862 && code <= 1866) {
                 pinyin = "CE";
                 break;
             }
 
-            if(code >= 1867 && code <= 1868) {
+            if (code >= 1867 && code <= 1868) {
                 pinyin = "CENG";
                 break;
             }
 
-            if(code >= 1869 && code <= 1879) {
+            if (code >= 1869 && code <= 1879) {
                 pinyin = "CHA";
                 break;
             }
 
-            if(code >= 1880 && code <= 1882) {
+            if (code >= 1880 && code <= 1882) {
                 pinyin = "CHAI";
                 break;
             }
 
-            if(code >= 1883 && code <= 1892) {
+            if (code >= 1883 && code <= 1892) {
                 pinyin = "CHAN";
                 break;
             }
 
-            if(code >= 1893 && code <= 1911) {
+            if (code >= 1893 && code <= 1911) {
                 pinyin = "CHANG";
                 break;
             }
 
-            if(code >= 1912 && code <= 1920) {
+            if (code >= 1912 && code <= 1920) {
                 pinyin = "CHAO";
                 break;
             }
 
-            if(code >= 1921 && code <= 1926) {
+            if (code >= 1921 && code <= 1926) {
                 pinyin = "CHE";
                 break;
             }
 
-            if(code >= 1927 && code <= 1936) {
+            if (code >= 1927 && code <= 1936) {
                 pinyin = "CHEN";
                 break;
             }
 
-            if(code >= 1937 && code <= 1951) {
+            if (code >= 1937 && code <= 1951) {
                 pinyin = "CHENG";
                 break;
             }
 
-            if(code >= 1952 && code <= 1967) {
+            if (code >= 1952 && code <= 1967) {
                 pinyin = "CHI";
                 break;
             }
 
-            if(code >= 1968 && code <= 1972) {
+            if (code >= 1968 && code <= 1972) {
                 pinyin = "CHONG";
                 break;
             }
 
-            if(code >= 1973 && code <= 1984) {
+            if (code >= 1973 && code <= 1984) {
                 pinyin = "CHOU";
                 break;
             }
 
-            if(code >= 1985 && code <= 2006) {
+            if (code >= 1985 && code <= 2006) {
                 pinyin = "CHU";
                 break;
             }
 
-            if(code == 2007) {
+            if (code == 2007) {
                 pinyin = "CHUAI";
                 break;
             }
 
-            if(code >= 2008 && code <= 2014) {
+            if (code >= 2008 && code <= 2014) {
                 pinyin = "CHUAN";
                 break;
             }
 
-            if(code >= 2015 && code <= 2020) {
+            if (code >= 2015 && code <= 2020) {
                 pinyin = "CHUANG";
                 break;
             }
 
-            if(code >= 2021 && code <= 2025) {
+            if (code >= 2021 && code <= 2025) {
                 pinyin = "CHUI";
                 break;
             }
 
-            if(code >= 2026 && code <= 2032) {
+            if (code >= 2026 && code <= 2032) {
                 pinyin = "CHUN";
                 break;
             }
 
-            if(code >= 2033 && code <= 2034) {
+            if (code >= 2033 && code <= 2034) {
                 pinyin = "CHUO";
                 break;
             }
 
-            if(code >= 2035 && code <= 2046) {
+            if (code >= 2035 && code <= 2046) {
                 pinyin = "CI";
                 break;
             }
 
-            if(code >= 2047 && code <= 2052) {
+            if (code >= 2047 && code <= 2052) {
                 pinyin = "CONG";
                 break;
             }
 
-            if(code >= 2054 && code <= 2057) {
+            if (code >= 2054 && code <= 2057) {
                 pinyin = "CU";
                 break;
             }
 
-            if(code >= 2058 && code <= 2060) {
+            if (code >= 2058 && code <= 2060) {
                 pinyin = "CUAN";
                 break;
             }
 
-            if(code >= 2061 && code <= 2068) {
+            if (code >= 2061 && code <= 2068) {
                 pinyin = "CUI";
                 break;
             }
 
-            if(code >= 2069 && code <= 2071) {
+            if (code >= 2069 && code <= 2071) {
                 pinyin = "CUN";
                 break;
             }
 
-            if(code >= 2072 && code <= 2077) {
+            if (code >= 2072 && code <= 2077) {
                 pinyin = "CUO";
                 break;
             }
 
-            if(code >= 2078 && code <= 2083) {
+            if (code >= 2078 && code <= 2083) {
                 pinyin = "DA";
                 break;
             }
 
-            if(code >= 2084 && code <= 2094) {
+            if (code >= 2084 && code <= 2094) {
                 pinyin = "DAI";
                 break;
             }
 
-            if(code >= 2102 && code <= 2116) {
+            if (code >= 2102 && code <= 2116) {
                 pinyin = "DAN";
                 break;
             }
 
-            if(code >= 2117 && code <= 2121) {
+            if (code >= 2117 && code <= 2121) {
                 pinyin = "DANG";
                 break;
             }
 
-            if(code >= 2122 && code <= 2133) {
+            if (code >= 2122 && code <= 2133) {
                 pinyin = "DAO";
                 break;
             }
 
-            if(code >= 2134 && code <= 2136) {
+            if (code >= 2134 && code <= 2136) {
                 pinyin = "DE";
                 break;
             }
 
-            if(code >= 2137 && code <= 2143) {
+            if (code >= 2137 && code <= 2143) {
                 pinyin = "DENG";
                 break;
             }
 
-            if(code >= 2144 && code <= 2162) {
+            if (code >= 2144 && code <= 2162) {
                 pinyin = "DI";
                 break;
             }
 
-            if(code >= 2163 && code <= 2178) {
+            if (code >= 2163 && code <= 2178) {
                 pinyin = "DIAN";
                 break;
             }
 
-            if(code >= 2179 && code <= 2187) {
+            if (code >= 2179 && code <= 2187) {
                 pinyin = "DIAO";
                 break;
             }
 
-            if(code >= 2188 && code <= 2194) {
+            if (code >= 2188 && code <= 2194) {
                 pinyin = "DIE";
                 break;
             }
 
-            if(code >= 2201 && code <= 2209) {
+            if (code >= 2201 && code <= 2209) {
                 pinyin = "DING";
                 break;
             }
 
-            if(code == 2210) {
+            if (code == 2210) {
                 pinyin = "DIU";
                 break;
             }
 
-            if(code >= 2211 && code <= 2220) {
+            if (code >= 2211 && code <= 2220) {
                 pinyin = "DONG";
                 break;
             }
 
-            if(code >= 2221 && code <= 2227) {
+            if (code >= 2221 && code <= 2227) {
                 pinyin = "DOU";
                 break;
             }
 
-            if(code >= 2228 && code <= 2242) {
+            if (code >= 2228 && code <= 2242) {
                 pinyin = "DU";
                 break;
             }
 
-            if(code >= 2243 && code <= 2248) {
+            if (code >= 2243 && code <= 2248) {
                 pinyin = "DUAN";
                 break;
             }
 
-            if(code >= 2249 && code <= 2252) {
+            if (code >= 2249 && code <= 2252) {
                 pinyin = "DUI";
                 break;
             }
 
-            if(code >= 2253 && code <= 2261) {
+            if (code >= 2253 && code <= 2261) {
                 pinyin = "DUN";
                 break;
             }
 
-            if(code >= 2262 && code <= 2273) {
+            if (code >= 2262 && code <= 2273) {
                 pinyin = "DUO";
                 break;
             }
 
-            if(code >= 2274 && code <= 2286) {
+            if (code >= 2274 && code <= 2286) {
                 pinyin = "E";
                 break;
             }
 
-            if(code == 2287) {
+            if (code == 2287) {
                 pinyin = "EN";
                 break;
             }
 
-            if(code >= 2288 && code <= 2231) {
+            if (code >= 2288 && code <= 2231) {
                 pinyin = "ER";
                 break;
             }
 
-            if(code >= 2302 && code <= 2309) {
+            if (code >= 2302 && code <= 2309) {
                 pinyin = "FA";
                 break;
             }
 
-            if(code >= 2310 && code <= 2326) {
+            if (code >= 2310 && code <= 2326) {
                 pinyin = "FAN";
                 break;
             }
 
-            if(code >= 2327 && code <= 2337) {
+            if (code >= 2327 && code <= 2337) {
                 pinyin = "FANG";
                 break;
             }
 
-            if(code >= 2338 && code <= 2349) {
+            if (code >= 2338 && code <= 2349) {
                 pinyin = "FEI";
                 break;
             }
 
-            if(code >= 2350 && code <= 2364) {
+            if (code >= 2350 && code <= 2364) {
                 pinyin = "FEN";
                 break;
             }
 
-            if(code >= 2365 && code <= 2379) {
+            if (code >= 2365 && code <= 2379) {
                 pinyin = "FENG";
                 break;
             }
 
-            if(code == 2380) {
+            if (code == 2380) {
                 pinyin = "FO";
                 break;
             }
 
-            if(code == 2381) {
+            if (code == 2381) {
                 pinyin = "FOU";
                 break;
             }
 
-            if(code >= 2382 && code <= 2432) {
+            if (code >= 2382 && code <= 2432) {
                 pinyin = "FU";
                 break;
             }
 
-            if(code >= 2435 && code <= 2440) {
+            if (code >= 2435 && code <= 2440) {
                 pinyin = "GAI";
                 break;
             }
 
-            if(code >= 2441 && code <= 2451) {
+            if (code >= 2441 && code <= 2451) {
                 pinyin = "GAN";
                 break;
             }
 
-            if(code >= 2452 && code <= 2460) {
+            if (code >= 2452 && code <= 2460) {
                 pinyin = "GANG";
                 break;
             }
 
-            if(code >= 2461 && code <= 2470) {
+            if (code >= 2461 && code <= 2470) {
                 pinyin = "GAO";
                 break;
             }
 
-            if(code >= 2471 && code <= 2487) {
+            if (code >= 2471 && code <= 2487) {
                 pinyin = "GE";
                 break;
             }
 
-            if(code == 2488) {
+            if (code == 2488) {
                 pinyin = "GEI";
                 break;
             }
 
-            if(code >= 2489 && code <= 2490) {
+            if (code >= 2489 && code <= 2490) {
                 pinyin = "GEN";
                 break;
             }
 
-            if(code >= 2491 && code <= 2503) {
+            if (code >= 2491 && code <= 2503) {
                 pinyin = "GENG";
                 break;
             }
 
-            if(code >= 2504 && code <= 2518) {
+            if (code >= 2504 && code <= 2518) {
                 pinyin = "GONG";
                 break;
             }
 
-            if(code >= 2519 && code <= 2527) {
+            if (code >= 2519 && code <= 2527) {
                 pinyin = "GOU";
                 break;
             }
 
-            if(code >= 2528 && code <= 2545) {
+            if (code >= 2528 && code <= 2545) {
                 pinyin = "GU";
                 break;
             }
 
-            if(code >= 2546 && code <= 2551) {
+            if (code >= 2546 && code <= 2551) {
                 pinyin = "GUA";
                 break;
             }
 
-            if(code >= 2552 && code <= 2554) {
+            if (code >= 2552 && code <= 2554) {
                 pinyin = "GUAI";
                 break;
             }
 
-            if(code >= 2555 && code <= 2565) {
+            if (code >= 2555 && code <= 2565) {
                 pinyin = "GUAN";
                 break;
             }
 
-            if(code >= 2566 && code <= 2568) {
+            if (code >= 2566 && code <= 2568) {
                 pinyin = "GUANG";
                 break;
             }
 
-            if(code >= 2569 && code <= 2584) {
+            if (code >= 2569 && code <= 2584) {
                 pinyin = "GUI";
                 break;
             }
 
-            if(code >= 2585 && code <= 2587) {
+            if (code >= 2585 && code <= 2587) {
                 pinyin = "GUN";
                 break;
             }
 
-            if(code >= 2588 && code <= 2593) {
+            if (code >= 2588 && code <= 2593) {
                 pinyin = "GUO";
                 break;
             }
 
-            if(code == 2594) {
+            if (code == 2594) {
                 pinyin = "HA";
                 break;
             }
 
-            if(code >= 2601 && code <= 2607) {
+            if (code >= 2601 && code <= 2607) {
                 pinyin = "HAI";
                 break;
             }
 
-            if(code >= 2608 && code <= 2626) {
+            if (code >= 2608 && code <= 2626) {
                 pinyin = "HAN";
                 break;
             }
 
-            if(code >= 2627 && code <= 2629) {
+            if (code >= 2627 && code <= 2629) {
                 pinyin = "HANG";
                 break;
             }
 
-            if(code >= 2630 && code <= 2638) {
+            if (code >= 2630 && code <= 2638) {
                 pinyin = "HAO";
                 break;
             }
 
-            if(code >= 2639 && code <= 2656) {
+            if (code >= 2639 && code <= 2656) {
                 pinyin = "HE";
                 break;
             }
 
-            if(code >= 2657 && code <= 2658) {
+            if (code >= 2657 && code <= 2658) {
                 pinyin = "HEI";
                 break;
             }
 
-            if(code >= 2659 && code <= 2662) {
+            if (code >= 2659 && code <= 2662) {
                 pinyin = "HEN";
                 break;
             }
 
-            if(code >= 2663 && code <= 2667) {
+            if (code >= 2663 && code <= 2667) {
                 pinyin = "HENG";
                 break;
             }
 
-            if(code >= 2668 && code <= 2676) {
+            if (code >= 2668 && code <= 2676) {
                 pinyin = "HONG";
                 break;
             }
 
-            if(code >= 2677 && code <= 2683) {
+            if (code >= 2677 && code <= 2683) {
                 pinyin = "HOU";
                 break;
             }
 
-            if(code >= 2684 && code <= 2707) {
+            if (code >= 2684 && code <= 2707) {
                 pinyin = "HU";
                 break;
             }
 
-            if(code >= 2708 && code <= 2716) {
+            if (code >= 2708 && code <= 2716) {
                 pinyin = "HUA";
                 break;
             }
 
-            if(code >= 2717 && code <= 2721) {
+            if (code >= 2717 && code <= 2721) {
                 pinyin = "HUAI";
                 break;
             }
 
-            if(code >= 2722 && code <= 2735) {
+            if (code >= 2722 && code <= 2735) {
                 pinyin = "HUAN";
                 break;
             }
 
-            if(code >= 2736 && code <= 2749) {
+            if (code >= 2736 && code <= 2749) {
                 pinyin = "HUANG";
                 break;
             }
 
-            if(code >= 2750 && code <= 2770) {
+            if (code >= 2750 && code <= 2770) {
                 pinyin = "HUI";
                 break;
             }
 
-            if(code >= 2771 && code <= 2776) {
+            if (code >= 2771 && code <= 2776) {
                 pinyin = "HUN";
                 break;
             }
 
-            if(code >= 2777 && code <= 2786) {
+            if (code >= 2777 && code <= 2786) {
                 pinyin = "HUO";
                 break;
             }
 
-            if(code >= 2787 && code <= 2845) {
+            if (code >= 2787 && code <= 2845) {
                 pinyin = "JI";
                 break;
             }
 
-            if(code >= 2846 && code <= 2862) {
+            if (code >= 2846 && code <= 2862) {
                 pinyin = "JIA";
                 break;
             }
 
-            if(code >= 2863 && code <= 2908) {
+            if (code >= 2863 && code <= 2908) {
                 pinyin = "JIAN";
                 break;
             }
 
-            if(code >= 2909 && code <= 2921) {
+            if (code >= 2909 && code <= 2921) {
                 pinyin = "JIANG";
                 break;
             }
 
-            if(code >= 2922 && code <= 2949) {
+            if (code >= 2922 && code <= 2949) {
                 pinyin = "JIAO";
                 break;
             }
 
-            if(code >= 2950 && code <= 2976) {
+            if (code >= 2950 && code <= 2976) {
                 pinyin = "JIE";
                 break;
             }
 
-            if(code >= 2977 && code <= 3002) {
+            if (code >= 2977 && code <= 3002) {
                 pinyin = "JIN";
                 break;
             }
 
-            if(code >= 3003 && code <= 3027) {
+            if (code >= 3003 && code <= 3027) {
                 pinyin = "JING";
                 break;
             }
 
-            if(code >= 3028 && code <= 3029) {
+            if (code >= 3028 && code <= 3029) {
                 pinyin = "JIONG";
                 break;
             }
 
-            if(code >= 3030 && code <= 3046) {
+            if (code >= 3030 && code <= 3046) {
                 pinyin = "JIU";
                 break;
             }
 
-            if(code >= 3047 && code <= 3071) {
+            if (code >= 3047 && code <= 3071) {
                 pinyin = "JU";
                 break;
             }
 
-            if(code >= 3072 && code <= 3078) {
+            if (code >= 3072 && code <= 3078) {
                 pinyin = "JUAN";
                 break;
             }
 
-            if(code >= 3079 && code <= 3088) {
+            if (code >= 3079 && code <= 3088) {
                 pinyin = "JUE";
                 break;
             }
 
-            if(code >= 3089 && code <= 3105) {
+            if (code >= 3089 && code <= 3105) {
                 pinyin = "JUN";
                 break;
             }
 
-            if(code >= 3106 && code <= 3109) {
+            if (code >= 3106 && code <= 3109) {
                 pinyin = "KA";
                 break;
             }
 
-            if(code >= 3110 && code <= 3114) {
+            if (code >= 3110 && code <= 3114) {
                 pinyin = "KAI";
                 break;
             }
 
-            if(code >= 3115 && code <= 3120) {
+            if (code >= 3115 && code <= 3120) {
                 pinyin = "KAN";
                 break;
             }
 
-            if(code >= 3121 && code <= 3127) {
+            if (code >= 3121 && code <= 3127) {
                 pinyin = "KANG";
                 break;
             }
 
-            if(code >= 3128 && code <= 3131) {
+            if (code >= 3128 && code <= 3131) {
                 pinyin = "KAO";
                 break;
             }
 
-            if(code >= 3132 && code <= 3146) {
+            if (code >= 3132 && code <= 3146) {
                 pinyin = "KE";
                 break;
             }
 
-            if(code >= 3147 && code <= 3150) {
+            if (code >= 3147 && code <= 3150) {
                 pinyin = "KEN";
                 break;
             }
 
-            if(code >= 3151 && code <= 3152) {
+            if (code >= 3151 && code <= 3152) {
                 pinyin = "KENG";
                 break;
             }
 
-            if(code >= 3153 && code <= 3156) {
+            if (code >= 3153 && code <= 3156) {
                 pinyin = "KONG";
                 break;
             }
 
-            if(code >= 3157 && code <= 3160) {
+            if (code >= 3157 && code <= 3160) {
                 pinyin = "KOU";
                 break;
             }
 
-            if(code >= 3161 && code <= 3167) {
+            if (code >= 3161 && code <= 3167) {
                 pinyin = "KU";
                 break;
             }
 
-            if(code >= 3168 && code <= 3172) {
+            if (code >= 3168 && code <= 3172) {
                 pinyin = "KUA";
                 break;
             }
 
-            if(code >= 3173 && code <= 3176) {
+            if (code >= 3173 && code <= 3176) {
                 pinyin = "KUAI";
                 break;
             }
 
-            if(code >= 3177 && code <= 3178) {
+            if (code >= 3177 && code <= 3178) {
                 pinyin = "KUAN";
                 break;
             }
 
-            if(code >= 3179 && code <= 3186) {
+            if (code >= 3179 && code <= 3186) {
                 pinyin = "KUANG";
                 break;
             }
 
-            if(code >= 3187 && code <= 3203) {
+            if (code >= 3187 && code <= 3203) {
                 pinyin = "KUI";
                 break;
             }
 
-            if(code >= 3204 && code <= 3207) {
+            if (code >= 3204 && code <= 3207) {
                 pinyin = "KUN";
                 break;
             }
 
-            if(code >= 3208 && code <= 3211) {
+            if (code >= 3208 && code <= 3211) {
                 pinyin = "KUO";
                 break;
             }
 
-            if(code >= 3212 && code <= 3218) {
+            if (code >= 3212 && code <= 3218) {
                 pinyin = "LA";
                 break;
             }
 
-            if(code >= 3219 && code <= 3221) {
+            if (code >= 3219 && code <= 3221) {
                 pinyin = "LAI";
                 break;
             }
 
-            if(code >= 3222 && code <= 3236) {
+            if (code >= 3222 && code <= 3236) {
                 pinyin = "LAN";
                 break;
             }
 
-            if(code >= 3237 && code <= 3243) {
+            if (code >= 3237 && code <= 3243) {
                 pinyin = "LANG";
                 break;
             }
 
-            if(code >= 3244 && code <= 3252) {
+            if (code >= 3244 && code <= 3252) {
                 pinyin = "LAO";
                 break;
             }
 
-            if(code >= 3253 && code <= 3254) {
+            if (code >= 3253 && code <= 3254) {
                 pinyin = "LE";
                 break;
             }
 
-            if(code >= 3255 && code <= 3265) {
+            if (code >= 3255 && code <= 3265) {
                 pinyin = "LEI";
                 break;
             }
 
-            if(code >= 3266 && code <= 3268) {
+            if (code >= 3266 && code <= 3268) {
                 pinyin = "LENG";
                 break;
             }
 
-            if(code >= 3269 && code <= 3308) {
+            if (code >= 3269 && code <= 3308) {
                 pinyin = "LI";
             }
 
-            if(code == 3309) {
+            if (code == 3309) {
                 pinyin = "LIA";
                 break;
             }
 
-            if(code >= 3310 && code <= 3323) {
+            if (code >= 3310 && code <= 3323) {
                 pinyin = "LIAN";
                 break;
             }
 
-            if(code >= 3324 && code <= 3334) {
+            if (code >= 3324 && code <= 3334) {
                 pinyin = "LIANG";
                 break;
             }
 
-            if(code >= 3335 && code <= 3347) {
+            if (code >= 3335 && code <= 3347) {
                 pinyin = "LIAO";
                 break;
             }
 
-            if(code >= 3348 && code <= 3352) {
+            if (code >= 3348 && code <= 3352) {
                 pinyin = "LIE";
                 break;
             }
 
-            if(code >= 3353 && code <= 3363) {
+            if (code >= 3353 && code <= 3363) {
                 pinyin = "LIN";
                 break;
             }
 
-            if(code >= 3364 && code <= 3378) {
+            if (code >= 3364 && code <= 3378) {
                 pinyin = "LING";
                 break;
             }
 
-            if(code >= 3379 && code <= 3389) {
+            if (code >= 3379 && code <= 3389) {
                 pinyin = "LIU";
                 break;
             }
 
-            if(code >= 3390 && code <= 3404) {
+            if (code >= 3390 && code <= 3404) {
                 pinyin = "LONG";
                 break;
             }
 
-            if(code >= 3405 && code <= 3410) {
+            if (code >= 3405 && code <= 3410) {
                 pinyin = "LOU";
                 break;
             }
 
-            if(code >= 3411 && code <= 3444) {
+            if (code >= 3411 && code <= 3444) {
                 pinyin = "LU";
                 break;
             }
 
-            if(code >= 3445 && code <= 3450) {
+            if (code >= 3445 && code <= 3450) {
                 pinyin = "LUAN";
                 break;
             }
 
-            if(code >= 3451 && code <= 3452) {
+            if (code >= 3451 && code <= 3452) {
                 pinyin = "LUE";
                 break;
             }
 
-            if(code >= 3453 && code <= 3459) {
+            if (code >= 3453 && code <= 3459) {
                 pinyin = "LUN";
                 break;
             }
 
-            if(code >= 3460 && code <= 3471) {
+            if (code >= 3460 && code <= 3471) {
                 pinyin = "LUO";
                 break;
             }
 
-            if(code >= 3472 && code <= 3480) {
+            if (code >= 3472 && code <= 3480) {
                 pinyin = "MA";
                 break;
             }
 
-            if(code >= 3481 && code <= 3486) {
+            if (code >= 3481 && code <= 3486) {
                 pinyin = "MAI";
                 break;
             }
 
-            if(code >= 3487 && code <= 3501) {
+            if (code >= 3487 && code <= 3501) {
                 pinyin = "MAN";
                 break;
             }
 
-            if(code >= 3502 && code <= 3507) {
+            if (code >= 3502 && code <= 3507) {
                 pinyin = "MANG";
                 break;
             }
 
-            if(code >= 3508 && code <= 3519) {
+            if (code >= 3508 && code <= 3519) {
                 pinyin = "MAO";
                 break;
             }
 
-            if(code == 3520) {
+            if (code == 3520) {
                 pinyin = "ME";
                 break;
             }
 
-            if(code >= 3521 && code <= 3536) {
+            if (code >= 3521 && code <= 3536) {
                 pinyin = "MEI";
                 break;
             }
 
-            if(code >= 3537 && code <= 3539) {
+            if (code >= 3537 && code <= 3539) {
                 pinyin = "MEN";
                 break;
             }
 
-            if(code >= 3540 && code <= 3547) {
+            if (code >= 3540 && code <= 3547) {
                 pinyin = "MENG";
                 break;
             }
 
-            if(code >= 3548 && code <= 3561) {
+            if (code >= 3548 && code <= 3561) {
                 pinyin = "MI";
             }
 
-            if(code >= 3562 && code <= 3570) {
+            if (code >= 3562 && code <= 3570) {
                 pinyin = "MIAN";
                 break;
             }
 
-            if(code >= 3571 && code <= 3578) {
+            if (code >= 3571 && code <= 3578) {
                 pinyin = "MIAO";
                 break;
             }
 
-            if(code >= 3579 && code <= 3580) {
+            if (code >= 3579 && code <= 3580) {
                 pinyin = "MIE";
                 break;
             }
 
-            if(code >= 3581 && code <= 3586) {
+            if (code >= 3581 && code <= 3586) {
                 pinyin = "MIN";
                 break;
             }
 
-            if(code >= 3587 && code <= 3592) {
+            if (code >= 3587 && code <= 3592) {
                 pinyin = "MING";
                 break;
             }
 
-            if(code == 3593) {
+            if (code == 3593) {
                 pinyin = "MIU";
                 break;
             }
 
-            if(code >= 3594 && code <= 3616) {
+            if (code >= 3594 && code <= 3616) {
                 pinyin = "MO";
                 break;
             }
 
-            if(code >= 3617 && code <= 3619) {
+            if (code >= 3617 && code <= 3619) {
                 pinyin = "MOU";
                 break;
             }
 
-            if(code >= 3620 && code <= 3634) {
+            if (code >= 3620 && code <= 3634) {
                 pinyin = "MU";
                 break;
             }
 
-            if(code >= 3635 && code <= 3641) {
+            if (code >= 3635 && code <= 3641) {
                 pinyin = "NA";
                 break;
             }
 
-            if(code >= 3642 && code <= 3646) {
+            if (code >= 3642 && code <= 3646) {
                 pinyin = "NAI";
                 break;
             }
 
-            if(code >= 3647 && code <= 3649) {
+            if (code >= 3647 && code <= 3649) {
                 pinyin = "NAN";
                 break;
             }
 
-            if(code == 3650) {
+            if (code == 3650) {
                 pinyin = "NANG";
                 break;
             }
 
-            if(code >= 3651 && code <= 3655) {
+            if (code >= 3651 && code <= 3655) {
                 pinyin = "NAO";
                 break;
             }
 
-            if(code == 3656) {
+            if (code == 3656) {
                 pinyin = "NE";
                 break;
             }
 
-            if(code >= 3657 && code <= 3658) {
+            if (code >= 3657 && code <= 3658) {
                 pinyin = "NEI";
                 break;
             }
 
-            if(code == 3659) {
+            if (code == 3659) {
                 pinyin = "NEN";
                 break;
             }
 
-            if(code == 3660) {
+            if (code == 3660) {
                 pinyin = "NENG";
                 break;
             }
 
-            if(code >= 3661 && code <= 3671) {
+            if (code >= 3661 && code <= 3671) {
                 pinyin = "NI";
                 break;
             }
 
-            if(code >= 3672 && code <= 3678) {
+            if (code >= 3672 && code <= 3678) {
                 pinyin = "NIAN";
                 break;
             }
 
-            if(code >= 3679 && code <= 3680) {
+            if (code >= 3679 && code <= 3680) {
                 pinyin = "NIANG";
                 break;
             }
 
-            if(code >= 3681 && code <= 3682) {
+            if (code >= 3681 && code <= 3682) {
                 pinyin = "NIAO";
                 break;
             }
 
-            if(code >= 3683 && code <= 3689) {
+            if (code >= 3683 && code <= 3689) {
                 pinyin = "NIE";
                 break;
             }
 
-            if(code == 3690) {
+            if (code == 3690) {
                 pinyin = "NIN";
                 break;
             }
 
-            if(code >= 3691 && code <= 3702) {
+            if (code >= 3691 && code <= 3702) {
                 pinyin = "NING";
                 break;
             }
 
-            if(code >= 3703 && code <= 3706) {
+            if (code >= 3703 && code <= 3706) {
                 pinyin = "NIU";
                 break;
             }
 
-            if(code >= 3707 && code <= 3710) {
+            if (code >= 3707 && code <= 3710) {
                 pinyin = "NONG";
                 break;
             }
 
-            if(code >= 3711 && code <= 3714) {
+            if (code >= 3711 && code <= 3714) {
                 pinyin = "NU";
                 break;
             }
 
-            if(code == 3715) {
+            if (code == 3715) {
                 pinyin = "NUAN";
                 break;
             }
 
-            if(code >= 3716 && code <= 3717) {
+            if (code >= 3716 && code <= 3717) {
                 pinyin = "NUE";
                 break;
             }
 
-            if(code >= 3718 && code <= 3721) {
+            if (code >= 3718 && code <= 3721) {
                 pinyin = "NUO";
                 break;
             }
 
-            if(code == 3722) {
+            if (code == 3722) {
                 pinyin = "O";
                 break;
             }
 
-            if(code >= 3723 && code <= 3729) {
+            if (code >= 3723 && code <= 3729) {
                 pinyin = "OU";
                 break;
             }
 
-            if(code >= 3730 && code <= 3735) {
+            if (code >= 3730 && code <= 3735) {
                 pinyin = "PA";
                 break;
             }
 
-            if(code >= 3736 && code <= 3741) {
+            if (code >= 3736 && code <= 3741) {
                 pinyin = "PAI";
                 break;
             }
 
-            if(code >= 3742 && code <= 3749) {
+            if (code >= 3742 && code <= 3749) {
                 pinyin = "PAN";
                 break;
             }
 
-            if(code >= 3750 && code <= 3754) {
+            if (code >= 3750 && code <= 3754) {
                 pinyin = "PANG";
                 break;
             }
 
-            if(code >= 3755 && code <= 3761) {
+            if (code >= 3755 && code <= 3761) {
                 pinyin = "PAO";
                 break;
             }
 
-            if(code >= 3762 && code <= 3770) {
+            if (code >= 3762 && code <= 3770) {
                 pinyin = "PEI";
                 break;
             }
 
-            if(code >= 3771 && code <= 3772) {
+            if (code >= 3771 && code <= 3772) {
                 pinyin = "PEN";
                 break;
             }
 
-            if(code >= 3773 && code <= 3786) {
+            if (code >= 3773 && code <= 3786) {
                 pinyin = "PENG";
                 break;
             }
 
-            if(code >= 3787 && code <= 3809) {
+            if (code >= 3787 && code <= 3809) {
                 pinyin = "PI";
                 break;
             }
 
-            if(code >= 3810 && code <= 3813) {
+            if (code >= 3810 && code <= 3813) {
                 pinyin = "PIAN";
                 break;
             }
 
-            if(code >= 3814 && code <= 3817) {
+            if (code >= 3814 && code <= 3817) {
                 pinyin = "PIAO";
                 break;
             }
 
-            if(code >= 3818 && code <= 3819) {
+            if (code >= 3818 && code <= 3819) {
                 pinyin = "PIE";
                 break;
             }
 
-            if(code >= 3820 && code <= 3824) {
+            if (code >= 3820 && code <= 3824) {
                 pinyin = "PIN";
                 break;
             }
 
-            if(code >= 3825 && code <= 3833) {
+            if (code >= 3825 && code <= 3833) {
                 pinyin = "PING";
                 break;
             }
 
-            if(code >= 3834 && code <= 3841) {
+            if (code >= 3834 && code <= 3841) {
                 pinyin = "PO";
                 break;
             }
 
-            if(code == 3842) {
+            if (code == 3842) {
                 pinyin = "POU";
                 break;
             }
 
-            if(code >= 3843 && code <= 3857) {
+            if (code >= 3843 && code <= 3857) {
                 pinyin = "PU";
                 break;
             }
 
-            if(code >= 3858 && code <= 3893) {
+            if (code >= 3858 && code <= 3893) {
                 pinyin = "QI";
                 break;
             }
 
-            if(code == 3894 || (code >= 3901 && code <= 3902)) {
+            if (code == 3894 || (code >= 3901 && code <= 3902)) {
                 pinyin = "QIA";
                 break;
             }
 
-            if(code >= 3903 && code <= 3924) {
+            if (code >= 3903 && code <= 3924) {
                 pinyin = "QIAN";
                 break;
             }
 
-            if(code >= 3925 && code <= 3932) {
+            if (code >= 3925 && code <= 3932) {
                 pinyin = "QIANG";
                 break;
             }
 
-            if(code >= 3933 && code <= 3947) {
+            if (code >= 3933 && code <= 3947) {
                 pinyin = "QIAO";
                 break;
             }
 
-            if(code >= 3948 && code <= 3952) {
+            if (code >= 3948 && code <= 3952) {
                 pinyin = "QIE";
                 break;
             }
 
-            if(code >= 3953 && code <= 3963) {
+            if (code >= 3953 && code <= 3963) {
                 pinyin = "QIN";
                 break;
             }
 
-            if(code >= 3964 && code <= 3976) {
+            if (code >= 3964 && code <= 3976) {
                 pinyin = "QING";
                 break;
             }
 
-            if(code >= 3977 && code <= 3978) {
+            if (code >= 3977 && code <= 3978) {
                 pinyin = "QIONG";
                 break;
             }
 
-            if(code >= 3979 && code <= 3986) {
+            if (code >= 3979 && code <= 3986) {
                 pinyin = "QIU";
                 break;
             }
 
-            if(code >= 3987 && code <= 4005) {
+            if (code >= 3987 && code <= 4005) {
                 pinyin = "QU";
                 break;
             }
 
-            if(code >= 4006 && code <= 4016) {
+            if (code >= 4006 && code <= 4016) {
                 pinyin = "QUAN";
                 break;
             }
 
-            if(code >= 4017 && code <= 4024) {
+            if (code >= 4017 && code <= 4024) {
                 pinyin = "QUE";
                 break;
             }
 
-            if(code >= 4025 && code <= 4026) {
+            if (code >= 4025 && code <= 4026) {
                 pinyin = "QUN";
                 break;
             }
 
-            if(code >= 4027 && code <= 4030) {
+            if (code >= 4027 && code <= 4030) {
                 pinyin = "RAN";
                 break;
             }
 
-            if(code >= 4031 && code <= 4035) {
+            if (code >= 4031 && code <= 4035) {
                 pinyin = "RANG";
             }
 
-            if(code >= 4036 && code <= 4038) {
+            if (code >= 4036 && code <= 4038) {
                 pinyin = "RAO";
                 break;
             }
 
-            if(code >= 4039 && code <= 4040) {
+            if (code >= 4039 && code <= 4040) {
                 pinyin = "RE";
                 break;
             }
 
-            if(code >= 4041 && code <= 4050) {
+            if (code >= 4041 && code <= 4050) {
                 pinyin = "REN";
                 break;
             }
 
-            if(code >= 4051 && code <= 4052) {
+            if (code >= 4051 && code <= 4052) {
                 pinyin = "RENG";
                 break;
             }
 
-            if(code == 4053) {
+            if (code == 4053) {
                 pinyin = "RI";
                 break;
             }
 
-            if(code >= 4054 && code <= 4063) {
+            if (code >= 4054 && code <= 4063) {
                 pinyin = "RONG";
                 break;
             }
 
-            if(code >= 4064 && code <= 4066) {
+            if (code >= 4064 && code <= 4066) {
                 pinyin = "ROU";
                 break;
             }
 
-            if(code >= 4067 && code <= 4076) {
+            if (code >= 4067 && code <= 4076) {
                 pinyin = "RU";
                 break;
             }
 
-            if(code >= 4077 && code <= 4078) {
+            if (code >= 4077 && code <= 4078) {
                 pinyin = "RUAN";
                 break;
             }
 
-            if(code >= 4079 && code <= 4081) {
+            if (code >= 4079 && code <= 4081) {
                 pinyin = "RUI";
                 break;
             }
 
-            if(code >= 4082 && code <= 4083) {
+            if (code >= 4082 && code <= 4083) {
                 pinyin = "RUN";
                 break;
             }
 
-            if(code >= 4084 && code <= 4085) {
+            if (code >= 4084 && code <= 4085) {
                 pinyin = "RUO";
                 break;
             }
 
-            if(code >= 4086 && code <= 4088) {
+            if (code >= 4086 && code <= 4088) {
                 pinyin = "SA";
                 break;
             }
 
-            if(code >= 4089 && code <= 4092) {
+            if (code >= 4089 && code <= 4092) {
                 pinyin = "SAI";
                 break;
             }
 
-            if(code >= 4093 && code <= 4094) {
+            if (code >= 4093 && code <= 4094) {
                 pinyin = "SAN";
                 break;
             }
 
-            if(code >= 4101 && code <= 4102) {
+            if (code >= 4101 && code <= 4102) {
                 pinyin = "SAN";
                 break;
             }
 
-            if(code >= 4103 && code <= 4105) {
+            if (code >= 4103 && code <= 4105) {
                 pinyin = "SANG";
                 break;
             }
 
-            if(code >= 4106 && code <= 4109) {
+            if (code >= 4106 && code <= 4109) {
                 pinyin = "SAO";
                 break;
             }
 
-            if(code >= 4110 && code <= 4112) {
+            if (code >= 4110 && code <= 4112) {
                 pinyin = "SE";
                 break;
             }
 
-            if(code == 4113) {
+            if (code == 4113) {
                 pinyin = "SEN";
             }
 
-            if(code == 4114) {
+            if (code == 4114) {
                 pinyin = "SENG";
                 break;
             }
 
-            if(code >= 4115 && code <= 4123) {
+            if (code >= 4115 && code <= 4123) {
                 pinyin = "SHA";
                 break;
             }
 
-            if(code >= 4124 && code <= 4125) {
+            if (code >= 4124 && code <= 4125) {
                 pinyin = "SHAI";
                 break;
             }
 
-            if(code >= 4126 && code <= 4141) {
+            if (code >= 4126 && code <= 4141) {
                 pinyin = "SHAN";
                 break;
             }
 
-            if(code >= 4142 && code <= 4149) {
+            if (code >= 4142 && code <= 4149) {
                 pinyin = "SHANG";
                 break;
             }
 
-            if(code >= 4150 && code <= 4160) {
+            if (code >= 4150 && code <= 4160) {
                 pinyin = "SHAO";
                 break;
             }
 
-            if(code >= 4161 && code <= 4172) {
+            if (code >= 4161 && code <= 4172) {
                 pinyin = "SHE";
                 break;
             }
 
-            if(code >= 4173 && code <= 4188) {
+            if (code >= 4173 && code <= 4188) {
                 pinyin = "SHEN";
                 break;
             }
 
-            if(code >= 4189 && code <= 4205) {
+            if (code >= 4189 && code <= 4205) {
                 pinyin = "SHENG";
                 break;
             }
 
-            if(code >= 4206 && code <= 4252) {
+            if (code >= 4206 && code <= 4252) {
                 pinyin = "SHI";
                 break;
             }
 
-            if(code >= 4253 && code <= 4262) {
+            if (code >= 4253 && code <= 4262) {
                 pinyin = "SHOU";
                 break;
             }
 
-            if(code >= 4263 && code <= 4301) {
+            if (code >= 4263 && code <= 4301) {
                 pinyin = "SHU";
                 break;
             }
 
-            if(code >= 4302 && code <= 4303) {
+            if (code >= 4302 && code <= 4303) {
                 pinyin = "SHUA";
                 break;
             }
 
-            if(code >= 4304 && code <= 4307) {
+            if (code >= 4304 && code <= 4307) {
                 pinyin = "SHUAI";
                 break;
             }
 
-            if(code >= 4308 && code <= 4309) {
+            if (code >= 4308 && code <= 4309) {
                 pinyin = "SHUAN";
                 break;
             }
 
-            if(code >= 4310 && code <= 4312) {
+            if (code >= 4310 && code <= 4312) {
                 pinyin = "SHUANG";
                 break;
             }
 
-            if(code >= 4313 && code <= 4316) {
+            if (code >= 4313 && code <= 4316) {
                 pinyin = "SHUI";
                 break;
             }
 
-            if(code >= 4317 && code <= 4320) {
+            if (code >= 4317 && code <= 4320) {
                 pinyin = "SHUN";
                 break;
             }
 
-            if(code >= 4321 && code <= 4324) {
+            if (code >= 4321 && code <= 4324) {
                 pinyin = "SHUO";
                 break;
             }
 
-            if(code >= 4325 && code <= 4340) {
+            if (code >= 4325 && code <= 4340) {
                 pinyin = "SI";
                 break;
             }
 
-            if(code >= 4341 && code <= 4348) {
+            if (code >= 4341 && code <= 4348) {
                 pinyin = "SONG";
                 break;
             }
 
-            if(code >= 4349 && code <= 4352) {
+            if (code >= 4349 && code <= 4352) {
                 pinyin = "SOU";
                 break;
             }
 
-            if(code >= 4353 && code <= 4364) {
+            if (code >= 4353 && code <= 4364) {
                 pinyin = "SU";
                 break;
             }
 
-            if(code >= 4365 && code <= 4367) {
+            if (code >= 4365 && code <= 4367) {
                 pinyin = "SUAN";
                 break;
             }
 
-            if(code >= 4368 && code <= 4378) {
+            if (code >= 4368 && code <= 4378) {
                 pinyin = "SUI";
                 break;
             }
 
-            if(code >= 4379 && code <= 4381) {
+            if (code >= 4379 && code <= 4381) {
                 pinyin = "SUN";
                 break;
             }
 
-            if(code >= 4382 && code <= 4389) {
+            if (code >= 4382 && code <= 4389) {
                 pinyin = "SUO";
                 break;
             }
 
-            if(code >= 4390 && code <= 4404) {
+            if (code >= 4390 && code <= 4404) {
                 pinyin = "TA";
                 break;
             }
 
-            if(code >= 4405 && code <= 4413) {
+            if (code >= 4405 && code <= 4413) {
                 pinyin = "TAI";
                 break;
             }
 
-            if(code >= 4414 && code <= 4431) {
+            if (code >= 4414 && code <= 4431) {
                 pinyin = "TAN";
                 break;
             }
 
-            if(code >= 4432 && code <= 4444) {
+            if (code >= 4432 && code <= 4444) {
                 pinyin = "TANG";
                 break;
             }
 
-            if(code >= 4445 && code <= 4455) {
+            if (code >= 4445 && code <= 4455) {
                 pinyin = "TAO";
                 break;
             }
 
-            if(code == 4456) {
+            if (code == 4456) {
                 pinyin = "TE";
                 break;
             }
 
-            if(code >= 4457 && code <= 4460) {
+            if (code >= 4457 && code <= 4460) {
                 pinyin = "TENG";
                 break;
             }
 
-            if(code >= 4461 && code <= 4475) {
+            if (code >= 4461 && code <= 4475) {
                 pinyin = "TI";
                 break;
             }
 
-            if(code >= 4476 && code <= 4483) {
+            if (code >= 4476 && code <= 4483) {
                 pinyin = "TIAN";
                 break;
             }
 
-            if(code >= 4484 && code <= 4488) {
+            if (code >= 4484 && code <= 4488) {
                 pinyin = "TIAO";
                 break;
             }
 
-            if(code >= 4489 && code <= 4491) {
+            if (code >= 4489 && code <= 4491) {
                 pinyin = "TIE";
                 break;
             }
 
-            if(code >= 4492 && code <= 4507) {
+            if (code >= 4492 && code <= 4507) {
                 pinyin = "TING";
                 break;
             }
 
-            if(code >= 4508 && code <= 4520) {
+            if (code >= 4508 && code <= 4520) {
                 pinyin = "TONG";
                 break;
             }
 
-            if(code >= 4521 && code <= 4524) {
+            if (code >= 4521 && code <= 4524) {
                 pinyin = "TOU";
                 break;
             }
 
-            if(code >= 4525 && code <= 4535) {
+            if (code >= 4525 && code <= 4535) {
                 pinyin = "TU";
                 break;
             }
 
-            if(code >= 4536 && code <= 4537) {
+            if (code >= 4536 && code <= 4537) {
                 pinyin = "TUAN";
                 break;
             }
 
-            if(code >= 4538 && code <= 4543) {
+            if (code >= 4538 && code <= 4543) {
                 pinyin = "TUI";
                 break;
             }
 
-            if(code >= 4544 && code <= 4546) {
+            if (code >= 4544 && code <= 4546) {
                 pinyin = "TUN";
                 break;
             }
 
-            if(code >= 4547 && code <= 4557) {
+            if (code >= 4547 && code <= 4557) {
                 pinyin = "TUO";
                 break;
             }
 
-            if(code >= 4558 && code <= 4564) {
+            if (code >= 4558 && code <= 4564) {
                 pinyin = "WA";
                 break;
             }
 
-            if(code >= 4565 && code <= 4566) {
+            if (code >= 4565 && code <= 4566) {
                 pinyin = "WAI";
                 break;
             }
 
-            if(code >= 4567 && code <= 4583) {
+            if (code >= 4567 && code <= 4583) {
                 pinyin = "WAN";
                 break;
             }
 
-            if(code >= 4584 && code <= 4593) {
+            if (code >= 4584 && code <= 4593) {
                 pinyin = "WANG";
                 break;
             }
 
-            if(code >= 4594 && code <= 4632) {
+            if (code >= 4594 && code <= 4632) {
                 pinyin = "WEI";
                 break;
             }
 
-            if(code >= 4633 && code <= 4642) {
+            if (code >= 4633 && code <= 4642) {
                 pinyin = "WEN";
                 break;
             }
 
-            if(code >= 4643 && code <= 4645) {
+            if (code >= 4643 && code <= 4645) {
                 pinyin = "WENG";
                 break;
             }
 
-            if(code >= 4646 && code <= 4654) {
+            if (code >= 4646 && code <= 4654) {
                 pinyin = "WO";
                 break;
             }
 
-            if(code >= 4655 && code <= 4683) {
+            if (code >= 4655 && code <= 4683) {
                 pinyin = "WU";
                 break;
             }
 
-            if(code >= 4684 && code <= 4724) {
+            if (code >= 4684 && code <= 4724) {
                 pinyin = "XI";
                 break;
             }
 
-            if(code >= 4725 && code <= 4737) {
+            if (code >= 4725 && code <= 4737) {
                 pinyin = "XIA";
                 break;
             }
 
-            if(code >= 4738 && code <= 4763) {
+            if (code >= 4738 && code <= 4763) {
                 pinyin = "XIAN";
                 break;
             }
 
-            if(code >= 4764 && code <= 4783) {
+            if (code >= 4764 && code <= 4783) {
                 pinyin = "XIANG";
                 break;
             }
 
-            if(code >= 4784 && code <= 4807) {
+            if (code >= 4784 && code <= 4807) {
                 pinyin = "XIAO";
                 break;
             }
 
-            if(code >= 4809 && code <= 4828) {
+            if (code >= 4809 && code <= 4828) {
                 pinyin = "XIE";
                 break;
             }
 
-            if(code >= 4829 && code <= 4838) {
+            if (code >= 4829 && code <= 4838) {
                 pinyin = "XIN";
                 break;
             }
 
-            if(code >= 4839 && code <= 4853) {
+            if (code >= 4839 && code <= 4853) {
                 pinyin = "XING";
                 break;
             }
 
-            if(code >= 4854 && code <= 4860) {
+            if (code >= 4854 && code <= 4860) {
                 pinyin = "XIONG";
                 break;
             }
 
-            if(code >= 4861 && code <= 4869) {
+            if (code >= 4861 && code <= 4869) {
                 pinyin = "XIU";
                 break;
             }
 
-            if(code >= 4870 && code <= 4888) {
+            if (code >= 4870 && code <= 4888) {
                 pinyin = "XU";
                 break;
             }
 
-            if(code >= 4889 && code <= 4904) {
+            if (code >= 4889 && code <= 4904) {
                 pinyin = "XUAN";
                 break;
             }
 
-            if(code >= 4905 && code <= 4910) {
+            if (code >= 4905 && code <= 4910) {
                 pinyin = "XUE";
                 break;
             }
 
-            if(code >= 4911 && code <= 4924) {
+            if (code >= 4911 && code <= 4924) {
                 pinyin = "XUN";
                 break;
             }
 
-            if(code >= 4925 && code <= 4940) {
+            if (code >= 4925 && code <= 4940) {
                 pinyin = "YA";
                 break;
             }
 
-            if(code >= 4941 && code <= 4973) {
+            if (code >= 4941 && code <= 4973) {
                 pinyin = "YAN";
                 break;
             }
 
-            if(code >= 4974 && code <= 4990) {
+            if (code >= 4974 && code <= 4990) {
                 pinyin = "YANG";
                 break;
             }
 
-            if(code >= 4991 && code <= 5011) {
+            if (code >= 4991 && code <= 5011) {
                 pinyin = "YAO";
                 break;
             }
 
-            if(code >= 5012 && code <= 5026) {
+            if (code >= 5012 && code <= 5026) {
                 pinyin = "YE";
                 break;
             }
 
-            if(code >= 5027 && code <= 5079) {
+            if (code >= 5027 && code <= 5079) {
                 pinyin = "YI";
                 break;
             }
 
-            if(code >= 5080 && code <= 5101) {
+            if (code >= 5080 && code <= 5101) {
                 pinyin = "YIN";
                 break;
             }
 
-            if(code >= 5102 && code <= 5119) {
+            if (code >= 5102 && code <= 5119) {
                 pinyin = "YING";
                 break;
             }
 
-            if(code == 5120) {
+            if (code == 5120) {
                 pinyin = "YO";
                 break;
             }
 
-            if(code >= 5121 && code <= 5135) {
+            if (code >= 5121 && code <= 5135) {
                 pinyin = "YONG";
                 break;
             }
 
-            if(code >= 5136 && code <= 5155) {
+            if (code >= 5136 && code <= 5155) {
                 pinyin = "YOU";
                 break;
             }
 
-            if(code >= 5156 && code <= 5206) {
+            if (code >= 5156 && code <= 5206) {
                 pinyin = "YU";
                 break;
             }
 
-            if(code >= 5207 && code <= 5226) {
+            if (code >= 5207 && code <= 5226) {
                 pinyin = "YUAN";
                 break;
             }
 
-            if(code >= 5227 && code <= 5236) {
+            if (code >= 5227 && code <= 5236) {
                 pinyin = "YUE";
                 break;
             }
 
-            if(code >= 5237 && code <= 5248) {
+            if (code >= 5237 && code <= 5248) {
                 pinyin = "YUN";
                 break;
             }
 
-            if(code >= 5249 && code <= 5251) {
+            if (code >= 5249 && code <= 5251) {
                 pinyin = "ZA";
                 break;
             }
 
-            if(code >= 5252 && code <= 5258) {
+            if (code >= 5252 && code <= 5258) {
                 pinyin = "ZAI";
                 break;
             }
 
-            if(code >= 5259 && code <= 5262) {
+            if (code >= 5259 && code <= 5262) {
                 pinyin = "ZAN";
                 break;
             }
 
-            if(code >= 5263 && code <= 5265) {
+            if (code >= 5263 && code <= 5265) {
                 pinyin = "ZANG";
                 break;
             }
 
-            if(code >= 5266 && code <= 5279) {
+            if (code >= 5266 && code <= 5279) {
                 pinyin = "ZAO";
                 break;
             }
 
-            if(code >= 5280 && code <= 5283) {
+            if (code >= 5280 && code <= 5283) {
                 pinyin = "ZE";
                 break;
             }
 
-            if(code == 5284) {
+            if (code == 5284) {
                 pinyin = "ZEI";
                 break;
             }
 
-            if(code == 5285) {
+            if (code == 5285) {
                 pinyin = "ZEN";
                 break;
             }
 
-            if(code >= 5286 && code <= 5289) {
+            if (code >= 5286 && code <= 5289) {
                 pinyin = "ZENG";
                 break;
             }
 
-            if(code >= 5290 && code <= 5309) {
+            if (code >= 5290 && code <= 5309) {
                 pinyin = "ZHA";
                 break;
             }
 
-            if(code >= 5310 && code <= 5315) {
+            if (code >= 5310 && code <= 5315) {
                 pinyin = "ZHAI";
                 break;
             }
 
-            if(code >= 5316 && code <= 5332) {
+            if (code >= 5316 && code <= 5332) {
                 pinyin = "ZHAN";
                 break;
             }
 
-            if(code >= 5333 && code <= 5347) {
+            if (code >= 5333 && code <= 5347) {
                 pinyin = "ZHANG";
                 break;
             }
 
-            if(code >= 5348 && code <= 5357) {
+            if (code >= 5348 && code <= 5357) {
                 pinyin = "ZHAO";
                 break;
             }
 
-            if(code >= 5358 && code <= 5367) {
+            if (code >= 5358 && code <= 5367) {
                 pinyin = "ZHE";
                 break;
             }
 
-            if(code >= 5368 && code <= 5383) {
+            if (code >= 5368 && code <= 5383) {
                 pinyin = "ZHEN";
                 break;
             }
 
-            if(code >= 5384 && code <= 5404) {
+            if (code >= 5384 && code <= 5404) {
                 pinyin = "ZHENG";
                 break;
             }
 
-            if(code >= 5405 && code <= 5447) {
+            if (code >= 5405 && code <= 5447) {
                 pinyin = "ZHI";
                 break;
             }
 
-            if(code >= 5448 && code <= 5458) {
+            if (code >= 5448 && code <= 5458) {
                 pinyin = "ZHONG";
                 break;
             }
 
-            if(code >= 5459 && code <= 5472) {
+            if (code >= 5459 && code <= 5472) {
                 pinyin = "ZHOU";
                 break;
             }
 
-            if(code >= 5473 && code <= 5504) {
+            if (code >= 5473 && code <= 5504) {
                 pinyin = "ZHU";
                 break;
             }
 
-            if(code >= 5505 && code <= 5506) {
+            if (code >= 5505 && code <= 5506) {
                 pinyin = "ZHUA";
                 break;
             }
 
-            if(code == 5507) {
+            if (code == 5507) {
                 pinyin = "ZHUAI";
                 break;
             }
 
-            if(code >= 5508 && code <= 5513) {
+            if (code >= 5508 && code <= 5513) {
                 pinyin = "ZHUAN";
                 break;
             }
 
-            if(code >= 5514 && code <= 5520) {
+            if (code >= 5514 && code <= 5520) {
                 pinyin = "ZHUANG";
                 break;
             }
 
-            if(code >= 5521 && code <= 5526) {
+            if (code >= 5521 && code <= 5526) {
                 pinyin = "ZHUI";
                 break;
             }
 
-            if(code >= 5527 && code <= 5528) {
+            if (code >= 5527 && code <= 5528) {
                 pinyin = "ZHUN";
                 break;
             }
 
-            if(code >= 5529 && code <= 5539) {
+            if (code >= 5529 && code <= 5539) {
                 pinyin = "ZHUO";
                 break;
             }
 
-            if(code >= 5540 && code <= 5554) {
+            if (code >= 5540 && code <= 5554) {
                 pinyin = "ZI";
                 break;
             }
 
-            if(code >= 5555 && code <= 5561) {
+            if (code >= 5555 && code <= 5561) {
                 pinyin = "ZONG";
                 break;
             }
 
-            if(code >= 5562 && code <= 5565) {
+            if (code >= 5562 && code <= 5565) {
                 pinyin = "ZOU";
                 break;
             }
 
-            if(code >= 5566 && code <= 5573) {
+            if (code >= 5566 && code <= 5573) {
                 pinyin = "ZU";
                 break;
             }
 
-            if(code >= 5574 && code <= 5575) {
+            if (code >= 5574 && code <= 5575) {
                 pinyin = "ZUAN";
                 break;
             }
 
-            if(code >= 5576 && code <= 5579) {
+            if (code >= 5576 && code <= 5579) {
                 pinyin = "ZUI";
                 break;
             }
 
-            if(code >= 5580 && code <= 5581) {
+            if (code >= 5580 && code <= 5581) {
                 pinyin = "ZUN";
                 break;
             }
 
-            if(code >= 5582 && code <= 5589) {
+            if (code >= 5582 && code <= 5589) {
                 pinyin = "ZUO";
                 break;
             }

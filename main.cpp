@@ -38,7 +38,7 @@
 
 int main(int argc, char *argv[])
 {
-    // initUkuiLog4qt("ukui-menu");
+    initUkuiLog4qt("ukui-menu");
     projectCodeName = KDKGetPrjCodeName().c_str();
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))

@@ -36,26 +36,26 @@ void SearchAppThread::run()
     m_appInfoVector = UkuiMenuInterface::appInfoVector;
     m_searchResultVector.clear();
 
-    if(!this->m_keyWord.isEmpty()) {
+    if (!this->m_keyWord.isEmpty()) {
         QString str = m_ukuiMenuInterface->getAppNamePinyin(m_keyWord);
         int index = 0;
 
-        if(str.size() == 1) {
+        if (str.size() == 1) {
             int num = static_cast<int>(str.toLocal8Bit().at(0));
             QStringList searchDesktopList;
             searchDesktopList.clear();
 
-            if(num >= 65 && num <= 90) {
-                for(int i = 0; i < UkuiMenuInterface::alphabeticVector.at(num - 65).size(); i++) {
+            if (num >= 65 && num <= 90) {
+                for (int i = 0; i < UkuiMenuInterface::alphabeticVector.at(num - 65).size(); i++) {
                     searchDesktopList.append(UkuiMenuInterface::alphabeticVector.at(num - 65).at(i));
                 }
             } else {
-                while(index < m_appInfoVector.size()) {
+                while (index < m_appInfoVector.size()) {
                     //                    QString appNamePy=m_ukuiMenuInterface->getAppNamePinyin(m_appInfoVector.at(index).at(1));
                     //                    QString appEnglishName=m_appInfoVector.at(index).at(2);
                     QString appNameFl = m_appInfoVector.at(index).at(3);
 
-                    if(appNameFl == str) { //匹配首字母
+                    if (appNameFl == str) { //匹配首字母
                         m_searchResultVector.append(m_appInfoVector.at(index));
                     }
 
@@ -70,20 +70,20 @@ void SearchAppThread::run()
             //                for(int i=0;i<UkuiMenuInterface::alphabeticVector.at(27).size();i++)
             //                    searchDesktopList.append(UkuiMenuInterface::alphabeticVector.at(27).at(i));
 
-            if(!searchDesktopList.isEmpty()) {
-                for(int i = 0; i < searchDesktopList.size(); i++) {
+            if (!searchDesktopList.isEmpty()) {
+                for (int i = 0; i < searchDesktopList.size(); i++) {
                     m_searchResultVector.append(QStringList() << searchDesktopList.at(i) << m_ukuiMenuInterface->getAppName(searchDesktopList.at(i)));
                 }
             }
         } else {
-            while(index < m_appInfoVector.size()) {
+            while (index < m_appInfoVector.size()) {
                 // QString appNamePy=m_ukuiMenuInterface->getAppNamePinyin(m_appInfoVector.at(index).at(1));
                 QStringList appNameLs;
                 QStringList appNameFls;
                 QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords(m_appInfoVector.at(index).at(1));
 
                 // QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords("奇安信可信");
-                for(int i = 0; i < appNamePyLst.size() / 2; i++) {
+                for (int i = 0; i < appNamePyLst.size() / 2; i++) {
                     appNameLs.append(appNamePyLst.at(i * 2));
                     appNameFls.append(appNamePyLst.at(i * 2 + 1));
                 }
@@ -92,15 +92,15 @@ void SearchAppThread::run()
                 QString appEnglishName = m_appInfoVector.at(index).at(2);
                 //QString appNameFls=m_appInfoVector.at(index).at(4);
 
-                if(m_keyWord.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) { //中文正则表达式
-                    if(appName.toUpper().contains(m_keyWord.toUpper())) {
+                if (m_keyWord.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) { //中文正则表达式
+                    if (appName.toUpper().contains(m_keyWord.toUpper())) {
                         m_searchResultVector.append(m_appInfoVector.at(index));
                     }
                 } else {
                     for (int var = 0; var < appNameLs.size(); ++var) {
-                        if(appNameLs[var].contains(str, Qt::CaseInsensitive) ||
-                           appNameFls[var].contains(str, Qt::CaseInsensitive) ||
-                           appEnglishName.contains(str, Qt::CaseInsensitive)) {
+                        if (appNameLs[var].contains(str, Qt::CaseInsensitive) ||
+                            appNameFls[var].contains(str, Qt::CaseInsensitive) ||
+                            appEnglishName.contains(str, Qt::CaseInsensitive)) {
                             m_searchResultVector.append(m_appInfoVector.at(index));
                             break;
                         }

@@ -33,11 +33,11 @@ TabletDirectoryChangedThread::TabletDirectoryChangedThread()
 
 TabletDirectoryChangedThread::~TabletDirectoryChangedThread()
 {
-    if(m_ukuiMenuInterface) {
+    if (m_ukuiMenuInterface) {
         delete m_ukuiMenuInterface;
     }
 
-    if(setting) {
+    if (setting) {
         delete setting;
     }
 
@@ -52,8 +52,8 @@ void TabletDirectoryChangedThread::run()
     myDebug() << "安装应用";
     QString m_desktopfp;
 
-    for(int i = 0; i < desktopfpList.count(); i++) {
-        if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i))) {
+    for (int i = 0; i < desktopfpList.count(); i++) {
+        if (!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i))) {
             m_desktopfp = desktopfpList.at(i);
             //获取当前时间戳
             QDateTime dt = QDateTime::currentDateTime();
@@ -72,8 +72,8 @@ void TabletDirectoryChangedThread::run()
             int appnum = setting->allKeys().count();
             int maxindex = 0;
 
-            for(int i = 0; i < appnum; i++) {
-                if(setting->value(applist.at(i)).toInt() > maxindex) {
+            for (int i = 0; i < appnum; i++) {
+                if (setting->value(applist.at(i)).toInt() > maxindex) {
                     maxindex = setting->value(applist.at(i)).toInt();
                 }
             }
@@ -86,7 +86,7 @@ void TabletDirectoryChangedThread::run()
             syslog(LOG_LOCAL0 | LOG_DEBUG, "%s", iconstr.toLocal8Bit().data());
             syslog(LOG_LOCAL0 | LOG_DEBUG, "软件安装desktop文件名：%s", desktopfn.toLocal8Bit().data());
 
-            Q_FOREACH(QString path, QIcon::themeSearchPaths()) {
+            Q_FOREACH (QString path, QIcon::themeSearchPaths()) {
                 syslog(LOG_LOCAL0 | LOG_DEBUG, "%s", path.toLocal8Bit().data());
             }
         }
@@ -94,8 +94,8 @@ void TabletDirectoryChangedThread::run()
 
     myDebug() << "卸载应用";
 
-    for(int i = 0; i < UkuiMenuInterface::desktopfpVector.count(); i++) {
-        if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i))) {
+    for (int i = 0; i < UkuiMenuInterface::desktopfpVector.count(); i++) {
+        if (!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i))) {
             QString desktopfp = UkuiMenuInterface::desktopfpVector.at(i);
             QFileInfo fileInfo(desktopfp);
             QString desktopfn = fileInfo.fileName();
@@ -106,7 +106,7 @@ void TabletDirectoryChangedThread::run()
             setting->endGroup();
             setting->beginGroup("application");
 
-            if(!setting->contains(desktopfn)) {
+            if (!setting->contains(desktopfn)) {
                 setting->sync();
                 setting->endGroup();
                 break;
@@ -117,8 +117,8 @@ void TabletDirectoryChangedThread::run()
             setting->remove(desktopfn);
             QStringList desktopfnList = setting->allKeys();
 
-            for(int i = 0; i < desktopfnList.count(); i++) {
-                if(setting->value(desktopfnList.at(i)).toInt() > val) {
+            for (int i = 0; i < desktopfnList.count(); i++) {
+                if (setting->value(desktopfnList.at(i)).toInt() > val) {
                     setting->setValue(desktopfnList.at(i), setting->value(desktopfnList.at(i)).toInt() - 1);
                 }
             }

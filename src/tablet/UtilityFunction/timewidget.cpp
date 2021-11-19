@@ -16,7 +16,6 @@
 #include <QDebug>
 #include <QPalette>
 
-
 TimeWidget::TimeWidget(QWidget *parent): QWidget(parent)
 {
     //    if(QGSettings::isSchemaInstalled("org.ukui.style")){

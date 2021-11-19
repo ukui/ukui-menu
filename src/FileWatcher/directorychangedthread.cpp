@@ -37,9 +37,9 @@ void DirectoryChangedThread::run()
     openDataBase("DirectoryChangedThread");
     QStringList desktopfpList = m_ukuiMenuInterface->getDesktopFilePath();
 
-    if(desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size()) { //有新的应用安装
-        for(int i = 0; i < desktopfpList.count(); i++) {
-            if(!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i))) {
+    if (desktopfpList.size() > UkuiMenuInterface::desktopfpVector.size()) { //有新的应用安装
+        for (int i = 0; i < desktopfpList.count(); i++) {
+            if (!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i))) {
                 QFileInfo fileInfo(desktopfpList.at(i));
                 QString desktopfn = fileInfo.fileName();
                 updateDataBaseTableRecent(desktopfn);
@@ -47,8 +47,8 @@ void DirectoryChangedThread::run()
             }
         }
     } else { //软件卸载
-        for(int i = 0; i < UkuiMenuInterface::desktopfpVector.size(); i++) {
-            if(!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i))) {
+        for (int i = 0; i < UkuiMenuInterface::desktopfpVector.size(); i++) {
+            if (!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i))) {
                 QString desktopfp = UkuiMenuInterface::appInfoVector.at(i).at(0);
                 QFileInfo fileInfo(desktopfp);
                 QString desktopfn = fileInfo.fileName();

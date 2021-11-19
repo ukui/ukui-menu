@@ -12,19 +12,19 @@ CurrentTimeInterface::CurrentTimeInterface()
     myTimer = new QTimer();
     myTimer->start(1000);
 
-    if(QGSettings::isSchemaInstalled(TIME_FORMAT)) {
+    if (QGSettings::isSchemaInstalled(TIME_FORMAT)) {
         timeSetting = new QGSettings(TIME_FORMAT);
         timeFormat = timeSetting->get(TIME_FORMAT_KEY).toString();
         timeSlash = timeSetting->get("date").toString();
         getDateTime(timeFormat);
         connect(timeSetting, &QGSettings::changed, this, [ = ](const QString & key) {
-            if(key == "hoursystem") {
+            if (key == "hoursystem") {
                 timeFormat = timeSetting->get(TIME_FORMAT_KEY).toString();
                 getDateTime(timeFormat);
-            } else if(key == "date") {
+            } else if (key == "date") {
                 timeSlash = timeSetting->get("date").toString();
 
-                if(timeSlash == "en") {
+                if (timeSlash == "en") {
                     currentDate = currentDate.replace("/", "-");
                 } else {
                     currentDate = currentDate.replace("-", "/");
@@ -33,22 +33,22 @@ CurrentTimeInterface::CurrentTimeInterface()
         });
     }
 
-    connect(myTimer, &QTimer::timeout, [this] () {
+    connect(myTimer, &QTimer::timeout, [this]() {
         getDateTime(timeFormat);
     });
 }
 
 CurrentTimeInterface::~CurrentTimeInterface()
 {
-    if(myTimer) {
+    if (myTimer) {
         delete myTimer;
     }
 
-    if(timeSetting) {
+    if (timeSetting) {
         delete timeSetting;
     }
 
-    if(dateTime) {
+    if (dateTime) {
         delete dateTime;
     }
 
@@ -59,13 +59,13 @@ CurrentTimeInterface::~CurrentTimeInterface()
 
 void CurrentTimeInterface::getDateTime(QString timeFormat)
 {
-    if(timeFormat == "12") {
+    if (timeFormat == "12") {
         twelveHourTime();
-    } else if(timeFormat == "24") {
+    } else if (timeFormat == "24") {
         twentyFourHourTime();
     }
 
-    if(timeSlash == "cn") {
+    if (timeSlash == "cn") {
         currentDate = currentDate.replace("-", "/");
     }
 }

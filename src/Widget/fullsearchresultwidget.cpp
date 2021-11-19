@@ -79,7 +79,7 @@ void FullSearchResultWidget::updateAppListView(QVector<QStringList> arg)
 {
     m_data.clear();
 
-    Q_FOREACH(QStringList appinfo, arg) {
+    Q_FOREACH (QStringList appinfo, arg) {
         m_data.append(appinfo.at(0));
     }
 
@@ -96,7 +96,7 @@ void FullSearchResultWidget::resizeScrollAreaControls()
     int dividend = (m_scrollArea->width() - Style::SliderSize) / Style::AppListGridSizeWidth;
     int rowcount = 0;
 
-    if(listview->model()->rowCount() % dividend > 0) {
+    if (listview->model()->rowCount() % dividend > 0) {
         rowcount = listview->model()->rowCount() / dividend + 1;
     } else {
         rowcount = listview->model()->rowCount() / dividend;
@@ -108,11 +108,11 @@ void FullSearchResultWidget::resizeScrollAreaControls()
 
 bool FullSearchResultWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == m_listView) {
-        if( event->type() == QEvent::KeyPress ) {
+    if (watched == m_listView) {
+        if (event->type() == QEvent::KeyPress) {
             QKeyEvent *ke = (QKeyEvent *)event;
 
-            if( ke->key() == Qt::Key_Tab ) {
+            if (ke->key() == Qt::Key_Tab) {
                 Q_EMIT setFocusToSideWin();
                 return true;
             }
@@ -151,7 +151,7 @@ void FullSearchResultWidget::moveScrollBar(int type)
 {
     int height = Style::primaryScreenHeight;
 
-    if(type == 0) {
+    if (type == 0) {
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition() - height * 100 / 1080);
     } else {
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition() + height * 100 / 1080);
