@@ -198,9 +198,9 @@ public Q_SLOTS:
 
     void modelChanged(bool value);
 
-//    void XkbEventsPress(const QString &keycode);
-//    void XkbEventsRelease(const QString &keycode);
-//    void winKeyReleaseSlot(const QString &key);
+    void XkbEventsPress(const QString &keycode);
+    void XkbEventsRelease(const QString &keycode);
+    void winKeyReleaseSlot(const QString &key);
     void on_pageNumberChanged(bool nextPage);
     void buttonClicked(QAbstractButton *button);
     void pageNumberChanged(int pageNum);
