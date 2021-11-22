@@ -45,7 +45,7 @@ private Q_SLOTS:
 
 protected:
     void paintEvent(QPaintEvent *event);
-    bool event ( QEvent *event);
+    bool event(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void mousePressEvent(QMouseEvent *event);
 
@@ -60,7 +60,7 @@ private:
     QHBoxLayout *topHorizontalLayout;
     QHBoxLayout *bottomHorizonLayout;
     QSpacerItem *horizontalSpacer;
-    QLineEdit *lineEdit;
+    QLineEdit *m_lineEdit;
     QSpacerItem *horizontalSpacer_2;
     QToolButton *fullSelectToolButton;
     QToolButton *fullSelectMenuButton;
@@ -78,6 +78,7 @@ private:
     QLabel *m_queryIcon = nullptr;
     QLabel *m_queryText = nullptr;
     bool isSearching = false;
+    QString m_buttonStyle;
 };
 
 #endif // FULLMAINWINDOW_H

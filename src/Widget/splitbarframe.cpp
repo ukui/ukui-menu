@@ -47,7 +47,7 @@ void SplitBarFrame::initAppBtn()
     m_textLabel->setAutoFillBackground(false);
     m_textLabel->setAlignment(Qt::AlignCenter);
 
-    if(m_module == 1) {
+    if (m_module == 1) {
         m_textLabel->setText(m_category);
     } else {
         setLabelText();

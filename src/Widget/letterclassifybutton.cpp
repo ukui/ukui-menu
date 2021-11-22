@@ -28,7 +28,7 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
 {
     this->setFlat(true);
 
-    if(m_fullscreen) {
+    if (m_fullscreen) {
         QFont font;
         font.setPixelSize(Style::LeftLetterFontSize);
         this->setFont(font);
@@ -51,7 +51,7 @@ void LetterClassifyButton::paintEvent(QPaintEvent *e)
         painter.save();
         painter.setPen(Qt::NoPen);
 
-        if(!m_fullscreen) {
+        if (!m_fullscreen) {
             QColor color = option.palette.color(QPalette::Text);
             color.setAlphaF(0.15);
             painter.setBrush(color);
@@ -64,7 +64,7 @@ void LetterClassifyButton::paintEvent(QPaintEvent *e)
         painter.restore();
     }
 
-    if(m_fullscreen && (option.state & QStyle::State_On)) {
+    if (m_fullscreen && (option.state & QStyle::State_On)) {
         painter.save();
         painter.setPen(Qt::NoPen);
         //        QColor color = option.palette.color(QPalette::Text);
@@ -90,7 +90,7 @@ void LetterClassifyButton::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
 
-    if(m_fullscreen) {
+    if (m_fullscreen) {
         //        QFont font;
         //        font.setPixelSize(Style::LeftLetterFontSize*3);
         //        this->setFont(font);
@@ -108,7 +108,7 @@ void LetterClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
 
-    if(m_fullscreen) {
+    if (m_fullscreen) {
         QFont font;
         font.setPixelSize(Style::LeftLetterFontSize);
         this->setFont(font);
@@ -123,7 +123,7 @@ void LetterClassifyButton::mousePressEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    if(m_fullscreen) {
+    if (m_fullscreen) {
         //        QFont font;
         //        font.setPixelSize(Style::LeftLetterFontSize*3);
         //        this->setFont(font);
@@ -136,7 +136,7 @@ void LetterClassifyButton::focusInEvent(QEvent *e)
 {
     Q_UNUSED(e);
 
-    if(m_fullscreen) {
+    if (m_fullscreen) {
         QFont font;
         font.setPixelSize(Style::LeftLetterFontSize * 3);
         this->setFont(font);
@@ -148,7 +148,7 @@ void LetterClassifyButton::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    if(m_fullscreen) {
+    if (m_fullscreen) {
         //        QFont font;
         //        font.setPixelSize(Style::LeftLetterFontSize*3);
         //        this->setFont(font);
@@ -160,7 +160,7 @@ void LetterClassifyButton::mouseReleaseEvent(QMouseEvent *event)
 
 void LetterClassifyButton::reactToToggle(bool checked)
 {
-    if(checked) {
+    if (checked) {
         this->is_pressed = true;
     } else {
         this->is_pressed = false;

@@ -21,7 +21,7 @@ void KListView::addData(QStringList data)
     listmodel = new QStandardItemModel(this);
     this->setModel(listmodel);
 
-    Q_FOREACH(QString desktopfp, data) {
+    Q_FOREACH (QString desktopfp, data) {
         QStandardItem *item = new QStandardItem;
         item->setData(QVariant::fromValue<QString>(desktopfp), Qt::DisplayRole);
         listmodel->appendRow(item);
@@ -32,7 +32,7 @@ void KListView::updateData(QStringList data)
 {
     listmodel->clear();
 
-    Q_FOREACH(QString desktopfp, data) {
+    Q_FOREACH (QString desktopfp, data) {
         QStandardItem *item = new QStandardItem;
         item->setData(QVariant::fromValue<QString>(desktopfp), Qt::DisplayRole);
         listmodel->appendRow(item);
@@ -43,7 +43,7 @@ void KListView::onClicked(QModelIndex index)
 {
     QVariant var = listmodel->data(index, Qt::DisplayRole);
 
-    if(var.isValid()) {
+    if (var.isValid()) {
         QString desktopfp = var.value<QString>();
         execApp(desktopfp);
     }
@@ -62,7 +62,7 @@ void KListView::paintEvent(QPaintEvent *e)
 
 void KListView::mousePressEvent(QMouseEvent *event)
 {
-    if(!(this->indexAt(event->pos()).isValid()) && event->button() == Qt::LeftButton) {
+    if (!(this->indexAt(event->pos()).isValid()) && event->button() == Qt::LeftButton) {
         Q_EMIT sendHideMainWindowSignal();
     } else {
         pressApp = listmodel->data(this->indexAt(event->pos()), Qt::DisplayRole);
@@ -74,16 +74,16 @@ void KListView::rightClickedSlot(const QPoint &pos)
 {
     Q_UNUSED(pos)
 
-    if(!(this->selectionModel()->selectedIndexes().isEmpty())) {
+    if (!(this->selectionModel()->selectedIndexes().isEmpty())) {
         QModelIndex index = this->currentIndex();
         QVariant var = listmodel->data(index, Qt::DisplayRole);
         QStringList strlist = var.value<QStringList>();
 
-        if(strlist.count() == 1 || ((strlist.count() == 2) && (strlist.at(1).toInt() == 1))) {
+        if (strlist.count() == 1 || ((strlist.count() == 2) && (strlist.at(1).toInt() == 1))) {
             RightClickMenu menu;
             int ret = menu.showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
 
-            if(module > 0) {
+            if (module > 0) {
                 switch (ret) {
                     case 6:
                     case 7:

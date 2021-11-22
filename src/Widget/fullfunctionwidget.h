@@ -83,6 +83,7 @@ private:
     QVBoxLayout *m_scrollAreaWidLayout = nullptr;
     QStringList m_classificationList;//Store the list of category buttons
     QStringList m_data;
+    QString m_scrollBarStyle;
     QTimer *time = nullptr;
     bool flag;
     /*Function classification list interface*/
@@ -101,9 +102,9 @@ private:
     int m_beginPos = 0; //Application list scrollbar starting value
     int m_endPos = 0; //Application list scrollbar end value
     int m_index = 0;
-    QScrollBar *verticalScrollBar = nullptr;
+    QScrollBar *m_verticalScrollBar = nullptr;
     int m_scrollAreaWidHeight = 0;
-    QPushButton *powerOffButton = nullptr;
+    QPushButton *m_powerOffButton = nullptr;
 
 protected:
     /**

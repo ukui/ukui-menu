@@ -39,9 +39,9 @@ ToolButton::ToolButton(int width,
     svgRender = new QSvgRenderer(this);
     svgRender->load(iconstr);
 
-    if(module == 1) {
+    if (module == 1) {
         pixmap = new QPixmap(14, 14);
-    } else if(module == 2) {
+    } else if (module == 2) {
         pixmap = new QPixmap(19, 19);
     } else {
         pixmap = new QPixmap(9, 9);
@@ -52,7 +52,7 @@ ToolButton::ToolButton(int width,
     svgRender->render(&p);
     this->setIcon(QIcon(*pixmap));
 
-    if(module == 2) {
+    if (module == 2) {
         this->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         this->setText(tr(text.toLocal8Bit().data()));
         //        this->setStyleSheet("border:0px;padding-left:16px;background:transparent;color:rgba(255, 255, 255, 50%);font-size:14px;");
@@ -69,7 +69,7 @@ void ToolButton::enterEvent(QEvent *e)
     char *hover = byte.data();
     char style[100];
 
-    if(module == 2) {
+    if (module == 2) {
         sprintf(style, "border:0px;padding-left:16px;background-color:%s;color:#ffffff;font-size:14px;", hover);
     } else {
         sprintf(style, "border:0px;padding-left:0px;background-color:%s;", hover);
@@ -79,9 +79,9 @@ void ToolButton::enterEvent(QEvent *e)
     svgRender = new QSvgRenderer(this);
     svgRender->load(piconstr);
 
-    if(module == 1) {
+    if (module == 1) {
         pixmap = new QPixmap(14, 14);
-    } else if(module == 2) {
+    } else if (module == 2) {
         pixmap = new QPixmap(19, 19);
     } else {
         pixmap = new QPixmap(9, 9);
@@ -108,15 +108,15 @@ void ToolButton::leaveEvent(QEvent *e)
     delete svgRender;
     svgRender = new QSvgRenderer(this);
 
-    if(module == 2 && is_pressed) {
+    if (module == 2 && is_pressed) {
         svgRender->load(piconstr);
     } else {
         svgRender->load(iconstr);
     }
 
-    if(module == 1) {
+    if (module == 1) {
         pixmap = new QPixmap(14, 14);
-    } else if(module == 2) {
+    } else if (module == 2) {
         pixmap = new QPixmap(19, 19);
     } else {
         pixmap = new QPixmap(9, 9);
@@ -134,21 +134,21 @@ void ToolButton::mousePressEvent(QMouseEvent *event)
     char *pressed = byte.data();
     char style[100];
 
-    if(module == 2) {
+    if (module == 2) {
         sprintf(style, "border:0px;padding-left:16px;background-color:%s;color:#ffffff;font-size:14px;", pressed);
     } else {
         sprintf(style, "border:0px;padding-left:0px;background-color:%s;", pressed);
     }
 
-    if(event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton) {
         //        this->setStyleSheet(QString::fromLocal8Bit(style));
         delete svgRender;
         svgRender = new QSvgRenderer(this);
         svgRender->load(piconstr);
 
-        if(module == 1) {
+        if (module == 1) {
             pixmap = new QPixmap(14, 14);
-        } else if(module == 2) {
+        } else if (module == 2) {
             pixmap = new QPixmap(19, 19);
         } else {
             pixmap = new QPixmap(9, 9);
@@ -168,21 +168,21 @@ void ToolButton::mouseReleaseEvent(QMouseEvent *event)
     char *hover = byte.data();
     char style[100];
 
-    if(module == 2) {
+    if (module == 2) {
         sprintf(style, "border:0px;padding-left:16px;background-color:%s;color:#ffffff;font-size:14px;", hover);
     } else {
         sprintf(style, "border:0px;padding-left:0px;background-color:%s;", hover);
     }
 
-    if(event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton) {
         //        this->setStyleSheet(QString::fromLocal8Bit(style));
         delete svgRender;
         svgRender = new QSvgRenderer(this);
         svgRender->load(piconstr);
 
-        if(module == 1) {
+        if (module == 1) {
             pixmap = new QPixmap(14, 14);
-        } else if(module == 2) {
+        } else if (module == 2) {
             pixmap = new QPixmap(19, 19);
         } else {
             pixmap = new QPixmap(9, 9);
@@ -193,7 +193,7 @@ void ToolButton::mouseReleaseEvent(QMouseEvent *event)
         svgRender->render(&p);
         this->setIcon(QIcon(*pixmap));
 
-        if(module == 2) {
+        if (module == 2) {
             Q_EMIT buttonClicked(this);
         } else {
             Q_EMIT clicked();

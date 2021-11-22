@@ -33,13 +33,13 @@ void FileUtils::loadHanziTable(const QString &fileName)
 {
     QFile file(fileName);
 
-    if(!file.open(QFile::ReadOnly | QFile::Text)) {
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug("File: '%s' open failed!", file.fileName().toStdString().c_str());
         return;
     }
 
     /* 读取汉字对照表文件并转换为QMap存储 */
-    while(!file.atEnd()) {
+    while (!file.atEnd()) {
         QString content = QString::fromUtf8(file.readLine());
         FileUtils::map_chinese2pinyin[content.split(" ").last().trimmed()] = content.split(" ").first().split(",");
     }
@@ -51,14 +51,14 @@ void FileUtils::loadHanziTable(const QString &fileName)
 //DFS多音字太多直接GG
 void stitchMultiToneWordsDFS(const QString &hanzi, const QString &resultAllPinYin, const QString &resultFirst, QStringList &resultList)
 {
-    if(hanzi.size() == 0) {
+    if (hanzi.size() == 0) {
         resultList.append(resultAllPinYin);
         resultList.append(resultFirst);
         return;
     }
 
-    if(FileUtils::map_chinese2pinyin.contains(hanzi.at(0))) {
-        for(auto i : FileUtils::map_chinese2pinyin[hanzi.at(0)]) {
+    if (FileUtils::map_chinese2pinyin.contains(hanzi.at(0))) {
+        for (auto i : FileUtils::map_chinese2pinyin[hanzi.at(0)]) {
             stitchMultiToneWordsDFS(hanzi.right(hanzi.size() - 1), resultAllPinYin + i, resultFirst + i.at(0), resultList);
         }
     } else {
@@ -74,8 +74,8 @@ void stitchMultiToneWordsBFSStack(const QString &hanzi, QStringList &resultList)
     tempHanzi = hanzi;
     int tempQueueSize = 0;
 
-    if(FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
-        for(auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
+    if (FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
+        for (auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
             tempQueue.enqueue(i);
         }
     } else {
@@ -84,19 +84,19 @@ void stitchMultiToneWordsBFSStack(const QString &hanzi, QStringList &resultList)
 
     tempHanzi = tempHanzi.right(tempHanzi.size() - 1);
 
-    while(tempHanzi.size() != 0) {
+    while (tempHanzi.size() != 0) {
         tempQueueSize = tempQueue.size();
 
-        if(FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
-            for(int j = 0; j < tempQueueSize; ++j) {
-                for(auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
+        if (FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
+            for (int j = 0; j < tempQueueSize; ++j) {
+                for (auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
                     tempQueue.enqueue(tempQueue.head() + i);
                 }
 
                 tempQueue.dequeue();
             }
         } else {
-            for(int j = 0; j < tempQueueSize; ++j) {
+            for (int j = 0; j < tempQueueSize; ++j) {
                 tempQueue.enqueue(tempQueue.head() + tempHanzi.at(0));
                 tempQueue.dequeue();
             }
@@ -105,7 +105,7 @@ void stitchMultiToneWordsBFSStack(const QString &hanzi, QStringList &resultList)
         tempHanzi = tempHanzi.right(tempHanzi.size() - 1);
     }
 
-    while(!tempQueue.empty()) {
+    while (!tempQueue.empty()) {
         resultList.append(tempQueue.dequeue());
     }
 }
@@ -118,8 +118,8 @@ void stitchMultiToneWordsBFSHeap(const QString &hanzi, QStringList &resultList)
     tempHanzi = hanzi;
     int tempQueueSize = 0;
 
-    if(FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
-        for(auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
+    if (FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
+        for (auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
             tempQueue->enqueue(i);
         }
     } else {
@@ -128,19 +128,19 @@ void stitchMultiToneWordsBFSHeap(const QString &hanzi, QStringList &resultList)
 
     tempHanzi = tempHanzi.right(tempHanzi.size() - 1);
 
-    while(tempHanzi.size() != 0) {
+    while (tempHanzi.size() != 0) {
         tempQueueSize = tempQueue->size();
 
-        if(FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
-            for(int j = 0; j < tempQueueSize; ++j) {
-                for(auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
+        if (FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
+            for (int j = 0; j < tempQueueSize; ++j) {
+                for (auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
                     tempQueue->enqueue(tempQueue->head() + i);
                 }
 
                 tempQueue->dequeue();
             }
         } else {
-            for(int j = 0; j < tempQueueSize; ++j) {
+            for (int j = 0; j < tempQueueSize; ++j) {
                 tempQueue->enqueue(tempQueue->head() + tempHanzi.at(0));
                 tempQueue->dequeue();
             }
@@ -149,7 +149,7 @@ void stitchMultiToneWordsBFSHeap(const QString &hanzi, QStringList &resultList)
         tempHanzi = tempHanzi.right(tempHanzi.size() - 1);
     }
 
-    while(!tempQueue->empty()) {
+    while (!tempQueue->empty()) {
         resultList.append(tempQueue->dequeue());
     }
 
@@ -167,19 +167,19 @@ void stitchMultiToneWordsBFSHeapLess3(const QString &hanzi, QStringList &resultL
     int tempQueueSize = 0;
     int multiToneWordNum = 0;
 
-    for(auto i : hanzi) {
-        if(FileUtils::map_chinese2pinyin.contains(i)) {
-            if(FileUtils::map_chinese2pinyin[i].size() > 1) {
+    for (auto i : hanzi) {
+        if (FileUtils::map_chinese2pinyin.contains(i)) {
+            if (FileUtils::map_chinese2pinyin[i].size() > 1) {
                 ++multiToneWordNum;
             }
         }
     }
 
-    if(multiToneWordNum > 3) {
+    if (multiToneWordNum > 3) {
         QString oneResult, oneResultFirst;
 
-        for(auto i : hanzi) {
-            if(FileUtils::map_chinese2pinyin.contains(i)) {
+        for (auto i : hanzi) {
+            if (FileUtils::map_chinese2pinyin.contains(i)) {
                 oneResult += FileUtils::map_chinese2pinyin[i].first();
                 oneResultFirst += FileUtils::map_chinese2pinyin[i].first().at(0);
             } else {
@@ -193,8 +193,8 @@ void stitchMultiToneWordsBFSHeapLess3(const QString &hanzi, QStringList &resultL
         return;
     }
 
-    if(FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
-        for(auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
+    if (FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
+        for (auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
             tempQueue->enqueue(i);
             tempQueueFirst->enqueue(i.at(0));
         }
@@ -205,12 +205,12 @@ void stitchMultiToneWordsBFSHeapLess3(const QString &hanzi, QStringList &resultL
 
     tempHanzi = tempHanzi.right(tempHanzi.size() - 1);
 
-    while(tempHanzi.size() != 0) {
+    while (tempHanzi.size() != 0) {
         tempQueueSize = tempQueue->size();
 
-        if(FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
-            for(int j = 0; j < tempQueueSize; ++j) {
-                for(auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
+        if (FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
+            for (int j = 0; j < tempQueueSize; ++j) {
+                for (auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
                     tempQueue->enqueue(tempQueue->head() + i);
                     tempQueueFirst->enqueue(tempQueueFirst->head() + i.at(0));
                 }
@@ -219,7 +219,7 @@ void stitchMultiToneWordsBFSHeapLess3(const QString &hanzi, QStringList &resultL
                 tempQueueFirst->dequeue();
             }
         } else {
-            for(int j = 0; j < tempQueueSize; ++j) {
+            for (int j = 0; j < tempQueueSize; ++j) {
                 tempQueue->enqueue(tempQueue->head() + tempHanzi.at(0));
                 tempQueueFirst->enqueue(tempQueueFirst->head() + tempHanzi.at(0));
                 tempQueue->dequeue();
@@ -230,7 +230,7 @@ void stitchMultiToneWordsBFSHeapLess3(const QString &hanzi, QStringList &resultL
         tempHanzi = tempHanzi.right(tempHanzi.size() - 1);
     }
 
-    while(!tempQueue->empty()) {
+    while (!tempQueue->empty()) {
         resultList.append(tempQueue->dequeue());
         resultList.append(tempQueueFirst->dequeue());
     }
@@ -252,19 +252,19 @@ void stitchMultiToneWordsBFSStackLess3(const QString &hanzi, QStringList &result
     int tempQueueSize = 0;
     int multiToneWordNum = 0;
 
-    for(auto i : hanzi) {
-        if(FileUtils::map_chinese2pinyin.contains(i)) {
-            if(FileUtils::map_chinese2pinyin[i].size() > 1) {
+    for (auto i : hanzi) {
+        if (FileUtils::map_chinese2pinyin.contains(i)) {
+            if (FileUtils::map_chinese2pinyin[i].size() > 1) {
                 ++multiToneWordNum;
             }
         }
     }
 
-    if(multiToneWordNum > 3) {
+    if (multiToneWordNum > 3) {
         QString oneResult, oneResultFirst;
 
-        for(auto i : hanzi) {
-            if(FileUtils::map_chinese2pinyin.contains(i)) {
+        for (auto i : hanzi) {
+            if (FileUtils::map_chinese2pinyin.contains(i)) {
                 oneResult += FileUtils::map_chinese2pinyin[i].first();
                 oneResultFirst += FileUtils::map_chinese2pinyin[i].first().at(0);
             } else {
@@ -278,8 +278,8 @@ void stitchMultiToneWordsBFSStackLess3(const QString &hanzi, QStringList &result
         return;
     }
 
-    if(FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
-        for(auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
+    if (FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
+        for (auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
             tempQueue.enqueue(i);
             tempQueueFirst.enqueue(i.at(0));
         }
@@ -290,12 +290,12 @@ void stitchMultiToneWordsBFSStackLess3(const QString &hanzi, QStringList &result
 
     tempHanzi = tempHanzi.right(tempHanzi.size() - 1);
 
-    while(tempHanzi.size() != 0) {
+    while (tempHanzi.size() != 0) {
         tempQueueSize = tempQueue.size();
 
-        if(FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
-            for(int j = 0; j < tempQueueSize; ++j) {
-                for(auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
+        if (FileUtils::map_chinese2pinyin.contains(tempHanzi.at(0))) {
+            for (int j = 0; j < tempQueueSize; ++j) {
+                for (auto i : FileUtils::map_chinese2pinyin[tempHanzi.at(0)]) {
                     tempQueue.enqueue(tempQueue.head() + i);
                     tempQueueFirst.enqueue(tempQueueFirst.head() + i.at(0));
                 }
@@ -304,7 +304,7 @@ void stitchMultiToneWordsBFSStackLess3(const QString &hanzi, QStringList &result
                 tempQueueFirst.dequeue();
             }
         } else {
-            for(int j = 0; j < tempQueueSize; ++j) {
+            for (int j = 0; j < tempQueueSize; ++j) {
                 tempQueue.enqueue(tempQueue.head() + tempHanzi.at(0));
                 tempQueueFirst.enqueue(tempQueueFirst.head() + tempHanzi.at(0));
                 tempQueue.dequeue();
@@ -315,7 +315,7 @@ void stitchMultiToneWordsBFSStackLess3(const QString &hanzi, QStringList &result
         tempHanzi = tempHanzi.right(tempHanzi.size() - 1);
     }
 
-    while(!tempQueue.empty()) {
+    while (!tempQueue.empty()) {
         resultList.append(tempQueue.dequeue());
         resultList.append(tempQueueFirst.dequeue());
     }

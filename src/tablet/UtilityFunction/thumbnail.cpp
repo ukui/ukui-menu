@@ -17,7 +17,6 @@ ThumbNail::ThumbNail(QWidget *parent):
     disableSetting = new QSettings(pathini, QSettings::IniFormat);
 }
 
-
 void ThumbNail::initUi()
 {
     setWindowFlags(Qt::FramelessWindowHint);
@@ -33,25 +32,26 @@ void ThumbNail::initUi()
     layout->setSpacing(0);
     layout->addWidget(iconLabel);
 }
+
 ThumbNail::~ThumbNail()
 {
-    if(pUkuiMenuInterface) {
+    if (pUkuiMenuInterface) {
         delete pUkuiMenuInterface;
     }
 
-    if(setting) {
+    if (setting) {
         delete setting;
     }
 
-    if(disableSetting) {
+    if (disableSetting) {
         delete disableSetting;
     }
 
-    if(iconLabel) {
+    if (iconLabel) {
         delete iconLabel;
     }
 
-    if(m_icon) {
+    if (m_icon) {
         delete m_icon;
     }
 
@@ -60,7 +60,7 @@ ThumbNail::~ThumbNail()
     disableSetting = nullptr;
     iconLabel = nullptr;
 
-    if(layout) {
+    if (layout) {
         delete layout;
     }
 }
@@ -72,39 +72,39 @@ void ThumbNail::setupthumbnail(QString desktopfp)
     QStringList keyList = setting->allKeys();
     bool isgroup = setting->contains(fn);
 
-    if(!isgroup) {
+    if (!isgroup) {
         QString iconstr = pUkuiMenuInterface->getAppIcon(desktopfp);
         QString appname = pUkuiMenuInterface->getAppName(desktopfp);
         QIcon icon;
         QFileInfo iconFileInfo(iconstr);
 
-        if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
+        if (iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
             icon = QIcon(iconstr);
         } else {
             iconstr.remove(".png");
             iconstr.remove(".svg");
             icon = QIcon::fromTheme(iconstr);
 
-            if(icon.isNull()) {
-                if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
+            if (icon.isNull()) {
+                if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
-                } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
                 } else {
                     icon = QIcon::fromTheme(QString("application-x-desktop"));
@@ -115,7 +115,7 @@ void ThumbNail::setupthumbnail(QString desktopfp)
         //        QPixmap pixmap = icon.pixmap((Style::AppListIconSize,Style::AppListIconSize),QIcon::Selected,QIcon::Off);
         QPixmap pixmap ;
 
-        if(appDisable(desktopfp) == 1) {
+        if (appDisable(desktopfp) == 1) {
             pixmap = icon.pixmap((Style::AppListIconSize, Style::AppListIconSize), QIcon::Disabled, QIcon::Off);
             //qDebug()<<"appDisable(desktopfp)"<<appDisable(desktopfp);
         } else {
@@ -132,12 +132,12 @@ void ThumbNail::setupthumbnail(QString desktopfp)
         iconLayout->setSpacing(0);
         iconLabel->setLayout(iconLayout);
 
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             for (int j = 1; j < 4; j++) {
-                if(k < keyList.size()) {
+                if (k < keyList.size()) {
                     QString fp;
 
-                    if(UkuiMenuInterface::androidDesktopfnList.contains(keyList.at(k))) {
+                    if (UkuiMenuInterface::androidDesktopfnList.contains(keyList.at(k))) {
                         fp = QString(QDir::homePath() + "/.local/share/applications/" + keyList.at(i));
                     } else {
                         fp = "/usr/share/applications/" + keyList.at(k);
@@ -164,33 +164,33 @@ QPixmap ThumbNail::getIcon(QString desktopfp, int width, int height)
     QIcon icon;
     QFileInfo iconFileInfo(iconstr);
 
-    if(iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
+    if (iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
         icon = QIcon(iconstr);
     } else {
         iconstr.remove(".png");
         iconstr.remove(".svg");
         icon = QIcon::fromTheme(iconstr);
 
-        if(icon.isNull()) {
-            if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
+        if (icon.isNull()) {
+            if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
-            } else if(QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
+            } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
                 icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
             } else {
                 icon = QIcon::fromTheme(QString("application-x-desktop"));
@@ -198,7 +198,7 @@ QPixmap ThumbNail::getIcon(QString desktopfp, int width, int height)
         }
     }
 
-    if(appDisable(desktopfp) == 1) {
+    if (appDisable(desktopfp) == 1) {
         //return icon.pixmap((width,height),QIcon::Selected,QIcon::Off);
         return icon.pixmap((width, height), QIcon::Disabled, QIcon::Off);
     }
@@ -212,7 +212,7 @@ bool ThumbNail::appDisable(QString desktopfp)//判断是否是禁用应用(这�
     //打开文件.desktop
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);

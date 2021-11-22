@@ -36,6 +36,7 @@
 class ListView : public KListView
 {
     Q_OBJECT
+
 public:
     ListView(QWidget *parent/*, int width, int height, int module*/);
     ~ListView();

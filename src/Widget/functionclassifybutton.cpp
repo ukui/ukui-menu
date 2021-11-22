@@ -30,7 +30,7 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
         bool fullscreen,
         bool enabled,
         QWidget *parent):
-    QPushButton (parent),
+    QPushButton(parent),
     m_width(width),
     m_height(height),
     m_iconSize(iconSize),
@@ -46,7 +46,7 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
     m_iconLabel->setFixedSize(m_iconSize, m_iconSize);
     m_textLabel->adjustSize();
 
-    if(m_fullscreen) {
+    if (m_fullscreen) {
         QPalette pe = m_textLabel->palette();
         pe.setColor(QPalette::ButtonText, QColor(Qt::white));
         m_textLabel->setPalette(pe);
@@ -54,11 +54,11 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
 
     setLabelText();
 
-    if(m_fullscreen) {
+    if (m_fullscreen) {
         updateIconState(Normal);
         this->setCheckable(true);
     } else {
-        if(m_enabled) {
+        if (m_enabled) {
             updateIconState(Enabled);
         } else {
             updateIconState(Disabled);
@@ -88,7 +88,7 @@ void FunctionClassifyButton::paintEvent(QPaintEvent *e)
         painter.save();
         painter.setPen(Qt::NoPen);
 
-        if(!m_fullscreen) {
+        if (!m_fullscreen) {
             QColor color = option.palette.color(QPalette::Text);
             color.setAlphaF(0.15);
             painter.setBrush(color);
@@ -101,7 +101,7 @@ void FunctionClassifyButton::paintEvent(QPaintEvent *e)
         painter.restore();
     }
 
-    if(m_fullscreen && (option.state & QStyle::State_On)) {
+    if (m_fullscreen && (option.state & QStyle::State_On)) {
         painter.save();
         painter.setPen(Qt::NoPen);
         //        QColor color = option.palette.color(QPalette::Text);
@@ -122,7 +122,7 @@ void FunctionClassifyButton::paintEvent(QPaintEvent *e)
 
 void FunctionClassifyButton::updateBtnState()
 {
-    if(m_enabled) {
+    if (m_enabled) {
         updateIconState(Enabled);
     } else {
         updateIconState(Disabled);
@@ -133,7 +133,7 @@ void FunctionClassifyButton::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
 
-    if(m_enabled) {
+    if (m_enabled) {
         updateIconState(Checked);
     }
 }
@@ -142,12 +142,12 @@ void FunctionClassifyButton::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
 
-    if(m_fullscreen) {
-        if(!isChecked()) {
+    if (m_fullscreen) {
+        if (!isChecked()) {
             updateIconState(Normal);
         }
     } else {
-        if(m_enabled) {
+        if (m_enabled) {
             updateIconState(Enabled);
         }
     }
@@ -155,8 +155,8 @@ void FunctionClassifyButton::leaveEvent(QEvent *e)
 
 void FunctionClassifyButton::reactToToggle(bool checked)
 {
-    if(m_fullscreen) {
-        if(checked) {
+    if (m_fullscreen) {
+        if (checked) {
             updateIconState(Checked);
         } else {
             updateIconState(Normal);
@@ -199,7 +199,7 @@ void FunctionClassifyButton::updateIconState()
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize * ratio);
     QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
 
-    if(gsetting.get("style-name").toString() == "ukui-light") { //反黑
+    if (gsetting.get("style-name").toString() == "ukui-light") { //反黑
         pixmap = drawSymbolicBlackColoredPixmap(pixmap);
     } else {
         pixmap = drawSymbolicColoredPixmap(pixmap); //反白
@@ -242,10 +242,10 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
     const auto ratio = devicePixelRatioF();
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize * ratio);
 
-    if(!m_fullscreen) {
+    if (!m_fullscreen) {
         QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
 
-        if(gsetting.get("style-name").toString() == "ukui-light") { //反黑
+        if (gsetting.get("style-name").toString() == "ukui-light") { //反黑
             pixmap = drawSymbolicBlackColoredPixmap(pixmap);
         } else {
             pixmap = drawSymbolicColoredPixmap(pixmap); //反白

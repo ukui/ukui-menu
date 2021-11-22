@@ -56,7 +56,7 @@ QPixmap RightClickMenu::getIconPixmap(QString iconstr, int type)
     const auto ratio = devicePixelRatioF();
     QPixmap pixmap;
 
-    if(type == 0) {
+    if (type == 0) {
         pixmap = loadSvg(iconstr, 16 * ratio);
         pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     } else {
@@ -130,7 +130,7 @@ void RightClickMenu::addToDesktopActionTriggerSlot()
     QString newname = QString(path + "/" + desktopfn);
     bool ret = file.copy(QString(path + "/" + desktopfn));
 
-    if(ret) {
+    if (ret) {
         char command[200];
         sprintf(command, "chmod a+x %s", newname.toLocal8Bit().data());
         QProcess::startDetached(QString::fromLocal8Bit(command));
@@ -141,7 +141,7 @@ void RightClickMenu::addToDesktopActionTriggerSlot()
 
 void RightClickMenu::uninstallActionTriggerSlot()
 {
-    if(!checkOsRelease()) {
+    if (!checkOsRelease()) {
         QString cmd = QString("kylin-uninstaller %1")
                       .arg(m_desktopfp.toLocal8Bit().data());
         bool ret = QProcess::startDetached(cmd);
@@ -224,7 +224,7 @@ int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
     QFileInfo fileInfo(desktopfp);
     QString desktopfn = fileInfo.fileName();
 
-    if(!checkIfLocked(desktopfn))
+    if (!checkIfLocked(desktopfn))
         m_showAppMenu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg", 0)), tr("Pin to all"),
                                 this, SLOT(fixToAllActionTriggerSlot()));
     else
@@ -237,7 +237,7 @@ int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
                          QDBusConnection::sessionBus());
     QDBusReply<bool> ret = iface.call("CheckIfExist", desktopfp);
 
-    if(!ret)
+    if (!ret)
         m_showAppMenu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/fixed.svg", 0)), tr("Pin to taskbar"),
                                 this, SLOT(fixToTaskbarActionTriggerSlot()));
     else
@@ -247,7 +247,7 @@ int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
     m_showAppMenu.addAction(tr("Add to desktop shortcuts"),
                             this, SLOT(addToDesktopActionTriggerSlot()));
 
-    if(!checkIfCollected(desktopfn)) {
+    if (!checkIfCollected(desktopfn)) {
         m_showAppMenu.addAction(tr("Pin to collection"),
                                 this, SLOT(pincToCollectionActionTriggerSlot()));
     } else {
@@ -259,13 +259,13 @@ int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
     QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     QString path = QString(desktopPath + "/" + QFileInfo(m_desktopfp).fileName());
 
-    if(QFile(path).exists()) {
+    if (QFile(path).exists()) {
         m_showAppMenu.actions().at(2)->setEnabled(false);    //存在时禁用
     }
 
     m_showAppMenu.addSeparator();
 
-    if(!m_whiteList.contains(desktopfn))
+    if (!m_whiteList.contains(desktopfn))
         m_showAppMenu.addAction(QIcon(getIconPixmap(":/data/img/mainviewwidget/uninstall.svg", 0)), tr("Uninstall"),
                                 this, SLOT(uninstallActionTriggerSlot()));
 

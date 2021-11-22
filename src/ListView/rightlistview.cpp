@@ -92,13 +92,13 @@ void RightListView::selectFirstItem()
 void RightListView::keyPressEvent(QKeyEvent *e)
 {
     if (e->type() == QEvent::KeyPress) {
-        switch(e->key()) {
+        switch (e->key()) {
             case Qt::Key_Enter:
             case Qt::Key_Return: {
-                    QModelIndex index = this->currentIndex();
-                    Q_EMIT clicked(index);
-                    break;
-                }
+                QModelIndex index = this->currentIndex();
+                Q_EMIT clicked(index);
+                break;
+            }
 
             default:
                 return QListView::keyPressEvent(e);

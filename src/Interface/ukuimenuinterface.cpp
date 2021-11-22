@@ -29,7 +29,7 @@
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
-    if(projectCodeName == "V10SP1") {
+    if (projectCodeName == "V10SP1") {
     } else {
         QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
         setting = new QSettings(path, QSettings::IniFormat);
@@ -52,13 +52,13 @@ QVector<QString> UkuiMenuInterface::applicationVector = QVector<QString>();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
-    if(projectCodeName == "V10SP1") {
+    if (projectCodeName == "V10SP1") {
     } else {
-        if(setting) {
+        if (setting) {
             delete setting;
         }
 
-        if(syssetting) {
+        if (syssetting) {
             delete syssetting;
         }
 
@@ -70,7 +70,7 @@ UkuiMenuInterface::~UkuiMenuInterface()
 //文件递归查询
 void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 {
-    if(projectCodeName == "V10SP1") {
+    if (projectCodeName == "V10SP1") {
         QDir dir(_filePath);
 
         if (!dir.exists()) {
@@ -82,7 +82,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
         QFileInfoList list = dir.entryInfoList();
         list.removeAll(QFileInfo("/usr/share/applications/screensavers"));
 
-        if(list.size() < 1 ) {
+        if (list.size() < 1) {
             return;
         }
 
@@ -94,13 +94,13 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
             //如果是文件夹，递归
             bool isDir = fileInfo.isDir();
 
-            if(isDir) {
+            if (isDir) {
                 recursiveSearchFile(fileInfo.filePath());
             } else {
                 //过滤后缀不是.desktop的文件
                 QString filePathStr = fileInfo.filePath();
 
-                if(!filePathStr.endsWith(".desktop")) {
+                if (!filePathStr.endsWith(".desktop")) {
                     i++;
                     continue;
                 }
@@ -108,23 +108,23 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
                 QByteArray fpbyte = filePathStr.toLocal8Bit();
                 char *filepath = fpbyte.data();
 
-                if(0 != access(filepath, R_OK)) { //判断文件是否可读
+                if (0 != access(filepath, R_OK)) { //判断文件是否可读
                     i++;
                     continue;
                 }
 
                 keyfile = g_key_file_new();
 
-                if(!g_key_file_load_from_file(keyfile, filepath, flags, error)) {
+                if (!g_key_file_load_from_file(keyfile, filepath, flags, error)) {
                     return;
                 }
 
                 char *ret_1 = g_key_file_get_locale_string(keyfile, "Desktop Entry", "NoDisplay", nullptr, nullptr);
 
-                if(ret_1 != nullptr) {
+                if (ret_1 != nullptr) {
                     QString str = QString::fromLocal8Bit(ret_1);
 
-                    if(str.contains("true")) {
+                    if (str.contains("true")) {
                         g_key_file_free(keyfile);
                         i++;
                         continue;
@@ -133,10 +133,10 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 
                 char *ret_2 = g_key_file_get_locale_string(keyfile, "Desktop Entry", "NotShowIn", nullptr, nullptr);
 
-                if(ret_2 != nullptr) {
+                if (ret_2 != nullptr) {
                     QString str = QString::fromLocal8Bit(ret_2);
 
-                    if(str.contains("UKUI")) {
+                    if (str.contains("UKUI")) {
                         g_key_file_free(keyfile);
                         i++;
                         continue;
@@ -146,10 +146,10 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
                 //过滤LXQt、KDE
                 char *ret = g_key_file_get_locale_string(keyfile, "Desktop Entry", "OnlyShowIn", nullptr, nullptr);
 
-                if(ret != nullptr) {
+                if (ret != nullptr) {
                     QString str = QString::fromLocal8Bit(ret);
 
-                    if(str.contains("LXQt") || str.contains("KDE")) {
+                    if (str.contains("LXQt") || str.contains("KDE")) {
                         g_key_file_free(keyfile);
                         i++;
                         continue;
@@ -161,7 +161,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
             }
 
             i++;
-        } while(i < list.size());
+        } while (i < list.size());
     } else {
         GError **error = nullptr;
         GKeyFileFlags flags = G_KEY_FILE_NONE;
@@ -177,7 +177,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
         QFileInfoList list = dir.entryInfoList();
         list.removeAll(QFileInfo("/usr/share/applications/screensavers"));
 
-        if(list.size() < 1 ) {
+        if (list.size() < 1) {
             return;
         }
 
@@ -189,13 +189,13 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
             //如果是文件夹，递归
             bool isDir = fileInfo.isDir();
 
-            if(isDir) {
+            if (isDir) {
                 recursiveSearchFile(fileInfo.filePath());
             } else {
                 //过滤后缀不是.desktop的文件
                 QString filePathStr = fileInfo.filePath();
 
-                if(!filePathStr.endsWith(".desktop")) {
+                if (!filePathStr.endsWith(".desktop")) {
                     i++;
                     continue;
                 }
@@ -205,10 +205,10 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
                 g_key_file_load_from_file(keyfile, filepath, flags, error);
                 char *ret_1 = g_key_file_get_locale_string(keyfile, "Desktop Entry", "NoDisplay", nullptr, nullptr);
 
-                if(ret_1 != nullptr) {
+                if (ret_1 != nullptr) {
                     QString str = QString::fromLocal8Bit(ret_1);
 
-                    if(str.contains("true")) {
+                    if (str.contains("true")) {
                         i++;
                         continue;
                     }
@@ -216,10 +216,10 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 
                 char *ret_2 = g_key_file_get_locale_string(keyfile, "Desktop Entry", "NotShowIn", nullptr, nullptr);
 
-                if(ret_2 != nullptr) {
+                if (ret_2 != nullptr) {
                     QString str = QString::fromLocal8Bit(ret_2);
 
-                    if(str.contains("UKUI")) {
+                    if (str.contains("UKUI")) {
                         i++;
                         continue;
                     }
@@ -228,10 +228,10 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
                 //过滤LXQt、KDE
                 char *ret = g_key_file_get_locale_string(keyfile, "Desktop Entry", "OnlyShowIn", nullptr, nullptr);
 
-                if(ret != nullptr) {
+                if (ret != nullptr) {
                     QString str = QString::fromLocal8Bit(ret);
 
-                    if(str.contains("LXQt") || str.contains("KDE")) {
+                    if (str.contains("LXQt") || str.contains("KDE")) {
                         i++;
                         continue;
                     }
@@ -241,18 +241,18 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
                 QLocale cn;
                 QString language = cn.languageToString(cn.language());
 
-                if(QString::compare(language, "Chinese") == 0) {
+                if (QString::compare(language, "Chinese") == 0) {
                     char *nameCh = g_key_file_get_string(keyfile, "Desktop Entry", "Name[zh_CN]", nullptr);
                     char *nameEn = g_key_file_get_string(keyfile, "Desktop Entry", "Name", nullptr);
 
-                    if(QString::fromLocal8Bit(nameCh).isEmpty() && QString::fromLocal8Bit(nameEn).isEmpty()) {
+                    if (QString::fromLocal8Bit(nameCh).isEmpty() && QString::fromLocal8Bit(nameEn).isEmpty()) {
                         i++;
                         continue;
                     }
                 } else {
                     char *name = g_key_file_get_string(keyfile, "Desktop Entry", "Name", nullptr);
 
-                    if(QString::fromLocal8Bit(name).isEmpty()) {
+                    if (QString::fromLocal8Bit(name).isEmpty()) {
                         i++;
                         continue;
                     }
@@ -262,7 +262,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
             }
 
             i++;
-        } while(i < list.size());
+        } while (i < list.size());
 
         g_key_file_free(keyfile);
     }
@@ -271,38 +271,38 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 //获取系统deskyop文件路径
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
-    if(projectCodeName == "V10SP1") {
+    if (projectCodeName == "V10SP1") {
         filePathList.clear();
         QString jsonPath = QDir::homePath() + "/.config/ukui-menu-security-config.json";
         QFile file(jsonPath);
 
-        if(file.exists()) {
+        if (file.exists()) {
             file.open(QIODevice::ReadOnly);
             QByteArray readBy = file.readAll();
             QJsonParseError error;
             QJsonDocument readDoc = QJsonDocument::fromJson(readBy, &error);
 
-            if(!readDoc.isNull() && error.error == QJsonParseError::NoError) {
+            if (!readDoc.isNull() && error.error == QJsonParseError::NoError) {
                 QJsonObject obj = readDoc.object().value("ukui-menu").toObject();
 
-                if(obj.value("mode").toString() == "whitelist") {
+                if (obj.value("mode").toString() == "whitelist") {
                     QJsonArray blArray = obj.value("whitelist").toArray();
                     QJsonArray enArray = blArray.at(0).toObject().value("entries").toArray();
 
-                    for(int index = 0; index < enArray.size(); index++) {
+                    for (int index = 0; index < enArray.size(); index++) {
                         QJsonObject obj = enArray.at(index).toObject();
                         filePathList.append(obj.value("path").toString());
                         //                    qDebug()<<obj.value("path").toString();
                     }
 
                     return filePathList;
-                } else if(obj.value("mode").toString() == "blacklist") {
+                } else if (obj.value("mode").toString() == "blacklist") {
                     getAndroidApp();
                     recursiveSearchFile("/usr/share/applications/");
                     QJsonArray blArray = obj.value("blacklist").toArray();
                     QJsonArray enArray = blArray.at(0).toObject().value("entries").toArray();
 
-                    for(int index = 0; index < enArray.size(); index++) {
+                    for (int index = 0; index < enArray.size(); index++) {
                         QJsonObject obj = enArray.at(index).toObject();
                         filePathList.removeAll(obj.value("path").toString());
                         //                    qDebug()<<obj.value("path").toString();
@@ -445,11 +445,11 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
     /*新的应用列表*/
     myDebug() << "sysapplistnum初始化默认应用列表" << filePathList.count();
 
-    for(int i = 0; i < filePathList.count(); i++) { //过滤 得到真实存在的应用
+    for (int i = 0; i < filePathList.count(); i++) { //过滤 得到真实存在的应用
         QString tmp = filePathList.at(i);
         QFileInfo fileInfo(tmp);
 
-        if(!fileInfo.isFile()) { //判断是否存在
+        if (!fileInfo.isFile()) { //判断是否存在
             //qDebug()<<tmp;
             continue;
         }
@@ -467,15 +467,15 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
     //qDebug()<<"sysapplistnum初始化默认应用列表3"<<ifFileDesktopList.count();
     int num = ifFileDesktopList.count();
 
-    for(int i = 0; i < num; i++) {
+    for (int i = 0; i < num; i++) {
         QString tmp = ifFileDesktopList.at(i);
         myDebug() << "filePathList.at(i)" << ifFileDesktopList.at(i) << tmp.indexOf("tencent");
         QString str = ifFileDesktopList.at(i);
         QStringList list = str.split('/');
         str = list[list.size() - 1];
 
-        if(tmp.indexOf("tencent") == -1) { //所有不是腾讯的系统应用7
-            if(sysapplistnum == 0) { //没有初始化默认应用列表
+        if (tmp.indexOf("tencent") == -1) { //所有不是腾讯的系统应用7
+            if (sysapplistnum == 0) { //没有初始化默认应用列表
                 syssetting->beginGroup("ukui-menu-sysapplist");
                 myDebug() << "isnottencent" << str;
                 syssetting->setValue(str, 0);
@@ -521,12 +521,12 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
     vector.append(QStringList() << "System" << "Settings" << "Security"); //9系统
     QStringList desktopfpList = getDesktopFilePath();
 
-    for(int i = 0; i < desktopfpList.count(); i++) {
+    for (int i = 0; i < desktopfpList.count(); i++) {
         QStringList appInfoList;
         QString desktopfp = desktopfpList.at(i);
         QString name = getAppName(desktopfpList.at(i));
 
-        if(!name.isEmpty()) {
+        if (!name.isEmpty()) {
             QString englishName = getAppEnglishName(desktopfpList.at(i));
             QString letter = getAppNameInitial(desktopfpList.at(i));
             QString letters = getAppNameInitials(desktopfpList.at(i));
@@ -534,14 +534,14 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
             appInfoList << desktopfp << name << englishName << letter << letters;
             bool is_owned = false;
 
-            for(int j = 0; j < vector.size(); j++) {
-                if(matchingAppCategories(desktopfpList.at(i), vector.at(j))) { //有对应分类
+            for (int j = 0; j < vector.size(); j++) {
+                if (matchingAppCategories(desktopfpList.at(i), vector.at(j))) { //有对应分类
                     is_owned = true;
                     appInfoList.append(QString::number(j));
                 }
             }
 
-            if(!is_owned) { //该应用无对应分类
+            if (!is_owned) { //该应用无对应分类
                 appInfoList.append(QString::number(10));
             }
 
@@ -558,7 +558,7 @@ QString UkuiMenuInterface::getTencentAppid(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -572,7 +572,7 @@ QString UkuiMenuInterface::getAppName(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -587,7 +587,7 @@ QString UkuiMenuInterface::getAppEnglishName(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -601,7 +601,7 @@ QString UkuiMenuInterface::getAppCategories(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -615,7 +615,7 @@ QString UkuiMenuInterface::getAppIcon(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -629,7 +629,7 @@ QString UkuiMenuInterface::getAppExec(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -643,7 +643,7 @@ QString UkuiMenuInterface::getAppComment(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -657,7 +657,7 @@ QString UkuiMenuInterface::getAppType(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
@@ -671,7 +671,7 @@ bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
     QLocale local;
     QString language = local.languageToString(local.language());
 
-    if(QString::compare(language, "Chinese") == 0) {
+    if (QString::compare(language, "Chinese") == 0) {
         local = QLocale(QLocale::Chinese);
     } else {
         local = QLocale(QLocale::English);
@@ -679,7 +679,7 @@ bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
 
     QCollator collator(local);
 
-    if(collator.compare(arg_1.at(1), arg_2.at(1)) < 0) {
+    if (collator.compare(arg_1.at(1), arg_2.at(1)) < 0) {
         return true;
     } else {
         return false;
@@ -688,7 +688,7 @@ bool UkuiMenuInterface::cmpApp(QStringList &arg_1, QStringList &arg_2)
 
 bool UkuiMenuInterface::initAppIni()
 {
-    if(false) {
+    if (false) {
         QVector<QStringList> appInitVector;
         QVector<QStringList> tencentInitVectorList;
         QVector<QStringList> customizedVectorList;
@@ -704,36 +704,36 @@ bool UkuiMenuInterface::initAppIni()
         QStringList desktopfnList = setting->allKeys();
         setting->endGroup();
 
-        if(desktopfnList.count() == 0) {
-            for(int i = 0; i < appInfoVector.count(); i++) {
+        if (desktopfnList.count() == 0) {
+            for (int i = 0; i < appInfoVector.count(); i++) {
                 //qDebug()<<"appInfoVector"<<appInfoVector.count()<<i;
                 QString tmp = appInfoVector.at(i).at(0);
 
-                if(tmp.indexOf("tencent") != -1) {
-                    if(tmp == tencent_math ) {
+                if (tmp.indexOf("tencent") != -1) {
+                    if (tmp == tencent_math) {
                         precise_practiceVector.append(appInfoVector.at(i));
                         math = appInfoVector.at(i);
                         continue;
                     }
 
-                    if(tmp == tencent_chinese ) {
+                    if (tmp == tencent_chinese) {
                         precise_practiceVector.append(appInfoVector.at(i));
                         chainese = appInfoVector.at(i);
                         continue;
                     }
 
-                    if(tmp == tencent_english ) {
+                    if (tmp == tencent_english) {
                         precise_practiceVector.append(appInfoVector.at(i));
                         english = appInfoVector.at(i);
                         continue;
                     }
 
                     tencentInitVectorList.append(appInfoVector.at(i));//所有是腾讯的系统应用
-                } else if(tmp.indexOf("wps") != -1) {
+                } else if (tmp.indexOf("wps") != -1) {
                     thirdPartyVectorList.append(appInfoVector.at(i));
-                } else if(tmp.indexOf("eye") != -1) {
+                } else if (tmp.indexOf("eye") != -1) {
                     customizedVectorList.append(appInfoVector.at(i));
-                } else if(tmp.indexOf("mdm") != -1) {
+                } else if (tmp.indexOf("mdm") != -1) {
                     customizedVectorList.append(appInfoVector.at(i));
                 } else {
                     appInitVector.append(appInfoVector.at(i));
@@ -744,15 +744,15 @@ bool UkuiMenuInterface::initAppIni()
             qSort(tencentInitVectorList.begin(), tencentInitVectorList.end(), cmpApp); //按中英文字母排序
 
             //腾讯应用的精准类应用处理
-            if(precise_practiceVector.contains(english)) {
+            if (precise_practiceVector.contains(english)) {
                 tencentInitVectorList.insert(0, english);
             }
 
-            if(precise_practiceVector.contains(math) ) {
+            if (precise_practiceVector.contains(math)) {
                 tencentInitVectorList.insert(0, math);
             }
 
-            if(precise_practiceVector.contains(chainese) ) {
+            if (precise_practiceVector.contains(chainese)) {
                 tencentInitVectorList.insert(0, chainese);
             }
 
@@ -760,7 +760,7 @@ bool UkuiMenuInterface::initAppIni()
             qSort(thirdPartyVectorList.begin(), thirdPartyVectorList.end(), cmpApp); //按中英文字母排序
             setting->beginGroup("tencent");
 
-            for(int i = 0; i < tencentInitVectorList.count(); i++) {
+            for (int i = 0; i < tencentInitVectorList.count(); i++) {
                 QString str = tencentInitVectorList.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
@@ -773,7 +773,7 @@ bool UkuiMenuInterface::initAppIni()
             //        int a=tencentInitVectorList.count();
             setting->beginGroup("customized");
 
-            for(int i = 0; i < customizedVectorList.count(); i++) {
+            for (int i = 0; i < customizedVectorList.count(); i++) {
                 QString str = customizedVectorList.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
@@ -785,7 +785,7 @@ bool UkuiMenuInterface::initAppIni()
             //        int b=customizedVector.count();
             setting->beginGroup("thirdParty");
 
-            for(int i = 0; i < thirdPartyVectorList.count(); i++) {
+            for (int i = 0; i < thirdPartyVectorList.count(); i++) {
                 QString str = thirdPartyVectorList.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
@@ -797,7 +797,7 @@ bool UkuiMenuInterface::initAppIni()
             //        int c=thirdPartyVectorList.count();
             setting->beginGroup("application");
 
-            for(int i = 0; i < appInitVector.count(); i++) { //赋值
+            for (int i = 0; i < appInitVector.count(); i++) { //赋值
                 QString str = appInitVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
@@ -826,36 +826,36 @@ bool UkuiMenuInterface::initAppIni()
         QStringList desktopfnList = setting->allKeys();
         setting->endGroup();
 
-        if(desktopfnList.count() == 0) {
-            for(int i = 0; i < desktopfpVector.count(); i++) {
+        if (desktopfnList.count() == 0) {
+            for (int i = 0; i < desktopfpVector.count(); i++) {
                 //qDebug()<<"appInfoVector"<<appInfoVector.count()<<i;
                 QString tmp = appInfoVector.at(i).at(0);
 
-                if(tmp.indexOf("tencent") != -1) {
-                    if(tmp == tencent_math ) {
+                if (tmp.indexOf("tencent") != -1) {
+                    if (tmp == tencent_math) {
                         precise_practiceVector.append(appInfoVector.at(i));
                         math = appInfoVector.at(i);
                         continue;
                     }
 
-                    if(tmp == tencent_chinese ) {
+                    if (tmp == tencent_chinese) {
                         precise_practiceVector.append(appInfoVector.at(i));
                         chainese = appInfoVector.at(i);
                         continue;
                     }
 
-                    if(tmp == tencent_english ) {
+                    if (tmp == tencent_english) {
                         precise_practiceVector.append(appInfoVector.at(i));
                         english = appInfoVector.at(i);
                         continue;
                     }
 
                     tencentInitVector.append(appInfoVector.at(i));//所有是腾讯的系统应用
-                } else if(tmp.indexOf("wps") != -1) {
+                } else if (tmp.indexOf("wps") != -1) {
                     thirdPartyVector.append(appInfoVector.at(i));
-                } else if(tmp.indexOf("eye") != -1) {
+                } else if (tmp.indexOf("eye") != -1) {
                     customizedVector.append(appInfoVector.at(i));
-                } else if(tmp.indexOf("mdm") != -1) {
+                } else if (tmp.indexOf("mdm") != -1) {
                     customizedVector.append(appInfoVector.at(i));
                 } else {
                     appInitVector.append(appInfoVector.at(i));
@@ -866,15 +866,15 @@ bool UkuiMenuInterface::initAppIni()
             qSort(tencentInitVector.begin(), tencentInitVector.end(), cmpApp); //按中英文字母排序
 
             //腾讯应用的精准类应用处理
-            if(precise_practiceVector.contains(english)) {
+            if (precise_practiceVector.contains(english)) {
                 tencentInitVector.insert(0, english);
             }
 
-            if(precise_practiceVector.contains(math) ) {
+            if (precise_practiceVector.contains(math)) {
                 tencentInitVector.insert(0, math);
             }
 
-            if(precise_practiceVector.contains(chainese) ) {
+            if (precise_practiceVector.contains(chainese)) {
                 tencentInitVector.insert(0, chainese);
             }
 
@@ -882,7 +882,7 @@ bool UkuiMenuInterface::initAppIni()
             qSort(thirdPartyVector.begin(), thirdPartyVector.end(), cmpApp); //按中英文字母排序
             setting->beginGroup("application");
 
-            for(int i = 0; i < tencentInitVector.count(); i++) {
+            for (int i = 0; i < tencentInitVector.count(); i++) {
                 QString str = tencentInitVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
@@ -892,7 +892,7 @@ bool UkuiMenuInterface::initAppIni()
 
             int a = tencentInitVector.count();
 
-            for(int i = 0; i < customizedVector.count(); i++) {
+            for (int i = 0; i < customizedVector.count(); i++) {
                 QString str = customizedVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
@@ -901,7 +901,7 @@ bool UkuiMenuInterface::initAppIni()
 
             int b = customizedVector.count();
 
-            for(int i = 0; i < thirdPartyVector.count(); i++) {
+            for (int i = 0; i < thirdPartyVector.count(); i++) {
                 QString str = thirdPartyVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
@@ -910,7 +910,7 @@ bool UkuiMenuInterface::initAppIni()
 
             int c = thirdPartyVector.count();
 
-            for(int i = 0; i < appInitVector.count(); i++) { //赋值
+            for (int i = 0; i < appInitVector.count(); i++) { //赋值
                 QString str = appInitVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
@@ -939,8 +939,8 @@ QVector<QString> UkuiMenuInterface::getAllClassification()
     commonVector = getCommonUseApp();
     int index = 0;
 
-    Q_FOREACH(QString desktopfp, desktopfpVector) {
-        if(!commonVector.contains(desktopfp)) {
+    Q_FOREACH (QString desktopfp, desktopfpVector) {
+        if (!commonVector.contains(desktopfp)) {
             appVector.append(appInfoVector.at(index));
         }
 
@@ -949,11 +949,11 @@ QVector<QString> UkuiMenuInterface::getAllClassification()
 
     qSort(appVector.begin(), appVector.end(), cmpApp);
 
-    Q_FOREACH(QString desktopfp, commonVector) {
+    Q_FOREACH (QString desktopfp, commonVector) {
         allAppVector.append(desktopfp);
     }
 
-    for(int index = 0; index < appVector.size(); index++) {
+    for (int index = 0; index < appVector.size(); index++) {
         allAppVector.append(appVector.at(index).at(0));
     }
 
@@ -1048,13 +1048,13 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
     //            continue;
     //        data.append(desktopfp);
     //    }
-    if(projectCodeName == "V10SP1") {
+    if (projectCodeName == "V10SP1") {
         QVector<QString> data;
 
-        Q_FOREACH(QString desktopfn, getLockAppList()) {
+        Q_FOREACH (QString desktopfn, getLockAppList()) {
             QString desktopfp;
 
-            if(androidDesktopfnList.contains(desktopfn)) {
+            if (androidDesktopfnList.contains(desktopfn)) {
                 desktopfp = QString(QDir::homePath() + "/.local/share/applications/" + desktopfn);
             } else {
                 desktopfp = QString("/usr/share/applications/" + desktopfn);
@@ -1062,17 +1062,17 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
 
             QFileInfo fileInfo(desktopfp);
 
-            if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp)) {
+            if (!fileInfo.isFile() || !desktopfpVector.contains(desktopfp)) {
                 continue;
             }
 
             data.append(desktopfp);
         }
 
-        Q_FOREACH(QString desktopfn, getUnlockAllList()) {
+        Q_FOREACH (QString desktopfn, getUnlockAllList()) {
             QString desktopfp;
 
-            if(androidDesktopfnList.contains(desktopfn)) {
+            if (androidDesktopfnList.contains(desktopfn)) {
                 desktopfp = QString(QDir::homePath() + "/.local/share/applications/" + desktopfn);
             } else {
                 desktopfp = QString("/usr/share/applications/" + desktopfn);
@@ -1080,7 +1080,7 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
 
             QFileInfo fileInfo(desktopfp);
 
-            if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp)) {
+            if (!fileInfo.isFile() || !desktopfpVector.contains(desktopfp)) {
                 continue;
             }
 
@@ -1096,12 +1096,12 @@ QVector<QString> UkuiMenuInterface::sortDesktopList(QString group)
     setting->beginGroup(group);
     QStringList desktopfnList = setting->allKeys();
 
-    for(int i = 0; i < desktopfnList.count() - 1; i++)
-        for(int j = 0; j < desktopfnList.count() - 1 - i; j++) { //冒泡排序常用的应用从大到小排列desktopfnList
+    for (int i = 0; i < desktopfnList.count() - 1; i++)
+        for (int j = 0; j < desktopfnList.count() - 1 - i; j++) { //冒泡排序常用的应用从大到小排列desktopfnList
             int value_1 = setting->value(desktopfnList.at(j)).toInt();
             int value_2 = setting->value(desktopfnList.at(j + 1)).toInt();
 
-            if(value_1 > value_2) {
+            if (value_1 > value_2) {
                 QString tmp = desktopfnList.at(j);
                 desktopfnList.replace(j, desktopfnList.at(j + 1));
                 desktopfnList.replace(j + 1, tmp);
@@ -1112,10 +1112,10 @@ QVector<QString> UkuiMenuInterface::sortDesktopList(QString group)
     setting->endGroup();
     QVector<QString> data;
 
-    Q_FOREACH(QString desktopfn, desktopfnList) {
+    Q_FOREACH (QString desktopfn, desktopfnList) {
         QString desktopfp;
 
-        if(androidDesktopfnList.contains(desktopfn)) {
+        if (androidDesktopfnList.contains(desktopfn)) {
             desktopfp = QString(QDir::homePath() + "/.local/share/applications/" + desktopfn);
         } else {
             desktopfp = QString("/usr/share/applications/" + desktopfn);
@@ -1131,10 +1131,10 @@ QVector<QString> UkuiMenuInterface::getCollectApp()
 {
     QVector<QString> data;
 
-    Q_FOREACH(QString desktopfn, getCollectAppList()) {
+    Q_FOREACH (QString desktopfn, getCollectAppList()) {
         QString desktopfp;
 
-        if(androidDesktopfnList.contains(desktopfn)) {
+        if (androidDesktopfnList.contains(desktopfn)) {
             desktopfp = QString(QDir::homePath() + "/.local/share/applications/" + desktopfn);
         } else {
             desktopfp = QString("/usr/share/applications/" + desktopfn);
@@ -1142,7 +1142,7 @@ QVector<QString> UkuiMenuInterface::getCollectApp()
 
         QFileInfo fileInfo(desktopfp);
 
-        if(!fileInfo.isFile() || !desktopfpVector.contains(desktopfp)) {
+        if (!fileInfo.isFile() || !desktopfpVector.contains(desktopfp)) {
             continue;
         }
 
@@ -1157,12 +1157,12 @@ QVector<QString> UkuiMenuInterface::getLockApp()
     setting->beginGroup("lockapplication");
     QStringList lockdesktopfnList = setting->allKeys();
 
-    for(int i = 0; i < lockdesktopfnList.count() - 1; i++) //冒泡排序锁住的应用从小到大排列lockdesktopfnList
-        for(int j = 0; j < lockdesktopfnList.count() - 1 - i; j++) {
+    for (int i = 0; i < lockdesktopfnList.count() - 1; i++) //冒泡排序锁住的应用从小到大排列lockdesktopfnList
+        for (int j = 0; j < lockdesktopfnList.count() - 1 - i; j++) {
             int value_1 = setting->value(lockdesktopfnList.at(j)).toInt();
             int value_2 = setting->value(lockdesktopfnList.at(j + 1)).toInt();
 
-            if(value_1 > value_2) {
+            if (value_1 > value_2) {
                 QString tmp = lockdesktopfnList.at(j);
                 lockdesktopfnList.replace(j, lockdesktopfnList.at(j + 1));
                 lockdesktopfnList.replace(j + 1, tmp);
@@ -1172,7 +1172,7 @@ QVector<QString> UkuiMenuInterface::getLockApp()
     setting->endGroup();
     QVector<QString> data;
 
-    Q_FOREACH(QString desktopfn, lockdesktopfnList) {
+    Q_FOREACH (QString desktopfn, lockdesktopfnList) {
         QString desktopfp;
         //        if(androidDesktopfnList.contains(desktopfn))//如果锁的应用在安卓列表
         //            desktopfp=QString(QDir::homePath()+"/.local/share/applications/"+desktopfn);
@@ -1195,11 +1195,11 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
     QVector<QStringList> appVector[27];
     int index = 0;
 
-    while(index < appInfoVector.size()) {
+    while (index < appInfoVector.size()) {
         QString appname = appInfoVector.at(index).at(1);
         QString appnamepy = UkuiChineseLetter::getPinyins(appname);
 
-        if(!appnamepy.isEmpty()) {
+        if (!appnamepy.isEmpty()) {
             char c = appnamepy.at(0).toLatin1();
 
             switch (c) {
@@ -1316,12 +1316,12 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
         index++;
     }
 
-    for(int i = 0; i < 26; i++) {
+    for (int i = 0; i < 26; i++) {
         QStringList desktopfpList;
         desktopfpList.clear();
         qSort(appVector[i].begin(), appVector[i].end(), cmpApp);
 
-        for(int j = 0; j < appVector[i].size(); j++) {
+        for (int j = 0; j < appVector[i].size(); j++) {
             desktopfpList.append(appVector[i].at(j).at(0));
         }
 
@@ -1331,11 +1331,11 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
     QVector<QStringList> otherVector;
     QVector<QStringList> numberVector;
 
-    for(int i = 0; i < appVector[26].count(); i++) {
+    for (int i = 0; i < appVector[26].count(); i++) {
         QString appname = appVector[26].at(i).at(2);
         QChar c = appname.at(0);
 
-        if(c < 48 || (c > 57 && c < 65) || c > 90) {
+        if (c < 48 || (c > 57 && c < 65) || c > 90) {
             otherVector.append(appVector[26].at(i));
         } else {
             numberVector.append(appVector[26].at(i));
@@ -1347,14 +1347,14 @@ QVector<QStringList> UkuiMenuInterface::getAlphabeticClassification()
     QStringList otherfpList;
     otherfpList.clear();
 
-    for(int i = 0; i < otherVector.size(); i++) {
+    for (int i = 0; i < otherVector.size(); i++) {
         otherfpList.append(otherVector.at(i).at(0));
     }
 
     QStringList numberfpList;
     numberfpList.clear();
 
-    for(int i = 0; i < numberVector.size(); i++) {
+    for (int i = 0; i < numberVector.size(); i++) {
         numberfpList.append(numberVector.at(i).at(0));
     }
 
@@ -1368,10 +1368,10 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     QVector<QStringList> appVector[11];
     int index = 0;
 
-    while(index < appInfoVector.size()) {
+    while (index < appInfoVector.size()) {
         int count = appInfoVector.at(index).size() - 5;
 
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             int category = appInfoVector.at(index).at(5 + i).toInt();
 
             switch (category) {
@@ -1430,12 +1430,12 @@ QVector<QStringList> UkuiMenuInterface::getFunctionalClassification()
     QVector<QStringList> data;
     data.clear();
 
-    for(int i = 0; i < 11; i++) {
+    for (int i = 0; i < 11; i++) {
         QStringList desktopfpList;
         desktopfpList.clear();
         qSort(appVector[i].begin(), appVector[i].end(), cmpApp);
 
-        for(int j = 0; j < appVector[i].size(); j++) {
+        for (int j = 0; j < appVector[i].size(); j++) {
             desktopfpList.append(appVector[i].at(j).at(0));
         }
 
@@ -1450,13 +1450,13 @@ bool UkuiMenuInterface::matchingAppCategories(QString desktopfp, QStringList cat
     QString category = getAppCategories(desktopfp);
     int index;
 
-    for(index = 0; index < categorylist.count(); index++) {
-        if(category.contains(categorylist.at(index), Qt::CaseInsensitive)) {
+    for (index = 0; index < categorylist.count(); index++) {
+        if (category.contains(categorylist.at(index), Qt::CaseInsensitive)) {
             return true;
         }
     }
 
-    if(index == categorylist.count()) {
+    if (index == categorylist.count()) {
         return false;
     }
 
@@ -1479,19 +1479,19 @@ void UkuiMenuInterface::getAndroidApp()
     dir.setSorting(QDir::DirsFirst);
     QFileInfoList list = dir.entryInfoList();
 
-    if(list.size() < 1 ) {
+    if (list.size() < 1) {
         return;
     }
 
     int i = 0;
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
 
     do {
         QFileInfo fileInfo = list.at(i);
 
-        if(!fileInfo.isFile()) {
+        if (!fileInfo.isFile()) {
             i++;
             continue;
         }
@@ -1499,7 +1499,7 @@ void UkuiMenuInterface::getAndroidApp()
         //过滤后缀不是.desktop的文件
         QString filePathStr = fileInfo.filePath();
 
-        if(!filePathStr.endsWith(".desktop")) {
+        if (!filePathStr.endsWith(".desktop")) {
             i++;
             continue;
         }
@@ -1509,7 +1509,7 @@ void UkuiMenuInterface::getAndroidApp()
         g_key_file_load_from_file(keyfile, filepath, flags, error);
         char *ret_1 = g_key_file_get_locale_string(keyfile, "Desktop Entry", "Categories", nullptr, nullptr);
 
-        if(ret_1 != nullptr) {
+        if (ret_1 != nullptr) {
             //            QString str=QString::fromLocal8Bit(ret_1);
             //            if(!str.contains("Android"))
             //            {
@@ -1524,7 +1524,7 @@ void UkuiMenuInterface::getAndroidApp()
         }
 
         i++;
-    } while(i < list.size());
+    } while (i < list.size());
 
     g_key_file_free(keyfile);
 }
@@ -1536,11 +1536,11 @@ QString UkuiMenuInterface::getAppNameInitials(QString desktopfp)
     QStringList appnamestr = appname.split(" ");
     QString letters;
 
-    Q_FOREACH(QString name, appnamestr) {
+    Q_FOREACH (QString name, appnamestr) {
         letters.clear();
         letters = UkuiChineseLetter::getFirstLettersAll(name);
 
-        if(letters.isEmpty()) {
+        if (letters.isEmpty()) {
             letters = UkuiChineseLetter::getFirstLetter(name);
         }
 
@@ -1565,16 +1565,16 @@ bool UkuiMenuInterface::checkKreApp(QString desktopfp)
 {
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new ();
+    GKeyFile *keyfile = g_key_file_new();
     QByteArray fpbyte = desktopfp.toLocal8Bit();
     char *filepath = fpbyte.data();
     g_key_file_load_from_file(keyfile, filepath, flags, error);
     char *value = g_key_file_get_locale_string(keyfile, "Desktop Entry", "environment", nullptr, nullptr);
     g_key_file_free(keyfile);
 
-    if(!value) {
+    if (!value) {
         return false;
-    } else if(QString::compare(QString::fromLocal8Bit(value), "kre-environment") == 0) {
+    } else if (QString::compare(QString::fromLocal8Bit(value), "kre-environment") == 0) {
         return true;
     }
 
@@ -1590,19 +1590,19 @@ QStringList UkuiMenuInterface::getSpecifiedCategoryAppList(QString categorystr)
     QStringList appnameList;
     appnameList.clear();
 
-    for(int index = 0; index < desktopfpList.count(); index++) {
+    for (int index = 0; index < desktopfpList.count(); index++) {
         QString appcategorystr = getAppCategories(desktopfpList.at(index));
 
-        if(!appcategorystr.isEmpty()) {
+        if (!appcategorystr.isEmpty()) {
             QByteArray appcategorybyte = appcategorystr.toLocal8Bit();
             char *appcategory = appcategorybyte.data();
             int len = static_cast<int>(strlen(appcategory) - 6);
 
-            for(int i = 0; i < len; i++) {
-                if(strncmp(appcategory + i, category, strlen(category)) == 0) {
+            for (int i = 0; i < len; i++) {
+                if (strncmp(appcategory + i, category, strlen(category)) == 0) {
                     QString appname = getAppName(desktopfpList.at(index));
 
-                    if(QString::compare(appname, "访问提示") == 0) {
+                    if (QString::compare(appname, "访问提示") == 0) {
                         appnameList.append(appname);
                     }
 

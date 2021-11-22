@@ -51,7 +51,7 @@
 #define QueryLineEditClickedDefaultBackground "rgba(0, 0, 0,0.04)" //搜索框默认态背景选中
 #define QueryLineEditClickedBackground "rgba(255, 255, 255,0.06)" //搜索框背景选中
 #define QueryLineEditClickedBorderDefault "rgba(0, 0, 0,0.1)" //搜索框默认态背景选中边框
-#define QueryLineEditClickedBorder "rgba(255, 255, 255,0.15)" //搜索框背景选中边框
+#define QueryLineEditClickedBorder "rgba(5, 151, 255, 1)" //搜索框背景选中边框
 #define AppBtnHover "#ffffff" //按钮悬浮
 
 /**

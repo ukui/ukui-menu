@@ -62,27 +62,30 @@ void FullCommonUseWidget::initUi()
     QSpacerItem *m_spaceItem2 = nullptr;
     m_spaceItem2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     rightButtonLayout->addItem(m_spaceItem2);
-    verticalScrollBar = new QScrollBar(m_scrollArea);
-    verticalScrollBar->setOrientation(Qt::Vertical);
+    m_verticalScrollBar = new QScrollBar(m_scrollArea);
+    m_verticalScrollBar->installEventFilter(this);
+    m_verticalScrollBar->setOrientation(Qt::Vertical);
     mainLayout->addWidget(m_scrollArea);
     QSpacerItem *m_spaceItem1 = nullptr;
     m_spaceItem1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     mainLayout->addItem(m_spaceItem1);
-    powerOffButton = new QPushButton(this);
-    powerOffButton->setMinimumSize(QSize(24, 24));
-    powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_powerOffButton = new QPushButton(this);
+    m_powerOffButton->setFixedSize(QSize(40, 40));
+    m_powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
     QIcon icon6;
     icon6.addFile(QString::fromUtf8(":/data/img/mainviewwidget/icon-电源.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    powerOffButton->setIcon(icon6);
-    powerOffButton->setIconSize(QSize(24, 24));
-    powerOffButton->setFlat(true);
-    powerOffButton->setStyleSheet("padding: 0px;");
-    rightButtonLayout->addWidget(verticalScrollBar);
+    m_powerOffButton->setIcon(icon6);
+    m_powerOffButton->setIconSize(QSize(28, 28));
+    m_powerOffButton->setFlat(true);
+    m_powerOffButton->setStyleSheet("QPushButton {padding: 0px;}"
+                                    "QPushButton:hover {border-radius:20px; background: rgba(255, 255, 255, 0.2);}"
+                                    "QPushButton:pressed {border-radius:20px; background: rgba(255, 255, 255, 0.3);}");
+    rightButtonLayout->addWidget(m_verticalScrollBar);
     QSpacerItem *m_spaceItem3 = nullptr;
     m_spaceItem3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     rightButtonLayout->addItem(m_spaceItem3);
-    rightButtonLayout->addWidget(powerOffButton);
-    rightButtonLayout->setAlignment(verticalScrollBar, Qt::AlignHCenter);
+    rightButtonLayout->addWidget(m_powerOffButton);
+    rightButtonLayout->setAlignment(m_verticalScrollBar, Qt::AlignHCenter);
     mainLayout->addLayout(rightButtonLayout);
     m_ukuiMenuInterface = new UkuiMenuInterface;
     initAppListWidget();
@@ -92,7 +95,7 @@ void FullCommonUseWidget::initUi()
     //翻页灵敏度时间调节
     time = new QTimer(this);
     connect(time, &QTimer::timeout, [ = ]() {
-        if(flag == false) {
+        if (flag == false) {
             flag = true;
             time->stop();
         }
@@ -100,40 +103,22 @@ void FullCommonUseWidget::initUi()
     m_scrollAreaWidHeight = m_scrollAreaWid->height();
     initVerticalScrollBar();
     connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setScrollBarValue);
-    connect(verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);
-    connect(powerOffButton, &QPushButton::customContextMenuRequested, this, &FullCommonUseWidget::on_powerOffButton_customContextMenuRequested);
-    connect(powerOffButton, &QPushButton::clicked, this, &FullCommonUseWidget::on_powerOffButton_clicked);
+    connect(m_verticalScrollBar, &QScrollBar::valueChanged, this, &FullCommonUseWidget::on_setAreaScrollBarValue);
+    connect(m_powerOffButton, &QPushButton::customContextMenuRequested, this, &FullCommonUseWidget::on_powerOffButton_customContextMenuRequested);
+    connect(m_powerOffButton, &QPushButton::clicked, this, &FullCommonUseWidget::on_powerOffButton_clicked);
 }
 
 void FullCommonUseWidget::initVerticalScrollBar()
 {
-    verticalScrollBar->setFixedHeight(200);
+    m_verticalScrollBar->setFixedHeight(200);
     int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
-    QString scrollBarStyle = QString("QScrollBar:vertical"
-                                     "{"
-                                     "width:4px;"
-                                     "background:rgba(0,0,0,60%);"
-                                     "margin:0px,0px,0px,0px;"
-                                     "border-radius:2px;"
-                                     "}"
-                                     "QScrollBar::handle:vertical"
-                                     "{"
-                                     "width:8px;"
-                                     "background:rgba(255,255,255,100%);"
-                                     " border-radius:2px;"
-                                     "min-height:%1;"
-                                     "}"
-                                     "QScrollBar::add-line:vertical"
-                                     "{"
-                                     "height:0px;width:0px;"
-                                     "subcontrol-position:bottom;"
-                                     "}"
-                                     "QScrollBar::sub-line:vertical"
-                                     "{"
-                                     "height:0px;width:0px;"
-                                     "subcontrol-position:top;"
-                                     "}").arg(scrollBarSize);
-    verticalScrollBar->setStyleSheet(scrollBarStyle);
+    m_scrollBarStyle = QString("QScrollBar:vertical{width: %2px; background: rgba(12, 12, 12, 1); "
+                               "margin: 0px,0px,0px,0px; border-radius: %3px;}"
+                               "QScrollBar::handle:vertical{width: %2px; background: rgba(255, 255, 255, 1);"
+                               "border-radius: %3px; min-height: %1;}"
+                               "QScrollBar::add-line:vertical{ height: 0px; width: 0px; subcontrol-position: bottom;}"
+                               "QScrollBar::sub-line:vertical{ height: 0px; width: 0px; subcontrol-position:top;}").arg(scrollBarSize);
+    m_verticalScrollBar->setStyleSheet(m_scrollBarStyle.arg(4).arg(2));
 }
 
 void FullCommonUseWidget::on_powerOffButton_clicked()
@@ -146,10 +131,10 @@ void FullCommonUseWidget::on_powerOffButton_customContextMenuRequested(const QPo
     RightClickMenu m_otherMenu(this);
     // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
     //  Q_EMIT sendShowMainWindowSignal(false);
-    int ret = m_otherMenu.showShutdownMenu(powerOffButton->mapToGlobal(pos));
+    int ret = m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
 
-    if(ret >= 10 && ret <= 17) {
+    if (ret >= 10 && ret <= 17) {
         //        Q_EMIT sendHideMainWindowSignal();
         switch (ret) {
             case 10:
@@ -212,7 +197,7 @@ void FullCommonUseWidget::resizeScrollAreaControls()
     int dividend = m_scrollArea->width() / Style::AppListGridSizeWidth;
     int rowcount = 0;
 
-    if(listview->model()->rowCount() % dividend > 0) {
+    if (listview->model()->rowCount() % dividend > 0) {
         rowcount = listview->model()->rowCount() / dividend + 1;
     } else {
         rowcount = listview->model()->rowCount() / dividend;
@@ -226,7 +211,7 @@ void FullCommonUseWidget::fillAppList()
 {
     m_data.clear();
 
-    Q_FOREACH(QString desktopfp, UkuiMenuInterface::allAppVector) {
+    Q_FOREACH (QString desktopfp, UkuiMenuInterface::allAppVector) {
         m_data.append(desktopfp);
     }
 
@@ -250,18 +235,30 @@ void FullCommonUseWidget::selectFirstItem()
 
 void FullCommonUseWidget::on_setScrollBarValue(int value)
 {
-    verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::AppListWidHeight);
-    verticalScrollBar->setValue(value);
+    m_verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::AppListWidHeight);
+    m_verticalScrollBar->setValue(value);
 }
 
 bool FullCommonUseWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    if( event->type() == QEvent::KeyPress ) {
-        QKeyEvent *ke = (QKeyEvent *)event;
+    if (watched == m_listView) {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *ke = (QKeyEvent *)event;
 
-        if( ke->key() == Qt::Key_Tab ) {
-            Q_EMIT setFocusToSideWin();
-            return true;
+            if (ke->key() == Qt::Key_Tab) {
+                Q_EMIT setFocusToSideWin();
+                return true;
+            }
+        }
+    }
+
+    if (watched == m_verticalScrollBar) {
+        if (event->type() == QEvent::Enter) {
+            m_verticalScrollBar->setStyleSheet(m_scrollBarStyle.arg(8).arg(4));
+        }
+
+        if (event->type() == QEvent::Leave) {
+            m_verticalScrollBar->setStyleSheet(m_scrollBarStyle.arg(4).arg(2));
         }
     }
 
@@ -270,7 +267,7 @@ bool FullCommonUseWidget::eventFilter(QObject *watched, QEvent *event)
 
 void FullCommonUseWidget::onSetSlider(int value)
 {
-    if(value == 0) {
+    if (value == 0) {
         m_scrollArea->verticalScrollBar()->setValue(0);
     } else {
         int curvalue = m_scrollArea->verticalScrollBar()->value();
@@ -301,7 +298,7 @@ void FullCommonUseWidget::updateListView()
 {
     m_data.clear();
 
-    Q_FOREACH(QString desktopfp, m_ukuiMenuInterface->getAllClassification()) {
+    Q_FOREACH (QString desktopfp, m_ukuiMenuInterface->getAllClassification()) {
         m_data.append(desktopfp);
     }
 
@@ -333,7 +330,7 @@ void FullCommonUseWidget::moveScrollBar(int type)
 {
     int height = Style::primaryScreenHeight;
 
-    if(type == 0) {
+    if (type == 0) {
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition() - height * 100 / 1080);
     } else {
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition() + height * 100 / 1080);

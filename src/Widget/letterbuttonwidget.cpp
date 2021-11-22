@@ -43,7 +43,7 @@ void LetterButtonWidget::initUi()
     QStringList letterlist;
     letterlist.clear();
 
-    for(int i = 0; i < 26; i++) {
+    for (int i = 0; i < 26; i++) {
         char letter = static_cast<char>(65 + i);
         letterlist.append(QString(QChar(letter)));
     }
@@ -51,9 +51,9 @@ void LetterButtonWidget::initUi()
     letterlist.append("&&");
     letterlist.append("#");
 
-    for(int row = 0; row < 7; row++) {
-        for(int col = 0; col < 4; col++) {
-            if(row * 4 + col < letterlist.size()) {
+    for (int row = 0; row < 7; row++) {
+        for (int col = 0; col < 4; col++) {
+            if (row * 4 + col < letterlist.size()) {
                 LetterClassifyButton *btn = new LetterClassifyButton(this, false, letterlist.at(row * 4 + col));
                 btn->setFlat(true);
                 btn->setCheckable(false);
@@ -84,19 +84,19 @@ void LetterButtonWidget::recvLetterBtnList(QStringList list)
 {
     QGridLayout *gridLayout = qobject_cast<QGridLayout *>(this->layout());
 
-    for(int row = 0; row < 7; row++) {
-        for(int col = 0; col < 4; col++) {
+    for (int row = 0; row < 7; row++) {
+        for (int col = 0; col < 4; col++) {
             QLayoutItem *item = gridLayout->itemAt(row * 4 + col);
             LetterClassifyButton *btn = static_cast<LetterClassifyButton *>(item->widget());
             QString letterstr = btn->text();
 
-            if(list.indexOf(letterstr.at(0)) == -1) {
+            if (list.indexOf(letterstr.at(0)) == -1) {
                 btn->setEnabled(false);
             } else {
                 btn->setEnabled(true);
             }
 
-            if(row * 4 + col == 27) {
+            if (row * 4 + col == 27) {
                 break;
             }
         }

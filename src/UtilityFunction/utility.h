@@ -70,6 +70,7 @@ bool deleteAppRecord(QString desktopfn);//删除应用记录
 void execApp(QString desktopfp);
 bool checkOsRelease();//区分社区办与商业版
 
+void centerToScreen(QWidget *widget);
 
 //获取用户图像
 QString getUserIcon();

@@ -15,7 +15,7 @@ int PageManager::getPageNum(int appnum)
     Style::appColumn = 6;
     Style::appLine = 4;
 
-    if(appnum % (Style::appColumn * Style::appLine) == 0) {
+    if (appnum % (Style::appColumn * Style::appLine) == 0) {
         pageNum = appnum / (Style::appColumn * Style::appLine);
     } else {
         pageNum = appnum / (Style::appColumn * Style::appLine) + 1;
@@ -30,17 +30,17 @@ QVector<QStringList> PageManager::sortAppInPage(QVector<QString> appvector)
     QVector<QStringList> pageData;
     QStringList onePageData;
 
-    Q_FOREACH(QString desktopfp, appvector) {
+    Q_FOREACH (QString desktopfp, appvector) {
         m_data.append(desktopfp);
     }
 
     int pageSize = getPageNum(m_data.size());
 
-    for(int i = 0; i < pageSize; i++) {
+    for (int i = 0; i < pageSize; i++) {
         onePageData.clear();
 
-        for(int j = 0; j < Style::appColumn * Style::appLine; j++) {
-            if(m_data.size() > 0) {
+        for (int j = 0; j < Style::appColumn * Style::appLine; j++) {
+            if (m_data.size() > 0) {
                 onePageData.append(m_data.at(0));
                 m_data.pop_front();
             } else {
@@ -64,7 +64,7 @@ QVector<QStringList> PageManager::getAppPageVector()
     QVector<QStringList> appPagelist;
     QVector<QString> allAppList = UkuiMenuInterface::tencentInitVector + UkuiMenuInterface::customizedVector + UkuiMenuInterface::thirdPartyVector + UkuiMenuInterface::applicationVector;
 
-    Q_FOREACH(QStringList desktopfp, sortAppInPage(/*UkuiMenuInterface::tencentInitVector*/allAppList)) {
+    Q_FOREACH (QStringList desktopfp, sortAppInPage(/*UkuiMenuInterface::tencentInitVector*/allAppList)) {
         appPagelist.append(desktopfp);
     }
 
