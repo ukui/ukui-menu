@@ -111,6 +111,7 @@ void FullFunctionWidget::initAppListWidget()
     layout->setContentsMargins(0, 0, 0, 0);
     m_applistWid->setLayout(layout);
     m_scrollArea = new ScrollArea;
+    m_scrollArea->setStyleSheet("background:transparent");
     m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
     m_scrollArea->setFixedSize(m_applistWid->width(), m_applistWid->height());

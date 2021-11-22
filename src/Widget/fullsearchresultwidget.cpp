@@ -46,6 +46,7 @@ void FullSearchResultWidget::initUi()
     m_listView = new FullListView(this, 3);
     this->setLayout(mainLayout);
     m_scrollArea = new ScrollArea;
+    m_scrollArea->setStyleSheet("background:transparent");
     m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
     m_scrollArea->setFixedSize(Style::AppListWidWidth, this->height());

@@ -77,6 +77,7 @@ void FullLetterWidget::initAppListWidget()
     //    layout->setContentsMargins(0,0,0,0);
     //    m_applistWid->setLayout(layout);
     m_scrollArea = new ScrollArea();
+    m_scrollArea->setStyleSheet("background:transparent");
     m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setFixedSize(Style::AppListWidWidth, Style::AppListWidHeight);
