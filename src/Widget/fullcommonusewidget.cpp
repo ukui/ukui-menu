@@ -46,6 +46,7 @@ void FullCommonUseWidget::initUi()
     m_spaceItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Fixed);
     mainLayout->addItem(m_spaceItem);
     m_scrollArea = new ScrollArea();
+    m_scrollArea->setStyleSheet("background:transparent");
     m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
     m_scrollArea->setFixedSize(Style::AppListWidWidth, Style::AppListWidHeight);

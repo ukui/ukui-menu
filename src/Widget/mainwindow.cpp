@@ -447,9 +447,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
  */
 bool MainWindow::event ( QEvent *event )
 {
-    //   if (event->type() == QEvent::ActivationChange && m_canHide)
-    myDebug() << "hahhhhhhhhhahhhh";
-
     if(QEvent::WindowDeactivate == event->type() && m_canHide) { //窗口停用
         if(QApplication::activeWindow() != this) {
             qDebug() << " * 鼠标点击窗口外部事件";
