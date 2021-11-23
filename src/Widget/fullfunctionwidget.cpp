@@ -62,12 +62,12 @@ void FullFunctionWidget::initUi()
     rightButtonLayout->setContentsMargins(0, 0, 0, 20);
     rightButtonLayout->setSpacing(0);
     m_powerOffButton = new QPushButton(this);
-    m_powerOffButton->setMinimumSize(QSize(24, 24));
+    m_powerOffButton->setFixedSize(QSize(40, 40));
     m_powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
     QIcon icon6;
     icon6.addFile(QString::fromUtf8(":/data/img/mainviewwidget/icon-电源@2x.png"), QSize(), QIcon::Normal, QIcon::Off);
     m_powerOffButton->setIcon(icon6);
-    m_powerOffButton->setIconSize(QSize(24, 24));
+    m_powerOffButton->setIconSize(QSize(28, 28));
     m_powerOffButton->setFlat(true);
     m_powerOffButton->setStyleSheet("QPushButton {padding: 0px;}"
                                     "QPushButton:hover {border-radius:20px; background: rgba(255, 255, 255, 0.2);}"
@@ -132,6 +132,11 @@ void FullFunctionWidget::initVerticalScrollBar()
 {
     m_verticalScrollBar->setFixedHeight(200);
     int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
+    if (scrollBarSize >= 200) {
+        m_verticalScrollBar->hide();
+    } else {
+        m_verticalScrollBar->show();
+    }
     m_scrollBarStyle = QString("QScrollBar:vertical{width: %2px; background: rgba(12, 12, 12, 1); "
                                "margin: 0px,0px,0px,0px; border-radius: %3px;}"
                                "QScrollBar::handle:vertical{width: %2px; background: rgba(255, 255, 255, 1);"

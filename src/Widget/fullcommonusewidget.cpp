@@ -112,6 +112,11 @@ void FullCommonUseWidget::initVerticalScrollBar()
 {
     m_verticalScrollBar->setFixedHeight(200);
     int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
+    if (scrollBarSize >= 200) {
+        m_verticalScrollBar->hide();
+    } else {
+        m_verticalScrollBar->show();
+    }
     m_scrollBarStyle = QString("QScrollBar:vertical{width: %2px; background: rgba(12, 12, 12, 1); "
                                "margin: 0px,0px,0px,0px; border-radius: %3px;}"
                                "QScrollBar::handle:vertical{width: %2px; background: rgba(255, 255, 255, 1);"
@@ -132,7 +137,7 @@ void FullCommonUseWidget::on_powerOffButton_customContextMenuRequested(const QPo
     // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
     //  Q_EMIT sendShowMainWindowSignal(false);
     int ret = m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
-    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
+    myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
 
     if (ret >= 10 && ret <= 17) {
         //        Q_EMIT sendHideMainWindowSignal();
@@ -170,7 +175,7 @@ void FullCommonUseWidget::on_powerOffButton_customContextMenuRequested(const QPo
         }
     }
 
-    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
+    myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
 }
 
 void FullCommonUseWidget::initAppListWidget()
@@ -203,7 +208,7 @@ void FullCommonUseWidget::resizeScrollAreaControls()
         rowcount = listview->model()->rowCount() / dividend;
     }
 
-    listview->setFixedSize(m_listView->width(), listview->gridSize().height()*rowcount);
+    listview->setFixedSize(m_listView->width(), listview->gridSize().height() * rowcount);
     m_scrollArea->widget()->setFixedSize(listview->size());
 }
 
