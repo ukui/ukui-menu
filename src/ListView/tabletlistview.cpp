@@ -312,13 +312,13 @@ void TabletListView::mousePressEvent(QMouseEvent *event)
         //左键
         myDebug() << "左键点击，当前点坐标" << event->pos();
 
-        if (((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x() % Style::AppListItemSizeWidth) >= 60 &&
-                pressedpos.x() % Style::AppListItemSizeWidth <= 60 + Style::AppListIconSize &&
-                pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
-                pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize)) ||
+        if (((this->indexAt(event->pos()).isValid()) && (module == 0) && (((pressedpos.x() % Style::TabletItemSizeWidthFirst) >= Style::FirstPageSpace) &&
+                ((pressedpos.x() % Style::TabletItemSizeWidthFirst) <= (Style::FirstPageSpace + Style::AppListIconSize)) &&
+                ((pressedpos.y() % Style::AppListItemSizeHeight) >= Style::AppTopSpace) &&
+                ((pressedpos.y() % Style::AppListItemSizeHeight) <= (Style::AppTopSpace + Style::AppListIconSize)))) ||
             ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
-             (pressedpos.x() % 318 >= 111 &&
-              pressedpos.x() % 318 <= 111 + Style::AppListIconSize &&
+             (pressedpos.x() % Style::TabletItemSizeWidthOther >= Style::OtherPageSpace &&
+              pressedpos.x() % Style::TabletItemSizeWidthOther <= Style::OtherPageSpace + Style::AppListIconSize &&
               pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
               pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize))) {
             pressApp = listmodel->data(this->indexAt(pressedpos), Qt::DisplayRole);
@@ -337,13 +337,13 @@ void TabletListView::mousePressEvent(QMouseEvent *event)
         //右键
         myDebug() << "右键点击，当前点坐标" << event->pos();
 
-        if (((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x()) % Style::AppListItemSizeWidth >= 60 &&
-                (pressedpos.x()) % Style::AppListItemSizeWidth <= 60 + Style::AppListIconSize &&
+        if (((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x()) % Style::TabletItemSizeWidthFirst >= Style::FirstPageSpace &&
+                (pressedpos.x()) % Style::TabletItemSizeWidthFirst <= Style::FirstPageSpace + Style::AppListIconSize &&
                 pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
                 pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize)) ||
             ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
-             (pressedpos.x() % 318 >= 111 &&
-              pressedpos.x() % 318 <= 111 + Style::AppListIconSize &&
+             (pressedpos.x() % Style::TabletItemSizeWidthOther >= Style::OtherPageSpace &&
+              pressedpos.x() % Style::TabletItemSizeWidthOther <= Style::OtherPageSpace + Style::AppListIconSize &&
               pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
               pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize))) {
             pressApp = listmodel->data(this->indexAt(pressedpos), Qt::DisplayRole);
@@ -370,7 +370,7 @@ void TabletListView::mouseMoveEvent(QMouseEvent *event)
                 QModelIndex theDragIndex = indexAt(startPos);
                 theDragRow = theDragIndex.row();
                 //[1]把拖拽数据放在QMimeData容器中
-                QString desktopfp = this->indexAt(event->pos()).data(Qt::DisplayRole).value<QString>();
+                QString desktopfp = this->indexAt(startPos).data(Qt::DisplayRole).value<QString>();
                 QByteArray itemData = desktopfp.toLocal8Bit();;
                 QMimeData *mimeData  = new QMimeData;
                 ThumbNail *dragImage = new ThumbNail(this);
@@ -496,16 +496,16 @@ void TabletListView::mouseReleaseEvent(QMouseEvent *e)
 //拖拽移动的时候，如果不是应用的话，就交换位置
 void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
 {
-    if (false) {
+    if (false) {//不同分类分页显示备用
         QVariant var2 = pressApp;
         QString desktopfp2 = var2.value<QString>();
         QFileInfo fileInfo2(desktopfp2);
         QString desktopfn2 = fileInfo2.fileName();
 
         if (module == 0) {
-            releasepos.setX(releasepos.x() + 111);
+            releasepos.setX(releasepos.x() + Style::OtherPageSpace);
         } else {
-            releasepos.setX(releasepos.x() + 60);
+            releasepos.setX(releasepos.x() + Style::FirstPageSpace);
         }
 
         QVariant var3 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//释放位置右侧有应用
@@ -514,9 +514,9 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
         QString desktopfn3 = fileInfo3.fileName();
 
         if (module == 0) {
-            releasepos.setX(releasepos.x() - 222);
+            releasepos.setX(releasepos.x() - (Style::OtherPageSpace * 2));
         } else {
-            releasepos.setX(releasepos.x() - 120);
+            releasepos.setX(releasepos.x() - (Style::FirstPageSpace * 2));
         }
 
         QVariant var4 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//右侧没有左侧有
@@ -619,12 +619,36 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
     } else {
         QFileInfo fileInfo2(pressDesktopfp);
         QString desktopfn2 = fileInfo2.fileName();
-        releasepos.setX(releasepos.x() + 70);
+
+        if (((this->indexAt(releasepos).isValid()) && (module == 0) && ((releasepos.x()) % Style::TabletItemSizeWidthFirst >= Style::FirstPageSpace &&
+                (releasepos.x()) % Style::TabletItemSizeWidthFirst <= Style::FirstPageSpace + Style::AppListIconSize &&
+                releasepos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
+                releasepos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize)) ||
+            ((this->indexAt(releasepos).isValid()) && (module == 1) &&
+             (releasepos.x() % Style::TabletItemSizeWidthOther >= Style::OtherPageSpace &&
+              releasepos.x() % Style::TabletItemSizeWidthOther <= Style::OtherPageSpace + Style::AppListIconSize &&
+              releasepos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
+              releasepos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize))) {
+            return;
+        }
+
+        if (module == 0) {
+            releasepos.setX(releasepos.x() + Style::FirstPageSpace);
+        } else {
+            releasepos.setX(releasepos.x() + Style::OtherPageSpace);
+        }
+
         QVariant var3 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//释放位置右侧有应用
         QString desktopfp3 = var3.value<QString>();//释放位置的应用
         QFileInfo fileInfo3(desktopfp3);
         QString desktopfn3 = fileInfo3.fileName();
-        releasepos.setX(releasepos.x() - 140);
+
+        if (module == 0) {
+            releasepos.setX(releasepos.x() - Style::FirstPageSpace * 2);
+        } else {
+            releasepos.setX(releasepos.x() - Style::OtherPageSpace * 2);
+        }
+
         QVariant var4 = listmodel->data(this->indexAt(releasepos), Qt::DisplayRole);//右侧没有左侧有
         QString desktopfp4 = var4.value<QString>();//释放位置的应用
         QFileInfo fileInfo4(desktopfp4);
@@ -638,7 +662,7 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
             QStringList keyList = setting->allKeys();
 
             if (indexPre > indexRel) {
-                qDebug() << ">";
+                myDebug() << ">";
 
                 for (int i = 0; i < keyList.count(); i++) {
                     if (setting->value(keyList.at(i)).toInt() >= indexRel && setting->value(keyList.at(i)).toInt() < indexPre) {
@@ -647,9 +671,6 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
                 }
 
                 setting->setValue(desktopfn2, indexRel);
-                //                listmodel->removeRow(this->indexAt(pressedpos).row());
-                //                listmodel->insertRow(this->indexAt(releasepos).row());
-                //                listmodel->setData(this->indexAt(releasepos),var2);
             } else if (indexPre < indexRel) {
                 qDebug() << "<";
 
@@ -660,14 +681,11 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
                 }
 
                 setting->setValue(desktopfn2, indexRel - 1);
-                //                listmodel->insertRow(this->indexAt(releasepos).row());
-                //                listmodel->setData(this->indexAt(releasepos),var2);
-                //                listmodel->removeRow(this->indexAt(pressedpos).row());
             }
 
             setting->sync();
             setting->endGroup();
-        } else if (var4.isValid() && desktopfp4 != pressDesktopfp) { //最后一个
+        } else if (var4.isValid() && desktopfp4 != pressDesktopfp) {
             setting->beginGroup("application");
             int indexPre = setting->value(desktopfn2).toInt();
             int indexRel = setting->value(desktopfn4).toInt();
@@ -682,9 +700,6 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
                 }
 
                 setting->setValue(desktopfn2, indexRel);
-                //                listmodel->insertRow(this->indexAt(relpos).row());
-                //                listmodel->setData(this->indexAt(relpos),var2);
-                //                listmodel->removeRow(this->indexAt(prepos).row());
             } else if (indexPre > indexRel) {
                 qDebug() << ">";
 

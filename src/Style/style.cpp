@@ -80,12 +80,16 @@ int Style::AppListFontSize = 0;
 int Style::AppListIconSize = 0;
 int Style::AppListBigIconSize = 0;
 int Style::AppListItemSizeWidth = 0;
+int Style::TabletItemSizeWidthOther = 0;
+int Style::TabletItemSizeWidthFirst = 0;
 int Style::AppListGridSizeWidth = 0;
 int Style::AppLeftSpace = 0;
 int Style::AppTopSpace = 0;
 int Style::AppSpaceBetweenIconText = 0;
 int Style::AppBottomSpace = 0;
 int Style::SliderSize = 0;
+int Style::FirstPageSpace = 0;
+int Style::OtherPageSpace = 0;
 
 //侧边栏primaryScreen
 int Style::SideBarWidWidth = 0;
@@ -538,7 +542,8 @@ void Style::initWidStyle()
         AppListViewLeftMargin = 52;
         AppListViewBottomMargin = 20;
         AppListViewRightMargin = 0;
-        AppListItemSizeWidth = 216;
+        TabletItemSizeWidthFirst = 216;
+        TabletItemSizeWidthOther = 318;
         AppListItemSizeHeight = 270;
         AppTopSpace = 60;
         AppLeftSpace = 60;
@@ -547,5 +552,7 @@ void Style::initWidStyle()
         ButtonWidgetWidth = 56;
         AppListIconSize = 96;
         AppListBigIconSize = 108;
+        FirstPageSpace = 60;
+        OtherPageSpace = 111;
     }
 }

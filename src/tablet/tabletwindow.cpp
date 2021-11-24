@@ -509,12 +509,12 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
         listview->setFixedSize(m_width - 512, m_height - 20);
         firstPageLayout->addWidget(listview);
         m_scrollAreaWidLayout->addWidget(firstPageWidget);
-        listview->setGridSize(QSize(216, (this->height() - 20) / 4));
+        listview->setGridSize(QSize(Style::TabletItemSizeWidthFirst, (this->height() - 20) / 4));
         isFirstPage = false;
     } else {
         listview = new TabletListView(this, 1);
         listview->setFixedSize(m_width, m_height - 20);
-        listview->setGridSize(QSize(318, (this->height() - 20) / 4));
+        listview->setGridSize(QSize(Style::TabletItemSizeWidthOther, (this->height() - 20) / 4));
         m_scrollAreaWidLayout->addWidget(listview);
     }
 
