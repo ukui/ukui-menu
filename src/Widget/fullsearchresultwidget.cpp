@@ -37,36 +37,115 @@ void FullSearchResultWidget::initUi()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground, true);
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    this->setFixedSize(Style::MainViewWidWidth,
-                       Style::AppListWidHeight);
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->setContentsMargins(0, 0, 0, 0);
+    this->setFocusPolicy(Qt::NoFocus);
+    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    mainLayout->setContentsMargins(40, 0, 40, 0);
+    mainLayout->setSpacing(0);
     m_spaceItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Fixed);
     mainLayout->addItem(m_spaceItem);
-    m_listView = new FullListView(this, 3);
-    this->setLayout(mainLayout);
     m_scrollArea = new ScrollArea;
     m_scrollArea->setStyleSheet("background:transparent");
     m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
-    m_scrollArea->setFixedSize(Style::AppListWidWidth, this->height());
+    m_scrollArea->setFixedSize(Style::AppListWidWidth, Style::AppListWidHeight);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
-    m_scrollAreaWidLayout = new QVBoxLayout;
+    m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scrollAreaWidLayout = new QVBoxLayout(m_scrollAreaWid);
     m_scrollAreaWidLayout->setContentsMargins(0, 0, 0, 0);
     m_scrollAreaWidLayout->setSpacing(10);
-    m_scrollAreaWid->setLayout(m_scrollAreaWidLayout);
+    QVBoxLayout *rightButtonLayout = new QVBoxLayout(this);
+    rightButtonLayout->setContentsMargins(0, 0, 0, 20);
+    rightButtonLayout->setSpacing(0);
+    QSpacerItem *m_spaceItem2 = nullptr;
+    m_spaceItem2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    rightButtonLayout->addItem(m_spaceItem2);
+    m_verticalScrollBar = new QScrollBar(m_scrollArea);
+    m_verticalScrollBar->installEventFilter(this);
+    m_verticalScrollBar->setOrientation(Qt::Vertical);
     mainLayout->addWidget(m_scrollArea);
-    m_scrollAreaWidLayout->addWidget(m_listView);
-    m_scrollAreaWidLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    m_data.clear();
-    m_listView->addData(m_data);
+    QSpacerItem *m_spaceItem1 = nullptr;
+    m_spaceItem1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    mainLayout->addItem(m_spaceItem1);
+    m_powerOffButton = new QPushButton(this);
+    m_powerOffButton->setFixedSize(QSize(40, 40));
+    m_powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
+    QIcon icon6;
+    icon6.addFile(QString::fromUtf8(":/data/img/mainviewwidget/icon-电源.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    m_powerOffButton->setIcon(icon6);
+    m_powerOffButton->setIconSize(QSize(28, 28));
+    m_powerOffButton->setFlat(true);
+    m_powerOffButton->setStyleSheet("QPushButton {padding: 0px;}"
+                                    "QPushButton:hover {border-radius:20px; background: rgba(255, 255, 255, 0.2);}"
+                                    "QPushButton:pressed {border-radius:20px; background: rgba(255, 255, 255, 0.3);}");
+    rightButtonLayout->addWidget(m_verticalScrollBar);
+    QSpacerItem *m_spaceItem3 = nullptr;
+    m_spaceItem3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    rightButtonLayout->addItem(m_spaceItem3);
+    rightButtonLayout->addWidget(m_powerOffButton);
+    rightButtonLayout->setAlignment(m_verticalScrollBar, Qt::AlignHCenter);
+    mainLayout->addLayout(rightButtonLayout);
     m_ukuiMenuInterface = new UkuiMenuInterface;
-    m_listView->installEventFilter(this);
-    connect(m_listView, &FullListView::sendItemClickedSignal, this, &FullSearchResultWidget::execApplication);
-    connect(m_listView, &FullListView::sendHideMainWindowSignal, this, &FullSearchResultWidget::sendHideMainWindowSignal);
+    initAppListWidget();
+    fillAppList();
+    m_scrollAreaWid->adjustSize();
+    m_scrollAreaWidHeight = m_scrollAreaWid->height() + 1;
+    initVerticalScrollBar();
+
+    connect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, &FullSearchResultWidget::on_setScrollBarValue);
+    connect(m_verticalScrollBar, &QScrollBar::valueChanged, this, &FullSearchResultWidget::on_setAreaScrollBarValue);
+    connect(m_powerOffButton, &QPushButton::customContextMenuRequested, this, &FullSearchResultWidget::on_powerOffButton_customContextMenuRequested);
+    connect(m_powerOffButton, &QPushButton::clicked, this, &FullSearchResultWidget::on_powerOffButton_clicked);
 }
 
+void FullSearchResultWidget::initVerticalScrollBar()
+{
+    m_verticalScrollBar->setFixedHeight(200);
+    int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
+    if (scrollBarSize >= 200) {
+        m_verticalScrollBar->hide();
+    } else {
+        m_verticalScrollBar->show();
+    }
+    m_scrollBarStyle = QString("QScrollBar:vertical{width: %2px; background: rgba(12, 12, 12, 1); "
+                               "margin: 0px,0px,0px,0px; border-radius: %3px;}"
+                               "QScrollBar::handle:vertical{width: %2px; background: rgba(255, 255, 255, 1);"
+                               "border-radius: %3px; min-height: %1;}"
+                               "QScrollBar::add-line:vertical{ height: 0px; width: 0px; subcontrol-position: bottom;}"
+                               "QScrollBar::sub-line:vertical{ height: 0px; width: 0px; subcontrol-position:top;}").arg(scrollBarSize);
+    m_verticalScrollBar->setStyleSheet(m_scrollBarStyle.arg(4).arg(2));
+}
+
+void FullSearchResultWidget::on_powerOffButton_clicked()
+{
+    QProcess::startDetached(QString("ukui-session-tools"));
+}
+
+void FullSearchResultWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
+{
+    RightClickMenu m_otherMenu(this);
+    m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
+    myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
+}
+
+void FullSearchResultWidget::initAppListWidget()
+{
+    m_listView = new FullListView(this, 0);
+    m_listView->installEventFilter(this);
+    m_scrollAreaWidLayout->addWidget(m_listView);
+    m_listView->setFixedWidth(m_scrollArea->width());
+
+    connect(m_listView, &FullListView::sendItemClickedSignal, this, &FullSearchResultWidget::execApplication);
+    connect(m_listView, &FullListView::sendHideMainWindowSignal, this, &FullSearchResultWidget::sendHideMainWindowSignal);
+    connect(m_listView, &FullListView::sendSetslidebar, this, &FullSearchResultWidget::onSetSlider);
+}
+
+void FullSearchResultWidget::fillAppList()
+{
+    m_data.clear();
+    m_listView->addData(m_data);
+    resizeScrollAreaControls();
+}
 /**
  * 执行应用程序
  */
@@ -86,6 +165,8 @@ void FullSearchResultWidget::updateAppListView(QVector<QStringList> arg)
 
     m_listView->updateData(m_data);
     resizeScrollAreaControls();
+    m_scrollAreaWidHeight  = m_scrollAreaWid->height() + 1;
+    initVerticalScrollBar();
 }
 
 void FullSearchResultWidget::resizeScrollAreaControls()
@@ -94,7 +175,7 @@ void FullSearchResultWidget::resizeScrollAreaControls()
     QWidget *wid = widItem->widget();
     FullListView *listview = qobject_cast<FullListView *>(wid);
     listview->adjustSize();
-    int dividend = (m_scrollArea->width() - Style::SliderSize) / Style::AppListGridSizeWidth;
+    int dividend = m_scrollArea->width() / Style::AppListGridSizeWidth;
     int rowcount = 0;
 
     if (listview->model()->rowCount() % dividend > 0) {
@@ -103,8 +184,8 @@ void FullSearchResultWidget::resizeScrollAreaControls()
         rowcount = listview->model()->rowCount() / dividend;
     }
 
-    listview->setFixedSize(m_scrollArea->width() - Style::SliderSize + 1, listview->gridSize().height()*rowcount);
-    m_scrollArea->widget()->adjustSize();
+    listview->setFixedSize(m_scrollArea->width(), listview->gridSize().height() * rowcount);
+    m_scrollArea->widget()->setFixedSize(listview->size());
 }
 
 bool FullSearchResultWidget::eventFilter(QObject *watched, QEvent *event)
@@ -117,6 +198,15 @@ bool FullSearchResultWidget::eventFilter(QObject *watched, QEvent *event)
                 Q_EMIT setFocusToSideWin();
                 return true;
             }
+        }
+    }
+    if (watched == m_verticalScrollBar) {
+        if (event->type() == QEvent::Enter) {
+            m_verticalScrollBar->setStyleSheet(m_scrollBarStyle.arg(8).arg(4));
+        }
+
+        if (event->type() == QEvent::Leave) {
+            m_verticalScrollBar->setStyleSheet(m_scrollBarStyle.arg(4).arg(2));
         }
     }
 
@@ -132,20 +222,13 @@ void FullSearchResultWidget::selectFirstItemTab()
 
 void FullSearchResultWidget::repaintWidget()
 {
-    this->setFixedSize(Style::MainViewWidWidth,
-                       Style::AppListWidHeight);
-    m_scrollArea->setFixedSize(Style::AppListWidWidth, this->height());
-    //    this->layout()->setContentsMargins(Style::LeftWidWidth,0,0,0);
     m_scrollAreaWidLayout->removeWidget(m_listView);
     m_listView->setParent(nullptr);
     delete m_listView;
-    m_listView = new FullListView(this, 3);
-    m_scrollAreaWidLayout->insertWidget(0, m_listView);
-    m_data.clear();
-    m_listView->addData(m_data);
-    resizeScrollAreaControls();
-    connect(m_listView, &FullListView::sendItemClickedSignal, this, &FullSearchResultWidget::execApplication);
-    connect(m_listView, &FullListView::sendHideMainWindowSignal, this, &FullSearchResultWidget::sendHideMainWindowSignal);
+    initAppListWidget();
+    fillAppList();
+    m_scrollAreaWidHeight  = m_scrollAreaWid->height() + 1;
+    initVerticalScrollBar();
 }
 
 void FullSearchResultWidget::moveScrollBar(int type)
@@ -159,7 +242,29 @@ void FullSearchResultWidget::moveScrollBar(int type)
     }
 }
 
+void FullSearchResultWidget::onSetSlider(int value)
+{
+    myDebug() << value;
+    if (value == 0) {
+        m_scrollArea->verticalScrollBar()->setValue(0);
+    } else {
+        int curvalue = m_scrollArea->verticalScrollBar()->value();
+        m_scrollArea->verticalScrollBar()->setValue(curvalue + value);
+    }
+}
+
 void FullSearchResultWidget::setViewFocus()
 {
     m_listView->setFocus();
+}
+
+void FullSearchResultWidget::on_setScrollBarValue(int value)
+{
+    m_verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::AppListWidHeight);
+    m_verticalScrollBar->setValue(value);
+}
+
+void FullSearchResultWidget::on_setAreaScrollBarValue(int value)
+{
+    m_scrollArea->verticalScrollBar()->setValue(value);
 }

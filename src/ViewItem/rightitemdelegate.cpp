@@ -71,6 +71,10 @@ void RightItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
                     icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
                 } else if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/128x128/apps/%1.%2").arg(iconstr).arg("png"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/128x128/apps/%1.%2").arg(iconstr).arg("png"));
+                } else if (QFile::exists(QString("/usr/share/icons/hicolor/128x128/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                    icon = QIcon(QString("/usr/share/icons/hicolor/128x128/apps/%1.%2").arg(iconstr).arg("svg"));
                 } else if (QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"))) {
                     icon = QIcon(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("png"));
                 } else if (QFile::exists(QString("/usr/share/icons/hicolor/96x96/apps/%1.%2").arg(iconstr).arg("svg"))) {

@@ -32,7 +32,7 @@
 class UkuiMenuInterface
 {
 private:
-    QStringList filePathList;
+    QStringList m_filePathList;
 
     GError **error = nullptr;
     GKeyFileFlags flags = G_KEY_FILE_NONE;

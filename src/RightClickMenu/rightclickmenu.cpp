@@ -174,27 +174,27 @@ void RightClickMenu::attributeActionTriggerSlot()
 
 void RightClickMenu::lockScreenActionTriggerSlot()
 {
-    m_actionNumber = 10;
+    QProcess::startDetached(QString("ukui-screensaver-command -l"));
 }
 
 void RightClickMenu::switchUserActionTriggerSlot()
 {
-    m_actionNumber = 11;
+    QProcess::startDetached(QString("ukui-session-tools --switchuser"));
 }
 
 void RightClickMenu::logoutActionTriggerSlot()
 {
-    m_actionNumber = 12;
+    QProcess::startDetached(QString("ukui-session-tools --logout"));
 }
 
 void RightClickMenu::rebootActionTriggerSlot()
 {
-    m_actionNumber = 13;
+    QProcess::startDetached(QString("ukui-session-tools --reboot"));
 }
 
 void RightClickMenu::shutdownActionTriggerSlot()
 {
-    m_actionNumber = 14;
+    QProcess::startDetached(QString("ukui-session-tools --shutdown"));
 }
 
 void RightClickMenu::otherListActionTriggerSlot()
@@ -204,12 +204,12 @@ void RightClickMenu::otherListActionTriggerSlot()
 
 void RightClickMenu::hibernateActionTriggerSlot()
 {
-    m_actionNumber = 16;
+    QProcess::startDetached(QString("ukui-session-tools --suspend"));
 }
 
 void RightClickMenu::sleepActionTriggerSlot()
 {
-    m_actionNumber = 17;
+    QProcess::startDetached(QString("ukui-session-tools --sleep"));
 }
 
 int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
@@ -281,7 +281,6 @@ int RightClickMenu::showShutdownMenu(const QPoint &pos)
     m_actionNumber = 0;
     MenuBox m_showShutMenu;
     connect(&m_showShutMenu, &MenuBox::sendMainWinActiveSignal, this, &RightClickMenu::sendMainWinActiveSignal);
-    // m_showShutMenu.setWindowFlag(Qt::Popup);
     m_showShutMenu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic", 1)), tr("Sleep"),
                              this, SLOT(hibernateActionTriggerSlot())); //休眠睡眠相同
     m_showShutMenu.addAction(QIcon(getIconPixmap("system-logout-symbolic", 1)), tr("Log Out"),

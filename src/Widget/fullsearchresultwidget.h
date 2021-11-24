@@ -20,6 +20,7 @@
 #define FULLSEARCHRESULTWIDGET_H
 
 #include <QWidget>
+#include <QPushButton>
 #include <QHBoxLayout>
 #include <QTableWidget>
 #include <QDesktopWidget>
@@ -67,12 +68,25 @@ private:
     ScrollAreaWid *m_scrollAreaWid = nullptr;
     QVBoxLayout *m_scrollAreaWidLayout = nullptr;
 
+    QScrollBar *m_verticalScrollBar = nullptr;
+    int m_scrollAreaWidHeight = 0;
+    QString m_scrollBarStyle;
+    QPushButton *m_powerOffButton = nullptr;
+
 protected:
     /**
      * @brief Initializes UI
      */
     void initUi();
+
+    void initAppListWidget();
+
+    void fillAppList();
+
     void resizeScrollAreaControls();
+
+    void initVerticalScrollBar();
+
     bool eventFilter(QObject *watched, QEvent *event);
 
 public Q_SLOTS:
@@ -81,7 +95,18 @@ public Q_SLOTS:
      * @param arg: Desktop file path
      */
     void execApplication(QString desktopfp);
+
     void selectFirstItemTab();
+
+    void on_setScrollBarValue(int value);
+
+    void onSetSlider(int value);
+
+    void on_setAreaScrollBarValue(int value);
+
+    void on_powerOffButton_clicked();
+
+    void on_powerOffButton_customContextMenuRequested(const QPoint &pos);
 
 Q_SIGNALS:
     /**

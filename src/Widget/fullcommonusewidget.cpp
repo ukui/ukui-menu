@@ -112,6 +112,11 @@ void FullCommonUseWidget::initVerticalScrollBar()
 {
     m_verticalScrollBar->setFixedHeight(200);
     int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
+    if (scrollBarSize >= 200) {
+        m_verticalScrollBar->hide();
+    } else {
+        m_verticalScrollBar->show();
+    }
     m_scrollBarStyle = QString("QScrollBar:vertical{width: %2px; background: rgba(12, 12, 12, 1); "
                                "margin: 0px,0px,0px,0px; border-radius: %3px;}"
                                "QScrollBar::handle:vertical{width: %2px; background: rgba(255, 255, 255, 1);"
@@ -129,57 +134,14 @@ void FullCommonUseWidget::on_powerOffButton_clicked()
 void FullCommonUseWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
     RightClickMenu m_otherMenu(this);
-    // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
-    //  Q_EMIT sendShowMainWindowSignal(false);
-    int ret = m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
-    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
-
-    if (ret >= 10 && ret <= 17) {
-        //        Q_EMIT sendHideMainWindowSignal();
-        switch (ret) {
-            case 10:
-                QProcess::startDetached(QString("ukui-screensaver-command -l"));
-                break;
-
-            case 11:
-                QProcess::startDetached(QString("ukui-session-tools --switchuser"));
-                break;
-
-            case 12:
-                QProcess::startDetached(QString("ukui-session-tools --logout"));
-                break;
-
-            case 13:
-                QProcess::startDetached(QString("ukui-session-tools --reboot"));
-                break;
-
-            case 14:
-                QProcess::startDetached(QString("ukui-session-tools --shutdown"));
-                break;
-
-            case 16:
-                QProcess::startDetached(QString("ukui-session-tools --suspend"));
-                break;
-
-            case 17:
-                QProcess::startDetached(QString("ukui-session-tools --sleep"));
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
+    m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
+    myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
 }
 
 void FullCommonUseWidget::initAppListWidget()
 {
     m_listView = new FullListView(this, 0);
     m_listView->installEventFilter(this);
-    //    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
-    //    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
-    //    mainLayout->insertWidget(1,m_listView);
     m_scrollAreaWidLayout->addWidget(m_listView);
     m_listView->setFixedWidth(m_scrollArea->width());
     connect(m_listView, &FullListView::sendItemClickedSignal, this, &FullCommonUseWidget::execApplication);
@@ -203,7 +165,7 @@ void FullCommonUseWidget::resizeScrollAreaControls()
         rowcount = listview->model()->rowCount() / dividend;
     }
 
-    listview->setFixedSize(m_listView->width(), listview->gridSize().height()*rowcount);
+    listview->setFixedSize(m_listView->width(), listview->gridSize().height() * rowcount);
     m_scrollArea->widget()->setFixedSize(listview->size());
 }
 

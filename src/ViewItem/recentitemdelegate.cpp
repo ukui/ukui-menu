@@ -146,21 +146,33 @@ void recentitemdelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
                         icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("svg"));
                     } else if (QFile::exists(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"))) {
                         icon = QIcon(QString("/usr/share/icons/hicolor/scalable/apps/%1.%2").arg(iconstr).arg("png"));
-                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
-                        icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
                     } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"))) {
                         icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("svg"));
+                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"))) {
+                        icon = QIcon(QString("/usr/share/icons/hicolor/32x32/apps/%1.%2").arg(iconstr).arg("png"));
+                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                        icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("svg"));
+                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"))) {
+                        icon = QIcon(QString("/usr/share/icons/hicolor/48x48/apps/%1.%2").arg(iconstr).arg("png"));
+                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"))) {
+                        icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("svg"));
+                    } else if (QFile::exists(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"))) {
+                        icon = QIcon(QString("/usr/share/icons/hicolor/64x64/apps/%1.%2").arg(iconstr).arg("png"));
                     } else if (QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"))) {
                         icon = QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("png"));
                     } else if (QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"))) {
                         icon = QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("svg"));
+                    } else if (QFile::exists(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm"))) {
+                        icon = QIcon(QString("/usr/share/pixmaps/%1.%2").arg(iconstr).arg("xpm"));
+                    } else if (QFile::exists(QString("/usr/share/icons/%1.%2").arg(iconstr).arg("png"))) {
+                        icon = QIcon(QString("/usr/share/icons/%1.%2").arg(iconstr).arg("png"));
                     } else {
                         icon = QIcon::fromTheme(QString("application-x-desktop"));
                     }
                 }
             }
 
-            icon.paint(painter, iconRect, Qt::AlignLeft);
+            icon.paint(painter, iconRect, Qt::AlignCenter);
             QString appname = pUkuiMenuInterface->getAppName(strlist.at(0));
             QFileInfo fileInfo(strlist.at(0));
             QString desktopfn = fileInfo.fileName();

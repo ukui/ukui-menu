@@ -955,46 +955,6 @@ void MainWindow::on_powerOffButton_clicked()
 void MainWindow::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
     RightClickMenu m_otherMenu(this);
-    // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
-    //  Q_EMIT sendShowMainWindowSignal(false);
-    int ret = m_otherMenu.showShutdownMenu(this->mapToGlobal(m_centralwidget->rect().bottomRight()));
+    m_otherMenu.showShutdownMenu(this->mapToGlobal(m_centralwidget->rect().bottomRight()));
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
-
-    if (ret >= 10 && ret <= 17) {
-        //        Q_EMIT sendHideMainWindowSignal();
-        switch (ret) {
-            case 10:
-                QProcess::startDetached(QString("ukui-screensaver-command -l"));
-                break;
-
-            case 11:
-                QProcess::startDetached(QString("ukui-session-tools --switchuser"));
-                break;
-
-            case 12:
-                QProcess::startDetached(QString("ukui-session-tools --logout"));
-                break;
-
-            case 13:
-                QProcess::startDetached(QString("ukui-session-tools --reboot"));
-                break;
-
-            case 14:
-                QProcess::startDetached(QString("ukui-session-tools --shutdown"));
-                break;
-
-            case 16:
-                QProcess::startDetached(QString("ukui-session-tools --suspend"));
-                break;
-
-            case 17:
-                QProcess::startDetached(QString("ukui-session-tools --sleep"));
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
 }

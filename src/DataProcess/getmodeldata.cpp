@@ -147,7 +147,6 @@ QVector<QStringList> GetModelData::getMinFuncData()
     m_classificationList.clear();
     m_classificationBtnRowList.clear();
     QVector<QStringList> vector = UkuiMenuInterface::functionalVector;
-    myDebug() << "功能分类数据列表" << vector;
     QStringList androidlist = vector.at(0);
 
     if (!androidlist.isEmpty()) {

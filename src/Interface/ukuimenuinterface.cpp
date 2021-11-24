@@ -99,7 +99,6 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
             } else {
                 //过滤后缀不是.desktop的文件
                 QString filePathStr = fileInfo.filePath();
-
                 if (!filePathStr.endsWith(".desktop")) {
                     i++;
                     continue;
@@ -157,7 +156,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
                 }
 
                 g_key_file_free(keyfile);
-                filePathList.append(filePathStr);
+                m_filePathList.append(filePathStr);
             }
 
             i++;
@@ -258,7 +257,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
                     }
                 }
 
-                filePathList.append(filePathStr);
+                m_filePathList.append(filePathStr);
             }
 
             i++;
@@ -268,11 +267,11 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
     }
 }
 
-//获取系统deskyop文件路径
+//获取系统desktop文件路径
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
     if (projectCodeName == "V10SP1") {
-        filePathList.clear();
+        m_filePathList.clear();
         QString jsonPath = QDir::homePath() + "/.config/ukui-menu-security-config.json";
         QFile file(jsonPath);
 
@@ -291,11 +290,11 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
 
                     for (int index = 0; index < enArray.size(); index++) {
                         QJsonObject obj = enArray.at(index).toObject();
-                        filePathList.append(obj.value("path").toString());
+                        m_filePathList.append(obj.value("path").toString());
                         //                    qDebug()<<obj.value("path").toString();
                     }
 
-                    return filePathList;
+                    return m_filePathList;
                 } else if (obj.value("mode").toString() == "blacklist") {
                     getAndroidApp();
                     recursiveSearchFile("/usr/share/applications/");
@@ -304,7 +303,7 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
 
                     for (int index = 0; index < enArray.size(); index++) {
                         QJsonObject obj = enArray.at(index).toObject();
-                        filePathList.removeAll(obj.value("path").toString());
+                        m_filePathList.removeAll(obj.value("path").toString());
                         //                    qDebug()<<obj.value("path").toString();
                     }
                 } else {
@@ -319,110 +318,123 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
             recursiveSearchFile("/usr/share/applications/");
         }
 
-        filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
-        filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
-        filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
-        filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
-        filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
-        filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
-        filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
-        filePathList.removeAll("/usr/share/applications/im-config.desktop");
-        filePathList.removeAll("/usr/share/applications/fcitx.desktop");
-        filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
-        filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
-        filePathList.removeAll("/usr/share/applications/info.desktop");
-        filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
-        filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
-        filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
-        filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
-        filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
-        filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
-        filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
-        filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
-        filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
-        filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
-        filePathList.removeAll("/usr/share/applications/mpv.desktop");
-        filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
-        filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
-        filePathList.removeAll("/usr/share/applications/yelp.desktop");
+        m_filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
+        m_filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
+        m_filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
+        m_filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
+        m_filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
+        m_filePathList.removeAll("/usr/share/applications/fcitx.desktop");
+        m_filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
+        m_filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
+        m_filePathList.removeAll("/usr/share/applications/info.desktop");
+        m_filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
+        m_filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
+        m_filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
+        m_filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
+        m_filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
+        m_filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
+        m_filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
+        m_filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
+        m_filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mpv.desktop");
+        m_filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
+        m_filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
+        m_filePathList.removeAll("/usr/share/applications/yelp.desktop");
         //v10
-        filePathList.removeAll("/usr/share/applications/mate-about.desktop");
-        filePathList.removeAll("/usr/share/applications/time.desktop");
-        filePathList.removeAll("/usr/share/applications/network.desktop");
-        filePathList.removeAll("/usr/share/applications/shares.desktop");
-        filePathList.removeAll("/usr/share/applications/mate-power-statistics.desktop");
-        filePathList.removeAll("/usr/share/applications/display-im6.desktop");
-        filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
-        filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
-        filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
-        filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
-        filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
-        return filePathList;
+        m_filePathList.removeAll("/usr/share/applications/time.desktop");
+        m_filePathList.removeAll("/usr/share/applications/network.desktop");
+        m_filePathList.removeAll("/usr/share/applications/shares.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-power-statistics.desktop");
+        m_filePathList.removeAll("/usr/share/applications/display-im6.desktop");
+        m_filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
+        m_filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
+        m_filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
+        m_filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
+        m_filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
+        QStringList desktopList;
+
+        for (int i = 0; i < m_filePathList.count(); ++i) {
+            QString filepath = m_filePathList.at(i);
+            int list_index = filepath.lastIndexOf('/');
+            QString desktopName = filepath.right(filepath.length() - list_index - 1);
+
+            if (desktopList.contains(desktopName)) {
+                m_filePathList.removeAll(filepath);
+                i--;
+            } else {
+                desktopList.append(desktopName);
+            }
+        }
+
+        return m_filePathList;
     } else {
-        filePathList.clear();
+        m_filePathList.clear();
         getAndroidApp();
         recursiveSearchFile("/usr/share/applications/");
-        filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
-        filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
-        filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
-        filePathList.removeAll("/usr/share/applications/blueman-manager.desktop");
-        filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
-        filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
-        filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
-        filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
-        filePathList.removeAll("/usr/share/applications/im-config.desktop");
-        filePathList.removeAll("/usr/share/applications/fcitx.desktop");
-        filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
-        filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
-        filePathList.removeAll("/usr/share/applications/info.desktop");
-        filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
-        filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
-        filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
-        filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
-        filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
-        filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
-        filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
-        filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
-        filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
-        filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
-        filePathList.removeAll("/usr/share/applications/mpv.desktop");
-        filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
-        filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
-        filePathList.removeAll("/usr/share/applications/yelp.desktop");
-        filePathList.removeAll("/usr/share/applications/peony-computer.desktop");
-        filePathList.removeAll("/usr/share/applications/peony-home.desktop");
-        filePathList.removeAll("/usr/share/applications/peony-trash.desktop");
+        m_filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-color-select.desktop");
+        m_filePathList.removeAll("/usr/share/applications/blueman-adapters.desktop");
+        m_filePathList.removeAll("/usr/share/applications/blueman-manager.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-user-guide.desktop");
+        m_filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
+        m_filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
+        m_filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
+        m_filePathList.removeAll("/usr/share/applications/im-config.desktop");
+        m_filePathList.removeAll("/usr/share/applications/fcitx.desktop");
+        m_filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
+        m_filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
+        m_filePathList.removeAll("/usr/share/applications/info.desktop");
+        m_filePathList.removeAll("/usr/share/applications/ukui-power-preferences.desktop");
+        m_filePathList.removeAll("/usr/share/applications/ukui-power-statistics.desktop");
+        m_filePathList.removeAll("/usr/share/applications/software-properties-drivers.desktop");
+        m_filePathList.removeAll("/usr/share/applications/software-properties-gtk.desktop");
+        m_filePathList.removeAll("/usr/share/applications/gnome-session-properties.desktop");
+        m_filePathList.removeAll("/usr/share/applications/org.gnome.font-viewer.desktop");
+        m_filePathList.removeAll("/usr/share/applications/xdiagnose.desktop");
+        m_filePathList.removeAll("/usr/share/applications/gnome-language-selector.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-notification-properties.desktop");
+        m_filePathList.removeAll("/usr/share/applications/transmission-gtk.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mpv.desktop");
+        m_filePathList.removeAll("/usr/share/applications/system-config-printer.desktop");
+        m_filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
+        m_filePathList.removeAll("/usr/share/applications/yelp.desktop");
+        m_filePathList.removeAll("/usr/share/applications/peony-computer.desktop");
+        m_filePathList.removeAll("/usr/share/applications/peony-home.desktop");
+        m_filePathList.removeAll("/usr/share/applications/peony-trash.desktop");
         //filePathList.removeAll("/usr/share/applications/peony.desktop");
         //*过滤*//
-        filePathList.removeAll("/usr/share/applications/recoll-searchgui.desktop");
-        filePathList.removeAll("/usr/share/applications/ukui-about.desktop");
-        filePathList.removeAll("/usr/share/applications/org.gnome.dfeet.desktop");
-        filePathList.removeAll("/usr/share/applications/ukui-feedback.desktop");
-        filePathList.removeAll("/usr/share/applications/users.desktop");
+        m_filePathList.removeAll("/usr/share/applications/recoll-searchgui.desktop");
+        m_filePathList.removeAll("/usr/share/applications/ukui-about.desktop");
+        m_filePathList.removeAll("/usr/share/applications/org.gnome.dfeet.desktop");
+        m_filePathList.removeAll("/usr/share/applications/ukui-feedback.desktop");
+        m_filePathList.removeAll("/usr/share/applications/users.desktop");
         //    filePathList.removeAll("/usr/share/applications/mate-terminal.desktop");
-        filePathList.removeAll("/usr/share/applications/vim.desktop");
-        filePathList.removeAll("/usr/share/applications/mpv.desktop");
-        filePathList.removeAll("/usr/share/applications/engrampa.desktop");
-        filePathList.removeAll("/usr/share/applications/hp-document.desktop");
+        m_filePathList.removeAll("/usr/share/applications/vim.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mpv.desktop");
+        m_filePathList.removeAll("/usr/share/applications/engrampa.desktop");
+        m_filePathList.removeAll("/usr/share/applications/hp-document.desktop");
         //    filePathList.removeAll("/usr/share/applications/kylin-user-guide.desktop");
-        filePathList.removeAll("/usr/share/applications/wps-office-prometheus.desktop");
+        m_filePathList.removeAll("/usr/share/applications/wps-office-prometheus.desktop");
         //    filePathList.removeAll("/usr/share/applications/indicator-china-weather.desktop");    //禁用麒麟天气
         //v10
-        filePathList.removeAll("/usr/share/applications/mate-about.desktop");
-        filePathList.removeAll("/usr/share/applications/time.desktop");
-        filePathList.removeAll("/usr/share/applications/network.desktop");
-        filePathList.removeAll("/usr/share/applications/shares.desktop");
-        filePathList.removeAll("/usr/share/applications/mate-power-statistics.desktop");
-        filePathList.removeAll("/usr/share/applications/display-im6.desktop");
-        filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
-        filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
-        filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
-        filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
-        filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-about.desktop");
+        m_filePathList.removeAll("/usr/share/applications/time.desktop");
+        m_filePathList.removeAll("/usr/share/applications/network.desktop");
+        m_filePathList.removeAll("/usr/share/applications/shares.desktop");
+        m_filePathList.removeAll("/usr/share/applications/mate-power-statistics.desktop");
+        m_filePathList.removeAll("/usr/share/applications/display-im6.desktop");
+        m_filePathList.removeAll("/usr/share/applications/display-im6.q16.desktop");
+        m_filePathList.removeAll("/usr/share/applications/openjdk-8-policytool.desktop");
+        m_filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
+        m_filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
+        m_filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
         /*加入的*/
-        filePathList.append("/usr/share/applications/mate-calc.desktop");
-        filePathList = getInstalledAppList();
-        return filePathList;
+        m_filePathList.append("/usr/share/applications/mate-calc.desktop");
+        m_filePathList = getInstalledAppList();
+        return m_filePathList;
     }
 }
 
@@ -443,10 +455,10 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
     //filePathList;
     QStringList ifFileDesktopList;
     /*新的应用列表*/
-    myDebug() << "sysapplistnum初始化默认应用列表" << filePathList.count();
+    myDebug() << "sysapplistnum初始化默认应用列表" << m_filePathList.count();
 
-    for (int i = 0; i < filePathList.count(); i++) { //过滤 得到真实存在的应用
-        QString tmp = filePathList.at(i);
+    for (int i = 0; i < m_filePathList.count(); i++) { //过滤 得到真实存在的应用
+        QString tmp = m_filePathList.at(i);
         QFileInfo fileInfo(tmp);
 
         if (!fileInfo.isFile()) { //判断是否存在
@@ -499,7 +511,7 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
         }*/
     }
 
-    filePathList.clear();
+    m_filePathList.clear();
     return ifFileDesktopList;
 }
 
@@ -1518,7 +1530,7 @@ void UkuiMenuInterface::getAndroidApp()
             //            }
             //            else
             //            {
-            filePathList.append(filePathStr);
+            m_filePathList.append(filePathStr);
             androidDesktopfnList.append(fileInfo.fileName());
             //            }
         }
