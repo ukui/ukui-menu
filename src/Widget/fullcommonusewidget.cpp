@@ -134,57 +134,14 @@ void FullCommonUseWidget::on_powerOffButton_clicked()
 void FullCommonUseWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
     RightClickMenu m_otherMenu(this);
-    // connect(&m_otherMenu, &RightClickMenu::sendMainWinActiveSignal, this, &SideBarWidget::sendShowMainWindowSignal);
-    //  Q_EMIT sendShowMainWindowSignal(false);
-    int ret = m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
+    m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
     myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
-
-    if (ret >= 10 && ret <= 17) {
-        //        Q_EMIT sendHideMainWindowSignal();
-        switch (ret) {
-            case 10:
-                QProcess::startDetached(QString("ukui-screensaver-command -l"));
-                break;
-
-            case 11:
-                QProcess::startDetached(QString("ukui-session-tools --switchuser"));
-                break;
-
-            case 12:
-                QProcess::startDetached(QString("ukui-session-tools --logout"));
-                break;
-
-            case 13:
-                QProcess::startDetached(QString("ukui-session-tools --reboot"));
-                break;
-
-            case 14:
-                QProcess::startDetached(QString("ukui-session-tools --shutdown"));
-                break;
-
-            case 16:
-                QProcess::startDetached(QString("ukui-session-tools --suspend"));
-                break;
-
-            case 17:
-                QProcess::startDetached(QString("ukui-session-tools --sleep"));
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 结束";
 }
 
 void FullCommonUseWidget::initAppListWidget()
 {
     m_listView = new FullListView(this, 0);
     m_listView->installEventFilter(this);
-    //    m_listView->setFixedSize(this->width()-Style::LeftWidWidth+3,this->height());
-    //    QHBoxLayout *mainLayout=qobject_cast<QHBoxLayout*>(this->layout());
-    //    mainLayout->insertWidget(1,m_listView);
     m_scrollAreaWidLayout->addWidget(m_listView);
     m_listView->setFixedWidth(m_scrollArea->width());
     connect(m_listView, &FullListView::sendItemClickedSignal, this, &FullCommonUseWidget::execApplication);

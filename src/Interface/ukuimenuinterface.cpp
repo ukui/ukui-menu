@@ -99,7 +99,6 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
             } else {
                 //过滤后缀不是.desktop的文件
                 QString filePathStr = fileInfo.filePath();
-
                 if (!filePathStr.endsWith(".desktop")) {
                     i++;
                     continue;
@@ -268,7 +267,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
     }
 }
 
-//获取系统deskyop文件路径
+//获取系统desktop文件路径
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
     if (projectCodeName == "V10SP1") {
@@ -326,7 +325,6 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
         m_filePathList.removeAll("/usr/share/applications/nm-connection-editor.desktop");
         m_filePathList.removeAll("/usr/share/applications/debian-uxterm.desktop");
         m_filePathList.removeAll("/usr/share/applications/debian-xterm.desktop");
-        m_filePathList.removeAll("/usr/share/applications/im-config.desktop");
         m_filePathList.removeAll("/usr/share/applications/fcitx.desktop");
         m_filePathList.removeAll("/usr/share/applications/fcitx-configtool.desktop");
         m_filePathList.removeAll("/usr/share/applications/onboard-settings.desktop");
@@ -346,7 +344,6 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
         m_filePathList.removeAll("/usr/share/applications/org.gnome.DejaDup.desktop");
         m_filePathList.removeAll("/usr/share/applications/yelp.desktop");
         //v10
-        m_filePathList.removeAll("/usr/share/applications/mate-about.desktop");
         m_filePathList.removeAll("/usr/share/applications/time.desktop");
         m_filePathList.removeAll("/usr/share/applications/network.desktop");
         m_filePathList.removeAll("/usr/share/applications/shares.desktop");
