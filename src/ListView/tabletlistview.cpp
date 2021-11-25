@@ -31,7 +31,7 @@
 #define TABLED_SCHEMA "org.ukui.SettingsDaemon.plugins.tablet-mode"
 #define TABLET_MODE                  "tablet-mode"
 /*初始化*/
-TabletListView::TabletListView(QWidget *parent, int module):
+TabletListView::TabletListView(QWidget *parent, int pageNum):
     QListView(parent)
 {
     QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(this);
@@ -40,7 +40,7 @@ TabletListView::TabletListView(QWidget *parent, int module):
     shadowEffect->setBlurRadius(15);
     this->setGraphicsEffect(shadowEffect);
     this->setAcceptDrops(true);
-    this->module = module;
+    this->m_pageNum = pageNum;
     initWidget();
     pUkuiMenuInterface = new UkuiMenuInterface;
     menu = new TabletRightClickMenu;
@@ -158,7 +158,7 @@ void TabletListView::addData(QStringList data)
         listmodel->appendRow(item);
     }
 
-    m_delegate = new TabletFullItemDelegate(this, module);
+    m_delegate = new TabletFullItemDelegate(this, m_pageNum);
     this->setItemDelegate(m_delegate);
 }
 
@@ -174,7 +174,7 @@ void TabletListView::updateData(QStringList data)
         listmodel->appendRow(p_item);
     }
 
-    m_delegate = new TabletFullItemDelegate(this, module);
+    m_delegate = new TabletFullItemDelegate(this, m_pageNum);
     this->setItemDelegate(m_delegate);
 }
 
@@ -312,11 +312,11 @@ void TabletListView::mousePressEvent(QMouseEvent *event)
         //左键
         myDebug() << "左键点击，当前点坐标" << event->pos();
 
-        if (((this->indexAt(event->pos()).isValid()) && (module == 0) && (((pressedpos.x() % Style::TabletItemSizeWidthFirst) >= Style::FirstPageSpace) &&
+        if (((this->indexAt(event->pos()).isValid()) && (m_pageNum == firstPage) && (((pressedpos.x() % Style::TabletItemSizeWidthFirst) >= Style::FirstPageSpace) &&
                 ((pressedpos.x() % Style::TabletItemSizeWidthFirst) <= (Style::FirstPageSpace + Style::AppListIconSize)) &&
                 ((pressedpos.y() % Style::AppListItemSizeHeight) >= Style::AppTopSpace) &&
                 ((pressedpos.y() % Style::AppListItemSizeHeight) <= (Style::AppTopSpace + Style::AppListIconSize)))) ||
-            ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
+            ((this->indexAt(event->pos()).isValid()) && (m_pageNum == otherPage) &&
              (pressedpos.x() % Style::TabletItemSizeWidthOther >= Style::OtherPageSpace &&
               pressedpos.x() % Style::TabletItemSizeWidthOther <= Style::OtherPageSpace + Style::AppListIconSize &&
               pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
@@ -337,11 +337,11 @@ void TabletListView::mousePressEvent(QMouseEvent *event)
         //右键
         myDebug() << "右键点击，当前点坐标" << event->pos();
 
-        if (((this->indexAt(event->pos()).isValid()) && (module == 0) && ((pressedpos.x()) % Style::TabletItemSizeWidthFirst >= Style::FirstPageSpace &&
+        if (((this->indexAt(event->pos()).isValid()) && (m_pageNum == firstPage) && ((pressedpos.x()) % Style::TabletItemSizeWidthFirst >= Style::FirstPageSpace &&
                 (pressedpos.x()) % Style::TabletItemSizeWidthFirst <= Style::FirstPageSpace + Style::AppListIconSize &&
                 pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
                 pressedpos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize)) ||
-            ((this->indexAt(event->pos()).isValid()) && (module == 1) &&
+            ((this->indexAt(event->pos()).isValid()) && (m_pageNum == otherPage) &&
              (pressedpos.x() % Style::TabletItemSizeWidthOther >= Style::OtherPageSpace &&
               pressedpos.x() % Style::TabletItemSizeWidthOther <= Style::OtherPageSpace + Style::AppListIconSize &&
               pressedpos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
@@ -407,7 +407,7 @@ void TabletListView::dragMoveEvent(QDragMoveEvent *event)
         m_flat = false;
         m_time->start(500);
 
-        if (module == 1) {
+        if (m_pageNum == otherPage) {
             if (event->pos().x() >= (1920 - 50) || event->pos().x() <= 50) {
                 if (event->pos().x() <= 50) {
                     Q_EMIT pagenumchanged(false);
@@ -502,7 +502,7 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
         QFileInfo fileInfo2(desktopfp2);
         QString desktopfn2 = fileInfo2.fileName();
 
-        if (module == 0) {
+        if (m_pageNum == firstPage) {
             releasepos.setX(releasepos.x() + Style::OtherPageSpace);
         } else {
             releasepos.setX(releasepos.x() + Style::FirstPageSpace);
@@ -513,7 +513,7 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
         QFileInfo fileInfo3(desktopfp3);
         QString desktopfn3 = fileInfo3.fileName();
 
-        if (module == 0) {
+        if (m_pageNum == firstPage) {
             releasepos.setX(releasepos.x() - (Style::OtherPageSpace * 2));
         } else {
             releasepos.setX(releasepos.x() - (Style::FirstPageSpace * 2));
@@ -620,11 +620,11 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
         QFileInfo fileInfo2(pressDesktopfp);
         QString desktopfn2 = fileInfo2.fileName();
 
-        if (((this->indexAt(releasepos).isValid()) && (module == 0) && ((releasepos.x()) % Style::TabletItemSizeWidthFirst >= Style::FirstPageSpace &&
+        if (((this->indexAt(releasepos).isValid()) && (m_pageNum == firstPage) && ((releasepos.x()) % Style::TabletItemSizeWidthFirst >= Style::FirstPageSpace &&
                 (releasepos.x()) % Style::TabletItemSizeWidthFirst <= Style::FirstPageSpace + Style::AppListIconSize &&
                 releasepos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
                 releasepos.y() % Style::AppListItemSizeHeight <= Style::AppTopSpace + Style::AppListIconSize)) ||
-            ((this->indexAt(releasepos).isValid()) && (module == 1) &&
+            ((this->indexAt(releasepos).isValid()) && (m_pageNum == otherPage) &&
              (releasepos.x() % Style::TabletItemSizeWidthOther >= Style::OtherPageSpace &&
               releasepos.x() % Style::TabletItemSizeWidthOther <= Style::OtherPageSpace + Style::AppListIconSize &&
               releasepos.y() % Style::AppListItemSizeHeight >= Style::AppTopSpace &&
@@ -632,7 +632,7 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
             return;
         }
 
-        if (module == 0) {
+        if (m_pageNum == firstPage) {
             releasepos.setX(releasepos.x() + Style::FirstPageSpace);
         } else {
             releasepos.setX(releasepos.x() + Style::OtherPageSpace);
@@ -643,7 +643,7 @@ void TabletListView::insertApplication(QPoint pressedpos, QPoint releasepos)
         QFileInfo fileInfo3(desktopfp3);
         QString desktopfn3 = fileInfo3.fileName();
 
-        if (module == 0) {
+        if (m_pageNum == firstPage) {
             releasepos.setX(releasepos.x() - Style::FirstPageSpace * 2);
         } else {
             releasepos.setX(releasepos.x() - Style::OtherPageSpace * 2);

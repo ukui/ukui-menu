@@ -176,28 +176,26 @@ void TabletWindow::initUi()
         qDebug() << "error:" << con.lastError().message();
     }
 
-    connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
-
-        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
-        {
-            QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-
-            if (gsetting.keys().contains("winKeyRelease")) {
-                if (gsetting.get(QString("winKeyRelease")).toBool()) {
-                    return;
-                }
-            }
-        }
-        if (QApplication::activeWindow() == this)
-        {
-            myDebug() << "win键触发窗口隐藏事件";
-            this->hide();
-        } else
-        {
-            myDebug() << "win键触发窗口显示事件";
-            this->showPCMenu();
-        }
-    });
+//    connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
+//        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
+//        {
+//            QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
+//            if (gsetting.keys().contains("winKeyRelease")) {
+//                if (gsetting.get(QString("winKeyRelease")).toBool()) {
+//                    return;
+//                }
+//            }
+//        }
+//        if (QApplication::activeWindow() == this)
+//        {
+//            myDebug() << "win键触发窗口隐藏事件";
+//            this->hide();
+//        } else
+//        {
+//            myDebug() << "win键触发窗口显示事件";
+//            this->showPCMenu();
+//        }
+//    });
     //pc下鼠标功能
     XEventMonitor::instance()->start();
     connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
@@ -903,40 +901,37 @@ void TabletWindow::animationValueChangedSlot(const QVariant &value)
 
 void TabletWindow::XkbEventsPress(const QString &keycode)
 {
+    myDebug() << keycode;
     QString KeyName;
 
     if (keycode.length() >= 8) {
         KeyName = keycode.left(8);
     }
 
-    if (KeyName.compare("Super_L+") == 0) {
+    if (KeyName.compare("Super_L+") == 0) {//组合按键
         m_winFlag = true;
     }
 
-    if (m_winFlag && keycode == "Super_L") {
+    if (keycode == "Super_L") {//win键
         m_winFlag = false;
-        return;
     }
 }
 
 void TabletWindow::XkbEventsRelease(const QString &keycode)
 {
-    qDebug() << "触发按键释放";
+    myDebug() << "触发按键释放" << keycode;
     QString KeyName;
-    static bool winFlag = false;
 
     if (keycode.length() >= 8) {
         KeyName = keycode.left(8);
     }
 
     if (KeyName.compare("Super_L+") == 0) {
-        winFlag = true;
+        return;
     }
 
-    if (winFlag && keycode == "Super_L") {
-        winFlag = false;
-        return;
-    } else if (m_winFlag && keycode == "Super_L") {
+    if (KeyName.compare("Super_L+") == 0 ||  //组合释放
+        (m_winFlag && keycode == "Super_L")) { //组合按下单独释放
         return;
     }
 
