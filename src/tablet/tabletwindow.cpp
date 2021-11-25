@@ -926,10 +926,6 @@ void TabletWindow::XkbEventsRelease(const QString &keycode)
         KeyName = keycode.left(8);
     }
 
-    if (KeyName.compare("Super_L+") == 0) {
-        return;
-    }
-
     if (KeyName.compare("Super_L+") == 0 ||  //组合释放
         (m_winFlag && keycode == "Super_L")) { //组合按下单独释放
         return;

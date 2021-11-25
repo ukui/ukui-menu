@@ -40,8 +40,8 @@
 #include "klistview.h"
 
 enum Page {
-    firstPage = 0,
-    otherPage
+    FIRSTPAGE = 0,
+    OTHERPAGE
 };
 
 class TabletListView : public QListView
