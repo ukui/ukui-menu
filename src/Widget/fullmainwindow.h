@@ -31,6 +31,7 @@ Q_SIGNALS:
     void sendSetFocusToFun();
     void sendSetFocusToLet();
     void sendSetFocusToResult();
+    void sendUpdateOtherView();
 
 private Q_SLOTS:
 

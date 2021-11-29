@@ -167,6 +167,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     connect(this, &FullMainWindow::sendSetFocusToFun, fullFunctionPage, &FullFunctionWidget::setFocusToThis);
     connect(this, &FullMainWindow::sendSetFocusToResult, fullResultPage, &FullSearchResultWidget::selectFirstItemTab);
     connect(fullSelectMenuButton, &QToolButton::clicked, this, &FullMainWindow::on_fullSelectMenuButton_clicked);
+    connect(fullCommonPage, &FullCommonUseWidget::sendUpdateOtherView, this, &FullMainWindow::sendUpdateOtherView);
 }
 
 FullMainWindow::~FullMainWindow()
@@ -330,7 +331,7 @@ bool FullMainWindow::event(QEvent *event)
             }
         }
 
-        if(keyEvent->key() == Qt::Key_Escape){
+        if (keyEvent->key() == Qt::Key_Escape) {
             this->hide();
         }
     }
@@ -392,7 +393,8 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
 {
     if (arg1 == m_allAction) {
         fullStackedWidget->setCurrentIndex(0);
-        fullCommonPage->repaintWidget();
+//        fullCommonPage->repaintWidget();
+        fullCommonPage->updateListView();
         m_state = 0;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/fullicon-all.svg"));
         m_allAction->setChecked(true);
@@ -400,7 +402,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_funcAction->setChecked(false);
     } else if (arg1 == m_letterAction) {
         fullStackedWidget->setCurrentIndex(1);
-        fullLetterPage->repaintWidget();
+//        fullLetterPage->repaintWidget();
         m_state = 1;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/全屏 icon-字母排序.svg"));
         m_allAction->setChecked(false);
@@ -408,7 +410,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_funcAction->setChecked(false);
     } else if (arg1 == m_funcAction) {
         fullStackedWidget->setCurrentIndex(2);
-        fullFunctionPage->repaintWidget();
+//        fullFunctionPage->repaintWidget();
         m_state = 2;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/全屏 icon-功能排序.svg"));
         m_allAction->setChecked(false);

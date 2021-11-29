@@ -198,7 +198,6 @@ Q_SIGNALS:
     void selectFirstItem();
 
     void changeScrollValue(int value, int maximumValue);
-
 };
 
 #endif // FULLLETTERWIDGET_H
