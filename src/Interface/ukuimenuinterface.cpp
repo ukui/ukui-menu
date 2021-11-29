@@ -67,6 +67,23 @@ UkuiMenuInterface::~UkuiMenuInterface()
     }
 }
 
+QStringList UkuiMenuInterface::getFunctionClassName()
+{
+    QStringList functionList;
+    functionList.append(QObject::tr("Office"));
+    functionList.append(QObject::tr("Development"));
+    functionList.append(QObject::tr("Image"));
+    functionList.append(QObject::tr("Video"));
+    functionList.append(QObject::tr("Internet"));
+    functionList.append(QObject::tr("Game"));
+    functionList.append(QObject::tr("Education"));
+    functionList.append(QObject::tr("Social"));
+    functionList.append(QObject::tr("System"));
+    functionList.append(QObject::tr("Safe"));
+    functionList.append(QObject::tr("Others"));
+    return functionList;
+}
+
 //文件递归查询
 void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 {
@@ -521,17 +538,21 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
     desktopfpVector.clear();
     QVector<QStringList> appInfoVector;
     QVector<QStringList> vector;
-    vector.append(QStringList() << "Android"); //0安卓
-    vector.append(QStringList() << "Network"); //1网络
-    vector.append(QStringList() << "Messaging"); //2社交
-    vector.append(QStringList() << "Audio" << "Video"); //3影音
-    vector.append(QStringList() << "Development"); //4开发
-    vector.append(QStringList() << "Graphics"); //5图像
-    vector.append(QStringList() << "Game"); //6游戏
-    vector.append(QStringList() << "Office" << "Calculator" << "Spreadsheet" << "Presentation" << "WordProcessor" << "TextEditor"); //7办公
-    vector.append(QStringList() << "Education"); //8教育
-    vector.append(QStringList() << "System" << "Settings" << "Security"); //9系统
+    vector.append(QStringList() << "office" << "Office" << "Calculator" << "Spreadsheet" << "Presentation" << "WordProcessor" << "TextEditor"); //0办公
+    vector.append(QStringList() << "develop" << "Development"); //1开发
+    vector.append(QStringList() << "graphic" << "Graphics"); //2图像
+    vector.append(QStringList() << "video" << "Audio" << "Video"); //3影音
+    vector.append(QStringList() << "network" << "Network"); //4网络
+    vector.append(QStringList() << "game" << "Game"); //5游戏
+    vector.append(QStringList() << "education" << "Education"); //6教育
+    vector.append(QStringList() << "social" << "Messaging"); //7社交
+    vector.append(QStringList() << "system" << "System" << "Settings" << "Security"); //8系统
+    vector.append(QStringList() << "safe"); //9安全
+    vector.append(QStringList() << "others"); //10其他
+
     QStringList desktopfpList = getDesktopFilePath();
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
+    QSqlQuery sql(db);
 
     for (int i = 0; i < desktopfpList.count(); i++) {
         QStringList appInfoList;
@@ -544,19 +565,33 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
             QString letters = getAppNameInitials(desktopfpList.at(i));
             desktopfpVector.append(desktopfp);
             appInfoList << desktopfp << name << englishName << letter << letters;
-            bool is_owned = false;
+            QString desktopfpExecName = getAppExec(desktopfpList.at(i));
+            desktopfpExecName = desktopfpExecName.mid(desktopfpExecName.lastIndexOf("/") + 1);
+            desktopfpExecName = desktopfpExecName.left(desktopfpExecName.lastIndexOf(" "));
+            sql.exec(QString("select name_zh from appCategory where app_name=\"%1\" ").arg(desktopfpExecName));
+            if (sql.next()) {
+                myDebug() << "数据库执行成功";
 
-            for (int j = 0; j < vector.size(); j++) {
-                if (matchingAppCategories(desktopfpList.at(i), vector.at(j))) { //有对应分类
-                    is_owned = true;
-                    appInfoList.append(QString::number(j));
+                for (int j = 0; j < vector.size(); j++) {
+                    if (vector.at(j).contains(sql.value(0).toString())) {
+                        appInfoList.append(QString::number(j));
+                    }
+                }
+            } else {
+                myDebug() << "数据库执行失败";
+                bool is_owned = false;
+
+                for (int j = 0; j < vector.size(); j++) {
+                    if (matchingAppCategories(desktopfpList.at(i), vector.at(j))) { //有对应分类
+                        is_owned = true;
+                        appInfoList.append(QString::number(j));
+                    }
+                }
+
+                if (!is_owned) { //该应用无对应分类
+                    appInfoList.append(QString::number(10));
                 }
             }
-
-            if (!is_owned) { //该应用无对应分类
-                appInfoList.append(QString::number(10));
-            }
-
             appInfoVector.append(appInfoList);
         }
     }

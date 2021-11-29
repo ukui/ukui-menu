@@ -52,21 +52,6 @@ public:
         Checked,
     };
 
-    enum Category {
-        Mobile,
-        Internet,
-        Social,
-        Video,
-        Development,
-        Image,
-        Game,
-        Office,
-        Education,
-        System,
-        Others,
-    };
-    Q_ENUM(Category)
-
     int m_width;
     int m_height;
     int m_iconSize;
@@ -86,7 +71,6 @@ protected:
     void paintEvent(QPaintEvent *e);
     void updateIconState(const State state);
     void updateTextState(const State state);
-    void setLabelText();
 
 Q_SIGNALS:
     void buttonClicked();

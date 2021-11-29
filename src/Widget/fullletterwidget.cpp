@@ -446,19 +446,6 @@ void FullLetterWidget::valueChangedSlot(int value)
             index++;
         }
     }
-
-    //    //向下滚动
-    //    if((m_buttonList.at(index)->pos().y()+m_buttonList.at(index)->height()+m_letterListScrollArea->widget()->pos().y()) >= m_letterListScrollArea->height())
-    //    {
-    //        int val=m_letterListScrollArea->verticalScrollBar()->sliderPosition()+m_buttonList.at(index)->height();
-    //        m_letterListScrollArea->verticalScrollBar()->setSliderPosition(val);
-    //    }
-    //    //向上滚动
-    //    if((m_buttonList.at(index)->pos().y()+m_letterListScrollArea->widget()->pos().y()) <= 0)
-    //    {
-    //        int val=m_letterListScrollArea->verticalScrollBar()->value()-m_buttonList.at(index)->height();
-    //        m_letterListScrollArea->verticalScrollBar()->setSliderPosition(val);
-    //    }
 }
 
 void FullLetterWidget::enterAnimation()

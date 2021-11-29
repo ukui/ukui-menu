@@ -40,21 +40,6 @@ public:
     SplitBarFrame(QWidget *parent, QString category, int width, int height, int module);
     ~SplitBarFrame();
 
-    enum Category {
-        Mobile,
-        Internet,
-        Social,
-        Video,
-        Development,
-        Image,
-        Game,
-        Office,
-        Education,
-        System,
-        Others,
-    };
-    Q_ENUM(Category)
-
 private:
     QString m_category;
     int m_width;
@@ -65,7 +50,6 @@ private:
 
 protected:
     void initAppBtn();
-    void setLabelText();
     void paintEvent(QPaintEvent *event);
 };
 

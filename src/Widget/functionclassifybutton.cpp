@@ -52,7 +52,8 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
         m_textLabel->setPalette(pe);
     }
 
-    setLabelText();
+    m_textLabel->setText(m_category);
+    m_textLabel->setAlignment(Qt::AlignCenter);
 
     if (m_fullscreen) {
         updateIconState(Normal);
@@ -68,10 +69,10 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
     }
 
     QHBoxLayout *mainlayout = new QHBoxLayout;
-    mainlayout->setContentsMargins(Style::LeftSpaceIconLeft, 0, 0, 0);
+    mainlayout->setContentsMargins(0, 0, 0, 0);
     mainlayout->setSpacing(Style::LeftSpaceIconText);
     this->setLayout(mainlayout);
-    mainlayout->addWidget(m_iconLabel);
+//    mainlayout->addWidget(m_iconLabel);
     mainlayout->addWidget(m_textLabel);
     connect(this, &FunctionClassifyButton::toggled, this, &FunctionClassifyButton::reactToToggle);
     connect(this, &FunctionClassifyButton::clicked, this, &FunctionClassifyButton::buttonClickedSlot);
@@ -195,18 +196,18 @@ void FunctionClassifyButton::updateIconState()
             break;
     }
 
-    const auto ratio = devicePixelRatioF();
-    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize * ratio);
-    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+//    const auto ratio = devicePixelRatioF();
+//    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize * ratio);
+//    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
 
-    if (gsetting.get("style-name").toString() == "ukui-light") { //反黑
-        pixmap = drawSymbolicBlackColoredPixmap(pixmap);
-    } else {
-        pixmap = drawSymbolicColoredPixmap(pixmap); //反白
-    }
+//    if (gsetting.get("style-name").toString() == "ukui-light") { //反黑
+//        pixmap = drawSymbolicBlackColoredPixmap(pixmap);
+//    } else {
+//        pixmap = drawSymbolicColoredPixmap(pixmap); //反白
+//    }
 
-    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-    m_iconLabel->setPixmap(pixmap);
+//    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+//    m_iconLabel->setPixmap(pixmap);
 }
 
 void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State state)
@@ -239,23 +240,23 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
             break;
     }
 
-    const auto ratio = devicePixelRatioF();
-    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize * ratio);
+//    const auto ratio = devicePixelRatioF();
+//    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize * ratio);
 
-    if (!m_fullscreen) {
-        QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+//    if (!m_fullscreen) {
+//        QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
 
-        if (gsetting.get("style-name").toString() == "ukui-light") { //反黑
-            pixmap = drawSymbolicBlackColoredPixmap(pixmap);
-        } else {
-            pixmap = drawSymbolicColoredPixmap(pixmap); //反白
-        }
-    } else {
-        pixmap = drawSymbolicColoredPixmap(pixmap);    //反白
-    }
+//        if (gsetting.get("style-name").toString() == "ukui-light") { //反黑
+//            pixmap = drawSymbolicBlackColoredPixmap(pixmap);
+//        } else {
+//            pixmap = drawSymbolicColoredPixmap(pixmap); //反白
+//        }
+//    } else {
+//        pixmap = drawSymbolicColoredPixmap(pixmap);    //反白
+//    }
 
-    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-    m_iconLabel->setPixmap(pixmap);
+//    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+//    m_iconLabel->setPixmap(pixmap);
     updateTextState(state);
 }
 
@@ -289,55 +290,4 @@ void FunctionClassifyButton::updateTextState(const FunctionClassifyButton::State
 
     //    p.setColor(QPalette::Window,Qt::transparent);
     //    m_textLabel->setPalette(p);
-}
-
-void FunctionClassifyButton::setLabelText()
-{
-    QMetaEnum metaEnum = QMetaEnum::fromType<FunctionClassifyButton::Category>();
-
-    switch (metaEnum.keyToValue(m_category.toLocal8Bit().data())) {
-        case Mobile:
-            m_textLabel->setText(tr("Mobile"));
-            break;
-
-        case Internet:
-            m_textLabel->setText(tr("Internet"));
-            break;
-
-        case Social:
-            m_textLabel->setText(tr("Social"));
-            break;
-
-        case Video:
-            m_textLabel->setText(tr("Video"));
-            break;
-
-        case Development:
-            m_textLabel->setText(tr("Development"));
-            break;
-
-        case Image:
-            m_textLabel->setText(tr("Image"));
-            break;
-
-        case Game:
-            m_textLabel->setText(tr("Game"));
-            break;
-
-        case Office:
-            m_textLabel->setText(tr("Office"));
-            break;
-
-        case Education:
-            m_textLabel->setText(tr("Education"));
-            break;
-
-        case System:
-            m_textLabel->setText(tr("System"));
-            break;
-
-        default:
-            m_textLabel->setText(tr("Others"));
-            break;
-    }
 }

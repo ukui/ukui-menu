@@ -33,6 +33,7 @@
 #include "src/Interface/ukuimenuinterface.h"
 #include "src/Search/searchappthread.h"
 #include "src/FileWatcher/directorychangedthread.h"
+#include "src/DataProcess/convertwinidtodesktop.h"
 #include "src/Style/style.h"
 #include "src/UtilityFunction/utility.h"
 #include <QComboBox>
@@ -53,8 +54,6 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 public Q_SLOTS:
-
-    void ViewOpenedSlot(QString desktopfp);
 
 Q_SIGNALS:
 

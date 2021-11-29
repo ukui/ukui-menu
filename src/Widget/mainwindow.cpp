@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     Style::initWidStyle();
-    openDataBase("MainThread");
+    openDataBase("MainThreadDataBase");
     initDatabase();
     this->resize(Style::minw, Style::minh);
     this->setAutoFillBackground(false);
@@ -258,6 +258,17 @@ MainWindow::MainWindow(QWidget *parent) :
     setTabOrder(m_recentPushButton, m_minMaxChangeButton);
     setTabOrder(m_minMaxChangeButton, m_powerOffButton);
     setTabOrder(m_powerOffButton, m_collectListView);
+
+    m_softwareDbThread = new SoftwareDatabaseUpdateThread;
+    //获取软件商店类别信号
+    QDBusConnection::sessionBus().connect("com.kylin.softwarecenter.getsearchresults",
+                                          "/com/kylin/softwarecenter/getsearchresults",
+                                          "com.kylin.getsearchresults",
+                                          "get_app_category_list_signal",
+                                          this,
+                                          SLOT(updateAppCategorySlot(QString))
+                                         );
+
     initUi();
     m_functionBtnWid = new FunctionButtonWidget(m_minFuncPage);
     m_functionBtnWid->hide();
@@ -371,6 +382,15 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(gsetting, &QGSettings::changed,
                 this, &MainWindow::repaintWidget);
     }
+
+    //监控应用进程开启
+    connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [=](WId id) {
+        ConvertWinidToDesktop reply;
+        QString desktopfp = reply.tranIdToDesktop(id);
+        if (!desktopfp.isEmpty()) {
+            ViewOpenedSlot(desktopfp);
+        }
+    });
 }
 
 MainWindow::~MainWindow()
@@ -755,6 +775,27 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
     }
 }
 
+/**
+ * 进程开启监控槽函数
+ */
+void MainWindow::ViewOpenedSlot(QString desktopfp)
+{
+    myDebug() << "open software:" << desktopfp;
+    QVector<QString> desktopfpVec = UkuiMenuInterface::desktopfpVector;
+
+    if (desktopfpVec.contains(desktopfp)) {
+        QFileInfo fileInfo(desktopfp);
+        QString desktopfn = fileInfo.fileName();
+        QString dateTimeKey;
+        dateTimeKey.clear();
+
+        if (!desktopfn.isEmpty()) {
+            updateDataBaseTableTimes(desktopfn);
+            updateView();
+        }
+    }
+}
+
 void MainWindow::recvSearchResult(QVector<QStringList> arg)
 {
     m_searchAppThread->quit();
@@ -837,6 +878,19 @@ void MainWindow::updateView()
     m_minFuncListView->updateData(m_modaldata->getMinFuncData());
     m_minLetterListView->updateData(m_modaldata->getMinLetterData());
     m_fullWindow->updateView();
+}
+
+void MainWindow::updateAppCategorySlot(QString category)
+{
+    m_softwareDbThread->getDatabaseList(category);
+    m_softwareDbThread->start();
+    connect(m_softwareDbThread, &SoftwareDatabaseUpdateThread::updateDatabaseSignal, this, &MainWindow::databaseThreadCloseSlot);
+}
+
+void MainWindow::databaseThreadCloseSlot()
+{
+    m_softwareDbThread->quit();
+    updateView();
 }
 
 void MainWindow::on_collectPushButton_clicked()

@@ -258,7 +258,7 @@ void initDatabase()
 {
     QStringList desktopfnList;
     desktopfnList.clear();
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     sql.exec("select count(*) from sqlite_master where type='table' and name='appInfo'");
 
@@ -296,7 +296,7 @@ void initDatabase()
     bool b = sql.exec("create table if not exists appInfo(desktop char primary key, times int, time int, type int, recent int, num int, collect int)");
 
     Q_FOREACH (QString desktopfn, desktopfnList) {
-        qDebug() << "void initDatabase()" << desktopfn;
+        myDebug() << "void initDatabase()" << desktopfn;
         QDateTime dt = QDateTime::currentDateTime();
         int datetime = dt.toTime_t();
         QString cmd = QString("insert into appInfo values(\"%0\",%1,%2,%3,%4,%5,%6)")
@@ -308,14 +308,30 @@ void initDatabase()
                       .arg(0)
                       .arg(0);
         bool a = sql.exec(cmd);
-        qDebug() << "数据库执行是否成功" << a;
+        myDebug() << "数据库执行是否成功" << a;
     }
+
+    sql.exec("create table appCategory(app_name char primary key, name_en char, name_zh char)");
+    sql.exec("insert into appCategory values('indicator-china-weather', '其他', 'others')");
+    sql.exec("insert into appCategory values('peony', '其他', 'others')");
+    sql.exec("insert into appCategory values('kylin-usb-creator', '其他', 'others')");
+    sql.exec("insert into appCategory values('kylin-burner', '其他', 'others')");
+    sql.exec("insert into appCategory values('sc-reader', '办公', 'office')");
+    sql.exec("insert into appCategory values('kylin-scanner', '办公', 'office')");
+    sql.exec("insert into appCategory values('onboard', '系统', 'system')");
+    sql.exec("insert into appCategory values('evolution', '系统', 'system')");
+    sql.exec("insert into appCategory values('kylin-screenshot', '系统', 'system')");
+    sql.exec("insert into appCategory values('kylin-ipmsg', '网络', 'network')");
+    sql.exec("insert into appCategory values('ksc-defender', '安全', 'safe')");
+    sql.exec("insert into appCategory values('yhkylin-backup-tools', '安全', 'safe')");
+    sql.exec("insert into appCategory values('box-manager', '安全', 'safe')");
+    sql.exec("insert into appCategory values('ukui-system-monitor', '安全', 'safe')");
 }
 
 bool updateDataBaseTableTimes(QString desktopfn)
 {
     bool ret = false;
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd;
     cmd = QString("select times from appInfo where desktop=\"%1\"").arg(desktopfn);
@@ -351,7 +367,7 @@ bool updateDataBaseTableTimes(QString desktopfn)
 bool updateDataBaseCollect(QString desktopfn, int type)
 {
     bool ret = false;
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd;
 
@@ -399,7 +415,7 @@ QStringList getCollectAppList()
 {
     QStringList list;
     int count = 0;
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QSqlQuery sqlque(db);
     QString cmd = QString("select desktop from appInfo where collect!=0 order by collect");
@@ -420,7 +436,7 @@ QStringList getCollectAppList()
 int getCollectAppCount(QString desktopfn)
 {
     int appCount = 0;
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd = QString("select collect from appInfo where desktop=\"%1\"")
                   .arg(desktopfn);
@@ -459,7 +475,7 @@ void changeCollectSort(QString dragDesktopfn, QString dropDesktopfn)
 
 bool checkIfCollected(QString desktopfn)
 {
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd = QString("select collect from appInfo where desktop=\"%1\"")
                   .arg(desktopfn);
@@ -482,7 +498,7 @@ bool checkIfCollected(QString desktopfn)
 bool updateDataBaseTableType(QString desktopfn, int type)
 {
     bool ret = false;
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd;
 
@@ -551,7 +567,7 @@ bool updateDataBaseTableRecent(QString desktopfn)
 
 bool checkIfLocked(QString desktopfn)
 {
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd = QString("select type from appInfo where desktop=\"%1\"")
                   .arg(desktopfn);
@@ -573,7 +589,7 @@ bool checkIfLocked(QString desktopfn)
 
 bool checkIfRecent(QString desktopfn)
 {
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd = QString("select recent from appInfo where desktop=\"%1\"")
                   .arg(desktopfn);
@@ -596,7 +612,7 @@ bool checkIfRecent(QString desktopfn)
 QStringList getLockAppList()
 {
     QStringList list;
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd = QString("select desktop from appInfo where type=1");
 
@@ -612,7 +628,7 @@ QStringList getLockAppList()
 QStringList getUnlockAllList()
 {
     QStringList list;
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
     QString cmd = QString("select desktop from appInfo where type=0 and times>=1 order by times desc");
 
@@ -627,7 +643,7 @@ QStringList getUnlockAllList()
 
 void cleanTimeoutApp()
 {
-    QSqlDatabase db = QSqlDatabase::database("MainThread");
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QDateTime dt = QDateTime::currentDateTime();
     int datetime = dt.toTime_t() - 24 * 60 * 60 * 3;
     QString cmd = QString("select desktop from appInfo where time < %1")

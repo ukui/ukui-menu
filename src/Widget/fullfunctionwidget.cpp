@@ -155,7 +155,7 @@ void FullFunctionWidget::on_powerOffButton_customContextMenuRequested(const QPoi
 {
     RightClickMenu m_otherMenu(this);
     m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
-    qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
+    myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
 
 }
 
@@ -167,81 +167,13 @@ void FullFunctionWidget::fillAppList()
 {
     m_classificationList.clear();
     QVector<QStringList> vector = UkuiMenuInterface::functionalVector;
-    QStringList androidlist = vector.at(0);
+    QStringList functionList = m_ukuiMenuInterface->getFunctionClassName();
 
-    if (!androidlist.isEmpty()) {
-        insertClassificationBtn("Mobile");
-        insertAppList(androidlist);
-    }
-
-    QStringList netlist = vector.at(1);
-
-    if (!netlist.isEmpty()) {
-        insertClassificationBtn("Internet");
-        insertAppList(netlist);
-    }
-
-    QStringList sociallist = vector.at(2);
-
-    if (!sociallist.isEmpty()) {
-        insertClassificationBtn("Social");
-        insertAppList(sociallist);
-    }
-
-    QStringList avlist = vector.at(3);
-
-    if (!avlist.isEmpty()) {
-        insertClassificationBtn("Video");
-        insertAppList(avlist);
-    }
-
-    QStringList developlist = vector.at(4);
-
-    if (!developlist.isEmpty()) {
-        insertClassificationBtn("Development");
-        insertAppList(developlist);
-    }
-
-    QStringList graphicslist = vector.at(5);
-
-    if (!graphicslist.isEmpty()) {
-        insertClassificationBtn("Image");
-        insertAppList(graphicslist);
-    }
-
-    QStringList gamelist = vector.at(6);
-
-    if (!gamelist.isEmpty()) {
-        insertClassificationBtn("Game");
-        insertAppList(gamelist);
-    }
-
-    QStringList officelist = vector.at(7);
-
-    if (!officelist.isEmpty()) {
-        insertClassificationBtn("Office");
-        insertAppList(officelist);
-    }
-
-    QStringList educationlist = vector.at(8);
-
-    if (!educationlist.isEmpty()) {
-        insertClassificationBtn("Education");
-        insertAppList(educationlist);
-    }
-
-    QStringList systemadminlist = vector.at(9);
-
-    if (!systemadminlist.isEmpty()) {
-        insertClassificationBtn("System");
-        insertAppList(systemadminlist);
-    }
-
-    QStringList otherlist = vector.at(10);
-
-    if (!otherlist.isEmpty()) {
-        insertClassificationBtn("Others");
-        insertAppList(otherlist);
+    for (int i = 0; i < vector.size(); i++) {
+        if (!(vector.at(i).isEmpty())) {
+            insertClassificationBtn(functionList.at(i));
+            insertAppList(vector.at(i));
+        }
     }
 
     resizeScrollAreaControls();
