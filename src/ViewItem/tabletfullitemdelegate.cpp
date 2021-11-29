@@ -216,6 +216,6 @@ QSize TabletFullItemDelegate::sizeHint(const QStyleOptionViewItem &option, const
     //    {
     //        return QSize(0,0);
     //    }
-    return QSize(Style::AppListItemSizeWidth, Style::AppListItemSizeHeight);
+    return QSize(Style::TabletItemSizeWidthFirst, Style::AppListItemSizeHeight);
 }
 

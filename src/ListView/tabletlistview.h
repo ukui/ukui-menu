@@ -39,11 +39,16 @@
 #include "src/RightClickMenu/tabletrightclickmenu.h"
 #include "klistview.h"
 
+enum Page {
+    FIRSTPAGE = 0,
+    OTHERPAGE
+};
+
 class TabletListView : public QListView
 {
     Q_OBJECT
 public:
-    TabletListView(QWidget *parent, int module);
+    TabletListView(QWidget *parent, int pageNum);
     ~TabletListView();
 
     void addData(QStringList data);//字母排序模块添加数据
@@ -80,13 +85,7 @@ private:
     TabletFullItemDelegate *m_delegate = nullptr;
     QStringList data;
     UkuiMenuInterface *pUkuiMenuInterface = nullptr;
-    int module = 0;
-
-
-    int appLine;//null
-    int appColumn;//null
-    int pageNum;//null
-
+    int m_pageNum = 0;
 
     /*鼠标事件的参数变量*/
     int dist;//翻页的鼠标移动长度

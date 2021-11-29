@@ -143,12 +143,16 @@ public:
     static int AppListIconSize; //图标大小
     static int AppListBigIconSize;
     static int AppListItemSizeWidth; //item大小
+    static int TabletItemSizeWidthFirst;
+    static int TabletItemSizeWidthOther;
     static int AppListGridSizeWidth; //网格大小
     static int AppLeftSpace;//左侧边距
     static int AppTopSpace;//上侧边距
     static int AppSpaceBetweenIconText;//图标与文字边距
     static int AppBottomSpace;//下侧边距
     static int SliderSize; //滑块大小
+    static int FirstPageSpace;
+    static int OtherPageSpace;
 
     /**
      * 侧边栏
