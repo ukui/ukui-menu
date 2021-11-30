@@ -49,7 +49,6 @@ QString ConvertWinidToDesktop::confirmDesktopFile(KWindowInfo info)
 
     //第一种方法：获取点击应用时大部分desktop文件名
     searchFromEnviron(info);
-
     //第二种方法：比较名字一致性
     if (m_desktopfilePath.isEmpty()) {
         m_classClass = info.windowClassClass().toLower();
@@ -72,7 +71,6 @@ QString ConvertWinidToDesktop::confirmDesktopFile(KWindowInfo info)
         }
         compareClassName();
     }
-
     //第三种方法：比较cmd命令行操作一致性
     if (m_desktopfilePath.isEmpty()) {
         QFile file(QString("/proc/%1/cmdline").arg(info.pid()));
@@ -85,9 +83,8 @@ QString ConvertWinidToDesktop::confirmDesktopFile(KWindowInfo info)
         }
         compareCmdExec();
     }
-
     //第四种方法：匹配部分字段
-    if (m_desktopfilePath.isEmpty()) {
+    if (m_desktopfilePath.isEmpty() && (!m_className.isEmpty())) {
         compareLastStrategy();
     }
     return m_desktopfilePath;
@@ -115,6 +112,7 @@ void ConvertWinidToDesktop::searchAndroidApp(KWindowInfo info)
         desktopName = desktopName.left(desktopName.lastIndexOf("."));
         if(desktopName == cmdList.at(10)){
             m_desktopfilePath = fileInfo.filePath();
+            break;
         }
     }
 }
@@ -140,6 +138,7 @@ void ConvertWinidToDesktop::searchFromEnviron(KWindowInfo info)
             QFileInfo fileInfo = m_list.at(i);;
             if (fileInfo.filePath() == DEKSTOP_FILE_PATH + m_desktopfilePath) {
                 m_desktopfilePath = fileInfo.filePath();
+                break;
             }
         }
     }
@@ -158,6 +157,7 @@ void ConvertWinidToDesktop::compareClassName()
         path_desktop_name = path_desktop_name.left(path_desktop_name.lastIndexOf("."));
         if (path_desktop_name == m_classClass || path_desktop_name == m_className || path_desktop_name == m_statusName)  {
             m_desktopfilePath = fileInfo.filePath();
+            break;
         }
     }
 }
@@ -179,6 +179,7 @@ void ConvertWinidToDesktop::compareCmdExec()
 
         if (desktopFileExeName == m_cmdLine || desktopFileExeName.startsWith(m_cmdLine) || m_cmdLine.startsWith(desktopFileExeName)) {
             m_desktopfilePath = fileInfo.filePath();
+            break;
         }
 
         //仅仅是为了适配微信
@@ -186,6 +187,7 @@ void ConvertWinidToDesktop::compareCmdExec()
             desktopFileExeName = "/usr/lib/" + desktopFileExeName;
             if (desktopFileExeName == m_cmdLine || desktopFileExeName.startsWith(m_cmdLine) || m_cmdLine.startsWith(desktopFileExeName)) {
                 m_desktopfilePath = fileInfo.filePath();
+                break;
             }
         }
     }
@@ -195,7 +197,6 @@ void ConvertWinidToDesktop::compareCmdExec()
 void ConvertWinidToDesktop::compareLastStrategy()
 {
     compareCmdName();
-
     if (m_desktopfilePath.isEmpty()) {
         compareDesktopClass();
     }
@@ -222,6 +223,7 @@ void ConvertWinidToDesktop::compareCmdName()
 
         if (desktopFileExeName.startsWith(m_className) || desktopFileExeName.endsWith(m_className)) {
             m_desktopfilePath = fileInfo.filePath();
+            break;
         }
     }
 }
@@ -239,9 +241,11 @@ void ConvertWinidToDesktop::compareDesktopClass()
 
         if (path_desktop_name.startsWith(m_className) || path_desktop_name.endsWith(m_className)) {
             m_desktopfilePath = fileInfo.filePath();
+            break;
         }
         else if (m_className.startsWith(path_desktop_name) || m_className.endsWith(path_desktop_name)) {
             m_desktopfilePath = fileInfo.filePath();
+            break;
         }
     }
 }
@@ -265,6 +269,7 @@ void ConvertWinidToDesktop::containsName()
 
         if (path_desktop_name.contains(m_className) || desktopFileExeName.contains(m_className)) {
             m_desktopfilePath = fileInfo.filePath();
+            break;
         }
     }
 }

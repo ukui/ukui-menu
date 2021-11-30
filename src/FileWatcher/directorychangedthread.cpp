@@ -58,6 +58,8 @@ void DirectoryChangedThread::run()
         }
     }
 
+    myDebug() << "DirectoryChangedThread::run()";
+
     UkuiMenuInterface::appInfoVector.clear();
     UkuiMenuInterface::alphabeticVector.clear();
     UkuiMenuInterface::functionalVector.clear();

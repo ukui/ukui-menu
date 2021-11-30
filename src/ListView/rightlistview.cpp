@@ -53,7 +53,6 @@ void RightListView::initWidget()
     this->setGridSize(QSize(107, 107));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);//移除边框
-    this->setStyleSheet(QString::fromUtf8("QStandardItemModel#listmodel{border:3px solid #FFFFFF; }QWidget#widget:focus{ border:5px solid #A5A6A1;  } "));
     connect(this, &RightListView::customContextMenuRequested, this, &RightListView::rightClickedSlot);
     connect(this, &RightListView::clicked, this, &RightListView::onClicked);
 }

@@ -97,7 +97,6 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
         dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
         dir.setSorting(QDir::DirsFirst);
         QFileInfoList list = dir.entryInfoList();
-        list.removeAll(QFileInfo("/usr/share/applications/screensavers"));
 
         if (list.size() < 1) {
             return;

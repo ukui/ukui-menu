@@ -138,6 +138,7 @@ void TabletDirectoryChangedThread::run()
         }
     }
 
+    myDebug() << "卸载！！！";
     UkuiMenuInterface::appInfoVector.clear();
     UkuiMenuInterface::appInfoVector = m_ukuiMenuInterface->createAppInfoVector();
     Q_EMIT requestUpdateSignal(m_desktopfp);
