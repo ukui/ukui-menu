@@ -408,17 +408,17 @@ void TabletListView::dragMoveEvent(QDragMoveEvent *event)
         m_time->start(500);
 
         if (m_pageNum == OTHERPAGE) {
-            if (event->pos().x() >= (1920 - 50) || event->pos().x() <= 50) {
-                if (event->pos().x() <= 50) {
+            if (event->pos().x() >= (Style::OtherPageViewWidth - (Style::OtherPageSpace / 2)) || event->pos().x() <= (Style::OtherPageSpace / 2)) {
+                if (event->pos().x() <= (Style::OtherPageSpace / 2)) {
                     Q_EMIT pagenumchanged(false);
                 }
 
-                if (event->pos().x() >= (1920 - 50)) {
+                if (event->pos().x() >= (Style::OtherPageViewWidth - (Style::OtherPageSpace / 2))) {
                     Q_EMIT pagenumchanged(true);
                 }
             }
         } else {
-            if (event->pos().x() >= (1920 - 620)) {
+            if (event->pos().x() >= (Style::FirsPageViewWidth - (Style::FirstPageSpace / 2))) {
                 Q_EMIT pagenumchanged(true);
             }
         }
