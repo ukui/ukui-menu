@@ -25,17 +25,18 @@
 FunctionButtonWidget::FunctionButtonWidget(QWidget *parent) :
     QWidget(parent)
 {
-    m_categoryList.append("Mobile");
-    m_categoryList.append("Internet");
-    m_categoryList.append("Social");
-    m_categoryList.append("Video");
-    m_categoryList.append("Development");
-    m_categoryList.append("Image");
-    m_categoryList.append("Game");
-    m_categoryList.append("Office");
-    m_categoryList.append("Education");
-    m_categoryList.append("System");
-    m_categoryList.append("Others");
+    m_categoryList.clear();
+    m_categoryList.append(QObject::tr("Office"));
+    m_categoryList.append(QObject::tr("Development"));
+    m_categoryList.append(QObject::tr("Image"));
+    m_categoryList.append(QObject::tr("Video"));
+    m_categoryList.append(QObject::tr("Internet"));
+    m_categoryList.append(QObject::tr("Game"));
+    m_categoryList.append(QObject::tr("Education"));
+    m_categoryList.append(QObject::tr("Social"));
+    m_categoryList.append(QObject::tr("System"));
+    m_categoryList.append(QObject::tr("Safe"));
+    m_categoryList.append(QObject::tr("Others"));
     initUi();
 }
 
@@ -88,7 +89,7 @@ void FunctionButtonWidget::initUi()
 void FunctionButtonWidget::functionBtnClickedSlot()
 {
     FunctionClassifyButton *btn = dynamic_cast<FunctionClassifyButton *>(sender());
-    QWidget *wid = btn->layout()->itemAt(1)->widget();
+    QWidget *wid = btn->layout()->itemAt(0)->widget();
     QLabel *label = qobject_cast<QLabel *>(wid);
     Q_EMIT sendFunctionBtnSignal(label->text());
 }

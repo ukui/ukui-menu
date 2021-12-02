@@ -64,9 +64,11 @@ FORMS +=
 HEADERS += \
     src/DBus/dbus-adaptor.h \
     src/DBus/dbus.h \
+    src/DataProcess/convertwinidtodesktop.h \
     src/DataProcess/getmodeldata.h \
     src/FileWatcher/desktopwatcher.h \
     src/FileWatcher/directorychangedthread.h \
+    src/FileWatcher/softwaredatabaseupdatethread.h \
     src/FileWatcher/tabletdirectorychangedthread.h \
     src/Interface/currenttimeinterface.h \
     src/Interface/ukuichineseletter.h \
@@ -124,9 +126,11 @@ SOURCES += \
     main.cpp \
     src/DBus/dbus-adaptor.cpp \
     src/DBus/dbus.cpp \
+    src/DataProcess/convertwinidtodesktop.cpp \
     src/DataProcess/getmodeldata.cpp \
     src/FileWatcher/desktopwatcher.cpp \
     src/FileWatcher/directorychangedthread.cpp \
+    src/FileWatcher/softwaredatabaseupdatethread.cpp \
     src/FileWatcher/tabletdirectorychangedthread.cpp \
     src/Interface/currenttimeinterface.cpp \
     src/Interface/ukuichineseletter.cpp \

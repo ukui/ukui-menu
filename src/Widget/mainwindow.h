@@ -34,11 +34,13 @@
 #include <QSettings>
 #include <QPropertyAnimation>
 #include <QFileInfo>
+#include "src/DataProcess/convertwinidtodesktop.h"
 #include "src/Style/style.h"
 #include "src/Widget/mainviewwidget.h"
 #include "src/Widget/tabviewwidget.h"
 #include "src/DBus/dbus.h"
 #include "src/DBus/dbus-adaptor.h"
+#include "src/FileWatcher/softwaredatabaseupdatethread.h"
 #include <KWindowEffects>
 #include <QTabWidget>
 #include <QSpacerItem>
@@ -90,6 +92,8 @@ protected:
 
     void recvSearchResult(QVector<QStringList> arg);
 
+    void ViewOpenedSlot(QString desktopfp);
+
     bool eventFilter(QObject *target, QEvent *event);
 
     //    void mouseReleaseEvent(QMouseEvent *event);
@@ -110,6 +114,8 @@ public Q_SLOTS:
     void primaryScreenChangeSlot();
     void repaintWidget();
     void updateRecentView();
+    void updateAppCategorySlot(QString category);
+    void databaseThreadCloseSlot();
 
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
@@ -200,6 +206,7 @@ private:
     int m_widgetState = -1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;
     LetterButtonWidget *m_letterBtnWid = nullptr;
+    SoftwareDatabaseUpdateThread *m_softwareDbThread = nullptr;
 };
 
 #endif // MAINWINDOW_H

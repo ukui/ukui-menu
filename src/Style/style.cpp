@@ -70,7 +70,6 @@ int Style::LeftLetterBtnHeight = 0;
 int Style::LeftFontSize = 0;
 int Style::LeftLetterFontSize = 0;
 int Style::LeftIconSize = 0;
-int Style::LeftSpaceIconLeft = 0;
 int Style::LeftSpaceIconText = 0;
 int Style::LeftSpaceBetweenItem = 0;
 //应用列表栏
@@ -211,7 +210,6 @@ void Style::initWidStyle()
             LeftFontSize = fontSize;
             LeftLetterFontSize = 14;
             LeftIconSize = 19;
-            LeftSpaceIconLeft = 15;
             LeftSpaceIconText = 14;
             LeftSpaceBetweenItem = 15;
             AppListFontSize = fontSize;
@@ -253,7 +251,6 @@ void Style::initWidStyle()
             LeftFontSize = fontSize;
             LeftLetterFontSize = 14;
             LeftIconSize = 19;
-            LeftSpaceIconLeft = 15;
             LeftSpaceIconText = 14;
             LeftSpaceBetweenItem = 15;
             AppListFontSize = fontSize;
@@ -295,7 +292,6 @@ void Style::initWidStyle()
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
-            LeftSpaceIconLeft = 15;
             LeftSpaceIconText = 14;
             LeftSpaceBetweenItem = 10;
             AppListFontSize = fontSize;
@@ -337,7 +333,6 @@ void Style::initWidStyle()
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
-            LeftSpaceIconLeft = 15;
             LeftSpaceIconText = 14;
             LeftSpaceBetweenItem = 10;
             AppListFontSize = fontSize;
@@ -379,7 +374,6 @@ void Style::initWidStyle()
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
-            LeftSpaceIconLeft = 15;
             LeftSpaceIconText = 14;
             LeftSpaceBetweenItem = 10;
             AppListFontSize = fontSize;
@@ -421,7 +415,6 @@ void Style::initWidStyle()
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
-            LeftSpaceIconLeft = 15;
             LeftSpaceIconText = 14;
             LeftSpaceBetweenItem = 10;
             AppListFontSize = fontSize;
@@ -463,7 +456,6 @@ void Style::initWidStyle()
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
-            LeftSpaceIconLeft = 15;
             LeftSpaceIconText = 14;
             LeftSpaceBetweenItem = 10;
             AppListFontSize = fontSize;
@@ -505,7 +497,6 @@ void Style::initWidStyle()
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
-            LeftSpaceIconLeft = 15;
             LeftSpaceIconText = 14;
             LeftSpaceBetweenItem = 10;
             AppListFontSize = fontSize;

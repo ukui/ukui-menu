@@ -68,23 +68,3 @@ void MainViewWidget::paintEvent(QPaintEvent *event)
     //  KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     QWidget::paintEvent(event);
 }
-
-/**
- * 进程开启监控槽函数
- */
-void MainViewWidget::ViewOpenedSlot(QString desktopfp)
-{
-    qDebug() << "open software:" << desktopfp;
-    QVector<QString> desktopfpVec = UkuiMenuInterface::desktopfpVector;
-
-    if (desktopfpVec.contains(desktopfp)) {
-        QFileInfo fileInfo(desktopfp);
-        QString desktopfn = fileInfo.fileName();
-        QString dateTimeKey;
-        dateTimeKey.clear();
-
-        if (!desktopfn.isEmpty()) {
-            updateDataBaseTableTimes(desktopfn);
-        }
-    }
-}

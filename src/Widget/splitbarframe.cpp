@@ -47,11 +47,7 @@ void SplitBarFrame::initAppBtn()
     m_textLabel->setAutoFillBackground(false);
     m_textLabel->setAlignment(Qt::AlignCenter);
 
-    if (m_module == 1) {
-        m_textLabel->setText(m_category);
-    } else {
-        setLabelText();
-    }
+    m_textLabel->setText(m_category);
 
     m_textLabel->adjustSize();
     QPalette pe = m_textLabel->palette();
@@ -69,57 +65,6 @@ void SplitBarFrame::initAppBtn()
     this->setLayout(layout);
     layout->addWidget(m_textLabel);
     layout->addWidget(m_line);
-}
-
-void SplitBarFrame::setLabelText()
-{
-    QMetaEnum metaEnum = QMetaEnum::fromType<SplitBarFrame::Category>();
-
-    switch (metaEnum.keyToValue(m_category.toLocal8Bit().data())) {
-        case Mobile:
-            m_textLabel->setText(tr("Mobile"));
-            break;
-
-        case Internet:
-            m_textLabel->setText(tr("Internet"));
-            break;
-
-        case Social:
-            m_textLabel->setText(tr("Social"));
-            break;
-
-        case Video:
-            m_textLabel->setText(tr("Video"));
-            break;
-
-        case Development:
-            m_textLabel->setText(tr("Development"));
-            break;
-
-        case Image:
-            m_textLabel->setText(tr("Image"));
-            break;
-
-        case Game:
-            m_textLabel->setText(tr("Game"));
-            break;
-
-        case Office:
-            m_textLabel->setText(tr("Office"));
-            break;
-
-        case Education:
-            m_textLabel->setText(tr("Education"));
-            break;
-
-        case System:
-            m_textLabel->setText(tr("System"));
-            break;
-
-        default:
-            m_textLabel->setText(tr("Others"));
-            break;
-    }
 }
 
 void SplitBarFrame::paintEvent(QPaintEvent *event)

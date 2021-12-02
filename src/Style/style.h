@@ -62,7 +62,6 @@
 //#define LeftMarginLeftSize Leftmarginleftsize //内左侧边距
 //#define LeftFontSize leftfontsize //字体大小
 //#define LeftIconSize lefticonsize //图标大小
-//#define LeftSpaceIconLeft leftspaceiconleft //按钮内左侧边距
 //#define LeftSpaceIconText leftspaceicontext //按钮图标与文字内边距
 //#define LeftSpaceBetweenItem leftspacebetweenitem //item间距
 
@@ -133,7 +132,6 @@ public:
     static int LeftFontSize; //字体大小
     static int LeftLetterFontSize; //字体大小
     static int LeftIconSize; //图标大小
-    static int LeftSpaceIconLeft; //按钮内左侧边距
     static int LeftSpaceIconText; //按钮图标与文字内边距
     static int LeftSpaceBetweenItem; //item间距
     //应用列表栏

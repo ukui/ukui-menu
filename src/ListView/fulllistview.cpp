@@ -55,7 +55,7 @@ void FullListView::initWidget()
     this->setGridSize(QSize(Style::AppListGridSizeWidth, Style::AppListGridSizeWidth));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);//移除边框
-    this->setStyleSheet(QString::fromUtf8("QStandardItemModel#listmodel{border:3px solid #FFFFFF; }QWidget#widget:focus{ border:5px solid #A5A6A1;  } "));
+    //this->setStyleSheet(QString::fromUtf8("QStandardItemModel#listmodel{border:3px solid #FFFFFF; }QWidget#widget:focus{ border:5px solid #A5A6A1;  } "));
     connect(this, &FullListView::customContextMenuRequested, this, &FullListView::rightClickedSlot);
     connect(this, &FullListView::clicked, this, &FullListView::onClicked);
 }

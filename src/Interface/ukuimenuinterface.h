@@ -71,7 +71,8 @@ public:
     QString getAppExec(QString desktopfp);//获取应用命令
     QString getAppType(QString desktopfp);//获取应用类型
     QString getAppComment(QString desktopfp);//获取应用注释
-    QStringList getDesktopFilePath();//获取系统deskyop文件路径
+    QStringList getDesktopFilePath();//获取系统desktop文件路径
+    QStringList getFunctionClassName();//获取功能类别名称
     QVector<QString> getCollectApp();//获取收藏应用
     QVector<QStringList> getAlphabeticClassification();//字母分类模块
     QVector<QStringList> getFunctionalClassification();//功能分类模块
