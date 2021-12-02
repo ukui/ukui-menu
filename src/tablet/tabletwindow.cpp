@@ -763,7 +763,10 @@ void TabletWindow::backgroundPic()   //const QString &bgPath,QRect rect
         //qDebug() << "---------" << "stretched" << "----------";
         painter.drawPixmap(this->rect(), *m_backPixmap);
     } else if (m_bgOption == "scaled") {
+        painter.setPen(QColor(0, 0, 0, 64));
+        painter.setBrush(QColor(0, 0, 0, 64));
         painter.drawPixmap(this->geometry(), getPaddingPixmap(*m_backPixmap, this->size().width(), this->size().height()));
+        painter.drawRect(this->geometry());
     } else if (m_bgOption == "wallpaper") {
         //qDebug() << "---------" << "wallpaper" << "----------";
         int drawedWidth = 0;
