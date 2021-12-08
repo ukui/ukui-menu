@@ -550,7 +550,7 @@ void Style::initWidStyle()
         AppListBigIconSize = 108;
         AppTopSpace = (AppListItemSizeHeight - AppListIconSize) / 2;
         AppLeftSpace = (TabletItemSizeWidthFirst - AppListIconSize) / 2;
-        TimeWidgetTop = (CenterWindHeight - 918);
+        TimeWidgetTop = (CenterWindHeight - 870) / 2;
         TimeWidgetLeft = (LeftWidWidth - 400) / 2;
         FirstPageSpace = AppLeftSpace;
         OtherPageSpace = (TabletItemSizeWidthOther - AppListIconSize) / 2;
