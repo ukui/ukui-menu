@@ -133,6 +133,7 @@ Q_SIGNALS:
     void sendHideMainWindowSignal();
     void changeScrollValue(int value, int maximumValue);
     void setFocusToSideWin();
+    void sendUpdateOtherView();
 };
 
 #endif // FULLCOMMONUSEWIDGET_H
