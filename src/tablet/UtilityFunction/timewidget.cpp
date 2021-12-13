@@ -251,17 +251,11 @@ void TimeWidget::setDownOpacityEffect(const qreal &num)
 
 void TimeWidget::obtainSearchResult()
 {
-    //获取搜索框内容
-    //    QString searchContent= searchEdit->text();
-    Q_EMIT hideTabletWindow();
-    QProcess p;
-    p.setProgram(QString("ukui-search"));
-    p.startDetached(p.program());
-    //    p.setArguments(QStringList()<<QString("%1").arg(searchContent));
-    //    p.startDetached(p.program(),p.arguments());
-    //    p.setArguments(QStringList()<<QString("search:///search_uris=file:///&name_regexp=%1&recursive=1").arg(searchContent));
-    //    p.startDetached(p.program(), p.arguments());
-    //    p.waitForFinished(-1);
+    QDBusInterface iface("com.ukui.search.service",
+                         "/",
+                         "org.ukui.search.service",
+                         QDBusConnection::sessionBus());
+    QDBusReply<QVariantList> reply = iface.call("showWindow");
 }
 
 //搜索框适配主题
