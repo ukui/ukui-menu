@@ -255,7 +255,10 @@ void TimeWidget::obtainSearchResult()
                          "/",
                          "org.ukui.search.service",
                          QDBusConnection::sessionBus());
-    QDBusReply<QVariantList> reply = iface.call("showWindow");
+
+    if (iface.isValid()) {
+        iface.call("showWindow");
+    }
 }
 
 //搜索框适配主题

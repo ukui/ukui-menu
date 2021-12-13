@@ -258,7 +258,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setTabOrder(m_recentPushButton, m_minMaxChangeButton);
     setTabOrder(m_minMaxChangeButton, m_powerOffButton);
     setTabOrder(m_powerOffButton, m_collectListView);
-
     m_softwareDbThread = new SoftwareDatabaseUpdateThread;
     //获取软件商店类别信号
     QDBusConnection::sessionBus().connect("com.kylin.softwarecenter.getsearchresults",
@@ -268,7 +267,6 @@ MainWindow::MainWindow(QWidget *parent) :
                                           this,
                                           SLOT(updateAppCategorySlot(QString))
                                          );
-
     initUi();
     m_functionBtnWid = new FunctionButtonWidget(m_minFuncPage);
     m_functionBtnWid->hide();
@@ -378,8 +376,8 @@ MainWindow::MainWindow(QWidget *parent) :
                 this, &MainWindow::repaintWidget);
     }
 
-    QGSettings * gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
-    connect(gsetting, &QGSettings::changed,[=](QString key) {
+    QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
+    connect(gsetting, &QGSettings::changed, [ = ](QString key) {
         if ("systemFont" == key || "systemFontSize" == key) {
             m_leftTopSearchHorizontalLayout->removeWidget(m_lineEdit);
             m_leftTopSearchHorizontalLayout->removeWidget(m_cancelSearchPushButton);
@@ -390,11 +388,11 @@ MainWindow::MainWindow(QWidget *parent) :
             m_fullWindow->updateView();
         }
     });
-
     //监控应用进程开启
-    connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [=](WId id) {
+    connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
         ConvertWinidToDesktop reply;
         QString desktopfp = reply.tranIdToDesktop(id);
+
         if (!desktopfp.isEmpty()) {
             ViewOpenedSlot(desktopfp);
         }
@@ -936,7 +934,7 @@ void MainWindow::on_minMaxChangeButton_clicked()
     m_canHide = false;
     this->hide();
     QEventLoop loop;
-    QTimer::singleShot(10, &loop, SLOT(quit()));
+    QTimer::singleShot(50, &loop, SLOT(quit()));
     loop.exec();
     m_fullWindow->raise();
     m_fullWindow->showNormal();
@@ -1002,7 +1000,7 @@ void MainWindow::showNormalWindow()
 {
     m_canHide = false;
     QEventLoop loop;
-    QTimer::singleShot(10, &loop, SLOT(quit()));
+    QTimer::singleShot(50, &loop, SLOT(quit()));//调整延时时间，解决时间较短时概率性窗口隐藏问题
     loop.exec();
     this->show();
     this->raise();
