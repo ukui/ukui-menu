@@ -64,7 +64,7 @@ void TabletWindow::initUi()
     m_height = QApplication::primaryScreen()->geometry().height();
     this->setFixedSize(m_width, m_height);
     m_backPixmap = new QPixmap;
-    leftWidget = new TimeWidget(this);
+    leftWidget = new FunctionWidget(this);
     leftWidget->setFixedSize(Style::LeftWidWidth, Style::CenterWindHeight);
     firstPageWidget = new QWidget(this);
     firstPageWidget->installEventFilter(this);
@@ -205,7 +205,7 @@ void TabletWindow::initUi()
     ways();
     buttonWidgetShow();
 //    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
-    connect(leftWidget, &TimeWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
+    connect(leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
 
     if (checkapplist()) {
         directoryChangedSlot();//更新应用列表

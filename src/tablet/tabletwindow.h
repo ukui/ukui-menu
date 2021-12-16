@@ -105,7 +105,7 @@ private:
     bool m_winFlag = false;
     int curPageNum = 0;
     QVBoxLayout *layout = nullptr;
-    TimeWidget *leftWidget = nullptr;
+    FunctionWidget *leftWidget = nullptr;
     bool isFirstPage = true;
     QWidget *firstPageWidget = nullptr;
     static QVector<QString> keyVector;
