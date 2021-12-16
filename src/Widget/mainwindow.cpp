@@ -977,26 +977,25 @@ void MainWindow::hideWindow()
 void MainWindow::repaintWidget()
 {
     Style::initWidStyle();
-    QRect availableGeometry = getScreenAvailableGeometry();
     this->setMinimumSize(Style::minw, Style::minh);
-    int position = Style::panelPosition;
-    int panelSize = Style::panelSize;
-    int x = Style::primaryScreenX;
-    int y = Style::primaryScreenY;
+    int position = Style::m_panelPosition;
+    int x = Style::m_primaryScreenX;
+    int y = Style::m_primaryScreenY;
+    int width = Style::m_availableScreenWidth;
+    int height = Style::m_availableScreenHeight;
 
     if (position == 0) {
-        this->setGeometry(QRect(x + 4, y + availableGeometry.height() - Style::minh - 3, Style::minw, Style::minh));
-        m_fullWindow->setGeometry(QRect(x, y, availableGeometry.width(), /*availableGeometry.height()*/1080));
+        this->setGeometry(QRect(x + 4, y + height - Style::minh - 3, Style::minw, Style::minh));
     } else if (position == 1) {
-        this->setGeometry(QRect(x + 4, y + panelSize + 4, Style::minw, Style::minh));
-        m_fullWindow->setGeometry(QRect(x, y + panelSize, availableGeometry.width(), availableGeometry.height()));
+        this->setGeometry(QRect(x + 4, y + 4, Style::minw, Style::minh));
     } else if (position == 2) {
-        this->setGeometry(QRect(x + panelSize + 4, y + 4, Style::minw, Style::minh));
-        m_fullWindow->setGeometry(QRect(x + panelSize, y, availableGeometry.width(), availableGeometry.height()));
+        this->setGeometry(QRect(x + 4, y + 4, Style::minw, Style::minh));
     } else {
-        this->setGeometry(QRect(x + availableGeometry.width() - Style::minw - 4, y + 4, Style::minw, Style::minh));
-        m_fullWindow->setGeometry(QRect(x, y, availableGeometry.width(), availableGeometry.height()));
+        this->setGeometry(QRect(x + width - Style::minw - 4, y + 4, Style::minw, Style::minh));
     }
+    m_fullWindow->move(x, y);
+    m_fullWindow->setFixedSize(width, height);
+    m_fullWindow->repaintWidget();
 }
 
 void MainWindow::showNormalWindow()

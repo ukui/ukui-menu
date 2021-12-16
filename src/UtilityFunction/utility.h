@@ -44,8 +44,7 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
 
 //调试日志
 void debugLog(QString strMsg);
-QRect getScreenAvailableGeometry();
-QVariantList getScreenGeometry();
+QVariantList getScreenGeometryList();
 double getTransparency();
 QString getEnvOverriddenDesktopFile(int pid);
 //数据库操作

@@ -26,12 +26,9 @@ Style::Style()
 {
 }
 
-int Style::primaryScreenX = 0;
-int Style::primaryScreenY = 0;
-int Style::primaryScreenWidth = 0;
-int Style::primaryScreenHeight = 0;
-int Style::panelPosition = 0;
-int Style::panelSize = 0;
+int Style::m_primaryScreenX = 0;
+int Style::m_primaryScreenY = 0;
+int Style::m_panelPosition = 0;
 //默认窗口
 int Style::minw = 0;
 int Style::minh = 0;
@@ -49,8 +46,8 @@ int Style::defaultSideBarWidWidth = 0;
   * 全屏窗口
   */
 //主窗口
-int Style::widthavailable = 0;
-int Style::heightavailable = 0;
+int Style::m_availableScreenWidth = 0;
+int Style::m_availableScreenHeight = 0;
 //主视图
 int Style::MainViewWidWidth = 0;
 //搜索栏
@@ -60,7 +57,7 @@ int Style::QueryLineEditHeight = 0;
 int Style::QueryLineEditFontSize = 0;
 int Style::QueryLineEditIconSize = 0;
 //左侧栏
-int Style::LeftWidWidth = 0;
+int Style::m_leftWidWidth = 0;
 int Style::LeftWidHeight = 0;
 int Style::LeftMargin = 0;
 int Style::RightMargin = 0;
@@ -73,15 +70,15 @@ int Style::LeftIconSize = 0;
 int Style::LeftSpaceIconText = 0;
 int Style::LeftSpaceBetweenItem = 0;
 //应用列表栏
-int Style::AppListWidWidth = 0;
-int Style::AppListWidHeight = 0;
+int Style::m_applistWidWidth = 0;
+int Style::m_applistWidHeight = 0;
 int Style::AppListFontSize = 0;
 int Style::AppListIconSize = 0;
 int Style::AppListBigIconSize = 0;
 int Style::AppListItemSizeWidth = 0;
 int Style::TabletItemSizeWidthOther = 0;
 int Style::TabletItemSizeWidthFirst = 0;
-int Style::AppListGridSizeWidth = 0;
+int Style::m_applistGridSizeWidth = 0;
 int Style::AppLeftSpace = 0;
 int Style::AppTopSpace = 0;
 int Style::AppSpaceBetweenIconText = 0;
@@ -115,8 +112,6 @@ int Style::nowpagenum = 1;
 int Style::appRows = 0;
 bool Style::ScreenRotation = false;
 int Style::AppListItemSizeHeight = 270;
-//int Style::ScreenWidth=1920;
-//int Style::ScreenHeight=1080;
 int Style::AppListViewTopMargin = 0;
 int Style::AppListViewLeftMargin = 52;
 int Style::AppListViewBottomMargin = 20;
@@ -135,31 +130,17 @@ bool Style::IsWideScreen = false;
 void Style::initWidStyle()
 {
     if (projectCodeName == "V10SP1") {
-        QVariantList list = getScreenGeometry();
-
-        if (list.count() >= 6) {
-            primaryScreenX = list.at(0).toInt();
-            primaryScreenY = list.at(1).toInt();
-            primaryScreenWidth = list.at(2).toInt();
-            primaryScreenHeight = list.at(3).toInt();
-            panelSize = list.at(4).toInt();
-            panelPosition = list.at(5).toInt();
-        }
-
         QGSettings *setting = new QGSettings(QString("org.mate.interface").toLocal8Bit());
         QString value = setting->get("font-name").toString();
         QStringList valstr = value.split(" ");
         int fontSize = valstr.at(valstr.count() - 1).toInt();
 
-        if (panelPosition == 0 || panelPosition == 1) {
-            widthavailable = primaryScreenWidth;
-            heightavailable = primaryScreenHeight - panelSize;
-        }
-
-        if (panelPosition == 2 || panelPosition == 3) {
-            widthavailable = primaryScreenWidth - panelSize;
-            heightavailable = primaryScreenHeight;
-        }
+        QVariantList list = getScreenGeometryList();
+        m_primaryScreenX = list.at(0).toInt();
+        m_primaryScreenY = list.at(1).toInt();
+        m_availableScreenWidth = list.at(2).toInt();
+        m_availableScreenHeight = list.at(3).toInt();
+        m_panelPosition = list.at(5).toInt();
 
         int len = 0;
         QString locale = QLocale::system().name();
@@ -170,7 +151,7 @@ void Style::initWidStyle()
             len = 10;
         }
 
-        if (primaryScreenWidth == 800 && primaryScreenHeight == 600) {
+        if (m_availableScreenWidth == 800 && m_availableScreenHeight == 600) {
             minw = 320;
             minh = 500;
             defaultMainViewWidWidth = 264;
@@ -193,20 +174,20 @@ void Style::initWidStyle()
             defaultSideBarWidWidth = 55;
         }
 
-        if (widthavailable >= 2000 && widthavailable <= 4000) {
-            MainViewWidWidth = widthavailable - round((widthavailable - 1644) / 2);
+        if (m_availableScreenWidth >= 2000 && m_availableScreenWidth <= 4000) {
+            MainViewWidWidth = m_availableScreenWidth - round((m_availableScreenWidth - 1644) / 2);
             TopWidgetHeight = 107;
             QueryLineEditWidth = 350;
             QueryLineEditHeight = 30;
             QueryLineEditFontSize = fontSize;
             QueryLineEditIconSize = 16;
             //LeftWidWidth=round((widthavailable-1644)/2);
-            LeftWidHeight = heightavailable - TopWidgetHeight;
+            LeftWidHeight = m_availableScreenHeight - TopWidgetHeight;
             LeftMargin = 20;
             LeftBtnWidth = 100 + 5 * len;
             LeftBtnHeight = 43;
             LeftLetterBtnHeight = 25;
-            RightMargin = LeftWidWidth - LeftMargin - LeftBtnWidth;
+            RightMargin = m_leftWidWidth - LeftMargin - LeftBtnWidth;
             LeftFontSize = fontSize;
             LeftLetterFontSize = 14;
             LeftIconSize = 19;
@@ -215,13 +196,13 @@ void Style::initWidStyle()
             AppListFontSize = fontSize;
             AppListIconSize = 96;
             AppListItemSizeWidth = 168;
-            AppListGridSizeWidth = 240;
+            m_applistGridSizeWidth = 240;
             AppLeftSpace = 36;
             AppTopSpace = 15;
             AppSpaceBetweenIconText = 20;
             //        AppBottomSpace=27;
             SliderSize = 12;
-            SideBarWidWidth = round((widthavailable - 1644) / 2);
+            SideBarWidWidth = round((m_availableScreenWidth - 1644) / 2);
             SideBarMargin = 20;
             MinMaxWidWidth = 110;
             MinMaxWidHeight = TopWidgetHeight;
@@ -234,20 +215,20 @@ void Style::initWidStyle()
             SideBarSpaceIconLeft = 14;
             SideBarSpaceIconText = 10;
             SideBarSpaceBetweenItem = 16;
-        } else if (widthavailable >= 1920 && widthavailable < 2000) {
-            MainViewWidWidth = widthavailable - round((widthavailable - 1314) / 2);
+        } else if (m_availableScreenWidth >= 1920 && m_availableScreenWidth < 2000) {
+            MainViewWidWidth = m_availableScreenWidth - round((m_availableScreenWidth - 1314) / 2);
             TopWidgetHeight = 107;
             QueryLineEditWidth = 350;
             QueryLineEditHeight = 30;
             QueryLineEditFontSize = fontSize;
             QueryLineEditIconSize = 16;
             //LeftWidWidth=round((widthavailable-1314)/2);
-            LeftWidHeight = heightavailable - TopWidgetHeight;
+            LeftWidHeight = m_availableScreenHeight - TopWidgetHeight;
             LeftMargin = 20;
             LeftBtnWidth = 100 + 5 * len;
             LeftBtnHeight = 43;
             LeftLetterBtnHeight = 25;
-            RightMargin = LeftWidWidth - LeftMargin - LeftBtnWidth;
+            RightMargin = m_leftWidWidth - LeftMargin - LeftBtnWidth;
             LeftFontSize = fontSize;
             LeftLetterFontSize = 14;
             LeftIconSize = 19;
@@ -256,13 +237,13 @@ void Style::initWidStyle()
             AppListFontSize = fontSize;
             AppListIconSize = 86;
             AppListItemSizeWidth = 150;
-            AppListGridSizeWidth = 220;
+            m_applistGridSizeWidth = 220;
             AppLeftSpace = 32;
             AppTopSpace = 13;
             AppSpaceBetweenIconText = 18;
             //        AppBottomSpace=27;
             SliderSize = 0;
-            SideBarWidWidth = round((widthavailable - 1314) / 2);
+            SideBarWidWidth = round((m_availableScreenWidth - 1314) / 2);
             SideBarMargin = 20;
             MinMaxWidWidth = 110;
             MinMaxWidHeight = TopWidgetHeight;
@@ -275,20 +256,20 @@ void Style::initWidStyle()
             SideBarSpaceIconLeft = 14;
             SideBarSpaceIconText = 10;
             SideBarSpaceBetweenItem = 16;
-        } else if (widthavailable >= 1600 && widthavailable < 1920) {
-            MainViewWidWidth = widthavailable - round((widthavailable - 1090) / 2);
+        } else if (m_availableScreenWidth >= 1600 && m_availableScreenWidth < 1920) {
+            MainViewWidWidth = m_availableScreenWidth - round((m_availableScreenWidth - 1090) / 2);
             TopWidgetHeight = 107;
             QueryLineEditWidth = 350;
             QueryLineEditHeight = 30;
             QueryLineEditFontSize = fontSize;
             QueryLineEditIconSize = 14;
             //LeftWidWidth=round((widthavailable-1090)/2);
-            LeftWidHeight = heightavailable - TopWidgetHeight;
+            LeftWidHeight = m_availableScreenHeight - TopWidgetHeight;
             LeftMargin = 10;
             LeftBtnWidth = 100 + 5 * len;
             LeftBtnHeight = 43;
             LeftLetterBtnHeight = 25;
-            RightMargin = LeftWidWidth - LeftMargin - LeftBtnWidth;
+            RightMargin = m_leftWidWidth - LeftMargin - LeftBtnWidth;
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
@@ -297,13 +278,13 @@ void Style::initWidStyle()
             AppListFontSize = fontSize;
             AppListIconSize = 86;
             AppListItemSizeWidth = 150;
-            AppListGridSizeWidth = 180;
+            m_applistGridSizeWidth = 180;
             AppLeftSpace = 32;
             AppTopSpace = 10;
             AppSpaceBetweenIconText = 14;
             //        AppBottomSpace=static_cast<int>(round(27*0.84));
             SliderSize = 10;
-            SideBarWidWidth = round((widthavailable - 1090) / 2);
+            SideBarWidWidth = round((m_availableScreenWidth - 1090) / 2);
             SideBarMargin = 10;
             MinMaxWidWidth = 110;
             MinMaxWidHeight = TopWidgetHeight;
@@ -316,20 +297,20 @@ void Style::initWidStyle()
             SideBarSpaceIconLeft = 14;
             SideBarSpaceIconText = 10;
             SideBarSpaceBetweenItem = 16;
-        } else if (widthavailable >= 1366 && widthavailable < 1600) {
-            MainViewWidWidth = widthavailable - round((widthavailable - 850) / 2);
+        } else if (m_availableScreenWidth >= 1366 && m_availableScreenWidth < 1600) {
+            MainViewWidWidth = m_availableScreenWidth - round((m_availableScreenWidth - 850) / 2);
             TopWidgetHeight = round(107 * 0.78);
             QueryLineEditWidth = 350;
             QueryLineEditHeight = 30;
             QueryLineEditFontSize = fontSize;
             QueryLineEditIconSize = 14;
             //LeftWidWidth=round((widthavailable-850)/2);
-            LeftWidHeight = heightavailable - TopWidgetHeight;
+            LeftWidHeight = m_availableScreenHeight - TopWidgetHeight;
             LeftMargin = 10;
             LeftBtnWidth = 100 + 5 * len;
             LeftBtnHeight = 43;
             LeftLetterBtnHeight = 20;
-            RightMargin = LeftWidWidth - LeftMargin - LeftBtnWidth;
+            RightMargin = m_leftWidWidth - LeftMargin - LeftBtnWidth;
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
@@ -338,13 +319,13 @@ void Style::initWidStyle()
             AppListFontSize = fontSize;
             AppListIconSize = 64;
             AppListItemSizeWidth = 112;
-            AppListGridSizeWidth = 140;
+            m_applistGridSizeWidth = 140;
             AppLeftSpace = 24;
             AppTopSpace = 10;
             AppSpaceBetweenIconText = 0;
             //        AppBottomSpace=static_cast<int>(round(27*0.74));
             SliderSize = 10;
-            SideBarWidWidth = round((widthavailable - 850) / 2);
+            SideBarWidWidth = round((m_availableScreenWidth - 850) / 2);
             SideBarMargin = 10;
             MinMaxWidWidth = 110;
             MinMaxWidHeight = TopWidgetHeight;
@@ -357,20 +338,20 @@ void Style::initWidStyle()
             SideBarSpaceIconLeft = 14;
             SideBarSpaceIconText = 10;
             SideBarSpaceBetweenItem = 16;
-        } else if (widthavailable >= 1280 && widthavailable < 1366) {
-            MainViewWidWidth = widthavailable - round((widthavailable - 718) / 2);
+        } else if (m_availableScreenWidth >= 1280 && m_availableScreenWidth < 1366) {
+            MainViewWidWidth = m_availableScreenWidth - round((m_availableScreenWidth - 718) / 2);
             TopWidgetHeight = round(107 * 0.78);
             QueryLineEditWidth = 350;
             QueryLineEditHeight = 30;
             QueryLineEditFontSize = fontSize;
             QueryLineEditIconSize = 14;
             //LeftWidWidth=round((widthavailable-718)/2);
-            LeftWidHeight = heightavailable - TopWidgetHeight;
+            LeftWidHeight = m_availableScreenHeight - TopWidgetHeight;
             LeftMargin = 10;
             LeftBtnWidth = 100 + 5 * len;
             LeftBtnHeight = 43;
             LeftLetterBtnHeight = 20;
-            RightMargin = LeftWidWidth - LeftMargin - LeftBtnWidth;
+            RightMargin = m_leftWidWidth - LeftMargin - LeftBtnWidth;
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
@@ -379,13 +360,13 @@ void Style::initWidStyle()
             AppListFontSize = fontSize;
             AppListIconSize = 64;
             AppListItemSizeWidth = 112;
-            AppListGridSizeWidth = 142;
+            m_applistGridSizeWidth = 142;
             AppLeftSpace = 24;
             AppTopSpace = 10;
             AppSpaceBetweenIconText = 14;
             //        AppBottomSpace=static_cast<int>(round(27*0.65));
             SliderSize = 8;
-            SideBarWidWidth = round((widthavailable - 718) / 2);
+            SideBarWidWidth = round((m_availableScreenWidth - 718) / 2);
             SideBarMargin = 10;
             MinMaxWidWidth = 110;
             MinMaxWidHeight = TopWidgetHeight;
@@ -398,20 +379,20 @@ void Style::initWidStyle()
             SideBarSpaceIconLeft = 14;
             SideBarSpaceIconText = 10;
             SideBarSpaceBetweenItem = 16;
-        } else if (widthavailable >= 1152 && widthavailable < 1280) {
-            MainViewWidWidth = widthavailable - round((widthavailable - 718) / 2);
+        } else if (m_availableScreenWidth >= 1152 && m_availableScreenWidth < 1280) {
+            MainViewWidWidth = m_availableScreenWidth - round((m_availableScreenWidth - 718) / 2);
             TopWidgetHeight = round(107 * 0.78);
             QueryLineEditWidth = 350;
             QueryLineEditHeight = 30;
             QueryLineEditFontSize = fontSize;
             QueryLineEditIconSize = 14;
             //LeftWidWidth=round((widthavailable-718)/2);
-            LeftWidHeight = heightavailable - TopWidgetHeight;
+            LeftWidHeight = m_availableScreenHeight - TopWidgetHeight;
             LeftMargin = 10;
             LeftBtnWidth = 100 + 5 * len;
             LeftBtnHeight = 43;
             LeftLetterBtnHeight = 20;
-            RightMargin = LeftWidWidth - LeftMargin - LeftBtnWidth;
+            RightMargin = m_leftWidWidth - LeftMargin - LeftBtnWidth;
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
@@ -420,13 +401,13 @@ void Style::initWidStyle()
             AppListFontSize = fontSize;
             AppListIconSize = 64;
             AppListItemSizeWidth = 112;
-            AppListGridSizeWidth = 142;
+            m_applistGridSizeWidth = 142;
             AppLeftSpace = 24;
             AppTopSpace = 10;
             AppSpaceBetweenIconText = 14;
             //        AppBottomSpace=static_cast<int>(round(27*0.65));
             SliderSize = 8;
-            SideBarWidWidth = round((widthavailable - 718) / 2);
+            SideBarWidWidth = round((m_availableScreenWidth - 718) / 2);
             SideBarMargin = 10;
             MinMaxWidWidth = 110;
             MinMaxWidHeight = TopWidgetHeight;
@@ -439,20 +420,20 @@ void Style::initWidStyle()
             SideBarSpaceIconLeft = 14;
             SideBarSpaceIconText = 10;
             SideBarSpaceBetweenItem = 16;
-        } else if (widthavailable > 800 && widthavailable < 1152) {
-            MainViewWidWidth = widthavailable - round((widthavailable - 572) / 2);
+        } else if (m_availableScreenWidth > 800 && m_availableScreenWidth < 1152) {
+            MainViewWidWidth = m_availableScreenWidth - round((m_availableScreenWidth - 572) / 2);
             TopWidgetHeight = round(107 * 0.78);
             QueryLineEditWidth = 350;
             QueryLineEditHeight = 30;
             QueryLineEditFontSize = fontSize;
             QueryLineEditIconSize = 14;
             //LeftWidWidth=round((widthavailable-572)/2);
-            LeftWidHeight = heightavailable - TopWidgetHeight;
+            LeftWidHeight = m_availableScreenHeight - TopWidgetHeight;
             LeftMargin = 10;
             LeftBtnWidth = 100 + 5 * len;
             LeftBtnHeight = 43;
             LeftLetterBtnHeight = 20;
-            RightMargin = LeftWidWidth - LeftMargin - LeftBtnWidth;
+            RightMargin = m_leftWidWidth - LeftMargin - LeftBtnWidth;
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
@@ -461,13 +442,13 @@ void Style::initWidStyle()
             AppListFontSize = fontSize;
             AppListIconSize = 64;
             AppListItemSizeWidth = 112;
-            AppListGridSizeWidth = 141;
+            m_applistGridSizeWidth = 141;
             AppLeftSpace = 25;
             AppTopSpace = 10;
             AppSpaceBetweenIconText = 14;
             //        AppBottomSpace=static_cast<int>(round(27*0.52));
             SliderSize = 8;
-            SideBarWidWidth = round((widthavailable - 572) / 2);
+            SideBarWidWidth = round((m_availableScreenWidth - 572) / 2);
             SideBarMargin = 10;
             MinMaxWidWidth = 110;
             MinMaxWidHeight = TopWidgetHeight;
@@ -481,19 +462,19 @@ void Style::initWidStyle()
             SideBarSpaceIconText = 10;
             SideBarSpaceBetweenItem = 16;
         } else {
-            MainViewWidWidth = widthavailable - round((widthavailable - 560) / 2);
+            MainViewWidWidth = m_availableScreenWidth - round((m_availableScreenWidth - 560) / 2);
             TopWidgetHeight = round(107 * 0.78);
             QueryLineEditWidth = 350;
             QueryLineEditHeight = 30;
             QueryLineEditFontSize = fontSize;
             QueryLineEditIconSize = 14;
             //LeftWidWidth=round((widthavailable-560)/2);
-            LeftWidHeight = heightavailable - TopWidgetHeight;
+            LeftWidHeight = m_availableScreenHeight - TopWidgetHeight;
             LeftMargin = 10;
             LeftBtnWidth = 100 + 5 * len;
             LeftBtnHeight = 43;
             LeftLetterBtnHeight = 20;
-            RightMargin = LeftWidWidth - LeftMargin - LeftBtnWidth;
+            RightMargin = m_leftWidWidth - LeftMargin - LeftBtnWidth;
             LeftFontSize = fontSize;
             LeftLetterFontSize = 11;
             LeftIconSize = 19;
@@ -502,13 +483,13 @@ void Style::initWidStyle()
             AppListFontSize = fontSize;
             AppListIconSize = 64;
             AppListItemSizeWidth = 112;
-            AppListGridSizeWidth = 138;
+            m_applistGridSizeWidth = 138;
             AppLeftSpace = 25;
             AppTopSpace = 10;
             AppSpaceBetweenIconText = 14;
             //        AppBottomSpace=static_cast<int>(round(27*0.52));
             SliderSize = 8;
-            SideBarWidWidth = round((widthavailable - 560) / 2);
+            SideBarWidWidth = round((m_availableScreenWidth - 560) / 2);
             SideBarMargin = 10;
             MinMaxWidWidth = 110;
             MinMaxWidHeight = TopWidgetHeight;
@@ -523,11 +504,11 @@ void Style::initWidStyle()
             SideBarSpaceBetweenItem = 16;
         }
 
-        AppListWidWidth = primaryScreenWidth / 1.25;
-        AppListWidWidth = AppListWidWidth - (AppListWidWidth % AppListGridSizeWidth) + 1;
-        AppListWidHeight = primaryScreenHeight - 130;
-        AppListWidHeight = AppListWidHeight - (AppListWidHeight % AppListGridSizeWidth) + 1;
-        LeftWidWidth = (primaryScreenWidth - AppListWidWidth) / 2 + 1;
+        m_applistWidWidth = m_availableScreenWidth / 1.25;
+        m_applistWidWidth = m_applistWidWidth - (m_applistWidWidth % m_applistGridSizeWidth) + 1;
+        m_applistWidHeight = m_availableScreenHeight - 120;
+        m_applistWidHeight = m_applistWidHeight - (m_applistWidHeight % m_applistGridSizeWidth) + 1;
+        m_leftWidWidth = (m_availableScreenWidth - m_applistWidWidth) / 2 + 1;
     } else {
         AppListViewTopMargin = 0;
         AppListViewLeftMargin = 52;

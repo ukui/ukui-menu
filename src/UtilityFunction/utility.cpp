@@ -97,29 +97,14 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source)
     return QPixmap::fromImage(img);
 }
 
-QRect getScreenAvailableGeometry()
+//不通过任务栏获取屏幕可用区域数据
+QVariantList getScreenGeometryList()
 {
     QRect rect;
-    QVariantList list;
-    list.clear();
-    QDBusInterface iface(DBUS_NAME,
-                         DBUS_PATH,
-                         DBUS_INTERFACE,
-                         QDBusConnection::sessionBus());
-    QDBusReply<QVariantList> reply = iface.call("GetPrimaryScreenAvailableGeometry");
+    rect = qApp->primaryScreen()->geometry();
 
-    if (iface.isValid() && reply.isValid()) {
-        list = reply.value();
-        rect = QRect(list.at(0).toInt(), list.at(1).toInt(), list.at(2).toInt(), list.at(3).toInt());
-    } else {
-        rect = qApp->primaryScreen()->availableGeometry();
-    }
-
-    return rect;
-}
-
-QVariantList getScreenGeometry()
-{
+    int panelSize = 0;
+    int position = 0;
     QVariantList list;
     list.clear();
     QDBusInterface iface(DBUS_NAME,
@@ -127,43 +112,41 @@ QVariantList getScreenGeometry()
                          DBUS_INTERFACE,
                          QDBusConnection::sessionBus());
     QDBusReply<QVariantList> reply = iface.call("GetPrimaryScreenPhysicalGeometry");
-
-    if (iface.isValid() && reply.isValid()) {
-        list = reply.value();
-    } else {
-        QRect rect = QApplication::desktop()->screenGeometry(0);
-        list.append(QString::number(rect.x()));
-        list.append(QString::number(rect.y()));
-        list.append(QString::number(rect.width()));
-        list.append(QString::number(rect.height()));
-        int position = 0;
-        int panelSize = 0;
-
-        if (QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit())) {
-            QGSettings *gsetting = new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-
-            if (gsetting->keys().contains(QString("panelposition"))) {
-                position = gsetting->get("panelposition").toInt();
-            } else {
-                position = 0;
-            }
-
-            if (gsetting->keys().contains(QString("panelsize"))) {
-                panelSize = gsetting->get("panelsize").toInt();
-            } else {
-                panelSize = 46;
-            }
-
-            delete gsetting;
-        } else {
-            position = 0;
-            panelSize = 46;
-        }
-
-        list.append(QString::number(panelSize));
-        list.append(QString::number(position));
+    if (reply.isValid()) {
+        panelSize = reply.value().at(4).toInt();
+        position = reply.value().at(5).toInt();
     }
+//    if (rect == qApp->primaryScreen()->geometry()) {
+    if (position == 0) {
+        list.append(rect.x());
+        list.append(rect.y());
+        list.append(rect.width());
+        list.append(rect.height() - panelSize);
+    } else if (position == 1) {
+        list.append(rect.x());
+        list.append(rect.y() + panelSize);
+        list.append(rect.width());
+        list.append(rect.height() - panelSize);
+    } else if (position == 2) {
+        list.append(rect.x() + panelSize);
+        list.append(rect.y());
+        list.append(rect.width() - panelSize);
+        list.append(rect.height());
+    } else {
+        list.append(rect.x());
+        list.append(rect.y());
+        list.append(rect.width() - panelSize);
+        list.append(rect.height());
+    }
+//    } else {
+//        list.append(rect.x());
+//        list.append(rect.y());
+//        list.append(rect.width());
+//        list.append(rect.height());
+//    }
 
+    list.append(panelSize);
+    list.append(position);
     return list;
 }
 

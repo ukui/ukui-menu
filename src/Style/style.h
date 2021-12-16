@@ -87,12 +87,9 @@ public:
     Style();
     static void initWidStyle();
 
-    static int primaryScreenX;
-    static int primaryScreenY;
-    static int primaryScreenWidth;
-    static int primaryScreenHeight;
-    static int panelPosition;
-    static int panelSize;
+    static int m_primaryScreenX;
+    static int m_primaryScreenY;
+    static int m_panelPosition;
     //默认窗口
     static int minw;
     static int minh;
@@ -111,8 +108,8 @@ public:
       * 全屏
       */
     //主窗口
-    static int widthavailable;
-    static int heightavailable;
+    static int m_availableScreenWidth;
+    static int m_availableScreenHeight;
     //主视图
     static int MainViewWidWidth;//宽度
     //搜索栏
@@ -122,7 +119,7 @@ public:
     static int QueryLineEditIconSize;//搜索框图标
     static int QueryLineEditFontSize;//搜索框字体大小
     //左侧栏
-    static int LeftWidWidth; //宽度
+    static int m_leftWidWidth; //宽度
     static int LeftWidHeight; //高度
     static int LeftMargin; //内左侧边距
     static int RightMargin;//内右侧边距
@@ -135,15 +132,15 @@ public:
     static int LeftSpaceIconText; //按钮图标与文字内边距
     static int LeftSpaceBetweenItem; //item间距
     //应用列表栏
-    static int AppListWidWidth; //宽度
-    static int AppListWidHeight; //高度
+    static int m_applistWidWidth; //宽度
+    static int m_applistWidHeight; //高度
     static int AppListFontSize; //字体大小
     static int AppListIconSize; //图标大小
     static int AppListBigIconSize;
     static int AppListItemSizeWidth; //item大小
     static int TabletItemSizeWidthFirst;
     static int TabletItemSizeWidthOther;
-    static int AppListGridSizeWidth; //网格大小
+    static int m_applistGridSizeWidth; //网格大小
     static int AppLeftSpace;//左侧边距
     static int AppTopSpace;//上侧边距
     static int AppSpaceBetweenIconText;//图标与文字边距
