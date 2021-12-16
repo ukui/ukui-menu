@@ -520,8 +520,8 @@ void Style::initWidStyle()
         AppListViewLeftMargin = 52;
         AppListViewBottomMargin = 40;
         AppListViewRightMargin = 0;
-        LeftWidWidth = screenWidth * 0.3;
-        FirsPageViewWidth = screenWidth - LeftWidWidth - 5;
+        m_leftWidWidth = screenWidth * 0.3;
+        FirsPageViewWidth = screenWidth - m_leftWidWidth - 5;
         OtherPageViewWidth = screenWidth;
         TabletItemSizeWidthFirst = FirsPageViewWidth / 6;
         TabletItemSizeWidthOther = (screenWidth - 5) / 6;
@@ -532,7 +532,7 @@ void Style::initWidStyle()
         AppTopSpace = (AppListItemSizeHeight - AppListIconSize) / 2;
         AppLeftSpace = (TabletItemSizeWidthFirst - AppListIconSize) / 2;
         TimeWidgetTop = (CenterWindHeight - 870) / 2;
-        TimeWidgetLeft = (LeftWidWidth - 400) / 2;
+        TimeWidgetLeft = (m_leftWidWidth - 400) / 2;
         FirstPageSpace = AppLeftSpace;
         OtherPageSpace = (TabletItemSizeWidthOther - AppListIconSize) / 2;
     }

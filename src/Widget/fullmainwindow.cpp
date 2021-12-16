@@ -166,7 +166,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     connect(this, &FullMainWindow::sendSetFocusToFun, m_fullFunctionPage, &FullFunctionWidget::setFocusToThis);
     connect(this, &FullMainWindow::sendSetFocusToResult, m_fullResultPage, &FullSearchResultWidget::selectFirstItemTab);
     connect(fullSelectMenuButton, &QToolButton::clicked, this, &FullMainWindow::on_fullSelectMenuButton_clicked);
-    connect(fullCommonPage, &FullCommonUseWidget::sendUpdateOtherView, this, &FullMainWindow::sendUpdateOtherView);
+    connect(m_fullCommonPage, &FullCommonUseWidget::sendUpdateOtherView, this, &FullMainWindow::sendUpdateOtherView);
 }
 
 FullMainWindow::~FullMainWindow()
