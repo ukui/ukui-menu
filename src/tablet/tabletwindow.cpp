@@ -55,17 +55,17 @@ QVector<int> TabletWindow::keyValueVector = QVector<int>();
 void TabletWindow::initUi()
 {
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+//    this->setStyleSheet("border : 1px solid red");
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::NoFocus);
     m_width = QApplication::primaryScreen()->geometry().width();
     m_height = QApplication::primaryScreen()->geometry().height();
-    this->setFixedSize(/*Style::MainViewWidWidth*/m_width,
-            m_height);
+    this->setFixedSize(m_width, m_height);
     m_backPixmap = new QPixmap;
     leftWidget = new TimeWidget(this);
-    leftWidget->setFixedSize(512, m_height);
+    leftWidget->setFixedSize(Style::LeftWidWidth, Style::CenterWindHeight);
     firstPageWidget = new QWidget(this);
     firstPageWidget->installEventFilter(this);
     buttonGroup = new QButtonGroup;
@@ -302,9 +302,9 @@ void TabletWindow::initAppListWidget()
     firstPageLayout = new QHBoxLayout();
     m_scrollArea = new QScrollArea(this);
     m_scrollAreaWid = new ScrollAreaWid(this);
-    m_scrollAreaWid->setStyleSheet("border:0px; background:transparent;");
-    m_scrollAreaWid->setFixedHeight(m_height - 20);
-    m_scrollArea->setFixedSize(m_width, m_height - 20);
+//    m_scrollAreaWid->setStyleSheet("border:0px; background:transparent;");
+    m_scrollAreaWid->setFixedHeight(Style::CenterWindHeight);
+    m_scrollArea->setFixedSize(m_width, Style::CenterWindHeight);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setStyleSheet("border:0px; background:transparent;");
@@ -316,7 +316,7 @@ void TabletWindow::initAppListWidget()
     m_scrollAreaWidLayout->setSpacing(0);
     layout->addWidget(m_scrollArea);
     layout->addWidget(buttonWidget);
-    buttonWidget->setFixedSize(1920, 40);
+    buttonWidget->setFixedSize(Style::OtherPageViewWidth, 40);
     buttonWidget->installEventFilter(this);
     m_appListBottomSpacer = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     fillAppList();
@@ -501,18 +501,19 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
 
     if (isFirstPage) {
         listview = new TabletListView(this, 0);
-        firstPageLayout->setSpacing(60);
+        firstPageLayout->setSpacing(0);
+        firstPageLayout->setContentsMargins(0, 0, 0, 0);
         firstPageWidget->setLayout(firstPageLayout);
         firstPageLayout->addWidget(leftWidget);
-        listview->setFixedSize(m_width - 512, m_height - 20);
+        listview->setFixedSize(Style::FirsPageViewWidth, Style::CenterWindHeight);
         firstPageLayout->addWidget(listview);
         m_scrollAreaWidLayout->addWidget(firstPageWidget);
-        listview->setGridSize(QSize(Style::TabletItemSizeWidthFirst, (this->height() - 20) / 4));
+        listview->setGridSize(QSize(Style::TabletItemSizeWidthFirst, Style::AppListItemSizeHeight));
         isFirstPage = false;
     } else {
         listview = new TabletListView(this, 1);
-        listview->setFixedSize(m_width, m_height - 20);
-        listview->setGridSize(QSize(Style::TabletItemSizeWidthOther, (this->height() - 20) / 4));
+        listview->setFixedSize(Style::OtherPageViewWidth, /*m_height - 20*/Style::CenterWindHeight);
+        listview->setGridSize(QSize(Style::TabletItemSizeWidthOther, Style::AppListItemSizeHeight));
         m_scrollAreaWidLayout->addWidget(listview);
     }
 
@@ -762,7 +763,10 @@ void TabletWindow::backgroundPic()   //const QString &bgPath,QRect rect
         //qDebug() << "---------" << "stretched" << "----------";
         painter.drawPixmap(this->rect(), *m_backPixmap);
     } else if (m_bgOption == "scaled") {
+        painter.setPen(QColor(0, 0, 0, 64));
+        painter.setBrush(QColor(0, 0, 0, 64));
         painter.drawPixmap(this->geometry(), getPaddingPixmap(*m_backPixmap, this->size().width(), this->size().height()));
+        painter.drawRect(this->geometry());
     } else if (m_bgOption == "wallpaper") {
         //qDebug() << "---------" << "wallpaper" << "----------";
         int drawedWidth = 0;

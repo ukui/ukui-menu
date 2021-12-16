@@ -21,6 +21,7 @@
 #include <QDebug>
 #include "src/UtilityFunction/utility.h"
 #include "src/UtilityFunction/utility.h"
+#include <QApplication>
 
 Style::Style()
 {
@@ -78,6 +79,8 @@ int Style::AppListBigIconSize = 0;
 int Style::AppListItemSizeWidth = 0;
 int Style::TabletItemSizeWidthOther = 0;
 int Style::TabletItemSizeWidthFirst = 0;
+int Style::FirsPageViewWidth = 0;
+int Style::OtherPageViewWidth = 0;
 int Style::m_applistGridSizeWidth = 0;
 int Style::AppLeftSpace = 0;
 int Style::AppTopSpace = 0;
@@ -118,6 +121,7 @@ int Style::AppListViewBottomMargin = 20;
 int Style::AppListViewRightMargin = 0;
 int Style::TimeWidgetTop = 81;
 int Style::TimeWidgetLeft = 112;
+int Style::CenterWindHeight = 0;
 
 int Style::GroupAppColumn = 1;
 int Style::GroupAppRow = 1;
@@ -510,21 +514,26 @@ void Style::initWidStyle()
         m_applistWidHeight = m_applistWidHeight - (m_applistWidHeight % m_applistGridSizeWidth) + 1;
         m_leftWidWidth = (m_availableScreenWidth - m_applistWidWidth) / 2 + 1;
     } else {
-        AppListViewTopMargin = 0;
+        int screenWidth = QApplication::primaryScreen()->geometry().width();
+        int screenHeight = QApplication::primaryScreen()->geometry().height();
+        AppListViewTopMargin = 70;
         AppListViewLeftMargin = 52;
-        AppListViewBottomMargin = 20;
+        AppListViewBottomMargin = 40;
         AppListViewRightMargin = 0;
-        TabletItemSizeWidthFirst = 216;
-        TabletItemSizeWidthOther = 318;
-        AppListItemSizeHeight = 270;
-        AppTopSpace = 60;
-        AppLeftSpace = 60;
-        TimeWidgetTop = 81;
-        TimeWidgetLeft = 112;
-        ButtonWidgetWidth = 56;
+        LeftWidWidth = screenWidth * 0.3;
+        FirsPageViewWidth = screenWidth - LeftWidWidth - 5;
+        OtherPageViewWidth = screenWidth;
+        TabletItemSizeWidthFirst = FirsPageViewWidth / 6;
+        TabletItemSizeWidthOther = (screenWidth - 5) / 6;
+        CenterWindHeight =  screenHeight - AppListViewBottomMargin - AppListViewTopMargin;
+        AppListItemSizeHeight = CenterWindHeight / 4;
         AppListIconSize = 96;
         AppListBigIconSize = 108;
-        FirstPageSpace = 60;
-        OtherPageSpace = 111;
+        AppTopSpace = (AppListItemSizeHeight - AppListIconSize) / 2;
+        AppLeftSpace = (TabletItemSizeWidthFirst - AppListIconSize) / 2;
+        TimeWidgetTop = (CenterWindHeight - 870) / 2;
+        TimeWidgetLeft = (LeftWidWidth - 400) / 2;
+        FirstPageSpace = AppLeftSpace;
+        OtherPageSpace = (TabletItemSizeWidthOther - AppListIconSize) / 2;
     }
 }

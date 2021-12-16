@@ -253,6 +253,7 @@ void FullCommonUseWidget::on_setAreaScrollBarValue(int value)
 void FullCommonUseWidget::updateListViewSlot()
 {
     updateListView();
+    Q_EMIT sendUpdateOtherView();
 }
 
 void FullCommonUseWidget::updateListView()

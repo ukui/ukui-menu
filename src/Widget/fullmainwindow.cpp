@@ -166,6 +166,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     connect(this, &FullMainWindow::sendSetFocusToFun, m_fullFunctionPage, &FullFunctionWidget::setFocusToThis);
     connect(this, &FullMainWindow::sendSetFocusToResult, m_fullResultPage, &FullSearchResultWidget::selectFirstItemTab);
     connect(fullSelectMenuButton, &QToolButton::clicked, this, &FullMainWindow::on_fullSelectMenuButton_clicked);
+    connect(fullCommonPage, &FullCommonUseWidget::sendUpdateOtherView, this, &FullMainWindow::sendUpdateOtherView);
 }
 
 FullMainWindow::~FullMainWindow()
@@ -329,7 +330,7 @@ bool FullMainWindow::event(QEvent *event)
             }
         }
 
-        if(keyEvent->key() == Qt::Key_Escape){
+        if (keyEvent->key() == Qt::Key_Escape) {
             this->hide();
         }
     }
@@ -392,6 +393,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
     if (arg1 == m_allAction) {
         m_fullStackedWidget->setCurrentIndex(0);
         m_fullCommonPage->repaintWidget();
+        //fullCommonPage->updateListView();
         m_state = 0;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/fullicon-all.svg"));
         m_allAction->setChecked(true);

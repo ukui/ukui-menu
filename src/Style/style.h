@@ -140,6 +140,8 @@ public:
     static int AppListItemSizeWidth; //item大小
     static int TabletItemSizeWidthFirst;
     static int TabletItemSizeWidthOther;
+    static int FirsPageViewWidth;
+    static int OtherPageViewWidth;
     static int m_applistGridSizeWidth; //网格大小
     static int AppLeftSpace;//左侧边距
     static int AppTopSpace;//上侧边距
@@ -187,6 +189,7 @@ public:
     static int AppListViewLeftMargin;
     static int AppListViewBottomMargin;
     static int AppListViewRightMargin;
+    static int CenterWindHeight;
 
     static int GroupAppRow;
     static int GroupAppColumn;

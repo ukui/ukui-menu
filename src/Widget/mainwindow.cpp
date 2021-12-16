@@ -299,13 +299,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     connect(m_dbus, &DBus::sendReloadSignal, this, [ = ] {
-        m_modaldata->loadDesktopVercor();
-        QVector<QStringList> m_data = m_modaldata->getMinAllData();
-        m_minAllListView->updateData(m_data);
-        m_data = m_modaldata->getMinFuncData();
-        m_minFuncListView->updateData(m_data);
-        m_data = m_modaldata->getMinLetterData();
-        m_minLetterListView->updateData(m_data);
+        updateView();
     });
     connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
         if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
@@ -356,6 +350,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &MainWindow::recvSearchResult);
     connect(m_fullWindow, &FullMainWindow::showNormalWindow, this, &MainWindow::showNormalWindow);
+    connect(m_fullWindow, &FullMainWindow::sendUpdateOtherView, this, &MainWindow::updateMinAllView);
     connect(m_minSelectButton, &QToolButton::clicked, this, &MainWindow::on_minSelectButton_clicked);
     connect(m_selectMenuButton, &QToolButton::triggered, this, &MainWindow::on_selectMenuButton_triggered);
     connect(m_powerOffButton, &QPushButton::customContextMenuRequested, this, &MainWindow::on_powerOffButton_customContextMenuRequested);
@@ -445,9 +440,13 @@ void MainWindow::initUi()
     action->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-search.svg"));
     m_lineEdit->addAction(action, QLineEdit::LeadingPosition);
     m_desktopWatcher = new DesktopWatcher();
-    connect(m_minAllListView, &ListView::sendUpdateAppListSignal, this, &MainWindow::updateMinAllView);
+    connect(m_minAllListView, &ListView::sendUpdateAppListSignal, this, &MainWindow::updateView);
+    connect(m_minFuncListView, &ListView::sendUpdateAppListSignal, this, &MainWindow::updateView);
+    connect(m_minLetterListView, &ListView::sendUpdateAppListSignal, this, &MainWindow::updateView);
+    connect(m_minSearchResultListView, &ListView::sendUpdateAppListSignal, this, &MainWindow::updateView);
     connect(m_minAllListView, &ListView::sendCollectViewUpdate, this, &MainWindow::updateCollectView);
     connect(m_minFuncListView, &ListView::sendCollectViewUpdate, this, &MainWindow::updateCollectView);
+    connect(m_minSearchResultListView, &ListView::sendCollectViewUpdate, this, &MainWindow::updateCollectView);
     connect(m_minLetterListView, &ListView::sendCollectViewUpdate, this, &MainWindow::updateCollectView);
     connect(m_collectListView, &RightListView::sendCollectViewUpdate, this, &MainWindow::updateCollectView);
     connect(m_desktopWatcher, &DesktopWatcher::directoryChangedSignal, this, &MainWindow::updateView);
@@ -487,8 +486,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
  */
 bool MainWindow::event(QEvent *event)
 {
-    if(QEvent::WindowDeactivate == event->type() && m_canHide) { //窗口停用
-        if(QApplication::activeWindow() != this) {
+    if (QEvent::WindowDeactivate == event->type() && m_canHide) { //窗口停用
+        if (QApplication::activeWindow() != this) {
             qDebug() << " * 鼠标点击窗口外部事件";
             this->hide();
         }

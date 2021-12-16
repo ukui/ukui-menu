@@ -83,36 +83,23 @@ void KListView::rightClickedSlot(const QPoint &pos)
             RightClickMenu menu;
             int ret = menu.showAppBtnMenu(this->mapToGlobal(pos), strlist.at(0));
 
-            if (module > 0) {
-                switch (ret) {
-                    case 6:
-                    case 7:
-                        Q_EMIT sendHideMainWindowSignal();
+            switch (ret) {
+                case 1:
+                case 2:
+                    Q_EMIT sendUpdateAppListSignal();
+                    break;
 
-                    case 18:
-                        Q_EMIT sendCollectViewUpdate();
+                case 6:
+                case 7:
+                    Q_EMIT sendHideMainWindowSignal();
+                    break;
 
-                    default:
-                        break;
-                }
-            } else {
-                switch (ret) {
-                    case 1:
-                    case 2:
-                        Q_EMIT sendUpdateAppListSignal();
-                        break;
+                case 18:
+                    Q_EMIT sendCollectViewUpdate();
+                    break;
 
-                    case 6:
-                    case 7:
-                        Q_EMIT sendHideMainWindowSignal();
-                        break;
-
-                    case 18:
-                        Q_EMIT sendCollectViewUpdate();
-
-                    default:
-                        break;
-                }
+                default:
+                    break;
             }
         }
     }
