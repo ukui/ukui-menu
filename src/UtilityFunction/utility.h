@@ -76,6 +76,12 @@ QString getUserIcon();
 //获取用户姓名
 QString getUserName();
 
+enum PanelPositon{
+    BOTTOM = 0,
+    TOP = 1,
+    LEFT = 2
+};
+
 extern QString projectCodeName;
 
 

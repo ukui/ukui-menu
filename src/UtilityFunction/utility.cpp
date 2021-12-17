@@ -117,17 +117,17 @@ QVariantList getScreenGeometryList()
         position = reply.value().at(5).toInt();
     }
 //    if (rect == qApp->primaryScreen()->geometry()) {
-    if (position == 0) {
+    if (position == BOTTOM) {
         list.append(rect.x());
         list.append(rect.y());
         list.append(rect.width());
         list.append(rect.height() - panelSize);
-    } else if (position == 1) {
+    } else if (position == TOP) {
         list.append(rect.x());
         list.append(rect.y() + panelSize);
         list.append(rect.width());
         list.append(rect.height() - panelSize);
-    } else if (position == 2) {
+    } else if (position == LEFT) {
         list.append(rect.x() + panelSize);
         list.append(rect.y());
         list.append(rect.width() - panelSize);
