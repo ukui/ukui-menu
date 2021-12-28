@@ -50,7 +50,6 @@ MainWindow::MainWindow(QWidget *parent) :
     m_centerLayout->setContentsMargins(0, 0, 0, 0);
     //左侧
     m_viewWidget = new MainViewWidget(m_centralwidget);
-    m_viewWidget->resize(QSize(Style::defaultMainViewWidWidth, Style::defaultMainViewWidHeight));
     m_mainLeftVerticalLayout = new QVBoxLayout(m_viewWidget);
     m_mainLeftVerticalLayout->setSpacing(0);
     m_mainLeftVerticalLayout->setContentsMargins(8, 8, 0, 0);

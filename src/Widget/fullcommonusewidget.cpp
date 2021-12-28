@@ -78,7 +78,7 @@ void FullCommonUseWidget::initUi()
     m_powerOffButton->setIconSize(QSize(28, 28));
     m_powerOffButton->setFlat(true);
     m_powerOffButton->setStyleSheet("QPushButton {padding: 0px;}"
-                                    "QPushButton:hover {border-radius:20px; background: rgba(255, 255, 255, 0.2);}"
+                                    "QPushButton:hover {border-radius   :20px; background: rgba(255, 255, 255, 0.2);}"
                                     "QPushButton:pressed {border-radius:20px; background: rgba(255, 255, 255, 0.3);}");
     rightButtonLayout->addWidget(m_verticalScrollBar);
     QSpacerItem *m_spaceItem3 = nullptr;
