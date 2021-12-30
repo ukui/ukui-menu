@@ -52,7 +52,7 @@ void FullListView::initWidget()
     this->setMouseTracking(true);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    this->setGridSize(QSize(Style::AppListGridSizeWidth, Style::AppListGridSizeWidth));
+    this->setGridSize(QSize(Style::m_applistGridSizeWidth, Style::m_applistGridSizeWidth));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);//移除边框
     //this->setStyleSheet(QString::fromUtf8("QStandardItemModel#listmodel{border:3px solid #FFFFFF; }QWidget#widget:focus{ border:5px solid #A5A6A1;  } "));
@@ -83,8 +83,8 @@ void FullListView::keyPressEvent(QKeyEvent *e)
             case Qt::Key_Left: {
                 this->clearFocus();
 
-                if (mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::AppListGridSizeWidth) {
-                    Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+                if (mapToGlobal(center.topRight()).y() < Style::QueryLineEditHeight + Style::m_applistGridSizeWidth) {
+                    Q_EMIT sendSetslidebar(-Style::m_applistGridSizeWidth);
                 }
 
                 this->setFocus();
@@ -95,8 +95,8 @@ void FullListView::keyPressEvent(QKeyEvent *e)
             case Qt::Key_Right: {
                 this->clearFocus();
 
-                if (mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth)) {
-                    Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+                if (mapToGlobal(center.bottomRight()).y() > (1080 - Style::m_applistGridSizeWidth)) {
+                    Q_EMIT sendSetslidebar(Style::m_applistGridSizeWidth);
                 }
 
                 this->setFocus();
@@ -106,8 +106,8 @@ void FullListView::keyPressEvent(QKeyEvent *e)
 
             case Qt::Key_Up: {
                 if (module == 0) {
-                    if (mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::AppListGridSizeWidth)) {
-                        Q_EMIT sendSetslidebar(-Style::AppListGridSizeWidth);
+                    if (mapToGlobal(center.topRight()).y() < (Style::QueryLineEditHeight  + Style::m_applistGridSizeWidth)) {
+                        Q_EMIT sendSetslidebar(-Style::m_applistGridSizeWidth);
                     }
                 }
 
@@ -117,8 +117,8 @@ void FullListView::keyPressEvent(QKeyEvent *e)
 
             case Qt::Key_Down: {
                 if (module == 0) {
-                    if (mapToGlobal(center.bottomRight()).y() > (1080 - Style::AppListGridSizeWidth)) {
-                        Q_EMIT sendSetslidebar(Style::AppListGridSizeWidth);
+                    if (mapToGlobal(center.bottomRight()).y() > (1080 - Style::m_applistGridSizeWidth)) {
+                        Q_EMIT sendSetslidebar(Style::m_applistGridSizeWidth);
                     }
                 }
 

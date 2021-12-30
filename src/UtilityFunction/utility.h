@@ -44,8 +44,7 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
 
 //调试日志
 void debugLog(QString strMsg);
-QRect getScreenAvailableGeometry();
-QVariantList getScreenGeometry();
+QVariantList getScreenGeometryList();
 double getTransparency();
 QString getEnvOverriddenDesktopFile(int pid);
 //数据库操作
@@ -76,6 +75,13 @@ void centerToScreen(QWidget *widget);
 QString getUserIcon();
 //获取用户姓名
 QString getUserName();
+
+enum PanelPositon{
+    BOTTOM = 0,
+    TOP = 1,
+    LEFT = 2,
+    RIGHT = 3
+};
 
 extern QString projectCodeName;
 

@@ -15,11 +15,10 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     m_buttonStyle = QString("%1{border-radius:24px; background: rgba(255, 255, 255, 0.1);}"
                             "%1:hover {border-radius:24px; background: rgba(255, 255, 255, 0.2);}"
                             "%1:pressed {border-radius:24px; background: rgba(255, 255, 255, 0.3);}");
-    QRect rect = getScreenAvailableGeometry();
-    this->setFixedSize(QSize(rect.width(), rect.height()));
+    this->setFixedSize(Style::m_availableScreenWidth, Style::m_availableScreenHeight);
     centralwidget = new QWidget(this);
     verticalLayout = new QVBoxLayout(centralwidget);
-    verticalLayout->setSpacing(32);
+    verticalLayout->setSpacing(0);
     verticalLayout->setContentsMargins(0, 48, 0, 0);
     topHorizontalLayout = new QHBoxLayout();
     topHorizontalLayout->setSpacing(8);
@@ -59,9 +58,9 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
             m_queryWid->layout()->removeWidget(m_queryText);
             m_queryText->setParent(nullptr);
             resetEditline();
-            fullCommonPage->repaintWidget();
-            fullFunctionPage->repaintWidget();
-            fullLetterPage->repaintWidget();
+            m_fullCommonPage->repaintWidget();
+            m_fullFunctionPage->repaintWidget();
+            m_fullLetterPage->repaintWidget();
         }
     });
 
@@ -107,16 +106,16 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     minPushButton->setIcon(icon2);
     minPushButton->setFlat(true);
     minPushButton->installEventFilter(this);
-    fullStackedWidget = new QStackedWidget(centralwidget);
-    fullCommonPage = new FullCommonUseWidget(fullStackedWidget);
-    fullStackedWidget->addWidget(fullCommonPage);
-    fullLetterPage = new FullLetterWidget(fullStackedWidget);
-    fullStackedWidget->addWidget(fullLetterPage);
-    fullFunctionPage = new FullFunctionWidget(fullStackedWidget);
-    fullStackedWidget->addWidget(fullFunctionPage);
-    fullResultPage = new FullSearchResultWidget(fullStackedWidget);
-    fullStackedWidget->addWidget(fullResultPage);
-    bottomHorizonLayout->addWidget(fullStackedWidget);
+    m_fullStackedWidget = new QStackedWidget(centralwidget);
+    m_fullCommonPage = new FullCommonUseWidget(m_fullStackedWidget);
+    m_fullStackedWidget->addWidget(m_fullCommonPage);
+    m_fullLetterPage = new FullLetterWidget(m_fullStackedWidget);
+    m_fullStackedWidget->addWidget(m_fullLetterPage);
+    m_fullFunctionPage = new FullFunctionWidget(m_fullStackedWidget);
+    m_fullStackedWidget->addWidget(m_fullFunctionPage);
+    m_fullResultPage = new FullSearchResultWidget(m_fullStackedWidget);
+    m_fullStackedWidget->addWidget(m_fullResultPage);
+    bottomHorizonLayout->addWidget(m_fullStackedWidget);
     //    bottomHorizonLayout->addWidget(verticalScrollBar);
     topHorizontalLayout->addItem(horizontalSpacer);
     topHorizontalLayout->addWidget(m_lineEdit);
@@ -127,7 +126,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     verticalLayout->addLayout(topHorizontalLayout);
     verticalLayout->addLayout(bottomHorizonLayout);
     this->setCentralWidget(centralwidget);
-    fullStackedWidget->setCurrentIndex(0);
+    m_fullStackedWidget->setCurrentIndex(0);
     m_menu = new QMenu;
     m_allAction = new QAction(m_menu);
     m_letterAction = new QAction(m_menu);
@@ -155,19 +154,19 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     connect(minPushButton, &QPushButton::clicked, this, &FullMainWindow::on_minPushButton_clicked);
     connect(fullSelectToolButton, &QToolButton::clicked, this, &FullMainWindow::on_fullSelectToolButton_clicked);
     connect(fullSelectMenuButton, &QToolButton::triggered, this, &FullMainWindow::on_fullSelectMenuButton_triggered);
-    connect(fullCommonPage, &FullCommonUseWidget::changeScrollValue, this, &FullMainWindow::on_setScrollBarValue);
-    connect(fullFunctionPage, &FullFunctionWidget::changeScrollValue, this, &FullMainWindow::on_setScrollBarValue);
-    connect(fullLetterPage, &FullLetterWidget::changeScrollValue, this, &FullMainWindow::on_setScrollBarValue);
-    connect(fullFunctionPage, &FullFunctionWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
-    connect(fullLetterPage, &FullLetterWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
-    connect(fullCommonPage, &FullCommonUseWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
-    connect(fullResultPage, &FullSearchResultWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
-    connect(this, &FullMainWindow::sendSetFocusToCom, fullCommonPage, &FullCommonUseWidget::selectFirstItemTab);
-    connect(this, &FullMainWindow::sendSetFocusToLet, fullLetterPage, &FullLetterWidget::setFocusToThis);
-    connect(this, &FullMainWindow::sendSetFocusToFun, fullFunctionPage, &FullFunctionWidget::setFocusToThis);
-    connect(this, &FullMainWindow::sendSetFocusToResult, fullResultPage, &FullSearchResultWidget::selectFirstItemTab);
+    connect(m_fullCommonPage, &FullCommonUseWidget::changeScrollValue, this, &FullMainWindow::on_setScrollBarValue);
+    connect(m_fullFunctionPage, &FullFunctionWidget::changeScrollValue, this, &FullMainWindow::on_setScrollBarValue);
+    connect(m_fullLetterPage, &FullLetterWidget::changeScrollValue, this, &FullMainWindow::on_setScrollBarValue);
+    connect(m_fullFunctionPage, &FullFunctionWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
+    connect(m_fullLetterPage, &FullLetterWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
+    connect(m_fullCommonPage, &FullCommonUseWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
+    connect(m_fullResultPage, &FullSearchResultWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
+    connect(this, &FullMainWindow::sendSetFocusToCom, m_fullCommonPage, &FullCommonUseWidget::selectFirstItemTab);
+    connect(this, &FullMainWindow::sendSetFocusToLet, m_fullLetterPage, &FullLetterWidget::setFocusToThis);
+    connect(this, &FullMainWindow::sendSetFocusToFun, m_fullFunctionPage, &FullFunctionWidget::setFocusToThis);
+    connect(this, &FullMainWindow::sendSetFocusToResult, m_fullResultPage, &FullSearchResultWidget::selectFirstItemTab);
     connect(fullSelectMenuButton, &QToolButton::clicked, this, &FullMainWindow::on_fullSelectMenuButton_clicked);
-    connect(fullCommonPage, &FullCommonUseWidget::sendUpdateOtherView, this, &FullMainWindow::sendUpdateOtherView);
+    connect(m_fullCommonPage, &FullCommonUseWidget::sendUpdateOtherView, this, &FullMainWindow::sendUpdateOtherView);
 }
 
 FullMainWindow::~FullMainWindow()
@@ -176,9 +175,9 @@ FullMainWindow::~FullMainWindow()
 
 void FullMainWindow::updateView()
 {
-    fullCommonPage->updateListView();
-    fullFunctionPage->updateAppListView();
-    fullLetterPage->updateAppListView();
+    m_fullCommonPage->updateListView();
+    m_fullFunctionPage->updateAppListView();
+    m_fullLetterPage->updateAppListView();
 }
 
 void FullMainWindow::on_setScrollBarValue(int value, int maximumValue)
@@ -253,11 +252,11 @@ bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
             QKeyEvent *ke = (QKeyEvent *)event;
 
             if (ke->key() == Qt::Key_Tab) {
-                if (fullStackedWidget->currentIndex() == 0) {
+                if (m_fullStackedWidget->currentIndex() == 0) {
                     Q_EMIT sendSetFocusToCom();
-                } else if (fullStackedWidget->currentIndex() == 1) {
+                } else if (m_fullStackedWidget->currentIndex() == 1) {
                     Q_EMIT sendSetFocusToLet();
-                } else if (fullStackedWidget->currentIndex() == 2) {
+                } else if (m_fullStackedWidget->currentIndex() == 2) {
                     Q_EMIT sendSetFocusToFun();
                 } else {
                     Q_EMIT sendSetFocusToResult();
@@ -319,7 +318,7 @@ bool FullMainWindow::event(QEvent *event)
             }
 
             if (m_lineEdit->hasFocus()) {
-                fullResultPage->setFocus();
+                m_fullResultPage->setFocus();
             } else {
                 QWidget *current_focus_widget;
                 current_focus_widget = QWidget::focusWidget();
@@ -350,11 +349,11 @@ void FullMainWindow::searchAppSlot(QString arg)
     if (!arg.isEmpty()) { //切换至搜索模块
         Q_EMIT sendSearchKeyword(arg);
         m_searchAppThread->start();
-        fullStackedWidget->setCurrentIndex(3);
+        m_fullStackedWidget->setCurrentIndex(3);
     } else {
-        fullStackedWidget->setCurrentIndex(m_state);
-        fullFunctionPage->repaintWidget();
-        fullLetterPage->repaintWidget();
+        m_fullStackedWidget->setCurrentIndex(m_state);
+        m_fullFunctionPage->repaintWidget();
+        m_fullLetterPage->repaintWidget();
     }
 }
 
@@ -367,7 +366,7 @@ void FullMainWindow::mousePressEvent(QMouseEvent *event)
 void FullMainWindow::recvSearchResult(QVector<QStringList> arg)
 {
     m_searchAppThread->quit();
-    fullResultPage->updateAppListView(arg);
+    m_fullResultPage->updateAppListView(arg);
 }
 
 void FullMainWindow::on_fullSelectToolButton_clicked()
@@ -375,11 +374,11 @@ void FullMainWindow::on_fullSelectToolButton_clicked()
     resetEditline();
     fullSelectToolButton->setFocus();
 
-    if (fullStackedWidget->currentIndex() == 0) {
+    if (m_fullStackedWidget->currentIndex() == 0) {
         on_fullSelectMenuButton_triggered(m_letterAction);
-    } else if (fullStackedWidget->currentIndex() == 1) {
+    } else if (m_fullStackedWidget->currentIndex() == 1) {
         on_fullSelectMenuButton_triggered(m_funcAction);
-    } else if (fullStackedWidget->currentIndex() == 2) {
+    } else if (m_fullStackedWidget->currentIndex() == 2) {
         on_fullSelectMenuButton_triggered(m_allAction);
     }
 }
@@ -392,29 +391,37 @@ void FullMainWindow::on_fullSelectMenuButton_clicked()
 void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
 {
     if (arg1 == m_allAction) {
-        fullStackedWidget->setCurrentIndex(0);
-//        fullCommonPage->repaintWidget();
-        fullCommonPage->updateListView();
+        m_fullStackedWidget->setCurrentIndex(0);
+        m_fullCommonPage->repaintWidget();
+        //fullCommonPage->updateListView();
         m_state = 0;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/fullicon-all.svg"));
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(false);
     } else if (arg1 == m_letterAction) {
-        fullStackedWidget->setCurrentIndex(1);
-//        fullLetterPage->repaintWidget();
+        m_fullStackedWidget->setCurrentIndex(1);
+        m_fullLetterPage->repaintWidget();
         m_state = 1;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/全屏 icon-字母排序.svg"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
         m_funcAction->setChecked(false);
     } else if (arg1 == m_funcAction) {
-        fullStackedWidget->setCurrentIndex(2);
-//        fullFunctionPage->repaintWidget();
+        m_fullStackedWidget->setCurrentIndex(2);
+        m_fullFunctionPage->repaintWidget();
         m_state = 2;
         fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/全屏 icon-功能排序.svg"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(true);
     }
+}
+
+void FullMainWindow::repaintWidget()
+{
+    m_fullCommonPage->repaintWidget();
+    m_fullFunctionPage->repaintWidget();
+    m_fullLetterPage->repaintWidget();
+    m_fullResultPage->repaintWidget();
 }
