@@ -65,7 +65,7 @@ void TabletWindow::initUi()
     this->setFixedSize(m_width, m_height);
     m_backPixmap = new QPixmap;
     leftWidget = new FunctionWidget(this);
-    leftWidget->setFixedSize(Style::LeftWidWidth, Style::CenterWindHeight);
+    leftWidget->setFixedSize(Style::m_leftWidWidth, Style::CenterWindHeight);
     firstPageWidget = new QWidget(this);
     firstPageWidget->installEventFilter(this);
     buttonGroup = new QButtonGroup;

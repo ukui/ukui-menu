@@ -45,8 +45,8 @@ void FullFunctionWidget::initUi()
     m_iconListWid = new QWidget(this);
     m_iconListWid->setAttribute(Qt::WA_TranslucentBackground);
     m_iconListWid->setAutoFillBackground(false);
-    m_applistWid->setFixedSize(Style::AppListWidWidth, Style::AppListWidHeight);
-    m_iconListWid->setFixedSize(Style::LeftWidWidth, Style::AppListWidHeight);
+    m_applistWid->setFixedSize(Style::m_applistWidWidth, Style::m_applistWidHeight);
+    m_iconListWid->setFixedSize(Style::m_leftWidWidth, Style::m_applistWidHeight);
     m_verticalScrollBar = new QScrollBar(m_scrollArea);
     m_verticalScrollBar->installEventFilter(this);
     m_verticalScrollBar->setOrientation(Qt::Vertical);
@@ -131,7 +131,7 @@ void FullFunctionWidget::initAppListWidget()
 void FullFunctionWidget::initVerticalScrollBar()
 {
     m_verticalScrollBar->setFixedHeight(200);
-    int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
+    int scrollBarSize = 200 * Style::m_applistWidHeight / m_scrollAreaWidHeight + 1;
     if (scrollBarSize >= 200) {
         m_verticalScrollBar->hide();
     } else {
@@ -279,7 +279,7 @@ void FullFunctionWidget::resizeScrollAreaControls()
         QWidget *wid = widItem->widget();
         FullListView *listview = qobject_cast<FullListView *>(wid);
         listview->adjustSize();
-        int dividend = m_scrollArea->width() / Style::AppListGridSizeWidth;
+        int dividend = m_scrollArea->width() / Style::m_applistGridSizeWidth;
         int rowcount = 0;
 
         if (listview->model()->rowCount() % dividend > 0) {
@@ -317,7 +317,7 @@ void FullFunctionWidget::initIconListWidget()
 
 void FullFunctionWidget::on_setScrollBarValue(int value)
 {
-    m_verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::AppListWidHeight);
+    m_verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::m_applistWidHeight);
     m_verticalScrollBar->setValue(value);
 }
 
@@ -468,13 +468,9 @@ void FullFunctionWidget::setFunctionBtnGeometry()
 
 void FullFunctionWidget::repaintWidget()
 {
-    //    this->setFixedSize(Style::MainViewWidWidth,
-    //                       Style::AppListWidHeight);
-    //    m_applistWid->setFixedSize(Style::AppListWidWidth,this->height());
-    //    m_scrollArea->setFixedSize(m_applistWid->width(),m_applistWid->height());
-    //    m_iconListWid->setFixedSize(Style::LeftWidWidth,this->height());
-    //    m_iconListScrollAreaWid->setFixedSize(Style::LeftBtnWidth,
-    //                                          m_iconListWid->height());
+    m_applistWid->setFixedSize(Style::m_applistWidWidth, Style::m_applistWidHeight);
+    m_iconListWid->setFixedSize(Style::m_leftWidWidth, Style::m_applistWidHeight);
+    m_scrollArea->setFixedSize(m_applistWid->width(), m_applistWid->height());
     updateAppListView();
 }
 

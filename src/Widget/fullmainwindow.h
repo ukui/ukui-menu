@@ -22,6 +22,7 @@ public:
 public:
     void updateView();
     void resetEditline();
+    void repaintWidget();
 
 Q_SIGNALS:
 
@@ -66,12 +67,12 @@ private:
     QToolButton *fullSelectToolButton;
     QToolButton *fullSelectMenuButton;
     QPushButton *minPushButton;
-    QStackedWidget *fullStackedWidget;
+    QStackedWidget *m_fullStackedWidget;
 
-    FullCommonUseWidget *fullCommonPage;
-    FullLetterWidget *fullLetterPage;
-    FullFunctionWidget *fullFunctionPage;
-    FullSearchResultWidget *fullResultPage;
+    FullCommonUseWidget *m_fullCommonPage;
+    FullLetterWidget *m_fullLetterPage;
+    FullFunctionWidget *m_fullFunctionPage;
+    FullSearchResultWidget *m_fullResultPage;
 
     SearchAppThread *m_searchAppThread = nullptr;
     int m_state = 0;

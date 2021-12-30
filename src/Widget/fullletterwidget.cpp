@@ -41,7 +41,7 @@ void FullLetterWidget::initUi()
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->setAttribute(Qt::WA_TranslucentBackground);
     m_letterListWid = new QWidget(this);
-    m_letterListWid->setFixedSize(Style::LeftWidWidth, Style::AppListWidHeight);
+    m_letterListWid->setFixedSize(Style::m_leftWidWidth, Style::m_applistWidHeight);
     m_verticalScrollBar = new QScrollBar(m_scrollArea);
     m_verticalScrollBar->installEventFilter(this);
     m_verticalScrollBar->setOrientation(Qt::Vertical);
@@ -80,7 +80,7 @@ void FullLetterWidget::initAppListWidget()
     m_scrollArea->setStyleSheet("background:transparent");
     m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollArea->setWidget(m_scrollAreaWid);
-    m_scrollArea->setFixedSize(Style::AppListWidWidth, Style::AppListWidHeight);
+    m_scrollArea->setFixedSize(Style::m_applistWidWidth, Style::m_applistWidHeight);
     m_scrollArea->setWidgetResizable(true);
     //    m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scrollAreaWidLayout = new QVBoxLayout;
@@ -125,7 +125,7 @@ void FullLetterWidget::initAppListWidget()
 void FullLetterWidget::initVerticalScrollBar()
 {
     m_verticalScrollBar->setFixedHeight(200);
-    int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
+    int scrollBarSize = 200 * Style::m_applistWidHeight / m_scrollAreaWidHeight + 1;
     if (scrollBarSize >= 200) {
         m_verticalScrollBar->hide();
     } else {
@@ -271,7 +271,7 @@ void FullLetterWidget::updateAppListView()
 
 void FullLetterWidget::on_setScrollBarValue(int value)
 {
-    m_verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::AppListWidHeight);
+    m_verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::m_applistWidHeight);
     m_verticalScrollBar->setValue(value);
 }
 
@@ -289,7 +289,7 @@ void FullLetterWidget::resizeScrollAreaControls()
         QWidget *wid = widItem->widget();
         FullListView *listview = qobject_cast<FullListView *>(wid);
         listview->adjustSize();
-        int dividend = m_scrollArea->width() / Style::AppListGridSizeWidth;
+        int dividend = m_scrollArea->width() / Style::m_applistGridSizeWidth;
         int rowcount = 0;
 
         if (listview->model()->rowCount() % dividend > 0) {
@@ -473,6 +473,8 @@ void FullLetterWidget::setLetterBtnGeometry()
 
 void FullLetterWidget::repaintWidget()
 {
+    m_letterListWid->setFixedSize(Style::m_leftWidWidth, Style::m_applistWidHeight);
+    m_scrollArea->setFixedSize(Style::m_applistWidWidth, Style::m_applistWidHeight);
     updateAppListView();
 }
 
@@ -494,7 +496,7 @@ void FullLetterWidget::widgetMakeZero()
 
 void FullLetterWidget::moveScrollBar(int type)
 {
-    int height = Style::primaryScreenHeight;
+    int height = Style::m_availableScreenHeight;
 
     if (type == 0) {
         m_scrollArea->verticalScrollBar()->setSliderPosition(m_scrollArea->verticalScrollBar()->sliderPosition() - height * 100 / 1080);

@@ -69,15 +69,15 @@ int main(int argc, char *argv[])
         MainWindow w;
         app.setActivationWindow(&w);
 
-        if (Style::panelPosition == 0) {
-            w.setGeometry(QRect(Style::primaryScreenX + 4, Style::primaryScreenY + Style::primaryScreenHeight - Style::panelSize - Style::minh - 3,
+        if (Style::m_panelPosition == 0) {
+            w.setGeometry(QRect(Style::m_primaryScreenX + 4, Style::m_primaryScreenY + Style::m_availableScreenHeight - Style::minh - 3,
                                 Style::minw, Style::minh));
-        } else if (Style::panelPosition == 1) {
-            w.setGeometry(QRect(Style::primaryScreenX + 4, Style::primaryScreenY + Style::panelSize + 4, Style::minw, Style::minh));
-        } else if (Style::panelPosition == 2) {
-            w.setGeometry(QRect(Style::primaryScreenX + Style::panelSize + 4, Style::primaryScreenY + 4, Style::minw, Style::minh));
+        } else if (Style::m_panelPosition == 1) {
+            w.setGeometry(QRect(Style::m_primaryScreenX + 4, Style::m_primaryScreenY + 4, Style::minw, Style::minh));
+        } else if (Style::m_panelPosition == 2) {
+            w.setGeometry(QRect(Style::m_primaryScreenX + 4, Style::m_primaryScreenY + 4, Style::minw, Style::minh));
         } else {
-            w.setGeometry(QRect(Style::primaryScreenX + Style::primaryScreenWidth - Style::panelSize - Style::minw - 4, Style::primaryScreenY + 4,
+            w.setGeometry(QRect(Style::m_primaryScreenX + Style::m_availableScreenWidth - Style::minw - 4, Style::m_primaryScreenY + 4,
                                 Style::minw, Style::minh));
         }
 

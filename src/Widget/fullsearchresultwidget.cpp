@@ -47,7 +47,7 @@ void FullSearchResultWidget::initUi()
     m_scrollArea->setStyleSheet("background:transparent");
     m_scrollAreaWid = new ScrollAreaWid(this);
     m_scrollAreaWid->setAttribute(Qt::WA_TranslucentBackground);
-    m_scrollArea->setFixedSize(Style::AppListWidWidth, Style::AppListWidHeight);
+    m_scrollArea->setFixedSize(Style::m_applistWidWidth, Style::m_applistWidHeight);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -101,7 +101,7 @@ void FullSearchResultWidget::initUi()
 void FullSearchResultWidget::initVerticalScrollBar()
 {
     m_verticalScrollBar->setFixedHeight(200);
-    int scrollBarSize = 200 * Style::AppListWidHeight / m_scrollAreaWidHeight + 1;
+    int scrollBarSize = 200 * Style::m_applistWidHeight / m_scrollAreaWidHeight + 1;
     if (scrollBarSize >= 200) {
         m_verticalScrollBar->hide();
     } else {
@@ -175,7 +175,7 @@ void FullSearchResultWidget::resizeScrollAreaControls()
     QWidget *wid = widItem->widget();
     FullListView *listview = qobject_cast<FullListView *>(wid);
     listview->adjustSize();
-    int dividend = m_scrollArea->width() / Style::AppListGridSizeWidth;
+    int dividend = m_scrollArea->width() / Style::m_applistGridSizeWidth;
     int rowcount = 0;
 
     if (listview->model()->rowCount() % dividend > 0) {
@@ -222,6 +222,7 @@ void FullSearchResultWidget::selectFirstItemTab()
 
 void FullSearchResultWidget::repaintWidget()
 {
+    m_scrollArea->setFixedSize(Style::m_applistWidWidth, Style::m_applistWidHeight);
     m_scrollAreaWidLayout->removeWidget(m_listView);
     m_listView->setParent(nullptr);
     delete m_listView;
@@ -233,7 +234,7 @@ void FullSearchResultWidget::repaintWidget()
 
 void FullSearchResultWidget::moveScrollBar(int type)
 {
-    int height = Style::primaryScreenHeight;
+    int height = Style::m_availableScreenHeight;
 
     if (type == 0) {
         m_listView->verticalScrollBar()->setSliderPosition(m_listView->verticalScrollBar()->sliderPosition() - height * 100 / 1080);
@@ -260,7 +261,7 @@ void FullSearchResultWidget::setViewFocus()
 
 void FullSearchResultWidget::on_setScrollBarValue(int value)
 {
-    m_verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::AppListWidHeight);
+    m_verticalScrollBar->setMaximum(m_scrollAreaWidHeight - Style::m_applistWidHeight);
     m_verticalScrollBar->setValue(value);
 }
 
