@@ -79,7 +79,8 @@ QString getUserName();
 enum PanelPositon{
     BOTTOM = 0,
     TOP = 1,
-    LEFT = 2
+    LEFT = 2,
+    RIGHT = 3
 };
 
 extern QString projectCodeName;

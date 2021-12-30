@@ -32,6 +32,7 @@ SearchAppThread::~SearchAppThread()
 
 void SearchAppThread::run()
 {
+
     m_appInfoVector.clear();
     m_appInfoVector = UkuiMenuInterface::appInfoVector;
     m_searchResultVector.clear();

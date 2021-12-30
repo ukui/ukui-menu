@@ -249,14 +249,13 @@ MainWindow::MainWindow(QWidget *parent) :
     m_leftStackedWidget->setCurrentIndex(0);
     m_minMaxChangeButton->setDefault(false);
     m_rightStackedWidget->setCurrentIndex(0);
-    //    setTabOrder(widget, searchPushButton);
+
     setTabOrder(m_searchPushButton, m_minSelectButton);
     setTabOrder(m_minSelectButton, m_selectMenuButton);
     setTabOrder(m_selectMenuButton, m_collectPushButton);
     setTabOrder(m_collectPushButton, m_recentPushButton);
     setTabOrder(m_recentPushButton, m_minMaxChangeButton);
     setTabOrder(m_minMaxChangeButton, m_powerOffButton);
-    setTabOrder(m_powerOffButton, m_collectListView);
 
     m_softwareDbThread = new SoftwareDatabaseUpdateThread;
     //获取软件商店类别信号

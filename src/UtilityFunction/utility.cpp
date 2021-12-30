@@ -116,35 +116,26 @@ QVariantList getScreenGeometryList()
         panelSize = reply.value().at(4).toInt();
         position = reply.value().at(5).toInt();
     }
-//    if (rect == qApp->primaryScreen()->geometry()) {
-    if (position == BOTTOM) {
-        list.append(rect.x());
-        list.append(rect.y());
-        list.append(rect.width());
-        list.append(rect.height() - panelSize);
-    } else if (position == TOP) {
-        list.append(rect.x());
-        list.append(rect.y() + panelSize);
-        list.append(rect.width());
-        list.append(rect.height() - panelSize);
-    } else if (position == LEFT) {
-        list.append(rect.x() + panelSize);
-        list.append(rect.y());
-        list.append(rect.width() - panelSize);
-        list.append(rect.height());
-    } else {
-        list.append(rect.x());
-        list.append(rect.y());
-        list.append(rect.width() - panelSize);
-        list.append(rect.height());
-    }
-//    } else {
-//        list.append(rect.x());
-//        list.append(rect.y());
-//        list.append(rect.width());
-//        list.append(rect.height());
-//    }
 
+    QList<int> posIndex;
+    switch (position) {
+    case BOTTOM:
+        posIndex = {0, 0, 0, -1};
+        break;
+    case TOP:
+        posIndex = {0, 1, 0, -1};
+        break;
+    case LEFT:
+        posIndex = {1, 0, -1, 0};
+        break;
+    case RIGHT:
+        posIndex = {0, 0, -1, 0};
+    }
+
+    list.append(rect.x() + posIndex[0] * panelSize);
+    list.append(rect.y() + posIndex[1] * panelSize);
+    list.append(rect.width() + posIndex[2] * panelSize);
+    list.append(rect.height() + posIndex[3] * panelSize);
     list.append(panelSize);
     list.append(position);
     return list;
