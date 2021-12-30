@@ -4,188 +4,43 @@
 <context>
     <name>FullMainWindow</name>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="64"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="74"/>
         <source>Search</source>
         <translation>搜索应用</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="125"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="135"/>
         <source>All</source>
-        <translation>所有软件</translation>
+        <translation>全部</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="127"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="137"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="129"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="139"/>
         <source>Function</source>
         <translation>功能分类</translation>
     </message>
 </context>
 <context>
-    <name>FunctionClassifyButton</name>
-    <message>
-        <source>Mobile</source>
-        <translation type="vanished">移动</translation>
-    </message>
-    <message>
-        <source>Internet</source>
-        <translation type="vanished">网络</translation>
-    </message>
-    <message>
-        <source>Social</source>
-        <translation type="vanished">社交</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation type="vanished">影音</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation type="vanished">开发</translation>
-    </message>
-    <message>
-        <source>Image</source>
-        <translation type="vanished">图像</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation type="vanished">游戏</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation type="vanished">办公</translation>
-    </message>
-    <message>
-        <source>Education</source>
-        <translation type="vanished">教育</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation type="vanished">系统</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="vanished">其它</translation>
-    </message>
-</context>
-<context>
     <name>FunctionWidget</name>
     <message>
-        <source>Mobile</source>
-        <translation type="vanished">移动</translation>
-    </message>
-    <message>
-        <source>Internet</source>
-        <translation type="vanished">网络</translation>
-    </message>
-    <message>
-        <source>Social</source>
-        <translation type="vanished">社交</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation type="vanished">影音</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation type="vanished">开发</translation>
-    </message>
-    <message>
-        <source>Image</source>
-        <translation type="vanished">图像</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation type="vanished">游戏</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation type="vanished">办公</translation>
-    </message>
-    <message>
-        <source>Education</source>
-        <translation type="vanished">教育</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation type="vanished">系统</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="vanished">其它</translation>
-    </message>
-</context>
-<context>
-    <name>GetModelData</name>
-    <message>
-        <source>Mobile</source>
-        <translation type="vanished">移动</translation>
-    </message>
-    <message>
-        <source>Internet</source>
-        <translation type="vanished">网络</translation>
-    </message>
-    <message>
-        <source>Social</source>
-        <translation type="vanished">社交</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation type="vanished">影音</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation type="vanished">开发</translation>
-    </message>
-    <message>
-        <source>Image</source>
-        <translation type="vanished">图像</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation type="vanished">游戏</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation type="vanished">办公</translation>
-    </message>
-    <message>
-        <source>Education</source>
-        <translation type="vanished">教育</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation type="vanished">系统</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="vanished">其它</translation>
-    </message>
-</context>
-<context>
-    <name>MainViewWidget</name>
-    <message>
-        <source>All</source>
-        <translation type="vanished">所有软件</translation>
-    </message>
-    <message>
-        <source>Letter</source>
-        <translation type="vanished">字母排序</translation>
-    </message>
-    <message>
-        <source>Function</source>
-        <translation type="vanished">功能分类</translation>
-    </message>
-    <message>
+        <location filename="../src/tablet/UtilityFunction/functionWidget.cpp" line="205"/>
         <source>Search</source>
-        <translation type="vanished">搜索</translation>
+        <translation>全局搜索</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
+    <message>
+        <location filename="../src/Widget/mainwindow.cpp" line="238"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="425"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="843"/>
+        <source>All</source>
+        <translation>全部</translation>
+    </message>
     <message>
         <location filename="../src/Widget/mainwindow.cpp" line="240"/>
         <source>...</source>
@@ -202,13 +57,6 @@
         <translation>最近</translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="238"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="418"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="832"/>
-        <source>All</source>
-        <translation>所有软件</translation>
-    </message>
-    <message>
         <location filename="../src/Widget/mainwindow.cpp" line="245"/>
         <source>Max</source>
         <translation>放大</translation>
@@ -219,63 +67,16 @@
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="420"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="840"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="427"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="851"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="422"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="848"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="429"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="859"/>
         <source>Function</source>
         <translation>功能分类</translation>
-    </message>
-</context>
-<context>
-    <name>PushButton</name>
-    <message>
-        <source>Mobile</source>
-        <translation type="vanished">移动</translation>
-    </message>
-    <message>
-        <source>Internet</source>
-        <translation type="vanished">网络</translation>
-    </message>
-    <message>
-        <source>Social</source>
-        <translation type="vanished">社交</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation type="vanished">影音</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation type="vanished">开发</translation>
-    </message>
-    <message>
-        <source>Image</source>
-        <translation type="vanished">图像</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation type="vanished">游戏</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation type="vanished">办公</translation>
-    </message>
-    <message>
-        <source>Education</source>
-        <translation type="vanished">教育</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation type="vanished">系统</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="vanished">其它</translation>
     </message>
 </context>
 <context>
@@ -344,7 +145,7 @@
         <location filename="../src/Interface/ukuimenuinterface.cpp" line="83"/>
         <location filename="../src/Widget/functionbuttonwidget.cpp" line="39"/>
         <source>Others</source>
-        <translation>其它</translation>
+        <translation>其他</translation>
     </message>
 </context>
 <context>
@@ -377,7 +178,7 @@
     <message>
         <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="251"/>
         <source>Pin to collection</source>
-        <translation>固定到“收藏”</translation>
+        <translation>固定到收藏</translation>
     </message>
     <message>
         <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="254"/>
@@ -390,21 +191,9 @@
         <translation>卸载</translation>
     </message>
     <message>
-        <source>Hibernate</source>
-        <translation type="vanished">休眠</translation>
-    </message>
-    <message>
         <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="284"/>
         <source>Sleep</source>
         <translation>睡眠</translation>
-    </message>
-    <message>
-        <source>Lock Screen</source>
-        <translation type="vanished">锁屏</translation>
-    </message>
-    <message>
-        <source>Switch User</source>
-        <translation type="vanished">切换用户</translation>
     </message>
     <message>
         <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="286"/>
@@ -424,97 +213,7 @@
     <message>
         <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="319"/>
         <source>Personalize this list</source>
-        <translation>设置开始菜单显示列表</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarWidget</name>
-    <message>
-        <source>All</source>
-        <translation type="vanished">所有软件</translation>
-    </message>
-    <message>
-        <source>Letter</source>
-        <translation type="vanished">字母排序</translation>
-    </message>
-    <message>
-        <source>Function</source>
-        <translation type="vanished">功能分类</translation>
-    </message>
-    <message>
-        <source>Trash</source>
-        <translation type="vanished">回收站</translation>
-    </message>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">计算机</translation>
-    </message>
-    <message>
-        <source>Max</source>
-        <translation type="vanished">放大</translation>
-    </message>
-    <message>
-        <source>Personal</source>
-        <translation type="vanished">个人</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">设置</translation>
-    </message>
-    <message>
-        <source>Recycle Bin</source>
-        <translation type="vanished">回收站</translation>
-    </message>
-    <message>
-        <source>Power</source>
-        <translation type="vanished">电源</translation>
-    </message>
-</context>
-<context>
-    <name>SplitBarFrame</name>
-    <message>
-        <source>Mobile</source>
-        <translation type="vanished">移动</translation>
-    </message>
-    <message>
-        <source>Internet</source>
-        <translation type="vanished">网络</translation>
-    </message>
-    <message>
-        <source>Social</source>
-        <translation type="vanished">社交</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation type="vanished">影音</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation type="vanished">开发</translation>
-    </message>
-    <message>
-        <source>Image</source>
-        <translation type="vanished">图像</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation type="vanished">游戏</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation type="vanished">办公</translation>
-    </message>
-    <message>
-        <source>Education</source>
-        <translation type="vanished">教育</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation type="vanished">系统</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="vanished">其它</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -532,20 +231,12 @@
     <message>
         <location filename="../src/RightClickMenu/tabletrightclickmenu.cpp" line="250"/>
         <source>Add to desktop shortcuts</source>
-        <translation>添加到桌面快捷方式</translation>
+        <translation>固定到桌面快捷方式</translation>
     </message>
     <message>
         <location filename="../src/RightClickMenu/tabletrightclickmenu.cpp" line="269"/>
         <source>Uninstall</source>
         <translation>卸载</translation>
-    </message>
-</context>
-<context>
-    <name>TimeWidget</name>
-    <message>
-        <location filename="../src/tablet/UtilityFunction/timewidget.cpp" line="205"/>
-        <source>Search</source>
-        <translation>全局搜索</translation>
     </message>
 </context>
 </TS>

@@ -115,9 +115,9 @@ HEADERS += \
     src/tablet/UtilityFunction/AbstractInterface.h \
     src/tablet/UtilityFunction/KySmallPluginInterface.h \
     src/tablet/UtilityFunction/abstractInterface.h \
+    src/tablet/UtilityFunction/functionWidget.h \
     src/tablet/UtilityFunction/pluginwidget.h \
     src/tablet/UtilityFunction/thumbnail.h \
-    src/tablet/UtilityFunction/timewidget.h \
     src/tablet/XEventMonitor/xeventmonitor.h \
     src/tablet/pagemanager.h \
     src/tablet/tabletwindow.h
@@ -174,9 +174,9 @@ SOURCES += \
     src/Widget/splitbarframe.cpp \
     src/Widget/tabviewwidget.cpp \
     src/Widget/toolbutton.cpp \
+    src/tablet/UtilityFunction/functionWidget.cpp \
     src/tablet/UtilityFunction/pluginwidget.cpp \
     src/tablet/UtilityFunction/thumbnail.cpp \
-    src/tablet/UtilityFunction/timewidget.cpp \
     src/tablet/XEventMonitor/xeventmonitor.cpp \
     src/tablet/pagemanager.cpp \
     src/tablet/tabletwindow.cpp

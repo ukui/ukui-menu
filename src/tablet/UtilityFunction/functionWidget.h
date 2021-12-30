@@ -1,5 +1,5 @@
-#ifndef TIMEWIDGET_H
-#define TIMEWIDGET_H
+#ifndef FUNCTIONWIDGET_H
+#define FUNCTIONWIDGET_H
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -16,12 +16,12 @@
 #include "src/tablet/UtilityFunction/pluginwidget.h"
 #include "src/Interface/currenttimeinterface.h"
 
-class TimeWidget : public QWidget
+class FunctionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    TimeWidget(QWidget *parent);
-    ~TimeWidget();
+    FunctionWidget(QWidget *parent);
+    ~FunctionWidget();
     //QWidget* focusPlug=nullptr;
     pluginwidget *focusPlug = nullptr;
     void setDownOpacityEffect(const qreal &num);

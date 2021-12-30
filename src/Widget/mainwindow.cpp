@@ -249,14 +249,14 @@ MainWindow::MainWindow(QWidget *parent) :
     m_leftStackedWidget->setCurrentIndex(0);
     m_minMaxChangeButton->setDefault(false);
     m_rightStackedWidget->setCurrentIndex(0);
-
+    //设置tab切换顺序
+    //    setTabOrder(widget, searchPushButton);
     setTabOrder(m_searchPushButton, m_minSelectButton);
     setTabOrder(m_minSelectButton, m_selectMenuButton);
     setTabOrder(m_selectMenuButton, m_collectPushButton);
     setTabOrder(m_collectPushButton, m_recentPushButton);
     setTabOrder(m_recentPushButton, m_minMaxChangeButton);
     setTabOrder(m_minMaxChangeButton, m_powerOffButton);
-
     m_softwareDbThread = new SoftwareDatabaseUpdateThread;
     //获取软件商店类别信号
     QDBusConnection::sessionBus().connect("com.kylin.softwarecenter.getsearchresults",
@@ -266,7 +266,6 @@ MainWindow::MainWindow(QWidget *parent) :
                                           this,
                                           SLOT(updateAppCategorySlot(QString))
                                          );
-
     initUi();
     m_functionBtnWid = new FunctionButtonWidget(m_minFuncPage);
     m_functionBtnWid->hide();
@@ -376,8 +375,8 @@ MainWindow::MainWindow(QWidget *parent) :
                 this, &MainWindow::repaintWidget);
     }
 
-    QGSettings * gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
-    connect(gsetting, &QGSettings::changed,[=](QString key) {
+    QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
+    connect(gsetting, &QGSettings::changed, [ = ](QString key) {
         if ("systemFont" == key || "systemFontSize" == key) {
             m_leftTopSearchHorizontalLayout->removeWidget(m_lineEdit);
             m_leftTopSearchHorizontalLayout->removeWidget(m_cancelSearchPushButton);
@@ -388,11 +387,11 @@ MainWindow::MainWindow(QWidget *parent) :
             m_fullWindow->updateView();
         }
     });
-
     //监控应用进程开启
-    connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [=](WId id) {
+    connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
         ConvertWinidToDesktop reply;
         QString desktopfp = reply.tranIdToDesktop(id);
+
         if (!desktopfp.isEmpty()) {
             ViewOpenedSlot(desktopfp);
         }
@@ -934,7 +933,7 @@ void MainWindow::on_minMaxChangeButton_clicked()
     m_canHide = false;
     this->hide();
     QEventLoop loop;
-    QTimer::singleShot(10, &loop, SLOT(quit()));
+    QTimer::singleShot(50, &loop, SLOT(quit()));
     loop.exec();
     m_fullWindow->raise();
     m_fullWindow->showNormal();
@@ -990,6 +989,7 @@ void MainWindow::repaintWidget()
     } else {
         this->setGeometry(QRect(x + width - Style::minw - 4, y + 4, Style::minw, Style::minh));
     }
+
     m_fullWindow->move(x, y);
     m_fullWindow->setFixedSize(width, height);
     m_fullWindow->repaintWidget();
@@ -999,7 +999,7 @@ void MainWindow::showNormalWindow()
 {
     m_canHide = false;
     QEventLoop loop;
-    QTimer::singleShot(10, &loop, SLOT(quit()));
+    QTimer::singleShot(50, &loop, SLOT(quit()));//调整延时时间，解决时间较短时概率性窗口隐藏问题
     loop.exec();
     this->show();
     this->raise();

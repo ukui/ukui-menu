@@ -42,7 +42,7 @@
 #include "src/Widget/functionclassifybutton.h"
 #include "src/Style/style.h"
 #include <QAbstractButton>
-#include "src/tablet/UtilityFunction/timewidget.h"
+#include "src/tablet/UtilityFunction/functionWidget.h"
 #include "src/ListView/tabletlistview.h"
 #include "src/tablet/pagemanager.h"
 #include "src/FileWatcher/tabletdirectorychangedthread.h"
@@ -105,7 +105,7 @@ private:
     bool m_winFlag = false;
     int curPageNum = 0;
     QVBoxLayout *layout = nullptr;
-    TimeWidget *leftWidget = nullptr;
+    FunctionWidget *leftWidget = nullptr;
     bool isFirstPage = true;
     QWidget *firstPageWidget = nullptr;
     static QVector<QString> keyVector;

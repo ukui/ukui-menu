@@ -4,22 +4,22 @@
 <context>
     <name>FullMainWindow</name>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="64"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="74"/>
         <source>Search</source>
         <translation type="unfinished">Ara</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="125"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="135"/>
         <source>All</source>
         <translation type="unfinished">Tümü</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="127"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="137"/>
         <source>Letter</source>
         <translation type="unfinished">Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="129"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="139"/>
         <source>Function</source>
         <translation type="unfinished">Kategori</translation>
     </message>
@@ -117,6 +117,11 @@
         <source>Others</source>
         <translation type="vanished">Diğer</translation>
     </message>
+    <message>
+        <location filename="../src/tablet/UtilityFunction/functionWidget.cpp" line="205"/>
+        <source>Search</source>
+        <translation type="unfinished">Ara</translation>
+    </message>
 </context>
 <context>
     <name>GetModelData</name>
@@ -198,8 +203,8 @@
     </message>
     <message>
         <location filename="../src/Widget/mainwindow.cpp" line="238"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="418"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="832"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="425"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="843"/>
         <source>All</source>
         <translation type="unfinished">Tümü</translation>
     </message>
@@ -219,14 +224,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="420"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="840"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="427"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="851"/>
         <source>Letter</source>
         <translation type="unfinished">Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="422"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="848"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="429"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="859"/>
         <source>Function</source>
         <translation type="unfinished">Kategori</translation>
     </message>
@@ -539,9 +544,8 @@
 <context>
     <name>TimeWidget</name>
     <message>
-        <location filename="../src/tablet/UtilityFunction/timewidget.cpp" line="205"/>
         <source>Search</source>
-        <translation type="unfinished">Ara</translation>
+        <translation type="obsolete">Ara</translation>
     </message>
 </context>
 </TS>

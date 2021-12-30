@@ -1,4 +1,4 @@
-#include "timewidget.h"
+#include "functionWidget.h"
 #include "src/Style/style.h"
 #include <QVBoxLayout>
 #include <QProcess>
@@ -16,7 +16,7 @@
 #include <QDebug>
 #include <QPalette>
 
-TimeWidget::TimeWidget(QWidget *parent): QWidget(parent)
+FunctionWidget::FunctionWidget(QWidget *parent): QWidget(parent)
 {
     //    if(QGSettings::isSchemaInstalled("org.ukui.style")){
     //        themeSetting=new QGSettings("org.ukui.style");
@@ -55,7 +55,7 @@ TimeWidget::TimeWidget(QWidget *parent): QWidget(parent)
     }
 }
 
-TimeWidget::~TimeWidget()
+FunctionWidget::~FunctionWidget()
 {
     if (themeSetting) {
         delete themeSetting;
@@ -146,7 +146,7 @@ TimeWidget::~TimeWidget()
     effect = nullptr;
 }
 
-void TimeWidget::initUi()
+void FunctionWidget::initUi()
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground, true);
@@ -205,7 +205,7 @@ void TimeWidget::initUi()
     searchEditBtn->setText(tr("Search"));
     QDBusReply<QString> styleName = usrInterface->call(QString("get_current_stylename"));
     changeSearchBoxBackground(styleName);
-    connect(searchEditBtn, &QPushButton::clicked, this, &TimeWidget::obtainSearchResult);
+    connect(searchEditBtn, &QPushButton::clicked, this, &FunctionWidget::obtainSearchResult);
     downLayout->addWidget(searchEditBtn);
     upLayout->addWidget(leftUpWidget);
     upLayout->addWidget(downWidget);
@@ -242,30 +242,27 @@ void TimeWidget::initUi()
     upWidget->setGraphicsEffect(effect);
 }
 
-void TimeWidget::setDownOpacityEffect(const qreal &num)
+void FunctionWidget::setDownOpacityEffect(const qreal &num)
 {
     opacity = num;
     QDBusReply<QString> styleName = usrInterface->call(QString("get_current_stylename"));
     changeSearchBoxBackground(styleName);
 }
 
-void TimeWidget::obtainSearchResult()
+void FunctionWidget::obtainSearchResult()
 {
-    //获取搜索框内容
-    //    QString searchContent= searchEdit->text();
-    Q_EMIT hideTabletWindow();
-    QProcess p;
-    p.setProgram(QString("ukui-search"));
-    p.startDetached(p.program());
-    //    p.setArguments(QStringList()<<QString("%1").arg(searchContent));
-    //    p.startDetached(p.program(),p.arguments());
-    //    p.setArguments(QStringList()<<QString("search:///search_uris=file:///&name_regexp=%1&recursive=1").arg(searchContent));
-    //    p.startDetached(p.program(), p.arguments());
-    //    p.waitForFinished(-1);
+    QDBusInterface iface("com.ukui.search.service",
+                         "/",
+                         "org.ukui.search.service",
+                         QDBusConnection::sessionBus());
+
+    if (iface.isValid()) {
+        iface.call("showWindow");
+    }
 }
 
 //搜索框适配主题
-void TimeWidget::changeSearchBoxBackground(QString styleName)
+void FunctionWidget::changeSearchBoxBackground(QString styleName)
 {
     QString styleSheetDark = QString("border-radius:40px;background:rgba(44,50,57,%1);color:white;font-size:24px;text-align:left;padding-left:24px;").arg(opacity);
     QString styleSheetLight = QString("border-radius:40px;background:rgba(255,255,255,%1);"
