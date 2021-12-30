@@ -250,6 +250,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_leftStackedWidget->setCurrentIndex(0);
     m_minMaxChangeButton->setDefault(false);
     m_rightStackedWidget->setCurrentIndex(0);
+    //设置tab切换顺序
     //    setTabOrder(widget, searchPushButton);
     setTabOrder(m_searchPushButton, m_minSelectButton);
     setTabOrder(m_minSelectButton, m_selectMenuButton);

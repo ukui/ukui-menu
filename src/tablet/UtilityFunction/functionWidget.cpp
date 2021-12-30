@@ -1,4 +1,4 @@
-#include "timewidget.h"
+#include "functionWidget.h"
 #include "src/Style/style.h"
 #include <QVBoxLayout>
 #include <QProcess>

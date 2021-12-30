@@ -1,5 +1,5 @@
-#ifndef TIMEWIDGET_H
-#define TIMEWIDGET_H
+#ifndef FUNCTIONWIDGET_H
+#define FUNCTIONWIDGET_H
 
 #include <QWidget>
 #include <QHBoxLayout>
