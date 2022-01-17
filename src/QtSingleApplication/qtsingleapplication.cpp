@@ -47,8 +47,8 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
-#include "src/Widget/mainwindow.h"
-#include "src/tablet/tabletwindow.h"
+#include "mainwindow.h"
+#include "tabletwindow.h"
 
 
 /*!

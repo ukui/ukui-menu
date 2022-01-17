@@ -132,12 +132,12 @@
         <file>data/img/mainviewwidget/DM-icon-search.png</file>
         <file>data/img/mainviewwidget/DM-icon-search.svg</file>
         <file>data/img/mainviewwidget/DM-icon-search@2x.png</file>
-        <file>src/Search/pinyinWithTone.txt</file>
-        <file>src/Search/pinyinWithoutTone.txt</file>
         <file>data/img/mainviewwidget/select.svg</file>
         <file>data/img/mainviewwidget/selected.svg</file>
         <file>data/img/mainviewwidget/icon-电源.svg</file>
         <file>data/img/mainviewwidget/icon-电源@2x.png</file>
         <file>data/img/mainviewwidget/ukui-search-blue.svg</file>
+        <file>src/BackProcess/Search/pinyinWithoutTone.txt</file>
+        <file>src/BackProcess/Search/pinyinWithTone.txt</file>
     </qresource>
 </RCC>
