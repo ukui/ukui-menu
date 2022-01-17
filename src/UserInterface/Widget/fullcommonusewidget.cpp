@@ -72,9 +72,9 @@ void FullCommonUseWidget::initUi()
     m_powerOffButton = new QPushButton(this);
     m_powerOffButton->setFixedSize(QSize(40, 40));
     m_powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
-    QIcon icon6;
-    icon6.addFile(QString::fromUtf8(":/data/img/mainviewwidget/icon-电源.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    m_powerOffButton->setIcon(icon6);
+    QIcon powerIcon;
+    powerIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/power.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    m_powerOffButton->setIcon(powerIcon);
     m_powerOffButton->setIconSize(QSize(28, 28));
     m_powerOffButton->setFlat(true);
     m_powerOffButton->setStyleSheet("QPushButton {padding: 0px;}"

@@ -67,23 +67,23 @@ MainWindow::MainWindow(QWidget *parent) :
     m_searchPushButton = new QPushButton(m_minMenuPage);
     m_searchPushButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
     m_searchPushButton->setFixedSize(QSize(26, 26));
-    QIcon icon1;
-    icon1.addFile(QString::fromUtf8(":/data/img/mainviewwidget/search.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    m_searchPushButton->setIcon(icon1);
+    QIcon searchIcon;
+    searchIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/search.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    m_searchPushButton->setIcon(searchIcon);
     m_minSelectButton = new QToolButton(m_minMenuPage);
     m_minSelectButton->setStyleSheet(m_buttonStyle.arg("QToolButton"));
     m_minSelectButton->setFixedSize(QSize(26, 26));
-    QIcon icon2;
-    icon2.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-所有应用.png"), QSize(), QIcon::Normal, QIcon::Off);
-    m_minSelectButton->setIcon(icon2);
+    QIcon selectIcon;
+    selectIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-all.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    m_minSelectButton->setIcon(selectIcon);
     m_minSelectButton->installEventFilter(this);
     m_selectMenuButton = new QToolButton(m_minMenuPage);
     m_selectMenuButton->setStyleSheet("background: transparent;");
     m_selectMenuButton->setFixedSize(QSize(16, 26));
     m_selectMenuButton->setAcceptDrops(true);
-    QIcon icon3;
-    icon3.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon- arrow.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    m_selectMenuButton->setIcon(icon3);
+    QIcon selectMenuIcon;
+    selectMenuIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-arrow.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    m_selectMenuButton->setIcon(selectMenuIcon);
     m_selectMenuButton->setPopupMode(QToolButton::InstantPopup);
 //    m_selectMenuButton->setStyleSheet(QString::fromUtf8("QToolButton::menu-indicator { image: None; }"));
     //搜索框展开页
@@ -94,14 +94,14 @@ MainWindow::MainWindow(QWidget *parent) :
     m_lineEdit->setMinimumSize(QSize(30, 26));
     m_lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 13px; border:2px solid rgba(5, 151, 255, 1); background: transparent;"));
     m_lineEdit->setFrame(false);
-    m_lineEdit->setPlaceholderText("搜索应用");
+    m_lineEdit->setPlaceholderText(tr("Search"));
     m_cancelSearchPushButton = new QPushButton(m_minSearchPage);
     m_cancelSearchPushButton->setFixedSize(QSize(26, 26));
     m_cancelSearchPushButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
     m_cancelSearchPushButton->installEventFilter(this);
-    QIcon icon4;
-    icon4.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-\345\205\263\351\227\255.png"), QSize(), QIcon::Normal, QIcon::Off);
-    m_cancelSearchPushButton->setIcon(icon4);
+    QIcon cancelButtonIcon;
+    cancelButtonIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-close.png"), QSize(), QIcon::Normal, QIcon::Off);
+    m_cancelSearchPushButton->setIcon(cancelButtonIcon);
     m_topStackedWidget->addWidget(m_minMenuPage);
     m_topStackedWidget->addWidget(m_minSearchPage);
     //左侧列表区
@@ -156,9 +156,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //放大缩小按键
     m_minMaxChangeButton = new QPushButton(m_centralwidget);
     m_minMaxChangeButton->setFixedSize(QSize(24, 24));
-    QIcon icon5;
-    icon5.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-icon-\346\224\276\345\244\247.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    m_minMaxChangeButton->setIcon(icon5);
+    QIcon maxButtonIcon;
+    maxButtonIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/DM-max.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    m_minMaxChangeButton->setIcon(maxButtonIcon);
     m_minMaxChangeButton->setFlat(true);
     m_rightTopHorizontalLayout->addWidget(m_collectPushButton);
     m_rightTopHorizontalLayout->addWidget(m_recentPushButton);
@@ -837,7 +837,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
     if (arg1 == m_allAction) {
         m_leftStackedWidget->setCurrentIndex(0);
         m_state = 0;
-        m_minSelectButton->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-所有应用.svg"));
+        m_minSelectButton->setIcon(QIcon(":/data/img/mainviewwidget/DM-all.svg"));
         m_minSelectTextLabel->setText(tr("All"));
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
@@ -845,7 +845,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
     } else if (arg1 == m_letterAction) {
         m_leftStackedWidget->setCurrentIndex(1);
         m_state = 1;
-        m_minSelectButton->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-字母排序.svg"));
+        m_minSelectButton->setIcon(QIcon(":/data/img/mainviewwidget/DM-letter.svg"));
         m_minSelectTextLabel->setText(tr("Letter"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
@@ -853,7 +853,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
     } else if (arg1 == m_funcAction) {
         m_leftStackedWidget->setCurrentIndex(2);
         m_state = 2;
-        m_minSelectButton->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-功能排序.svg"));
+        m_minSelectButton->setIcon(QIcon(":/data/img/mainviewwidget/DM-function.svg"));
         m_minSelectTextLabel->setText(tr("Function"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(false);

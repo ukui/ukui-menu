@@ -42,8 +42,8 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     m_queryWid->setLayout(queryWidLayout);
     char style[200];
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/search.svg"), 16);
+    QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
 
-    QGSettings * gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
     if (gsetting->get("style-name").toString() == "ukui-light") {
         pixmap = drawSymbolicBlackColoredPixmap(pixmap);
         sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:17px;color:#000000;}",
@@ -53,7 +53,8 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
         sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:17px;color:#ffffff;}",
                 QueryLineEditClickedBorderDefault, QueryLineEditBackground);
     }
-    connect(gsetting, &QGSettings::changed,[=](QString key) {
+
+    connect(gsetting, &QGSettings::changed, [ = ](QString key) {
         if ("systemFont" == key || "systemFontSize" == key) {
             m_queryWid->layout()->removeWidget(m_queryText);
             m_queryText->setParent(nullptr);
@@ -63,7 +64,6 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
             m_fullLetterPage->repaintWidget();
         }
     });
-
     m_lineEdit->setStyleSheet(style);
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_queryIcon = new QLabel;
@@ -81,29 +81,27 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     fullSelectToolButton->setStyleSheet(m_buttonStyle.arg("QToolButton"));
     fullSelectToolButton->setObjectName(QString::fromUtf8("fullSelectToolButton"));
     fullSelectToolButton->setMinimumSize(QSize(48, 48));
-    QIcon icon;
-    icon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/fullicon-all.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    fullSelectToolButton->setIcon(icon);
+    QIcon selectIcon;
+    selectIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/full-function.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    fullSelectToolButton->setIcon(selectIcon);
     fullSelectToolButton->installEventFilter(this);
     fullSelectToolButton->setFocus();
     fullSelectMenuButton = new QToolButton(centralwidget);
     fullSelectMenuButton->setStyleSheet("QToolButton{background: transparent;}");
     fullSelectMenuButton->setFixedSize(20, 20);
     fullSelectMenuButton->setObjectName(QString::fromUtf8("fullSelectMenuButton"));
-    QIcon icon1;
-    icon1.addFile(QString::fromUtf8(":/data/img/mainviewwidget/\345\205\250\345\261\217 icon- \344\270\213\346\213\211.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    icon1.addFile(QString::fromUtf8(":/data/img/mainviewwidget/\345\205\250\345\261\217 icon- \344\270\213\346\213\211.svg"), QSize(), QIcon::Normal, QIcon::On);
-    icon1.addFile(QString::fromUtf8(":/data/img/mainviewwidget/\345\205\250\345\261\217 icon- \344\270\213\346\213\211.png"), QSize(), QIcon::Active, QIcon::On);
-    fullSelectMenuButton->setIcon(icon1);
+    QIcon menuBottonIcon;
+    menuBottonIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/full-drop-down.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    fullSelectMenuButton->setIcon(menuBottonIcon);
     fullSelectMenuButton->setPopupMode(QToolButton::InstantPopup);
     fullSelectMenuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     fullSelectMenuButton->installEventFilter(this);
     minPushButton = new QPushButton(centralwidget);
     minPushButton->setObjectName(QString::fromUtf8("minPushButton"));
     minPushButton->setMinimumSize(QSize(48, 48));
-    QIcon icon2;
-    icon2.addFile(QString::fromUtf8(":/data/img/mainviewwidget/\345\205\250\345\261\217 icon-\347\274\251\345\260\217.png"), QSize(), QIcon::Normal, QIcon::Off);
-    minPushButton->setIcon(icon2);
+    QIcon minPushButtonIcon;
+    minPushButtonIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/full-min.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    minPushButton->setIcon(minPushButtonIcon);
     minPushButton->setFlat(true);
     minPushButton->installEventFilter(this);
     m_fullStackedWidget = new QStackedWidget(centralwidget);
@@ -395,7 +393,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_fullCommonPage->repaintWidget();
         //fullCommonPage->updateListView();
         m_state = 0;
-        fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/fullicon-all.svg"));
+        fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/full-all-2x.png"));
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(false);
@@ -403,7 +401,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_fullStackedWidget->setCurrentIndex(1);
         m_fullLetterPage->repaintWidget();
         m_state = 1;
-        fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/全屏 icon-字母排序.svg"));
+        fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/full-letter.svg"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
         m_funcAction->setChecked(false);
@@ -411,7 +409,7 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_fullStackedWidget->setCurrentIndex(2);
         m_fullFunctionPage->repaintWidget();
         m_state = 2;
-        fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/全屏 icon-功能排序.svg"));
+        fullSelectToolButton->setIcon(QIcon(":/data/img/mainviewwidget/full-function.svg"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(true);

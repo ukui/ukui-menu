@@ -9,8 +9,8 @@
  * before re-generating it.
  */
 
-#ifndef DBUS-ADAPTOR_H
-#define DBUS-ADAPTOR_H
+#ifndef DBUS_ADAPTOR_H
+#define DBUS_ADAPTOR_H
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>

@@ -66,9 +66,6 @@ INSTALLS += qm_files
 # So we can access it from main.cpp
 DEFINES += QM_FILES_INSTALL_PATH='\\"$${QM_FILES_INSTALL_PATH}\\"'
 
-RESOURCES += \
-    res.qrc
-
 PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt libbamf3 x11 xtst
 
 CONFIG += no_keywords link_pkgconfig
@@ -85,3 +82,6 @@ FORMS +=
 
 SOURCES += \
     main.cpp
+
+RESOURCES += \
+    res.qrc
