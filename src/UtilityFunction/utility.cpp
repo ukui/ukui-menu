@@ -223,7 +223,7 @@ void openDataBase(QString connectionName)
 
 void closeDataBase(QString connectionName)
 {
-    QSqlDatabase db = QSqlDatabase::database("connectionName");
+    QSqlDatabase db = QSqlDatabase::database(connectionName);
     db.close();
     QSqlDatabase::removeDatabase(connectionName);
 }
