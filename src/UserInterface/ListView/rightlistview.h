@@ -8,7 +8,7 @@
 #include <QScrollBar>
 #include <QToolTip>
 #include <QStandardItemModel>
-#include "rightitemdelegate.h"
+#include "right_item_delegate.h"
 #include "style.h"
 #include "utility.h"
 #include "klistview.h"

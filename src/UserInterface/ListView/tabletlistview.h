@@ -27,7 +27,7 @@
 #include <QScrollBar>
 #include <QToolTip>
 #include <QStandardItemModel>
-#include "tabletfullitemdelegate.h"
+#include "tablet_full_itemdelegate.h"
 #include "style.h"
 #include "thumbnail.h"
 #include <QAbstractListModel>
@@ -35,7 +35,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
-#include "fullitemdelegate.h"
+#include "full_item_delegate.h"
 #include "tabletrightclickmenu.h"
 #include "klistview.h"
 

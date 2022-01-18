@@ -16,41 +16,50 @@
  *
  */
 
-#ifndef FULLLISTVIEW_H
-#define FULLLISTVIEW_H
-#include <QListView>
-#include <QSettings>
-#include "rightclickmenu.h"
-#include "ukuimenuinterface.h"
-#include <QEvent>
-#include <QScrollBar>
-#include <QToolTip>
-#include <QStandardItemModel>
-#include "full_item_delegate.h"
-#include "style.h"
-#include "klistview.h"
+#ifndef MAINVIEWWIDGET_H
+#define MAINVIEWWIDGET_H
 
-class FullListView : public KListView
+#include <QWidget>
+#include <QSpacerItem>
+#include <QLineEdit>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QToolButton>
+#include <QDesktopWidget>
+#include <QKeyEvent>
+#include <QScrollBar>
+#include <QFileSystemWatcher>
+#include <QSettings>
+#include "ukuimenuinterface.h"
+#include "searchappthread.h"
+#include "directory_changed_thread.h"
+#include "convert_winid_to_desktop.h"
+#include "style.h"
+#include "src/UtilityFunction/utility.h"
+#include <QComboBox>
+#include <QCheckBox>
+
+class MainViewWidget : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit FullListView(QWidget *parent, int module);
-    ~FullListView();
+    explicit MainViewWidget(QWidget *parent = nullptr);
+    ~MainViewWidget();
 
 protected:
-    void initWidget();
-    void keyPressEvent(QKeyEvent *e);
 
-private:
-    RightClickMenu *menu = nullptr;//右键菜单
-    QStringList data;
-    QGSettings *gsetting = nullptr;
+    void initUi();
+
+    void paintEvent(QPaintEvent *event);
 
 public Q_SLOTS:
-    void selectFirstItem();
 
 Q_SIGNALS:
-    void sendSetslidebar(int value);
+
+    void directoryChangedSignal();
+
+    void sendDirectoryPath();
 };
 
-#endif // FULLLISTVIEW_H
+#endif // MAINVIEWWIDGET_H

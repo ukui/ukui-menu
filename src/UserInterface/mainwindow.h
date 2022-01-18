@@ -34,23 +34,23 @@
 #include <QSettings>
 #include <QPropertyAnimation>
 #include <QFileInfo>
-#include "convertwinidtodesktop.h"
+#include "convert_winid_to_desktop.h"
 #include "style.h"
-#include "mainviewwidget.h"
-#include "tabviewwidget.h"
+#include "main_view_widget.h"
+#include "tabview_widget.h"
 #include "dbus.h"
 #include "dbus-adaptor.h"
-#include "softwaredatabaseupdatethread.h"
+#include "software_database_update_thread.h"
 #include <KWindowEffects>
 #include <QTabWidget>
 #include <QSpacerItem>
 #include <QStackedWidget>
 #include "listview.h"
 #include "getmodeldata.h"
-#include "fullmainwindow.h"
-#include "desktopwatcher.h"
-#include "functionbuttonwidget.h"
-#include "letterbuttonwidget.h"
+#include "full_mainwindow.h"
+#include "desktop_watcher.h"
+#include "function_button_widget.h"
+#include "letter_button_widget.h"
 
 class MainWindow : public QMainWindow
 {

@@ -763,7 +763,7 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
     if (e->type() == QEvent::KeyPress) {
-        if ((e->key() >= 0x30 && e->key() <= 0x39) || (e->key() >= 0x41 && e->key() <= 0x5a)) {
+        if ((e->key() >= Qt::Key_0 && e->key() <= Qt::Key_9) || (e->key() >= Qt::Key_A && e->key() <= Qt::Key_Z)) {
             qDebug() << "void MainWindow::keyPressEvent(QKeyEvent *e)" << e->text();
             m_topStackedWidget->setCurrentIndex(1);
             m_lineEdit->setFocus();

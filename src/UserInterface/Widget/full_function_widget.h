@@ -16,10 +16,10 @@
  *
  */
 
-#ifndef TABLETWINDOW_H
-#define TABLETWINDOW_H
+#ifndef FULLFUNCTIONWIDGET_H
+#define FULLFUNCTIONWIDGET_H
 
-#include <QMainWindow>
+#include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QTableWidget>
@@ -42,36 +42,50 @@
 #include "function_classify_button.h"
 #include "style.h"
 #include <QAbstractButton>
-#include "function_Widget.h"
-#include "tabletlistview.h"
-#include "pagemanager.h"
-#include "tablet_directorychanged_thread.h"
-#include "dbus.h"
-#include "dbus-adaptor.h"
 
-class TabletWindow : public QWidget
+class FullFunctionWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TabletWindow(QWidget *parent = nullptr);
-
-    ~TabletWindow();
-
+    explicit FullFunctionWidget(QWidget *parent = nullptr);
+    ~FullFunctionWidget();
+    /**
+     * @brief Initializes the interface state
+     */
+    void widgetMakeZero();
+    /**
+     * @brief The function category button uses animation to enter
+     */
+    void enterAnimation();
+    /**
+     * @brief Repaint window
+     */
     void repaintWidget();
+    /**
+     * @brief Move the scroll bar
+     * @param type: Scroll way,Only the following parameters can be entered:
+     *  0: moving up
+     *  1: moving down
+     */
+    void setFunctionBtnGeometry();
 
-    void showPCMenu();          //打开pc的开始菜单
+    void functionButtonClick();
 
-    static bool cmpApp(QString &arg_1, QString &arg_2);
-
-    void setOpacityEffect(const qreal &num);
+    QAbstractButton *getCurLetterButton(int value);
 
 private:
     /*Application list interface*/
-    QScrollArea *m_scrollArea = nullptr;
+    UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
+    QWidget *m_applistWid = nullptr;
+    ScrollArea *m_scrollArea = nullptr;
     ScrollAreaWid *m_scrollAreaWid = nullptr;
-    QHBoxLayout *m_scrollAreaWidLayout = nullptr;
+    QVBoxLayout *m_scrollAreaWidLayout = nullptr;
+    QStringList m_classificationList;//Store the list of category buttons
     QStringList m_data;
+    QString m_scrollBarStyle;
+    QTimer *time = nullptr;
+    bool flag;
     /*Function classification list interface*/
     QWidget *m_iconListWid = nullptr;
     ClassifyBtnScrollArea *m_iconListScrollArea = nullptr;
@@ -81,57 +95,27 @@ private:
     QButtonGroup *m_btnGroup = nullptr;
     QSpacerItem *m_topSpacerItem = nullptr;
     QSpacerItem *m_bottomSpacerItem = nullptr;
-    QSpacerItem *m_appListBottomSpacer = nullptr;
 
     /*Animation*/
-    QPropertyAnimation *m_scrollAnimation = nullptr;//Application list animation
-    int m_beginPos = 0;//Application list scrollbar starting value
-    int m_endPos = 0;//Application list scrollbar end value
+    QPropertyAnimation *m_animation = nullptr; //Function category button animation
+    QPropertyAnimation *m_scrollAnimation = nullptr; //Application list animation
+    int m_beginPos = 0; //Application list scrollbar starting value
+    int m_endPos = 0; //Application list scrollbar end value
     int m_index = 0;
+    QScrollBar *m_verticalScrollBar = nullptr;
     int m_scrollAreaWidHeight = 0;
-
-    int m_width;
-    int m_height;
-
-    QString m_bgPath;
-    QString m_bgOption;
-    QPixmap m_pixmap;
-
-    QPixmap *m_backPixmap = nullptr;
-    QGSettings *bg_setting = nullptr;
-    QGSettings *bg_effect = nullptr;
-
-    QDBusInterface *usrInterface = nullptr;
-    bool m_winFlag = false;
-    int curPageNum = 0;
-    QVBoxLayout *layout = nullptr;
-    FunctionWidget *leftWidget = nullptr;
-    bool isFirstPage = true;
-    QWidget *firstPageWidget = nullptr;
-    static QVector<QString> keyVector;
-    static QVector<int> keyValueVector;
-    QSettings *setting;
-    TabletListView *m_listView = nullptr;
-    QHBoxLayout *firstPageLayout = nullptr;
-    QHBoxLayout *buttonBoxLayout = nullptr;
-    QButtonGroup *buttonGroup = nullptr;
-    QWidget *buttonWidget = nullptr;
-    QPushButton *button = nullptr;
-    PageManager *m_pagemanager = nullptr;
-
-    QFileSystemWatcher *m_fileWatcher = nullptr;
-    QFileSystemWatcher *m_fileWatcher1 = nullptr;
-    QFileSystemWatcher *m_fileWatcher2 = nullptr;
-    TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
-    QSettings *settt = nullptr;
-    QWidget *widget = nullptr;
-    DBus *m_dbus = nullptr;
+    QPushButton *m_powerOffButton = nullptr;
 
 protected:
     /**
      * @brief Initializes UI
      */
     void initUi();
+    /**
+     * @brief Initializes the icon list interface
+     */
+    void initIconListWidget();
+    void initIconListScrollArea();
     /**
      * @brief Initialize the application list interface
      */
@@ -141,32 +125,21 @@ protected:
      */
     void fillAppList();
     /**
+     * @brief Insert category button
+     * @param category: Functional classification name
+     */
+    void insertClassificationBtn(QString category);
+    /**
      * @brief Insert application list
      * @param desktopfplist: Desktop file path list
      */
     void insertAppList(QStringList desktopfplist);
-
-    void paintEvent(QPaintEvent *event);
-
-    void backgroundPic();
-
-    QPixmap *blurPixmap(QPixmap *pixmap);
-
-    void ways();
-
-    QPixmap getPaddingPixmap(QPixmap pixmap, int width, int height);
-
-    QImage applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent = 0);
-
-    void buttonWidgetShow();
-
-    bool event(QEvent *event);
-
-    void wheelEvent(QWheelEvent *e);
-
-    bool eventFilter(QObject *target, QEvent *event);
-
-    bool checkapplist();
+    /**
+     * @brief Set the control size in qscrollarea
+     */
+    void resizeScrollAreaControls();
+    void initVerticalScrollBar();
+    bool eventFilter(QObject *watched, QEvent *event);
 
 public Q_SLOTS:
     /**
@@ -178,10 +151,16 @@ public Q_SLOTS:
      * @brief Respond to button click
      * @param btn: QButtonGroup button
      */
-    void btnGroupClickedSlot(int pageNum);
-
-    void reloadAppList();
-
+    void btnGroupClickedSlot(QAbstractButton *btn);
+    /**
+     * @brief Update application list slot function
+     */
+    void updateAppListView();
+    /**
+     * @brief Respond to application list scrolling
+     * @param value: Scrollbar current value
+     */
+    void valueChangedSlot(int value);
     /**
      * @brief Respond to application list animation finish
      */
@@ -192,22 +171,17 @@ public Q_SLOTS:
      */
     void animationValueChangedSlot(const QVariant &value);
 
-    void recvHideMainWindowSlot();
+    void onSetSlider(int);
 
-//    void recvStartMenuSlot();
+    void setFocusToThis();
 
-    void modelChanged(bool value);
+    void on_setScrollBarValue(int value);
 
-    void XkbEventsPress(const QString &keycode);
-    void XkbEventsRelease(const QString &keycode);
-    void winKeyReleaseSlot(const QString &key);
-    void on_pageNumberChanged(bool nextPage);
-    void buttonClicked(QAbstractButton *button);
-    void pageNumberChanged(int pageNum);
-    void requestDeleteAppSlot();
-    void requestUpdateSlot(QString desktopfp);
-    void directoryChangedSlot();
-    void reloadWidget();
+    void on_setAreaScrollBarValue(int value);
+
+    void on_powerOffButton_clicked();
+
+    void on_powerOffButton_customContextMenuRequested(const QPoint &pos);
 
 Q_SIGNALS:
     /**
@@ -221,11 +195,6 @@ Q_SIGNALS:
 
     void changeScrollValue(int value, int maximumValue);
 
-    void pagenumchanged(int pageNum); //翻页信号
-
-    void sendDirectoryPath(QString arg);
-
-    void UpdateSignal();
 };
 
 #endif // FULLFUNCTIONWIDGET_H

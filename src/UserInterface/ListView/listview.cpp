@@ -17,7 +17,7 @@
  */
 
 #include "listview.h"
-#include "functionbuttonwidget.h"
+#include "function_button_widget.h"
 #include "utility.h"
 #include <QDebug>
 #include <QDesktopServices>

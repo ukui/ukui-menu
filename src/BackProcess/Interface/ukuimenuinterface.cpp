@@ -25,7 +25,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <unistd.h>
-#include "ukuichineseletter.h"
+#include "ukui_chineseletter.h"
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
@@ -115,6 +115,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
             } else {
                 //过滤后缀不是.desktop的文件
                 QString filePathStr = fileInfo.filePath();
+
                 if (!filePathStr.endsWith(".desktop")) {
                     i++;
                     continue;
@@ -548,7 +549,6 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
     vector.append(QStringList() << "system" << "System" << "Settings" << "Security"); //8系统
     vector.append(QStringList() << "safe"); //9安全
     vector.append(QStringList() << "others"); //10其他
-
     QStringList desktopfpList = getDesktopFilePath();
     QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
     QSqlQuery sql(db);
@@ -568,6 +568,7 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
             desktopfpExecName = desktopfpExecName.mid(desktopfpExecName.lastIndexOf("/") + 1);
             desktopfpExecName = desktopfpExecName.left(desktopfpExecName.lastIndexOf(" "));
             sql.exec(QString("select name_zh from appCategory where app_name=\"%1\" ").arg(desktopfpExecName));
+
             if (sql.next()) {
                 myDebug() << "数据库执行成功";
 
@@ -591,6 +592,7 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
                     appInfoList.append(QString::number(10));
                 }
             }
+
             appInfoVector.append(appInfoList);
         }
     }

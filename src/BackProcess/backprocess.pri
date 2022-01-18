@@ -7,13 +7,13 @@ DISTFILES += \
 HEADERS += \
     $$PWD/DBus/dbus-adaptor.h \
     $$PWD/DBus/dbus.h \
-    $$PWD/FileWatcher/convertwinidtodesktop.h \
-    $$PWD/FileWatcher/desktopwatcher.h \
-    $$PWD/FileWatcher/directorychangedthread.h \
-    $$PWD/FileWatcher/softwaredatabaseupdatethread.h \
-    $$PWD/FileWatcher/tabletdirectorychangedthread.h \
-    $$PWD/Interface/currenttimeinterface.h \
-    $$PWD/Interface/ukuichineseletter.h \
+    $$PWD/FileWatcher/convert_winid_to_desktop.h \
+    $$PWD/FileWatcher/desktop_watcher.h \
+    $$PWD/FileWatcher/directory_changed_thread.h \
+    $$PWD/FileWatcher/software_database_update_thread.h \
+    $$PWD/FileWatcher/tablet_directorychanged_thread.h \
+    $$PWD/Interface/currenttime_interface.h \
+    $$PWD/Interface/ukui_chineseletter.h \
     $$PWD/Interface/ukuimenuinterface.h \
     $$PWD/Search/file-utils.h \
     $$PWD/Search/searchappthread.h \
@@ -24,13 +24,13 @@ HEADERS += \
 SOURCES += \
     $$PWD/DBus/dbus-adaptor.cpp \
     $$PWD/DBus/dbus.cpp \
-    $$PWD/FileWatcher/convertwinidtodesktop.cpp \
-    $$PWD/FileWatcher/desktopwatcher.cpp \
-    $$PWD/FileWatcher/directorychangedthread.cpp \
-    $$PWD/FileWatcher/softwaredatabaseupdatethread.cpp \
-    $$PWD/FileWatcher/tabletdirectorychangedthread.cpp \
-    $$PWD/Interface/currenttimeinterface.cpp \
-    $$PWD/Interface/ukuichineseletter.cpp \
+    $$PWD/FileWatcher/convert_winid_to_desktop.cpp \
+    $$PWD/FileWatcher/desktop_watcher.cpp \
+    $$PWD/FileWatcher/directory_changed_thread.cpp \
+    $$PWD/FileWatcher/software_database_update_thread.cpp \
+    $$PWD/FileWatcher/tablet_directorychanged_thread.cpp \
+    $$PWD/Interface/currenttime_interface.cpp \
+    $$PWD/Interface/ukui_chineseletter.cpp \
     $$PWD/Interface/ukuimenuinterface.cpp \
     $$PWD/Search/file-utils.cpp \
     $$PWD/Search/searchappthread.cpp \
