@@ -116,7 +116,7 @@ void TabletWindow::initUi()
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::deleteAppSignal, this, &TabletWindow::requestDeleteAppSlot);
     initAppListWidget();
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
-    m_scrollAnimation->setEasingCurve(QEasingCurve::InOutSine);
+    m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
 
 //    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
 //    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
@@ -251,6 +251,7 @@ bool TabletWindow::eventFilter(QObject *target, QEvent *event)
     if (target == m_scrollArea->viewport()) {
         if (event->type() == QEvent::Wheel) {
             event->ignore();
+            return true;
         }
     }
 
@@ -273,7 +274,7 @@ bool TabletWindow::eventFilter(QObject *target, QEvent *event)
 void TabletWindow::wheelEvent(QWheelEvent *e)
 {
     if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
-        if (qAbs(e->angleDelta().y()) > qAbs(e->angleDelta().x())) {
+        if (qAbs(e->angleDelta().y()) >= qAbs(e->angleDelta().x())) {
             if ((e->angleDelta().y() >= 120)) {
                 on_pageNumberChanged(false);
             } else if ((e->angleDelta().y() <= -120)) {
@@ -454,7 +455,7 @@ void TabletWindow::requestDeleteAppSlot()
 void TabletWindow::on_pageNumberChanged(bool nextPage)
 {
 //    qDebug() << "void TabletWindow::on_pageNumberChanged(bool nextPage)";
-    if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
+    /*if (!(m_scrollAnimation->state() == QPropertyAnimation::Running))*/ {
         if (nextPage) {
             curPageNum++;
 
@@ -469,7 +470,7 @@ void TabletWindow::on_pageNumberChanged(bool nextPage)
             }
         }
 
-        m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
+//        m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
         btnGroupClickedSlot(curPageNum * 2);
         pageNumberChanged(curPageNum + 1);
     }
