@@ -375,18 +375,21 @@ MainWindow::MainWindow(QWidget *parent) :
                 this, &MainWindow::repaintWidget);
     }
 
-    QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
-    connect(gsetting, &QGSettings::changed, [ = ](QString key) {
-        if ("systemFont" == key || "systemFontSize" == key) {
-            m_leftTopSearchHorizontalLayout->removeWidget(m_lineEdit);
-            m_leftTopSearchHorizontalLayout->removeWidget(m_cancelSearchPushButton);
-            m_lineEdit->setParent(nullptr);
-            m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
-            m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
-            m_lineEdit->setPlaceholderText("搜索应用");
-            m_fullWindow->updateView();
-        }
-    });
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+        QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
+        connect(gsetting, &QGSettings::changed, [ = ](QString key) {
+            if ("systemFont" == key || "systemFontSize" == key) {
+                m_leftTopSearchHorizontalLayout->removeWidget(m_lineEdit);
+                m_leftTopSearchHorizontalLayout->removeWidget(m_cancelSearchPushButton);
+                m_lineEdit->setParent(nullptr);
+                m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
+                m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
+                m_lineEdit->setPlaceholderText("搜索应用");
+                m_fullWindow->updateView();
+            }
+        });
+    }
+
     //监控应用进程开启
     connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
         ConvertWinidToDesktop reply;
@@ -541,11 +544,11 @@ bool MainWindow::event(QEvent *event)
 /**
  * 接收FunctionButtonWidget界面按钮信号
  */
-void MainWindow::recvFunctionBtnSignal(QString btnname)
+void MainWindow::recvFunctionBtnSignal(QString btnName)
 {
     //此处需实现将功能为btnname的应用列表移动到applistWid界面最顶端
     if (m_state == 1) {
-        int index = m_modaldata->getLetterClassificationList().indexOf(btnname);
+        int index = m_modaldata->getLetterClassificationList().indexOf(btnName);
 
         if (index != -1) {
             int row = m_modaldata->getLetterClassificationBtnRowList().at(index).toInt();
@@ -554,7 +557,7 @@ void MainWindow::recvFunctionBtnSignal(QString btnname)
             m_enterAnimation->setTargetObject(m_minLetterListView);
         }
     } else {
-        int index = m_modaldata->getFuncClassificationList().indexOf(btnname);
+        int index = m_modaldata->getFuncClassificationList().indexOf(btnName);
 
         if (index != -1) {
             int row = m_modaldata->getFuncClassificationBtnRowList().at(index).toInt();
@@ -581,10 +584,10 @@ void MainWindow::primaryScreenChangeSlot()
 
 void MainWindow::appClassificationBtnClickedSlot()
 {
-    m_leaveAnimation->setStartValue(QRect(0, 0, m_minFuncPage->width(), m_minFuncPage->height()));
+    m_leaveAnimation->setStartValue(QRect(0, 0, Style::leftPageWidth, Style::leftPageHeight));
     m_leaveAnimation->setEndValue(QRect(0, 0, 0, 0));
-    m_enterAnimation->setStartValue(QRect(-40, -40, m_minFuncPage->width() + 80, m_minFuncPage->height() + 80));
-    m_enterAnimation->setEndValue(QRect(10, 0, m_minFuncPage->width() - 20, m_minFuncPage->height() - 60));
+    m_enterAnimation->setStartValue(QRect(-40, -40, Style::leftPageWidth + 80, Style::leftPageHeight + 80));
+    m_enterAnimation->setEndValue(QRect(10, 0, Style::leftPageWidth - 20, Style::leftPageHeight - 60));
     m_leaveAnimation->setDuration(10);
     m_enterAnimation->setDuration(100);
 

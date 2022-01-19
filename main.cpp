@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     }
 
     if (projectCodeName == "V10SP1") {
-        Zeeker::FileUtils::loadHanziTable(":/src/Search/pinyinWithoutTone.txt");
+        FileUtils::loadHanziTable(":/src/BackProcess/Search/pinyinWithoutTone.txt");
         MainWindow w;
         app.setActivationWindow(&w);
 

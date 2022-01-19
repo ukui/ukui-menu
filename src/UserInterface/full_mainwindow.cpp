@@ -42,28 +42,34 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     m_queryWid->setLayout(queryWidLayout);
     char style[200];
     QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/search.svg"), 16);
-    QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
 
-    if (gsetting->get("style-name").toString() == "ukui-light") {
-        pixmap = drawSymbolicBlackColoredPixmap(pixmap);
-        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:17px;color:#000000;}",
-                QueryLineEditClickedBorderDefault, QueryLineEditDefaultBackground);
-    } else {
-        pixmap = drawSymbolicColoredPixmap(pixmap); //反白
-        sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:17px;color:#ffffff;}",
-                QueryLineEditClickedBorderDefault, QueryLineEditBackground);
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+        QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
+
+        if (gsetting->keys().contains("styleName")) {
+            if (gsetting->get("styleName").toString() == "ukui-light") {
+                pixmap = drawSymbolicBlackColoredPixmap(pixmap);
+                sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:17px;color:#000000;}",
+                        QueryLineEditClickedBorderDefault, QueryLineEditDefaultBackground);
+            } else {
+                pixmap = drawSymbolicColoredPixmap(pixmap); //反白
+                sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:17px;color:#ffffff;}",
+                        QueryLineEditClickedBorderDefault, QueryLineEditBackground);
+            }
+        }
+
+        connect(gsetting, &QGSettings::changed, [ = ](QString key) {
+            if ("systemFont" == key || "systemFontSize" == key) {
+                m_queryWid->layout()->removeWidget(m_queryText);
+                m_queryText->setParent(nullptr);
+                resetEditline();
+                m_fullCommonPage->repaintWidget();
+                m_fullFunctionPage->repaintWidget();
+                m_fullLetterPage->repaintWidget();
+            }
+        });
     }
 
-    connect(gsetting, &QGSettings::changed, [ = ](QString key) {
-        if ("systemFont" == key || "systemFontSize" == key) {
-            m_queryWid->layout()->removeWidget(m_queryText);
-            m_queryText->setParent(nullptr);
-            resetEditline();
-            m_fullCommonPage->repaintWidget();
-            m_fullFunctionPage->repaintWidget();
-            m_fullLetterPage->repaintWidget();
-        }
-    });
     m_lineEdit->setStyleSheet(style);
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
     m_queryIcon = new QLabel;

@@ -41,14 +41,13 @@ void SearchAppThread::run()
     if (!this->m_keyWord.isEmpty()) {
         QString str = m_ukuiMenuInterface->getAppNamePinyin(m_keyWord);
         int index = 0;
-        while (index < m_appInfoVector.size()) {
 
+        while (index < m_appInfoVector.size()) {
             QString appName = m_appInfoVector.at(index).at(1);
             QString appEnglishName = m_appInfoVector.at(index).at(2);
-
             QStringList appNameLs;  //中文音标全拼列表
             QStringList appNameFls; //中文拼音首字母简拼列表
-            QStringList appNamePyLst = Zeeker::FileUtils::findMultiToneWords(appName); //获取中文拼音列表
+            QStringList appNamePyLst = FileUtils::findMultiToneWords(appName); //获取中文拼音列表
 
             for (int i = 0; i < appNamePyLst.size() / 2; i++) {
                 appNameLs.append(appNamePyLst.at(i * 2));
@@ -61,37 +60,43 @@ void SearchAppThread::run()
                 }
             } else {
                 for (int var = 0; var < appNameLs.size(); ++var) {
-                    if (appNameLs[var].left(str.length()).contains(str,Qt::CaseInsensitive) ||
-                            appNameFls[var].left(str.length()).contains(str,Qt::CaseInsensitive)) {
+                    if (appNameLs[var].left(str.length()).contains(str, Qt::CaseInsensitive) ||
+                        appNameFls[var].left(str.length()).contains(str, Qt::CaseInsensitive)) {
                         //按照顺序从首字母开始严格匹配查找
                         m_searchFirstVector.append(m_appInfoVector.at(index));
                         break;
-                    } else if (appNameLs[var].contains(str,Qt::CaseInsensitive) ||
-                            appNameFls[var].contains(str,Qt::CaseInsensitive) ||
-                            appEnglishName.contains(str,Qt::CaseInsensitive)) {
+                    } else if (appNameLs[var].contains(str, Qt::CaseInsensitive) ||
+                               appNameFls[var].contains(str, Qt::CaseInsensitive) ||
+                               appEnglishName.contains(str, Qt::CaseInsensitive)) {
                         //只要应用名存在包含输入信息就匹配
                         m_searchRestVector.append(m_appInfoVector.at(index));
                         break;
                     }
                 }
             }
+
             index++;
         }
     }
+
     qSort(m_searchFirstVector.begin(), m_searchFirstVector.end(), UkuiMenuInterface::cmpApp);
     qSort(m_searchRestVector.begin(), m_searchRestVector.end(), UkuiMenuInterface::cmpApp);
+
     //对中文搜索结果进行排序
-    if (m_searchResultVector.size() != 0){
-         qSort(m_searchResultVector.begin(),m_searchResultVector.end(),UkuiMenuInterface::cmpApp);
+    if (m_searchResultVector.size() != 0) {
+        qSort(m_searchResultVector.begin(), m_searchResultVector.end(), UkuiMenuInterface::cmpApp);
     }
+
     //优先将严格匹配结果加入列表
     for (int i = 0; i < m_searchFirstVector.size(); i++) {
         m_searchResultVector.append(m_searchFirstVector.at(i));
     }
+
     //将模糊匹配结果加入列表
     for (int i = 0; i < m_searchRestVector.size(); i++) {
         m_searchResultVector.append(m_searchRestVector.at(i));
     }
+
     Q_EMIT sendSearchResult(m_searchResultVector);
 }
 

@@ -19,24 +19,6 @@ TEMPLATE = app
 
 target.path = /usr/bin
 
-INCLUDEPATH  += \
-    src/BackProcess/DBus \
-    src/BackProcess/FileWatcher \
-    src/BackProcess/Interface \
-    src/BackProcess/Search \
-    src/BackProcess/tablet \
-    src/BackProcess/XEventMonitor \
-    src/QtSingleApplication \
-    src/UserInterface \
-    src/UserInterface/Button \
-    src/UserInterface/ListView \
-    src/UserInterface/Other \
-    src/UserInterface/RightClickMenu \
-    src/UserInterface/ViewItem \
-    src/UserInterface/Widget \
-    src/UtilityFunction \
-    src/UtilityFunction/Style
-
 TRANSLATIONS+=\
     translations/ukui-menu_bo.ts \
     translations/ukui-menu_zh_CN.ts \

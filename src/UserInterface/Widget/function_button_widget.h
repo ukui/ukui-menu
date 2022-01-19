@@ -47,6 +47,7 @@ protected:
      */
     void initUi();
 
+
 Q_SIGNALS:
     /**
      * @brief Send button click signal to functionwidget interface

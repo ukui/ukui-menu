@@ -116,7 +116,6 @@ public Q_SLOTS:
     void updateRecentView();
     void updateAppCategorySlot(QString category);
     void databaseThreadCloseSlot();
-
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
 

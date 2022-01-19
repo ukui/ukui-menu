@@ -40,8 +40,6 @@
 
 #define MAX_CONTENT_LENGTH 20480000
 
-namespace Zeeker
-{
 class FileUtils
 {
 public:
@@ -54,6 +52,5 @@ public:
 private:
     FileUtils();
 };
-}
 
 #endif // FILEUTILS_H

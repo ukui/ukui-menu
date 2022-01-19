@@ -1,8 +1,13 @@
 DISTFILES += \
-    $$PWD/DBus/org.ukui.menu.xml \
-    $$PWD/FileWatcher/filewatcher.pri \
-    $$PWD/Search/pinyinWithTone.txt \
-    $$PWD/Search/pinyinWithoutTone.txt
+    $$PWD/FileWatcher/filewatcher.pri
+
+INCLUDEPATH  += \
+    $$PWD/DBus \
+    $$PWD/FileWatcher \
+    $$PWD/Interface \
+    $$PWD/Search \
+    $$PWD/tablet \
+    $$PWD/XEventMonitor
 
 HEADERS += \
     $$PWD/DBus/dbus-adaptor.h \
