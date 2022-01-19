@@ -38,6 +38,10 @@
 #include "src/Style/style.h"
 #include "menubox.h"
 
+#define DBUS_SESSION_NAME       "org.gnome.SessionManager"
+#define DBUS_SESSION_PATH       "/org/gnome/SessionManager"
+#define DBUS_SESSION_INTERFACE  "org.gnome.SessionManager"
+
 class RightClickMenu : public QWidget
 {
     Q_OBJECT

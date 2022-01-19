@@ -4,22 +4,22 @@
 <context>
     <name>FullMainWindow</name>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="74"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="73"/>
         <source>Search</source>
         <translation type="unfinished">Ara</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="135"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="134"/>
         <source>All</source>
         <translation type="unfinished">Tümü</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="137"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="136"/>
         <source>Letter</source>
         <translation type="unfinished">Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/Widget/fullmainwindow.cpp" line="139"/>
+        <location filename="../src/Widget/fullmainwindow.cpp" line="138"/>
         <source>Function</source>
         <translation type="unfinished">Kategori</translation>
     </message>
@@ -192,46 +192,46 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="240"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="239"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="243"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="242"/>
         <source>collection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="238"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="425"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="843"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="237"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="424"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="842"/>
         <source>All</source>
         <translation type="unfinished">Tümü</translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="244"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="243"/>
         <source>recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="245"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="244"/>
         <source>Max</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="247"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="246"/>
         <source>PowerOff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="427"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="851"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="426"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="850"/>
         <source>Letter</source>
         <translation type="unfinished">Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/Widget/mainwindow.cpp" line="429"/>
-        <location filename="../src/Widget/mainwindow.cpp" line="859"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="428"/>
+        <location filename="../src/Widget/mainwindow.cpp" line="858"/>
         <source>Function</source>
         <translation type="unfinished">Kategori</translation>
     </message>
@@ -395,39 +395,46 @@
         <translation>Kaldır</translation>
     </message>
     <message>
-        <source>Hibernate</source>
-        <translation type="vanished">Beklemeye Al</translation>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="290"/>
+        <source>Switch user</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="284"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="296"/>
+        <source>Hibernate</source>
+        <translation>Beklemeye Al</translation>
+    </message>
+    <message>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="302"/>
         <source>Sleep</source>
         <translation>Uyku Modu</translation>
     </message>
     <message>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="306"/>
         <source>Lock Screen</source>
-        <translation type="vanished">Ekranı Kilitle</translation>
+        <translation>Ekranı Kilitle</translation>
     </message>
     <message>
         <source>Switch User</source>
         <translation type="vanished">Kullanıcı Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="286"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="311"/>
         <source>Log Out</source>
         <translation>Çıkış</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="288"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="317"/>
         <source>Restart</source>
         <translation>Yeniden Başlat</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="290"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="323"/>
         <source>Power Off</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="319"/>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="354"/>
         <source>Personalize this list</source>
         <translation>Bu listeyi özelleştirin</translation>
     </message>
