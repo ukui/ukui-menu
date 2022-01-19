@@ -396,7 +396,6 @@ MainWindow::MainWindow(QWidget *parent) :
             ViewOpenedSlot(desktopfp);
         }
     });
-    myDebug() << QIcon::themeSearchPaths();
 }
 
 MainWindow::~MainWindow()
