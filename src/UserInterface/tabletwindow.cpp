@@ -38,7 +38,7 @@ TabletWindow::TabletWindow(QWidget *parent) :
     QWidget(parent)
 {
     QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
-    setting = new QSettings(path, QSettings::IniFormat);
+    m_setting = new QSettings(path, QSettings::IniFormat);
     m_pagemanager = new PageManager();
     Style::initWidStyle();
     setProperty("useStyleWindowManager", false);
@@ -49,8 +49,8 @@ TabletWindow::~TabletWindow()
 {
 }
 
-QVector<QString> TabletWindow::keyVector = QVector<QString>();
-QVector<int> TabletWindow::keyValueVector = QVector<int>();
+QVector<QString> TabletWindow::m_keyVector = QVector<QString>();
+QVector<int> TabletWindow::m_keyValueVector = QVector<int>();
 
 void TabletWindow::initUi()
 {
@@ -64,17 +64,17 @@ void TabletWindow::initUi()
     m_height = QApplication::primaryScreen()->geometry().height();
     this->setFixedSize(m_width, m_height);
     m_backPixmap = new QPixmap;
-    leftWidget = new FunctionWidget(this);
-    leftWidget->setFixedSize(Style::m_leftWidWidth, Style::CenterWindHeight);
-    firstPageWidget = new QWidget(this);
-    firstPageWidget->installEventFilter(this);
-    buttonGroup = new QButtonGroup;
-    buttonBoxLayout = new QHBoxLayout;
-    buttonBoxLayout->setAlignment(Qt::AlignHCenter);
-    buttonBoxLayout->setSpacing(0);
-    buttonWidget = new QWidget(this);
-    buttonWidget->setLayout(buttonBoxLayout);
-    buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_leftWidget = new FunctionWidget(this);
+    m_leftWidget->setFixedSize(Style::m_leftWidWidth, Style::CenterWindHeight);
+    m_firstPageWidget = new QWidget(this);
+    m_firstPageWidget->installEventFilter(this);
+    m_buttonGroup = new QButtonGroup;
+    m_buttonBoxLayout = new QHBoxLayout;
+    m_buttonBoxLayout->setAlignment(Qt::AlignHCenter);
+    m_buttonBoxLayout->setSpacing(0);
+    m_buttonWidget = new QWidget(this);
+    m_buttonWidget->setLayout(m_buttonBoxLayout);
+    m_buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
     setOpacityEffect(0.7);
     m_fileWatcher = new QFileSystemWatcher;
     m_fileWatcher2 = new QFileSystemWatcher;
@@ -121,29 +121,43 @@ void TabletWindow::initUi()
 //    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
 //    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
     if (QGSettings::isSchemaInstalled(QString("org.mate.background").toLocal8Bit())) {
-        bg_setting = new QGSettings(QString("org.mate.background").toLocal8Bit());
-        m_bgPath = bg_setting->get("picture-filename").toString();
-        m_bgOption = bg_setting->get("pictureOptions").toString();
-        connect(bg_setting, &QGSettings::changed, this, [ = ](const QString & key) {
+        m_bgSetting = new QGSettings(QString("org.mate.background").toLocal8Bit());
+
+        if (m_bgSetting->keys().contains("pictureFilename")) {
+            m_bgPath = m_bgSetting->get("pictureFilename").toString();
+        }
+
+        if (m_bgSetting->keys().contains("pictureOptions")) {
+            m_bgOption = m_bgSetting->get("pictureOptions").toString();
+        }
+
+        connect(m_bgSetting, &QGSettings::changed, this, [ = ](const QString & key) {
             if (key == "pictureFilename") {
                 //在每个屏幕上绘制背景
-                m_bgPath = bg_setting->get("picture-filename").toString();
-                m_bgOption = bg_setting->get("pictureOptions").toString();
+                if (m_bgSetting->keys().contains("pictureFilename") &&
+                    m_bgSetting->keys().contains("pictureOptions")) {
+                    m_bgPath = m_bgSetting->get("pictureFilename").toString();
+                    m_bgOption = m_bgSetting->get("pictureOptions").toString();
+                }
+
                 ways();//壁纸显示方式
             }
 
             if (key == "pictureOptions") {
                 //在每个屏幕上绘制背景
-                m_bgOption = bg_setting->get("pictureOptions").toString();
+                if (m_bgSetting->keys().contains("pictureOptions")) {
+                    m_bgOption = m_bgSetting->get("pictureOptions").toString();
+                }
+
                 ways();
             }
         });
     }
 
-    usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
-                                      "/",
-                                      "com.kylin.statusmanager.interface",
-                                      QDBusConnection::sessionBus());
+    m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
+                                        "/",
+                                        "com.kylin.statusmanager.interface",
+                                        QDBusConnection::sessionBus());
     QDBusConnection::sessionBus().connect("com.kylin.statusmanager.interface",
                                           "/",
                                           "com.kylin.statusmanager.interface",
@@ -154,14 +168,14 @@ void TabletWindow::initUi()
 
     //特效模式,此处Gsetting不明确，需进一步确认
     if (QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit())) {
-        bg_effect = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-        setOpacityEffect(bg_effect->get("transparency").toReal());
-        connect(bg_effect, &QGSettings::changed, [this](const QString & key) {
+        m_bgEffect = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+        setOpacityEffect(m_bgEffect->get("transparency").toReal());
+        connect(m_bgEffect, &QGSettings::changed, [this](const QString & key) {
             if (key == "effect") {
-                if (bg_effect->get("effect").toBool()) {
-                    setOpacityEffect(bg_effect->get("transparency").toReal());
+                if (m_bgEffect->get("effect").toBool()) {
+                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
                 } else {
-                    setOpacityEffect(bg_effect->get("transparency").toReal());
+                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
                 }
             }
         });
@@ -205,7 +219,7 @@ void TabletWindow::initUi()
     ways();
     buttonWidgetShow();
 //    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
-    connect(leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
+    connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
 
     if (checkapplist()) {
         directoryChangedSlot();//更新应用列表
@@ -255,13 +269,13 @@ bool TabletWindow::eventFilter(QObject *target, QEvent *event)
         }
     }
 
-    if (target == firstPageWidget || target == buttonWidget) {
+    if (target == m_firstPageWidget || target == m_buttonWidget) {
         if (event->type() == QEvent::MouseMove) {
             return true;
         }
     }
 
-    if (target == firstPageWidget) {
+    if (target == m_firstPageWidget) {
         if (event->type() == QEvent::MouseButtonRelease) {//因触控拖拽会触发press事件，所以改为release时隐藏
             recvHideMainWindowSlot();
         }
@@ -297,10 +311,10 @@ void TabletWindow::wheelEvent(QWheelEvent *e)
  */
 void TabletWindow::initAppListWidget()
 {
-    layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    this->setLayout(layout);
-    firstPageLayout = new QHBoxLayout();
+    m_layout = new QVBoxLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    this->setLayout(m_layout);
+    m_firstPageLayout = new QHBoxLayout();
     m_scrollArea = new QScrollArea(this);
     m_scrollAreaWid = new ScrollAreaWid(this);
 //    m_scrollAreaWid->setStyleSheet("border:0px; background:transparent;");
@@ -315,10 +329,10 @@ void TabletWindow::initAppListWidget()
     m_scrollAreaWidLayout = new QHBoxLayout(m_scrollAreaWid);
     m_scrollAreaWidLayout->setContentsMargins(0, 0, 0, 0);
     m_scrollAreaWidLayout->setSpacing(0);
-    layout->addWidget(m_scrollArea);
-    layout->addWidget(buttonWidget);
-    buttonWidget->setFixedSize(Style::OtherPageViewWidth, 40);
-    buttonWidget->installEventFilter(this);
+    m_layout->addWidget(m_scrollArea);
+    m_layout->addWidget(m_buttonWidget);
+    m_buttonWidget->setFixedSize(Style::OtherPageViewWidth, 40);
+    m_buttonWidget->installEventFilter(this);
     m_appListBottomSpacer = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     fillAppList();
 }
@@ -348,7 +362,7 @@ void TabletWindow::showPCMenu()
 //改变搜索框及工具栏透明度
 void TabletWindow::setOpacityEffect(const qreal &num)
 {
-    leftWidget->setDownOpacityEffect(num); //全局搜索框透明度
+    m_leftWidget->setDownOpacityEffect(num); //全局搜索框透明度
 }
 
 void TabletWindow::reloadAppList()
@@ -356,12 +370,12 @@ void TabletWindow::reloadAppList()
 //    qDebug() << "void TabletWindow::reloadAppList()";
     QVector<QStringList> vector;
     m_data.clear();
-    keyVector.clear();
-    keyValueVector.clear();
+    m_keyVector.clear();
+    m_keyValueVector.clear();
     vector = m_pagemanager->getAppPageVector();
 
     if (!vector.at(0).isEmpty()) {
-        QLayoutItem *widItem = firstPageLayout->itemAt(1);
+        QLayoutItem *widItem = m_firstPageLayout->itemAt(1);
         QWidget *wid = widItem->widget();
         TabletListView *m_listview = qobject_cast<TabletListView *>(wid);
         m_listview->updateData(vector.at(0));
@@ -381,12 +395,12 @@ void TabletWindow::reloadWidget()
 {
     QLayoutItem *child;
 
-    if (firstPageLayout->count() == 2) {
-        QLayoutItem *widItem = firstPageLayout->itemAt(1);
+    if (m_firstPageLayout->count() == 2) {
+        QLayoutItem *widItem = m_firstPageLayout->itemAt(1);
         QWidget *wid = widItem->widget();
         TabletListView *m_listview = qobject_cast<TabletListView *>(wid);
         delete m_listview;
-        firstPageLayout->removeWidget(leftWidget);
+        m_firstPageLayout->removeWidget(m_leftWidget);
     }
 
     while ((child = m_scrollAreaWidLayout->takeAt(1)) != 0) {
@@ -397,7 +411,7 @@ void TabletWindow::reloadWidget()
         delete child;
     }
 
-    isFirstPage = true;
+    m_isFirstPage = true;
     fillAppList();
     buttonWidgetShow();
 }
@@ -408,15 +422,15 @@ void TabletWindow::fillAppList()
 {
     QVector<QStringList> vector;
     m_data.clear();
-    keyVector.clear();
-    keyValueVector.clear();
+    m_keyVector.clear();
+    m_keyValueVector.clear();
     vector = m_pagemanager->getAppPageVector();
 
     for (int i = 0; i < vector.size(); i++) {
         QStringList applist = vector.at(i);
 
         if (!applist.isEmpty()) {
-            if (!isFirstPage) {
+            if (!m_isFirstPage) {
                 insertAppList(QStringList());
             }
 
@@ -426,7 +440,7 @@ void TabletWindow::fillAppList()
 }
 bool TabletWindow::cmpApp(QString &arg_1, QString &arg_2)
 {
-    if (keyValueVector.at(keyVector.indexOf(arg_1)) < keyValueVector.at(keyVector.indexOf(arg_2))) {
+    if (m_keyValueVector.at(m_keyVector.indexOf(arg_1)) < m_keyValueVector.at(m_keyVector.indexOf(arg_2))) {
         return true;
     } else {
         return false;
@@ -457,22 +471,22 @@ void TabletWindow::on_pageNumberChanged(bool nextPage)
 //    qDebug() << "void TabletWindow::on_pageNumberChanged(bool nextPage)";
     /*if (!(m_scrollAnimation->state() == QPropertyAnimation::Running))*/ {
         if (nextPage) {
-            curPageNum++;
+            m_curPageNum++;
 
-            if (curPageNum > (m_scrollAreaWidLayout->count() - 1) / 2) {
-                curPageNum = (m_scrollAreaWidLayout->count() - 1) / 2;
+            if (m_curPageNum > (m_scrollAreaWidLayout->count() - 1) / 2) {
+                m_curPageNum = (m_scrollAreaWidLayout->count() - 1) / 2;
             }
         } else {
-            curPageNum--;
+            m_curPageNum--;
 
-            if (curPageNum < 0) {
-                curPageNum = 0;
+            if (m_curPageNum < 0) {
+                m_curPageNum = 0;
             }
         }
 
 //        m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
-        btnGroupClickedSlot(curPageNum * 2);
-        pageNumberChanged(curPageNum + 1);
+        btnGroupClickedSlot(m_curPageNum * 2);
+        pageNumberChanged(m_curPageNum + 1);
     }
 }
 
@@ -500,17 +514,17 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
 {
     TabletListView *listview = nullptr;
 
-    if (isFirstPage) {
+    if (m_isFirstPage) {
         listview = new TabletListView(this, 0);
-        firstPageLayout->setSpacing(0);
-        firstPageLayout->setContentsMargins(0, 0, 0, 0);
-        firstPageWidget->setLayout(firstPageLayout);
-        firstPageLayout->addWidget(leftWidget);
+        m_firstPageLayout->setSpacing(0);
+        m_firstPageLayout->setContentsMargins(0, 0, 0, 0);
+        m_firstPageWidget->setLayout(m_firstPageLayout);
+        m_firstPageLayout->addWidget(m_leftWidget);
         listview->setFixedSize(Style::FirsPageViewWidth, Style::CenterWindHeight);
-        firstPageLayout->addWidget(listview);
-        m_scrollAreaWidLayout->addWidget(firstPageWidget);
+        m_firstPageLayout->addWidget(listview);
+        m_scrollAreaWidLayout->addWidget(m_firstPageWidget);
         listview->setGridSize(QSize(Style::TabletItemSizeWidthFirst, Style::AppListItemSizeHeight));
-        isFirstPage = false;
+        m_isFirstPage = false;
     } else {
         listview = new TabletListView(this, 1);
         listview->setFixedSize(Style::OtherPageViewWidth, /*m_height - 20*/Style::CenterWindHeight);
@@ -575,13 +589,13 @@ void TabletWindow::execApplication(QString desktopfp)
     g_key_file_free(keyfile);
     //打开ini文件
     QString pathini = QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini";
-    settt = new QSettings(pathini, QSettings::IniFormat);
-    settt->beginGroup("application");
+    m_disableAppSet = new QSettings(pathini, QSettings::IniFormat);
+    m_disableAppSet->beginGroup("application");
     QString desktopfp1 = str;
     //判断
-    bool bo = settt->contains(desktopfp1.toLocal8Bit().data()); // iskey
-    bool bo1 = settt->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool(); //isvalue
-    settt->endGroup();
+    bool bo = m_disableAppSet->contains(desktopfp1.toLocal8Bit().data()); // iskey
+    bool bo1 = m_disableAppSet->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool(); //isvalue
+    m_disableAppSet->endGroup();
 
     if (bo && bo1 == false) { //都存在//存在并且为false，从filepathlist中去掉
         //qDebug()<<"bool"<<bo<<bo1;
@@ -670,11 +684,11 @@ void TabletWindow::pageNumberChanged(int pageNum)
     if (m_pagemanager->getAppPageVector().size() != 1) {
         for (int page = 1; page <= m_pagemanager->getAppPageVector().size(); page++) {
             if (pageNum == page) {
-                buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
+                m_buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
                         "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
                         "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/selected.svg);}");
             } else {
-                buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/select.svg);}"
+                m_buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/select.svg);}"
                         "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/select.svg);}"
                         "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/select.svg);}");
             }
@@ -820,64 +834,64 @@ void TabletWindow::btnGroupClickedSlot(int pageNum)
 void TabletWindow::buttonWidgetShow()
 {
     //qDebug()<<"4、buttonWidgetShow";
-    delete buttonBoxLayout;
-    buttonBoxLayout = new QHBoxLayout;
-    buttonWidget->setLayout(buttonBoxLayout);
-    buttonBoxLayout->setAlignment(Qt::AlignHCenter);
-    buttonBoxLayout->setSpacing(16);
-    buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
+    delete m_buttonBoxLayout;
+    m_buttonBoxLayout = new QHBoxLayout;
+    m_buttonWidget->setLayout(m_buttonBoxLayout);
+    m_buttonBoxLayout->setAlignment(Qt::AlignHCenter);
+    m_buttonBoxLayout->setSpacing(16);
+    m_buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
 
-    for (auto button : buttonGroup->buttons()) {
-        buttonGroup->removeButton(button);
+    for (auto button : m_buttonGroup->buttons()) {
+        m_buttonGroup->removeButton(button);
         button->deleteLater();
     }
 
-    QDBusReply<bool> var = usrInterface->call("get_current_tabletmode");
+    QDBusReply<bool> var = m_usrInterface->call("get_current_tabletmode");
 
 //    res = var;
     for (int page = 1; page <= m_pagemanager->getAppPageVector().size(); page++) {
-        button = new QPushButton;
-        button->setFocusPolicy(Qt::NoFocus);
-        button->setFixedSize(24, 24);
-        button->setStyleSheet("QPushButton{border-image: url(:/data/img/mainviewwidget/select.svg);}"
-                              "QPushButton:hover{border-image: url(:/img/mainviewwidget/select.svg);}"
-                              "QPushButton:pressed{border-image:url(:/img/mainviewwidget/select.svg);}");
+        m_pageButton = new QPushButton;
+        m_pageButton->setFocusPolicy(Qt::NoFocus);
+        m_pageButton->setFixedSize(24, 24);
+        m_pageButton->setStyleSheet("QPushButton{border-image: url(:/data/img/mainviewwidget/select.svg);}"
+                                    "QPushButton:hover{border-image: url(:/img/mainviewwidget/select.svg);}"
+                                    "QPushButton:pressed{border-image:url(:/img/mainviewwidget/select.svg);}");
 
         if (page == 1) {
-            button->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
-                                  "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
-                                  "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/selected.svg);}");
+            m_pageButton->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
+                                        "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
+                                        "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/selected.svg);}");
         }
 
-        buttonBoxLayout->addWidget(button);
-        buttonGroup->addButton(button, page);
+        m_buttonBoxLayout->addWidget(m_pageButton);
+        m_buttonGroup->addButton(m_pageButton, page);
     }
 
     btnGroupClickedSlot(0);
-    curPageNum = 0;
-    connect(buttonGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), this, &TabletWindow::buttonClicked);
+    m_curPageNum = 0;
+    connect(m_buttonGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), this, &TabletWindow::buttonClicked);
 }
 
 void TabletWindow::buttonClicked(QAbstractButton *button)
 {
-    int idd = buttonGroup->id(button);
+    int idd = m_buttonGroup->id(button);
     Style::nowpagenum = idd;
 
 //    QDBusReply<bool> res = usrInterface->call("get_current_tabletmode");
     for (int page = 1; page <= m_pagemanager->getAppPageVector().size(); page++) {
         if (idd == page) {
-            buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
+            m_buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
                     "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
                     "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/selected.svg);}");
         } else {
-            buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/select.svg);}"
+            m_buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/select.svg);}"
                     "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/select.svg);}"
                     "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/select.svg);}");
         }
     }
 
-    curPageNum = idd - 1;
-    btnGroupClickedSlot(curPageNum * 2);
+    m_curPageNum = idd - 1;
+    btnGroupClickedSlot(m_curPageNum * 2);
 }
 
 void TabletWindow::animationFinishSlot()
@@ -936,9 +950,9 @@ void TabletWindow::XkbEventsRelease(const QString &keycode)
         return;
     }
 
-    QDBusReply<bool> res = usrInterface->call("get_current_tabletmode");
+    QDBusReply<bool> res = m_usrInterface->call("get_current_tabletmode");
 
-    if (usrInterface && res) {
+    if (m_usrInterface && res) {
         qWarning() << QTime::currentTime()
                    << " Now is tablet mode, and it is forbidden to hide or show the menu after 'win'.'Esc'";
         return;
@@ -971,17 +985,18 @@ void TabletWindow::winKeyReleaseSlot(const QString &key)
         if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit())) {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
 
-            if (gsetting.get(QString("win-key-release")).toBool()) {
-                disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-                           this, SLOT(XkbEventsRelease(QString)));
-                disconnect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-                           this, SLOT(XkbEventsPress(QString)));
-            } else {
-                connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-                        this, SLOT(XkbEventsRelease(QString)));
-                connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-                        this, SLOT(XkbEventsPress(QString)));
-            }
+            if (gsetting.keys().contains("winKeyRelease"))
+                if (gsetting.get(QString("winKeyRelease")).toBool()) {
+                    disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+                               this, SLOT(XkbEventsRelease(QString)));
+                    disconnect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+                               this, SLOT(XkbEventsPress(QString)));
+                } else {
+                    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+                            this, SLOT(XkbEventsRelease(QString)));
+                    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+                            this, SLOT(XkbEventsPress(QString)));
+                }
         }
     }
 }

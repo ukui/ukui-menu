@@ -47,12 +47,15 @@ protected:
      */
     void initUi();
 
+    void hideEvent(QHideEvent *event);
+
 Q_SIGNALS:
     /**
      * @brief Send button click signal to functionwidget interface
      * @param btnname: Category button name
      */
     void sendFunctionBtnSignal(QString btnname);
+    void sendResetFunctionPage();
 
 public Q_SLOTS:
     /**

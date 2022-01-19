@@ -98,33 +98,32 @@ private:
     QPixmap m_pixmap;
 
     QPixmap *m_backPixmap = nullptr;
-    QGSettings *bg_setting = nullptr;
-    QGSettings *bg_effect = nullptr;
+    QGSettings *m_bgSetting = nullptr;
+    QGSettings *m_bgEffect = nullptr;
 
-    QDBusInterface *usrInterface = nullptr;
+    QDBusInterface *m_usrInterface = nullptr;
     bool m_winFlag = false;
-    int curPageNum = 0;
-    QVBoxLayout *layout = nullptr;
-    FunctionWidget *leftWidget = nullptr;
-    bool isFirstPage = true;
-    QWidget *firstPageWidget = nullptr;
-    static QVector<QString> keyVector;
-    static QVector<int> keyValueVector;
-    QSettings *setting;
+    int m_curPageNum = 0;
+    QVBoxLayout *m_layout = nullptr;
+    FunctionWidget *m_leftWidget = nullptr;
+    bool m_isFirstPage = true;
+    QWidget *m_firstPageWidget = nullptr;
+    static QVector<QString> m_keyVector;
+    static QVector<int> m_keyValueVector;
+    QSettings *m_setting = nullptr;
     TabletListView *m_listView = nullptr;
-    QHBoxLayout *firstPageLayout = nullptr;
-    QHBoxLayout *buttonBoxLayout = nullptr;
-    QButtonGroup *buttonGroup = nullptr;
-    QWidget *buttonWidget = nullptr;
-    QPushButton *button = nullptr;
+    QHBoxLayout *m_firstPageLayout = nullptr;
+    QHBoxLayout *m_buttonBoxLayout = nullptr;
+    QButtonGroup *m_buttonGroup = nullptr;
+    QWidget *m_buttonWidget = nullptr;
+    QPushButton *m_pageButton = nullptr;
     PageManager *m_pagemanager = nullptr;
 
     QFileSystemWatcher *m_fileWatcher = nullptr;
     QFileSystemWatcher *m_fileWatcher1 = nullptr;
     QFileSystemWatcher *m_fileWatcher2 = nullptr;
     TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
-    QSettings *settt = nullptr;
-    QWidget *widget = nullptr;
+    QSettings *m_disableAppSet = nullptr;
     DBus *m_dbus = nullptr;
 
 protected:
@@ -202,7 +201,7 @@ public Q_SLOTS:
     void XkbEventsRelease(const QString &keycode);
     void winKeyReleaseSlot(const QString &key);
     void on_pageNumberChanged(bool nextPage);
-    void buttonClicked(QAbstractButton *button);
+    void buttonClicked(QAbstractButton *m_pageButton);
     void pageNumberChanged(int pageNum);
     void requestDeleteAppSlot();
     void requestUpdateSlot(QString desktopfp);

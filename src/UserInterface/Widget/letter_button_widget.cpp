@@ -67,6 +67,12 @@ void LetterButtonWidget::initUi()
     }
 }
 
+void LetterButtonWidget::hideEvent(QHideEvent *event)
+{
+    Q_EMIT sendResetLetterPage();
+    return QWidget::hideEvent(event);
+}
+
 /**
  * 字母分类按钮槽函数
  */

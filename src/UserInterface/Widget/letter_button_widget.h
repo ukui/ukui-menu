@@ -42,12 +42,15 @@ protected:
      */
     void initUi();
 
+    void hideEvent(QHideEvent *event);
+
 Q_SIGNALS:
     /**
      * @brief Send button click signal to letterwidget interface
      * @param btnname: Category button name
      */
     void sendLetterBtnSignal(QString btnname);
+    void sendResetLetterPage();
 
 public Q_SLOTS:
     /**
