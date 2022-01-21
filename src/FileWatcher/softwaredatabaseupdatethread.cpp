@@ -52,6 +52,7 @@ void SoftwareDatabaseUpdateThread::run()
     QJsonObject jsonObject = jsonDocument.object();
     QJsonArray jsonArray = jsonObject[jsonObject.keys()[0]].toArray();
 
+    int number = 0;
     db.transaction();
 
     Q_FOREACH(QJsonValue jsonValue, jsonArray){
@@ -61,6 +62,12 @@ void SoftwareDatabaseUpdateThread::run()
                 .arg(arrObject[arrObject.keys()[1]].toString())
                 .arg(arrObject[arrObject.keys()[2]].toString());
         sql.exec(execline);
+
+        ++number;
+        if (number % 5000 == 0) {
+            db.commit();
+            db.transaction();
+        } 
     }
     db.commit();
 
