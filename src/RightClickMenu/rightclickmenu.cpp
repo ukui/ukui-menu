@@ -204,12 +204,12 @@ void RightClickMenu::otherListActionTriggerSlot()
 
 void RightClickMenu::hibernateActionTriggerSlot()
 {
-    QProcess::startDetached(QString("ukui-session-tools --suspend"));
+    QProcess::startDetached(QString("ukui-session-tools --hibernate"));
 }
 
 void RightClickMenu::sleepActionTriggerSlot()
 {
-    QProcess::startDetached(QString("ukui-session-tools --sleep"));
+    QProcess::startDetached(QString("ukui-session-tools --suspend"));
 }
 
 int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
@@ -281,19 +281,54 @@ int RightClickMenu::showShutdownMenu(const QPoint &pos)
     m_actionNumber = 0;
     MenuBox m_showShutMenu;
     connect(&m_showShutMenu, &MenuBox::sendMainWinActiveSignal, this, &RightClickMenu::sendMainWinActiveSignal);
-    m_showShutMenu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic", 1)), tr("Sleep"),
-                             this, SLOT(hibernateActionTriggerSlot())); //休眠睡眠相同
-    m_showShutMenu.addAction(QIcon(getIconPixmap("system-logout-symbolic", 1)), tr("Log Out"),
-                             this, SLOT(logoutActionTriggerSlot()));
-    m_showShutMenu.addAction(QIcon(getIconPixmap("system-restart-symbolic", 1)), tr("Restart"),
-                             this, SLOT(rebootActionTriggerSlot()));
-    m_showShutMenu.addAction(QIcon(getIconPixmap("exit-symbolic", 1)), tr("Power Off"),
-                             this, SLOT(shutdownActionTriggerSlot()));
+
+    QDBusInterface iface(DBUS_SESSION_NAME, DBUS_SESSION_PATH,
+                         DBUS_SESSION_INTERFACE, QDBusConnection::sessionBus());
+
+    QDBusReply<bool> reply = iface.call("canSwitch");
+    if (reply.isValid() && reply.value() == true) {
+        m_showShutMenu.addAction(QIcon(getIconPixmap("stock-people-symbolic", 1)), tr("Switch user"),
+                                 this, SLOT(switchUserActionTriggerSlot()));
+    }
+
+    reply = iface.call("canHibernate");
+    if (reply.isValid() && reply.value() == true) {
+        m_showShutMenu.addAction(QIcon(getIconPixmap("kylin-sleep-symbolic", 1)), tr("Hibernate"),
+                                 this, SLOT(hibernateActionTriggerSlot()));
+    }
+
+    reply = iface.call("canSuspend");
+    if (reply.isValid() && reply.value() == true) {
+        m_showShutMenu.addAction(QIcon(getIconPixmap("kylin-hebernate-symbolic", 1)), tr("Sleep"),
+                                 this, SLOT(sleepActionTriggerSlot()));
+    }
+
+    m_showShutMenu.addAction(QIcon(getIconPixmap("system-lock-screen-symbolic", 1)), tr("Lock Screen"),
+                             this, SLOT(lockScreenActionTriggerSlot()));
+
+    reply = iface.call("canLogout");
+    if (reply.isValid() && reply.value() == true) {
+        m_showShutMenu.addAction(QIcon(getIconPixmap("system-logout-symbolic", 1)), tr("Log Out"),
+                                 this, SLOT(logoutActionTriggerSlot()));
+    }
+
+    reply = iface.call("canReboot");
+    if (reply.isValid() && reply.value() == true) {
+        m_showShutMenu.addAction(QIcon(getIconPixmap("system-restart-symbolic", 1)), tr("Restart"),
+                                 this, SLOT(rebootActionTriggerSlot()));
+    }
+
+    reply = iface.call("canPowerOff");
+    if (reply.isValid() && reply.value() == true) {
+        m_showShutMenu.addAction(QIcon(getIconPixmap("exit-symbolic", 1)), tr("Power Off"),
+                                 this, SLOT(shutdownActionTriggerSlot()));
+    }
+
     m_showShutMenu.setAttribute(Qt::WA_TranslucentBackground);
     m_showShutMenu.setAttribute(Qt::WA_DeleteOnClose);
     m_showShutMenu.raise();
     m_showShutMenu.exec(pos);
-    qDebug() << "RightClickMenu::showShutdownMenu()";
+    myDebug() << "RightClickMenu::showShutdownMenu()";
     return m_actionNumber;
 }
 
