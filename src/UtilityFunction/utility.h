@@ -24,7 +24,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <gio/gdesktopappinfo.h>
-#include "src/Interface/ukuimenuinterface.h"
+#include "ukuimenuinterface.h"
 
 #define DBUS_NAME       "org.ukui.panel"
 #define DBUS_PATH       "/panel/position"
@@ -76,7 +76,7 @@ QString getUserIcon();
 //获取用户姓名
 QString getUserName();
 
-enum PanelPositon{
+enum PanelPositon {
     BOTTOM = 0,
     TOP = 1,
     LEFT = 2,

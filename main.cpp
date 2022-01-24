@@ -16,8 +16,8 @@
  *
  */
 
-#include "src/Widget/mainwindow.h"
-#include "src/tablet/tabletwindow.h"
+#include "mainwindow.h"
+#include "tabletwindow.h"
 #include <QtSingleApplication>
 #include <QDesktopWidget>
 #include <QFile>
@@ -26,8 +26,8 @@
 #include <QLocale>
 #include <X11/Xlib.h>
 #include <syslog.h>
-#include "src/UtilityFunction/utility.h"
-#include "src/Search/file-utils.h"
+#include "utility.h"
+#include "file-utils.h"
 #include <ukuisdk/kylin-com4c.h>
 #include <ukuisdk/kylin-com4cxx.h>
 #define UKUI_SERVICE    "org.gnome.SessionManager"
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     }
 
     if (projectCodeName == "V10SP1") {
-        Zeeker::FileUtils::loadHanziTable(":/src/Search/pinyinWithoutTone.txt");
+        FileUtils::loadHanziTable(":/src/BackProcess/Search/pinyinWithoutTone.txt");
         MainWindow w;
         app.setActivationWindow(&w);
 

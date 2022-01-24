@@ -1,13 +1,129 @@
 <RCC>
     <qresource prefix="/">
+        <file>data/img/mainviewwidget/all-2x.png</file>
+        <file>data/img/mainviewwidget/all.png</file>
+        <file>data/img/mainviewwidget/all.svg</file>
         <file>data/img/mainviewwidget/attributeaction.svg</file>
+        <file>data/img/mainviewwidget/close-2x.png</file>
+        <file>data/img/mainviewwidget/close.png</file>
+        <file>data/img/mainviewwidget/close.svg</file>
+        <file>data/img/mainviewwidget/Development-Checked.svg</file>
+        <file>data/img/mainviewwidget/Development-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Development-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Development-Normal.svg</file>
+        <file>data/img/mainviewwidget/DM-all-2x.png</file>
+        <file>data/img/mainviewwidget/DM-all.png</file>
+        <file>data/img/mainviewwidget/DM-all.svg</file>
+        <file>data/img/mainviewwidget/DM-close-2x.png</file>
+        <file>data/img/mainviewwidget/DM-close.png</file>
+        <file>data/img/mainviewwidget/DM-close.svg</file>
+        <file>data/img/mainviewwidget/DM-function-2x.png</file>
+        <file>data/img/mainviewwidget/DM-function.png</file>
+        <file>data/img/mainviewwidget/DM-function.svg</file>
+        <file>data/img/mainviewwidget/DM-arrow.png</file>
+        <file>data/img/mainviewwidget/DM-arrow.svg</file>
+        <file>data/img/mainviewwidget/DM-arrow-2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-返回.png</file>
+        <file>data/img/mainviewwidget/DM-icon-返回.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-返回@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-选项.png</file>
+        <file>data/img/mainviewwidget/DM-icon-选项.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-选项@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-check.png</file>
+        <file>data/img/mainviewwidget/DM-icon-check.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-check@2x.png</file>
+        <file>data/img/mainviewwidget/DM-icon-search.png</file>
+        <file>data/img/mainviewwidget/DM-icon-search.svg</file>
+        <file>data/img/mainviewwidget/DM-icon-search@2x.png</file>
+        <file>data/img/mainviewwidget/DM-letter-2x.png</file>
+        <file>data/img/mainviewwidget/DM-letter.png</file>
+        <file>data/img/mainviewwidget/DM-letter.svg</file>
+        <file>data/img/mainviewwidget/DM-max-2x.png</file>
+        <file>data/img/mainviewwidget/DM-max.png</file>
+        <file>data/img/mainviewwidget/DM-max.svg</file>
         <file>data/img/mainviewwidget/downarrow-pressed.svg</file>
         <file>data/img/mainviewwidget/downarrow.svg</file>
+        <file>data/img/mainviewwidget/drop-down-2x.png</file>
+        <file>data/img/mainviewwidget/drop-down.png</file>
+        <file>data/img/mainviewwidget/drop-down.svg</file>
+        <file>data/img/mainviewwidget/Education-Checked.svg</file>
+        <file>data/img/mainviewwidget/Education-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Education-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Education-Normal.svg</file>
         <file>data/img/mainviewwidget/fixed.svg</file>
+        <file>data/img/mainviewwidget/full-all-2x.png</file>
+        <file>data/img/mainviewwidget/full-close-2x.png</file>
+        <file>data/img/mainviewwidget/full-close.png</file>
+        <file>data/img/mainviewwidget/full-close.svg</file>
+        <file>data/img/mainviewwidget/full-drop-down-2x.png</file>
+        <file>data/img/mainviewwidget/full-drop-down.png</file>
+        <file>data/img/mainviewwidget/full-drop-down.svg</file>
+        <file>data/img/mainviewwidget/full-function-2x.png</file>
+        <file>data/img/mainviewwidget/full-function.png</file>
+        <file>data/img/mainviewwidget/full-function.svg</file>
+        <file>data/img/mainviewwidget/full-letter-2x.png</file>
+        <file>data/img/mainviewwidget/full-letter.png</file>
+        <file>data/img/mainviewwidget/full-letter.svg</file>
+        <file>data/img/mainviewwidget/full-min-2x.png</file>
+        <file>data/img/mainviewwidget/full-min.png</file>
+        <file>data/img/mainviewwidget/full-min.svg</file>
+        <file>data/img/mainviewwidget/full-search-2x.png</file>
+        <file>data/img/mainviewwidget/full-search.png</file>
+        <file>data/img/mainviewwidget/full-search.svg</file>
+        <file>data/img/mainviewwidget/fullicon-all.png</file>
+        <file>data/img/mainviewwidget/fullicon-all.svg</file>
+        <file>data/img/mainviewwidget/function-2x.png</file>
+        <file>data/img/mainviewwidget/function.png</file>
+        <file>data/img/mainviewwidget/function.svg</file>
+        <file>data/img/mainviewwidget/Game-Checked.svg</file>
+        <file>data/img/mainviewwidget/Game-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Game-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Game-Normal.svg</file>
+        <file>data/img/mainviewwidget/icon- 返回.png</file>
+        <file>data/img/mainviewwidget/icon- 返回.svg</file>
+        <file>data/img/mainviewwidget/icon- 返回@2x.png</file>
+        <file>data/img/mainviewwidget/icon- 选项.png</file>
+        <file>data/img/mainviewwidget/icon- 选项.svg</file>
+        <file>data/img/mainviewwidget/icon- 选项@2x.png</file>
+        <file>data/img/mainviewwidget/icon- search-2x.png</file>
+        <file>data/img/mainviewwidget/icon- search.png</file>
+        <file>data/img/mainviewwidget/icon- search.svg</file>
+        <file>data/img/mainviewwidget/icon-check.png</file>
+        <file>data/img/mainviewwidget/icon-check.svg</file>
+        <file>data/img/mainviewwidget/icon-check@2x.png</file>
+        <file>data/img/mainviewwidget/Image-Checked.svg</file>
+        <file>data/img/mainviewwidget/Image-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Image-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Image-Normal.svg</file>
+        <file>data/img/mainviewwidget/Internet-Checked.svg</file>
+        <file>data/img/mainviewwidget/Internet-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Internet-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Internet-Normal.svg</file>
         <file>data/img/mainviewwidget/leftarrow-hover.svg</file>
         <file>data/img/mainviewwidget/leftarrow.svg</file>
+        <file>data/img/mainviewwidget/letter-2x.png</file>
+        <file>data/img/mainviewwidget/letter.png</file>
+        <file>data/img/mainviewwidget/letter.svg</file>
         <file>data/img/mainviewwidget/lock-fs.svg</file>
         <file>data/img/mainviewwidget/lock.svg</file>
+        <file>data/img/mainviewwidget/max-2x.png</file>
+        <file>data/img/mainviewwidget/max.png</file>
+        <file>data/img/mainviewwidget/max.svg</file>
+        <file>data/img/mainviewwidget/Mobile-Checked.svg</file>
+        <file>data/img/mainviewwidget/Mobile-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Mobile-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Mobile-Normal.svg</file>
+        <file>data/img/mainviewwidget/Office-Checked.svg</file>
+        <file>data/img/mainviewwidget/Office-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Office-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Office-Normal.svg</file>
+        <file>data/img/mainviewwidget/Others-Checked.svg</file>
+        <file>data/img/mainviewwidget/Others-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Others-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Others-Normal.svg</file>
+        <file>data/img/mainviewwidget/power-2x.png</file>
+        <file>data/img/mainviewwidget/power.png</file>
+        <file>data/img/mainviewwidget/power.svg</file>
         <file>data/img/mainviewwidget/recent-disabled.svg</file>
         <file>data/img/mainviewwidget/recent-enabled.svg</file>
         <file>data/img/mainviewwidget/recent-gray.svg</file>
@@ -15,10 +131,26 @@
         <file>data/img/mainviewwidget/rightarrow-hover.svg</file>
         <file>data/img/mainviewwidget/rightarrow.svg</file>
         <file>data/img/mainviewwidget/search.svg</file>
+        <file>data/img/mainviewwidget/select.svg</file>
+        <file>data/img/mainviewwidget/selected.svg</file>
+        <file>data/img/mainviewwidget/Social-Checked.svg</file>
+        <file>data/img/mainviewwidget/Social-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Social-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Social-Normal.svg</file>
+        <file>data/img/mainviewwidget/System-Checked.svg</file>
+        <file>data/img/mainviewwidget/System-Disabled.svg</file>
+        <file>data/img/mainviewwidget/System-Enabled.svg</file>
+        <file>data/img/mainviewwidget/System-Normal.svg</file>
+        <file>data/img/mainviewwidget/ukui-search-blue.svg</file>
+        <file>data/img/mainviewwidget/ukui-search.svg</file>
         <file>data/img/mainviewwidget/unfixed.svg</file>
         <file>data/img/mainviewwidget/uninstall.svg</file>
         <file>data/img/mainviewwidget/uparrow-pressed.svg</file>
         <file>data/img/mainviewwidget/uparrow.svg</file>
+        <file>data/img/mainviewwidget/Video-Checked.svg</file>
+        <file>data/img/mainviewwidget/Video-Disabled.svg</file>
+        <file>data/img/mainviewwidget/Video-Enabled.svg</file>
+        <file>data/img/mainviewwidget/Video-Normal.svg</file>
         <file>data/img/sidebarwidget/commonuse.svg</file>
         <file>data/img/sidebarwidget/computer.svg</file>
         <file>data/img/sidebarwidget/control.svg</file>
@@ -29,115 +161,15 @@
         <file>data/img/sidebarwidget/lock.svg</file>
         <file>data/img/sidebarwidget/max.svg</file>
         <file>data/img/sidebarwidget/min.svg</file>
+        <file>data/img/sidebarwidget/personal.svg</file>
         <file>data/img/sidebarwidget/rightarrow.svg</file>
         <file>data/img/sidebarwidget/setting.svg</file>
         <file>data/img/sidebarwidget/shutdown.svg</file>
+        <file>data/img/sidebarwidget/trash.svg</file>
         <file>data/img/sidebarwidget/unfixed.svg</file>
         <file>data/img/sidebarwidget/usericon-darkcolor.svg</file>
         <file>data/img/sidebarwidget/usericon-lightcolor.svg</file>
-        <file>data/img/sidebarwidget/personal.svg</file>
-        <file>data/img/sidebarwidget/trash.svg</file>
-        <file>data/img/mainviewwidget/Development-Checked.svg</file>
-        <file>data/img/mainviewwidget/Development-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Development-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Development-Normal.svg</file>
-        <file>data/img/mainviewwidget/Education-Checked.svg</file>
-        <file>data/img/mainviewwidget/Education-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Education-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Education-Normal.svg</file>
-        <file>data/img/mainviewwidget/Game-Checked.svg</file>
-        <file>data/img/mainviewwidget/Game-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Game-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Game-Normal.svg</file>
-        <file>data/img/mainviewwidget/Image-Checked.svg</file>
-        <file>data/img/mainviewwidget/Image-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Image-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Image-Normal.svg</file>
-        <file>data/img/mainviewwidget/Internet-Checked.svg</file>
-        <file>data/img/mainviewwidget/Internet-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Internet-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Internet-Normal.svg</file>
-        <file>data/img/mainviewwidget/Office-Checked.svg</file>
-        <file>data/img/mainviewwidget/Office-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Office-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Office-Normal.svg</file>
-        <file>data/img/mainviewwidget/Others-Checked.svg</file>
-        <file>data/img/mainviewwidget/Others-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Others-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Others-Normal.svg</file>
-        <file>data/img/mainviewwidget/Social-Checked.svg</file>
-        <file>data/img/mainviewwidget/Social-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Social-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Social-Normal.svg</file>
-        <file>data/img/mainviewwidget/System-Checked.svg</file>
-        <file>data/img/mainviewwidget/System-Disabled.svg</file>
-        <file>data/img/mainviewwidget/System-Enabled.svg</file>
-        <file>data/img/mainviewwidget/System-Normal.svg</file>
-        <file>data/img/mainviewwidget/Video-Checked.svg</file>
-        <file>data/img/mainviewwidget/Video-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Video-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Video-Normal.svg</file>
-        <file>data/img/mainviewwidget/Mobile-Checked.svg</file>
-        <file>data/img/mainviewwidget/Mobile-Disabled.svg</file>
-        <file>data/img/mainviewwidget/Mobile-Enabled.svg</file>
-        <file>data/img/mainviewwidget/Mobile-Normal.svg</file>
-        <file>data/img/mainviewwidget/全屏 icon- 下拉.png</file>
-        <file>data/img/mainviewwidget/全屏 icon- 下拉.svg</file>
-        <file>data/img/mainviewwidget/全屏 icon- 下拉@2x.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-功能排序.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-功能排序.svg</file>
-        <file>data/img/mainviewwidget/全屏 icon-功能排序@2x.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-关闭.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-关闭.svg</file>
-        <file>data/img/mainviewwidget/全屏 icon-关闭@2x.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-搜索.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-搜索.svg</file>
-        <file>data/img/mainviewwidget/全屏 icon-搜索@2x.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-缩小.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-缩小.svg</file>
-        <file>data/img/mainviewwidget/全屏 icon-缩小@2x.png</file>
-        <file>data/img/mainviewwidget/fullicon-all.png</file>
-        <file>data/img/mainviewwidget/fullicon-all.svg</file>
-        <file>data/img/mainviewwidget/全屏 icon-所有应用@2x.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-字母排序.png</file>
-        <file>data/img/mainviewwidget/全屏 icon-字母排序.svg</file>
-        <file>data/img/mainviewwidget/全屏 icon-字母排序@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon- arrow.png</file>
-        <file>data/img/mainviewwidget/DM-icon- arrow.svg</file>
-        <file>data/img/mainviewwidget/DM-icon- arrow@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-返回.png</file>
-        <file>data/img/mainviewwidget/DM-icon-返回.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-返回@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-放大.png</file>
-        <file>data/img/mainviewwidget/DM-icon-放大.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-放大@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-功能排序.png</file>
-        <file>data/img/mainviewwidget/DM-icon-功能排序.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-功能排序@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-关闭.png</file>
-        <file>data/img/mainviewwidget/DM-icon-关闭.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-关闭@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-所有应用.png</file>
-        <file>data/img/mainviewwidget/DM-icon-所有应用.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-所有应用@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-选项.png</file>
-        <file>data/img/mainviewwidget/DM-icon-选项.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-选项@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-字母排序.png</file>
-        <file>data/img/mainviewwidget/DM-icon-字母排序.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-字母排序@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-check.png</file>
-        <file>data/img/mainviewwidget/DM-icon-check.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-check@2x.png</file>
-        <file>data/img/mainviewwidget/DM-icon-search.png</file>
-        <file>data/img/mainviewwidget/DM-icon-search.svg</file>
-        <file>data/img/mainviewwidget/DM-icon-search@2x.png</file>
-        <file>src/Search/pinyinWithTone.txt</file>
-        <file>src/Search/pinyinWithoutTone.txt</file>
-        <file>data/img/mainviewwidget/select.svg</file>
-        <file>data/img/mainviewwidget/selected.svg</file>
-        <file>data/img/mainviewwidget/icon-电源.svg</file>
-        <file>data/img/mainviewwidget/icon-电源@2x.png</file>
-        <file>data/img/mainviewwidget/ukui-search-blue.svg</file>
+        <file>src/BackProcess/Search/pinyinWithoutTone.txt</file>
+        <file>src/BackProcess/Search/pinyinWithTone.txt</file>
     </qresource>
 </RCC>
