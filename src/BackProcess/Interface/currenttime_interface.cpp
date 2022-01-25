@@ -14,23 +14,26 @@ CurrentTimeInterface::CurrentTimeInterface()
 
     if (QGSettings::isSchemaInstalled(TIME_FORMAT)) {
         timeSetting = new QGSettings(TIME_FORMAT);
-        timeFormat = timeSetting->get(TIME_FORMAT_KEY).toString();
-        timeSlash = timeSetting->get("date").toString();
-        getDateTime(timeFormat);
-        connect(timeSetting, &QGSettings::changed, this, [ = ](const QString & key) {
-            if (key == "hoursystem") {
-                timeFormat = timeSetting->get(TIME_FORMAT_KEY).toString();
-                getDateTime(timeFormat);
-            } else if (key == "date") {
-                timeSlash = timeSetting->get("date").toString();
 
-                if (timeSlash == "en") {
-                    currentDate = currentDate.replace("/", "-");
-                } else {
-                    currentDate = currentDate.replace("-", "/");
+        if (timeSetting->keys().contains(TIME_FORMAT_KEY) && timeSetting->keys().contains("date")) {
+            timeFormat = timeSetting->get(TIME_FORMAT_KEY).toString();
+            timeSlash = timeSetting->get("date").toString();
+            getDateTime(timeFormat);
+            connect(timeSetting, &QGSettings::changed, this, [ = ](const QString & key) {
+                if (key == "hoursystem") {
+                    timeFormat = timeSetting->get(TIME_FORMAT_KEY).toString();
+                    getDateTime(timeFormat);
+                } else if (key == "date") {
+                    timeSlash = timeSetting->get("date").toString();
+
+                    if (timeSlash == "en") {
+                        currentDate = currentDate.replace("/", "-");
+                    } else {
+                        currentDate = currentDate.replace("-", "/");
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     connect(myTimer, &QTimer::timeout, [this]() {

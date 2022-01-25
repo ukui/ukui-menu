@@ -1,3 +1,7 @@
+INCLUDEPATH  += \
+    $$PWD \
+    $$PWD/Style
+
 HEADERS += \
     $$PWD/AbstractInterface.h \
     $$PWD/KySmallPluginInterface.h \

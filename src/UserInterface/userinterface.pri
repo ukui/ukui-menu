@@ -1,3 +1,12 @@
+INCLUDEPATH += \
+    $$PWD \
+    $$PWD/Button \
+    $$PWD/ListView \
+    $$PWD/Other \
+    $$PWD/RightClickMenu \
+    $$PWD/ViewItem \
+    $$PWD/Widget
+
 HEADERS += \
     $$PWD/Button/function_classify_button.h \
     $$PWD/Button/letter_classify_button.h \

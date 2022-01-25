@@ -52,20 +52,28 @@ void SoftwareDatabaseUpdateThread::run()
     QJsonObject jsonObject = jsonDocument.object();
     QJsonArray jsonArray = jsonObject[jsonObject.keys()[0]].toArray();
 
+    int number = 0;
+    db.transaction();
+
     Q_FOREACH(QJsonValue jsonValue, jsonArray){
         QJsonObject arrObject = jsonValue.toObject();
         QString execline = QString("replace into appCategory values(\"%0\", \"%1\", \"%2\")")
                 .arg(arrObject[arrObject.keys()[0]].toString())
                 .arg(arrObject[arrObject.keys()[1]].toString())
                 .arg(arrObject[arrObject.keys()[2]].toString());
-        sql.prepare(execline);
-        if(sql.exec()){
-            msleep(15);
-        }
+        sql.exec(execline);
+
+        ++number;
+        if (number % 5000 == 0) {
+            db.commit();
+            db.transaction();
+        } 
     }
+    db.commit();
+
     myDebug() << "数据库已经更新";
     Q_EMIT updateDatabaseSignal();
-    msleep(10);
+
 }
 
 void SoftwareDatabaseUpdateThread::getDatabaseList(QString category)

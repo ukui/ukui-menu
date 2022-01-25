@@ -169,5 +169,7 @@
         <file>data/img/sidebarwidget/unfixed.svg</file>
         <file>data/img/sidebarwidget/usericon-darkcolor.svg</file>
         <file>data/img/sidebarwidget/usericon-lightcolor.svg</file>
+        <file>src/BackProcess/Search/pinyinWithoutTone.txt</file>
+        <file>src/BackProcess/Search/pinyinWithTone.txt</file>
     </qresource>
 </RCC>

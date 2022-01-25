@@ -118,7 +118,6 @@ public Q_SLOTS:
     void databaseThreadCloseSlot();
     void resetLetterPage();
     void resetFunctionPage();
-
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
 

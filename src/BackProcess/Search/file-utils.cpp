@@ -22,7 +22,6 @@
 #include "file-utils.h"
 #include <QXmlStreamReader>
 
-using namespace Zeeker;
 QMap<QString, QStringList> FileUtils::map_chinese2pinyin = QMap<QString, QStringList>();
 
 FileUtils::FileUtils()

@@ -400,8 +400,14 @@
         <translation>Kaldır</translation>
     </message>
     <message>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="290"/>
+        <source>Switch user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="296"/>
         <source>Hibernate</source>
-        <translation type="vanished">Beklemeye Al</translation>
+        <translation>Beklemeye Al</translation>
     </message>
     <message>
         <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="284"/>
@@ -409,8 +415,9 @@
         <translation>Uyku Modu</translation>
     </message>
     <message>
+        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="306"/>
         <source>Lock Screen</source>
-        <translation type="vanished">Ekranı Kilitle</translation>
+        <translation>Ekranı Kilitle</translation>
     </message>
     <message>
         <source>Switch User</source>

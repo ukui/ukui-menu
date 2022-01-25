@@ -377,18 +377,21 @@ MainWindow::MainWindow(QWidget *parent) :
                 this, &MainWindow::repaintWidget);
     }
 
-    QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
-    connect(gsetting, &QGSettings::changed, [ = ](QString key) {
-        if ("systemFont" == key || "systemFontSize" == key) {
-            m_leftTopSearchHorizontalLayout->removeWidget(m_lineEdit);
-            m_leftTopSearchHorizontalLayout->removeWidget(m_cancelSearchPushButton);
-            m_lineEdit->setParent(nullptr);
-            m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
-            m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
-            m_lineEdit->setPlaceholderText("搜索应用");
-            m_fullWindow->updateView();
-        }
-    });
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+        QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
+        connect(gsetting, &QGSettings::changed, [ = ](QString key) {
+            if ("systemFont" == key || "systemFontSize" == key) {
+                m_leftTopSearchHorizontalLayout->removeWidget(m_lineEdit);
+                m_leftTopSearchHorizontalLayout->removeWidget(m_cancelSearchPushButton);
+                m_lineEdit->setParent(nullptr);
+                m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
+                m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
+                m_lineEdit->setPlaceholderText("搜索应用");
+                m_fullWindow->updateView();
+            }
+        });
+    }
+
     //监控应用进程开启
     connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
         ConvertWinidToDesktop reply;
