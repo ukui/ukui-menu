@@ -4,22 +4,22 @@
 <context>
     <name>FullMainWindow</name>
     <message>
-        <location filename="../src/UserInterface/fullmainwindow.cpp" line="73"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="79"/>
         <source>Search</source>
         <translation>搜索应用</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/fullmainwindow.cpp" line="132"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="138"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/fullmainwindow.cpp" line="134"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="140"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/fullmainwindow.cpp" line="136"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="142"/>
         <source>Function</source>
         <translation>功能分类</translation>
     </message>
@@ -27,7 +27,7 @@
 <context>
     <name>FunctionWidget</name>
     <message>
-        <location filename="../src/UserInterface/Widget/functionWidget.cpp" line="205"/>
+        <location filename="../src/UserInterface/Widget/function_Widget.cpp" line="205"/>
         <source>Search</source>
         <translation>全局搜索</translation>
     </message>
@@ -37,12 +37,12 @@
     <message>
         <location filename="../src/UserInterface/mainwindow.cpp" line="97"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索应用</translation>
     </message>
     <message>
         <location filename="../src/UserInterface/mainwindow.cpp" line="237"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="423"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="841"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="426"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="844"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -72,14 +72,14 @@
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="425"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="849"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="428"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="852"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="427"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="857"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="430"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="860"/>
         <source>Function</source>
         <translation>功能分类</translation>
     </message>
@@ -88,67 +88,67 @@
     <name>QObject</name>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="73"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="29"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="29"/>
         <source>Office</source>
         <translation>办公</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="74"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="30"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="30"/>
         <source>Development</source>
         <translation>开发</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="75"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="31"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="31"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="76"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="32"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="32"/>
         <source>Video</source>
         <translation>影音</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="77"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="33"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="33"/>
         <source>Internet</source>
         <translation>网络</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="78"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="34"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="34"/>
         <source>Game</source>
         <translation>游戏</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="79"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="35"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="35"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="80"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="36"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="36"/>
         <source>Social</source>
         <translation>社交</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="81"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="37"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="37"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="82"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="38"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="38"/>
         <source>Safe</source>
         <translation>安全</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="83"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="39"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="39"/>
         <source>Others</source>
         <translation>其他</translation>
     </message>
@@ -196,27 +196,42 @@
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="284"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="290"/>
+        <source>Switch user</source>
+        <translation>切换用户</translation>
+    </message>
+    <message>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="296"/>
+        <source>Hibernate</source>
+        <translation>休眠</translation>
+    </message>
+    <message>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="302"/>
         <source>Sleep</source>
         <translation>睡眠</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="286"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="306"/>
+        <source>Lock Screen</source>
+        <translation>锁屏</translation>
+    </message>
+    <message>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="311"/>
         <source>Log Out</source>
         <translation>注销</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="288"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="317"/>
         <source>Restart</source>
         <translation>重启</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="290"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="323"/>
         <source>Power Off</source>
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="319"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="354"/>
         <source>Personalize this list</source>
         <translation type="unfinished"></translation>
     </message>
