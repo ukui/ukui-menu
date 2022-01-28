@@ -103,6 +103,7 @@ Q_SIGNALS:
     void sendSearchKeyword(QString arg);
     void sendClassificationbtnList();
     void sendLetterClassificationList(QStringList list);
+    void sendSetFullWindowItemHide(bool flag);
 
 public Q_SLOTS:
     void updateCollectView();
@@ -118,6 +119,7 @@ public Q_SLOTS:
     void databaseThreadCloseSlot();
     void resetLetterPage();
     void resetFunctionPage();
+    void minMaxAnimationFinished();
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
 
@@ -204,6 +206,7 @@ private:
     DesktopWatcher *m_desktopWatcher = nullptr;
     QPropertyAnimation *m_enterAnimation = nullptr;
     QPropertyAnimation *m_leaveAnimation = nullptr;
+    QVariantAnimation *m_minMaxAnimation = nullptr;
     int m_widgetState = -1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;
     LetterButtonWidget *m_letterBtnWid = nullptr;

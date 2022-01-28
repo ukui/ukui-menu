@@ -62,7 +62,7 @@ void FullCommonUseWidget::initUi()
     QSpacerItem *m_spaceItem2 = nullptr;
     m_spaceItem2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     rightButtonLayout->addItem(m_spaceItem2);
-    m_verticalScrollBar = new QScrollBar(m_scrollArea);
+    m_verticalScrollBar = new QScrollBar(this);
     m_verticalScrollBar->installEventFilter(this);
     m_verticalScrollBar->setOrientation(Qt::Vertical);
     mainLayout->addWidget(m_scrollArea);

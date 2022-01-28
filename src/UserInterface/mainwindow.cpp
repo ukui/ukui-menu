@@ -345,6 +345,20 @@ MainWindow::MainWindow(QWidget *parent) :
             }
         }
     });
+    m_minMaxAnimation = new QVariantAnimation(m_fullWindow);
+    connect(m_minMaxAnimation, &QVariantAnimation::finished, this, &MainWindow::minMaxAnimationFinished);
+    connect(this, &MainWindow::sendSetFullWindowItemHide, m_fullWindow, &FullMainWindow::itemHide);
+    connect(m_minMaxAnimation, &QVariantAnimation::valueChanged, this, [ = ](const QVariant variant) {
+        int value = variant.toInt();
+
+        if (m_isFullScreen) {
+            m_fullWindow->move(0, Style::m_availableScreenHeight - (Style::m_availableScreenHeight * value / Style::m_availableScreenWidth));
+            m_fullWindow->setFixedSize(value, Style::m_availableScreenHeight * value / Style::m_availableScreenWidth);
+        } else {
+            m_fullWindow->move(0, Style::m_availableScreenHeight - (Style::minh * value / Style::minw));
+            m_fullWindow->setFixedSize(value, Style::minh * value / Style::minw);
+        }
+    });
     connect(m_lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchAppSlot);
     connect(this, &MainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &MainWindow::recvSearchResult);
@@ -541,6 +555,19 @@ bool MainWindow::event(QEvent *event)
     }
 
     return QWidget::event(event);
+}
+
+void MainWindow::minMaxAnimationFinished()
+{
+    if (m_isFullScreen) {
+        Q_EMIT sendSetFullWindowItemHide(false);
+    } else {
+        this->show();
+        this->raise();
+        this->activateWindow();
+        m_viewWidget->setFocus();
+        m_collectPushButton->clicked(true);
+    }
 }
 
 void MainWindow::resetLetterPage()
@@ -948,16 +975,21 @@ void MainWindow::on_searchPushButton_clicked()
 
 void MainWindow::on_minMaxChangeButton_clicked()
 {
-    m_canHide = false;
-    this->hide();
-    QEventLoop loop;
-    QTimer::singleShot(50, &loop, SLOT(quit()));
-    loop.exec();
+//    this->hide();
+//    QEventLoop loop;
+//    QTimer::singleShot(50, &loop, SLOT(quit()));
+//    loop.exec();
+    m_canHide = true;
+    m_isFullScreen = true;
+    m_minMaxAnimation->setEasingCurve(QEasingCurve::Linear);
+    m_minMaxAnimation->setStartValue(Style::minw);
+    m_minMaxAnimation->setEndValue(Style::m_availableScreenWidth);
+    m_minMaxAnimation->setDuration(200);
+    m_minMaxAnimation->start();
     m_fullWindow->raise();
     m_fullWindow->showNormal();
     m_fullWindow->activateWindow();
-    m_canHide = true;
-    m_isFullScreen = true;
+    Q_EMIT sendSetFullWindowItemHide(true);
 }
 
 void MainWindow::showWindow()
@@ -1016,16 +1048,18 @@ void MainWindow::repaintWidget()
 void MainWindow::showNormalWindow()
 {
     m_canHide = false;
-    QEventLoop loop;
-    QTimer::singleShot(50, &loop, SLOT(quit()));//调整延时时间，解决时间较短时概率性窗口隐藏问题
-    loop.exec();
-    this->show();
-    this->raise();
-    this->activateWindow();
-    m_viewWidget->setFocus();
+    Q_EMIT sendSetFullWindowItemHide(true);
+//    QEventLoop loop;
+//    QTimer::singleShot(50, &loop, SLOT(quit()));//调整延时时间，解决时间较短时概率性窗口隐藏问题
+//    loop.exec();
+    m_minMaxAnimation->stop();
     m_isFullScreen = false;
     m_canHide = true;
-    m_collectPushButton->clicked(true);
+    m_minMaxAnimation->setEasingCurve(QEasingCurve::Linear);
+    m_minMaxAnimation->setStartValue(Style::m_availableScreenWidth);
+    m_minMaxAnimation->setEndValue(Style::minw);
+    m_minMaxAnimation->setDuration(200);
+    m_minMaxAnimation->start();
 }
 
 void MainWindow::on_powerOffButton_clicked()
