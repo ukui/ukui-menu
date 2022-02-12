@@ -119,7 +119,8 @@ public Q_SLOTS:
     void databaseThreadCloseSlot();
     void resetLetterPage();
     void resetFunctionPage();
-    void minMaxAnimationFinished();
+    void minAnimationFinished();
+    void maxAnimationFinished();
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
 
@@ -206,7 +207,8 @@ private:
     DesktopWatcher *m_desktopWatcher = nullptr;
     QPropertyAnimation *m_enterAnimation = nullptr;
     QPropertyAnimation *m_leaveAnimation = nullptr;
-    QVariantAnimation *m_minMaxAnimation = nullptr;
+    QVariantAnimation *m_minAnimation = nullptr;
+    QVariantAnimation *m_maxAnimation = nullptr;
     int m_widgetState = -1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;
     LetterButtonWidget *m_letterBtnWid = nullptr;

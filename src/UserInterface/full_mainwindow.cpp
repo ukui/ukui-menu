@@ -158,9 +158,6 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     connect(minPushButton, &QPushButton::clicked, this, &FullMainWindow::on_minPushButton_clicked);
     connect(fullSelectToolButton, &QToolButton::clicked, this, &FullMainWindow::on_fullSelectToolButton_clicked);
     connect(fullSelectMenuButton, &QToolButton::triggered, this, &FullMainWindow::on_fullSelectMenuButton_triggered);
-    connect(m_fullCommonPage, &FullCommonUseWidget::changeScrollValue, this, &FullMainWindow::setScrollBarValue);
-    connect(m_fullFunctionPage, &FullFunctionWidget::changeScrollValue, this, &FullMainWindow::setScrollBarValue);
-    connect(m_fullLetterPage, &FullLetterWidget::changeScrollValue, this, &FullMainWindow::setScrollBarValue);
     connect(m_fullFunctionPage, &FullFunctionWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
     connect(m_fullLetterPage, &FullLetterWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
     connect(m_fullCommonPage, &FullCommonUseWidget::setFocusToSideWin, this, &FullMainWindow::setFocusToButton);
@@ -184,12 +181,6 @@ void FullMainWindow::updateView()
     m_fullLetterPage->updateAppListView();
 }
 
-void FullMainWindow::setScrollBarValue(int value, int maximumValue)
-{
-    //    verticalScrollBar->setMaximum(maximumValue);
-    //    verticalScrollBar->setValue(value);
-}
-
 void FullMainWindow::itemHide(bool flag)
 {
     if (flag) {
@@ -203,7 +194,6 @@ void FullMainWindow::itemHide(bool flag)
 
 void FullMainWindow::on_minPushButton_clicked()
 {
-//    this->hide();
     Q_EMIT showNormalWindow();
 }
 

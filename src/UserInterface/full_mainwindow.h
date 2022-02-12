@@ -42,7 +42,6 @@ private Q_SLOTS:
     void on_minPushButton_clicked();
     void on_fullSelectToolButton_clicked();
     void on_fullSelectMenuButton_triggered(QAction *arg1);
-    void setScrollBarValue(int value, int maximumValue);
     void searchAppSlot(QString arg);
     void recvSearchResult(QVector<QStringList> arg);
     void setFocusToButton();
