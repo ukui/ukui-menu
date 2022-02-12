@@ -507,6 +507,10 @@ bool TabletWindow::event(QEvent *event)
         event->ignore();
     }
 
+    if (event->type() == QEvent::MouseButtonPress) {
+        this->hide();
+    }
+
     return QWidget::event(event);
 }
 
