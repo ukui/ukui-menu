@@ -4,22 +4,22 @@
 <context>
     <name>FullMainWindow</name>
     <message>
-        <location filename="../src/UserInterface/fullmainwindow.cpp" line="73"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="79"/>
         <source>Search</source>
         <translation type="unfinished">Ara</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/fullmainwindow.cpp" line="132"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="138"/>
         <source>All</source>
         <translation type="unfinished">Tümü</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/fullmainwindow.cpp" line="134"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="140"/>
         <source>Letter</source>
         <translation type="unfinished">Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/fullmainwindow.cpp" line="136"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="142"/>
         <source>Function</source>
         <translation type="unfinished">Kategori</translation>
     </message>
@@ -118,7 +118,7 @@
         <translation type="vanished">Diğer</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/Widget/functionWidget.cpp" line="205"/>
+        <location filename="../src/UserInterface/Widget/function_Widget.cpp" line="205"/>
         <source>Search</source>
         <translation type="unfinished">Ara</translation>
     </message>
@@ -203,8 +203,8 @@
     </message>
     <message>
         <location filename="../src/UserInterface/mainwindow.cpp" line="237"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="423"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="841"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="426"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="844"/>
         <source>All</source>
         <translation type="unfinished">Tümü</translation>
     </message>
@@ -229,14 +229,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="425"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="849"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="428"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="852"/>
         <source>Letter</source>
         <translation type="unfinished">Alfabetik</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="427"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="857"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="430"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="860"/>
         <source>Function</source>
         <translation type="unfinished">Kategori</translation>
     </message>
@@ -292,67 +292,67 @@
     <name>QObject</name>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="73"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="29"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="29"/>
         <source>Office</source>
         <translation type="unfinished">Ofis Uygulamaları</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="74"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="30"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="30"/>
         <source>Development</source>
         <translation type="unfinished">Programlama</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="75"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="31"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="31"/>
         <source>Image</source>
         <translation type="unfinished">Grafik</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="76"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="32"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="32"/>
         <source>Video</source>
         <translation type="unfinished">Video</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="77"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="33"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="33"/>
         <source>Internet</source>
         <translation type="unfinished">İnternet</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="78"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="34"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="34"/>
         <source>Game</source>
         <translation type="unfinished">Oyunlar</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="79"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="35"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="35"/>
         <source>Education</source>
         <translation type="unfinished">Eğitim</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="80"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="36"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="36"/>
         <source>Social</source>
         <translation type="unfinished">Sosyal</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="81"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="37"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="37"/>
         <source>System</source>
         <translation type="unfinished">Sistem</translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="82"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="38"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="38"/>
         <source>Safe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/BackProcess/Interface/ukuimenuinterface.cpp" line="83"/>
-        <location filename="../src/UserInterface/Widget/functionbuttonwidget.cpp" line="39"/>
+        <location filename="../src/UserInterface/Widget/function_button_widget.cpp" line="39"/>
         <source>Others</source>
         <translation type="unfinished">Diğer</translation>
     </message>
@@ -400,22 +400,22 @@
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="290"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="290"/>
         <source>Switch user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="296"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="296"/>
         <source>Hibernate</source>
         <translation>Beklemeye Al</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="284"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="302"/>
         <source>Sleep</source>
         <translation>Uyku Modu</translation>
     </message>
     <message>
-        <location filename="../src/RightClickMenu/rightclickmenu.cpp" line="306"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="306"/>
         <source>Lock Screen</source>
         <translation>Ekranı Kilitle</translation>
     </message>
@@ -424,22 +424,22 @@
         <translation type="vanished">Kullanıcı Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="286"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="311"/>
         <source>Log Out</source>
         <translation>Çıkış</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="288"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="317"/>
         <source>Restart</source>
         <translation>Yeniden Başlat</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="290"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="323"/>
         <source>Power Off</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="319"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="354"/>
         <source>Personalize this list</source>
         <translation>Bu listeyi özelleştirin</translation>
     </message>
