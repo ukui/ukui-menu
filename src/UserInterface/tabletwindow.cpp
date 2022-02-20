@@ -104,7 +104,7 @@ void TabletWindow::initUi()
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::deleteAppSignal, this, &TabletWindow::requestDeleteAppSlot);
     initAppListWidget();
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
-    m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
+    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
 //    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
 //    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
 
@@ -462,19 +462,21 @@ void TabletWindow::requestDeleteAppSlot()
 void TabletWindow::on_pageNumberChanged(bool nextPage)
 {
 //    qDebug() << "void TabletWindow::on_pageNumberChanged(bool nextPage)";
-    /*if (!(m_scrollAnimation->state() == QPropertyAnimation::Running))*/ {
+    if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
         if (nextPage) {
-            m_curPageNum++;
-
-            if (m_curPageNum > (m_scrollAreaWidLayout->count() - 1) / 2) {
+            if (m_curPageNum >= (m_scrollAreaWidLayout->count() - 1) / 2) {
                 m_curPageNum = (m_scrollAreaWidLayout->count() - 1) / 2;
+                return;
             }
-        } else {
-            m_curPageNum--;
 
-            if (m_curPageNum < 0) {
+            m_curPageNum++;
+        } else {
+            if (m_curPageNum <= 0) {
                 m_curPageNum = 0;
+                return;
             }
+
+            m_curPageNum--;
         }
 
 //        m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
