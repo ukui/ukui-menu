@@ -111,13 +111,13 @@ private:
     static QVector<QString> m_keyVector;
     static QVector<int> m_keyValueVector;
     QSettings *m_setting = nullptr;
+    PageManager *m_pagemanager = nullptr;
     TabletListView *m_listView = nullptr;
     QHBoxLayout *m_firstPageLayout = nullptr;
     QHBoxLayout *m_buttonBoxLayout = nullptr;
     QButtonGroup *m_buttonGroup = nullptr;
     QWidget *m_buttonWidget = nullptr;
     QPushButton *m_pageButton = nullptr;
-    PageManager *m_pagemanager = nullptr;
 
     QFileSystemWatcher *m_fileWatcher = nullptr;
     QFileSystemWatcher *m_fileWatcher1 = nullptr;
@@ -131,6 +131,10 @@ protected:
      * @brief Initializes UI
      */
     void initUi();
+    /**
+     * @brief initSize
+     */
+    void initSize();
     /**
      * @brief Initialize the application list interface
      */

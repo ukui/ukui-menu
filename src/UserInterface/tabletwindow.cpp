@@ -35,13 +35,26 @@ extern void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool qual
 QT_END_NAMESPACE
 
 TabletWindow::TabletWindow(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_scrollArea(new QScrollArea(this)),
+    m_scrollAreaWid(new ScrollAreaWid(this)),
+    m_backPixmap(new QPixmap),
+    m_leftWidget(new FunctionWidget(this)),
+    m_firstPageWidget(new QWidget(this)),
+    m_pagemanager(new PageManager()),
+    m_buttonBoxLayout(new QHBoxLayout),
+    m_buttonGroup(new QButtonGroup),
+    m_buttonWidget(new QWidget(this)),
+    m_fileWatcher(new QFileSystemWatcher),
+    m_fileWatcher1(new QFileSystemWatcher),
+    m_fileWatcher2(new QFileSystemWatcher),
+    m_directoryChangedThread(new TabletDirectoryChangedThread)
+
 {
     QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
     m_setting = new QSettings(path, QSettings::IniFormat);
-    m_pagemanager = new PageManager();
-    Style::initWidStyle();
     setProperty("useStyleWindowManager", false);
+    initSize();
     initUi();
 }
 
@@ -52,32 +65,30 @@ TabletWindow::~TabletWindow()
 QVector<QString> TabletWindow::m_keyVector = QVector<QString>();
 QVector<int> TabletWindow::m_keyValueVector = QVector<int>();
 
+void TabletWindow::initSize()
+{
+    Style::initWidStyle();
+    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->setFixedSize(Style::ScreenWidth, Style::ScreenHeight);
+    m_leftWidget->setFixedSize(Style::m_leftWidWidth, Style::CenterWindHeight);
+    m_scrollAreaWid->setFixedHeight(Style::CenterWindHeight);
+    m_scrollArea->setFixedSize(Style::ScreenWidth, Style::CenterWindHeight);
+    m_buttonWidget->setFixedSize(Style::OtherPageViewWidth, 40);
+}
+
 void TabletWindow::initUi()
 {
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
 //    this->setStyleSheet("border : 1px solid red");
-    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::NoFocus);
-    m_width = QApplication::primaryScreen()->geometry().width();
-    m_height = QApplication::primaryScreen()->geometry().height();
-    this->setFixedSize(m_width, m_height);
-    m_backPixmap = new QPixmap;
-    m_leftWidget = new FunctionWidget(this);
-    m_leftWidget->setFixedSize(Style::m_leftWidWidth, Style::CenterWindHeight);
-    m_firstPageWidget = new QWidget(this);
     m_firstPageWidget->installEventFilter(this);
-    m_buttonGroup = new QButtonGroup;
-    m_buttonBoxLayout = new QHBoxLayout;
     m_buttonBoxLayout->setAlignment(Qt::AlignHCenter);
     m_buttonBoxLayout->setSpacing(0);
-    m_buttonWidget = new QWidget(this);
     m_buttonWidget->setLayout(m_buttonBoxLayout);
     m_buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
     setOpacityEffect(0.7);
-    m_fileWatcher = new QFileSystemWatcher;
-    m_fileWatcher2 = new QFileSystemWatcher;
     m_fileWatcher2->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
     connect(m_fileWatcher2, &QFileSystemWatcher::fileChanged, this, [ = ]() {
         m_fileWatcher2->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
@@ -86,40 +97,17 @@ void TabletWindow::initUi()
     m_fileWatcher->addPaths(QStringList() << QString("/usr/share/applications")
                             << QString(QDir::homePath() + "/.local/share/applications/"));
     connect(m_fileWatcher, &QFileSystemWatcher::directoryChanged, this, &TabletWindow::directoryChangedSlot);
-    m_fileWatcher1 = new QFileSystemWatcher;
     bool ismonitor = m_fileWatcher1->addPath(QDir::homePath() + "/.config/ukui/desktop_applist");
-    //m_fileWatcher1->addPaths(QStringList()<<QDir::homePath()+"/.config/ukui/desktop_applist");
     connect(m_fileWatcher1, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
-//    if(isfile)
-//    {
-//        QString filepath=QDir::homePath()+"/.config/ukui/ukui-menu.ini";
-//        QSettings *filetsetting=new QSettings(filepath,QSettings::IniFormat);
-//        filetsetting->beginGroup("ukui-menu-sysapplist");
-//        filetsetting->setValue("desktop_applist",1);
-//        filetsetting->sync();
-//        filetsetting->endGroup();
-//        if(ismonitor)
-//        {
-//            filetsetting->beginGroup("ukui-menu-sysapplist");
-//            filetsetting->setValue("desktop_applist",0);
-//            filetsetting->sync();
-//            filetsetting->endGroup();
-//        }
-//        filetsetting->beginGroup("application");
-//        filetsetting->setValue("kylin-user-guide.desktop",1000);
-//        filetsetting->sync();
-//        filetsetting->endGroup();
-//    }
-    m_directoryChangedThread = new TabletDirectoryChangedThread;
     connect(this, &TabletWindow::sendDirectoryPath, m_directoryChangedThread, &TabletDirectoryChangedThread::recvDirectoryPath);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::requestUpdateSignal, this, &TabletWindow::requestUpdateSlot);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::deleteAppSignal, this, &TabletWindow::requestDeleteAppSlot);
     initAppListWidget();
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
-
 //    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
 //    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
+
     if (QGSettings::isSchemaInstalled(QString("org.mate.background").toLocal8Bit())) {
         m_bgSetting = new QGSettings(QString("org.mate.background").toLocal8Bit());
 
@@ -315,11 +303,7 @@ void TabletWindow::initAppListWidget()
     m_layout->setContentsMargins(0, 0, 0, 0);
     this->setLayout(m_layout);
     m_firstPageLayout = new QHBoxLayout();
-    m_scrollArea = new QScrollArea(this);
-    m_scrollAreaWid = new ScrollAreaWid(this);
 //    m_scrollAreaWid->setStyleSheet("border:0px; background:transparent;");
-    m_scrollAreaWid->setFixedHeight(Style::CenterWindHeight);
-    m_scrollArea->setFixedSize(m_width, Style::CenterWindHeight);
     m_scrollArea->setWidget(m_scrollAreaWid);
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setStyleSheet("border:0px; background:transparent;");
@@ -331,7 +315,6 @@ void TabletWindow::initAppListWidget()
     m_scrollAreaWidLayout->setSpacing(0);
     m_layout->addWidget(m_scrollArea);
     m_layout->addWidget(m_buttonWidget);
-    m_buttonWidget->setFixedSize(Style::OtherPageViewWidth, 40);
     m_buttonWidget->installEventFilter(this);
     m_appListBottomSpacer = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     fillAppList();
@@ -344,7 +327,17 @@ void TabletWindow::modelChanged(bool value)
         recvHideMainWindowSlot();
     }
 
-    reloadAppList();
+    QEventLoop loop;
+    QTimer::singleShot(500, &loop, SLOT(quit()));
+    loop.exec();
+    QDBusReply<bool> res = m_usrInterface->call("get_current_tabletmode");
+
+    if (!res) {
+        initSize();
+        reloadWidget();
+    }
+
+//    reloadAppList();
     myDebug() << "平板模式切换";
 }
 
@@ -531,7 +524,7 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
         m_isFirstPage = false;
     } else {
         listview = new TabletListView(this, 1);
-        listview->setFixedSize(Style::OtherPageViewWidth, /*m_height - 20*/Style::CenterWindHeight);
+        listview->setFixedSize(Style::OtherPageViewWidth, Style::CenterWindHeight);
         listview->setGridSize(QSize(Style::TabletItemSizeWidthOther, Style::AppListItemSizeHeight));
         m_scrollAreaWidLayout->addWidget(listview);
     }
@@ -782,7 +775,7 @@ void TabletWindow::backgroundPic()   //const QString &bgPath,QRect rect
         //qDebug() << "---------" << "stretched" << "----------";
         painter.drawPixmap(this->rect(), *m_backPixmap);
     } else if (m_bgOption == "scaled") {
-        painter.setPen(QColor(0, 0, 0, 64));
+        painter.setPen(QColor(0, 0, 0, 64));//蒙层效果
         painter.setBrush(QColor(0, 0, 0, 64));
         painter.drawPixmap(this->geometry(), getPaddingPixmap(*m_backPixmap, this->size().width(), this->size().height()));
         painter.drawRect(this->geometry());
