@@ -45,9 +45,9 @@ TabletWindow::TabletWindow(QWidget *parent) :
     m_buttonBoxLayout(new QHBoxLayout),
     m_buttonGroup(new QButtonGroup),
     m_buttonWidget(new QWidget(this)),
-    m_fileWatcher(new QFileSystemWatcher),
-    m_fileWatcher1(new QFileSystemWatcher),
-    m_fileWatcher2(new QFileSystemWatcher),
+    m_appFileWatcher(new QFileSystemWatcher),
+    m_appListFileWatcher(new QFileSystemWatcher),
+    m_configFileWatcher(new QFileSystemWatcher),
     m_directoryChangedThread(new TabletDirectoryChangedThread)
 
 {
@@ -71,15 +71,15 @@ void TabletWindow::initSize()
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->setFixedSize(Style::ScreenWidth, Style::ScreenHeight);
     m_leftWidget->setFixedSize(Style::m_leftWidWidth, Style::CenterWindHeight);
+    m_leftWidget->layout()->setContentsMargins(Style::TimeWidgetLeft, Style::TimeWidgetTop, 0, 0);
     m_scrollAreaWid->setFixedHeight(Style::CenterWindHeight);
     m_scrollArea->setFixedSize(Style::ScreenWidth, Style::CenterWindHeight);
-    m_buttonWidget->setFixedSize(Style::OtherPageViewWidth, 40);
+    m_buttonWidget->setFixedSize(Style::OtherPageViewWidth, 30);
 }
 
 void TabletWindow::initUi()
 {
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-//    this->setStyleSheet("border : 1px solid red");
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::NoFocus);
@@ -89,22 +89,22 @@ void TabletWindow::initUi()
     m_buttonWidget->setLayout(m_buttonBoxLayout);
     m_buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
     setOpacityEffect(0.7);
-    m_fileWatcher2->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
-    connect(m_fileWatcher2, &QFileSystemWatcher::fileChanged, this, [ = ]() {
-        m_fileWatcher2->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
+    m_configFileWatcher->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
+    connect(m_configFileWatcher, &QFileSystemWatcher::fileChanged, this, [ = ]() {
+        m_configFileWatcher->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
         this->repaint();
     });
-    m_fileWatcher->addPaths(QStringList() << QString("/usr/share/applications")
-                            << QString(QDir::homePath() + "/.local/share/applications/"));
-    connect(m_fileWatcher, &QFileSystemWatcher::directoryChanged, this, &TabletWindow::directoryChangedSlot);
-    bool ismonitor = m_fileWatcher1->addPath(QDir::homePath() + "/.config/ukui/desktop_applist");
-    connect(m_fileWatcher1, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
+    m_appFileWatcher->addPaths(QStringList() << QString("/usr/share/applications")
+                               << QString(QDir::homePath() + "/.local/share/applications/"));
+    connect(m_appFileWatcher, &QFileSystemWatcher::directoryChanged, this, &TabletWindow::directoryChangedSlot);
+    bool ismonitor = m_appListFileWatcher->addPath(QDir::homePath() + "/.config/ukui/desktop_applist");
+    connect(m_appListFileWatcher, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
     connect(this, &TabletWindow::sendDirectoryPath, m_directoryChangedThread, &TabletDirectoryChangedThread::recvDirectoryPath);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::requestUpdateSignal, this, &TabletWindow::requestUpdateSlot);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::deleteAppSignal, this, &TabletWindow::requestDeleteAppSlot);
     initAppListWidget();
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
-    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
 //    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
 //    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
 
@@ -316,7 +316,6 @@ void TabletWindow::initAppListWidget()
     m_layout->addWidget(m_scrollArea);
     m_layout->addWidget(m_buttonWidget);
     m_buttonWidget->installEventFilter(this);
-    m_appListBottomSpacer = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Expanding);
     fillAppList();
 }
 
@@ -449,14 +448,14 @@ void TabletWindow::requestUpdateSlot(QString desktopfp)
 {
     m_directoryChangedThread->quit();
     reloadWidget();
-    connect(m_fileWatcher1, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
+    connect(m_appListFileWatcher, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
 }
 
 void TabletWindow::requestDeleteAppSlot()
 {
     m_directoryChangedThread->quit();
     reloadWidget();
-    connect(m_fileWatcher1, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
+    connect(m_appListFileWatcher, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
 }
 
 void TabletWindow::on_pageNumberChanged(bool nextPage)

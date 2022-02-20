@@ -81,7 +81,6 @@ private:
     QButtonGroup *m_btnGroup = nullptr;
     QSpacerItem *m_topSpacerItem = nullptr;
     QSpacerItem *m_bottomSpacerItem = nullptr;
-    QSpacerItem *m_appListBottomSpacer = nullptr;
 
     /*Animation*/
     QPropertyAnimation *m_scrollAnimation = nullptr;//Application list animation
@@ -119,9 +118,9 @@ private:
     QWidget *m_buttonWidget = nullptr;
     QPushButton *m_pageButton = nullptr;
 
-    QFileSystemWatcher *m_fileWatcher = nullptr;
-    QFileSystemWatcher *m_fileWatcher1 = nullptr;
-    QFileSystemWatcher *m_fileWatcher2 = nullptr;
+    QFileSystemWatcher *m_appFileWatcher = nullptr;
+    QFileSystemWatcher *m_appListFileWatcher = nullptr;
+    QFileSystemWatcher *m_configFileWatcher = nullptr;
     TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
     QSettings *m_disableAppSet = nullptr;
     DBus *m_dbus = nullptr;

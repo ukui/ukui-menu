@@ -208,9 +208,15 @@ void Style::initWidStyle()
     } else {
         ScreenWidth = QApplication::primaryScreen()->geometry().width();
         ScreenHeight = QApplication::primaryScreen()->geometry().height();
-        AppListViewTopMargin = 70;
+
+        if (ScreenHeight != 1080) {
+            AppListViewTopMargin = 30;
+        } else {
+            AppListViewTopMargin = 70;
+        }
+
         AppListViewLeftMargin = 52;
-        AppListViewBottomMargin = 40;
+        AppListViewBottomMargin = AppListViewTopMargin - 30;
         AppListViewRightMargin = 0;
         m_leftWidWidth = ScreenWidth * 0.3;
         FirsPageViewWidth = ScreenWidth - m_leftWidWidth - 5;
