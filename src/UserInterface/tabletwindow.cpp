@@ -463,22 +463,22 @@ void TabletWindow::on_pageNumberChanged(bool nextPage)
 //    qDebug() << "void TabletWindow::on_pageNumberChanged(bool nextPage)";
     if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
         if (nextPage) {
-            if (m_curPageNum >= (m_scrollAreaWidLayout->count() - 1) / 2) {
+            m_curPageNum++;
+
+            if (m_curPageNum > (m_scrollAreaWidLayout->count() - 1) / 2) {
                 m_curPageNum = (m_scrollAreaWidLayout->count() - 1) / 2;
                 return;
             }
-
-            m_curPageNum++;
         } else {
-            if (m_curPageNum <= 0) {
+            m_curPageNum--;
+
+            if (m_curPageNum < 0) {
                 m_curPageNum = 0;
                 return;
             }
-
-            m_curPageNum--;
         }
 
-//        m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
+        m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
         btnGroupClickedSlot(m_curPageNum * 2);
         pageNumberChanged(m_curPageNum + 1);
     }
@@ -637,7 +637,7 @@ void TabletWindow::paintEvent(QPaintEvent *event)
 {
     backgroundPic();//bgPath,picrect
     //在每个屏幕上绘制背景
-//    return QWidget::paintEvent(event);
+    return QWidget::paintEvent(event);
 }
 
 QImage TabletWindow::applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent)
