@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QPainterPath>
 #include "full_commonuse_widget.h"
 #include "full_function_widget.h"
 #include "full_letter_widget.h"

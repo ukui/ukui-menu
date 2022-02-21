@@ -34,6 +34,7 @@
 #include <QSettings>
 #include <QPropertyAnimation>
 #include <QFileInfo>
+#include <QPainterPath>
 #include "convert_winid_to_desktop.h"
 #include "style.h"
 #include "main_view_widget.h"

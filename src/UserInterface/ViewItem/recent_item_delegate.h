@@ -2,6 +2,7 @@
 #define RECENTITEMDELEGATE_H
 #include "itemdelegate.h"
 #include <QPushButton>
+#include <QPainterPath>
 #include <syslog.h>
 #include <QToolTip>
 #include "src/UtilityFunction/utility.h"

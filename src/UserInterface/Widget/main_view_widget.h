@@ -30,6 +30,7 @@
 #include <QScrollBar>
 #include <QFileSystemWatcher>
 #include <QSettings>
+#include <QPainterPath>
 #include "ukuimenuinterface.h"
 #include "searchappthread.h"
 #include "directory_changed_thread.h"
