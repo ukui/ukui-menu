@@ -279,8 +279,9 @@ QString ConvertWinidToDesktop::getDesktopFileName(QString cmd)
 {
     char name[200];
     FILE *fp1 = NULL;
-    if ((fp1 = popen(cmd.toStdString().data(), "r")) == NULL)
+    if ((fp1 = popen(cmd.toStdString().data(), "r")) == NULL) {
         return QString();
+    }
     memset(name, 0, sizeof(name));
     fgets(name, sizeof(name), fp1);
     pclose(fp1);
