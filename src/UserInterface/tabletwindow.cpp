@@ -99,7 +99,6 @@ void TabletWindow::initUi()
     connect(m_appFileWatcher, &QFileSystemWatcher::directoryChanged, this, &TabletWindow::directoryChangedSlot);
     bool ismonitor = m_appListFileWatcher->addPath(QDir::homePath() + "/.config/ukui/desktop_applist");
     connect(m_appListFileWatcher, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
-    connect(this, &TabletWindow::sendDirectoryPath, m_directoryChangedThread, &TabletDirectoryChangedThread::recvDirectoryPath);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::requestUpdateSignal, this, &TabletWindow::requestUpdateSlot);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::deleteAppSignal, this, &TabletWindow::requestDeleteAppSlot);
     initAppListWidget();
@@ -441,7 +440,12 @@ bool TabletWindow::cmpApp(QString &arg_1, QString &arg_2)
 
 void TabletWindow::directoryChangedSlot()
 {
-    Q_EMIT sendDirectoryPath(QString("/usr/share/applications"));
+    myDebug() << "监测到desktop文件变化";
+    m_appFileWatcher->addPaths(QStringList() << QString("/usr/share/applications")
+                               << QString(QDir::homePath() + "/.local/share/applications/"));
+    QEventLoop loop;
+    QTimer::singleShot(100, &loop, SLOT(quit()));
+    loop.exec();
     m_directoryChangedThread->start();
 }
 void TabletWindow::requestUpdateSlot(QString desktopfp)
