@@ -20,6 +20,10 @@
 #define UTILITY_H
 
 #include <QtCore>
+#define DBUS_NAME       "org.ukui.panel"
+#define DBUS_PATH       "/panel/position"
+#define DBUS_INTERFACE  "org.ukui.panel"
+
 
 const QPixmap loadSvg(const QString &fileName, const int size);
 

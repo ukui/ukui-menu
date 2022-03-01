@@ -145,9 +145,6 @@ void MainWindow::initUi()
         connect(gsetting,&QGSettings::changed,
                 this,&MainWindow::panelChangedSlot);
     }
-
-//    QDBusConnection::sessionBus().connect("com.ukui.menu","/com/ukui/menu","local.test.MainWindow",
-//                                         QString("sendStartMenuSignal"),this,SLOT(recvStartMenuSlot()));
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)
@@ -155,12 +152,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
     double transparency=getTransparency();
 
     QRect rect = this->rect();
-//    rect.setWidth(this->rect().width());
-//    rect.setHeight(this->rect().height());
-//    rect.setX(this->rect().x());
-//    rect.setY(this->rect().y());
-//    rect.setWidth(this->rect().width());
-//    rect.setHeight(this->rect().height());
     QPainterPath path;
 
     QPainter painter(this);
@@ -183,16 +174,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::transparent);
         painter.setOpacity(transparency);
         painter.drawPath(path);
-
-//        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     }
     else//全屏固定背景色(黑底白字)
     {
-//        QGSettings gsetting(QString("org.mate.background").toLocal8Bit());
-//        QString iconPath =gsetting.get("picture-filename").toString();
-//        painter.drawPixmap(0,0,this->width(),this->height(),QPixmap(iconPath));
-
         if(QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit()))
         {
             QGSettings gsetting(QString("org.ukui.control-center.personalise").toLocal8Bit());
@@ -231,7 +216,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
         QPainterPath path;
         path.addRect(this->rect());
-//        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     }
     QMainWindow::paintEvent(event);
