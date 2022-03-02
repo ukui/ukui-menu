@@ -60,8 +60,6 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->setRenderHint(QPainter::Antialiasing);
         if(option.state & QStyle::State_MouseOver)
         {
-//            QColor color = option.palette.text().color();
-//            color.setAlphaF(0.15);
             painter->save();
             painter->setPen(QPen(Qt::NoPen));
             painter->setBrush(Qt::white);
@@ -181,11 +179,9 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->restore();
 
         painter->save();
-//        painter->setPen(QPen(option.palette.text().color()));
         painter->setPen(QPen(Qt::white));
         painter->setBrush(Qt::NoBrush);
         painter->drawText(textRect,Qt::AlignHCenter |Qt::AlignTop,appnameElidedText);
-//        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter,appname);
         painter->restore();
 
         if(option.state & QStyle::State_MouseOver)
