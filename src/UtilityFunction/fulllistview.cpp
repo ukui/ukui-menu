@@ -45,8 +45,7 @@ void FullListView::initWidget()
     viewport()->setAttribute(Qt::WA_TranslucentBackground);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    if(module==1 || module==2)s
-        this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setViewMode(QListView::IconMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setResizeMode(QListView::Adjust);
@@ -203,18 +202,3 @@ void FullListView::paintEvent(QPaintEvent *e)
     }
     QListView::paintEvent(e);
 }
-
-//void FullListView::mousePressEvent(QMouseEvent *event)
-//{
-//    if(!(this->indexAt(event->pos()).isValid()) && event->button()==Qt::LeftButton)
-//        Q_EMIT sendHideMainWindowSignal();
-//    else{
-//        if(event->button()==Qt::LeftButton)
-//            Q_EMIT clicked(this->indexAt(event->pos()));
-//        if(event->button()==Qt::RightButton)
-//        {
-//             this->selectionModel()->setCurrentIndex(this->indexAt(event->pos()),QItemSelectionModel::SelectCurrent);
-//            Q_EMIT customContextMenuRequested(event->pos());
-//        }
-//    }
-//}

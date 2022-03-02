@@ -103,9 +103,6 @@ void FunctionClassifyButton::paintEvent(QPaintEvent* e)
     {
         painter.save();
         painter.setPen(Qt::NoPen);
-//        QColor color = option.palette.color(QPalette::Text);
-//        color.setAlphaF(0.15);
-//        painter.setBrush(color);
         painter.setOpacity(0.15);
         painter.setBrush(Qt::white);
         painter.drawRoundedRect(option.rect, 4, 4);
@@ -234,30 +231,19 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
 
 void FunctionClassifyButton::updateTextState(const FunctionClassifyButton::State state)
 {
-//    QPalette p= m_textLabel->palette();
     switch (state)
     {
     case Enabled:
-//        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1));
-//        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255);");
         break;
     case Disabled:
-//        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1, 0.25));
-//        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 25%);");
         break;
     case Normal:
-//        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1, 0.50));
-//        m_textLabel->setStyleSheet("background:transparent; color:rgba(255, 255, 255, 50%);");
         break;
     case Checked:
-//        p.setColor(QPalette::WindowText,QColor::fromRgbF(1, 1, 1));
-//        m_textLabel->setStyleSheet("background:transparent;color:rgba(255, 255, 255);");
         break;
     default:
         break;
     }
-//    p.setColor(QPalette::Window,Qt::transparent);
-//    m_textLabel->setPalette(p);
 }
 
 void FunctionClassifyButton::setLabelText()
