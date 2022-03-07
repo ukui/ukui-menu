@@ -38,95 +38,85 @@ QString ConvertWinidToDesktop::tranIdToDesktop(WId id)
 
 QString ConvertWinidToDesktop::confirmDesktopFile(KWindowInfo info)
 {
-    m_desktopfilePath = "";
-    m_dir = new QDir(DEKSTOP_FILE_PATH);
-    m_list = m_dir->entryInfoList();
+    QString desktopFilePath = nullptr;
+    QDir dir = QDir(DESKTOP_FILE_PATH);
+    QFileInfoList list = dir.entryInfoList();
     //跳过 ./ 和 ../ 目录
-    m_list.removeAll(QFile(USR_SHARE_APP_CURRENT));
-    m_list.removeAll(QFile(USR_SHARE_APP_UPER));
+    list.removeAll(QFile(USR_SHARE_APP_CURRENT));
+    list.removeAll(QFile(USR_SHARE_APP_UPER));
+
     //第一种方法：获取点击应用时大部分desktop文件名
-    searchFromEnviron(info);
+    desktopFilePath = searchFromEnviron(info, list);
 
     //第二种方法：比较名字一致性
-    if (m_desktopfilePath.isEmpty()) {
+    if (desktopFilePath.isEmpty()) {
         m_classClass = info.windowClassClass().toLower();
         m_className = info.windowClassName();
 
         //匹配安卓兼容
         if (m_className == "kylin-kmre-window") {
-            searchAndroidApp(info);
-            return m_desktopfilePath;
+            return searchAndroidApp(info);
         }
 
         QFile file(QString("/proc/%1/status").arg(info.pid()));
-
         if (file.open(QIODevice::ReadOnly)) {
             char buf[1024];
-            qint64 len = file.readLine(buf, sizeof(buf));
-
-            if (len != -1) {
+            qint64 len=file.readLine(buf,sizeof(buf));
+            if (len!=-1) {
                 m_statusName = QString::fromLocal8Bit(buf).remove("Name:").remove("\t").remove("\n");
             }
         }
-
-        compareClassName();
+        desktopFilePath = compareClassName(list);
     }
 
     //第三种方法：比较cmd命令行操作一致性
-    if (m_desktopfilePath.isEmpty()) {
+    if (desktopFilePath.isEmpty()) {
         QFile file(QString("/proc/%1/cmdline").arg(info.pid()));
-
         if (file.open(QIODevice::ReadOnly)) {
             char buf[1024];
-            qint64 len = file.readLine(buf, sizeof(buf));
-
-            if (len != -1) {
+            qint64 len=file.readLine(buf,sizeof(buf));
+            if (len!=-1) {
                 m_cmdLine = QString::fromLocal8Bit(buf).remove("\n");
             }
         }
-
-        compareCmdExec();
+        desktopFilePath = compareCmdExec(list);
     }
 
     //第四种方法：匹配部分字段
-    if (m_desktopfilePath.isEmpty() && (!m_className.isEmpty())) {
-        compareLastStrategy();
+    if (desktopFilePath.isEmpty()) {
+        desktopFilePath = compareLastStrategy(list);
     }
-
-    return m_desktopfilePath;
+    return desktopFilePath;
 }
 
-void ConvertWinidToDesktop::searchAndroidApp(KWindowInfo info)
+QString ConvertWinidToDesktop::searchAndroidApp(KWindowInfo info)
 {
-    m_androidDir = new QDir(QString(QDir::homePath() + ANDROID_FILE_PATH));
-    m_androidList = m_androidDir->entryInfoList();
-    m_androidList.removeAll(QDir::homePath() + ANDROID_APP_CURRENT);
-    m_androidList.removeAll(QDir::homePath() + ANDROID_APP_UPER);
+    QDir androidDir = QString(QDir::homePath() + ANDROID_FILE_PATH);
+    QFileInfoList androidList = androidDir.entryInfoList();
+    androidList.removeAll(QDir::homePath() + ANDROID_APP_CURRENT);
+    androidList.removeAll(QDir::homePath() + ANDROID_APP_UPER);
+
     QFile file(QString("/proc/%1/cmdline").arg(info.pid()));
     file.open(QIODevice::ReadOnly);
     QByteArray cmd = file.readAll();
     file.close();
     QList<QByteArray> cmdList = cmd.split('\0');
-
-    for (int i = 0; i < m_androidList.size(); i++) {
-        QFileInfo fileInfo = m_androidList.at(i);
+    for (int i = 0; i < androidList.size(); i++) {
+        QFileInfo fileInfo = androidList.at(i);
         QString desktopName = fileInfo.filePath();
-
         if (!fileInfo.filePath().endsWith(".desktop")) {
             continue;
         }
-
         desktopName = desktopName.mid(desktopName.lastIndexOf("/") + 1);
         desktopName = desktopName.left(desktopName.lastIndexOf("."));
-
-        if (desktopName == cmdList.at(10)) {
-            m_desktopfilePath = fileInfo.filePath();
-            break;
+        if(desktopName == cmdList.at(10)){
+            return fileInfo.filePath();
         }
     }
+    return nullptr;
 }
 
-void ConvertWinidToDesktop::searchFromEnviron(KWindowInfo info)
+QString ConvertWinidToDesktop::searchFromEnviron(KWindowInfo info, QFileInfoList list)
 {
     QFile file("/proc/" + QString::number(info.pid()) + "/environ");
     file.open(QIODevice::ReadOnly);
@@ -134,58 +124,54 @@ void ConvertWinidToDesktop::searchFromEnviron(KWindowInfo info)
     file.close();
     QList<QByteArray> list_BA = BA.split('\0');
 
+    QString desktopFilePath = nullptr;
     for (int i = 0; i < list_BA.length(); i++) {
         if (list_BA.at(i).startsWith("GIO_LAUNCHED_DESKTOP_FILE=")) {
-            m_desktopfilePath = list_BA.at(i);
-            m_desktopfilePath = m_desktopfilePath.mid(m_desktopfilePath.indexOf("=") + 1);
+            desktopFilePath = list_BA.at(i);
+            desktopFilePath = desktopFilePath.mid(desktopFilePath.indexOf("=") + 1);
             //desktop文件地址需要重写
-            m_desktopfilePath = m_desktopfilePath.mid(m_desktopfilePath.lastIndexOf("/") + 1);
-        }
-    }
-
-    //desktop文件地址重写
-    if (!m_desktopfilePath.isEmpty()) {
-        for (int i = 0; i < m_list.size(); i++) {
-            QFileInfo fileInfo = m_list.at(i);;
-
-            if (fileInfo.filePath() == DEKSTOP_FILE_PATH + m_desktopfilePath) {
-                m_desktopfilePath = fileInfo.filePath();
-                break;
-            }
-        }
-    }
-}
-
-void ConvertWinidToDesktop::compareClassName()
-{
-    for (int i = 0; i < m_list.size(); i++) {
-        QFileInfo fileInfo = m_list.at(i);;
-        QString path_desktop_name = fileInfo.filePath();
-
-        if (!fileInfo.filePath().endsWith(".desktop")) {
-            continue;
-        }
-
-        path_desktop_name = path_desktop_name.mid(path_desktop_name.lastIndexOf("/") + 1);
-        path_desktop_name = path_desktop_name.left(path_desktop_name.lastIndexOf("."));
-
-        if (path_desktop_name == m_classClass || path_desktop_name == m_className || path_desktop_name == m_statusName)  {
-            m_desktopfilePath = fileInfo.filePath();
+            desktopFilePath = desktopFilePath.mid(desktopFilePath.lastIndexOf("/") + 1);
             break;
         }
     }
+    //desktop文件地址重写
+    if (!desktopFilePath.isEmpty()) {
+        for (int i = 0; i < list.size(); i++) {
+            QFileInfo fileInfo = list.at(i);
+            if (fileInfo.filePath() == DESKTOP_FILE_PATH + desktopFilePath) {
+                desktopFilePath = fileInfo.filePath();
+                return desktopFilePath;
+            }
+        }
+    }
+    return desktopFilePath;
 }
 
-void ConvertWinidToDesktop::compareCmdExec()
+QString ConvertWinidToDesktop::compareClassName(QFileInfoList list)
 {
-    for (int i = 0; i < m_list.size(); i++) {
-        QString cmd;
-        QFileInfo fileInfo = m_list.at(i);
-
+    for (int i = 0; i < list.size(); i++) {
+        QFileInfo fileInfo = list.at(i);;
+        QString pathDesktopName = fileInfo.filePath();
         if (!fileInfo.filePath().endsWith(".desktop")) {
             continue;
         }
+        pathDesktopName = pathDesktopName.mid(pathDesktopName.lastIndexOf("/") + 1);
+        pathDesktopName = pathDesktopName.left(pathDesktopName.lastIndexOf("."));
+        if (pathDesktopName == m_classClass || pathDesktopName == m_className || pathDesktopName == m_statusName)  {
+            return fileInfo.filePath();
+        }
+    }
+    return nullptr;
+}
 
+QString ConvertWinidToDesktop::compareCmdExec(QFileInfoList list)
+{
+    for (int i = 0; i < list.size(); i++) {
+        QString cmd;
+        QFileInfo fileInfo = list.at(i);
+        if (!fileInfo.filePath().endsWith(".desktop")) {
+            continue;
+        }
         cmd.sprintf(GET_DESKTOP_EXEC_NAME_MAIN, fileInfo.filePath().toStdString().data());
         QString desktopFileExeName = getDesktopFileName(cmd).remove("\n");
 
@@ -194,46 +180,41 @@ void ConvertWinidToDesktop::compareCmdExec()
         }
 
         if (desktopFileExeName == m_cmdLine || desktopFileExeName.startsWith(m_cmdLine) || m_cmdLine.startsWith(desktopFileExeName)) {
-            m_desktopfilePath = fileInfo.filePath();
-            break;
+            return fileInfo.filePath();
         }
 
         //仅仅是为了适配微信
-        if (m_desktopfilePath.isEmpty()) {
-            desktopFileExeName = "/usr/lib/" + desktopFileExeName;
-
-            if (desktopFileExeName == m_cmdLine || desktopFileExeName.startsWith(m_cmdLine) || m_cmdLine.startsWith(desktopFileExeName)) {
-                m_desktopfilePath = fileInfo.filePath();
-                break;
-            }
+        desktopFileExeName = "/usr/lib/" + desktopFileExeName;
+        if (desktopFileExeName == m_cmdLine || desktopFileExeName.startsWith(m_cmdLine) || m_cmdLine.startsWith(desktopFileExeName)) {
+            return fileInfo.filePath();
         }
     }
+    return nullptr;
 }
 
 //最后的匹配策略汇总
-void ConvertWinidToDesktop::compareLastStrategy()
+QString ConvertWinidToDesktop::compareLastStrategy(QFileInfoList list)
 {
-    compareCmdName();
+    QString desktopFilePath = compareCmdName(list);
 
-    if (m_desktopfilePath.isEmpty()) {
-        compareDesktopClass();
+    if (desktopFilePath.isEmpty()) {
+        desktopFilePath = compareDesktopClass(list);
     }
 
-    if (m_desktopfilePath.isEmpty()) {
-        containsName();
+    if (desktopFilePath.isEmpty()) {
+        desktopFilePath = containsName(list);
     }
+    return desktopFilePath;
 }
 
-void ConvertWinidToDesktop::compareCmdName()
+QString ConvertWinidToDesktop::compareCmdName(QFileInfoList list)
 {
-    for (int i = 0; i < m_list.size(); i++) {
+    for (int i = 0; i < list.size(); i++) {
         QString cmd;
-        QFileInfo fileInfo = m_list.at(i);
-
+        QFileInfo fileInfo = list.at(i);
         if (!fileInfo.filePath().endsWith(".desktop")) {
             continue;
         }
-
         cmd.sprintf(GET_DESKTOP_EXEC_NAME_MAIN, fileInfo.filePath().toStdString().data());
         QString desktopFileExeName = getDesktopFileName(cmd).remove("\n");
 
@@ -242,41 +223,39 @@ void ConvertWinidToDesktop::compareCmdName()
         }
 
         if (desktopFileExeName.startsWith(m_className) || desktopFileExeName.endsWith(m_className)) {
-            m_desktopfilePath = fileInfo.filePath();
-            break;
+            return fileInfo.filePath();
         }
     }
+    return nullptr;
 }
 
-void ConvertWinidToDesktop::compareDesktopClass()
+QString ConvertWinidToDesktop::compareDesktopClass(QFileInfoList list)
 {
-    for (int i = 0; i < m_list.size(); i++) {
-        QFileInfo fileInfo = m_list.at(i);
-        QString path_desktop_name = fileInfo.filePath();
-
+    for (int i = 0; i < list.size(); i++) {
+        QFileInfo fileInfo = list.at(i);
+        QString pathDesktopName = fileInfo.filePath();
         if (!fileInfo.filePath().endsWith(".desktop")) {
             continue;
         }
+        pathDesktopName = pathDesktopName.mid(pathDesktopName.lastIndexOf("/") + 1);
+        pathDesktopName = pathDesktopName.left(pathDesktopName.lastIndexOf("."));
 
-        path_desktop_name = path_desktop_name.mid(path_desktop_name.lastIndexOf("/") + 1);
-        path_desktop_name = path_desktop_name.left(path_desktop_name.lastIndexOf("."));
-
-        if (path_desktop_name.startsWith(m_className) || path_desktop_name.endsWith(m_className)) {
-            m_desktopfilePath = fileInfo.filePath();
-            break;
-        } else if (m_className.startsWith(path_desktop_name) || m_className.endsWith(path_desktop_name)) {
-            m_desktopfilePath = fileInfo.filePath();
-            break;
+        if (pathDesktopName.startsWith(m_className) || pathDesktopName.endsWith(m_className)) {
+            return fileInfo.filePath();
+        }
+        else if (m_className.startsWith(pathDesktopName) || m_className.endsWith(pathDesktopName)) {
+            return fileInfo.filePath();
         }
     }
+    return nullptr;
 }
 
-void ConvertWinidToDesktop::containsName()
+QString ConvertWinidToDesktop::containsName(QFileInfoList list)
 {
-    for (int i = 0; i < m_list.size(); i++) {
+    for (int i = 0; i < list.size(); i++) {
         QString cmd;
-        QFileInfo fileInfo = m_list.at(i);
-        QString path_desktop_name = fileInfo.filePath();
+        QFileInfo fileInfo = list.at(i);
+        QString pathDesktopName = fileInfo.filePath();
 
         if (!fileInfo.filePath().endsWith(".desktop")) {
             continue;
@@ -284,14 +263,15 @@ void ConvertWinidToDesktop::containsName()
 
         cmd.sprintf(GET_DESKTOP_EXEC_NAME_MAIN, fileInfo.filePath().toStdString().data());
         QString desktopFileExeName = getDesktopFileName(cmd).remove("\n");
-        path_desktop_name = path_desktop_name.mid(path_desktop_name.lastIndexOf("/") + 1);
-        path_desktop_name = path_desktop_name.left(path_desktop_name.lastIndexOf("."));
 
-        if (path_desktop_name.contains(m_className) || desktopFileExeName.contains(m_className)) {
-            m_desktopfilePath = fileInfo.filePath();
-            break;
+        pathDesktopName = pathDesktopName.mid(pathDesktopName.lastIndexOf("/") + 1);
+        pathDesktopName = pathDesktopName.left(pathDesktopName.lastIndexOf("."));
+
+        if (pathDesktopName.contains(m_className) || desktopFileExeName.contains(m_className)) {
+            return fileInfo.filePath();
         }
     }
+    return nullptr;
 }
 
 //执行头文件中宏定义写好的终端指令获取对应的Exec字段
@@ -299,27 +279,15 @@ QString ConvertWinidToDesktop::getDesktopFileName(QString cmd)
 {
     char name[200];
     FILE *fp1 = NULL;
-
     if ((fp1 = popen(cmd.toStdString().data(), "r")) == NULL) {
         return QString();
     }
-
     memset(name, 0, sizeof(name));
     fgets(name, sizeof(name), fp1);
     pclose(fp1);
     return QString(name);
 }
 
-
 ConvertWinidToDesktop::~ConvertWinidToDesktop()
 {
-    if (m_dir != nullptr) {
-        delete m_dir;
-        m_dir = nullptr;
-    }
-
-    if (m_androidDir) {
-        delete m_androidDir;
-        m_androidDir = nullptr;
-    }
 }

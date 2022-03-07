@@ -34,6 +34,7 @@
 #include <QSettings>
 #include <QPropertyAnimation>
 #include <QFileInfo>
+#include <QPainterPath>
 #include "convert_winid_to_desktop.h"
 #include "style.h"
 #include "main_view_widget.h"
@@ -103,6 +104,7 @@ Q_SIGNALS:
     void sendSearchKeyword(QString arg);
     void sendClassificationbtnList();
     void sendLetterClassificationList(QStringList list);
+    void sendSetFullWindowItemHide(bool flag);
 
 public Q_SLOTS:
     void updateCollectView();
@@ -116,6 +118,10 @@ public Q_SLOTS:
     void updateRecentView();
     void updateAppCategorySlot(QString category);
     void databaseThreadCloseSlot();
+    void resetLetterPage();
+    void resetFunctionPage();
+    void minAnimationFinished();
+    void maxAnimationFinished();
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
 
@@ -202,6 +208,8 @@ private:
     DesktopWatcher *m_desktopWatcher = nullptr;
     QPropertyAnimation *m_enterAnimation = nullptr;
     QPropertyAnimation *m_leaveAnimation = nullptr;
+    QVariantAnimation *m_minAnimation = nullptr;
+    QVariantAnimation *m_maxAnimation = nullptr;
     int m_widgetState = -1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;
     LetterButtonWidget *m_letterBtnWid = nullptr;

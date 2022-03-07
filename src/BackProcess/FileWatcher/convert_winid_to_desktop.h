@@ -23,7 +23,7 @@
 #include <KWindowSystem>
 #include <QDir>
 
-#define DEKSTOP_FILE_PATH       "/usr/share/applications/"
+#define DESKTOP_FILE_PATH       "/usr/share/applications/"
 #define USR_SHARE_APP_CURRENT   "/usr/share/applications/."
 #define USR_SHARE_APP_UPER      "/usr/share/applications/.."
 #define PEONY_TRASH             "/usr/share/applications/peony-trash.desktop"
@@ -53,30 +53,21 @@ public:
     QString tranIdToDesktop(WId id);
 
 private:
-    QString m_desktopfilePath = nullptr;
     QString m_classClass = nullptr;
     QString m_className = nullptr;
     QString m_statusName = nullptr;
     QString m_cmdLine = nullptr;
 
-    QDir *m_dir = nullptr;
-    QDir *m_androidDir = nullptr;
-    QFileInfoList m_list;
-    QFileInfoList m_androidList;
-
     QString confirmDesktopFile(KWindowInfo info);
-    void searchFromEnviron(KWindowInfo info);
-    void searchAndroidApp(KWindowInfo info);
-    void compareClassName();
-    void compareCmdExec();
-    void compareLastStrategy();
-    void compareCmdName();
-    void compareDesktopClass();
-    void containsName();
+    QString searchFromEnviron(KWindowInfo info, QFileInfoList list);
+    QString searchAndroidApp(KWindowInfo info);
+    QString compareClassName(QFileInfoList list);
+    QString compareCmdExec(QFileInfoList list);
+    QString compareLastStrategy(QFileInfoList list);
+    QString compareCmdName(QFileInfoList list);
+    QString compareDesktopClass(QFileInfoList list);
+    QString containsName(QFileInfoList list);
     QString getDesktopFileName(QString cmd);
-
-Q_SIGNALS:
-
 };
 
 #endif // CONVERTDESKTOPTOWINID_H

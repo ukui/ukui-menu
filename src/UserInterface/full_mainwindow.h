@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QPainterPath>
 #include "full_commonuse_widget.h"
 #include "full_function_widget.h"
 #include "full_letter_widget.h"
@@ -34,16 +35,19 @@ Q_SIGNALS:
     void sendSetFocusToResult();
     void sendUpdateOtherView();
 
+public Q_SLOTS:
+    void itemHide(bool flag);
+
 private Q_SLOTS:
 
     void on_minPushButton_clicked();
     void on_fullSelectToolButton_clicked();
     void on_fullSelectMenuButton_triggered(QAction *arg1);
-    void on_setScrollBarValue(int value, int maximumValue);
     void searchAppSlot(QString arg);
     void recvSearchResult(QVector<QStringList> arg);
     void setFocusToButton();
     void on_fullSelectMenuButton_clicked();
+
 
 protected:
     void paintEvent(QPaintEvent *event);
