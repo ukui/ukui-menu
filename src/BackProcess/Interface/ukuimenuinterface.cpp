@@ -29,7 +29,7 @@
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
     } else {
         QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
         setting = new QSettings(path, QSettings::IniFormat);
@@ -52,7 +52,7 @@ QVector<QString> UkuiMenuInterface::applicationVector = QVector<QString>();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
     } else {
         if (setting) {
             delete setting;
@@ -87,7 +87,7 @@ QStringList UkuiMenuInterface::getFunctionClassName()
 //文件递归查询
 void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         QDir dir(_filePath);
 
         if (!dir.exists()) {
@@ -287,7 +287,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 //获取系统desktop文件路径
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         m_filePathList.clear();
         QString jsonPath = QDir::homePath() + "/.config/ukui-menu-security-config.json";
         QFile file(jsonPath);
@@ -564,7 +564,7 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
             desktopfpVector.append(desktopfp);
             appInfoList << desktopfp << name << englishName << letter << letters;
 
-            if (projectCodeName == "V10SP1") {
+            if (g_projectCodeName == "V10SP1") {
                 QString desktopfpExecName = getAppExec(desktopfpList.at(i));
                 desktopfpExecName = desktopfpExecName.mid(desktopfpExecName.lastIndexOf("/") + 1);
                 desktopfpExecName = desktopfpExecName.left(desktopfpExecName.lastIndexOf(" "));
@@ -1100,7 +1100,7 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
     //            continue;
     //        data.append(desktopfp);
     //    }
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         QVector<QString> data;
 
         Q_FOREACH (QString desktopfn, getLockAppList()) {

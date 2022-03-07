@@ -102,7 +102,7 @@ bool Style::IsWideScreen = false;
 
 void Style::initWidStyle()
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         QVariantList list = getScreenGeometryList();
         m_primaryScreenX = list.at(0).toInt();
         m_primaryScreenY = list.at(1).toInt();

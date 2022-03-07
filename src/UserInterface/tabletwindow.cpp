@@ -348,6 +348,7 @@ void TabletWindow::showPCMenu()
     this->show();
     this->raise();
     this->activateWindow();
+    g_menuStatus = true;
 }
 
 //改变搜索框及工具栏透明度
@@ -496,6 +497,7 @@ bool TabletWindow::event(QEvent *event)
         if (QApplication::activeWindow() != this) {
             qDebug() << " * 鼠标点击窗口外部事件";
             this->hide();
+            g_menuStatus = false;
         }
     }
 
@@ -507,6 +509,7 @@ bool TabletWindow::event(QEvent *event)
 
     if (event->type() == QEvent::MouseButtonPress) {
         this->hide();
+        g_menuStatus = false;
     }
 
     return QWidget::event(event);
@@ -818,6 +821,7 @@ void TabletWindow::recvHideMainWindowSlot()
 //    this->setAttribute(Qt::WA_X11NetWmWindowTypeDesktop,false);
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     this->hide();
+    g_menuStatus = false;
 }
 
 void TabletWindow::btnGroupClickedSlot(int pageNum)
@@ -970,9 +974,11 @@ void TabletWindow::XkbEventsRelease(const QString &keycode)
 //            }
             qDebug() << "win键触发窗口隐藏事件";
             this->hide();
+            g_menuStatus = false;
         } else {
             qDebug() << "win键触发窗口显示事件";
             this->showPCMenu();
+            g_menuStatus = true;
         }
     }
 
