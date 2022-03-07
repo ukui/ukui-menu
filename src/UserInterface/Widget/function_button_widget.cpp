@@ -94,6 +94,12 @@ void FunctionButtonWidget::functionBtnClickedSlot()
     Q_EMIT sendFunctionBtnSignal(label->text());
 }
 
+void FunctionButtonWidget::hideEvent(QHideEvent *event)
+{
+    Q_EMIT sendResetFunctionPage();
+    return QWidget::hideEvent(event);
+}
+
 /**
  * 接收FunctionWidget界面分类按钮列表
  */

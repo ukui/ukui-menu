@@ -47,6 +47,7 @@ protected:
      */
     void initUi();
 
+    void hideEvent(QHideEvent *event);
 
 Q_SIGNALS:
     /**
@@ -54,6 +55,7 @@ Q_SIGNALS:
      * @param btnname: Category button name
      */
     void sendFunctionBtnSignal(QString btnname);
+    void sendResetFunctionPage();
 
 public Q_SLOTS:
     /**
