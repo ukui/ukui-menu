@@ -29,7 +29,7 @@
 
 UkuiMenuInterface::UkuiMenuInterface()
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
     } else {
         QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
         setting = new QSettings(path, QSettings::IniFormat);
@@ -52,7 +52,7 @@ QVector<QString> UkuiMenuInterface::applicationVector = QVector<QString>();
 
 UkuiMenuInterface::~UkuiMenuInterface()
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
     } else {
         if (setting) {
             delete setting;
@@ -87,7 +87,7 @@ QStringList UkuiMenuInterface::getFunctionClassName()
 //文件递归查询
 void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         QDir dir(_filePath);
 
         if (!dir.exists()) {
@@ -287,7 +287,7 @@ void UkuiMenuInterface::recursiveSearchFile(const QString &_filePath)
 //获取系统desktop文件路径
 QStringList UkuiMenuInterface::getDesktopFilePath()
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         m_filePathList.clear();
         QString jsonPath = QDir::homePath() + "/.config/ukui-menu-security-config.json";
         QFile file(jsonPath);
@@ -498,7 +498,6 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
 
     for (int i = 0; i < num; i++) {
         QString tmp = ifFileDesktopList.at(i);
-        myDebug() << "filePathList.at(i)" << ifFileDesktopList.at(i) << tmp.indexOf("tencent");
         QString str = ifFileDesktopList.at(i);
         QStringList list = str.split('/');
         str = list[list.size() - 1];
@@ -532,7 +531,7 @@ QStringList UkuiMenuInterface::getInstalledAppList()//获取已安装应用列�
     return ifFileDesktopList;
 }
 
-//创建应用信息容器
+//创建应用信息容器(intel SP1共用)
 QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
 {
     desktopfpVector.clear();
@@ -564,33 +563,38 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
             QString letters = getAppNameInitials(desktopfpList.at(i));
             desktopfpVector.append(desktopfp);
             appInfoList << desktopfp << name << englishName << letter << letters;
-            QString desktopfpExecName = getAppExec(desktopfpList.at(i));
-            desktopfpExecName = desktopfpExecName.mid(desktopfpExecName.lastIndexOf("/") + 1);
-            desktopfpExecName = desktopfpExecName.left(desktopfpExecName.lastIndexOf(" "));
-            sql.exec(QString("select name_zh from appCategory where app_name=\"%1\" ").arg(desktopfpExecName));
 
-            if (sql.next()) {
-                myDebug() << "数据库执行成功";
+            if (g_projectCodeName == "V10SP1") {
+                QString desktopfpExecName = getAppExec(desktopfpList.at(i));
+                desktopfpExecName = desktopfpExecName.mid(desktopfpExecName.lastIndexOf("/") + 1);
+                desktopfpExecName = desktopfpExecName.left(desktopfpExecName.lastIndexOf(" "));
+                sql.exec(QString("select name_zh from appCategory where app_name=\"%1\" ").arg(desktopfpExecName));
 
-                for (int j = 0; j < vector.size(); j++) {
-                    if (vector.at(j).contains(sql.value(0).toString())) {
-                        appInfoList.append(QString::number(j));
+                if (sql.next()) {
+                    myDebug() << "数据库执行成功";
+
+                    for (int j = 0; j < vector.size(); j++) {
+                        if (vector.at(j).contains(sql.value(0).toString())) {
+                            appInfoList.append(QString::number(j));
+                        }
                     }
-                }
-            } else {
-                myDebug() << "数据库执行失败";
-                bool is_owned = false;
 
-                for (int j = 0; j < vector.size(); j++) {
-                    if (matchingAppCategories(desktopfpList.at(i), vector.at(j))) { //有对应分类
-                        is_owned = true;
-                        appInfoList.append(QString::number(j));
-                    }
+                    appInfoVector.append(appInfoList);
+                    continue;
                 }
+            }
 
-                if (!is_owned) { //该应用无对应分类
-                    appInfoList.append(QString::number(10));
+            bool is_owned = false;
+
+            for (int j = 0; j < vector.size(); j++) {
+                if (matchingAppCategories(desktopfpList.at(i), vector.at(j))) { //有对应分类
+                    is_owned = true;
+                    appInfoList.append(QString::number(j));
                 }
+            }
+
+            if (!is_owned) { //该应用无对应分类
+                appInfoList.append(QString::number(10));
             }
 
             appInfoVector.append(appInfoList);
@@ -1096,7 +1100,7 @@ QVector<QString> UkuiMenuInterface::getCommonUseApp()
     //            continue;
     //        data.append(desktopfp);
     //    }
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         QVector<QString> data;
 
         Q_FOREACH (QString desktopfn, getLockAppList()) {

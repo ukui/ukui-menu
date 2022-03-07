@@ -39,7 +39,7 @@
 int main(int argc, char *argv[])
 {
     initUkuiLog4qt("ukui-menu");
-    projectCodeName = KDKGetPrjCodeName().c_str();
+    g_projectCodeName = KDKGetPrjCodeName().c_str();
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         myDebug() << "Load translations file" << QLocale() << "failed!";
     }
 
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         FileUtils::loadHanziTable(":/src/BackProcess/Search/pinyinWithoutTone.txt");
         MainWindow w;
         app.setActivationWindow(&w);

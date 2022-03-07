@@ -49,12 +49,17 @@ TabletDirectoryChangedThread::~TabletDirectoryChangedThread()
 void TabletDirectoryChangedThread::run()
 {
     QStringList desktopfpList = m_ukuiMenuInterface->getDesktopFilePath();
-    myDebug() << "安装应用";
+    myDebug() << "应用列表desktopfpList" << desktopfpList.size() << desktopfpList;
+    myDebug() << "应用列表desktopfpVector" << UkuiMenuInterface::desktopfpVector.size() << UkuiMenuInterface::desktopfpVector;
     QString m_desktopfp;
 
     for (int i = 0; i < desktopfpList.count(); i++) {
-        if (!UkuiMenuInterface::desktopfpVector.contains(desktopfpList.at(i))) {
+        myDebug() << desktopfpList.at(i) << "是否存在于已安装应用列表中" <<
+                  UkuiMenuInterface::desktopfpVector.contains(QString(desktopfpList.at(i)));
+
+        if (!UkuiMenuInterface::desktopfpVector.contains(QString(desktopfpList.at(i)))) {
             m_desktopfp = desktopfpList.at(i);
+            myDebug() << "安装应用" << m_desktopfp;
             //获取当前时间戳
             QDateTime dt = QDateTime::currentDateTime();
             int datetime = dt.toTime_t();
@@ -92,8 +97,6 @@ void TabletDirectoryChangedThread::run()
         }
     }
 
-    myDebug() << "卸载应用";
-
     for (int i = 0; i < UkuiMenuInterface::desktopfpVector.count(); i++) {
         if (!desktopfpList.contains(UkuiMenuInterface::desktopfpVector.at(i))) {
             QString desktopfp = UkuiMenuInterface::desktopfpVector.at(i);
@@ -109,7 +112,7 @@ void TabletDirectoryChangedThread::run()
             if (!setting->contains(desktopfn)) {
                 setting->sync();
                 setting->endGroup();
-                break;
+                continue;
             }
 
             int val = setting->value(desktopfn).toInt();
@@ -138,13 +141,7 @@ void TabletDirectoryChangedThread::run()
         }
     }
 
-    myDebug() << "卸载！！！";
     UkuiMenuInterface::appInfoVector.clear();
     UkuiMenuInterface::appInfoVector = m_ukuiMenuInterface->createAppInfoVector();
     Q_EMIT requestUpdateSignal(m_desktopfp);
-}
-void TabletDirectoryChangedThread::recvDirectoryPath(QString arg)
-{
-    this->m_path.clear();
-    this->m_path = arg;
 }

@@ -30,7 +30,8 @@
 #include <QScreen>
 
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
-QString projectCodeName = "V10SP1";
+QString g_projectCodeName = "V10SP1";
+bool g_menuStatus = false;
 
 const QPixmap loadSvg(const QString &fileName, const int size)
 {
@@ -102,7 +103,6 @@ QVariantList getScreenGeometryList()
 {
     QRect rect;
     rect = qApp->primaryScreen()->geometry();
-
     int panelSize = 0;
     int position = 0;
     QVariantList list;
@@ -112,24 +112,26 @@ QVariantList getScreenGeometryList()
                          DBUS_INTERFACE,
                          QDBusConnection::sessionBus());
     QDBusReply<QVariantList> reply = iface.call("GetPrimaryScreenPhysicalGeometry");
+
     if (reply.isValid()) {
         panelSize = reply.value().at(4).toInt();
         position = reply.value().at(5).toInt();
     }
 
     QList<int> posIndex;
+
     switch (position) {
-    case BOTTOM:
-        posIndex = {0, 0, 0, -1};
-        break;
-    case TOP:
-        posIndex = {0, 1, 0, -1};
-        break;
-    case LEFT:
-        posIndex = {1, 0, -1, 0};
-        break;
-    case RIGHT:
-        posIndex = {0, 0, -1, 0};
+        case BOTTOM:
+            posIndex = {0, 0, 0, -1};
+            break;
+        case TOP:
+            posIndex = {0, 1, 0, -1};
+            break;
+        case LEFT:
+            posIndex = {1, 0, -1, 0};
+            break;
+        case RIGHT:
+            posIndex = {0, 0, -1, 0};
     }
 
     list.append(rect.x() + posIndex[0] * panelSize);
@@ -673,6 +675,7 @@ void execApp(QString desktopfp)
 
     QFileInfo fileInfo(desktopfp);
     QString desktopfn = fileInfo.fileName();
+
     if (desktopfn.startsWith("app.web.")) {
         updateDataBaseTableTimes(desktopfn);
     }

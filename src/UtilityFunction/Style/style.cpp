@@ -83,6 +83,8 @@ int Style::appRows = 0;
 bool Style::ScreenRotation = false;
 int Style::AppListItemSizeHeight = 270;
 int Style::AppListViewTopMargin = 0;
+int Style::ScreenWidth = 0;
+int Style::ScreenHeight = 0;
 int Style::AppListViewLeftMargin = 52;
 int Style::AppListViewBottomMargin = 20;
 int Style::AppListViewRightMargin = 0;
@@ -100,14 +102,13 @@ bool Style::IsWideScreen = false;
 
 void Style::initWidStyle()
 {
-    if (projectCodeName == "V10SP1") {
+    if (g_projectCodeName == "V10SP1") {
         QVariantList list = getScreenGeometryList();
         m_primaryScreenX = list.at(0).toInt();
         m_primaryScreenY = list.at(1).toInt();
         m_availableScreenWidth = list.at(2).toInt();
         m_availableScreenHeight = list.at(3).toInt();
         m_panelPosition = list.at(5).toInt();
-
         int len = 0;
         QString locale = QLocale::system().name();
 
@@ -192,31 +193,37 @@ void Style::initWidStyle()
             m_applistGridSizeWidth = 138;
             AppSpaceBetweenIconText = 14;
         }
+
         LeftBtnWidth = 100 + 5 * len;
         LeftBtnHeight = 43;
         QueryLineEditHeight = 30;
         LeftLetterBtnHeight = 25;
         LeftIconSize = 19;
         LeftSpaceIconText = 14;
-
         m_applistWidWidth = m_availableScreenWidth / 1.25;
         m_applistWidWidth = m_applistWidWidth - (m_applistWidWidth % m_applistGridSizeWidth) + 1;
         m_applistWidHeight = m_availableScreenHeight - 120;
         m_applistWidHeight = m_applistWidHeight - (m_applistWidHeight % m_applistGridSizeWidth) + 1;
         m_leftWidWidth = (m_availableScreenWidth - m_applistWidWidth) / 2 + 1;
     } else {
-        int screenWidth = QApplication::primaryScreen()->geometry().width();
-        int screenHeight = QApplication::primaryScreen()->geometry().height();
-        AppListViewTopMargin = 70;
+        ScreenWidth = QApplication::primaryScreen()->geometry().width();
+        ScreenHeight = QApplication::primaryScreen()->geometry().height();
+
+        if (ScreenHeight != 1080) {
+            AppListViewTopMargin = 30;
+        } else {
+            AppListViewTopMargin = 70;
+        }
+
         AppListViewLeftMargin = 52;
-        AppListViewBottomMargin = 40;
+        AppListViewBottomMargin = AppListViewTopMargin - 30;
         AppListViewRightMargin = 0;
-        m_leftWidWidth = screenWidth * 0.3;
-        FirsPageViewWidth = screenWidth - m_leftWidWidth - 5;
-        OtherPageViewWidth = screenWidth;
+        m_leftWidWidth = ScreenWidth * 0.3;
+        FirsPageViewWidth = ScreenWidth - m_leftWidWidth - 5;
+        OtherPageViewWidth = ScreenWidth;
         TabletItemSizeWidthFirst = FirsPageViewWidth / 6;
-        TabletItemSizeWidthOther = (screenWidth - 5) / 6;
-        CenterWindHeight =  screenHeight - AppListViewBottomMargin - AppListViewTopMargin;
+        TabletItemSizeWidthOther = (ScreenWidth - 5) / 6;
+        CenterWindHeight =  ScreenHeight - AppListViewBottomMargin - AppListViewTopMargin;
         AppListItemSizeHeight = CenterWindHeight / 4;
         AppListIconSize = 96;
         AppListBigIconSize = 108;

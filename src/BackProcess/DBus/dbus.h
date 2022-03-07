@@ -18,6 +18,7 @@ public Q_SLOTS:
     QString GetSecurityConfigPath();
     void ReloadSecurityConfig();
     void WinKeyResponse();
+    bool GetMenuStatus();
 };
 
 #endif // DBUS_H
