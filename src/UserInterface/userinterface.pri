@@ -28,6 +28,7 @@ HEADERS += \
     $$PWD/ViewItem/recent_item_delegate.h \
     $$PWD/ViewItem/right_item_delegate.h \
     $$PWD/ViewItem/tablet_full_itemdelegate.h \
+    $$PWD/Widget/animationpage.h \
     $$PWD/Widget/full_commonuse_widget.h \
     $$PWD/Widget/full_function_widget.h \
     $$PWD/Widget/full_letter_widget.h \
@@ -64,6 +65,7 @@ SOURCES += \
     $$PWD/ViewItem/recent_item_delegate.cpp \
     $$PWD/ViewItem/right_item_delegate.cpp \
     $$PWD/ViewItem/tablet_full_itemdelegate.cpp \
+    $$PWD/Widget/animationpage.cpp \
     $$PWD/Widget/full_commonuse_widget.cpp \
     $$PWD/Widget/full_function_widget.cpp \
     $$PWD/Widget/full_letter_widget.cpp \
