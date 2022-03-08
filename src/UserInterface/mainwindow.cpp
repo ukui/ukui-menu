@@ -974,9 +974,10 @@ void MainWindow::on_minMaxChangeButton_clicked()
     m_canHide = true;
     m_isFullScreen = true;
     this->hide();
-    m_animationPage.setGeometry(Style::m_primaryScreenX, Style::m_primaryScreenY + Style::m_availableScreenHeight - Style::minh, Style::minw, Style::minh);
+    m_animationPage.setGeometry(this->x(), this->y(), Style::minw, Style::minh);
     m_maxAnimation->setEasingCurve(QEasingCurve::Linear);
-    m_maxAnimation->setStartValue(QRect(Style::m_primaryScreenX, Style::m_primaryScreenY + Style::m_availableScreenHeight - Style::minh, Style::minw, Style::minh));
+//    m_maxAnimation->setStartValue(QRect(Style::m_primaryScreenX, Style::m_primaryScreenY + Style::m_availableScreenHeight - Style::minh, Style::minw, Style::minh));
+    m_maxAnimation->setStartValue(QRect(this->x(), this->y(), Style::minw, Style::minh));
     m_maxAnimation->setEndValue(QRect(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight));
     m_maxAnimation->setDuration(300);
     m_maxAnimation->start();
@@ -1043,7 +1044,7 @@ void MainWindow::showNormalWindow()
     m_animationPage.setGeometry(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight);
     m_minAnimation->setEasingCurve(QEasingCurve::Linear);
     m_minAnimation->setStartValue(QRect(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight));
-    m_minAnimation->setEndValue(QRect(Style::m_primaryScreenX, Style::m_primaryScreenY + Style::m_availableScreenHeight - Style::minh, Style::minw, Style::minh));
+    m_minAnimation->setEndValue(QRect(this->x(), this->y(), Style::minw, Style::minh));
     m_minAnimation->setDuration(300);
     m_minAnimation->start();
     m_animationPage.show();
