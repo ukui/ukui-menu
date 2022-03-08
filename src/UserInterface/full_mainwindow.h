@@ -35,9 +35,6 @@ Q_SIGNALS:
     void sendSetFocusToResult();
     void sendUpdateOtherView();
 
-public Q_SLOTS:
-    void itemHide(bool flag);
-
 private Q_SLOTS:
 
     void on_minPushButton_clicked();

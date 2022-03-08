@@ -191,7 +191,7 @@ private:
     QHBoxLayout *m_rightBottomHorizontalLayout = nullptr;
     QSpacerItem *m_horizontalSpacer_2 = nullptr;
     QPushButton *m_powerOffButton = nullptr;
-    AnimationPage label;
+    AnimationPage m_animationPage;
 
     bool m_canHide = true;
     bool m_isFullScreen = false;
@@ -210,7 +210,7 @@ private:
     DesktopWatcher *m_desktopWatcher = nullptr;
     QPropertyAnimation *m_enterAnimation = nullptr;
     QPropertyAnimation *m_leaveAnimation = nullptr;
-    QVariantAnimation *m_minAnimation = nullptr;
+    QPropertyAnimation *m_minAnimation = nullptr;
     QPropertyAnimation *m_maxAnimation = nullptr;
     int m_widgetState = -1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;

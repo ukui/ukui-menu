@@ -181,17 +181,6 @@ void FullMainWindow::updateView()
     m_fullLetterPage->updateAppListView();
 }
 
-void FullMainWindow::itemHide(bool flag)
-{
-    if (flag) {
-        m_fullStackedWidget->hide();
-        centralwidget->hide();
-    } else {
-        centralwidget->show();
-        m_fullStackedWidget->show();
-    }
-}
-
 void FullMainWindow::on_minPushButton_clicked()
 {
     Q_EMIT showNormalWindow();

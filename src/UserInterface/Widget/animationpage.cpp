@@ -9,11 +9,6 @@ AnimationPage::AnimationPage()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAutoFillBackground(false);
     this->setAttribute(Qt::WA_TranslucentBackground);
-//    QGraphicsBlurEffect *ef = new QGraphicsBlurEffect;
-//    ef->setBlurRadius(1);
-//    ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
-//    this->setGraphicsEffect(ef);
-//    this->setStyleSheet("backdrop-filter:blur(8px);");
 }
 void AnimationPage::paintEvent(QPaintEvent *event)
 {
