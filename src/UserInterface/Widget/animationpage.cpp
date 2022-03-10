@@ -20,5 +20,5 @@ void AnimationPage::paintEvent(QPaintEvent *event)
     painter.setOpacity(transparency);
     painter.drawRect(rect);
     KWindowEffects::enableBlurBehind(this->winId(), true, QRect(rect));
-    QLabel::paintEvent(event);
+    QWidget::paintEvent(event);
 }

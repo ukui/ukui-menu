@@ -2,7 +2,7 @@
 #define ANIMATIONPAGE_H
 #include <QLabel>
 
-class AnimationPage : public QLabel
+class AnimationPage : public QWidget
 {
 public:
     AnimationPage();
