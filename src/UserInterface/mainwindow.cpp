@@ -986,11 +986,11 @@ void MainWindow::on_minMaxChangeButton_clicked()
     QEventLoop loop;
     QTimer::singleShot(200, &loop, SLOT(quit()));
     loop.exec();
-    m_maxAnimation->setEasingCurve(QEasingCurve::Linear);
+    m_maxAnimation->setEasingCurve(QEasingCurve::OutExpo);
 //    m_maxAnimation->setStartValue(QRect(Style::m_primaryScreenX, Style::m_primaryScreenY + Style::m_availableScreenHeight - Style::minh, Style::minw, Style::minh));
     m_maxAnimation->setStartValue(QRect(this->x(), this->y(), Style::minw, Style::minh));
     m_maxAnimation->setEndValue(QRect(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight));
-    m_maxAnimation->setDuration(200);
+    m_maxAnimation->setDuration(260);
     m_maxAnimation->start();
     this->hide();
 }
@@ -1057,10 +1057,10 @@ void MainWindow::showNormalWindow()
     QTimer::singleShot(200, &loop, SLOT(quit()));
     loop.exec();
     m_isFullScreen = false;
-    m_minAnimation->setEasingCurve(QEasingCurve::Linear);
+    m_minAnimation->setEasingCurve(QEasingCurve::OutExpo);
     m_minAnimation->setStartValue(QRect(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight));
     m_minAnimation->setEndValue(QRect(this->x(), this->y(), Style::minw, Style::minh));
-    m_minAnimation->setDuration(200);
+    m_minAnimation->setDuration(260);
     m_minAnimation->start();
     m_fullWindow->hide();
 }
