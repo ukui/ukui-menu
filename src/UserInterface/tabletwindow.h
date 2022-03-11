@@ -140,6 +140,12 @@ protected:
     void setBackground();
 
     void registDbusService();
+
+    void initTransparency();
+
+    void initStatusManager();
+
+    void initXEventMonitor();
     /**
      * @brief Initialize the application list interface
      */

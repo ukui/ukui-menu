@@ -93,35 +93,10 @@ void TabletWindow::initUi()
     setBackground();
     m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
-    m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
-                                        "/",
-                                        "com.kylin.statusmanager.interface",
-                                        QDBusConnection::sessionBus());
-    QDBusConnection::sessionBus().connect("com.kylin.statusmanager.interface",
-                                          "/",
-                                          "com.kylin.statusmanager.interface",
-                                          "mode_change_signal",
-                                          this,
-                                          SLOT(modelChanged(bool))
-                                         );
-
-    //特效模式,此处Gsetting不明确，需进一步确认
-    if (QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit())) {
-        m_bgEffect = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-        setOpacityEffect(m_bgEffect->get("transparency").toReal());
-        connect(m_bgEffect, &QGSettings::changed, [this](const QString & key) {
-            if (key == "effect") {
-                if (m_bgEffect->get("effect").toBool()) {
-                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
-                } else {
-                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
-                }
-            }
-        });
-    }
-
+    initStatusManager();
+    initTransparency();
     registDbusService();
-    /*
+    /*//备用待窗管修改后启用
      connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
          if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
          {
@@ -143,12 +118,7 @@ void TabletWindow::initUi()
          }
      });
      */
-    //pc下鼠标功能
-    XEventMonitor::instance()->start();
-    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-            this, SLOT(xkbEventsRelease(QString)));
-    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-            this, SLOT(xkbEventsPress(QString)));
+    initXEventMonitor();
     ways();
     buttonWidgetShow();
     connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
@@ -156,6 +126,16 @@ void TabletWindow::initUi()
     if (checkapplist()) {
         directoryChangedSlot();//更新应用列表
     }
+}
+
+void TabletWindow::initXEventMonitor()
+{
+    //pc下鼠标功能
+    XEventMonitor::instance()->start();
+    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+            this, SLOT(xkbEventsRelease(QString)));
+    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+            this, SLOT(xkbEventsPress(QString)));
 }
 
 void TabletWindow::fileWatcher()
@@ -172,6 +152,39 @@ void TabletWindow::fileWatcher()
     connect(m_appListFileWatcher, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::requestUpdateSignal, this, &TabletWindow::requestUpdateSlot);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::deleteAppSignal, this, &TabletWindow::requestDeleteAppSlot);
+}
+
+void TabletWindow::initTransparency()
+{
+    //特效模式,此处Gsetting不明确，需进一步确认
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit())) {
+        m_bgEffect = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+        setOpacityEffect(m_bgEffect->get("transparency").toReal());
+        connect(m_bgEffect, &QGSettings::changed, [this](const QString & key) {
+            if (key == "effect") {
+                if (m_bgEffect->get("effect").toBool()) {
+                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
+                } else {
+                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
+                }
+            }
+        });
+    }
+}
+
+void TabletWindow::initStatusManager()
+{
+    m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
+                                        "/",
+                                        "com.kylin.statusmanager.interface",
+                                        QDBusConnection::sessionBus());
+    QDBusConnection::sessionBus().connect("com.kylin.statusmanager.interface",
+                                          "/",
+                                          "com.kylin.statusmanager.interface",
+                                          "mode_change_signal",
+                                          this,
+                                          SLOT(modelChanged(bool))
+                                         );
 }
 
 void TabletWindow::setBackground()
