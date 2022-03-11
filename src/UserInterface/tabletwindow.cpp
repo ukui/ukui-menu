@@ -210,12 +210,6 @@ void TabletWindow::initUi()
 //            this->showPCMenu();
 //        }
 //    });
-    //pc下鼠标功能
-    XEventMonitor::instance()->start();
-    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-            this, SLOT(XkbEventsRelease(QString)));
-    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-            this, SLOT(XkbEventsPress(QString)));
     ways();
     buttonWidgetShow();
 //    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
@@ -224,6 +218,13 @@ void TabletWindow::initUi()
     if (checkapplist()) {
         directoryChangedSlot();//更新应用列表
     }
+
+    //pc下鼠标功能
+    XEventMonitor::instance()->start();
+    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+            this, SLOT(XkbEventsRelease(QString)));
+    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+            this, SLOT(XkbEventsPress(QString)));
 }
 
 
