@@ -100,14 +100,13 @@ bool Style::IsWideScreen = false;
 
 void Style::initWidStyle()
 {
-    if (projectCodeName == "V10SP1") {
+    if (!projectCodeName.contains("V10SP1-edu")) {
         QVariantList list = getScreenGeometryList();
         m_primaryScreenX = list.at(0).toInt();
         m_primaryScreenY = list.at(1).toInt();
         m_availableScreenWidth = list.at(2).toInt();
         m_availableScreenHeight = list.at(3).toInt();
         m_panelPosition = list.at(5).toInt();
-
         int len = 0;
         QString locale = QLocale::system().name();
 
@@ -192,13 +191,13 @@ void Style::initWidStyle()
             m_applistGridSizeWidth = 138;
             AppSpaceBetweenIconText = 14;
         }
+
         LeftBtnWidth = 100 + 5 * len;
         LeftBtnHeight = 43;
         QueryLineEditHeight = 30;
         LeftLetterBtnHeight = 25;
         LeftIconSize = 19;
         LeftSpaceIconText = 14;
-
         m_applistWidWidth = m_availableScreenWidth / 1.25;
         m_applistWidWidth = m_applistWidWidth - (m_applistWidWidth % m_applistGridSizeWidth) + 1;
         m_applistWidHeight = m_availableScreenHeight - 120;

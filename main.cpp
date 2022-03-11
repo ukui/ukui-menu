@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         myDebug() << "Load translations file" << QLocale() << "failed!";
     }
 
-    if (projectCodeName == "V10SP1") {
+    if (!projectCodeName.contains("V10SP1-edu")) {
         FileUtils::loadHanziTable(":/src/BackProcess/Search/pinyinWithoutTone.txt");
         MainWindow w;
         app.setActivationWindow(&w);

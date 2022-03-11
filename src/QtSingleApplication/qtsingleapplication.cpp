@@ -347,7 +347,7 @@ QWidget *QtSingleApplication::activationWindow() const
 void QtSingleApplication::activateWindow()
 {
     if (actWin) {
-        if (projectCodeName == "V10SP1") {
+        if (!projectCodeName.contains("V10SP1-edu")) {
             MainWindow *w = qobject_cast<MainWindow *>(actWin);
 
             if (this->applicationState() & Qt::ApplicationInactive) {
