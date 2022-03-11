@@ -556,7 +556,7 @@ void MainWindow::minAnimationFinished()
     m_viewWidget->setFocus();
     m_collectPushButton->clicked(true);
     QEventLoop loop;
-    QTimer::singleShot(200, &loop, SLOT(quit()));
+    QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();
     m_animationPage.hide();
 }
@@ -567,7 +567,7 @@ void MainWindow::maxAnimationFinished()
     m_fullWindow->showNormal();
     m_fullWindow->activateWindow();
     QEventLoop loop;
-    QTimer::singleShot(200, &loop, SLOT(quit()));
+    QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();
     m_animationPage.hide();
 }
@@ -984,7 +984,7 @@ void MainWindow::on_minMaxChangeButton_clicked()
     m_animationPage.raise();
     m_animationPage.repaint();
     QEventLoop loop;
-    QTimer::singleShot(200, &loop, SLOT(quit()));
+    QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();
     m_maxAnimation->setEasingCurve(QEasingCurve::OutExpo);
 //    m_maxAnimation->setStartValue(QRect(Style::m_primaryScreenX, Style::m_primaryScreenY + Style::m_availableScreenHeight - Style::minh, Style::minw, Style::minh));
@@ -1054,7 +1054,7 @@ void MainWindow::showNormalWindow()
     m_animationPage.show();
     m_animationPage.raise();
     QEventLoop loop;
-    QTimer::singleShot(200, &loop, SLOT(quit()));
+    QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();
     m_isFullScreen = false;
     m_minAnimation->setEasingCurve(QEasingCurve::OutExpo);
