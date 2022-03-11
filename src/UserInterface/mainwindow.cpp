@@ -32,6 +32,7 @@
 #include <QPalette>
 #include <QGroupBox>
 #include <QEventLoop>
+#include <QLabel>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -345,21 +346,10 @@ MainWindow::MainWindow(QWidget *parent) :
             }
         }
     });
-    m_maxAnimation = new QVariantAnimation(m_fullWindow);
-    m_minAnimation = new QVariantAnimation(m_fullWindow);
-    connect(m_maxAnimation, &QVariantAnimation::finished, this, &MainWindow::maxAnimationFinished);
-    connect(m_minAnimation, &QVariantAnimation::finished, this, &MainWindow::minAnimationFinished);
-    connect(this, &MainWindow::sendSetFullWindowItemHide, m_fullWindow, &FullMainWindow::itemHide);
-    connect(m_maxAnimation, &QVariantAnimation::valueChanged, this, [ = ](const QVariant variant) {
-        int value = variant.toInt();
-        m_fullWindow->setFixedSize(value, Style::m_availableScreenHeight * value / Style::m_availableScreenWidth);
-        m_fullWindow->move(0, Style::m_availableScreenHeight - (Style::m_availableScreenHeight * value / Style::m_availableScreenWidth));
-    });
-    connect(m_minAnimation, &QVariantAnimation::valueChanged, this, [ = ](const QVariant variant) {
-        int value = variant.toInt();
-        m_fullWindow->move(0, Style::m_availableScreenHeight - (Style::minh * value / Style::minw));
-        m_fullWindow->setFixedSize(value, Style::minh * value / Style::minw);
-    });
+    m_maxAnimation = new QPropertyAnimation(&m_animationPage, "geometry");
+    m_minAnimation = new QPropertyAnimation(&m_animationPage, "geometry");
+    connect(m_maxAnimation, &QPropertyAnimation::finished, this, &MainWindow::maxAnimationFinished);
+    connect(m_minAnimation, &QPropertyAnimation::finished, this, &MainWindow::minAnimationFinished);
     connect(m_lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchAppSlot);
     connect(this, &MainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &MainWindow::recvSearchResult);
@@ -565,11 +555,21 @@ void MainWindow::minAnimationFinished()
     this->activateWindow();
     m_viewWidget->setFocus();
     m_collectPushButton->clicked(true);
+    QEventLoop loop;
+    QTimer::singleShot(200, &loop, SLOT(quit()));
+    loop.exec();
+    m_animationPage.hide();
 }
 
 void MainWindow::maxAnimationFinished()
 {
-    Q_EMIT sendSetFullWindowItemHide(false);
+    m_fullWindow->raise();
+    m_fullWindow->showNormal();
+    m_fullWindow->activateWindow();
+    QEventLoop loop;
+    QTimer::singleShot(200, &loop, SLOT(quit()));
+    loop.exec();
+    m_animationPage.hide();
 }
 
 void MainWindow::resetLetterPage()
@@ -979,15 +979,20 @@ void MainWindow::on_minMaxChangeButton_clicked()
 {
     m_canHide = true;
     m_isFullScreen = true;
-    m_maxAnimation->setEasingCurve(QEasingCurve::Linear);
-    m_maxAnimation->setStartValue(Style::minw);
-    m_maxAnimation->setEndValue(Style::m_availableScreenWidth);
-    m_maxAnimation->setDuration(200);
+    m_animationPage.setGeometry(this->x(), this->y(), Style::minw, Style::minh);
+    m_animationPage.show();
+    m_animationPage.raise();
+    m_animationPage.repaint();
+    QEventLoop loop;
+    QTimer::singleShot(200, &loop, SLOT(quit()));
+    loop.exec();
+    m_maxAnimation->setEasingCurve(QEasingCurve::OutExpo);
+//    m_maxAnimation->setStartValue(QRect(Style::m_primaryScreenX, Style::m_primaryScreenY + Style::m_availableScreenHeight - Style::minh, Style::minw, Style::minh));
+    m_maxAnimation->setStartValue(QRect(this->x(), this->y(), Style::minw, Style::minh));
+    m_maxAnimation->setEndValue(QRect(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight));
+    m_maxAnimation->setDuration(260);
     m_maxAnimation->start();
-    m_fullWindow->raise();
-    m_fullWindow->showNormal();
-    m_fullWindow->activateWindow();
-    Q_EMIT sendSetFullWindowItemHide(true);
+    this->hide();
 }
 
 void MainWindow::showWindow()
@@ -1045,13 +1050,19 @@ void MainWindow::repaintWidget()
 
 void MainWindow::showNormalWindow()
 {
-    Q_EMIT sendSetFullWindowItemHide(true);
+    m_animationPage.setGeometry(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight);
+    m_animationPage.show();
+    m_animationPage.raise();
+    QEventLoop loop;
+    QTimer::singleShot(200, &loop, SLOT(quit()));
+    loop.exec();
     m_isFullScreen = false;
-    m_minAnimation->setEasingCurve(QEasingCurve::Linear);
-    m_minAnimation->setStartValue(Style::m_availableScreenWidth);
-    m_minAnimation->setEndValue(Style::minw);
-    m_minAnimation->setDuration(200);
+    m_minAnimation->setEasingCurve(QEasingCurve::OutExpo);
+    m_minAnimation->setStartValue(QRect(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight));
+    m_minAnimation->setEndValue(QRect(this->x(), this->y(), Style::minw, Style::minh));
+    m_minAnimation->setDuration(260);
     m_minAnimation->start();
+    m_fullWindow->hide();
 }
 
 void MainWindow::on_powerOffButton_clicked()

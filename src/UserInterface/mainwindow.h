@@ -52,6 +52,7 @@
 #include "desktop_watcher.h"
 #include "function_button_widget.h"
 #include "letter_button_widget.h"
+#include "animationpage.h"
 
 class MainWindow : public QMainWindow
 {
@@ -190,6 +191,7 @@ private:
     QHBoxLayout *m_rightBottomHorizontalLayout = nullptr;
     QSpacerItem *m_horizontalSpacer_2 = nullptr;
     QPushButton *m_powerOffButton = nullptr;
+    AnimationPage m_animationPage;
 
     bool m_canHide = true;
     bool m_isFullScreen = false;
@@ -208,8 +210,8 @@ private:
     DesktopWatcher *m_desktopWatcher = nullptr;
     QPropertyAnimation *m_enterAnimation = nullptr;
     QPropertyAnimation *m_leaveAnimation = nullptr;
-    QVariantAnimation *m_minAnimation = nullptr;
-    QVariantAnimation *m_maxAnimation = nullptr;
+    QPropertyAnimation *m_minAnimation = nullptr;
+    QPropertyAnimation *m_maxAnimation = nullptr;
     int m_widgetState = -1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;
     LetterButtonWidget *m_letterBtnWid = nullptr;
