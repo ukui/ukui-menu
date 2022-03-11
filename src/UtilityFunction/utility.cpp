@@ -30,7 +30,8 @@
 #include <QScreen>
 
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
-QString projectCodeName = "V10SP1";
+QString g_projectCodeName = "V10SP1";
+bool g_menuStatus = false;
 
 const QPixmap loadSvg(const QString &fileName, const int size)
 {

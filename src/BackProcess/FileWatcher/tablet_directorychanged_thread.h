@@ -35,19 +35,11 @@ public:
 
 private:
     UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
-    QString m_path;
     QSettings *setting = nullptr;
     TabletListView *m_listView = nullptr;
     QStandardItemModel *listmodel = nullptr;
 
     int index = 0;
-
-public Q_SLOTS:
-    /**
-     * @brief Receive the changed directory
-     * @param arg: Desktop file directory
-     */
-    void recvDirectoryPath(QString arg);
 
 Q_SIGNALS:
     /**

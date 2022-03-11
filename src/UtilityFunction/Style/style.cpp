@@ -83,6 +83,8 @@ int Style::appRows = 0;
 bool Style::ScreenRotation = false;
 int Style::AppListItemSizeHeight = 270;
 int Style::AppListViewTopMargin = 0;
+int Style::ScreenWidth = 0;
+int Style::ScreenHeight = 0;
 int Style::AppListViewLeftMargin = 52;
 int Style::AppListViewBottomMargin = 20;
 int Style::AppListViewRightMargin = 0;
@@ -100,7 +102,7 @@ bool Style::IsWideScreen = false;
 
 void Style::initWidStyle()
 {
-    if (!projectCodeName.contains("V10SP1-edu")) {
+    if (!g_projectCodeName.contains("V10SP1-edu")) {
         QVariantList list = getScreenGeometryList();
         m_primaryScreenX = list.at(0).toInt();
         m_primaryScreenY = list.at(1).toInt();
@@ -204,18 +206,24 @@ void Style::initWidStyle()
         m_applistWidHeight = m_applistWidHeight - (m_applistWidHeight % m_applistGridSizeWidth) + 1;
         m_leftWidWidth = (m_availableScreenWidth - m_applistWidWidth) / 2 + 1;
     } else {
-        int screenWidth = QApplication::primaryScreen()->geometry().width();
-        int screenHeight = QApplication::primaryScreen()->geometry().height();
-        AppListViewTopMargin = 70;
+        ScreenWidth = QApplication::primaryScreen()->geometry().width();
+        ScreenHeight = QApplication::primaryScreen()->geometry().height();
+
+        if (ScreenHeight != 1080) {
+            AppListViewTopMargin = 30;
+        } else {
+            AppListViewTopMargin = 70;
+        }
+
         AppListViewLeftMargin = 52;
-        AppListViewBottomMargin = 40;
+        AppListViewBottomMargin = AppListViewTopMargin - 30;
         AppListViewRightMargin = 0;
-        m_leftWidWidth = screenWidth * 0.3;
-        FirsPageViewWidth = screenWidth - m_leftWidWidth - 5;
-        OtherPageViewWidth = screenWidth;
+        m_leftWidWidth = ScreenWidth * 0.3;
+        FirsPageViewWidth = ScreenWidth - m_leftWidWidth - 5;
+        OtherPageViewWidth = ScreenWidth;
         TabletItemSizeWidthFirst = FirsPageViewWidth / 6;
-        TabletItemSizeWidthOther = (screenWidth - 5) / 6;
-        CenterWindHeight =  screenHeight - AppListViewBottomMargin - AppListViewTopMargin;
+        TabletItemSizeWidthOther = (ScreenWidth - 5) / 6;
+        CenterWindHeight =  ScreenHeight - AppListViewBottomMargin - AppListViewTopMargin;
         AppListItemSizeHeight = CenterWindHeight / 4;
         AppListIconSize = 96;
         AppListBigIconSize = 108;

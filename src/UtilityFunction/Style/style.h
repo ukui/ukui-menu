@@ -147,6 +147,8 @@ public:
 
     static int LeftWidgetWidth;
 
+    static int ScreenWidth;
+    static int ScreenHeight;
     static int AppListViewTopMargin;
     static int AppListViewLeftMargin;
     static int AppListViewBottomMargin;

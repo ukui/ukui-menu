@@ -154,7 +154,6 @@ void FunctionWidget::initUi()
     this->setFocusPolicy(Qt::NoFocus);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(0);
-    mainLayout->setContentsMargins(Style::TimeWidgetLeft, Style::TimeWidgetTop, 0, 0);
     this->setLayout(mainLayout);
     //时间+搜索框
     upWidget = new QWidget();

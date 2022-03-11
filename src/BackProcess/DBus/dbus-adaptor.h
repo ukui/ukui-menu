@@ -38,6 +38,9 @@ class MenuAdaptor: public QDBusAbstractAdaptor
                 "    </method>\n"
                 "    <method name=\"ReloadSecurityConfig\"/>\n"
                 "    <method name=\"WinKeyResponse\"/>\n"
+                "    <method name=\"GetMenuStatus\">\n"
+                "      <arg direction=\"out\" type=\"b\"/>\n"
+                "    </method>\n"
                 "  </interface>\n"
                 "")
 public:
@@ -49,6 +52,7 @@ public Q_SLOTS: // METHODS
     QString GetSecurityConfigPath();
     void ReloadSecurityConfig();
     void WinKeyResponse();
+    bool GetMenuStatus();
 Q_SIGNALS: // SIGNALS
 };
 

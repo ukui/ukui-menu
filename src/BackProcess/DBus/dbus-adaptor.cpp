@@ -53,3 +53,9 @@ void MenuAdaptor::WinKeyResponse()
     QMetaObject::invokeMethod(parent(), "WinKeyResponse");
 }
 
+bool MenuAdaptor::GetMenuStatus()
+{
+    bool status;
+    QMetaObject::invokeMethod(parent(), "GetMenuStatus", Q_RETURN_ARG(bool, status));
+    return status;
+}

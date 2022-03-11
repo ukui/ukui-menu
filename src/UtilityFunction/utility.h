@@ -83,7 +83,8 @@ enum PanelPositon {
     RIGHT = 3
 };
 
-extern QString projectCodeName;
+extern QString g_projectCodeName;
+extern bool g_menuStatus;
 
 
 #endif // UTILITY_H

@@ -1,6 +1,7 @@
 #include "dbus.h"
 #include <QFileInfo>
 #include <QDir>
+#include "utility.h"
 
 DBus::DBus(QObject *parent) : QObject(parent)
 {
@@ -20,4 +21,9 @@ QString DBus::GetSecurityConfigPath()
 void DBus::WinKeyResponse()
 {
     Q_EMIT winKeyResponseSignal();
+}
+
+bool DBus::GetMenuStatus()
+{
+    return g_menuStatus;
 }
