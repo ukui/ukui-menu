@@ -159,16 +159,19 @@ void TabletWindow::initTransparency()
     //特效模式,此处Gsetting不明确，需进一步确认
     if (QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit())) {
         m_bgEffect = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-        setOpacityEffect(m_bgEffect->get("transparency").toReal());
-        connect(m_bgEffect, &QGSettings::changed, [this](const QString & key) {
-            if (key == "effect") {
-                if (m_bgEffect->get("effect").toBool()) {
-                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
-                } else {
-                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
+
+        if (m_bgEffect->keys().contains("transparency")) {
+            setOpacityEffect(m_bgEffect->get("transparency").toReal());
+            connect(m_bgEffect, &QGSettings::changed, [this](const QString & key) {
+                if (key == "effect") {
+                    if (m_bgEffect->get("effect").toBool()) {
+                        setOpacityEffect(m_bgEffect->get("transparency").toReal());
+                    } else {
+                        setOpacityEffect(m_bgEffect->get("transparency").toReal());
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }
 
