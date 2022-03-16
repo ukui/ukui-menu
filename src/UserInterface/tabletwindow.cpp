@@ -79,7 +79,6 @@ void TabletWindow::initSize()
 
 void TabletWindow::initUi()
 {
-//    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::NoFocus);
@@ -89,6 +88,58 @@ void TabletWindow::initUi()
     m_buttonWidget->setLayout(m_buttonBoxLayout);
     m_buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
     setOpacityEffect(0.7);
+    fileWatcher();
+    initAppListWidget();
+    setBackground();
+    m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
+    m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
+    initStatusManager();
+    initTransparency();
+    registDbusService();
+    /*//备用待窗管修改后启用
+     connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
+         if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
+         {
+             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
+             if (gsetting.keys().contains("winKeyRelease")) {
+                 if (gsetting.get(QString("winKeyRelease")).toBool()) {
+                     return;
+                 }
+             }
+         }
+         if (QApplication::activeWindow() == this)
+         {
+             myDebug() << "win键触发窗口隐藏事件";
+             this->hide();
+         } else
+         {
+             myDebug() << "win键触发窗口显示事件";
+             this->showPCMenu();
+         }
+     });
+     */
+    initXEventMonitor();
+    ways();
+    buttonWidgetShow();
+    connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
+
+    if (checkapplist()) {
+        directoryChangedSlot();//更新应用列表
+    }
+}
+
+void TabletWindow::initXEventMonitor()
+{
+    //pc下鼠标功能
+    XEventMonitor::instance()->start();
+    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
+            this, SLOT(xkbEventsRelease(QString)));
+    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
+            this, SLOT(xkbEventsPress(QString)));
+}
+
+void TabletWindow::fileWatcher()
+{
     m_configFileWatcher->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
     connect(m_configFileWatcher, &QFileSystemWatcher::fileChanged, this, [ = ]() {
         m_configFileWatcher->addPath(QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini");
@@ -97,16 +148,50 @@ void TabletWindow::initUi()
     m_appFileWatcher->addPaths(QStringList() << QString("/usr/share/applications")
                                << QString(QDir::homePath() + "/.local/share/applications/"));
     connect(m_appFileWatcher, &QFileSystemWatcher::directoryChanged, this, &TabletWindow::directoryChangedSlot);
-    bool ismonitor = m_appListFileWatcher->addPath(QDir::homePath() + "/.config/ukui/desktop_applist");
+    m_appListFileWatcher->addPath(QDir::homePath() + "/.config/ukui/desktop_applist");
     connect(m_appListFileWatcher, &QFileSystemWatcher::fileChanged, this, &TabletWindow::directoryChangedSlot);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::requestUpdateSignal, this, &TabletWindow::requestUpdateSlot);
     connect(m_directoryChangedThread, &TabletDirectoryChangedThread::deleteAppSignal, this, &TabletWindow::requestDeleteAppSlot);
-    initAppListWidget();
-    m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
-    m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
-//    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
-//    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &TabletWindow::animationValueChangedSlot);
+}
 
+void TabletWindow::initTransparency()
+{
+    //特效模式,此处Gsetting不明确，需进一步确认
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit())) {
+        m_bgEffect = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
+
+        if (m_bgEffect->keys().contains("transparency")) {
+            setOpacityEffect(m_bgEffect->get("transparency").toReal());
+            connect(m_bgEffect, &QGSettings::changed, [this](const QString & key) {
+                if (key == "effect") {
+                    if (m_bgEffect->get("effect").toBool()) {
+                        setOpacityEffect(m_bgEffect->get("transparency").toReal());
+                    } else {
+                        setOpacityEffect(m_bgEffect->get("transparency").toReal());
+                    }
+                }
+            });
+        }
+    }
+}
+
+void TabletWindow::initStatusManager()
+{
+    m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
+                                        "/",
+                                        "com.kylin.statusmanager.interface",
+                                        QDBusConnection::sessionBus());
+    QDBusConnection::sessionBus().connect("com.kylin.statusmanager.interface",
+                                          "/",
+                                          "com.kylin.statusmanager.interface",
+                                          "mode_change_signal",
+                                          this,
+                                          SLOT(modelChanged(bool))
+                                         );
+}
+
+void TabletWindow::setBackground()
+{
     if (QGSettings::isSchemaInstalled(QString("org.mate.background").toLocal8Bit())) {
         m_bgSetting = new QGSettings(QString("org.mate.background").toLocal8Bit());
 
@@ -140,34 +225,10 @@ void TabletWindow::initUi()
             }
         });
     }
+}
 
-    m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
-                                        "/",
-                                        "com.kylin.statusmanager.interface",
-                                        QDBusConnection::sessionBus());
-    QDBusConnection::sessionBus().connect("com.kylin.statusmanager.interface",
-                                          "/",
-                                          "com.kylin.statusmanager.interface",
-                                          "mode_change_signal",
-                                          this,
-                                          SLOT(modelChanged(bool))
-                                         );
-
-    //特效模式,此处Gsetting不明确，需进一步确认
-    if (QGSettings::isSchemaInstalled(QString("org.ukui.control-center.personalise").toLocal8Bit())) {
-        m_bgEffect = new QGSettings(QString("org.ukui.control-center.personalise").toLocal8Bit());
-        setOpacityEffect(m_bgEffect->get("transparency").toReal());
-        connect(m_bgEffect, &QGSettings::changed, [this](const QString & key) {
-            if (key == "effect") {
-                if (m_bgEffect->get("effect").toBool()) {
-                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
-                } else {
-                    setOpacityEffect(m_bgEffect->get("transparency").toReal());
-                }
-            }
-        });
-    }
-
+void TabletWindow::registDbusService()
+{
     m_dbus = new DBus;
     new MenuAdaptor(m_dbus);
     QDBusConnection con = QDBusConnection::sessionBus();
@@ -213,7 +274,6 @@ void TabletWindow::initUi()
     connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
             this, SLOT(XkbEventsPress(QString)));
 }
-
 
 bool TabletWindow::checkapplist()
 {
@@ -925,7 +985,7 @@ void TabletWindow::animationValueChangedSlot(const QVariant &value)
     }
 }
 
-void TabletWindow::XkbEventsPress(const QString &keycode)
+void TabletWindow::xkbEventsPress(const QString &keycode)
 {
     myDebug() << keycode;
     QString KeyName;
@@ -943,7 +1003,7 @@ void TabletWindow::XkbEventsPress(const QString &keycode)
     }
 }
 
-void TabletWindow::XkbEventsRelease(const QString &keycode)
+void TabletWindow::xkbEventsRelease(const QString &keycode)
 {
     myDebug() << "触发按键释放" << keycode;
     QString KeyName;
@@ -997,14 +1057,14 @@ void TabletWindow::winKeyReleaseSlot(const QString &key)
             if (gsetting.keys().contains("winKeyRelease"))
                 if (gsetting.get(QString("winKeyRelease")).toBool()) {
                     disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-                               this, SLOT(XkbEventsRelease(QString)));
+                               this, SLOT(xkbEventsRelease(QString)));
                     disconnect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-                               this, SLOT(XkbEventsPress(QString)));
+                               this, SLOT(xkbEventsPress(QString)));
                 } else {
                     connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-                            this, SLOT(XkbEventsRelease(QString)));
+                            this, SLOT(xkbEventsRelease(QString)));
                     connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-                            this, SLOT(XkbEventsPress(QString)));
+                            this, SLOT(xkbEventsPress(QString)));
                 }
         }
     }

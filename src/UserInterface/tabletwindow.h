@@ -134,6 +134,18 @@ protected:
      * @brief initSize
      */
     void initSize();
+
+    void fileWatcher();
+
+    void setBackground();
+
+    void registDbusService();
+
+    void initTransparency();
+
+    void initStatusManager();
+
+    void initXEventMonitor();
     /**
      * @brief Initialize the application list interface
      */
@@ -200,8 +212,8 @@ public Q_SLOTS:
 
     void modelChanged(bool value);
 
-    void XkbEventsPress(const QString &keycode);
-    void XkbEventsRelease(const QString &keycode);
+    void xkbEventsPress(const QString &keycode);
+    void xkbEventsRelease(const QString &keycode);
     void winKeyReleaseSlot(const QString &key);
     void on_pageNumberChanged(bool nextPage);
     void buttonClicked(QAbstractButton *m_pageButton);
