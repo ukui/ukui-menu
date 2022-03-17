@@ -120,7 +120,6 @@ void TabletWindow::initUi()
          }
      });
      */
-    initXEventMonitor();
     ways();
     buttonWidgetShow();
     connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
@@ -128,6 +127,8 @@ void TabletWindow::initUi()
     if (checkapplist()) {
         directoryChangedSlot();//更新应用列表
     }
+
+    initXEventMonitor();
 }
 
 void TabletWindow::initXEventMonitor()
@@ -893,7 +894,7 @@ void TabletWindow::recvHideMainWindowSlot()
 void TabletWindow::btnGroupClickedSlot(int prePageNum, int pageNum)
 {
     qDebug() << "void TabletWindow::btnGroupClickedSlot(int pageNum)";
-    int durationTime = 150;
+    int durationTime = 200;
 
     if (prePageNum == pageNum) {
         durationTime = 1;
