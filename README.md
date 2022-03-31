@@ -34,7 +34,7 @@ Note: build-depends references the paragraph in debian/control.
 
 Note: If you want to run ukui-menu, You just need to execute the ukui-menu command at the terminal.
 
-##DBUS interface
+## DBUS interface
 
 BUS Name：org.ukui.menu
 
@@ -50,7 +50,7 @@ WinKeyResponse () <--->  ukui-menu display hidden state change interface
 
 GetSecurityConfigPath ()  <--->  Get security control profile path
 
-##Configuration file
+## Configuration file
 
 .config/ukui/Ukuimenu.db
 
