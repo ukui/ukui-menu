@@ -19,6 +19,7 @@
 #include "full_letter_widget.h"
 #include <QDebug>
 #include <syslog.h>
+#include "buriedpointdatasend.h"
 
 FullLetterWidget::FullLetterWidget(QWidget *parent) :
     QWidget(parent)
@@ -222,6 +223,12 @@ void FullLetterWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
     execApp(desktopfp);
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/FullLetterWidget/execApplication";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    pointData.otherFunction[0] = desktopfp;
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullLetterWidget::on_setAreaScrollBarValue(int value)

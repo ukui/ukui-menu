@@ -32,6 +32,26 @@
 
 #define myDebug() qDebug() << QString("%1 %2 行 %3").arg(__FILE__).arg(__FUNCTION__).arg(__LINE__)
 
+typedef struct pointDataStruct {
+    QString module;
+    QString function;
+    QString functionNum;
+    QStringList otherFunction;
+    QString errorLevel;
+    QString errorOutput;
+    QString timeStamp;
+    pointDataStruct()
+    {
+        module = QString();
+        function = QString();
+        functionNum = QString();
+        otherFunction = QStringList();
+        errorLevel = QString();
+        errorOutput = QString();
+        timeStamp = QString();
+    }
+} pointDataStruct;
+
 static int collectCount = 0;
 
 const QPixmap loadSvg(const QString &fileName, const int size);

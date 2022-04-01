@@ -52,7 +52,7 @@ PKGCONFIG+=glib-2.0 gio-unix-2.0 gsettings-qt libbamf3 x11 xtst
 
 CONFIG += no_keywords link_pkgconfig
 
-LIBS+=-pthread -luchardet -lukui-log4qt -lukui-com4c -lukui-com4cxx -lpeony
+LIBS+=-pthread -luchardet -lukui-log4qt -lukui-com4c -lukui-com4cxx -lpeony -luploadInterface
 
 desktop_file.files = ukui-menu.desktop
 desktop_file.path = /etc/xdg/autostart
@@ -74,7 +74,7 @@ INSTALLS += \
 FORMS +=
 
 SOURCES += \
-    main.cpp
+    main.cpp \
 
 RESOURCES += \
     res.qrc

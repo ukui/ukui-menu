@@ -21,6 +21,7 @@
 #include "utility.h"
 #include <QDebug>
 #include <QDesktopServices>
+#include "buriedpointdatasend.h"
 
 ListView::ListView(QWidget *parent/*, int width, int height, int module*/):
     KListView(parent)
@@ -108,6 +109,12 @@ void ListView::onClicked(QModelIndex index)
             Q_EMIT sendAppClassificationBtnClicked();
         } else {
             execApp(desktopfp);
+            pointDataStruct pointData;
+            pointData.module = "mainWindow/execApplication";
+            pointData.function = "Clicked";
+            pointData.functionNum = "";
+            pointData.otherFunction.append(desktopfp);
+            BuriedPointDataSend::getInstance()->setPoint(pointData);
         }
     }
 }

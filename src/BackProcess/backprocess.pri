@@ -7,7 +7,8 @@ INCLUDEPATH  += \
     $$PWD/Interface \
     $$PWD/Search \
     $$PWD/tablet \
-    $$PWD/XEventMonitor
+    $$PWD/XEventMonitor \
+    $$PWD/BuriedPoint
 
 HEADERS += \
     $$PWD/DBus/dbus-adaptor.h \
@@ -24,7 +25,8 @@ HEADERS += \
     $$PWD/Search/searchappthread.h \
     $$PWD/XEventMonitor/xeventmonitor.h \
     $$PWD/tablet/getmodeldata.h \
-    $$PWD/tablet/pagemanager.h
+    $$PWD/tablet/pagemanager.h \
+    $$PWD/BuriedPoint/buriedpointdatasend.h
 
 SOURCES += \
     $$PWD/DBus/dbus-adaptor.cpp \
@@ -41,4 +43,5 @@ SOURCES += \
     $$PWD/Search/searchappthread.cpp \
     $$PWD/XEventMonitor/xeventmonitor.cpp \
     $$PWD/tablet/getmodeldata.cpp \
-    $$PWD/tablet/pagemanager.cpp
+    $$PWD/tablet/pagemanager.cpp \
+    $$PWD/BuriedPoint/buriedpointdatasend.cpp

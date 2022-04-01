@@ -33,6 +33,7 @@
 #include <QGroupBox>
 #include <QEventLoop>
 #include <QLabel>
+#include "buriedpointdatasend.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -326,10 +327,20 @@ MainWindow::MainWindow(QWidget *parent) :
             this->hide();
             this->clearFocus();
             m_isFullScreen = false;
+            pointDataStruct pointData;
+            pointData.module = "mainWindow";
+            pointData.function = "winHide";
+            pointData.functionNum = "";
+            BuriedPointDataSend::getInstance()->setPoint(pointData);
         } else if (m_fullWindow->isVisible())
         {
             m_fullWindow->hide();
             m_fullWindow->clearFocus();
+            pointDataStruct pointData;
+            pointData.module = "fullWindow";
+            pointData.function = "winHide";
+            pointData.functionNum = "";
+            BuriedPointDataSend::getInstance()->setPoint(pointData);
             m_isFullScreen = true;
         } else
         {
@@ -337,12 +348,22 @@ MainWindow::MainWindow(QWidget *parent) :
                 this->show();
                 this->raise();
                 this->activateWindow();
+                pointDataStruct pointData;
+                pointData.module = "mainWindow";
+                pointData.function = "winShow";
+                pointData.functionNum = "";
+                BuriedPointDataSend::getInstance()->setPoint(pointData);
                 m_collectPushButton->clicked(true);
                 m_viewWidget->setFocus();
             } else {
                 m_fullWindow->show();
                 //                fullWindow->raise();
                 m_fullWindow->activateWindow();
+                pointDataStruct pointData;
+                pointData.module = "fullWindow";
+                pointData.function = "winShow";
+                pointData.functionNum = "";
+                BuriedPointDataSend::getInstance()->setPoint(pointData);
             }
         }
     });
@@ -880,6 +901,7 @@ void MainWindow::searchAppSlot(QString arg)
 void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
 {
     qDebug() << "void MainWindow::on_selectMenuButton_triggered(QAction *arg1)" << m_allAction << arg1;
+    pointDataStruct pointData;
 
     if (arg1 == m_allAction) {
         m_leftStackedWidget->setCurrentIndex(0);
@@ -889,6 +911,10 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(false);
+        pointData.module = "mainWindow/selectMenuButton";
+        pointData.function = "AllSelect";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     } else if (arg1 == m_letterAction) {
         m_leftStackedWidget->setCurrentIndex(1);
         m_state = 1;
@@ -897,6 +923,10 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
         m_funcAction->setChecked(false);
+        pointData.module = "mainWindow/selectMenuButton";
+        pointData.function = "LetterSelect";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     } else if (arg1 == m_funcAction) {
         m_leftStackedWidget->setCurrentIndex(2);
         m_state = 2;
@@ -905,6 +935,10 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_allAction->setChecked(false);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(true);
+        pointData.module = "mainWindow/selectMenuButton";
+        pointData.function = "FunctionSelect";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     }
 }
 
@@ -954,6 +988,10 @@ void MainWindow::on_collectPushButton_clicked()
     m_rightStackedWidget->setCurrentIndex(0);
     m_collectPushButton->setStyleSheet("color:#3790FA");
     m_recentPushButton->setStyleSheet("color:white");
+    pointDataStruct pointData;
+    pointData.module = "mainWindow/collectPushButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
 }
 
 void MainWindow::on_recentPushButton_clicked()
@@ -961,18 +999,32 @@ void MainWindow::on_recentPushButton_clicked()
     m_rightStackedWidget->setCurrentIndex(1);
     m_collectPushButton->setStyleSheet("color:white");
     m_recentPushButton->setStyleSheet("color:#3790FA");
+    pointDataStruct pointData;
+    pointData.module = "mainWindow/recentPushButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
 }
 
 void MainWindow::on_cancelSearchPushButton_clicked()
 {
     m_topStackedWidget->setCurrentIndex(0);
     m_lineEdit->clear();
+    pointDataStruct pointData;
+    pointData.module = "mainWindow/cancelSearchPushButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void MainWindow::on_searchPushButton_clicked()
 {
     m_topStackedWidget->setCurrentIndex(1);
     m_lineEdit->setFocus();
+    pointDataStruct pointData;
+    pointData.module = "mainWindow/searchPushButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void MainWindow::on_minMaxChangeButton_clicked()
@@ -993,6 +1045,11 @@ void MainWindow::on_minMaxChangeButton_clicked()
     m_maxAnimation->setDuration(260);
     m_maxAnimation->start();
     this->hide();
+    pointDataStruct pointData;
+    pointData.module = "mainWindow/minMaxChangeButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void MainWindow::showWindow()
@@ -1001,12 +1058,22 @@ void MainWindow::showWindow()
         m_fullWindow->raise();
         m_fullWindow->showNormal();
         m_fullWindow->activateWindow();
+        pointDataStruct pointData;
+        pointData.module = "fullWindow";
+        pointData.function = "Show";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     } else {
         this->raise();
         this->showNormal();
         this->activateWindow();
         m_collectPushButton->clicked(true);
         m_viewWidget->setFocus();
+        pointDataStruct pointData;
+        pointData.module = "mainWindow";
+        pointData.function = "Show";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     }
 }
 
@@ -1016,10 +1083,20 @@ void MainWindow::hideWindow()
         m_fullWindow->hide();
         this->clearFocus();
         m_isFullScreen = true;
+        pointDataStruct pointData;
+        pointData.module = "fullWindow";
+        pointData.function = "Hide";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     } else {
         this->hide();
         this->clearFocus();
         m_isFullScreen = false;
+        pointDataStruct pointData;
+        pointData.module = "mainWindow";
+        pointData.function = "Hide";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     }
 }
 
@@ -1068,11 +1145,21 @@ void MainWindow::showNormalWindow()
 void MainWindow::on_powerOffButton_clicked()
 {
     QProcess::startDetached(QString("ukui-session-tools"));
+    pointDataStruct pointData;
+    pointData.module = "mainWindow/powerOffButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void MainWindow::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
     RightClickMenu m_otherMenu(this);
     m_otherMenu.showShutdownMenu(this->mapToGlobal(m_centralwidget->rect().bottomRight()));
+    pointDataStruct pointData;
+    pointData.module = "mainWindow/powerOffButton";
+    pointData.function = "RightClicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
 }

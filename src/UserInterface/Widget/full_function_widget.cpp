@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QPainter>
+#include "buriedpointdatasend.h"
 
 FullFunctionWidget::FullFunctionWidget(QWidget *parent) :
     QWidget(parent)
@@ -218,6 +219,12 @@ void FullFunctionWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
     execApp(desktopfp);
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/FullFunctionWidget/execApplication";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    pointData.otherFunction[0] = desktopfp;
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullFunctionWidget::on_setAreaScrollBarValue(int value)

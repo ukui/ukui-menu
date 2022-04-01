@@ -20,6 +20,7 @@
 #include "style.h"
 #include "utility.h"
 #include <QDebug>
+#include "buriedpointdatasend.h"
 
 FullSearchResultWidget::FullSearchResultWidget(QWidget *parent) :
     QWidget(parent)
@@ -153,6 +154,12 @@ void FullSearchResultWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
     execApp(desktopfp);
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/FullLetterWidget/execApplication";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    pointData.otherFunction[0] = desktopfp;
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullSearchResultWidget::updateAppListView(QVector<QStringList> arg)
