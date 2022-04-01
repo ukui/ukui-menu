@@ -168,11 +168,11 @@ void ListView::keyPressEvent(QKeyEvent *e)
             }
 
            case Qt::Key_Right: {
-           break;
+                break;
             }
 
            case Qt::Key_Left: {
-           break;
+                break;
             }
 
            default:
