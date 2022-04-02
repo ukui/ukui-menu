@@ -82,17 +82,19 @@ void TabletWindow::initUi()
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::NoFocus);
+    m_animationPage.setParent(this);
     m_firstPageWidget->installEventFilter(this);
     m_buttonBoxLayout->setAlignment(Qt::AlignHCenter);
     m_buttonBoxLayout->setSpacing(0);
     m_buttonWidget->setLayout(m_buttonBoxLayout);
     m_buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_scrollAnimation = new QPropertyAnimation(&m_animationPage, "pos");
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TabletWindow::animationFinishSlot);
+    m_scrollAnimation->setEasingCurve(QEasingCurve::OutExpo);
     setOpacityEffect(0.7);
     fileWatcher();
     initAppListWidget();
     setBackground();
-    m_scrollAnimation = new QPropertyAnimation(m_scrollArea->horizontalScrollBar(), "value");
-    m_scrollAnimation->setEasingCurve(QEasingCurve::Linear);
     initStatusManager();
     initTransparency();
     registDbusService();
@@ -118,7 +120,6 @@ void TabletWindow::initUi()
          }
      });
      */
-    initXEventMonitor();
     ways();
     buttonWidgetShow();
     connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
@@ -126,6 +127,8 @@ void TabletWindow::initUi()
     if (checkapplist()) {
         directoryChangedSlot();//更新应用列表
     }
+
+    initXEventMonitor();
 }
 
 void TabletWindow::initXEventMonitor()
@@ -436,7 +439,7 @@ void TabletWindow::reloadAppList()
 
     for (int i = 1; i < vector.size(); i++) {
         if (!vector.at(i).isEmpty()) {
-            QLayoutItem *widItem = m_scrollAreaWidLayout->itemAt(i * 2);
+            QLayoutItem *widItem = m_scrollAreaWidLayout->itemAt(i);
             QWidget *wid = widItem->widget();
             TabletListView *m_listview = qobject_cast<TabletListView *>(wid);
             m_listview->updateData(vector.at(i));
@@ -483,10 +486,9 @@ void TabletWindow::fillAppList()
         QStringList applist = vector.at(i);
 
         if (!applist.isEmpty()) {
-            if (!m_isFirstPage) {
-                insertAppList(QStringList());
-            }
-
+//            if (!m_isFirstPage) {
+//                insertAppList(QStringList());
+//            }
             insertAppList(applist);
         }
     }
@@ -527,27 +529,29 @@ void TabletWindow::requestDeleteAppSlot()
 void TabletWindow::on_pageNumberChanged(bool nextPage)
 {
 //    qDebug() << "void TabletWindow::on_pageNumberChanged(bool nextPage)";
-    if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
-        if (nextPage) {
-            m_curPageNum++;
+//    if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
+    int preNum = m_curPageNum;
 
-            if (m_curPageNum > (m_scrollAreaWidLayout->count() - 1) / 2) {
-                m_curPageNum = (m_scrollAreaWidLayout->count() - 1) / 2;
-                return;
-            }
-        } else {
-            m_curPageNum--;
+    if (nextPage) {
+        m_curPageNum++;
 
-            if (m_curPageNum < 0) {
-                m_curPageNum = 0;
-                return;
-            }
+        if (m_curPageNum > (m_scrollAreaWidLayout->count() - 1)) {
+            m_curPageNum = (m_scrollAreaWidLayout->count() - 1);
+            return;
         }
+    } else {
+        m_curPageNum--;
 
-        m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
-        btnGroupClickedSlot(m_curPageNum * 2);
-        pageNumberChanged(m_curPageNum + 1);
+        if (m_curPageNum < 0) {
+            m_curPageNum = 0;
+            return;
+        }
     }
+
+    m_scrollArea->horizontalScrollBar()->setMaximum(m_scrollAreaWidLayout->count() * 1920);
+    btnGroupClickedSlot(preNum, m_curPageNum);
+    pageNumberChanged(m_curPageNum + 1);
+//    }
 }
 
 bool TabletWindow::event(QEvent *event)
@@ -569,8 +573,10 @@ bool TabletWindow::event(QEvent *event)
     }
 
     if (event->type() == QEvent::MouseButtonPress) {
-        this->hide();
-        g_menuStatus = false;
+        if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
+            this->hide();
+            g_menuStatus = false;
+        }
     }
 
     return QWidget::event(event);
@@ -885,17 +891,31 @@ void TabletWindow::recvHideMainWindowSlot()
     g_menuStatus = false;
 }
 
-void TabletWindow::btnGroupClickedSlot(int pageNum)
+void TabletWindow::btnGroupClickedSlot(int prePageNum, int pageNum)
 {
     qDebug() << "void TabletWindow::btnGroupClickedSlot(int pageNum)";
-    m_beginPos = m_scrollArea->horizontalScrollBar()->sliderPosition();
-    m_endPos = m_scrollAreaWidLayout->itemAt(pageNum)->widget()->x();
-    m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_scrollAnimation->stop();
-    m_scrollAnimation->setDuration(500);
-    m_scrollAnimation->setStartValue(m_beginPos);
-    m_scrollAnimation->setEndValue(m_endPos);
-    m_scrollAnimation->start();
+    int durationTime = 200;
+
+    if (prePageNum == pageNum) {
+        durationTime = 1;
+    }
+
+    if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
+        QPixmap p = m_scrollAreaWid->grab(m_scrollAreaWid->rect());
+        m_animationPage.setFixedSize(m_scrollAreaWid->size());
+        m_animationPage.setPixmap(p);
+        m_beginPos = m_scrollArea->horizontalScrollBar()->sliderPosition();
+        m_endPos = m_scrollAreaWidLayout->itemAt(pageNum)->widget()->x();
+        m_scrollArea->horizontalScrollBar()->setValue(m_endPos);
+        m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        m_scrollAnimation->setDuration(durationTime);
+        m_scrollAnimation->setStartValue(QPoint(-m_beginPos, m_scrollArea->y()));
+        m_scrollAnimation->setEndValue(QPoint(-m_endPos, m_scrollArea->y()));
+        m_scrollAnimation->start();
+        m_animationPage.show();
+        m_animationPage.raise();
+        m_scrollAreaWid->hide();
+    }
 }
 
 void TabletWindow::buttonWidgetShow()
@@ -934,35 +954,41 @@ void TabletWindow::buttonWidgetShow()
         m_buttonGroup->addButton(m_pageButton, page);
     }
 
-    btnGroupClickedSlot(0);
+    btnGroupClickedSlot(0, 0);
     m_curPageNum = 0;
     connect(m_buttonGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), this, &TabletWindow::buttonClicked);
 }
 
 void TabletWindow::buttonClicked(QAbstractButton *button)
 {
-    int idd = m_buttonGroup->id(button);
-    Style::nowpagenum = idd;
+    if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
+        int idd = m_buttonGroup->id(button);
+        int preNum = m_curPageNum;
+        Style::nowpagenum = idd;
 
 //    QDBusReply<bool> res = usrInterface->call("get_current_tabletmode");
-    for (int page = 1; page <= m_pagemanager->getAppPageVector().size(); page++) {
-        if (idd == page) {
-            m_buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
-                    "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
-                    "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/selected.svg);}");
-        } else {
-            m_buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/select.svg);}"
-                    "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/select.svg);}"
-                    "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/select.svg);}");
+        for (int page = 1; page <= m_pagemanager->getAppPageVector().size(); page++) {
+            if (idd == page) {
+                m_buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/selected.svg);}"
+                        "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/selected.svg);}"
+                        "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/selected.svg);}");
+            } else {
+                m_buttonGroup->button(page)->setStyleSheet("QPushButton{border-image:url(:/data/img/mainviewwidget/select.svg);}"
+                        "QPushButton:hover{border-image: url(:/data/img/mainviewwidget/select.svg);}"
+                        "QPushButton:pressed{border-image: url(:/data/img/mainviewwidget/select.svg);}");
+            }
         }
-    }
 
-    m_curPageNum = idd - 1;
-    btnGroupClickedSlot(m_curPageNum * 2);
+        m_curPageNum = idd - 1;
+        btnGroupClickedSlot(preNum, m_curPageNum);
+    }
 }
 
 void TabletWindow::animationFinishSlot()
 {
+    m_scrollAreaWid->show();
+    m_scrollAreaWid->raise();
+    m_animationPage.hide();
 //    if(m_scrollArea->horizontalScrollBar()->value()==m_endPos ||
 //            m_scrollArea->horizontalScrollBar()->value()==m_scrollArea->horizontalScrollBar()->maximum())
 //    {

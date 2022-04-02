@@ -33,3 +33,24 @@ Note: build-depends references the paragraph in debian/control.
 > sudo make install
 
 Note: If you want to run ukui-menu, You just need to execute the ukui-menu command at the terminal.
+
+## DBUS interface
+
+BUS Name：org.ukui.menu
+
+path：/org/ukui/menu
+
+Interface：org.ukui.menu
+
+Method name：
+
+GetMenuStatus () <--->  Get ukui-menu display hidden status
+
+WinKeyResponse () <--->  ukui-menu display hidden state change interface
+
+GetSecurityConfigPath ()  <--->  Get security control profile path
+
+## Configuration file
+
+.config/ukui/Ukuimenu.db
+

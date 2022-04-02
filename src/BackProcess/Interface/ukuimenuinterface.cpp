@@ -370,6 +370,7 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
         m_filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
         m_filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
         m_filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
+        m_filePathList.removeAll("/usr/share/applications/kylin-installer.desktop");
         QStringList desktopList;
 
         for (int i = 0; i < m_filePathList.count(); ++i) {
