@@ -167,6 +167,14 @@ void ListView::keyPressEvent(QKeyEvent *e)
                 break;
             }
 
+            case Qt::Key_Right: {
+                break;
+            }
+
+            case Qt::Key_Left: {
+                break;
+            }
+
             default:
                 return QListView::keyPressEvent(e);
                 break;
