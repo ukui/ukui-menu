@@ -146,6 +146,11 @@ void FullLetterWidget::initVerticalScrollBar()
 void FullLetterWidget::on_powerOffButton_clicked()
 {
     QProcess::startDetached(QString("ukui-session-tools"));
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/FullLetterWidget/powerOffButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullLetterWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
@@ -153,6 +158,11 @@ void FullLetterWidget::on_powerOffButton_customContextMenuRequested(const QPoint
     RightClickMenu m_otherMenu(this);
     m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
     qDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/FullLetterWidget/powerOffButton";
+    pointData.function = "RightClicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullLetterWidget::setFocusToThis()
