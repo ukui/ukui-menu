@@ -1,13 +1,18 @@
 #include "buriedpointdatasend.h"
 #include <QHostInfo>
 #include <QString>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QDateTime>
+#include <QTimeZone>
 
 Q_GLOBAL_STATIC(BuriedPointDataSend, buriedPointDataSend)
 
 BuriedPointDataSend::BuriedPointDataSend()
 {
     QString path = QDir::homePath() + "/menuUploadMessage/";
-    m_sendDataInterface = new UploadMessageInterface(getgid(), "ukui-menu", "menuData", path);
+    m_sendDataInterface = new UploadMessageInterface(getpid(), "ukui-menu", "menuData", path);
 }
 
 BuriedPointDataSend::~BuriedPointDataSend()
@@ -62,9 +67,10 @@ void BuriedPointDataSend::setPoint(const pointDataStruct &data)
     jsonObj.insert("otherFunction", otherFunction);
     jsonObj.insert("errorLevel", QJsonValue(data.errorLevel));
     jsonObj.insert("errorOutput", QJsonValue(data.errorOutput));
-    jsonObj.insert("timeStamp", time);
+    jsonObj.insert("createTimeStamp", QJsonValue(time));//注意该字段名称不能修改，否则会报invalid
     //  将数据转化为QString
     QString informationData(QJsonDocument(jsonObj).toJson(QJsonDocument::Compact));
+    qDebug() << "jsonObj:" << jsonObj;
     m_sendDataInterface->UploadMessage(informationData);
 }
 

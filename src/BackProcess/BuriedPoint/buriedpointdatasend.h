@@ -6,6 +6,7 @@
 #include <QDir>
 #include <uploadmessage_interface.h>
 #include "src/UtilityFunction/utility.h"
+#include "unistd.h"
 
 class BuriedPointDataSend : public QObject
 {
