@@ -46,7 +46,6 @@ SOURCES += \
     $$PWD/tablet/pagemanager.cpp \
     $$PWD/BuriedPoint/buriedpointdatasend.cpp
 
-unix:!macx: LIBS += -L$$PWD/../../lib/ -luploadInterface
 
 INCLUDEPATH += $$PWD/../
 DEPENDPATH += $$PWD/../
