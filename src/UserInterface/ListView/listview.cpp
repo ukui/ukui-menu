@@ -163,19 +163,19 @@ void ListView::keyPressEvent(QKeyEvent *e)
                     break;
                 }
 
-
                 return QListView::keyPressEvent(e);
                 break;
             }
 
-           case Qt::Key_Right: {
-           break;
+            case Qt::Key_Right: {
+                break;
             }
 
-           case Qt::Key_Left: {
-           break;
+            case Qt::Key_Left: {
+                break;
             }
-                default:
+
+            default:
                 return QListView::keyPressEvent(e);
                 break;
         }

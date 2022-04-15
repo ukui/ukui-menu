@@ -124,6 +124,7 @@ private:
     TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
     QSettings *m_disableAppSet = nullptr;
     DBus *m_dbus = nullptr;
+    QLabel m_animationPage;
 
 protected:
     /**
@@ -192,7 +193,7 @@ public Q_SLOTS:
      * @brief Respond to button click
      * @param btn: QButtonGroup button
      */
-    void btnGroupClickedSlot(int pageNum);
+    void btnGroupClickedSlot(int prePageNum, int pageNum);
 
     void reloadAppList();
 
@@ -222,7 +223,6 @@ public Q_SLOTS:
     void requestUpdateSlot(QString desktopfp);
     void directoryChangedSlot();
     void reloadWidget();
-
 Q_SIGNALS:
     /**
      * @brief Send a hidden main window signal to the MainViewWidget
