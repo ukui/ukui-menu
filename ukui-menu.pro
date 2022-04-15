@@ -57,17 +57,6 @@ LIBS+=-pthread -luchardet -lukui-log4qt -lukui-com4c -lukui-com4cxx -lpeony
 desktop_file.files = ukui-menu.desktop
 desktop_file.path = /etc/xdg/autostart
 
-header.files += src/uploadmessage_interface.h
-header.path = /usr/include
-INSTALLS += header
-
-# Default rules for deployment.
-targetlib.files += lib/*
-targetlib.path = /usr/lib
-
-INSTALLS += targetlib
-
-
 INSTALLS += \
     target desktop_file
 
