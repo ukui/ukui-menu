@@ -174,8 +174,20 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
         painter->restore();
         painter->save();
+
         //        painter->setPen(QPen(option.palette.text().color()));
-        painter->setPen(QPen(Qt::white));
+        if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+            QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+
+            if (gsetting.keys().contains("styleName")) {
+                if (/*gsetting.get("styleName").toString() == "ukui-light"*/false) {
+                    painter->setPen(QPen(Qt::black));
+                } else {
+                    painter->setPen(QPen(Qt::white));
+                }
+            }
+        }
+
         painter->setBrush(Qt::NoBrush);
         painter->drawText(textRect, Qt::AlignHCenter | Qt::AlignTop, appnameElidedText);
         //        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter,appname);

@@ -46,19 +46,17 @@ void SplitBarFrame::initAppBtn()
     layout->setSpacing(6);
     m_textLabel->setAutoFillBackground(false);
     m_textLabel->setAlignment(Qt::AlignCenter);
-
     m_textLabel->setText(m_category);
-
     m_textLabel->adjustSize();
     QPalette pe = m_textLabel->palette();
-    pe.setColor(QPalette::WindowText, Qt::white);
+    pe.setColor(QPalette::WindowText, /*pe.color(QPalette::Text)*/Qt::white);
     m_textLabel->setPalette(pe);
     m_line->setFrameShape(QFrame::HLine);
     m_line->setFixedHeight(1);
     m_line->setFixedSize(m_width - m_textLabel->width() - 15, 1);
     m_line->setEnabled(false);
     QPalette linePe = m_line->palette();
-    QColor color(255, 255, 255);
+    QColor color = /*linePe.color(QPalette::Text)*/Qt::white;
     color.setAlphaF(0.10);
     linePe.setColor(QPalette::WindowText, color);
     m_line->setPalette(linePe);

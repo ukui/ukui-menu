@@ -123,6 +123,7 @@ public Q_SLOTS:
     void resetFunctionPage();
     void minAnimationFinished();
     void maxAnimationFinished();
+    void changeStyle();
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
 
@@ -157,7 +158,7 @@ private:
     QLabel *m_minSelectTextLabel = nullptr;
     QSpacerItem *m_horizontalSpacer = nullptr;
     QPushButton *m_searchPushButton = nullptr;
-    QToolButton *m_minSelectButton = nullptr;
+    QPushButton *m_minSelectButton = nullptr;
     QToolButton *m_selectMenuButton = nullptr;
     QWidget *m_minSearchPage = nullptr;
     QHBoxLayout *m_leftTopSearchHorizontalLayout = nullptr;
@@ -177,8 +178,8 @@ private:
     QHBoxLayout *m_rightTopHorizontalLayout = nullptr;
     QVBoxLayout *m_rightCollectLayout = nullptr;
     QVBoxLayout *m_rightRecentLayout = nullptr;
-    QPushButton *m_collectPushButton = nullptr;
-    QPushButton *m_recentPushButton = nullptr;
+    QLabel *m_collectPushButton = nullptr;
+    QLabel *m_recentPushButton = nullptr;
     QSpacerItem *m_horizontalSpacer_3 = nullptr;
     QPushButton *m_minMaxChangeButton = nullptr;
     QSpacerItem *m_verticalSpacer = nullptr;

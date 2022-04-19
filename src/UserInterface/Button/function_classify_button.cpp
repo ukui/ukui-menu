@@ -45,15 +45,14 @@ FunctionClassifyButton::FunctionClassifyButton(int width,
     this->setFocusPolicy(Qt::NoFocus);
     m_iconLabel->setFixedSize(m_iconSize, m_iconSize);
     m_textLabel->adjustSize();
+    m_textLabel->setText(m_category);
+    m_textLabel->setAlignment(Qt::AlignCenter);
 
     if (m_fullscreen) {
         QPalette pe = m_textLabel->palette();
-        pe.setColor(QPalette::ButtonText, QColor(Qt::white));
+        pe.setColor(QPalette::ButtonText, Qt::white);
         m_textLabel->setPalette(pe);
     }
-
-    m_textLabel->setText(m_category);
-    m_textLabel->setAlignment(Qt::AlignCenter);
 
     if (m_fullscreen) {
         updateIconState(Normal);
@@ -105,9 +104,9 @@ void FunctionClassifyButton::paintEvent(QPaintEvent *e)
     if (m_fullscreen && (option.state & QStyle::State_On)) {
         painter.save();
         painter.setPen(Qt::NoPen);
-        //        QColor color = option.palette.color(QPalette::Text);
+        QColor color = option.palette.color(QPalette::Text);
         //        color.setAlphaF(0.15);
-        //        painter.setBrush(color);
+        painter.setBrush(color);
         painter.setOpacity(0.15);
         painter.setBrush(Qt::white);
         painter.drawRoundedRect(option.rect, 4, 4);
@@ -199,13 +198,11 @@ void FunctionClassifyButton::updateIconState()
 //    const auto ratio = devicePixelRatioF();
 //    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize * ratio);
 //    QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
-
 //    if (gsetting.get("style-name").toString() == "ukui-light") { //反黑
 //        pixmap = drawSymbolicBlackColoredPixmap(pixmap);
 //    } else {
 //        pixmap = drawSymbolicColoredPixmap(pixmap); //反白
 //    }
-
 //    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
 //    m_iconLabel->setPixmap(pixmap);
 }
@@ -242,10 +239,8 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
 
 //    const auto ratio = devicePixelRatioF();
 //    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/%1-%2.svg").arg(m_category).arg(picState), m_iconSize * ratio);
-
 //    if (!m_fullscreen) {
 //        QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
-
 //        if (gsetting.get("style-name").toString() == "ukui-light") { //反黑
 //            pixmap = drawSymbolicBlackColoredPixmap(pixmap);
 //        } else {
@@ -254,7 +249,6 @@ void FunctionClassifyButton::updateIconState(const FunctionClassifyButton::State
 //    } else {
 //        pixmap = drawSymbolicColoredPixmap(pixmap);    //反白
 //    }
-
 //    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
 //    m_iconLabel->setPixmap(pixmap);
     updateTextState(state);

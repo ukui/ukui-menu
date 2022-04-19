@@ -23,6 +23,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QIcon>
 #include <gio/gdesktopappinfo.h>
 #include "ukuimenuinterface.h"
 
@@ -70,6 +71,7 @@ void execApp(QString desktopfp);
 bool checkOsRelease();//区分社区办与商业版
 
 void centerToScreen(QWidget *widget);
+QIcon getCurIcon(const QString &iconPath, bool autoSet);
 
 //获取用户图像
 QString getUserIcon();

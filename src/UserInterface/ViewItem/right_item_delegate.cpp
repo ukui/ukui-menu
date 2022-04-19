@@ -37,16 +37,15 @@ void RightItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         painter->setRenderHint(QPainter::Antialiasing);
         painter->save();
         painter->setPen(QPen(Qt::NoPen));
-        painter->setBrush(Qt::black);
+        painter->setBrush(option.palette.base().color());
 
         if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
-            painter->setOpacity(0.6);
-        }
-        //        else if(option.state & QStyle::State_DownArrow)
-        //        {
-        //            painter->setOpacity(0.8);
-        //        }
-        else {
+            if (option.state & QStyle::State_Selected) {
+                painter->setOpacity(0.8);
+            } else {
+                painter->setOpacity(0.6);
+            }
+        } else {
             painter->setOpacity(0.4);
         }
 
@@ -150,8 +149,8 @@ void RightItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
         painter->restore();
         painter->save();
-        //        painter->setPen(QPen(option.palette.text().color()));
-        painter->setPen(QPen(Qt::white));
+        painter->setPen(QPen(option.palette.text().color()));
+//        painter->setPen(QPen(Qt::white));
         painter->setBrush(Qt::NoBrush);
         painter->drawText(textRect, Qt::AlignHCenter | Qt::AlignTop, appnameElidedText);
         //        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter,appname);

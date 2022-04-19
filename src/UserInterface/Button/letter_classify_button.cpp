@@ -32,6 +32,9 @@ LetterClassifyButton::LetterClassifyButton(QWidget *parent,
         QFont font;
         font.setPixelSize(Style::LeftLetterFontSize);
         this->setFont(font);
+        QPalette pe = this->palette();
+        pe.setColor(QPalette::ButtonText, Qt::white);
+        this->setPalette(pe);
     }
 
     this->setText(letter);
