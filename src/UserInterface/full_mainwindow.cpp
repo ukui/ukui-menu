@@ -102,6 +102,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     fullSelectMenuButton = new QToolButton(centralwidget);
     QIcon menuBottonIcon;
     fullSelectMenuButton->setStyleSheet("QToolButton{background:transparent;}");
+    fullSelectMenuButton->setProperty("useIconHighlightEffect", 0x0);
     fullSelectMenuButton->setFixedSize(20, 20);
     fullSelectMenuButton->setObjectName(QString::fromUtf8("fullSelectMenuButton"));
     fullSelectMenuButton->setPopupMode(QToolButton::InstantPopup);
@@ -111,9 +112,8 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     palete.setColor(QPalette::NoRole, Qt::white);
     fullSelectMenuButton->setPalette(palete);
     minPushButton = new QPushButton(centralwidget);
-    minPushButton->setStyleSheet("QPushButton{border: transparent;}");
     minPushButton->setObjectName(QString::fromUtf8("minPushButton"));
-    minPushButton->setMinimumSize(QSize(48, 48));
+    minPushButton->setFixedSize(QSize(48, 48));
     minPushButton->setFlat(true);
     minPushButton->installEventFilter(this);
     m_fullStackedWidget = new QStackedWidget(centralwidget);
@@ -156,9 +156,6 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     setTabOrder(fullSelectToolButton, fullSelectMenuButton);
     setTabOrder(fullSelectMenuButton, minPushButton);
     changeStyle();
-    //    QAction *action = new QAction(this);
-    //    action->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-search.svg"));
-    //    lineEdit->addAction(action,QLineEdit::TrailingPosition);
     connect(m_lineEdit, &QLineEdit::textChanged, this, &FullMainWindow::searchAppSlot);
     connect(this, &FullMainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &FullMainWindow::recvSearchResult);
@@ -222,6 +219,7 @@ void FullMainWindow::changeStyle()
     fullSelectToolButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
     fullSelectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/full-drop-down.svg", false));
     minPushButton->setIcon(getCurIcon(":/data/img/mainviewwidget/full-min.svg", false));
+    minPushButton->setProperty("useIconHighlightEffect", 0x0);
 }
 
 void FullMainWindow::on_minPushButton_clicked()

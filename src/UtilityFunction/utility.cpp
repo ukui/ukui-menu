@@ -116,7 +116,8 @@ QIcon getCurIcon(const QString &iconPath, bool autoSet)
         QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
 
         if (gsetting.keys().contains(QString("styleName"))) {
-            if (gsetting.get("style-name").toString() == "ukui-light") {
+            if (gsetting.get("style-name").toString() == "ukui-light"
+                || gsetting.get("style-name").toString() == "ukui-default") {
                 pixmap = drawSymbolicBlackColoredPixmap(pixmap);
             } else {
                 pixmap = drawSymbolicColoredPixmap(pixmap);

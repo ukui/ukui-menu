@@ -111,7 +111,6 @@ public Q_SLOTS:
     void updateCollectView();
     void on_minSelectButton_clicked();
     void updateMinAllView();
-    void showNormalWindow();
     void updateView();
     void recvFunctionBtnSignal(QString btnname);
     void primaryScreenChangeSlot();
@@ -144,6 +143,8 @@ private Q_SLOTS:
     void appClassificationBtnClickedSlot();
 
     void animationFinishedSLot();
+
+    void showNormalWindowSlot();
 
 private:
 

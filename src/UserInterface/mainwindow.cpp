@@ -130,8 +130,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_mainRightVerticalLayout->setContentsMargins(8, 8, 8, 8);
     m_mainRightVerticalLayout_1 = new QVBoxLayout();
     m_rightTopHorizontalLayout = new QHBoxLayout();
-    m_rightTopHorizontalLayout->setSpacing(24);
-    m_rightTopHorizontalLayout->setContentsMargins(8, 0, 8, 0);
+    m_rightTopHorizontalLayout->setSpacing(30);
+    m_rightTopHorizontalLayout->setContentsMargins(8, 0, 10, 0);
     //收藏按键
     m_collectPushButton = new QLabel(m_centralwidget);
     m_collectPushButton->setFixedHeight(34);
@@ -152,8 +152,6 @@ MainWindow::MainWindow(QWidget *parent) :
     m_rightTopHorizontalLayout->addWidget(m_recentPushButton);
     m_rightTopHorizontalLayout->addItem(m_horizontalSpacer_3);
     m_rightTopHorizontalLayout->addWidget(m_minMaxChangeButton);
-    m_rightTopHorizontalLayout->setSpacing(40);
-    m_rightTopHorizontalLayout->setContentsMargins(10, 0, 0, 0);
     m_verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     //右侧列表区
     m_rightStackedWidget = new QStackedWidget(m_centralwidget);
@@ -339,7 +337,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchAppSlot);
     connect(this, &MainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &MainWindow::recvSearchResult);
-    connect(m_fullWindow, &FullMainWindow::showNormalWindow, this, &MainWindow::showNormalWindow);
+    connect(m_fullWindow, &FullMainWindow::showNormalWindow, this, &MainWindow::showNormalWindowSlot);
     connect(m_fullWindow, &FullMainWindow::sendUpdateOtherView, this, &MainWindow::updateMinAllView);
     connect(m_minSelectButton, &QToolButton::clicked, this, &MainWindow::on_minSelectButton_clicked);
     connect(m_selectMenuButton, &QToolButton::triggered, this, &MainWindow::on_selectMenuButton_triggered);
@@ -467,7 +465,8 @@ void MainWindow::changeStyle()
         QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
 
         if (gsetting.keys().contains(QString("styleName"))) {
-            if (gsetting.get("style-name").toString() == "ukui-light") {
+            if (gsetting.get("style-name").toString() == "ukui-light"
+                || gsetting.get("style-name").toString() == "ukui-default") {
                 buttonColorDefault = "rgba(16, 23, 29, 0.06)";
                 buttonColorHover = "rgba(16, 23, 29, 0.12)";
                 buttonColorPress = "rgba(16, 23, 29, 0.17)";
@@ -1093,11 +1092,13 @@ void MainWindow::repaintWidget()
     m_fullWindow->setFixedSize(width, height);
     m_fullWindow->repaintWidget();
 }
-void MainWindow::showNormalWindow()
+void MainWindow::showNormalWindowSlot()
 {
+    myDebug() << "Style::m_availableScreenWidth" << Style::m_availableScreenWidth << "Style::m_availableScreenHeight" << Style::m_availableScreenHeight;
     m_animationPage.setGeometry(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight);
     m_animationPage.show();
     m_animationPage.raise();
+    myDebug() << m_animationPage.rect();
     QEventLoop loop;
     QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();
