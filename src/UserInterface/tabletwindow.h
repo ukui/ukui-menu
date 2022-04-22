@@ -46,12 +46,14 @@
 #include "tabletlistview.h"
 #include "pagemanager.h"
 #include "tablet_directorychanged_thread.h"
-#include "dbus.h"
-#include "dbus-adaptor.h"
+#include <QtDBus>
+//#include "dbus.h"
+//#include "dbus-adaptor.h"
 
 class TabletWindow : public QWidget
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "com.ukui.menu")
 
 public:
     explicit TabletWindow(QWidget *parent = nullptr);
@@ -123,8 +125,9 @@ private:
     QFileSystemWatcher *m_configFileWatcher = nullptr;
     TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
     QSettings *m_disableAppSet = nullptr;
-    DBus *m_dbus = nullptr;
+
     QLabel m_animationPage;
+//    DBus *m_dbus = nullptr;
 
 protected:
     /**
@@ -183,6 +186,8 @@ protected:
 
     bool checkapplist();
 
+    void menuStatus();
+
 public Q_SLOTS:
     /**
      * @brief Open the application
@@ -240,6 +245,8 @@ Q_SIGNALS:
     void sendDirectoryPath(QString arg);
 
     void UpdateSignal();
+
+    void menuChangeStatus(bool flag);
 };
 
 #endif // FULLFUNCTIONWIDGET_H
