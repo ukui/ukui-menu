@@ -314,6 +314,8 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
                 } else if (obj.value("mode").toString() == "blacklist") {
                     getAndroidApp();
                     recursiveSearchFile("/usr/share/applications/");
+                    recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+                    recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
                     QJsonArray blArray = obj.value("blacklist").toArray();
                     QJsonArray enArray = blArray.at(0).toObject().value("entries").toArray();
 
@@ -325,6 +327,8 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
                 } else {
                     getAndroidApp();
                     recursiveSearchFile("/usr/share/applications/");
+                    recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+                    recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
                 }
             }
 
@@ -332,6 +336,8 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
         } else {
             getAndroidApp();
             recursiveSearchFile("/usr/share/applications/");
+            recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+            recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
         }
 
         m_filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
