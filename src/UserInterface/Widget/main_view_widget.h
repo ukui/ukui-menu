@@ -55,12 +55,16 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 public Q_SLOTS:
+    void styleChangeSlot(const QString &style);
 
 Q_SIGNALS:
 
     void directoryChangedSignal();
 
     void sendDirectoryPath();
+private:
+    QString m_curStyle;
+    QColor m_backColor;
 };
 
 #endif // MAINVIEWWIDGET_H

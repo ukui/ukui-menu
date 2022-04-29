@@ -87,6 +87,7 @@ enum PanelPositon {
 
 extern QString g_projectCodeName;
 extern bool g_menuStatus;
+extern QString g_curStyle;
 
 
 #endif // UTILITY_H

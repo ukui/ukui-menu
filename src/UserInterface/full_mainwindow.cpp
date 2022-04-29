@@ -41,7 +41,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     queryWidLayout->setSpacing(5);
     m_queryWid->setLayout(queryWidLayout);
     char style[200];
-    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/search.svg"), 16);
+    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/full-search.svg"), 16);
 
     if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
         QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);

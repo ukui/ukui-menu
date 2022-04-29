@@ -50,18 +50,18 @@ MainWindow::MainWindow(QWidget *parent) :
     m_viewWidget = new MainViewWidget(m_centralwidget);
     m_mainLeftVerticalLayout = new QVBoxLayout(m_viewWidget);
     m_mainLeftVerticalLayout->setSpacing(0);
-    m_mainLeftVerticalLayout->setContentsMargins(8, 8, 0, 0);
+    m_mainLeftVerticalLayout->setContentsMargins(8, 4, 0, 0);
     //搜索框部分
     m_topStackedWidget = new QStackedWidget(m_viewWidget);
     m_topStackedWidget->setFixedHeight(48);
     //搜索框收起页
     m_minMenuPage = new QWidget();
-    m_minMenuPage->setMinimumSize(QSize(0, 48));
+    m_minMenuPage->setMinimumSize(QSize(0, 40));
     m_letfTopSelectHorizontalLayout = new QHBoxLayout(m_minMenuPage);
-    m_letfTopSelectHorizontalLayout->setSpacing(8);
-    m_letfTopSelectHorizontalLayout->setContentsMargins(8, 0, 8, 12);
+    m_letfTopSelectHorizontalLayout->setSpacing(2);
+    m_letfTopSelectHorizontalLayout->setContentsMargins(8, 0, 4, 12);
     m_minSelectTextLabel = new QLabel(m_minMenuPage);
-    m_horizontalSpacer = new QSpacerItem(68, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_horizontalSpacer = new QSpacerItem(58, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_searchPushButton = new QPushButton(m_minMenuPage);
 //    m_searchPushButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
     m_searchPushButton->setFixedSize(QSize(26, 26));
@@ -71,20 +71,21 @@ MainWindow::MainWindow(QWidget *parent) :
     m_minSelectButton->setFixedSize(QSize(26, 26));
     m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-all.svg", true));
     m_minSelectButton->installEventFilter(this);
-    m_selectMenuButton = new QToolButton(m_minMenuPage);
+    m_selectMenuButton = new QLabel(m_minMenuPage);
+    m_selectMenuButton->installEventFilter(this);
     m_selectMenuButton->setStyleSheet("background: transparent;");
     m_selectMenuButton->setFixedSize(QSize(16, 26));
     m_selectMenuButton->setAcceptDrops(true);
-    m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-arrow.svg", true));
-    m_selectMenuButton->setPopupMode(QToolButton::InstantPopup);
-//    m_selectMenuButton->setStyleSheet(QString::fromUtf8("QToolButton::menu-indicator { image: None; }"));
+    m_selectMenuButton->setFocusPolicy(Qt::StrongFocus);
+    m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
+                                  .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
     //搜索框展开页
     m_minSearchPage = new QWidget();
     m_leftTopSearchHorizontalLayout = new QHBoxLayout(m_minSearchPage);
     m_leftTopSearchHorizontalLayout->setContentsMargins(8, 0, 8, 12);
     m_lineEdit = new QLineEdit(m_minSearchPage);
     m_lineEdit->setMinimumSize(QSize(30, 26));
-    m_lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 13px; border:2px solid rgba(5, 151, 255, 1); background: transparent;"));
+    m_lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 13px; border:1px solid rgba(5, 151, 255, 1); background: transparent;"));
     m_lineEdit->setFrame(false);
     m_lineEdit->setPlaceholderText(tr("Search"));
     m_cancelSearchPushButton = new QPushButton(m_minSearchPage);
@@ -127,19 +128,21 @@ MainWindow::MainWindow(QWidget *parent) :
     //右侧窗口
     m_mainRightVerticalLayout = new QVBoxLayout();
     m_mainRightVerticalLayout->setSpacing(0);
-    m_mainRightVerticalLayout->setContentsMargins(8, 8, 8, 8);
+    m_mainRightVerticalLayout->setContentsMargins(8, 4, 8, 8);
     m_mainRightVerticalLayout_1 = new QVBoxLayout();
     m_rightTopHorizontalLayout = new QHBoxLayout();
     m_rightTopHorizontalLayout->setSpacing(30);
-    m_rightTopHorizontalLayout->setContentsMargins(8, 0, 10, 0);
+    m_rightTopHorizontalLayout->setContentsMargins(8, 0, 10, 8);
     //收藏按键
     m_collectPushButton = new QLabel(m_centralwidget);
+    m_collectPushButton->setFocusPolicy(Qt::StrongFocus);
     m_collectPushButton->setFixedHeight(34);
 //    m_collectPushButton->setFlat(true);
     m_collectPushButton->installEventFilter(this);
     //最近按键
     m_recentPushButton = new QLabel(m_centralwidget);
     m_recentPushButton->setFixedHeight(34);
+    m_recentPushButton->setFocusPolicy(Qt::StrongFocus);
 //    m_recentPushButton->setFlat(true);
     m_recentPushButton->installEventFilter(this);
     m_horizontalSpacer_3 = new QSpacerItem(332, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -190,15 +193,18 @@ MainWindow::MainWindow(QWidget *parent) :
     m_rightBottomHorizontalLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
     m_rightBottomHorizontalLayout->setContentsMargins(0, 0, 8, 0);
     m_horizontalSpacer_2 = new QSpacerItem(332, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_horizontalSpacer_4 = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_powerOffButton = new QPushButton(m_centralwidget);
-    m_powerOffButton->setFixedSize(QSize(24, 24));
+    m_powerOffButton->setFixedSize(QSize(32, 32));
     m_powerOffButton->setContextMenuPolicy(Qt::CustomContextMenu);
     m_powerOffButton->setIcon(QIcon(":/data/img/mainviewwidget/power.svg"));
+    m_powerOffButton->setIconSize(QSize(24, 24));
     m_powerOffButton->setFlat(true);
     m_powerOffButton->installEventFilter(this);
     m_letfTopSelectHorizontalLayout->addWidget(m_minSelectTextLabel);
     m_letfTopSelectHorizontalLayout->addItem(m_horizontalSpacer);
     m_letfTopSelectHorizontalLayout->addWidget(m_searchPushButton);
+    m_letfTopSelectHorizontalLayout->addItem(m_horizontalSpacer_4);
     m_letfTopSelectHorizontalLayout->addWidget(m_minSelectButton);
     m_letfTopSelectHorizontalLayout->addWidget(m_selectMenuButton);
     m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
@@ -330,8 +336,9 @@ MainWindow::MainWindow(QWidget *parent) :
             }
         }
     });
-    m_maxAnimation = new QPropertyAnimation(&m_animationPage, "geometry");
-    m_minAnimation = new QPropertyAnimation(&m_animationPage, "geometry");
+    m_animationPage = new AnimationPage();
+    m_maxAnimation = new QPropertyAnimation(m_animationPage, "geometry", this);
+    m_minAnimation = new QPropertyAnimation(m_animationPage, "geometry", this);
     connect(m_maxAnimation, &QPropertyAnimation::finished, this, &MainWindow::maxAnimationFinished);
     connect(m_minAnimation, &QPropertyAnimation::finished, this, &MainWindow::minAnimationFinished);
     connect(m_lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchAppSlot);
@@ -340,11 +347,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_fullWindow, &FullMainWindow::showNormalWindow, this, &MainWindow::showNormalWindowSlot);
     connect(m_fullWindow, &FullMainWindow::sendUpdateOtherView, this, &MainWindow::updateMinAllView);
     connect(m_minSelectButton, &QToolButton::clicked, this, &MainWindow::on_minSelectButton_clicked);
-    connect(m_selectMenuButton, &QToolButton::triggered, this, &MainWindow::on_selectMenuButton_triggered);
+    connect(m_dropDownMenu, &MenuBox::triggered, this, &MainWindow::on_selectMenuButton_triggered);
+    connect(m_dropDownMenu, &MenuBox::sendMainWinActiveSignal, [ = ]() {
+        m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
+                                      .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+    });
     connect(m_powerOffButton, &QPushButton::customContextMenuRequested, this, &MainWindow::on_powerOffButton_customContextMenuRequested);
     connect(m_powerOffButton, &QPushButton::clicked, this, &MainWindow::on_powerOffButton_clicked);
-//    connect(m_collectPushButton, &QPushButton::clicked, this, &MainWindow::on_collectPushButton_clicked);
-//    connect(m_recentPushButton, &QPushButton::clicked, this, &MainWindow::on_recentPushButton_clicked);
     connect(m_cancelSearchPushButton, &QPushButton::clicked, this, &MainWindow::on_cancelSearchPushButton_clicked);
     connect(m_searchPushButton, &QPushButton::clicked, this, &MainWindow::on_searchPushButton_clicked);
     connect(m_minMaxChangeButton, &QPushButton::clicked, this, &MainWindow::on_minMaxChangeButton_clicked);
@@ -399,6 +408,11 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     closeDataBase("MainThread");
+
+    if (m_animationPage != nullptr) {
+        delete m_animationPage;
+        m_animationPage = nullptr;
+    }
 }
 
 void MainWindow::initUi()
@@ -414,21 +428,21 @@ void MainWindow::initUi()
     m_minLetterListView->addData(m_modaldata->getMinLetterData(), 2);
     m_collectListView->addData(m_modaldata->getcollectData());
     m_recentListView->addData(m_modaldata->getRecentData(), -1);
-    QMenu *m_menu = new QMenu;
-    m_allAction = new QAction(m_menu);
-    m_letterAction = new QAction(m_menu);
-    m_funcAction = new QAction(m_menu);
+    m_dropDownMenu = new MenuBox(this);
+    m_dropDownMenu->setFixedSize(Style::DropMenuWidth, Style::DropMenuHeight);
+    m_allAction = new QAction(m_dropDownMenu);
+    m_letterAction = new QAction(m_dropDownMenu);
+    m_funcAction = new QAction(m_dropDownMenu);
     m_allAction->setText(tr("All"));
     m_allAction->setCheckable(true);
     m_letterAction->setText(tr("Letter"));
     m_letterAction->setCheckable(true);
     m_funcAction->setText(tr("Function"));
     m_funcAction->setCheckable(true);
-    m_menu->addAction(m_allAction);
-    m_menu->addAction(m_letterAction);
-    m_menu->addAction(m_funcAction);
+    m_dropDownMenu->addAction(m_allAction);
+    m_dropDownMenu->addAction(m_letterAction);
+    m_dropDownMenu->addAction(m_funcAction);
     m_allAction->setChecked(true);
-    m_selectMenuButton->setMenu(m_menu);
     m_collectPushButton->setStyleSheet("color:#3790FA;");
 //    m_collectPushButton->setStyleSheet("border: 1px solid red;");
     QColor textColor = this->palette().color(QPalette::Text);
@@ -450,6 +464,7 @@ void MainWindow::initUi()
     connect(m_collectListView, &RightListView::sendCollectViewUpdate, this, &MainWindow::updateCollectView);
     connect(m_desktopWatcher, &DesktopWatcher::directoryChangedSignal, this, &MainWindow::updateView);
     connect(m_desktopWatcher, &DesktopWatcher::updateRecentList, this, &MainWindow::updateRecentView);
+    connect(this, &MainWindow::sendStyleChangeSignal, m_viewWidget, &MainViewWidget::styleChangeSlot);
     changeStyle();
 }
 
@@ -467,10 +482,17 @@ void MainWindow::changeStyle()
         if (gsetting.keys().contains(QString("styleName"))) {
             if (gsetting.get("style-name").toString() == "ukui-light"
                 || gsetting.get("style-name").toString() == "ukui-default") {
+                g_curStyle = "ukui-light";
                 buttonColorDefault = "rgba(16, 23, 29, 0.06)";
                 buttonColorHover = "rgba(16, 23, 29, 0.12)";
                 buttonColorPress = "rgba(16, 23, 29, 0.17)";
+                m_windowColor.setNamedColor("#C7E9EEF2");
+                Q_EMIT sendStyleChangeSignal("ukui-light");
+                m_powerOffButton->setStyleSheet("QPushButton {padding: 0px;}"
+                                                "QPushButton:hover {border-radius:16px; background: rgba(255, 255, 255, 0.4);}"
+                                                "QPushButton:pressed {border-radius:16px; background: rgba(255, 255, 255, 0.65);}");
             } else {
+                g_curStyle = "ukui-dark";
                 buttonColor = linePe.color(QPalette::Light);
                 QRgb rgbDefault = qRgba(buttonColor.red(), buttonColor.green(), buttonColor.blue(), 25);
                 buttonColorDefault = "#" +  QString::number(rgbDefault, 16);
@@ -478,6 +500,11 @@ void MainWindow::changeStyle()
                 buttonColorHover = "#" + QString::number(rgbHover, 16);
                 QRgb rgbPress = qRgba(buttonColor.red(), buttonColor.green(), buttonColor.blue(), 75);
                 buttonColorPress = "#" + QString::number(rgbPress, 16);
+                m_windowColor.setNamedColor("#FF383838");
+                Q_EMIT sendStyleChangeSignal("ukui-dark");
+                m_powerOffButton->setStyleSheet("QPushButton {padding: 0px;}"
+                                                "QPushButton:hover {border-radius:16px; background: rgba(255, 255, 255, 0.12);}"
+                                                "QPushButton:pressed {border-radius:16px; background: rgba(255, 255, 255, 0.25);}");
             }
         }
     }
@@ -488,10 +515,7 @@ void MainWindow::changeStyle()
     m_searchPushButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
     m_minSelectButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
     m_cancelSearchPushButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
-    m_powerOffButton->setStyleSheet("QPushButton {padding: 0px;}"
-                                    "QPushButton:hover {border-radius:12px; background: rgba(255, 255, 255, 0.2);}"
-                                    "QPushButton:pressed {border-radius:12px; background: rgba(255, 255, 255, 0.3);}");
-    m_searchPushButton->setIcon(getCurIcon(":/data/img/mainviewwidget/search.svg", true));
+    m_searchPushButton->setIcon(getCurIcon(":/data/img/mainviewwidget/full-search.svg", true));
     QAction *lineAction = m_lineEdit->actions().at(0);
 
     if (lineAction != nullptr) {
@@ -501,7 +525,7 @@ void MainWindow::changeStyle()
     }
 
     QAction *action = new QAction();
-    action->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-icon-search.svg", true));
+    action->setIcon(getCurIcon(":/data/img/mainviewwidget/full-search.svg", true));
     m_lineEdit->addAction(action, QLineEdit::LeadingPosition);
     m_cancelSearchPushButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-close-2x.png", true));
 
@@ -533,7 +557,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
     path.lineTo(rect.topRight() + QPointF(0, radius));
     path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
-    painter.setBrush(this->palette().base());
+    painter.setBrush(m_windowColor);
     painter.setPen(Qt::transparent);
     painter.setOpacity(transparency);
     painter.drawPath(path);
@@ -581,7 +605,7 @@ bool MainWindow::event(QEvent *event)
             if (m_minSelectButton->hasFocus()) {
                 m_minSelectButton->click();
             } else if (m_selectMenuButton->hasFocus()) {
-                m_selectMenuButton->click();
+                QApplication::postEvent(m_selectMenuButton, new QEvent(QEvent::MouseButtonPress));
             }
 
             if (m_lineEdit->hasFocus()) {
@@ -611,7 +635,7 @@ void MainWindow::minAnimationFinished()
     QEventLoop loop;
     QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();
-    m_animationPage.hide();
+    m_animationPage->hide();
 }
 void MainWindow::maxAnimationFinished()
 {
@@ -621,7 +645,7 @@ void MainWindow::maxAnimationFinished()
     QEventLoop loop;
     QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();
-    m_animationPage.hide();
+    m_animationPage->hide();
 }
 void MainWindow::resetLetterPage()
 {
@@ -744,6 +768,13 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
         if (target == m_collectPushButton) {
             on_collectPushButton_clicked();
             return false;
+        }
+
+        if (target == m_selectMenuButton) {
+            m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/uparrow.svg", true)
+                                          .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+            m_dropDownMenu->raise();
+            m_dropDownMenu->exec(this->mapToGlobal(QPoint(m_selectMenuButton->x() - 105, m_selectMenuButton->y() + 50)));
         }
     }
 
@@ -929,13 +960,12 @@ void MainWindow::searchAppSlot(QString arg)
 }
 void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
 {
-    qDebug() << "void MainWindow::on_selectMenuButton_triggered(QAction *arg1)" << m_allAction << arg1;
+    m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true).pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
 
     if (arg1 == m_allAction) {
         m_leftStackedWidget->setCurrentIndex(0);
         m_state = 0;
         m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-all.svg", true));
-//        m_minSelectButton->setIcon(QIcon(":/data/img/mainviewwidget/DM-all.svg"));
         m_minSelectTextLabel->setText(tr("All"));
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
@@ -1026,10 +1056,10 @@ void MainWindow::on_minMaxChangeButton_clicked()
 {
     m_canHide = true;
     m_isFullScreen = true;
-    m_animationPage.setGeometry(this->x(), this->y(), Style::minw, Style::minh);
-    m_animationPage.show();
-    m_animationPage.raise();
-    m_animationPage.repaint();
+    m_animationPage->setGeometry(this->x(), this->y(), Style::minw, Style::minh);
+    m_animationPage->show();
+    m_animationPage->raise();
+    m_animationPage->repaint();
     QEventLoop loop;
     QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();
@@ -1095,10 +1125,10 @@ void MainWindow::repaintWidget()
 void MainWindow::showNormalWindowSlot()
 {
     myDebug() << "Style::m_availableScreenWidth" << Style::m_availableScreenWidth << "Style::m_availableScreenHeight" << Style::m_availableScreenHeight;
-    m_animationPage.setGeometry(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight);
-    m_animationPage.show();
-    m_animationPage.raise();
-    myDebug() << m_animationPage.rect();
+    m_animationPage->setGeometry(0, 0, Style::m_availableScreenWidth, Style::m_availableScreenHeight);
+    m_animationPage->show();
+    m_animationPage->raise();
+    myDebug() << m_animationPage->rect();
     QEventLoop loop;
     QTimer::singleShot(100, &loop, SLOT(quit()));
     loop.exec();

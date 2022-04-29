@@ -576,8 +576,6 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
                 sql.exec(QString("select name_zh from appCategory where app_name=\"%1\" ").arg(desktopfpExecName));
 
                 if (sql.next()) {
-                    myDebug() << "数据库执行成功";
-
                     for (int j = 0; j < vector.size(); j++) {
                         if (vector.at(j).contains(sql.value(0).toString())) {
                             appInfoList.append(QString::number(j));

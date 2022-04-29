@@ -26,12 +26,14 @@ protected:
     void keyPressEvent(QKeyEvent *e);
     void dropEvent(QDropEvent *event);
     void enterEvent(QEvent *e);
+    void paintEvent(QPaintEvent *e);
 
 private:
     RightClickMenu *menu = nullptr; //右键菜单
     QStringList data;
     QGSettings *gsetting;
-    QPoint dropPos;
+    QPoint m_dropPos;
+    QColor m_styleColor;
 
 //    bool inCurView;
 
@@ -39,6 +41,7 @@ public Q_SLOTS:
 
 //    void rightClickedSlot(const QPoint &pos);//右键菜单
     void selectFirstItem();
+    void changeStyleColor(const QColor &color);
 
 Q_SIGNALS:
 

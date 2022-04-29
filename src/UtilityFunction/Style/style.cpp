@@ -100,6 +100,10 @@ int Style::ButtonWidgetWidth = 56;
 int Style::ToolWidgetLeft = 24;
 bool Style::IsWideScreen = false;
 
+int Style::DropMenuWidth = 0;
+int Style::DropMenuHeight = 0;
+int Style::miniIconSize = 0;
+
 void Style::initWidStyle()
 {
     if (!g_projectCodeName.contains("V10SP1-edu")) {
@@ -121,10 +125,12 @@ void Style::initWidStyle()
         if (m_availableScreenWidth == 800 && m_availableScreenHeight == 600) {
             minw = 320;
             minh = 500;
+            leftPageWidth = 300;
+            leftPageHeight = 517;
         } else {
             minw = 652;
             minh = 590;
-            leftPageWidth = 292;
+            leftPageWidth = 300;
             leftPageHeight = 517;
         }
 
@@ -194,11 +200,14 @@ void Style::initWidStyle()
             AppSpaceBetweenIconText = 14;
         }
 
-        LeftBtnWidth = 100 + 5 * len;
-        LeftBtnHeight = 43;
+        LeftBtnWidth = 68 + 5 * len;
+        LeftBtnHeight = 34;
         QueryLineEditHeight = 30;
         LeftLetterBtnHeight = 25;
         LeftIconSize = 19;
+        DropMenuWidth = 128;
+        DropMenuHeight = 112;
+        miniIconSize = 8;
         LeftSpaceIconText = 14;
         m_applistWidWidth = m_availableScreenWidth / 1.25;
         m_applistWidWidth = m_applistWidWidth - (m_applistWidWidth % m_applistGridSizeWidth) + 1;

@@ -19,6 +19,7 @@
 #include "letter_classify_button.h"
 #include <QStylePainter>
 #include <QStyleOptionButton>
+#include "utility.h"
 
 LetterClassifyButton::LetterClassifyButton(QWidget *parent,
         bool fullscreen,
@@ -55,8 +56,22 @@ void LetterClassifyButton::paintEvent(QPaintEvent *e)
         painter.setPen(Qt::NoPen);
 
         if (!m_fullscreen) {
-            QColor color = option.palette.color(QPalette::Text);
-            color.setAlphaF(0.15);
+            QColor color;
+
+            if (option.state & QStyle::State_Selected) {
+                if (g_curStyle == "ukui-dark") {
+                    color.setNamedColor("#33FFFFFF");
+                } else {
+                    color.setNamedColor("#D1FFFFFF");
+                }
+            } else {
+                if (g_curStyle == "ukui-dark") {
+                    color.setNamedColor("#1AFFFFFF");
+                } else {
+                    color.setNamedColor("#8CFFFFFF");
+                }
+            }
+
             painter.setBrush(color);
         } else {
             painter.setOpacity(0.15);
@@ -81,10 +96,13 @@ void LetterClassifyButton::paintEvent(QPaintEvent *e)
 
     QStyleOptionButton subopt = option;
     subopt.rect = painter.style()->subElementRect(QStyle::SE_PushButtonContents, &option, this);
-    //    if(m_fullscreen)
-    //        subopt.palette.setBrush(QPalette::ButtonText, QColor(Qt::white));
-    //    else
-    //        subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
+
+    if (m_fullscreen) {
+        subopt.palette.setBrush(QPalette::ButtonText, QColor(Qt::white));
+    } else {
+        subopt.palette.setBrush(QPalette::HighlightedText, subopt.palette.text());
+    }
+
     painter.style()->drawControl(QStyle::CE_PushButtonLabel, &subopt, &painter, this);
     return;
 }

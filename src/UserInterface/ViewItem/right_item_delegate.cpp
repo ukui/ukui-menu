@@ -1,5 +1,5 @@
 #include "right_item_delegate.h"
-#include "src/UtilityFunction/utility.h"
+#include "utility.h"
 #include <QDebug>
 
 RightItemDelegate::RightItemDelegate(QObject *parent):
@@ -37,16 +37,27 @@ void RightItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         painter->setRenderHint(QPainter::Antialiasing);
         painter->save();
         painter->setPen(QPen(Qt::NoPen));
-        painter->setBrush(option.palette.base().color());
 
         if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
             if (option.state & QStyle::State_Selected) {
-                painter->setOpacity(0.8);
+                if (g_curStyle == "ukui-dark") {
+                    painter->setBrush(QColor("#7A000000"));
+                } else {
+                    painter->setBrush(QColor("#BFFFFFFF"));
+                }
             } else {
-                painter->setOpacity(0.6);
+                if (g_curStyle == "ukui-dark") {
+                    painter->setBrush(QColor("#66000000"));
+                } else {
+                    painter->setBrush(QColor("#99FFFFFF"));
+                }
             }
         } else {
-            painter->setOpacity(0.4);
+            if (g_curStyle == "ukui-dark") {
+                painter->setBrush(QColor("#40000000"));
+            } else {
+                painter->setBrush(QColor("#66FFFFFF"));
+            }
         }
 
         painter->drawPath(path);

@@ -89,8 +89,22 @@ void FunctionClassifyButton::paintEvent(QPaintEvent *e)
         painter.setPen(Qt::NoPen);
 
         if (!m_fullscreen) {
-            QColor color = option.palette.color(QPalette::Text);
-            color.setAlphaF(0.15);
+            QColor color;
+
+            if (option.state & QStyle::State_Selected) {
+                if (g_curStyle == "ukui-dark") {
+                    color.setNamedColor("#33FFFFFF");
+                } else {
+                    color.setNamedColor("#D1FFFFFF");
+                }
+            } else {
+                if (g_curStyle == "ukui-dark") {
+                    color.setNamedColor("#1AFFFFFF");
+                } else {
+                    color.setNamedColor("#8CFFFFFF");
+                }
+            }
+
             painter.setBrush(color);
         } else {
             painter.setOpacity(0.15);

@@ -106,6 +106,7 @@ Q_SIGNALS:
     void sendClassificationbtnList();
     void sendLetterClassificationList(QStringList list);
     void sendSetFullWindowItemHide(bool flag);
+    void sendStyleChangeSignal(QString style);
 
 public Q_SLOTS:
     void updateCollectView();
@@ -160,7 +161,7 @@ private:
     QSpacerItem *m_horizontalSpacer = nullptr;
     QPushButton *m_searchPushButton = nullptr;
     QPushButton *m_minSelectButton = nullptr;
-    QToolButton *m_selectMenuButton = nullptr;
+    QLabel *m_selectMenuButton = nullptr;
     QWidget *m_minSearchPage = nullptr;
     QHBoxLayout *m_leftTopSearchHorizontalLayout = nullptr;
     QLineEdit *m_lineEdit = nullptr;
@@ -192,8 +193,10 @@ private:
     QSpacerItem *m_verticalSpacer_2 = nullptr;
     QHBoxLayout *m_rightBottomHorizontalLayout = nullptr;
     QSpacerItem *m_horizontalSpacer_2 = nullptr;
+    QSpacerItem *m_horizontalSpacer_4 = nullptr;
     QPushButton *m_powerOffButton = nullptr;
-    AnimationPage m_animationPage;
+    AnimationPage *m_animationPage = nullptr;
+    MenuBox *m_dropDownMenu = nullptr;
 
     bool m_canHide = true;
     bool m_isFullScreen = false;
@@ -218,6 +221,7 @@ private:
     FunctionButtonWidget *m_functionBtnWid = nullptr;
     LetterButtonWidget *m_letterBtnWid = nullptr;
     SoftwareDatabaseUpdateThread *m_softwareDbThread = nullptr;
+    QColor m_windowColor;
 };
 
 #endif // MAINWINDOW_H
