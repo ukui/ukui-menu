@@ -98,28 +98,6 @@ void TabletWindow::initUi()
     initStatusManager();
     initTransparency();
     registDbusService();
-    /*//备用待窗管修改后启用
-     connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
-         if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
-         {
-             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-             if (gsetting.keys().contains("winKeyRelease")) {
-                 if (gsetting.get(QString("winKeyRelease")).toBool()) {
-                     return;
-                 }
-             }
-         }
-         if (QApplication::activeWindow() == this)
-         {
-             myDebug() << "win键触发窗口隐藏事件";
-             this->hide();
-         } else
-         {
-             myDebug() << "win键触发窗口显示事件";
-             this->showPCMenu();
-         }
-     });
-     */
     ways();
     buttonWidgetShow();
     connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
@@ -259,21 +237,6 @@ void TabletWindow::registDbusService()
 //            this->showPCMenu();
 //        }
 //    });
-    ways();
-    buttonWidgetShow();
-//    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
-    connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
-
-    if (checkapplist()) {
-        directoryChangedSlot();//更新应用列表
-    }
-
-    //pc下鼠标功能
-    XEventMonitor::instance()->start();
-    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-            this, SLOT(XkbEventsRelease(QString)));
-    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-            this, SLOT(XkbEventsPress(QString)));
 }
 
 bool TabletWindow::checkapplist()
