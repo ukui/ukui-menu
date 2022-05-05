@@ -128,6 +128,8 @@ void TabletWindow::initUi()
         directoryChangedSlot();//更新应用列表
     }
 
+    QDBusConnection::sessionBus().registerService("com.ukui.menu");
+    QDBusConnection::sessionBus().registerObject("/ukui/menu", this, QDBusConnection :: ExportAllSlots | QDBusConnection :: ExportAllSignals);
     initXEventMonitor();
 }
 
@@ -232,15 +234,13 @@ void TabletWindow::setBackground()
 
 void TabletWindow::registDbusService()
 {
-    m_dbus = new DBus;
-    new MenuAdaptor(m_dbus);
-    QDBusConnection con = QDBusConnection::sessionBus();
-
-    if (!con.registerService("org.ukui.menu") ||
-        !con.registerObject("/org/ukui/menu", m_dbus)) {
-        qDebug() << "error:" << con.lastError().message();
-    }
-
+//    m_dbus = new DBus;
+//    new MenuAdaptor(m_dbus);
+//    QDBusConnection con = QDBusConnection::sessionBus();
+//    if (!con.registerService("org.ukui.menu") ||
+//        !con.registerObject("/org/ukui/menu", m_dbus)) {
+//        qDebug() << "error:" << con.lastError().message();
+//    }
 //    connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
 //        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
 //        {
@@ -413,6 +413,7 @@ void TabletWindow::showPCMenu()
     this->raise();
     this->activateWindow();
     g_menuStatus = true;
+    menuStatus();
 }
 
 //改变搜索框及工具栏透明度
@@ -563,6 +564,7 @@ bool TabletWindow::event(QEvent *event)
             qDebug() << " * 鼠标点击窗口外部事件";
             this->hide();
             g_menuStatus = false;
+            menuStatus();
         }
     }
 
@@ -576,6 +578,7 @@ bool TabletWindow::event(QEvent *event)
         if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
             this->hide();
             g_menuStatus = false;
+            menuStatus();
         }
     }
 
@@ -887,6 +890,7 @@ void TabletWindow::recvHideMainWindowSlot()
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     this->hide();
     g_menuStatus = false;
+    menuStatus();
 }
 
 void TabletWindow::btnGroupClickedSlot(int prePageNum, int pageNum)
@@ -1060,10 +1064,12 @@ void TabletWindow::xkbEventsRelease(const QString &keycode)
             qDebug() << "win键触发窗口隐藏事件";
             this->hide();
             g_menuStatus = false;
+            menuStatus();
         } else {
             qDebug() << "win键触发窗口显示事件";
             this->showPCMenu();
             g_menuStatus = true;
+            menuStatus();
         }
     }
 
@@ -1094,3 +1100,11 @@ void TabletWindow::winKeyReleaseSlot(const QString &key)
     }
 }
 
+void TabletWindow::menuStatus()
+{
+    QDBusMessage message = QDBusMessage::createSignal("/ukui/menu", "com.ukui.menu", "menuChangeStatus");
+    //给信号赋值
+    message << g_menuStatus;
+    //发射
+    QDBusConnection::sessionBus().send(message);
+}
