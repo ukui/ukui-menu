@@ -128,8 +128,6 @@ void TabletWindow::initUi()
         directoryChangedSlot();//更新应用列表
     }
 
-    QDBusConnection::sessionBus().registerService("com.ukui.menu");
-    QDBusConnection::sessionBus().registerObject("/ukui/menu", this, QDBusConnection :: ExportAllSlots | QDBusConnection :: ExportAllSignals);
     initXEventMonitor();
 }
 
@@ -413,7 +411,8 @@ void TabletWindow::showPCMenu()
     this->raise();
     this->activateWindow();
     g_menuStatus = true;
-    menuStatus();
+    menuStatusChange();
+    myDebug() << "showMenu显示开始菜单";
 }
 
 //改变搜索框及工具栏透明度
@@ -561,10 +560,10 @@ bool TabletWindow::event(QEvent *event)
         //if(QEvent::WindowDeactivate == event->type())//窗口停用
     {
         if (QApplication::activeWindow() != this) {
-            qDebug() << " * 鼠标点击窗口外部事件";
+            myDebug() << " * 鼠标点击窗口外部事件";
             this->hide();
             g_menuStatus = false;
-            menuStatus();
+            menuStatusChange();
         }
     }
 
@@ -578,7 +577,7 @@ bool TabletWindow::event(QEvent *event)
         if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
             this->hide();
             g_menuStatus = false;
-            menuStatus();
+            myDebug() << "鼠标点击事件触发隐藏";
         }
     }
 
@@ -890,7 +889,7 @@ void TabletWindow::recvHideMainWindowSlot()
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     this->hide();
     g_menuStatus = false;
-    menuStatus();
+    myDebug() << "信号触发隐藏窗口";
 }
 
 void TabletWindow::btnGroupClickedSlot(int prePageNum, int pageNum)
@@ -1064,12 +1063,10 @@ void TabletWindow::xkbEventsRelease(const QString &keycode)
             qDebug() << "win键触发窗口隐藏事件";
             this->hide();
             g_menuStatus = false;
-            menuStatus();
         } else {
             qDebug() << "win键触发窗口显示事件";
             this->showPCMenu();
             g_menuStatus = true;
-            menuStatus();
         }
     }
 
@@ -1084,7 +1081,7 @@ void TabletWindow::winKeyReleaseSlot(const QString &key)
         if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit())) {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
 
-            if (gsetting.keys().contains("winKeyRelease"))
+            if (gsetting.keys().contains("winKeyRelease")) {
                 if (gsetting.get(QString("winKeyRelease")).toBool()) {
                     disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
                                this, SLOT(xkbEventsRelease(QString)));
@@ -1096,13 +1093,14 @@ void TabletWindow::winKeyReleaseSlot(const QString &key)
                     connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
                             this, SLOT(xkbEventsPress(QString)));
                 }
+            }
         }
     }
 }
 
-void TabletWindow::menuStatus()
+void TabletWindow::menuStatusChange()
 {
-    QDBusMessage message = QDBusMessage::createSignal("/ukui/menu", "com.ukui.menu", "menuChangeStatus");
+    QDBusMessage message = QDBusMessage::createSignal("/com/ukui/menu", "com.ukui.menu", "statusChangeSignal");
     //给信号赋值
     message << g_menuStatus;
     //发射

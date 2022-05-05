@@ -46,14 +46,10 @@
 #include "tabletlistview.h"
 #include "pagemanager.h"
 #include "tablet_directorychanged_thread.h"
-#include <QtDBus>
-//#include "dbus.h"
-//#include "dbus-adaptor.h"
 
 class TabletWindow : public QWidget
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.ukui.menu")
 
 public:
     explicit TabletWindow(QWidget *parent = nullptr);
@@ -186,7 +182,7 @@ protected:
 
     bool checkapplist();
 
-    void menuStatus();
+    void menuStatusChange();
 
 public Q_SLOTS:
     /**
@@ -245,8 +241,6 @@ Q_SIGNALS:
     void sendDirectoryPath(QString arg);
 
     void UpdateSignal();
-
-    void menuChangeStatus(bool flag);
 };
 
 #endif // FULLFUNCTIONWIDGET_H
