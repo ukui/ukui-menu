@@ -203,7 +203,7 @@ void FunctionWidget::initUi()
     upLayout->addWidget(leftUpWidget);
     mainLayout->addStretch();
 
-    if (g_subProjectCodeName == "mavis") {
+    if (g_subProjectCodeName.contains("mavis")) {
         upWidget->setFixedSize(0, 0);
     } else {
         mainLayout->addWidget(upWidget);

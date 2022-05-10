@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 {
     initUkuiLog4qt("ukui-menu");
     g_projectCodeName = KDKGetPrjCodeName().c_str();
-    g_subProjectCodeName = KDKGetLSBRelease("SUB_PROJECT_CODENAME").c_str();
+    g_subProjectCodeName = KDKGetOSRelease("SUB_PROJECT_CODENAME").c_str();
     qRegisterMetaType<QVector<QStringList>>("QVector<QStringList>");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
