@@ -10,6 +10,7 @@
 #include <QPluginLoader>
 #include "currenttime_interface.h"
 #include "style.h"
+#include "utility.h"
 #include <QtSvg/QSvgRenderer>
 #define TIME_FORMAT "org.ukui.control-center.panel.plugins"
 #define TIME_FORMAT_KEY "hoursystem"
@@ -153,11 +154,12 @@ void FunctionWidget::initUi()
     this->setStyleSheet("border:0px solid #ff0000;background:transparent;");
     this->setFocusPolicy(Qt::NoFocus);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setSpacing(0);
+    mainLayout->setSpacing(10);
+    mainLayout->setContentsMargins(5, 0, 0, 0);
     this->setLayout(mainLayout);
-    //时间+搜索框
+    //时间
     upWidget = new QWidget();
-    upWidget->setFixedSize(400, 232);
+    upWidget->setFixedSize(400, 96);
     upLayout = new QVBoxLayout();
     upWidget->setLayout(upLayout);
     upLayout->setContentsMargins(0, 0, 0, 32);
@@ -184,13 +186,6 @@ void FunctionWidget::initUi()
     upRightLayout->setContentsMargins(0, 0, 0, 0);
     upRightLayout->setSpacing(0);
     //    upRightWidget->setStyleSheet("border-width:1px;border-style:solid;border-color:red");
-    //左下
-    downWidget = new QWidget;
-    downLayout = new QVBoxLayout();
-    downWidget->setLayout(downLayout);
-    downWidget->setFixedSize(400, 104);
-    downLayout->setSpacing(0);
-    downLayout->setContentsMargins(0, 24, 0, 0);
     //左侧控件
     timeLabel = new QLabel();
     weekLabel = new QLabel();
@@ -205,17 +200,19 @@ void FunctionWidget::initUi()
     QDBusReply<QString> styleName = usrInterface->call(QString("get_current_stylename"));
     changeSearchBoxBackground(styleName);
     connect(searchEditBtn, &QPushButton::clicked, this, &FunctionWidget::obtainSearchResult);
-    downLayout->addWidget(searchEditBtn);
     upLayout->addWidget(leftUpWidget);
-    upLayout->addWidget(downWidget);
-    mainLayout->addWidget(upWidget);
+    mainLayout->addStretch();
+
+    if (g_subProjectCodeName == "mavis") {
+        upWidget->setFixedSize(0, 0);
+    } else {
+        mainLayout->addWidget(upWidget);
+    }
+
+    mainLayout->addWidget(searchEditBtn);
     focusPlug = new pluginwidget(this);
-    //加入专注模式
-    //    if(plugin)
-    //    {
     mainLayout->addWidget(focusPlug);
     focusPlug->setFixedSize(400, 638);
-    //    }
     mainLayout->addStretch();
     leftUpLayout->addWidget(upLeftWidget);
     leftUpLayout->addWidget(upRightWidget);
