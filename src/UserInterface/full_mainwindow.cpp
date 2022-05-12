@@ -41,13 +41,13 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     queryWidLayout->setSpacing(5);
     m_queryWid->setLayout(queryWidLayout);
     char style[200];
-    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/search.svg"), 16);
+    QPixmap pixmap = loadSvg(QString(":/data/img/mainviewwidget/full-search.svg"), 16);
 
     if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
         QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
 
         if (gsetting->keys().contains("styleName")) {
-            if (gsetting->get("styleName").toString() == "ukui-light") {
+            if (/*gsetting->get("styleName").toString() == "ukui-light"*/false) {
                 pixmap = drawSymbolicBlackColoredPixmap(pixmap);
                 sprintf(style, "QLineEdit{border:1px solid %s;background-color:%s;border-radius:17px;color:#000000;}",
                         QueryLineEditClickedBorderDefault, QueryLineEditDefaultBackground);
@@ -67,6 +67,10 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
                 m_fullFunctionPage->repaintWidget();
                 m_fullLetterPage->repaintWidget();
             }
+
+            if (key.contains(QString("styleName"))) {
+                changeStyle();
+            }
         });
     }
 
@@ -76,6 +80,9 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     m_queryIcon->setFixedSize(pixmap.size());
     m_queryIcon->setPixmap(pixmap);
     m_queryText = new QLabel;
+    QPalette pa;
+    pa.setColor(QPalette::Text, Qt::white);
+    m_queryText->setPalette(pa);
     m_queryText->setText(tr("Search"));
     m_queryText->adjustSize();
     queryWidLayout->addWidget(m_queryIcon);
@@ -83,31 +90,30 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     queryWidLayout->setAlignment(Qt::AlignCenter);
     m_lineEdit->setFocusPolicy(Qt::StrongFocus);
     horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    fullSelectToolButton = new QToolButton(centralwidget);
-    fullSelectToolButton->setStyleSheet(m_buttonStyle.arg("QToolButton"));
+    fullSelectToolButton = new QPushButton(centralwidget);
+//    fullSelectToolButton->setStyleSheet(m_buttonStyle.arg("QToolButton"));
     fullSelectToolButton->setObjectName(QString::fromUtf8("fullSelectToolButton"));
     fullSelectToolButton->setMinimumSize(QSize(48, 48));
+    fullSelectToolButton->installEventFilter(this);
+    fullSelectToolButton->setFocus();
     QIcon selectIcon;
     selectIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/full-function.svg"), QSize(), QIcon::Normal, QIcon::Off);
     fullSelectToolButton->setIcon(selectIcon);
-    fullSelectToolButton->installEventFilter(this);
-    fullSelectToolButton->setFocus();
     fullSelectMenuButton = new QToolButton(centralwidget);
-    fullSelectMenuButton->setStyleSheet("QToolButton{background: transparent;}");
+    QIcon menuBottonIcon;
+    fullSelectMenuButton->setStyleSheet("QToolButton{background:transparent;}");
+    fullSelectMenuButton->setProperty("useIconHighlightEffect", 0x0);
     fullSelectMenuButton->setFixedSize(20, 20);
     fullSelectMenuButton->setObjectName(QString::fromUtf8("fullSelectMenuButton"));
-    QIcon menuBottonIcon;
-    menuBottonIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/full-drop-down.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    fullSelectMenuButton->setIcon(menuBottonIcon);
     fullSelectMenuButton->setPopupMode(QToolButton::InstantPopup);
     fullSelectMenuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     fullSelectMenuButton->installEventFilter(this);
+    QPalette palete;
+    palete.setColor(QPalette::NoRole, Qt::white);
+    fullSelectMenuButton->setPalette(palete);
     minPushButton = new QPushButton(centralwidget);
     minPushButton->setObjectName(QString::fromUtf8("minPushButton"));
-    minPushButton->setMinimumSize(QSize(48, 48));
-    QIcon minPushButtonIcon;
-    minPushButtonIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/full-min.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    minPushButton->setIcon(minPushButtonIcon);
+    minPushButton->setFixedSize(QSize(48, 48));
     minPushButton->setFlat(true);
     minPushButton->installEventFilter(this);
     m_fullStackedWidget = new QStackedWidget(centralwidget);
@@ -149,9 +155,7 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     setTabOrder(m_lineEdit, fullSelectToolButton);
     setTabOrder(fullSelectToolButton, fullSelectMenuButton);
     setTabOrder(fullSelectMenuButton, minPushButton);
-    //    QAction *action = new QAction(this);
-    //    action->setIcon(QIcon(":/data/img/mainviewwidget/DM-icon-search.svg"));
-    //    lineEdit->addAction(action,QLineEdit::TrailingPosition);
+    changeStyle();
     connect(m_lineEdit, &QLineEdit::textChanged, this, &FullMainWindow::searchAppSlot);
     connect(this, &FullMainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &FullMainWindow::recvSearchResult);
@@ -181,6 +185,43 @@ void FullMainWindow::updateView()
     m_fullLetterPage->updateAppListView();
 }
 
+void FullMainWindow::changeStyle()
+{
+    QPalette linePe;
+    QString buttonColorDefault;
+    QString buttonColorHover;
+    QString buttonColorPress;
+    QColor buttonColor;
+
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+        QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+
+        if (gsetting.keys().contains(QString("styleName"))) {
+            if (/*gsetting.get("style-name").toString() == "ukui-light"*/false) {
+                buttonColorDefault = "rgba(16, 23, 29, 0.06)";
+                buttonColorHover = "rgba(16, 23, 29, 0.12)";
+                buttonColorPress = "rgba(16, 23, 29, 0.17)";
+            } else {
+                buttonColor = linePe.color(QPalette::Light);
+                QRgb rgbDefault = qRgba(buttonColor.red(), buttonColor.green(), buttonColor.blue(), 25);
+                buttonColorDefault = "#" +  QString::number(rgbDefault, 16);
+                QRgb rgbHover = qRgba(buttonColor.red(), buttonColor.green(), buttonColor.blue(), 50);
+                buttonColorHover = "#" + QString::number(rgbHover, 16);
+                QRgb rgbPress = qRgba(buttonColor.red(), buttonColor.green(), buttonColor.blue(), 75);
+                buttonColorPress = "#" + QString::number(rgbPress, 16);
+            }
+        }
+    }
+
+    m_buttonStyle = QString("%1{border-radius:24px; background:" + buttonColorDefault + ";}"
+                            "%1:hover {border-radius:24px; background:" + buttonColorHover + ";}"
+                            "%1:pressed {border-radius:24px; background:" + buttonColorPress + ";}");
+    fullSelectToolButton->setStyleSheet(m_buttonStyle.arg("QPushButton"));
+    fullSelectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/full-drop-down.svg", false));
+    minPushButton->setIcon(getCurIcon(":/data/img/mainviewwidget/full-min.svg", false));
+    minPushButton->setProperty("useIconHighlightEffect", 0x0);
+}
+
 void FullMainWindow::on_minPushButton_clicked()
 {
     Q_EMIT showNormalWindow();
@@ -193,7 +234,7 @@ void FullMainWindow::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     painter.setPen(Qt::transparent);
-    painter.setBrush(this->palette().base());
+    painter.setBrush(this->palette().dark());
     painter.setPen(Qt::transparent);
     painter.setOpacity(transparency);
     painter.drawRect(this->rect());

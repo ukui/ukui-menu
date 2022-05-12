@@ -4,7 +4,9 @@
 #include <KWindowEffects>
 #include <QGraphicsBlurEffect>
 
-AnimationPage::AnimationPage()
+AnimationPage::AnimationPage(QWidget *parent)
+    : QWidget(parent)
+
 {
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAutoFillBackground(false);
@@ -20,5 +22,5 @@ void AnimationPage::paintEvent(QPaintEvent *event)
     painter.setOpacity(transparency);
     painter.drawRect(rect);
     KWindowEffects::enableBlurBehind(this->winId(), true, QRect(rect));
-    QWidget::paintEvent(event);
+    return QWidget::paintEvent(event);
 }

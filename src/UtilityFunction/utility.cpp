@@ -32,6 +32,7 @@
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
 QString g_projectCodeName = "V10SP1";
 bool g_menuStatus = false;
+QString g_curStyle = "";
 
 const QPixmap loadSvg(const QString &fileName, const int size)
 {
@@ -96,6 +97,36 @@ QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source)
     }
 
     return QPixmap::fromImage(img);
+}
+
+QIcon getCurIcon(const QString &iconPath, bool autoSet)
+{
+    QPixmap pixmap;
+
+    if (iconPath.endsWith("png")) {
+        pixmap =  QPixmap(iconPath);
+    } else {
+        pixmap = loadSvg(iconPath, 16);
+    }
+
+    if (!autoSet) {
+        return drawSymbolicColoredPixmap(pixmap);
+    }
+
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+        QGSettings gsetting(QString("org.ukui.style").toLocal8Bit());
+
+        if (gsetting.keys().contains(QString("styleName"))) {
+            if (gsetting.get("style-name").toString() == "ukui-light"
+                || gsetting.get("style-name").toString() == "ukui-default") {
+                pixmap = drawSymbolicBlackColoredPixmap(pixmap);
+            } else {
+                pixmap = drawSymbolicColoredPixmap(pixmap);
+            }
+        }
+    }
+
+    return QIcon(pixmap);
 }
 
 //不通过任务栏获取屏幕可用区域数据

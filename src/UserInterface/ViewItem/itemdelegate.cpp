@@ -20,7 +20,7 @@
 #include <QPushButton>
 #include <syslog.h>
 #include <QToolTip>
-#include "src/UtilityFunction/utility.h"
+#include "utility.h"
 
 ItemDelegate::ItemDelegate(QObject *parent, int module):
     KItemDelegate(parent)
@@ -58,8 +58,22 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         painter->setRenderHint(QPainter::Antialiasing);
 
         if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
-            QColor color = option.palette.text().color();
-            color.setAlphaF(0.15);
+            QColor color;
+
+            if (option.state & QStyle::State_Selected) {
+                if (g_curStyle == "ukui-dark") {
+                    color.setNamedColor("#33FFFFFF");
+                } else {
+                    color.setNamedColor("#D1FFFFFF");
+                }
+            } else {
+                if (g_curStyle == "ukui-dark") {
+                    color.setNamedColor("#1AFFFFFF");
+                } else {
+                    color.setNamedColor("#8CFFFFFF");
+                }
+            }
+
             painter->save();
             painter->setPen(QPen(Qt::NoPen));
             painter->setBrush(color);
@@ -153,10 +167,13 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
                 //                QRect textRect=QRect(rect.x()+11,rect.y()+12,rect.width(),rect.height());
                 QRect textRect = QRect(rect.x() + 11, rect.y(), rect.width(), rect.height());
                 painter->drawText(textRect, Qt::AlignVCenter, strlist.at(0));
-                painter->setRenderHint(QPainter::Antialiasing, true);
-                painter->setPen(QPen(QColor(option.palette.text().color()), 1));
-                painter->setOpacity(0.1);
-                painter->drawLine(QPoint(5, rect.bottom()), QPoint(rect.right(), rect.bottom()));
+                painter->setRenderHints(QPainter::SmoothPixmapTransform, true);
+                QPixmap pixmap = getCurIcon(":/data/img/mainviewwidget/DM-icon-option.svg", true).pixmap(QSize(16, 16));
+
+                if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
+                    painter->drawPixmap(rect.width() - 25, rect.y() + 15, pixmap);
+                }
+
                 painter->restore();
             }
         } else if (module == -1) {
@@ -279,7 +296,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             QString desktopfn = fileInfo.fileName();
 
             if (checkIfLocked(desktopfn)) {
-                QIcon icon(QString(":/data/img/mainviewwidget/lock.svg"));
+                QIcon icon = getCurIcon(":/data/img/mainviewwidget/lock.svg", true);
                 icon.paint(painter, QRect(rect.topRight().x() - 22, rect.y() + (rect.height() - 16) / 2, 16, 16));
             }
 

@@ -674,19 +674,17 @@ void TabletWindow::execApplication(QString desktopfp)
         return;
     }
 
-    QString exe = execnamestr;
+    QString exe = execnamestr.simplified();
     QStringList parameters;
 
     if (exe.indexOf("%") != -1) {
         exe = exe.left(exe.indexOf("%") - 1);
-        //qDebug()<<"=====dd====="<<exe;
     }
 
-    if (exe.indexOf("-") != -1) {
+    if (exe.indexOf(" ") != -1) {
         parameters = exe.split(" ");
         exe = parameters[0];
         parameters.removeAt(0);
-        //qDebug()<<"===qqq==="<<exe;
     }
 
     if (exe == "/usr/bin/indicator-china-weather") {

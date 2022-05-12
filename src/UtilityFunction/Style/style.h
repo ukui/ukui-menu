@@ -169,7 +169,9 @@ public:
     static int WideAppListItemSizeHeight;
     static int WideAppViewLeftMargin;
     static bool IsWideScreen;
-
+    static int DropMenuWidth;
+    static int DropMenuHeight;
+    static int miniIconSize;
 
 };
 

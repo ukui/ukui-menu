@@ -51,6 +51,7 @@ protected:
     bool event(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void mousePressEvent(QMouseEvent *event);
+    void changeStyle();
 
 private:
     QAction *m_allAction = nullptr;
@@ -65,7 +66,7 @@ private:
     QSpacerItem *horizontalSpacer;
     QLineEdit *m_lineEdit;
     QSpacerItem *horizontalSpacer_2;
-    QToolButton *fullSelectToolButton;
+    QPushButton *fullSelectToolButton;
     QToolButton *fullSelectMenuButton;
     QPushButton *minPushButton;
     QStackedWidget *m_fullStackedWidget;
