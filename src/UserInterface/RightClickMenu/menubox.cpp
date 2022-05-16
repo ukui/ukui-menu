@@ -19,3 +19,9 @@ void MenuBox::mousePressEvent(QMouseEvent *event)
     return QMenu::mousePressEvent(event);
 }
 
+void MenuBox::hideEvent(QHideEvent *e)
+{
+    Q_EMIT sendMainWinActiveSignal(true);
+    return QMenu::hideEvent(e);
+}
+
