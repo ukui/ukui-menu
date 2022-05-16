@@ -608,8 +608,13 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
 void TabletWindow::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
+    QDBusInterface iface("com.kylin.AppManager",
+                         "/com/kylin/AppManager",
+                         "com.kylin.AppManager",
+                         QDBusConnection::sessionBus());
 
-    if (!g_subProjectCodeName.contains("mavis")) {
+    if (!g_subProjectCodeName.contains("mavis")
+        || (g_subProjectCodeName.contains("mavis") && !QDBusReply<bool>(iface.call("LaunchApp", desktopfp)))) {
         execApp(desktopfp);
         QString str;
         //打开文件.desktop
@@ -667,12 +672,6 @@ void TabletWindow::execApplication(QString desktopfp)
         } else {
             session.call("app_open", exe, parameters);
         }
-    } else {
-        QDBusInterface iface("com.kylin.AppManager",
-                             "/com/kylin/AppManager",
-                             "com.kylin.AppManager",
-                             QDBusConnection::sessionBus());
-        QDBusReply<bool> ret = iface.call("LaunchApp", desktopfp);
     }
 
     //Q_EMIT sendHideMainWindowSignal();
