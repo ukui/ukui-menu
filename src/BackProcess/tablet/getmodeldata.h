@@ -59,6 +59,11 @@ public:
      * @brief 重新加载各个部分数据，用于初始化和整体更新
      */
     void loadDesktopVercor();
+    /**
+     * @brief 获取预装应用
+     * @return
+     */
+    QStringList getPreCollectionApp();
 
 protected:
     /**

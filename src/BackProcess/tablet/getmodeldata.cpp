@@ -1,7 +1,7 @@
 #include "getmodeldata.h"
 #include <QTranslator>
 #include <QDir>
-#include "src/UtilityFunction/utility.h"
+#include "utility.h"
 
 GetModelData::GetModelData()
 {
@@ -32,6 +32,28 @@ QVector<QStringList> GetModelData::getMinAllData()
     }
 
     return m_minAllData;
+}
+
+QStringList GetModelData::getPreCollectionApp()
+{
+    //收藏区预置应用：设置、天气、软件商店、截图、文件管理器
+    QStringList preAppList = QStringList();
+    QStringList preAppListExist = QStringList();
+    preAppList << QString("/usr/share/applications/ukui-control-center.desktop")
+               <<QString("/usr/share/applications/kylin-weather.desktop")
+               <<QString("/usr/share/applications/kylin-software-center.desktop")
+               <<QString("/usr/share/applications/kylin-screenshot.desktop")
+               <<QString("/usr/share/applications/peony.desktop");
+    Q_FOREACH (QString appDesktop,preAppList) {
+        if (UkuiMenuInterface::allAppVector.contains(appDesktop)) {
+            preAppListExist.append(appDesktop);
+            QFileInfo fileInfo(appDesktop);
+            QString desktopfn = fileInfo.fileName();
+            updateDataBaseCollect(desktopfn,1);
+        }
+    }
+
+    return preAppListExist;
 }
 
 QStringList GetModelData::getcollectData()
