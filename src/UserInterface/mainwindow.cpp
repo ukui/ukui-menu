@@ -229,6 +229,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_minSelectButton->setText(QString());
     m_selectMenuButton->setText(QString());
     m_cancelSearchPushButton->setText(QString());
+    QFont collectFont("Noto Sans CJK SC",QGuiApplication::font().pointSize() + 2);
+    m_collectPushButton->setFont(collectFont);
     m_collectPushButton->setText(QApplication::translate("MainWindow", "collection", nullptr));
     m_recentPushButton->setText(QApplication::translate("MainWindow", "recent", nullptr));
     m_minMaxChangeButton->setToolTip(QApplication::translate("MainWindow", "Max", nullptr));
@@ -1027,10 +1029,14 @@ void MainWindow::on_collectPushButton_clicked()
 {
     m_rightStackedWidget->setCurrentIndex(0);
     m_collectPushButton->setStyleSheet("color:#3790FA;");
+    QFont collectFont("Noto Sans CJK SC",QGuiApplication::font().pointSize() + 2);
+    m_collectPushButton->setFont(collectFont);
     QColor textColor = this->palette().color(QPalette::Text);
     QRgb rgbDefault = qRgb(textColor.red(), textColor.green(), textColor.blue());
     QString textColorDefault = "#" +  QString::number(rgbDefault, 16);
     m_recentPushButton->setStyleSheet(QString("color:%1;").arg(textColorDefault));
+    QFont recentFont("Noto Sans CJK SC",QGuiApplication::font().pointSize());
+    m_recentPushButton->setFont(recentFont);
 }
 void MainWindow::on_recentPushButton_clicked()
 {
@@ -1039,8 +1045,11 @@ void MainWindow::on_recentPushButton_clicked()
     QRgb rgbDefault = qRgb(textColor.red(), textColor.green(), textColor.blue());
     QString textColorDefault = "#" +  QString::number(rgbDefault, 16);
     m_collectPushButton->setStyleSheet(QString("color:%1").arg(textColorDefault));
-//    m_collectPushButton->setStyleSheet("color:white");
+    QFont collectFont("Noto Sans CJK SC",QGuiApplication::font().pointSize());
+    m_collectPushButton->setFont(collectFont);
     m_recentPushButton->setStyleSheet("color:#3790FA");
+    QFont recentFont("Noto Sans CJK SC",QGuiApplication::font().pointSize() + 2);
+    m_recentPushButton->setFont(recentFont);
 }
 void MainWindow::on_cancelSearchPushButton_clicked()
 {
