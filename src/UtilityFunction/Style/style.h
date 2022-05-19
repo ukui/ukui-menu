@@ -173,6 +173,9 @@ public:
     static int DropMenuHeight;
     static int miniIconSize;
 
+    static int rightViewWidth;
+    static int rightViewHeight;
+
 };
 
 #endif // STYLE_H

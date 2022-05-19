@@ -185,7 +185,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //最近视图
     m_recentListView = new ListView(m_recentPage);
     m_recentListView->installEventFilter(this);
-    m_recentListView->setFixedSize(QSize(324, 470));
+    m_recentListView->setFixedSize(QSize(Style::rightViewWidth, Style::rightViewHeight));
+    m_recentTextlabel = new QLabel(m_recentPage);
+    m_recentTextlabel->setFixedSize(QSize(Style::rightViewWidth, Style::rightViewHeight));
+    m_recentTextlabel->setAlignment(Qt::AlignCenter);
+    m_recentTextlabel->setText(QApplication::translate("MainWindow","No recent files"));
+
     m_rightStackedWidget->addWidget(m_collectPage);
     m_rightStackedWidget->addWidget(m_recentPage);
     m_verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -216,6 +221,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_rightCollectLayout->addWidget(m_collectListView);
     m_rightCollectLayout->addItem(m_verticalSpacer_2);
     m_rightRecentLayout->addWidget(m_recentListView);
+    m_rightRecentLayout->addWidget(m_recentTextlabel);
     m_mainRightVerticalLayout_1->addWidget(m_rightStackedWidget);
     m_rightBottomHorizontalLayout->addItem(m_horizontalSpacer_2);
     m_rightBottomHorizontalLayout->addWidget(m_powerOffButton);
@@ -386,7 +392,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 m_lineEdit->setParent(nullptr);
                 m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
                 m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
-                m_lineEdit->setPlaceholderText("搜索应用");
+                m_lineEdit->setPlaceholderText(QApplication::translate("MainWindow","Search application"));
                 m_fullWindow->updateView();
             }
 
@@ -429,7 +435,15 @@ void MainWindow::initUi()
     m_minFuncListView->addData(m_modaldata->getMinFuncData(), 1);
     m_minLetterListView->addData(m_modaldata->getMinLetterData(), 2);
     m_collectListView->addData(m_modaldata->getcollectData());
-    m_recentListView->addData(m_modaldata->getRecentData(), -1);
+    QVector<QStringList> recentFile = m_modaldata->getRecentData();
+    m_recentListView->addData(recentFile , -1);
+
+    if (recentFile.isEmpty()) {
+        m_recentListView->hide();
+    } else {
+        m_recentTextlabel->hide();
+    }
+
     m_dropDownMenu = new MenuBox(this);
     m_dropDownMenu->setFixedSize(Style::DropMenuWidth, Style::DropMenuHeight);
     m_allAction = new QAction(m_dropDownMenu);
@@ -1003,7 +1017,15 @@ void MainWindow::updateMinAllView()
 void MainWindow::updateRecentView()
 {
     m_modaldata->loadDesktopVercor();
-    m_recentListView->updateData(m_modaldata->getRecentData());
+    QVector<QStringList> recentFile = m_modaldata->getRecentData();
+    if (recentFile.isEmpty()) {
+        m_recentListView->hide();
+        m_recentTextlabel->show();
+    } else {
+        m_recentTextlabel->hide();
+        m_recentListView->show();
+        m_recentListView->updateData(recentFile);
+    }
 }
 void MainWindow::updateView()
 {
@@ -1025,6 +1047,7 @@ void MainWindow::databaseThreadCloseSlot()
     m_softwareDbThread->quit();
     updateView();
 }
+
 void MainWindow::on_collectPushButton_clicked()
 {
     m_rightStackedWidget->setCurrentIndex(0);
@@ -1038,6 +1061,7 @@ void MainWindow::on_collectPushButton_clicked()
     QFont recentFont("Noto Sans CJK SC",QGuiApplication::font().pointSize());
     m_recentPushButton->setFont(recentFont);
 }
+
 void MainWindow::on_recentPushButton_clicked()
 {
     m_rightStackedWidget->setCurrentIndex(1);
@@ -1050,6 +1074,7 @@ void MainWindow::on_recentPushButton_clicked()
     m_recentPushButton->setStyleSheet("color:#3790FA");
     QFont recentFont("Noto Sans CJK SC",QGuiApplication::font().pointSize() + 2);
     m_recentPushButton->setFont(recentFont);
+    updateRecentView();
 }
 void MainWindow::on_cancelSearchPushButton_clicked()
 {

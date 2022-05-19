@@ -104,6 +104,9 @@ int Style::DropMenuWidth = 0;
 int Style::DropMenuHeight = 0;
 int Style::miniIconSize = 0;
 
+int Style::rightViewWidth = 0;
+int Style::rightViewHeight = 0;
+
 void Style::initWidStyle()
 {
     if (!g_projectCodeName.contains("V10SP1-edu")) {
@@ -208,6 +211,8 @@ void Style::initWidStyle()
         DropMenuWidth = 128;
         DropMenuHeight = 112;
         miniIconSize = 8;
+        rightViewWidth = 324;
+        rightViewHeight = 470;
         LeftSpaceIconText = 14;
         m_applistWidWidth = m_availableScreenWidth / 1.25;
         m_applistWidWidth = m_applistWidWidth - (m_applistWidWidth % m_applistGridSizeWidth) + 1;
