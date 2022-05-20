@@ -49,17 +49,17 @@ MainWindow::MainWindow(QWidget *parent) :
     //左侧
     m_viewWidget = new MainViewWidget(m_centralwidget);
     m_mainLeftVerticalLayout = new QVBoxLayout(m_viewWidget);
-    m_mainLeftVerticalLayout->setSpacing(0);
-    m_mainLeftVerticalLayout->setContentsMargins(8, 4, 0, 0);
+    m_mainLeftVerticalLayout->setSpacing(9);
+    m_mainLeftVerticalLayout->setContentsMargins(8, 13, 0, 0);
     //搜索框部分
     m_topStackedWidget = new QStackedWidget(m_viewWidget);
-    m_topStackedWidget->setFixedHeight(48);
+    m_topStackedWidget->setFixedHeight(34);
     //搜索框收起页
     m_minMenuPage = new QWidget();
-    m_minMenuPage->setMinimumSize(QSize(0, 40));
+    m_minMenuPage->setMinimumSize(QSize(0, 34));
     m_letfTopSelectHorizontalLayout = new QHBoxLayout(m_minMenuPage);
     m_letfTopSelectHorizontalLayout->setSpacing(2);
-    m_letfTopSelectHorizontalLayout->setContentsMargins(8, 0, 4, 12);
+    m_letfTopSelectHorizontalLayout->setContentsMargins(8, 0, 4, 0);
     m_minSelectTextLabel = new QLabel(m_minMenuPage);
     m_horizontalSpacer = new QSpacerItem(58, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_searchPushButton = new QPushButton(m_minMenuPage);
@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //搜索框展开页
     m_minSearchPage = new QWidget();
     m_leftTopSearchHorizontalLayout = new QHBoxLayout(m_minSearchPage);
-    m_leftTopSearchHorizontalLayout->setContentsMargins(8, 0, 8, 12);
+    m_leftTopSearchHorizontalLayout->setContentsMargins(8, 0, 8, 0);
     m_lineEdit = new QLineEdit(m_minSearchPage);
     m_lineEdit->setMinimumSize(QSize(30, 26));
     m_lineEdit->setStyleSheet(QString::fromUtf8("border-radius: 13px; border:1px solid rgba(5, 151, 255, 1); background: transparent;"));
@@ -128,11 +128,11 @@ MainWindow::MainWindow(QWidget *parent) :
     //右侧窗口
     m_mainRightVerticalLayout = new QVBoxLayout();
     m_mainRightVerticalLayout->setSpacing(0);
-    m_mainRightVerticalLayout->setContentsMargins(8, 4, 8, 8);
+    m_mainRightVerticalLayout->setContentsMargins(8, 6, 8, 8);
     m_mainRightVerticalLayout_1 = new QVBoxLayout();
     m_rightTopHorizontalLayout = new QHBoxLayout();
     m_rightTopHorizontalLayout->setSpacing(30);
-    m_rightTopHorizontalLayout->setContentsMargins(8, 0, 10, 8);
+    m_rightTopHorizontalLayout->setContentsMargins(8, 0, 10, 0);
     //收藏按键
     m_collectPushButton = new QLabel(m_centralwidget);
     m_collectPushButton->setFocusPolicy(Qt::StrongFocus);
@@ -163,7 +163,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_collectPage = new QWidget();
     m_collectPage->setFixedSize(QSize(324, 480));
     m_rightCollectLayout = new QVBoxLayout(m_collectPage);
-    m_rightCollectLayout->setContentsMargins(0, 0, 0, 0);
+    m_rightCollectLayout->setContentsMargins(0, 18, 0, 0);
     //收藏视图
     m_collectListView = new RightListView(m_collectPage);
     m_collectListView->setFixedSize(QSize(324, 428));
@@ -211,8 +211,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
     m_mainLeftVerticalLayout->addWidget(m_topStackedWidget);
     m_mainLeftVerticalLayout->addWidget(m_leftStackedWidget);
+    m_mainLeftVerticalLayout->addStretch();
     m_mainRightVerticalLayout_1->addLayout(m_rightTopHorizontalLayout);
-    m_rightCollectLayout->addItem(m_verticalSpacer);
     m_rightCollectLayout->addWidget(m_collectListView);
     m_rightCollectLayout->addItem(m_verticalSpacer_2);
     m_rightRecentLayout->addWidget(m_recentListView);
@@ -444,7 +444,6 @@ void MainWindow::initUi()
     m_dropDownMenu->addAction(m_funcAction);
     m_allAction->setChecked(true);
     m_collectPushButton->setStyleSheet("color:#3790FA;");
-//    m_collectPushButton->setStyleSheet("border: 1px solid red;");
     QColor textColor = this->palette().color(QPalette::Text);
     QRgb rgbDefault = qRgb(textColor.red(), textColor.green(), textColor.blue());
     QString textColorDefault = "#" +  QString::number(rgbDefault, 16);
