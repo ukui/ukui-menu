@@ -189,7 +189,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_recentTextlabel = new QLabel(m_recentPage);
     m_recentTextlabel->setFixedSize(QSize(Style::rightViewWidth, Style::rightViewHeight));
     m_recentTextlabel->setAlignment(Qt::AlignCenter);
-    m_recentTextlabel->setText(QApplication::translate("MainWindow","No recent files"));
+    m_recentTextlabel->setText(QApplication::translate("MainWindow", "No recent files"));
 
     m_rightStackedWidget->addWidget(m_collectPage);
     m_rightStackedWidget->addWidget(m_recentPage);
@@ -235,7 +235,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_minSelectButton->setText(QString());
     m_selectMenuButton->setText(QString());
     m_cancelSearchPushButton->setText(QString());
-    QFont collectFont("Noto Sans CJK SC",QGuiApplication::font().pointSize() + 2);
+    QFont collectFont(QGuiApplication::font().family(), QGuiApplication::font().pointSize() + 2);
     m_collectPushButton->setFont(collectFont);
     m_collectPushButton->setText(QApplication::translate("MainWindow", "collection", nullptr));
     m_recentPushButton->setText(QApplication::translate("MainWindow", "recent", nullptr));
@@ -392,7 +392,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 m_lineEdit->setParent(nullptr);
                 m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
                 m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
-                m_lineEdit->setPlaceholderText(QApplication::translate("MainWindow","Search application"));
+                m_lineEdit->setPlaceholderText(QApplication::translate("MainWindow", "Search application"));
                 m_fullWindow->updateView();
             }
 
@@ -445,7 +445,7 @@ void MainWindow::initUi()
     }
 
     m_dropDownMenu = new MenuBox(this);
-    m_dropDownMenu->setFixedSize(Style::DropMenuWidth, Style::DropMenuHeight);
+    m_dropDownMenu->setFixedWidth(Style::DropMenuWidth);
     m_allAction = new QAction(m_dropDownMenu);
     m_letterAction = new QAction(m_dropDownMenu);
     m_funcAction = new QAction(m_dropDownMenu);
@@ -790,7 +790,7 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
             m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/uparrow.svg", true)
                                           .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
             m_dropDownMenu->raise();
-            m_dropDownMenu->exec(this->mapToGlobal(QPoint(m_selectMenuButton->x() - 105, m_selectMenuButton->y() + 50)));
+            m_dropDownMenu->exec(m_selectMenuButton->mapToGlobal(QPoint((m_selectMenuButton->width() - Style::DropMenuWidth - 5), 29)));
         }
     }
 
@@ -1052,13 +1052,13 @@ void MainWindow::on_collectPushButton_clicked()
 {
     m_rightStackedWidget->setCurrentIndex(0);
     m_collectPushButton->setStyleSheet("color:#3790FA;");
-    QFont collectFont("Noto Sans CJK SC",QGuiApplication::font().pointSize() + 2);
+    QFont collectFont(QGuiApplication::font().family(), QGuiApplication::font().pointSize() + 2);
     m_collectPushButton->setFont(collectFont);
     QColor textColor = this->palette().color(QPalette::Text);
     QRgb rgbDefault = qRgb(textColor.red(), textColor.green(), textColor.blue());
     QString textColorDefault = "#" +  QString::number(rgbDefault, 16);
     m_recentPushButton->setStyleSheet(QString("color:%1;").arg(textColorDefault));
-    QFont recentFont("Noto Sans CJK SC",QGuiApplication::font().pointSize());
+    QFont recentFont(QGuiApplication::font().family(), QGuiApplication::font().pointSize());
     m_recentPushButton->setFont(recentFont);
 }
 
@@ -1069,10 +1069,10 @@ void MainWindow::on_recentPushButton_clicked()
     QRgb rgbDefault = qRgb(textColor.red(), textColor.green(), textColor.blue());
     QString textColorDefault = "#" +  QString::number(rgbDefault, 16);
     m_collectPushButton->setStyleSheet(QString("color:%1").arg(textColorDefault));
-    QFont collectFont("Noto Sans CJK SC",QGuiApplication::font().pointSize());
+    QFont collectFont(QGuiApplication::font().family(), QGuiApplication::font().pointSize());
     m_collectPushButton->setFont(collectFont);
     m_recentPushButton->setStyleSheet("color:#3790FA");
-    QFont recentFont("Noto Sans CJK SC",QGuiApplication::font().pointSize() + 2);
+    QFont recentFont(QGuiApplication::font().family(), QGuiApplication::font().pointSize() + 2);
     m_recentPushButton->setFont(recentFont);
     updateRecentView();
 }

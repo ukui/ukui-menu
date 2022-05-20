@@ -208,7 +208,7 @@ void Style::initWidStyle()
         QueryLineEditHeight = 30;
         LeftLetterBtnHeight = 25;
         LeftIconSize = 19;
-        DropMenuWidth = 128;
+        DropMenuWidth = 140;
         DropMenuHeight = 112;
         miniIconSize = 8;
         rightViewWidth = 324;
