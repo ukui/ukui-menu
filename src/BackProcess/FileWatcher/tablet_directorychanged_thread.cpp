@@ -76,14 +76,24 @@ void TabletDirectoryChangedThread::run()
             QStringList applist = setting->allKeys();
             int appnum = setting->allKeys().count();
             int maxindex = 0;
+            int minindex = 0;
 
             for (int i = 0; i < appnum; i++) {
                 if (setting->value(applist.at(i)).toInt() > maxindex) {
                     maxindex = setting->value(applist.at(i)).toInt();
                 }
+
+                if(setting->value(applist.at(i)).toInt() <= minindex) {
+                    minindex = setting->value(applist.at(i)).toInt();
+                }
             }
 
-            setting->setValue(desktopfn, maxindex + 1); //setting->allKeys().count()
+            if (desktopfn.contains("small-plugin-manage")){
+                setting->setValue(desktopfn,minindex-1);
+            } else {
+                setting->setValue(desktopfn,maxindex+1);
+            }
+
             setting->sync();
             setting->endGroup();
             //
