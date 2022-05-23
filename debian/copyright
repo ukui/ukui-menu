@@ -7,10 +7,6 @@ Files: *
 Copyright: 2019 Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-3.0+
 
-Files: debian/*
-Copyright: 2019 liuhao <liuhao@kylinos.cn>
-License: GPL-3.0+
-
 License: GPL-3.0+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
