@@ -372,6 +372,26 @@ bool updateDataBaseTableTimes(QString desktopfn)
     return ret;
 }
 
+bool dataBaseIsEmpty()
+{
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
+    QSqlQuery sql(db);
+    QString cmd;
+    cmd = QString("select * from appInfo");
+    if (sql.exec(cmd)) {
+
+        if (!sql.next()) {
+            return true;
+        } else {
+            if (sql.value(0).toString() == "") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+}
+
 bool updateDataBaseCollect(QString desktopfn, int type)
 {
     bool ret = false;

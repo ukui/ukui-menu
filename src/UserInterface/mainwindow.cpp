@@ -435,7 +435,13 @@ void MainWindow::initUi()
     m_minAllListView->addData(m_modaldata->getMinAllData(), 0);
     m_minFuncListView->addData(m_modaldata->getMinFuncData(), 1);
     m_minLetterListView->addData(m_modaldata->getMinLetterData(), 2);
-    m_collectListView->addData(m_modaldata->getcollectData());
+
+    if (dataBaseIsEmpty()) {
+        m_collectListView->addData(m_modaldata->getPreCollectionApp());
+    } else {
+        m_collectListView->addData(m_modaldata->getcollectData());
+    }
+
     QVector<QStringList> recentFile = m_modaldata->getRecentData();
     m_recentListView->addData(recentFile , -1);
 

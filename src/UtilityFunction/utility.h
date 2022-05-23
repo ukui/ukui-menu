@@ -60,6 +60,7 @@ bool checkIfRecent(QString desktopfn);//检查是否最近安装
 bool checkIfCollected(QString desktopfn);
 QStringList getCollectAppList();
 void changeCollectSort(QString dragDesktopfn, QString dropDesktopfn);
+bool dataBaseIsEmpty();//判断数据库是否为空
 bool updateDataBaseCollect(QString desktopfn, int type);
 QStringList getLockAppList();//获取被锁定应用
 QStringList getUnlockAllList();//获取未被锁定应用
