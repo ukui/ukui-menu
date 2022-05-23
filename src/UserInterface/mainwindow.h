@@ -194,6 +194,7 @@ private:
     RightListView *m_collectListView = nullptr;
     QWidget *m_recentPage = nullptr;
     ListView *m_recentListView = nullptr;
+    QLabel *m_recentTextlabel = nullptr;
     QSpacerItem *m_verticalSpacer_2 = nullptr;
     QHBoxLayout *m_rightBottomHorizontalLayout = nullptr;
     QSpacerItem *m_horizontalSpacer_2 = nullptr;
