@@ -1,9 +1,8 @@
 ukui-menu (3.0.3-1) unstable; urgency=medium
 
   * New upstream release.
-  * Update d/copyright.
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 15 Feb 2022 17:47:33 +0800
+ -- Allen <zouchang@kylinos.cn>  Thu, 04 Nov 2021 19:16:55 +0800
 
 ukui-menu (3.0.2-1) unstable; urgency=medium
 
