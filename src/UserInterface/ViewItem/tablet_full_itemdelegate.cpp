@@ -33,7 +33,6 @@ TabletFullItemDelegate::TabletFullItemDelegate(QObject *parent, int module):
     settt = new QSettings(pathini, QSettings::IniFormat);
     QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
     setting = new QSettings(path, QSettings::IniFormat);
-    //    qDebug() << "---------------------gengxinleziti---------------------";
 }
 
 TabletFullItemDelegate::~TabletFullItemDelegate()
@@ -73,11 +72,6 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         QString appname = pUkuiMenuInterface->getAppName(desktopfp);
         QRect iconRect;
         QRect textRect;
-        //        QString desktopfn=desktopfp.split('/').last();
-        //        setting->beginGroup("groupname");
-        //        bool iscontain=setting->contains(desktopfn);
-        //        setting->sync();
-        //        setting->endGroup();
 
         if (iconFileInfo.isFile() && (iconstr.endsWith(".png") || iconstr.endsWith(".svg"))) {
             icon = QIcon(iconstr);
@@ -118,28 +112,27 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         }
 
         bool bigIcon = index.data(Qt::UserRole + 2).toBool();
+        int iconTopSpace = (rect.height() - Style::AppListIconSize) / 2;
+        int iconLeftSpace = (rect.width() - Style::AppListIconSize) / 2;
 
         if (bigIcon) {
-            iconRect = QRect(rect.x() + Style::AppLeftSpace - 6, //94
-                             rect.y() + Style::AppTopSpace - 6, //60
-                             Style::AppListIconSize + 12,//96
+            iconRect = QRect(rect.x() + iconLeftSpace - 6,
+                             rect.y() + iconTopSpace - 6,
+                             Style::AppListIconSize + 12,
                              Style::AppListIconSize + 12);
             textRect = QRect(rect.x(),
-                             iconRect.bottom() /*- 3*/,
+                             rect.bottom() - iconTopSpace,
                              rect.width(),
-                             rect.height() - iconRect.height() - Style::AppTopSpace - 30);
-            //            QPixmap pixmap;
-            //            pixmap = icon.pixmap((Style::AppListIconSize+20,Style::AppListIconSize+20));//wgx
-            //            icon=QIcon(pixmap);
+                             iconTopSpace);
         } else {
-            iconRect = QRect(rect.x() + Style::AppLeftSpace,
-                             rect.y() + Style::AppTopSpace,
+            iconRect = QRect(rect.x() + iconLeftSpace,
+                             rect.y() + iconTopSpace,
                              Style::AppListIconSize,
                              Style::AppListIconSize);
             textRect = QRect(rect.x(),
-                             iconRect.bottom(),
+                             rect.bottom() - iconTopSpace,
                              rect.width(),
-                             rect.height() - iconRect.height() - Style::AppTopSpace - 30);
+                             iconTopSpace);
         }
 
         QString str;

@@ -9,34 +9,50 @@ PageManager::PageManager()
     m_ukuiMenuInterface->initAppIni();
 }
 
-int PageManager::getPageNum(int appnum)
+int PageManager::getPageNum(const int &appNum)
 {
     int pageNum = 0;
-    Style::appColumn = 6;
-    Style::appLine = 4;
 
-    if (appnum % (Style::appColumn * Style::appLine) == 0) {
-        pageNum = appnum / (Style::appColumn * Style::appLine);
+    if (appNum / (Style::appColumnFirst * Style::appLineFirst) == 0) {
+        pageNum = 1;
     } else {
-        pageNum = appnum / (Style::appColumn * Style::appLine) + 1;
+        int  appNumOtherPage = appNum - (Style::appColumnFirst * Style::appLineFirst);
+
+        if (appNumOtherPage % (Style::appColumn * Style::appLine) == 0) {
+            pageNum = appNumOtherPage / (Style::appColumn * Style::appLine) + 1;
+        } else {
+            pageNum = appNumOtherPage / (Style::appColumn * Style::appLine) + 2;
+        }
     }
 
     return pageNum;
 }
 
-QVector<QStringList> PageManager::sortAppInPage(QVector<QString> appvector)
+QVector<QStringList> PageManager::sortAppInPage(const QVector<QString> &appVector)
 {
     QVector<QString> m_data;
     QVector<QStringList> pageData;
     QStringList onePageData;
 
-    Q_FOREACH (QString desktopfp, appvector) {
+    Q_FOREACH (QString desktopfp, appVector) {
         m_data.append(desktopfp);
     }
 
     int pageSize = getPageNum(m_data.size());
+    onePageData.clear();
 
-    for (int i = 0; i < pageSize; i++) {
+    for (int j = 0; j < Style::appColumnFirst * Style::appLineFirst; j++) {
+        if (m_data.size() > 0) {
+            onePageData.append(m_data.at(0));
+            m_data.pop_front();
+        } else {
+            break;
+        }
+    }
+
+    pageData.append(onePageData);
+
+    for (int i = 0; i < pageSize - 1; i++) {
         onePageData.clear();
 
         for (int j = 0; j < Style::appColumn * Style::appLine; j++) {
@@ -44,7 +60,6 @@ QVector<QStringList> PageManager::sortAppInPage(QVector<QString> appvector)
                 onePageData.append(m_data.at(0));
                 m_data.pop_front();
             } else {
-                //  pageData.append(onePageData);
                 break;
             }
         }

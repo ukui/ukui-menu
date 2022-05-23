@@ -76,6 +76,8 @@ int Style::SideBarWidWidth = 0;
 
 int Style::appLine = 0;
 int Style::appColumn = 0;
+int Style::appLineFirst = 0;
+int Style::appColumnFirst = 0;
 int Style::appPage = 1;
 int Style::appNum = 0;
 int Style::nowpagenum = 1;
@@ -103,6 +105,9 @@ bool Style::IsWideScreen = false;
 int Style::DropMenuWidth = 0;
 int Style::DropMenuHeight = 0;
 int Style::miniIconSize = 0;
+
+int Style::rightViewWidth = 0;
+int Style::rightViewHeight = 0;
 
 void Style::initWidStyle()
 {
@@ -205,9 +210,11 @@ void Style::initWidStyle()
         QueryLineEditHeight = 30;
         LeftLetterBtnHeight = 25;
         LeftIconSize = 19;
-        DropMenuWidth = 128;
+        DropMenuWidth = 140;
         DropMenuHeight = 112;
         miniIconSize = 8;
+        rightViewWidth = 324;
+        rightViewHeight = 470;
         LeftSpaceIconText = 14;
         m_applistWidWidth = m_availableScreenWidth / 1.25;
         m_applistWidWidth = m_applistWidWidth - (m_applistWidWidth % m_applistGridSizeWidth) + 1;
@@ -217,23 +224,25 @@ void Style::initWidStyle()
     } else {
         ScreenWidth = QApplication::primaryScreen()->geometry().width();
         ScreenHeight = QApplication::primaryScreen()->geometry().height();
-
-        if (ScreenHeight != 1080) {
-            AppListViewTopMargin = 30;
-        } else {
-            AppListViewTopMargin = 70;
-        }
-
+        myDebug() << "Winches" << qApp->desktop()->widthMM();
+        myDebug() << "Hinches" << qApp->desktop()->heightMM();
+        myDebug() << "ScreenWidth" << ScreenWidth;
+        myDebug() << "ScreenHeight" << ScreenHeight;
+        appColumn = 6;
+        appLine = 4;
+        appLineFirst = 4;
+        AppListViewTopMargin = 70;
         AppListViewLeftMargin = 52;
         AppListViewBottomMargin = AppListViewTopMargin - 30;
         AppListViewRightMargin = 0;
         m_leftWidWidth = ScreenWidth * 0.3;
         FirsPageViewWidth = ScreenWidth - m_leftWidWidth - 5;
+        appColumnFirst = FirsPageViewWidth / 220;
         OtherPageViewWidth = ScreenWidth;
-        TabletItemSizeWidthFirst = FirsPageViewWidth / 6;
-        TabletItemSizeWidthOther = (ScreenWidth - 5) / 6;
+        TabletItemSizeWidthFirst = FirsPageViewWidth / appColumnFirst;
+        TabletItemSizeWidthOther = (ScreenWidth - 5) / appColumn;
         CenterWindHeight =  ScreenHeight - AppListViewBottomMargin - AppListViewTopMargin;
-        AppListItemSizeHeight = CenterWindHeight / 4;
+        AppListItemSizeHeight = CenterWindHeight / appLine;
         AppListIconSize = 96;
         AppListBigIconSize = 108;
         AppTopSpace = (AppListItemSizeHeight - AppListIconSize) / 2;

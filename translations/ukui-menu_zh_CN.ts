@@ -4,22 +4,22 @@
 <context>
     <name>FullMainWindow</name>
     <message>
-        <location filename="../src/UserInterface/full_mainwindow.cpp" line="79"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="86"/>
         <source>Search</source>
         <translation>搜索应用</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/full_mainwindow.cpp" line="138"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="144"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/full_mainwindow.cpp" line="140"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="146"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/full_mainwindow.cpp" line="142"/>
+        <location filename="../src/UserInterface/full_mainwindow.cpp" line="148"/>
         <source>Function</source>
         <translation>功能分类</translation>
     </message>
@@ -27,7 +27,7 @@
 <context>
     <name>FunctionWidget</name>
     <message>
-        <location filename="../src/UserInterface/Widget/function_Widget.cpp" line="205"/>
+        <location filename="../src/UserInterface/Widget/function_Widget.cpp" line="204"/>
         <source>Search</source>
         <translation>全局搜索</translation>
     </message>
@@ -35,51 +35,56 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="97"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="90"/>
         <source>Search</source>
         <translation>搜索应用</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="237"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="426"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="844"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="192"/>
+        <source>No recent files</source>
+        <translation>暂无最近文件</translation>
+    </message>
+    <message>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="233"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="452"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="985"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="239"/>
-        <source>...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="242"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="240"/>
         <source>collection</source>
         <translation>收藏</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="243"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="241"/>
         <source>recent</source>
         <translation>最近</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="244"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="242"/>
         <source>Max</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="246"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="244"/>
         <source>PowerOff</source>
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="428"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="852"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="395"/>
+        <source>Search application</source>
+        <translation>搜索应用</translation>
+    </message>
+    <message>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="454"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="993"/>
         <source>Letter</source>
         <translation>字母排序</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="430"/>
-        <location filename="../src/UserInterface/mainwindow.cpp" line="860"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="456"/>
+        <location filename="../src/UserInterface/mainwindow.cpp" line="1001"/>
         <source>Function</source>
         <translation>功能分类</translation>
     </message>
@@ -156,82 +161,82 @@
 <context>
     <name>RightClickMenu</name>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="228"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="213"/>
         <source>Pin to all</source>
         <translation>固定到“所有软件”</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="231"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="216"/>
         <source>Unpin from all</source>
         <translation>从“所有软件”取消固定</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="241"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="226"/>
         <source>Pin to taskbar</source>
         <translation>固定到任务栏</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="244"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="229"/>
         <source>Unpin from taskbar</source>
         <translation>从任务栏取消固定</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="247"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="232"/>
         <source>Add to desktop shortcuts</source>
         <translation>添加到桌面快捷方式</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="251"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="236"/>
         <source>Pin to collection</source>
         <translation>固定到收藏</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="254"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="239"/>
         <source>Remove from collection</source>
         <translation>从收藏移除</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="269"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="254"/>
         <source>Uninstall</source>
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="290"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="274"/>
         <source>Switch user</source>
         <translation>切换用户</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="296"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="281"/>
         <source>Hibernate</source>
         <translation>休眠</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="302"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="288"/>
         <source>Sleep</source>
         <translation>睡眠</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="306"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="292"/>
         <source>Lock Screen</source>
         <translation>锁屏</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="311"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="297"/>
         <source>Log Out</source>
         <translation>注销</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="317"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="304"/>
         <source>Restart</source>
         <translation>重启</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="323"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="311"/>
         <source>Power Off</source>
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="354"/>
+        <location filename="../src/UserInterface/RightClickMenu/rightclickmenu.cpp" line="342"/>
         <source>Personalize this list</source>
         <translation type="unfinished"></translation>
     </message>
