@@ -31,6 +31,7 @@
 
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
 QString g_projectCodeName = "V10SP1";
+QString g_subProjectCodeName = "";
 bool g_menuStatus = false;
 QString g_curStyle = "";
 
@@ -369,6 +370,26 @@ bool updateDataBaseTableTimes(QString desktopfn)
     }
 
     return ret;
+}
+
+bool dataBaseIsEmpty()
+{
+    QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
+    QSqlQuery sql(db);
+    QString cmd;
+    cmd = QString("select * from appInfo");
+    if (sql.exec(cmd)) {
+
+        if (!sql.next()) {
+            return true;
+        } else {
+            if (sql.value(0).toString() == "") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
 
 bool updateDataBaseCollect(QString desktopfn, int type)

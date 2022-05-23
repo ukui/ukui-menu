@@ -607,63 +607,71 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
  */
 void TabletWindow::execApplication(QString desktopfp)
 {
-//    Q_EMIT sendHideMainWindowSignal();
-//    execApp(desktopfp);
-    QString str;
-    //打开文件.desktop
-    GError **error = nullptr;
-    GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new();
-    QByteArray fpbyte = desktopfp.toLocal8Bit();
-    char *filepath = fpbyte.data();
-    g_key_file_load_from_file(keyfile, filepath, flags, error);
-    char *name = g_key_file_get_locale_string(keyfile, "Desktop Entry", "Exec", nullptr, nullptr);
-    //取出value值
-    QString execnamestr = QString::fromLocal8Bit(name);
-    str = execnamestr;
-    //qDebug()<<"2 exec"<<str;
-    //关闭文件
-    g_key_file_free(keyfile);
-    //打开ini文件
-    QString pathini = QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini";
-    m_disableAppSet = new QSettings(pathini, QSettings::IniFormat);
-    m_disableAppSet->beginGroup("application");
-    QString desktopfp1 = str;
-    //判断
-    bool bo = m_disableAppSet->contains(desktopfp1.toLocal8Bit().data()); // iskey
-    bool bo1 = m_disableAppSet->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool(); //isvalue
-    m_disableAppSet->endGroup();
+    Q_EMIT sendHideMainWindowSignal();
+    QDBusInterface iface("com.kylin.AppManager",
+                         "/com/kylin/AppManager",
+                         "com.kylin.AppManager",
+                         QDBusConnection::sessionBus());
 
-    if (bo && bo1 == false) { //都存在//存在并且为false，从filepathlist中去掉
-        //qDebug()<<"bool"<<bo<<bo1;
-        return;
-    }
+    if (!g_subProjectCodeName.contains("mavis")
+        || (g_subProjectCodeName.contains("mavis") && !QDBusReply<bool>(iface.call("LaunchApp", desktopfp)))) {
+        execApp(desktopfp);
+        QString str;
+        //打开文件.desktop
+        GError **error = nullptr;
+        GKeyFileFlags flags = G_KEY_FILE_NONE;
+        GKeyFile *keyfile = g_key_file_new();
+        QByteArray fpbyte = desktopfp.toLocal8Bit();
+        char *filepath = fpbyte.data();
+        g_key_file_load_from_file(keyfile, filepath, flags, error);
+        char *name = g_key_file_get_locale_string(keyfile, "Desktop Entry", "Exec", nullptr, nullptr);
+        //取出value值
+        QString execnamestr = QString::fromLocal8Bit(name);
+        str = execnamestr;
+        //qDebug()<<"2 exec"<<str;
+        //关闭文件
+        g_key_file_free(keyfile);
+        //打开ini文件
+        QString pathini = QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini";
+        m_disableAppSet = new QSettings(pathini, QSettings::IniFormat);
+        m_disableAppSet->beginGroup("application");
+        QString desktopfp1 = str;
+        //判断
+        bool bo = m_disableAppSet->contains(desktopfp1.toLocal8Bit().data()); // iskey
+        bool bo1 = m_disableAppSet->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool(); //isvalue
+        m_disableAppSet->endGroup();
 
-    QString exe = execnamestr.simplified();
-    QStringList parameters;
+        if (bo && bo1 == false) { //都存在//存在并且为false，从filepathlist中去掉
+            //qDebug()<<"bool"<<bo<<bo1;
+            return;
+        }
 
-    if (exe.indexOf("%") != -1) {
-        exe = exe.left(exe.indexOf("%") - 1);
-    }
+        QString exe = execnamestr.simplified();
+        QStringList parameters;
 
-    if (exe.indexOf(" ") != -1) {
-        parameters = exe.split(" ");
-        exe = parameters[0];
-        parameters.removeAt(0);
-    }
+        if (exe.indexOf("%") != -1) {
+            exe = exe.left(exe.indexOf("%") - 1);
+        }
 
-    if (exe == "/usr/bin/indicator-china-weather") {
-        parameters.removeAt(0);
-        parameters.append("showmainwindow");
-    }
+        if (exe.indexOf(" ") != -1) {
+            parameters = exe.split(" ");
+            exe = parameters[0];
+            parameters.removeAt(0);
+        }
 
-    qDebug() << "5 exe" << exe << parameters;
-    QDBusInterface session("org.gnome.SessionManager", "/com/ukui/app", "com.ukui.app");
+        if (exe == "/usr/bin/indicator-china-weather") {
+            parameters.removeAt(0);
+            parameters.append("showmainwindow");
+        }
 
-    if (parameters.isEmpty()) {
-        session.call("app_open", exe, parameters);
-    } else {
-        session.call("app_open", exe, parameters);
+        qDebug() << "5 exe" << exe << parameters;
+        QDBusInterface session("org.gnome.SessionManager", "/com/ukui/app", "com.ukui.app");
+
+        if (parameters.isEmpty()) {
+            session.call("app_open", exe, parameters);
+        } else {
+            session.call("app_open", exe, parameters);
+        }
     }
 
     //Q_EMIT sendHideMainWindowSignal();

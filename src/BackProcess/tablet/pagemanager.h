@@ -10,8 +10,8 @@ class PageManager : public QObject
 public:
     PageManager();
 
-    int getPageNum(int appnum);
-    QVector<QStringList> sortAppInPage(QVector<QString> appvector);
+    int getPageNum(const int &appNum);
+    QVector<QStringList> sortAppInPage(const QVector<QString> &appVector);
     QVector<QStringList> getAppPageVector();
 private:
     UkuiMenuInterface *m_ukuiMenuInterface = nullptr;
