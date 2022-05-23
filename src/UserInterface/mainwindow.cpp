@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_minMenuPage->setMinimumSize(QSize(0, 40));
     m_letfTopSelectHorizontalLayout = new QHBoxLayout(m_minMenuPage);
     m_letfTopSelectHorizontalLayout->setSpacing(2);
-    m_letfTopSelectHorizontalLayout->setContentsMargins(8, 0, 4, 12);
+    m_letfTopSelectHorizontalLayout->setContentsMargins(8, 0, 8, 12);
     m_minSelectTextLabel = new QLabel(m_minMenuPage);
     m_horizontalSpacer = new QSpacerItem(58, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_searchPushButton = new QPushButton(m_minMenuPage);
@@ -71,14 +71,14 @@ MainWindow::MainWindow(QWidget *parent) :
     m_minSelectButton->setFixedSize(QSize(26, 26));
     m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-all.svg", true));
     m_minSelectButton->installEventFilter(this);
-    m_selectMenuButton = new QLabel(m_minMenuPage);
+    m_selectMenuButton = new RotationLabel(m_minMenuPage);
     m_selectMenuButton->installEventFilter(this);
     m_selectMenuButton->setStyleSheet("background: transparent;");
-    m_selectMenuButton->setFixedSize(QSize(16, 26));
+    m_selectMenuButton->setFixedSize(QSize(8, 26));
     m_selectMenuButton->setAcceptDrops(true);
     m_selectMenuButton->setFocusPolicy(Qt::StrongFocus);
-    m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
-                                  .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+    m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
+                                .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
     //搜索框展开页
     m_minSearchPage = new QWidget();
     m_leftTopSearchHorizontalLayout = new QHBoxLayout(m_minSearchPage);
@@ -357,8 +357,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_minSelectButton, &QToolButton::clicked, this, &MainWindow::on_minSelectButton_clicked);
     connect(m_dropDownMenu, &MenuBox::triggered, this, &MainWindow::on_selectMenuButton_triggered);
     connect(m_dropDownMenu, &MenuBox::sendMainWinActiveSignal, [ = ]() {
-        m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
-                                      .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+        m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
+                                    .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+        selectIconAnimation(false);
     });
     connect(m_powerOffButton, &QPushButton::customContextMenuRequested, this, &MainWindow::on_powerOffButton_customContextMenuRequested);
     connect(m_powerOffButton, &QPushButton::clicked, this, &MainWindow::on_powerOffButton_clicked);
@@ -653,6 +654,13 @@ void MainWindow::minAnimationFinished()
     loop.exec();
     m_animationPage->hide();
 }
+
+void MainWindow::iconAnimationFinished()
+{
+    m_dropDownMenu->raise();
+    m_dropDownMenu->exec(this->mapToGlobal(QPoint(m_selectMenuButton->x() - 105, m_selectMenuButton->y() + 50)));
+}
+
 void MainWindow::maxAnimationFinished()
 {
     m_fullWindow->raise();
@@ -765,6 +773,9 @@ void MainWindow::animationFinishedSLot()
 }
 void MainWindow::on_minSelectButton_clicked()
 {
+//    selectIconAnimation(true);
+    selectIconAnimation(false);
+
     if (m_leftStackedWidget->currentIndex() == 0) {
         on_selectMenuButton_triggered(m_letterAction);
     } else if (m_leftStackedWidget->currentIndex() == 1) {
@@ -773,6 +784,30 @@ void MainWindow::on_minSelectButton_clicked()
         on_selectMenuButton_triggered(m_allAction);
     }
 }
+
+void MainWindow::selectIconAnimation(const bool &flag)
+{
+    iconAnimation = new QPropertyAnimation(m_selectMenuButton, "rotation", this);
+
+    if (flag) {
+        connect(iconAnimation, &QPropertyAnimation::finished, this, &MainWindow::iconAnimationFinished);
+
+        if (m_selectMenuButton->property("rotation") == 0) {
+            iconAnimation->setStartValue(0);
+            iconAnimation->setEndValue(-180);
+        }
+    } else {
+        if (m_selectMenuButton->property("rotation") == -180) {
+            iconAnimation->setStartValue(-180);
+            iconAnimation->setEndValue(0);
+        }
+    }
+
+    iconAnimation->setEasingCurve(QEasingCurve::Linear);
+    iconAnimation->setDuration(300);
+    iconAnimation->start(QPropertyAnimation::DeleteWhenStopped);
+}
+
 bool MainWindow::eventFilter(QObject *target, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
@@ -787,10 +822,9 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
         }
 
         if (target == m_selectMenuButton) {
-            m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/uparrow.svg", true)
-                                          .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
-            m_dropDownMenu->raise();
-            m_dropDownMenu->exec(m_selectMenuButton->mapToGlobal(QPoint((m_selectMenuButton->width() - Style::DropMenuWidth - 5), 29)));
+            m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
+                                        .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+            selectIconAnimation(true);
         }
     }
 
@@ -976,7 +1010,8 @@ void MainWindow::searchAppSlot(QString arg)
 }
 void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
 {
-    m_selectMenuButton->setPixmap(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true).pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+    m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true).pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+    selectIconAnimation(false);
 
     if (arg1 == m_allAction) {
         m_leftStackedWidget->setCurrentIndex(0);

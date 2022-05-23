@@ -12,6 +12,7 @@ public:
 protected:
 
     void mousePressEvent(QMouseEvent *event);
+    void hideEvent(QHideEvent *e) override;
 
 public:
 Q_SIGNALS:

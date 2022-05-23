@@ -53,6 +53,7 @@
 #include "function_button_widget.h"
 #include "letter_button_widget.h"
 #include "animationpage.h"
+#include "rotationlabel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -100,6 +101,8 @@ protected:
 
     //    void mouseReleaseEvent(QMouseEvent *event);
 
+    void selectIconAnimation(const bool &flag);
+
 public:
 Q_SIGNALS:
     void sendSearchKeyword(QString arg);
@@ -123,6 +126,7 @@ public Q_SLOTS:
     void resetFunctionPage();
     void minAnimationFinished();
     void maxAnimationFinished();
+    void iconAnimationFinished();
     void changeStyle();
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
@@ -161,7 +165,7 @@ private:
     QSpacerItem *m_horizontalSpacer = nullptr;
     QPushButton *m_searchPushButton = nullptr;
     QPushButton *m_minSelectButton = nullptr;
-    QLabel *m_selectMenuButton = nullptr;
+    RotationLabel *m_selectMenuButton = nullptr;
     QWidget *m_minSearchPage = nullptr;
     QHBoxLayout *m_leftTopSearchHorizontalLayout = nullptr;
     QLineEdit *m_lineEdit = nullptr;
@@ -218,6 +222,7 @@ private:
     QPropertyAnimation *m_leaveAnimation = nullptr;
     QPropertyAnimation *m_minAnimation = nullptr;
     QPropertyAnimation *m_maxAnimation = nullptr;
+    QPropertyAnimation *iconAnimation = nullptr;
     int m_widgetState = -1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;
     LetterButtonWidget *m_letterBtnWid = nullptr;

@@ -31,6 +31,7 @@
 
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
 QString g_projectCodeName = "V10SP1";
+QString g_subProjectCodeName = "";
 bool g_menuStatus = false;
 QString g_curStyle = "";
 
