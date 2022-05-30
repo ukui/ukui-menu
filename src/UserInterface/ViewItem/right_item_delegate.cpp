@@ -1,5 +1,5 @@
 #include "right_item_delegate.h"
-#include "src/UtilityFunction/utility.h"
+#include "utility.h"
 #include <QDebug>
 
 RightItemDelegate::RightItemDelegate(QObject *parent):
@@ -37,17 +37,27 @@ void RightItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         painter->setRenderHint(QPainter::Antialiasing);
         painter->save();
         painter->setPen(QPen(Qt::NoPen));
-        painter->setBrush(Qt::black);
 
         if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
-            painter->setOpacity(0.6);
-        }
-        //        else if(option.state & QStyle::State_DownArrow)
-        //        {
-        //            painter->setOpacity(0.8);
-        //        }
-        else {
-            painter->setOpacity(0.4);
+            if (option.state & QStyle::State_Selected) {
+                if (g_curStyle == "ukui-dark") {
+                    painter->setBrush(QColor("#7A000000"));
+                } else {
+                    painter->setBrush(QColor("#BFFFFFFF"));
+                }
+            } else {
+                if (g_curStyle == "ukui-dark") {
+                    painter->setBrush(QColor("#66000000"));
+                } else {
+                    painter->setBrush(QColor("#99FFFFFF"));
+                }
+            }
+        } else {
+            if (g_curStyle == "ukui-dark") {
+                painter->setBrush(QColor("#40000000"));
+            } else {
+                painter->setBrush(QColor("#66FFFFFF"));
+            }
         }
 
         painter->drawPath(path);
@@ -150,8 +160,8 @@ void RightItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
         painter->restore();
         painter->save();
-        //        painter->setPen(QPen(option.palette.text().color()));
-        painter->setPen(QPen(Qt::white));
+        painter->setPen(QPen(option.palette.text().color()));
+//        painter->setPen(QPen(Qt::white));
         painter->setBrush(Qt::NoBrush);
         painter->drawText(textRect, Qt::AlignHCenter | Qt::AlignTop, appnameElidedText);
         //        painter->drawText(textRect,Qt::TextWordWrap |Qt::AlignHCenter,appname);

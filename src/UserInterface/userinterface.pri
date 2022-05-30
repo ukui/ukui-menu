@@ -18,6 +18,7 @@ HEADERS += \
     $$PWD/ListView/tabletlistview.h \
     $$PWD/Other/classify_btn_scrollarea.h \
     $$PWD/Other/lettertooltip.h \
+    $$PWD/Other/rotationlabel.h \
     $$PWD/Other/scrollarea.h \
     $$PWD/RightClickMenu/menubox.h \
     $$PWD/RightClickMenu/rightclickmenu.h \
@@ -55,6 +56,7 @@ SOURCES += \
     $$PWD/ListView/tabletlistview.cpp \
     $$PWD/Other/classify_btn_scrollarea.cpp \
     $$PWD/Other/lettertooltip.cpp \
+    $$PWD/Other/rotationlabel.cpp \
     $$PWD/Other/scrollarea.cpp \
     $$PWD/RightClickMenu/menubox.cpp \
     $$PWD/RightClickMenu/rightclickmenu.cpp \

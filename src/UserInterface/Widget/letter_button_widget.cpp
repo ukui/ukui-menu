@@ -35,9 +35,8 @@ void LetterButtonWidget::initUi()
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_StyledBackground, true);
     this->setFocusPolicy(Qt::NoFocus);
-    this->resize(235, 366);
     QGridLayout *gridLayout = new QGridLayout;
-    gridLayout->setContentsMargins(0, 0, 0, 0);
+    gridLayout->setContentsMargins(35, 80, 35, 80);
     gridLayout->setSpacing(5);
     this->setLayout(gridLayout);
     QStringList letterlist;
@@ -51,13 +50,13 @@ void LetterButtonWidget::initUi()
     letterlist.append("&&");
     letterlist.append("#");
 
-    for (int row = 0; row < 7; row++) {
-        for (int col = 0; col < 4; col++) {
-            if (row * 4 + col < letterlist.size()) {
-                LetterClassifyButton *btn = new LetterClassifyButton(this, false, letterlist.at(row * 4 + col));
+    for (int row = 0; row < 6; row++) {
+        for (int col = 0; col < 5; col++) {
+            if (row * 5 + col < letterlist.size()) {
+                LetterClassifyButton *btn = new LetterClassifyButton(this, false, letterlist.at(row * 5 + col));
                 btn->setFlat(true);
                 btn->setCheckable(false);
-                btn->setFixedSize(55, 48);
+                btn->setFixedSize(38, 38);
                 gridLayout->addWidget(btn, row, col);
                 connect(btn, &LetterClassifyButton::buttonClicked, this, &LetterButtonWidget::letterBtnClickedSlot);
             } else {

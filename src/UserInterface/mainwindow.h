@@ -53,6 +53,7 @@
 #include "function_button_widget.h"
 #include "letter_button_widget.h"
 #include "animationpage.h"
+#include "rotationlabel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -100,18 +101,20 @@ protected:
 
     //    void mouseReleaseEvent(QMouseEvent *event);
 
+    void selectIconAnimation(const bool &flag);
+
 public:
 Q_SIGNALS:
     void sendSearchKeyword(QString arg);
     void sendClassificationbtnList();
     void sendLetterClassificationList(QStringList list);
     void sendSetFullWindowItemHide(bool flag);
+    void sendStyleChangeSignal(QString style);
 
 public Q_SLOTS:
     void updateCollectView();
     void on_minSelectButton_clicked();
     void updateMinAllView();
-    void showNormalWindow();
     void updateView();
     void recvFunctionBtnSignal(QString btnname);
     void primaryScreenChangeSlot();
@@ -123,6 +126,8 @@ public Q_SLOTS:
     void resetFunctionPage();
     void minAnimationFinished();
     void maxAnimationFinished();
+    void iconAnimationFinished();
+    void changeStyle();
 private Q_SLOTS:
     void on_selectMenuButton_triggered(QAction *arg1);
 
@@ -144,6 +149,8 @@ private Q_SLOTS:
 
     void animationFinishedSLot();
 
+    void showNormalWindowSlot();
+
 private:
 
     QWidget *m_centralwidget = nullptr;
@@ -157,8 +164,8 @@ private:
     QLabel *m_minSelectTextLabel = nullptr;
     QSpacerItem *m_horizontalSpacer = nullptr;
     QPushButton *m_searchPushButton = nullptr;
-    QToolButton *m_minSelectButton = nullptr;
-    QToolButton *m_selectMenuButton = nullptr;
+    QPushButton *m_minSelectButton = nullptr;
+    RotationLabel *m_selectMenuButton = nullptr;
     QWidget *m_minSearchPage = nullptr;
     QHBoxLayout *m_leftTopSearchHorizontalLayout = nullptr;
     QLineEdit *m_lineEdit = nullptr;
@@ -177,8 +184,8 @@ private:
     QHBoxLayout *m_rightTopHorizontalLayout = nullptr;
     QVBoxLayout *m_rightCollectLayout = nullptr;
     QVBoxLayout *m_rightRecentLayout = nullptr;
-    QPushButton *m_collectPushButton = nullptr;
-    QPushButton *m_recentPushButton = nullptr;
+    QLabel *m_collectPushButton = nullptr;
+    QLabel *m_recentPushButton = nullptr;
     QSpacerItem *m_horizontalSpacer_3 = nullptr;
     QPushButton *m_minMaxChangeButton = nullptr;
     QSpacerItem *m_verticalSpacer = nullptr;
@@ -187,11 +194,14 @@ private:
     RightListView *m_collectListView = nullptr;
     QWidget *m_recentPage = nullptr;
     ListView *m_recentListView = nullptr;
+    QLabel *m_recentTextlabel = nullptr;
     QSpacerItem *m_verticalSpacer_2 = nullptr;
     QHBoxLayout *m_rightBottomHorizontalLayout = nullptr;
     QSpacerItem *m_horizontalSpacer_2 = nullptr;
+    QSpacerItem *m_horizontalSpacer_4 = nullptr;
     QPushButton *m_powerOffButton = nullptr;
-    AnimationPage m_animationPage;
+    AnimationPage *m_animationPage = nullptr;
+    MenuBox *m_dropDownMenu = nullptr;
 
     bool m_canHide = true;
     bool m_isFullScreen = false;
@@ -212,10 +222,12 @@ private:
     QPropertyAnimation *m_leaveAnimation = nullptr;
     QPropertyAnimation *m_minAnimation = nullptr;
     QPropertyAnimation *m_maxAnimation = nullptr;
+    QPropertyAnimation *iconAnimation = nullptr;
     int m_widgetState = -1;
     FunctionButtonWidget *m_functionBtnWid = nullptr;
     LetterButtonWidget *m_letterBtnWid = nullptr;
     SoftwareDatabaseUpdateThread *m_softwareDbThread = nullptr;
+    QColor m_windowColor;
 };
 
 #endif // MAINWINDOW_H

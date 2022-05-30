@@ -42,9 +42,20 @@ MainViewWidget::~MainViewWidget()
 {
 }
 
+void MainViewWidget::styleChangeSlot(const QString &style)
+{
+    m_curStyle = style;
+
+    if (style == "ukui-dark") {
+        m_backColor.setNamedColor("#800D0D0D");
+    } else {
+        m_backColor.setNamedColor("#94FFFFFF");
+    }
+}
+
 void MainViewWidget::paintEvent(QPaintEvent *event)
 {
-    double transparency = getTransparency();
+//    double transparency = getTransparency();
     QRect rect = this->rect();
     QPainterPath path;
     QPainter painter(this);
@@ -60,11 +71,8 @@ void MainViewWidget::paintEvent(QPaintEvent *event)
     path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
     path.lineTo(rect.topRight() + QPointF(0, radius));
     path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
-    painter.setBrush(this->palette().base());
     painter.setPen(Qt::transparent);
-    painter.setOpacity(transparency + 0.1);
-    painter.fillPath(path, this->palette().base());
-    //        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-    //  KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    painter.setOpacity(0.58);
+    painter.fillPath(path, m_backColor);
     QWidget::paintEvent(event);
 }

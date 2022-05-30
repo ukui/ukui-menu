@@ -133,6 +133,8 @@ public:
 
     static int appLine;
     static int appColumn;
+    static int appLineFirst;
+    static int appColumnFirst;
     static int appNum;
     static int appPage;
     static int nowpagenum;
@@ -169,7 +171,12 @@ public:
     static int WideAppListItemSizeHeight;
     static int WideAppViewLeftMargin;
     static bool IsWideScreen;
+    static int DropMenuWidth;
+    static int DropMenuHeight;
+    static int miniIconSize;
 
+    static int rightViewWidth;
+    static int rightViewHeight;
 
 };
 

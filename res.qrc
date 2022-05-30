@@ -27,7 +27,6 @@
         <file>data/img/mainviewwidget/DM-icon-返回.svg</file>
         <file>data/img/mainviewwidget/DM-icon-返回@2x.png</file>
         <file>data/img/mainviewwidget/DM-icon-选项.png</file>
-        <file>data/img/mainviewwidget/DM-icon-选项.svg</file>
         <file>data/img/mainviewwidget/DM-icon-选项@2x.png</file>
         <file>data/img/mainviewwidget/DM-icon-check.png</file>
         <file>data/img/mainviewwidget/DM-icon-check.svg</file>
@@ -171,5 +170,6 @@
         <file>data/img/sidebarwidget/usericon-lightcolor.svg</file>
         <file>src/BackProcess/Search/pinyinWithoutTone.txt</file>
         <file>src/BackProcess/Search/pinyinWithTone.txt</file>
+        <file>data/img/mainviewwidget/DM-icon-option.svg</file>
     </qresource>
 </RCC>

@@ -2,7 +2,34 @@
 
 ![build](https://github.com/ukui/ukui-menu/workflows/Check%20build/badge.svg?branch=master)
 
-An advanced menu for UKUI, providing common and all software mixed sort module, alphabet classification module, functional classification module and search module.
+An advanced menu for UKUI, providing common and all software mixed sort module, alphabet classification module, functional classification module and search module. Provides favorites and recent file functions, You can fix it to your favorites area by right-clicking the application. Provides two display modes: default window and full-screen window.
+
+# The project structure
+
+## data/img
+
+Provide icon files for the projec.
+
+## src/BackProcess
+
+Background data processing function realization, Includes DBUS, path listening, data acquisition, and search functions.
+
+## src/QtSingleApplication
+
+Singleton pattern processing.
+
+## src/UserInterface
+
+The UI implementation.
+
+## src/UtilityFunction
+
+Implementation of common functions, including database operations.
+
+## translations
+
+Translation files
+
 
 # How to report bugs
 Bugs should be reported to the UKUI bug tracking system:
@@ -15,6 +42,7 @@ Please read the HACKING file for information on where to send changes or
 bugfixes for this package.
 
 # How to build
+
 ## Preparation
 You can build pre-depends with such command:
 
@@ -33,3 +61,24 @@ Note: build-depends references the paragraph in debian/control.
 > sudo make install
 
 Note: If you want to run ukui-menu, You just need to execute the ukui-menu command at the terminal.
+
+# DBUS interface
+
+BUS Name：org.ukui.menu
+
+path：/org/ukui/menu
+
+Interface：org.ukui.menu
+
+Method name：
+
+GetMenuStatus () <--->  Get ukui-menu display hidden status
+
+WinKeyResponse () <--->  ukui-menu display hidden state change interface
+
+GetSecurityConfigPath ()  <--->  Get security control profile path
+
+# Configuration file
+
+.config/ukui/Ukuimenu.db
+

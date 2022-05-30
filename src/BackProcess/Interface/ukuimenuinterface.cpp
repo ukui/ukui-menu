@@ -314,6 +314,8 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
                 } else if (obj.value("mode").toString() == "blacklist") {
                     getAndroidApp();
                     recursiveSearchFile("/usr/share/applications/");
+                    recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+                    recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
                     QJsonArray blArray = obj.value("blacklist").toArray();
                     QJsonArray enArray = blArray.at(0).toObject().value("entries").toArray();
 
@@ -325,6 +327,8 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
                 } else {
                     getAndroidApp();
                     recursiveSearchFile("/usr/share/applications/");
+                    recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+                    recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
                 }
             }
 
@@ -332,6 +336,8 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
         } else {
             getAndroidApp();
             recursiveSearchFile("/usr/share/applications/");
+            recursiveSearchFile("/var/lib/snapd/desktop/applications/");
+            recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
         }
 
         m_filePathList.removeAll("/usr/share/applications/software-properties-livepatch.desktop");
@@ -370,6 +376,7 @@ QStringList UkuiMenuInterface::getDesktopFilePath()
         m_filePathList.removeAll("/usr/share/applications/kylin-io-monitor.desktop");
         m_filePathList.removeAll("/usr/share/applications/wps-office-uninstall.desktop");
         m_filePathList.removeAll("/usr/share/applications/wps-office-misc.desktop");
+        m_filePathList.removeAll("/usr/share/applications/kylin-installer.desktop");
         QStringList desktopList;
 
         for (int i = 0; i < m_filePathList.count(); ++i) {
@@ -569,8 +576,6 @@ QVector<QStringList> UkuiMenuInterface::createAppInfoVector()
                 sql.exec(QString("select name_zh from appCategory where app_name=\"%1\" ").arg(desktopfpExecName));
 
                 if (sql.next()) {
-                    myDebug() << "数据库执行成功";
-
                     for (int j = 0; j < vector.size(); j++) {
                         if (vector.at(j).contains(sql.value(0).toString())) {
                             appInfoList.append(QString::number(j));

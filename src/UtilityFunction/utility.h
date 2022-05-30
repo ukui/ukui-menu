@@ -23,6 +23,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QIcon>
 #include <gio/gdesktopappinfo.h>
 
 #define DBUS_NAME       "org.ukui.panel"
@@ -78,6 +79,7 @@ bool checkIfRecent(QString desktopfn);//检查是否最近安装
 bool checkIfCollected(QString desktopfn);
 QStringList getCollectAppList();
 void changeCollectSort(QString dragDesktopfn, QString dropDesktopfn);
+bool dataBaseIsEmpty();//判断数据库是否为空
 bool updateDataBaseCollect(QString desktopfn, int type);
 QStringList getLockAppList();//获取被锁定应用
 QStringList getUnlockAllList();//获取未被锁定应用
@@ -89,6 +91,7 @@ void execApp(QString desktopfp);
 bool checkOsRelease();//区分社区办与商业版
 
 void centerToScreen(QWidget *widget);
+QIcon getCurIcon(const QString &iconPath, bool autoSet);
 
 //获取用户图像
 QString getUserIcon();
@@ -103,7 +106,9 @@ enum PanelPositon {
 };
 
 extern QString g_projectCodeName;
+extern QString g_subProjectCodeName;
 extern bool g_menuStatus;
+extern QString g_curStyle;
 
 
 #endif // UTILITY_H

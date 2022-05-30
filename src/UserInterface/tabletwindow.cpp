@@ -98,28 +98,6 @@ void TabletWindow::initUi()
     initStatusManager();
     initTransparency();
     registDbusService();
-    /*//备用待窗管修改后启用
-     connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
-         if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
-         {
-             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-             if (gsetting.keys().contains("winKeyRelease")) {
-                 if (gsetting.get(QString("winKeyRelease")).toBool()) {
-                     return;
-                 }
-             }
-         }
-         if (QApplication::activeWindow() == this)
-         {
-             myDebug() << "win键触发窗口隐藏事件";
-             this->hide();
-         } else
-         {
-             myDebug() << "win键触发窗口显示事件";
-             this->showPCMenu();
-         }
-     });
-     */
     ways();
     buttonWidgetShow();
     connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
@@ -232,15 +210,13 @@ void TabletWindow::setBackground()
 
 void TabletWindow::registDbusService()
 {
-    m_dbus = new DBus;
-    new MenuAdaptor(m_dbus);
-    QDBusConnection con = QDBusConnection::sessionBus();
-
-    if (!con.registerService("org.ukui.menu") ||
-        !con.registerObject("/org/ukui/menu", m_dbus)) {
-        qDebug() << "error:" << con.lastError().message();
-    }
-
+//    m_dbus = new DBus;
+//    new MenuAdaptor(m_dbus);
+//    QDBusConnection con = QDBusConnection::sessionBus();
+//    if (!con.registerService("org.ukui.menu") ||
+//        !con.registerObject("/org/ukui/menu", m_dbus)) {
+//        qDebug() << "error:" << con.lastError().message();
+//    }
 //    connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
 //        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
 //        {
@@ -261,21 +237,6 @@ void TabletWindow::registDbusService()
 //            this->showPCMenu();
 //        }
 //    });
-    ways();
-    buttonWidgetShow();
-//    connect(this,&TabletWindow::pagenumchanged,this,&TabletWindow::pageNumberChanged);
-    connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
-
-    if (checkapplist()) {
-        directoryChangedSlot();//更新应用列表
-    }
-
-    //pc下鼠标功能
-    XEventMonitor::instance()->start();
-    connect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
-            this, SLOT(XkbEventsRelease(QString)));
-    connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
-            this, SLOT(XkbEventsPress(QString)));
 }
 
 bool TabletWindow::checkapplist()
@@ -413,6 +374,8 @@ void TabletWindow::showPCMenu()
     this->raise();
     this->activateWindow();
     g_menuStatus = true;
+    menuStatusChange();
+    myDebug() << "showMenu显示开始菜单";
 }
 
 //改变搜索框及工具栏透明度
@@ -560,9 +523,10 @@ bool TabletWindow::event(QEvent *event)
         //if(QEvent::WindowDeactivate == event->type())//窗口停用
     {
         if (QApplication::activeWindow() != this) {
-            qDebug() << " * 鼠标点击窗口外部事件";
+            myDebug() << " * 鼠标点击窗口外部事件";
             this->hide();
             g_menuStatus = false;
+            menuStatusChange();
         }
     }
 
@@ -576,6 +540,7 @@ bool TabletWindow::event(QEvent *event)
         if (!(m_scrollAnimation->state() == QPropertyAnimation::Running)) {
             this->hide();
             g_menuStatus = false;
+            myDebug() << "鼠标点击事件触发隐藏";
         }
     }
 
@@ -642,65 +607,71 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
  */
 void TabletWindow::execApplication(QString desktopfp)
 {
-//    Q_EMIT sendHideMainWindowSignal();
-//    execApp(desktopfp);
-    QString str;
-    //打开文件.desktop
-    GError **error = nullptr;
-    GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *keyfile = g_key_file_new();
-    QByteArray fpbyte = desktopfp.toLocal8Bit();
-    char *filepath = fpbyte.data();
-    g_key_file_load_from_file(keyfile, filepath, flags, error);
-    char *name = g_key_file_get_locale_string(keyfile, "Desktop Entry", "Exec", nullptr, nullptr);
-    //取出value值
-    QString execnamestr = QString::fromLocal8Bit(name);
-    str = execnamestr;
-    //qDebug()<<"2 exec"<<str;
-    //关闭文件
-    g_key_file_free(keyfile);
-    //打开ini文件
-    QString pathini = QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini";
-    m_disableAppSet = new QSettings(pathini, QSettings::IniFormat);
-    m_disableAppSet->beginGroup("application");
-    QString desktopfp1 = str;
-    //判断
-    bool bo = m_disableAppSet->contains(desktopfp1.toLocal8Bit().data()); // iskey
-    bool bo1 = m_disableAppSet->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool(); //isvalue
-    m_disableAppSet->endGroup();
+    Q_EMIT sendHideMainWindowSignal();
+    QDBusInterface iface("com.kylin.AppManager",
+                         "/com/kylin/AppManager",
+                         "com.kylin.AppManager",
+                         QDBusConnection::sessionBus());
 
-    if (bo && bo1 == false) { //都存在//存在并且为false，从filepathlist中去掉
-        //qDebug()<<"bool"<<bo<<bo1;
-        return;
-    }
+    if (!g_subProjectCodeName.contains("mavis")
+        || (g_subProjectCodeName.contains("mavis") && !QDBusReply<bool>(iface.call("LaunchApp", desktopfp)))) {
+        execApp(desktopfp);
+        QString str;
+        //打开文件.desktop
+        GError **error = nullptr;
+        GKeyFileFlags flags = G_KEY_FILE_NONE;
+        GKeyFile *keyfile = g_key_file_new();
+        QByteArray fpbyte = desktopfp.toLocal8Bit();
+        char *filepath = fpbyte.data();
+        g_key_file_load_from_file(keyfile, filepath, flags, error);
+        char *name = g_key_file_get_locale_string(keyfile, "Desktop Entry", "Exec", nullptr, nullptr);
+        //取出value值
+        QString execnamestr = QString::fromLocal8Bit(name);
+        str = execnamestr;
+        //qDebug()<<"2 exec"<<str;
+        //关闭文件
+        g_key_file_free(keyfile);
+        //打开ini文件
+        QString pathini = QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini";
+        m_disableAppSet = new QSettings(pathini, QSettings::IniFormat);
+        m_disableAppSet->beginGroup("application");
+        QString desktopfp1 = str;
+        //判断
+        bool bo = m_disableAppSet->contains(desktopfp1.toLocal8Bit().data()); // iskey
+        bool bo1 = m_disableAppSet->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool(); //isvalue
+        m_disableAppSet->endGroup();
 
-    QString exe = execnamestr;
-    QStringList parameters;
+        if (bo && bo1 == false) { //都存在//存在并且为false，从filepathlist中去掉
+            //qDebug()<<"bool"<<bo<<bo1;
+            return;
+        }
 
-    if (exe.indexOf("%") != -1) {
-        exe = exe.left(exe.indexOf("%") - 1);
-        //qDebug()<<"=====dd====="<<exe;
-    }
+        QString exe = execnamestr.simplified();
+        QStringList parameters;
 
-    if (exe.indexOf("-") != -1) {
-        parameters = exe.split(" ");
-        exe = parameters[0];
-        parameters.removeAt(0);
-        //qDebug()<<"===qqq==="<<exe;
-    }
+        if (exe.indexOf("%") != -1) {
+            exe = exe.left(exe.indexOf("%") - 1);
+        }
 
-    if (exe == "/usr/bin/indicator-china-weather") {
-        parameters.removeAt(0);
-        parameters.append("showmainwindow");
-    }
+        if (exe.indexOf(" ") != -1) {
+            parameters = exe.split(" ");
+            exe = parameters[0];
+            parameters.removeAt(0);
+        }
 
-    qDebug() << "5 exe" << exe << parameters;
-    QDBusInterface session("org.gnome.SessionManager", "/com/ukui/app", "com.ukui.app");
+        if (exe == "/usr/bin/indicator-china-weather") {
+            parameters.removeAt(0);
+            parameters.append("showmainwindow");
+        }
 
-    if (parameters.isEmpty()) {
-        session.call("app_open", exe, parameters);
-    } else {
-        session.call("app_open", exe, parameters);
+        qDebug() << "5 exe" << exe << parameters;
+        QDBusInterface session("org.gnome.SessionManager", "/com/ukui/app", "com.ukui.app");
+
+        if (parameters.isEmpty()) {
+            session.call("app_open", exe, parameters);
+        } else {
+            session.call("app_open", exe, parameters);
+        }
     }
 
     //Q_EMIT sendHideMainWindowSignal();
@@ -889,6 +860,7 @@ void TabletWindow::recvHideMainWindowSlot()
 //    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     this->hide();
     g_menuStatus = false;
+    myDebug() << "信号触发隐藏窗口";
 }
 
 void TabletWindow::btnGroupClickedSlot(int prePageNum, int pageNum)
@@ -1080,7 +1052,7 @@ void TabletWindow::winKeyReleaseSlot(const QString &key)
         if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit())) {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
 
-            if (gsetting.keys().contains("winKeyRelease"))
+            if (gsetting.keys().contains("winKeyRelease")) {
                 if (gsetting.get(QString("winKeyRelease")).toBool()) {
                     disconnect(XEventMonitor::instance(), SIGNAL(keyRelease(QString)),
                                this, SLOT(xkbEventsRelease(QString)));
@@ -1092,7 +1064,16 @@ void TabletWindow::winKeyReleaseSlot(const QString &key)
                     connect(XEventMonitor::instance(), SIGNAL(keyPress(QString)),
                             this, SLOT(xkbEventsPress(QString)));
                 }
+            }
         }
     }
 }
 
+void TabletWindow::menuStatusChange()
+{
+    QDBusMessage message = QDBusMessage::createSignal("/com/ukui/menu", "com.ukui.menu", "statusChangeSignal");
+    //给信号赋值
+    message << g_menuStatus;
+    //发射
+    QDBusConnection::sessionBus().send(message);
+}

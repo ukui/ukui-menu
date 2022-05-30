@@ -46,8 +46,6 @@
 #include "tabletlistview.h"
 #include "pagemanager.h"
 #include "tablet_directorychanged_thread.h"
-#include "dbus.h"
-#include "dbus-adaptor.h"
 
 class TabletWindow : public QWidget
 {
@@ -123,8 +121,9 @@ private:
     QFileSystemWatcher *m_configFileWatcher = nullptr;
     TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
     QSettings *m_disableAppSet = nullptr;
-    DBus *m_dbus = nullptr;
+
     QLabel m_animationPage;
+//    DBus *m_dbus = nullptr;
 
 protected:
     /**
@@ -182,6 +181,8 @@ protected:
     bool eventFilter(QObject *target, QEvent *event);
 
     bool checkapplist();
+
+    void menuStatusChange();
 
 public Q_SLOTS:
     /**

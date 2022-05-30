@@ -136,8 +136,14 @@ void ListView::paintEvent(QPaintEvent *e)
 {
     //滚动条
     QPalette p = this->verticalScrollBar()->palette();
-    QColor color(255, 255, 255);
-    color.setAlphaF(0.25);
+    QColor color;
+
+    if (g_curStyle == "ukui-dark") {
+        color = QColor("#26FFFFFF");
+    } else {
+        color = QColor("#1A000000");
+    }
+
     p.setColor(QPalette::Active, QPalette::Button, color);
     this->verticalScrollBar()->setPalette(p);
     QListView::paintEvent(e);
@@ -171,6 +177,14 @@ void ListView::keyPressEvent(QKeyEvent *e)
                 }
 
                 return QListView::keyPressEvent(e);
+                break;
+            }
+
+            case Qt::Key_Right: {
+                break;
+            }
+
+            case Qt::Key_Left: {
                 break;
             }
 

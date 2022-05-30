@@ -39,7 +39,9 @@ RightListView::~RightListView()
 
 void RightListView::initWidget()
 {
+    setAttribute(Qt::WA_TranslucentBackground);
     viewport()->setAttribute(Qt::WA_TranslucentBackground);
+    viewport()->setAutoFillBackground(false);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -62,10 +64,10 @@ void RightListView::dropEvent(QDropEvent *event)
     RightListView *source = qobject_cast<RightListView *>(event->source());
 
     if (source && source == this) {
-        dropPos = event->pos();
+        m_dropPos = event->pos();
 
-        if (this->indexAt(dropPos).isValid()) {
-            QVariant var = listmodel->data(indexAt(dropPos), Qt::DisplayRole);
+        if (this->indexAt(m_dropPos).isValid()) {
+            QVariant var = listmodel->data(indexAt(m_dropPos), Qt::DisplayRole);
             QString desktopfp = var.value<QString>();
             QFileInfo fileInfo(desktopfp);
             QString desktopfn = fileInfo.fileName();
@@ -88,6 +90,11 @@ void RightListView::selectFirstItem()
     }
 }
 
+void RightListView::paintEvent(QPaintEvent *e)
+{
+    QListView::paintEvent(e);
+}
+
 void RightListView::keyPressEvent(QKeyEvent *e)
 {
     if (e->type() == QEvent::KeyPress) {
@@ -104,6 +111,11 @@ void RightListView::keyPressEvent(QKeyEvent *e)
                 break;
         }
     }
+}
+
+void RightListView::changeStyleColor(const QColor &color)
+{
+    m_styleColor = color;
 }
 
 void RightListView::enterEvent(QEvent *e)

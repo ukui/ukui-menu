@@ -4,8 +4,9 @@
 
 class AnimationPage : public QWidget
 {
+    Q_OBJECT
 public:
-    AnimationPage();
+    AnimationPage(QWidget *parent = nullptr);
 protected:
     void paintEvent(QPaintEvent *event);
 };
