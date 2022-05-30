@@ -24,7 +24,6 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <gio/gdesktopappinfo.h>
-#include "ukuimenuinterface.h"
 
 #define DBUS_NAME       "org.ukui.panel"
 #define DBUS_PATH       "/panel/position"

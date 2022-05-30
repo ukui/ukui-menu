@@ -6244,7 +6244,7 @@ QString UkuiChineseLetter::getPinyin(int code)//此方法可以获取所有汉�
     }
 
     if (pinyin.isEmpty()) {
-        pinyin = "";
+        pinyin = " ";
     }
 
     return pinyin;

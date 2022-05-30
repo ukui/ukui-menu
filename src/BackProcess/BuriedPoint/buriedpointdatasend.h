@@ -4,9 +4,13 @@
 #include <QObject>
 #include <QDateTime>
 #include <QDir>
-#include <uploadmessage_interface.h>
 #include "src/UtilityFunction/utility.h"
 #include "unistd.h"
+
+#  if __has_include(<uploadPluginInterface.h>)
+#    define  hasUploadInterface
+#    include <uploadPluginInterface.h>
+#  endif
 
 class BuriedPointDataSend : public QObject
 {
@@ -23,7 +27,7 @@ private:
     QString getCurrentTime();
     QHash<QString, int> m_functionCount;
     QHash<QString, QStringList> m_applist;
-    UploadMessageInterface *m_sendDataInterface = nullptr;
+    UploadPluginInterface *m_sendDataInterface = nullptr;
 };
 
 #endif // BURIEDPOINTDATASEND_H

@@ -11,8 +11,17 @@ Q_GLOBAL_STATIC(BuriedPointDataSend, buriedPointDataSend)
 
 BuriedPointDataSend::BuriedPointDataSend()
 {
+#ifdef hasUploadInterface
     QString path = QDir::homePath() + "/menuUploadMessage/";
-    m_sendDataInterface = new UploadMessageInterface(getpid(), "ukui-menu", "menuData", path);
+    QPluginLoader pluginLoder("/usr/lib/libUploadPluginInterface.so");
+    QObject *plugin = pluginLoder.instance();
+    if (plugin) {
+        m_sendDataInterface = qobject_cast<UploadPluginInterface *>(plugin);
+        m_sendDataInterface->initInterface(getpid(), "ukui-menu", "menuData", path);
+    }
+#else
+    myDebug() << "埋点数据上传依赖不存在，不执行后续操作";
+#endif
 }
 
 BuriedPointDataSend::~BuriedPointDataSend()
@@ -38,6 +47,7 @@ QString BuriedPointDataSend::getCurrentTime()
 
 void BuriedPointDataSend::setPoint(const pointDataStruct &data)
 {
+#ifdef hasUploadInterface
     int curNum = 1;
     QStringList applist = QStringList();
     QString keyValue = data.module + data.function;
@@ -71,7 +81,8 @@ void BuriedPointDataSend::setPoint(const pointDataStruct &data)
     //  将数据转化为QString
     QString informationData(QJsonDocument(jsonObj).toJson(QJsonDocument::Compact));
     qDebug() << "jsonObj:" << jsonObj;
-    m_sendDataInterface->UploadMessage(informationData);
+    m_sendDataInterface->uploadMessage(informationData);
+#endif
 }
 
 
