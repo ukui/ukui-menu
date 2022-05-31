@@ -28,6 +28,7 @@ private:
     QHash<QString, int> m_functionCount;
     QHash<QString, QStringList> m_applist;
     UploadPluginInterface *m_sendDataInterface = nullptr;
+    bool m_pluginAvailable = false;
 };
 
 #endif // BURIEDPOINTDATASEND_H
