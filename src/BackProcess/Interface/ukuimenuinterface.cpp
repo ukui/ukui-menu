@@ -859,9 +859,11 @@ bool UkuiMenuInterface::initAppIni()
         QVector<QStringList> tencentInitVector;
         QVector<QStringList> customizedVector;
         QVector<QStringList> thirdPartyVector;
+        QVector<QStringList> preorderAppVector;
         QString tencent_math = "/usr/share/applications/tencent-math-precise-practice.desktop";
         QString tencent_chinese = "/usr/share/applications/tencent-chinese-precise-practice.desktop";
         QString tencent_english = "/usr/share/applications/tencent-english-precise-practice.desktop";
+        QString smallPluginManage = "/usr/share/applications/small-plugin-manage.desktop";
         QVector<QStringList> precise_practiceVector;
         QStringList math;
         QStringList english;
@@ -901,6 +903,8 @@ bool UkuiMenuInterface::initAppIni()
                     customizedVector.append(appInfoVector.at(i));
                 } else if (tmp.indexOf("mdm") != -1) {
                     customizedVector.append(appInfoVector.at(i));
+                } else if (tmp.contains(smallPluginManage)) {
+                    preorderAppVector.append(appInfoVector.at(i));
                 } else {
                     appInitVector.append(appInfoVector.at(i));
                 }
@@ -926,12 +930,22 @@ bool UkuiMenuInterface::initAppIni()
             qSort(thirdPartyVector.begin(), thirdPartyVector.end(), cmpApp); //按中英文字母排序
             setting->beginGroup("application");
 
+            for (int i = 0; i < preorderAppVector.count(); i++) {
+                QString str = preorderAppVector.at(i).at(0).section(' ', 0, 0);
+                QStringList list = str.split('/');
+                str = list[list.size() - 1];
+                //qDebug()<<str;
+                setting->setValue(str, i);
+            }
+
+            int firstVectorCount = preorderAppVector.count();
+
             for (int i = 0; i < tencentInitVector.count(); i++) {
                 QString str = tencentInitVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
                 //qDebug()<<str;
-                setting->setValue(str, i);
+                setting->setValue(str, i + firstVectorCount);
             }
 
             int a = tencentInitVector.count();
