@@ -76,8 +76,6 @@ private:
 
     char m_style[400];
 
-    QProcess *m_cmdProc = nullptr;
-
 protected:
     /**
      * @brief Get icon pixmap

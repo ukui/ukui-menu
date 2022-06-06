@@ -25,7 +25,7 @@ TabletRightClickMenu::TabletRightClickMenu(QWidget *parent):
 {
     QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
     m_setting = new QSettings(path, QSettings::IniFormat);
-    m_cmdProc = new QProcess;
+
     sprintf(m_style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
             QMenu::item:selected{background-color:%s;border-radius:6px;}\
             QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
@@ -34,15 +34,10 @@ TabletRightClickMenu::TabletRightClickMenu(QWidget *parent):
 
 TabletRightClickMenu::~TabletRightClickMenu()
 {
-    if (m_cmdProc) {
-        delete m_cmdProc;
-    }
-
     if (m_setting) {
         delete m_setting;
     }
 
-    m_cmdProc = nullptr;
     m_setting = nullptr;
 }
 
