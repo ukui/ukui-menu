@@ -150,10 +150,6 @@ private Q_SLOTS:
      * @brief Personalize this list
      */
     //void otherListActionTriggerSlot();
-    /**
-     * @brief Read command output
-     */
-    void onReadOutput();
 };
 
 #endif // RIGHTCLICKMENU_H
