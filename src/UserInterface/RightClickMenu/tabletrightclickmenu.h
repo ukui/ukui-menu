@@ -76,8 +76,6 @@ private:
 
     char m_style[400];
 
-    QProcess *m_cmdProc = nullptr;
-
 protected:
     /**
      * @brief Get icon pixmap
@@ -150,10 +148,6 @@ private Q_SLOTS:
      * @brief Personalize this list
      */
     //void otherListActionTriggerSlot();
-    /**
-     * @brief Read command output
-     */
-    void onReadOutput();
 };
 
 #endif // RIGHTCLICKMENU_H
