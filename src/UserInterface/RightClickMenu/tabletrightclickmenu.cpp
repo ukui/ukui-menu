@@ -25,8 +25,7 @@ TabletRightClickMenu::TabletRightClickMenu(QWidget *parent):
 {
     QString path = QDir::homePath() + "/.config/ukui/ukui-menu.ini";
     m_setting = new QSettings(path, QSettings::IniFormat);
-    m_cmdProc = new QProcess;
-    connect(m_cmdProc, &QProcess::readyReadStandardOutput, this, &TabletRightClickMenu::onReadOutput);
+
     sprintf(m_style, "QMenu{padding-left:2px;padding-top:6px;padding-right:2px;padding-bottom:6px;border:1px solid %s;border-radius:6px;background-color:%s;}\
             QMenu::item:selected{background-color:%s;border-radius:6px;}\
             QMenu::separator{height:1px;background-color:%s;margin-top:2px;margin-bottom:2px;}",
@@ -35,15 +34,10 @@ TabletRightClickMenu::TabletRightClickMenu(QWidget *parent):
 
 TabletRightClickMenu::~TabletRightClickMenu()
 {
-    if (m_cmdProc) {
-        delete m_cmdProc;
-    }
-
     if (m_setting) {
         delete m_setting;
     }
 
-    m_cmdProc = nullptr;
     m_setting = nullptr;
 }
 
@@ -185,26 +179,11 @@ void TabletRightClickMenu::addToDesktopActionTriggerSlot()
 
 void TabletRightClickMenu::uninstallActionTriggerSlot()
 {
-//    QString cmd = QString("dpkg -S " + m_desktopfp);
-//    myDebug() << "void TabletRightClickMenu::uninstallActionTriggerSlot()" << m_desktopfp;
-//    m_cmdProc->setReadChannel(QProcess::StandardOutput);
-//    m_cmdProc->start("sh", QStringList() << "-c" << cmd);
-//    m_cmdProc->waitForFinished();
-//    m_cmdProc->waitForReadyRead();
-//    m_cmdProc->close();
-    onReadOutput();
+    QString cmd = QString("kylin-uninstaller %1")
+                  .arg(m_desktopfp.toLocal8Bit().data());
+    bool ret = QProcess::startDetached(cmd);
+    myDebug() << "卸载：" << cmd << ret;
     m_actionNumber = 6;
-}
-
-void TabletRightClickMenu::onReadOutput()
-{
-//    QString packagestr = QString::fromLocal8Bit(m_cmdProc->readAllStandardOutput().data());
-//    QString packageName = packagestr.split(":").at(0);
-//目前仅调用起软件商店，不传递参数
-    char command[100];
-//    sprintf(command, "kylin-software-center -remove %s", packageName.toLocal8Bit().data());
-    sprintf(command, "kylin-software-center");
-    QProcess::startDetached(command);
 }
 
 void TabletRightClickMenu::attributeActionTriggerSlot()
