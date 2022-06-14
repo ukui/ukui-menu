@@ -27,7 +27,9 @@ private:
     QString getCurrentTime();
     QHash<QString, int> m_functionCount;
     QHash<QString, QStringList> m_applist;
+#ifdef hasUploadInterface
     UploadPluginInterface *m_sendDataInterface = nullptr;
+#endif
     bool m_pluginAvailable = false;
 };
 
