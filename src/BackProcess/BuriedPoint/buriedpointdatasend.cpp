@@ -28,10 +28,12 @@ BuriedPointDataSend::BuriedPointDataSend()
 
 BuriedPointDataSend::~BuriedPointDataSend()
 {
+#ifdef hasUploadInterface
     if (m_sendDataInterface != nullptr) {
         delete  m_sendDataInterface;
         m_sendDataInterface = nullptr;
     }
+#else
 }
 
 BuriedPointDataSend *BuriedPointDataSend::getInstance()
