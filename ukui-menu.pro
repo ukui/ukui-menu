@@ -63,7 +63,7 @@ INSTALLS += \
 FORMS +=
 
 SOURCES += \
-    main.cpp
+    main.cpp \
 
 RESOURCES += \
     res.qrc

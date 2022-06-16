@@ -19,7 +19,9 @@ Build-Depends: debhelper-compat (=12),
                libx11-dev,
                libukui-common0,
                libukui-common-dev,
-               libpeony-dev
+               libpeony-dev,
+               buriedpoint-upload
+
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/ukui-menu
@@ -35,7 +37,7 @@ Depends: ${shlibs:Depends},
          libqt5x11extras5,
          bamfdaemon
 Suggests:kylin-status-manager,
-	 kylin-daq
+         buriedpoint-upload
 Description: Advanced ukui menu
  UKUI menu provides start menu development library and advanced
  graphical user interface.

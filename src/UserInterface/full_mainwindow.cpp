@@ -2,7 +2,8 @@
 #include <KWindowEffects>
 #include <QAction>
 #include <QTranslator>
-#include "src/UtilityFunction/utility.h"
+#include "utility.h"
+#include "buriedpointdatasend.h"
 
 FullMainWindow::FullMainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -225,6 +226,11 @@ void FullMainWindow::changeStyle()
 void FullMainWindow::on_minPushButton_clicked()
 {
     Q_EMIT showNormalWindow();
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/minPushButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullMainWindow::paintEvent(QPaintEvent *event)
@@ -250,6 +256,11 @@ bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
         char style[200];
 
         if (event->type() == QEvent::FocusIn) {
+            pointDataStruct pointData;
+            pointData.module = "fullWindow/Search";
+            pointData.function = "Clicked";
+            pointData.functionNum = "";
+            BuriedPointDataSend::getInstance()->setPoint(pointData);
             sprintf(style, "QLineEdit{border:2px solid %s;background-color:%s;border-radius:17px;color:#ffffff;}",
                     QueryLineEditClickedBorder, QueryLineEditClickedBackground);
             m_lineEdit->setStyleSheet(style);
@@ -425,6 +436,8 @@ void FullMainWindow::on_fullSelectMenuButton_clicked()
 
 void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
 {
+    pointDataStruct pointData;
+
     if (arg1 == m_allAction) {
         m_fullStackedWidget->setCurrentIndex(0);
         m_fullCommonPage->repaintWidget();
@@ -434,6 +447,10 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(false);
+        pointData.module = "fullWindow/fullSelectMenuButton";
+        pointData.function = "AllSelect";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     } else if (arg1 == m_letterAction) {
         m_fullStackedWidget->setCurrentIndex(1);
         m_fullLetterPage->repaintWidget();
@@ -442,6 +459,10 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
         m_funcAction->setChecked(false);
+        pointData.module = "fullWindow/fullSelectMenuButton";
+        pointData.function = "letterSelect";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     } else if (arg1 == m_funcAction) {
         m_fullStackedWidget->setCurrentIndex(2);
         m_fullFunctionPage->repaintWidget();
@@ -450,6 +471,10 @@ void FullMainWindow::on_fullSelectMenuButton_triggered(QAction *arg1)
         m_allAction->setChecked(false);
         m_letterAction->setChecked(false);
         m_funcAction->setChecked(true);
+        pointData.module = "fullWindow/fullSelectMenuButton";
+        pointData.function = "FunctionSelect";
+        pointData.functionNum = "";
+        BuriedPointDataSend::getInstance()->setPoint(pointData);
     }
 }
 

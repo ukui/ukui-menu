@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QDBusInterface>
 #include <QScreen>
+#include "ukuimenuinterface.h"
 
 #define DATABASENAME QDir::homePath()+"/.config/ukui/"+"UkuiMenu.db"
 QString g_projectCodeName = "V10SP1";

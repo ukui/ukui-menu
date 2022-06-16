@@ -20,6 +20,7 @@
 #include <QDesktopWidget>
 #include "style.h"
 #include "utility.h"
+#include "buriedpointdatasend.h"
 #include <QDebug>
 
 FullCommonUseWidget::FullCommonUseWidget(QWidget *parent) :
@@ -131,6 +132,11 @@ void FullCommonUseWidget::initVerticalScrollBar()
 void FullCommonUseWidget::on_powerOffButton_clicked()
 {
     QProcess::startDetached(QString("ukui-session-tools"));
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/commonUseWidget/powerOffButton";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullCommonUseWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
@@ -138,6 +144,11 @@ void FullCommonUseWidget::on_powerOffButton_customContextMenuRequested(const QPo
     RightClickMenu m_otherMenu(this);
     m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
     myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/commonUseWidget/powerOffButton";
+    pointData.function = "RightClicked";
+    pointData.functionNum = "";
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullCommonUseWidget::initAppListWidget()
@@ -190,6 +201,12 @@ void FullCommonUseWidget::execApplication(QString desktopfp)
 {
     Q_EMIT sendHideMainWindowSignal();
     execApp(desktopfp);
+    pointDataStruct pointData;
+    pointData.module = "fullWindow/commonUseWidget/execApplication";
+    pointData.function = "Clicked";
+    pointData.functionNum = "";
+    pointData.otherFunction[0] = desktopfp;
+    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullCommonUseWidget::selectFirstItem()
