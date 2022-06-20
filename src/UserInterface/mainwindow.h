@@ -151,6 +151,8 @@ private Q_SLOTS:
 
     void showNormalWindowSlot();
 
+    void tabletModeChangeSlot(bool flag);
+
 private:
 
     QWidget *m_centralwidget = nullptr;
@@ -228,6 +230,7 @@ private:
     LetterButtonWidget *m_letterBtnWid = nullptr;
     SoftwareDatabaseUpdateThread *m_softwareDbThread = nullptr;
     QColor m_windowColor;
+    bool m_isTabletMode = false;
     QDBusInterface* m_usrInterface = nullptr;
 };
 

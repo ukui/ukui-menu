@@ -265,10 +265,21 @@ MainWindow::MainWindow(QWidget *parent) :
                                           this,
                                           SLOT(updateAppCategorySlot(QString))
                                          );
+    QDBusConnection::sessionBus().connect("com.kylin.statusmanager.interface",
+                                          "/",
+                                          "com.kylin.statusmanager.interface",
+                                          "mode_change_signal",
+                                          this,
+                                          SLOT(tabletModeChangeSlot(bool)));
     m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
                                         "/",
                                         "com.kylin.statusmanager.interface",
                                         QDBusConnection::sessionBus(), this);
+    QDBusReply<bool> res = m_usrInterface->call("get_current_tabletmode");
+    if (res.isValid()) {
+        m_isTabletMode = res;
+    }
+
     initUi();
     m_functionBtnWid = new FunctionButtonWidget(m_minFuncPage);
     m_functionBtnWid->hide();
@@ -305,9 +316,7 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
 
-        QDBusReply<bool> res = m_usrInterface->call("get_current_tabletmode");
-        myDebug() << "平板模式状态" << res;
-        if (res) {
+        if (m_isTabletMode) {
             return;
         }
 
@@ -1311,6 +1320,12 @@ void MainWindow::showNormalWindowSlot()
     m_minAnimation->start();
     m_fullWindow->hide();
 }
+
+void MainWindow::tabletModeChangeSlot(bool flag)
+{
+    m_isTabletMode = flag;
+}
+
 void MainWindow::on_powerOffButton_clicked()
 {
     QProcess::startDetached(QString("ukui-session-tools"));
