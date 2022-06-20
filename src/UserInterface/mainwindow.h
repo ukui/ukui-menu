@@ -68,6 +68,16 @@ public:
     void hideWindow();
 
 protected:
+    void initSearchUi();
+    void initLeftWidget();
+    void initRightWidgetButton();
+    void initCollectWidget();
+    void initRecentWidget();
+    void initTabOrder();
+    void initGsettings();
+    void initSignalConnect();
+    void registDbusServer();
+    void setTabletModeFlag();
     void initUi();
     /**
      * @brief 处理外部点击事件和主窗口键盘控制

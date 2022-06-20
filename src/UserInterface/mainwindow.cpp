@@ -52,6 +52,221 @@ MainWindow::MainWindow(QWidget *parent) :
     m_mainLeftVerticalLayout = new QVBoxLayout(m_viewWidget);
     m_mainLeftVerticalLayout->setSpacing(9);
     m_mainLeftVerticalLayout->setContentsMargins(8, 15, 4, 0);
+
+    initSearchUi();
+    initLeftWidget();
+    initRightWidgetButton();
+    initCollectWidget();
+    initRecentWidget();
+    initTabOrder();
+
+    m_softwareDbThread = new SoftwareDatabaseUpdateThread;
+    m_animationPage = new AnimationPage();
+    m_maxAnimation = new QPropertyAnimation(m_animationPage, "geometry", this);
+    m_minAnimation = new QPropertyAnimation(m_animationPage, "geometry", this);
+    m_searchAppThread = new SearchAppThread;
+    m_functionBtnWid = new FunctionButtonWidget(m_minFuncPage);
+    m_functionBtnWid->hide();
+    m_letterBtnWid = new LetterButtonWidget(m_minLetterPage);
+    m_letterBtnWid->hide();
+    m_enterAnimation = new QPropertyAnimation;
+    m_enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
+    m_leaveAnimation = new QPropertyAnimation;
+    m_leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
+
+    //获取软件商店类别信号
+    QDBusConnection::sessionBus().connect("com.kylin.softwarecenter.getsearchresults",
+                                          "/com/kylin/softwarecenter/getsearchresults",
+                                          "com.kylin.getsearchresults",
+                                          "get_app_category_list_signal",
+                                          this,
+                                          SLOT(updateAppCategorySlot(QString))
+                                         );
+    setTabletModeFlag();
+    initUi();
+    registDbusServer();
+    initSignalConnect();
+    initGsettings();
+}
+
+MainWindow::~MainWindow()
+{
+    closeDataBase("MainThread");
+
+    if (m_animationPage != nullptr) {
+        delete m_animationPage;
+        m_animationPage = nullptr;
+    }
+}
+
+void MainWindow::setTabletModeFlag()
+{
+    QDBusConnection::sessionBus().connect("com.kylin.statusmanager.interface",
+                                          "/",
+                                          "com.kylin.statusmanager.interface",
+                                          "mode_change_signal",
+                                          this,
+                                          SLOT(tabletModeChangeSlot(bool)));
+    m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
+                                        "/",
+                                        "com.kylin.statusmanager.interface",
+                                        QDBusConnection::sessionBus(), this);
+    QDBusReply<bool> res = m_usrInterface->call("get_current_tabletmode");
+    if (res.isValid()) {
+        m_isTabletMode = res;
+    }
+}
+
+void MainWindow::registDbusServer()
+{
+    m_dbus = new DBus;
+    new MenuAdaptor(m_dbus);
+    m_fullWindow = new FullMainWindow;
+    QDBusConnection con = QDBusConnection::sessionBus();
+
+    if (!con.registerService("org.ukui.menu") ||
+        !con.registerObject("/org/ukui/menu", m_dbus)) {
+        qDebug() << "error:" << con.lastError().message();
+    }
+
+    connect(m_dbus, &DBus::sendReloadSignal, this, [ = ] {
+        updateView();
+    });
+    connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
+
+        if (m_isTabletMode) {
+            return;
+        }
+
+        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
+        {
+            QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
+
+            if (gsetting.keys().contains("winKeyRelease"))
+                if (gsetting.get("winKeyRelease").toBool()) {
+                    return;
+                }
+        }
+        if (QGSettings::isSchemaInstalled(QString("org.ukui.screenshot").toLocal8Bit()))
+        {
+            QGSettings gsetting(QString("org.ukui.screenshot").toLocal8Bit());
+
+            if (gsetting.keys().contains("isrunning"))
+                if (gsetting.get("isrunning").toBool()) {
+                    return;
+                }
+        }
+
+        if (this->isVisible())
+        {
+            this->hide();
+            this->clearFocus();
+            m_isFullScreen = false;
+        } else if (m_fullWindow->isVisible())
+        {
+            m_fullWindow->hide();
+            m_fullWindow->clearFocus();
+            m_isFullScreen = true;
+        } else
+        {
+            if (!m_isFullScreen) {
+                this->show();
+                this->raise();
+                this->activateWindow();
+//                m_collectPushButton->clicked(true);
+                on_collectPushButton_clicked();
+                m_viewWidget->setFocus();
+            } else {
+                m_fullWindow->show();
+                //                fullWindow->raise();
+                m_fullWindow->activateWindow();
+            }
+        }
+    });
+}
+
+void MainWindow::initSignalConnect()
+{
+    connect(this, &MainWindow::sendClassificationbtnList, m_functionBtnWid, &FunctionButtonWidget::recvClassificationBtnList);
+    connect(this, &MainWindow::sendLetterClassificationList, m_letterBtnWid, &LetterButtonWidget::recvLetterBtnList);
+    //   connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&FunctionWidget::recvFunctionBtnSignal);
+    connect(m_minFuncListView, &ListView::sendAppClassificationBtnClicked, this, &MainWindow::appClassificationBtnClickedSlot);
+    connect(m_minLetterListView, &ListView::sendAppClassificationBtnClicked, this, &MainWindow::appClassificationBtnClickedSlot);
+    connect(m_leaveAnimation, &QPropertyAnimation::finished, this, &MainWindow::animationFinishedSLot);
+    connect(m_enterAnimation, &QPropertyAnimation::finished, this, &MainWindow::animationFinishedSLot);
+    connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal, this, &MainWindow::recvFunctionBtnSignal);
+    connect(m_letterBtnWid, &LetterButtonWidget::sendLetterBtnSignal, this, &MainWindow::recvFunctionBtnSignal);
+    connect(m_functionBtnWid, &FunctionButtonWidget::sendResetFunctionPage, this, &MainWindow::resetFunctionPage);
+    connect(m_letterBtnWid, &LetterButtonWidget::sendResetLetterPage, this, &MainWindow::resetLetterPage);
+    connect(m_maxAnimation, &QPropertyAnimation::finished, this, &MainWindow::maxAnimationFinished);
+    connect(m_minAnimation, &QPropertyAnimation::finished, this, &MainWindow::minAnimationFinished);
+    connect(m_lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchAppSlot);
+    connect(this, &MainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
+    connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &MainWindow::recvSearchResult);
+    connect(m_fullWindow, &FullMainWindow::showNormalWindow, this, &MainWindow::showNormalWindowSlot);
+    connect(m_fullWindow, &FullMainWindow::sendUpdateOtherView, this, &MainWindow::updateMinAllView);
+    connect(m_minSelectButton, &QToolButton::clicked, this, &MainWindow::on_minSelectButton_clicked);
+    connect(m_dropDownMenu, &MenuBox::triggered, this, &MainWindow::on_selectMenuButton_triggered);
+    connect(m_dropDownMenu, &MenuBox::sendMainWinActiveSignal, [ = ]() {
+        selectIconAnimation(false);
+    });
+    connect(m_powerOffButton, &QPushButton::customContextMenuRequested, this, &MainWindow::on_powerOffButton_customContextMenuRequested);
+    connect(m_powerOffButton, &QPushButton::clicked, this, &MainWindow::on_powerOffButton_clicked);
+    connect(m_cancelSearchPushButton, &QPushButton::clicked, this, &MainWindow::on_cancelSearchPushButton_clicked);
+    connect(m_searchPushButton, &QPushButton::clicked, this, &MainWindow::on_searchPushButton_clicked);
+    connect(m_minMaxChangeButton, &QPushButton::clicked, this, &MainWindow::on_minMaxChangeButton_clicked);
+    QDBusConnection::sessionBus().connect(DBUS_NAME, DBUS_PATH, DBUS_INTERFACE, QString("PanelGeometryRefresh"), this, SLOT(primaryScreenChangeSlot()));
+    //监控应用进程开启
+    connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
+        ConvertWinidToDesktop reply;
+        QString desktopfp = reply.tranIdToDesktop(id);
+
+        if (!desktopfp.isEmpty()) {
+            ViewOpenedSlot(desktopfp);
+        }
+    });
+}
+
+void MainWindow::initGsettings()
+{
+    //监听屏幕缩放
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit())) {
+        QGSettings *m_gsetting = new QGSettings(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit());
+        connect(m_gsetting, &QGSettings::changed, this, [ = ](const QString & key) {
+            if (key == "scalingFactor") {
+                repaintWidget();
+            }
+        });
+    }
+
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit())) {
+        QGSettings *gsetting = new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
+        connect(gsetting, &QGSettings::changed,
+                this, &MainWindow::repaintWidget);
+    }
+
+    if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+        QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
+        connect(gsetting, &QGSettings::changed, [ = ](QString key) {
+            if ("systemFont" == key || "systemFontSize" == key) {
+                m_leftTopSearchHorizontalLayout->removeWidget(m_lineEdit);
+                m_leftTopSearchHorizontalLayout->removeWidget(m_cancelSearchPushButton);
+                m_lineEdit->setParent(nullptr);
+                m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
+                m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
+                m_lineEdit->setPlaceholderText("搜索应用");
+                m_fullWindow->updateView();
+            }
+
+            if (key.contains(QString("styleName"))) {
+                changeStyle();
+            }
+        });
+    }
+}
+
+void MainWindow::initSearchUi()
+{
     //搜索框部分
     m_topStackedWidget = new QStackedWidget(m_viewWidget);
     m_topStackedWidget->setFixedHeight(34);
@@ -96,6 +311,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_cancelSearchPushButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-close-2x.png", true));
     m_topStackedWidget->addWidget(m_minMenuPage);
     m_topStackedWidget->addWidget(m_minSearchPage);
+}
+
+void MainWindow::initLeftWidget()
+{
     //左侧列表区
     m_leftStackedWidget = new QStackedWidget(m_viewWidget);
     m_leftStackedWidget->setFixedSize(QSize(300, Style::leftPageHeight));
@@ -126,6 +345,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_minSearchResultListView->setFixedSize(QSize(Style::leftPageWidth, Style::leftPageHeight));
     m_minSearchResultListView->installEventFilter(this);
     m_leftStackedWidget->addWidget(m_minSearchResultPage);
+}
+
+void MainWindow::initRightWidgetButton()
+{
     //右侧窗口
     m_mainRightVerticalLayout = new QVBoxLayout();
     m_mainRightVerticalLayout->setSpacing(0);
@@ -157,6 +380,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_rightTopHorizontalLayout->addItem(m_horizontalSpacer_3);
     m_rightTopHorizontalLayout->addWidget(m_minMaxChangeButton);
     m_verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+}
+
+void  MainWindow::initCollectWidget()
+{
     //右侧列表区
     m_rightStackedWidget = new QStackedWidget(m_centralwidget);
     m_rightStackedWidget->setFixedSize(QSize(324, 490));
@@ -183,6 +410,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_recentPage->setFixedSize(QSize(324, 490));
     m_rightRecentLayout = new QVBoxLayout(m_recentPage);
     m_rightRecentLayout->setContentsMargins(0, 20, 0, 0);
+}
+
+void MainWindow::initRecentWidget()
+{
     //最近视图
     m_recentListView = new ListView(m_recentPage);
     m_recentListView->installEventFilter(this);
@@ -248,220 +479,16 @@ MainWindow::MainWindow(QWidget *parent) :
     m_leftStackedWidget->setCurrentIndex(0);
     m_minMaxChangeButton->setDefault(false);
     m_rightStackedWidget->setCurrentIndex(0);
-    //设置tab切换顺序
-    //    setTabOrder(widget, searchPushButton);
+}
+
+void MainWindow::initTabOrder()
+{
     setTabOrder(m_searchPushButton, m_minSelectButton);
     setTabOrder(m_minSelectButton, m_selectMenuButton);
     setTabOrder(m_selectMenuButton, m_collectPushButton);
     setTabOrder(m_collectPushButton, m_recentPushButton);
     setTabOrder(m_recentPushButton, m_minMaxChangeButton);
     setTabOrder(m_minMaxChangeButton, m_powerOffButton);
-    m_softwareDbThread = new SoftwareDatabaseUpdateThread;
-    //获取软件商店类别信号
-    QDBusConnection::sessionBus().connect("com.kylin.softwarecenter.getsearchresults",
-                                          "/com/kylin/softwarecenter/getsearchresults",
-                                          "com.kylin.getsearchresults",
-                                          "get_app_category_list_signal",
-                                          this,
-                                          SLOT(updateAppCategorySlot(QString))
-                                         );
-    QDBusConnection::sessionBus().connect("com.kylin.statusmanager.interface",
-                                          "/",
-                                          "com.kylin.statusmanager.interface",
-                                          "mode_change_signal",
-                                          this,
-                                          SLOT(tabletModeChangeSlot(bool)));
-    m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
-                                        "/",
-                                        "com.kylin.statusmanager.interface",
-                                        QDBusConnection::sessionBus(), this);
-    QDBusReply<bool> res = m_usrInterface->call("get_current_tabletmode");
-    if (res.isValid()) {
-        m_isTabletMode = res;
-    }
-
-    initUi();
-    m_functionBtnWid = new FunctionButtonWidget(m_minFuncPage);
-    m_functionBtnWid->hide();
-    m_letterBtnWid = new LetterButtonWidget(m_minLetterPage);
-    m_letterBtnWid->hide();
-    m_enterAnimation = new QPropertyAnimation;
-    m_enterAnimation->setPropertyName(QString("geometry").toLocal8Bit());
-    m_leaveAnimation = new QPropertyAnimation;
-    m_leaveAnimation->setPropertyName(QString("geometry").toLocal8Bit());
-    connect(this, &MainWindow::sendClassificationbtnList, m_functionBtnWid, &FunctionButtonWidget::recvClassificationBtnList);
-    connect(this, &MainWindow::sendLetterClassificationList, m_letterBtnWid, &LetterButtonWidget::recvLetterBtnList);
-    //   connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal,this,&FunctionWidget::recvFunctionBtnSignal);
-    connect(m_minFuncListView, &ListView::sendAppClassificationBtnClicked, this, &MainWindow::appClassificationBtnClickedSlot);
-    connect(m_minLetterListView, &ListView::sendAppClassificationBtnClicked, this, &MainWindow::appClassificationBtnClickedSlot);
-    connect(m_leaveAnimation, &QPropertyAnimation::finished, this, &MainWindow::animationFinishedSLot);
-    connect(m_enterAnimation, &QPropertyAnimation::finished, this, &MainWindow::animationFinishedSLot);
-    connect(m_functionBtnWid, &FunctionButtonWidget::sendFunctionBtnSignal, this, &MainWindow::recvFunctionBtnSignal);
-    connect(m_letterBtnWid, &LetterButtonWidget::sendLetterBtnSignal, this, &MainWindow::recvFunctionBtnSignal);
-    connect(m_functionBtnWid, &FunctionButtonWidget::sendResetFunctionPage, this, &MainWindow::resetFunctionPage);
-    connect(m_letterBtnWid, &LetterButtonWidget::sendResetLetterPage, this, &MainWindow::resetLetterPage);
-    m_searchAppThread = new SearchAppThread;
-    m_dbus = new DBus;
-    new MenuAdaptor(m_dbus);
-    m_fullWindow = new FullMainWindow;
-    QDBusConnection con = QDBusConnection::sessionBus();
-
-    if (!con.registerService("org.ukui.menu") ||
-        !con.registerObject("/org/ukui/menu", m_dbus)) {
-        qDebug() << "error:" << con.lastError().message();
-    }
-
-    connect(m_dbus, &DBus::sendReloadSignal, this, [ = ] {
-        updateView();
-    });
-    connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
-
-        if (m_isTabletMode) {
-            return;
-        }
-
-        if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
-        {
-            QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
-
-            if (gsetting.keys().contains("winKeyRelease"))
-                if (gsetting.get("winKeyRelease").toBool()) {
-                    return;
-                }
-        }
-        if (QGSettings::isSchemaInstalled(QString("org.ukui.screenshot").toLocal8Bit()))
-        {
-            QGSettings gsetting(QString("org.ukui.screenshot").toLocal8Bit());
-
-            if (gsetting.keys().contains("isrunning"))
-                if (gsetting.get("isrunning").toBool()) {
-                    return;
-                }
-        }
-
-        if (this->isVisible())
-        {
-            this->hide();
-            this->clearFocus();
-            m_isFullScreen = false;
-            pointDataStruct pointData;
-            pointData.module = "mainWindow";
-            pointData.function = "winHide";
-            pointData.functionNum = "";
-            BuriedPointDataSend::getInstance()->setPoint(pointData);
-        } else if (m_fullWindow->isVisible())
-        {
-            m_fullWindow->hide();
-            m_fullWindow->clearFocus();
-            pointDataStruct pointData;
-            pointData.module = "fullWindow";
-            pointData.function = "winHide";
-            pointData.functionNum = "";
-            BuriedPointDataSend::getInstance()->setPoint(pointData);
-            m_isFullScreen = true;
-        } else
-        {
-            if (!m_isFullScreen) {
-                this->show();
-                this->raise();
-                this->activateWindow();
-                pointDataStruct pointData;
-                pointData.module = "mainWindow";
-                pointData.function = "winShow";
-                pointData.functionNum = "";
-                BuriedPointDataSend::getInstance()->setPoint(pointData);
-                on_collectPushButton_clicked();
-                m_viewWidget->setFocus();
-            } else {
-                m_fullWindow->show();
-                //                fullWindow->raise();
-                m_fullWindow->activateWindow();
-                pointDataStruct pointData;
-                pointData.module = "fullWindow";
-                pointData.function = "winShow";
-                pointData.functionNum = "";
-                BuriedPointDataSend::getInstance()->setPoint(pointData);
-            }
-        }
-    });
-    m_animationPage = new AnimationPage();
-    m_maxAnimation = new QPropertyAnimation(m_animationPage, "geometry", this);
-    m_minAnimation = new QPropertyAnimation(m_animationPage, "geometry", this);
-    connect(m_maxAnimation, &QPropertyAnimation::finished, this, &MainWindow::maxAnimationFinished);
-    connect(m_minAnimation, &QPropertyAnimation::finished, this, &MainWindow::minAnimationFinished);
-    connect(m_lineEdit, &QLineEdit::textChanged, this, &MainWindow::searchAppSlot);
-    connect(this, &MainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
-    connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &MainWindow::recvSearchResult);
-    connect(m_fullWindow, &FullMainWindow::showNormalWindow, this, &MainWindow::showNormalWindowSlot);
-    connect(m_fullWindow, &FullMainWindow::sendUpdateOtherView, this, &MainWindow::updateMinAllView);
-    connect(m_minSelectButton, &QToolButton::clicked, this, &MainWindow::on_minSelectButton_clicked);
-    connect(m_dropDownMenu, &MenuBox::triggered, this, &MainWindow::on_selectMenuButton_triggered);
-    connect(m_dropDownMenu, &MenuBox::sendMainWinActiveSignal, [ = ]() {
-        m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
-                                    .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
-        selectIconAnimation(false);
-    });
-    connect(m_powerOffButton, &QPushButton::customContextMenuRequested, this, &MainWindow::on_powerOffButton_customContextMenuRequested);
-    connect(m_powerOffButton, &QPushButton::clicked, this, &MainWindow::on_powerOffButton_clicked);
-    connect(m_cancelSearchPushButton, &QPushButton::clicked, this, &MainWindow::on_cancelSearchPushButton_clicked);
-    connect(m_searchPushButton, &QPushButton::clicked, this, &MainWindow::on_searchPushButton_clicked);
-    connect(m_minMaxChangeButton, &QPushButton::clicked, this, &MainWindow::on_minMaxChangeButton_clicked);
-    QDBusConnection::sessionBus().connect(DBUS_NAME, DBUS_PATH, DBUS_INTERFACE, QString("PanelGeometryRefresh"), this, SLOT(primaryScreenChangeSlot()));
-
-    //监听屏幕缩放
-    if (QGSettings::isSchemaInstalled(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit())) {
-        QGSettings *m_gsetting = new QGSettings(QString("org.ukui.SettingsDaemon.plugins.xsettings").toLocal8Bit());
-        connect(m_gsetting, &QGSettings::changed, this, [ = ](const QString & key) {
-            if (key == "scalingFactor") {
-                repaintWidget();
-            }
-        });
-    }
-
-    if (QGSettings::isSchemaInstalled(QString("org.ukui.panel.settings").toLocal8Bit())) {
-        QGSettings *gsetting = new QGSettings(QString("org.ukui.panel.settings").toLocal8Bit());
-        connect(gsetting, &QGSettings::changed,
-                this, &MainWindow::repaintWidget);
-    }
-
-    if (QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
-        QGSettings *gsetting = new QGSettings("org.ukui.style", QByteArray(), this);
-        connect(gsetting, &QGSettings::changed, [ = ](QString key) {
-            if ("systemFont" == key || "systemFontSize" == key) {
-                m_leftTopSearchHorizontalLayout->removeWidget(m_lineEdit);
-                m_leftTopSearchHorizontalLayout->removeWidget(m_cancelSearchPushButton);
-                m_lineEdit->setParent(nullptr);
-                m_leftTopSearchHorizontalLayout->addWidget(m_lineEdit);
-                m_leftTopSearchHorizontalLayout->addWidget(m_cancelSearchPushButton);
-                m_lineEdit->setPlaceholderText(QApplication::translate("MainWindow", "Search application"));
-                m_fullWindow->updateView();
-            }
-
-            if (key.contains(QString("styleName"))) {
-                changeStyle();
-            }
-        });
-    }
-
-    //监控应用进程开启
-    connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
-        ConvertWinidToDesktop reply;
-        QString desktopfp = reply.tranIdToDesktop(id);
-
-        if (!desktopfp.isEmpty()) {
-            ViewOpenedSlot(desktopfp);
-        }
-    });
-}
-
-MainWindow::~MainWindow()
-{
-    closeDataBase("MainThread");
-
-    if (m_animationPage != nullptr) {
-        delete m_animationPage;
-        m_animationPage = nullptr;
-    }
 }
 
 void MainWindow::initUi()
@@ -872,8 +899,8 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
         }
 
         if (target == m_selectMenuButton) {
-            m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
-                                        .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+//            m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true)
+//                                        .pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
             selectIconAnimation(true);
         }
     }
@@ -1061,7 +1088,7 @@ void MainWindow::searchAppSlot(QString arg)
 void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
 {
     pointDataStruct pointData;
-    m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true).pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
+//    m_selectMenuButton->setIcon(getCurIcon(":/data/img/mainviewwidget/downarrow.svg", true).pixmap(QSize(Style::miniIconSize, Style::miniIconSize)));
     selectIconAnimation(false);
 
     if (arg1 == m_allAction) {
