@@ -90,12 +90,6 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 public Q_SLOTS:
-    /**
-     * @brief Open the application
-     * @param arg: Desktop file path
-     */
-    void execApplication(QString desktopfp);
-
     void selectFirstItemTab();
 
     void on_setScrollBarValue(int value);

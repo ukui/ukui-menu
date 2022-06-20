@@ -44,7 +44,7 @@ private Q_SLOTS:
     void recvSearchResult(QVector<QStringList> arg);
     void setFocusToButton();
     void on_fullSelectMenuButton_clicked();
-
+    void fullMainWindowHide();
 
 protected:
     void paintEvent(QPaintEvent *event);

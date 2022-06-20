@@ -265,6 +265,10 @@ MainWindow::MainWindow(QWidget *parent) :
                                           this,
                                           SLOT(updateAppCategorySlot(QString))
                                          );
+    m_usrInterface = new QDBusInterface("com.kylin.statusmanager.interface",
+                                        "/",
+                                        "com.kylin.statusmanager.interface",
+                                        QDBusConnection::sessionBus(), this);
     initUi();
     m_functionBtnWid = new FunctionButtonWidget(m_minFuncPage);
     m_functionBtnWid->hide();
@@ -300,6 +304,13 @@ MainWindow::MainWindow(QWidget *parent) :
         updateView();
     });
     connect(m_dbus, &DBus::winKeyResponseSignal, this, [ = ] {
+
+        QDBusReply<bool> res = m_usrInterface->call("get_current_tabletmode");
+        myDebug() << "平板模式状态" << res;
+        if (res) {
+            return;
+        }
+
         if (QGSettings::isSchemaInstalled(QString("org.ukui.session").toLocal8Bit()))
         {
             QGSettings gsetting(QString("org.ukui.session").toLocal8Bit());
@@ -507,6 +518,10 @@ void MainWindow::initUi()
     connect(m_desktopWatcher, &DesktopWatcher::directoryChangedSignal, this, &MainWindow::updateView);
     connect(m_desktopWatcher, &DesktopWatcher::updateRecentList, this, &MainWindow::updateRecentView);
     connect(this, &MainWindow::sendStyleChangeSignal, m_viewWidget, &MainViewWidget::styleChangeSlot);
+    connect(m_minAllListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_minFuncListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_minLetterListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_minSearchResultListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
     changeStyle();
 }
 
@@ -1205,6 +1220,7 @@ void MainWindow::on_minMaxChangeButton_clicked()
     pointData.functionNum = "";
     BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
+
 void MainWindow::showWindow()
 {
     if (m_isFullScreen) {
@@ -1230,6 +1246,7 @@ void MainWindow::showWindow()
         BuriedPointDataSend::getInstance()->setPoint(pointData);
     }
 }
+
 void MainWindow::hideWindow()
 {
     if (m_fullWindow->isVisible()) {

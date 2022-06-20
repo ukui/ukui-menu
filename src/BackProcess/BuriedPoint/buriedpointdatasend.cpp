@@ -33,7 +33,7 @@ BuriedPointDataSend::~BuriedPointDataSend()
         delete  m_sendDataInterface;
         m_sendDataInterface = nullptr;
     }
-#else
+#endif
 }
 
 BuriedPointDataSend *BuriedPointDataSend::getInstance()

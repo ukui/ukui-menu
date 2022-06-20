@@ -218,27 +218,11 @@ void FullLetterWidget::fillAppList()
             }
 
             listview->addData(m_data);
-            connect(listview, &FullListView::sendItemClickedSignal, this, &FullLetterWidget::execApplication);
             connect(listview, &FullListView::sendHideMainWindowSignal, this, &FullLetterWidget::sendHideMainWindowSignal);
         }
     }
 
     resizeScrollAreaControls();
-}
-
-/**
- * 执行应用程序
- */
-void FullLetterWidget::execApplication(QString desktopfp)
-{
-    Q_EMIT sendHideMainWindowSignal();
-    execApp(desktopfp);
-    pointDataStruct pointData;
-    pointData.module = "fullWindow/FullLetterWidget/execApplication";
-    pointData.function = "Clicked";
-    pointData.functionNum = "";
-    pointData.otherFunction[0] = desktopfp;
-    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullLetterWidget::on_setAreaScrollBarValue(int value)
@@ -448,7 +432,6 @@ void FullLetterWidget::valueChangedSlot(int value)
         } else {
             max = m_scrollAreaWidLayout->itemAt(2 * (index + 1))->widget()->y();
         }
-
         if (value >= min && value < max) {
             Q_FOREACH (QAbstractButton *button, m_buttonList) {
                 LetterClassifyButton *letterbtn = qobject_cast<LetterClassifyButton *>(button);

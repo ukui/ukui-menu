@@ -103,11 +103,6 @@ protected:
 
 public Q_SLOTS:
     /**
-     * @brief Open the application
-     * @param arg: Desktop file path
-     */
-    void execApplication(QString desktopfp);
-    /**
      * @brief Update the application list slot function
      */
     void updateListViewSlot();

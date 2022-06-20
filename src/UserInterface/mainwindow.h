@@ -228,6 +228,7 @@ private:
     LetterButtonWidget *m_letterBtnWid = nullptr;
     SoftwareDatabaseUpdateThread *m_softwareDbThread = nullptr;
     QColor m_windowColor;
+    QDBusInterface* m_usrInterface = nullptr;
 };
 
 #endif // MAINWINDOW_H

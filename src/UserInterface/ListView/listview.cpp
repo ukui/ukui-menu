@@ -108,6 +108,7 @@ void ListView::onClicked(QModelIndex index)
         if (var.value<QStringList>().at(1).toInt() == 0) {
             Q_EMIT sendAppClassificationBtnClicked();
         } else {
+            Q_EMIT sendHideMainWindowSignal();
             execApp(desktopfp);
             pointDataStruct pointData;
             pointData.module = "mainWindow/execApplication";

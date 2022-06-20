@@ -148,11 +148,6 @@ public Q_SLOTS:
      */
     void btnGroupClickedSlot(QAbstractButton *btn);
     /**
-     * @brief Open the application
-     * @param arg: Desktop file path
-     */
-    void execApplication(QString desktopfp);
-    /**
      * @brief Update application list slot function
      */
     void updateAppListView();

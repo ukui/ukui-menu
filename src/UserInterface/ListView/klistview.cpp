@@ -44,6 +44,7 @@ void KListView::onClicked(QModelIndex index)
     QVariant var = listmodel->data(index, Qt::DisplayRole);
 
     if (var.isValid()) {
+        Q_EMIT sendHideMainWindowSignal();
         QString desktopfp = var.value<QString>();
         execApp(desktopfp);
     }

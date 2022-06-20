@@ -146,7 +146,6 @@ void FullSearchResultWidget::initAppListWidget()
     m_listView->installEventFilter(this);
     m_scrollAreaWidLayout->addWidget(m_listView);
     m_listView->setFixedWidth(m_scrollArea->width());
-    connect(m_listView, &FullListView::sendItemClickedSignal, this, &FullSearchResultWidget::execApplication);
     connect(m_listView, &FullListView::sendHideMainWindowSignal, this, &FullSearchResultWidget::sendHideMainWindowSignal);
     connect(m_listView, &FullListView::sendSetslidebar, this, &FullSearchResultWidget::onSetSlider);
 }
@@ -156,20 +155,6 @@ void FullSearchResultWidget::fillAppList()
     m_data.clear();
     m_listView->addData(m_data);
     resizeScrollAreaControls();
-}
-/**
- * 执行应用程序
- */
-void FullSearchResultWidget::execApplication(QString desktopfp)
-{
-    Q_EMIT sendHideMainWindowSignal();
-    execApp(desktopfp);
-    pointDataStruct pointData;
-    pointData.module = "fullWindow/FullLetterWidget/execApplication";
-    pointData.function = "Clicked";
-    pointData.functionNum = "";
-    pointData.otherFunction[0] = desktopfp;
-    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullSearchResultWidget::updateAppListView(QVector<QStringList> arg)

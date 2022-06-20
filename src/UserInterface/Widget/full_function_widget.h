@@ -143,11 +143,6 @@ protected:
 
 public Q_SLOTS:
     /**
-     * @brief Open the application
-     * @param arg: Desktop file path
-     */
-    void execApplication(QString desktopfp);
-    /**
      * @brief Respond to button click
      * @param btn: QButtonGroup button
      */

@@ -218,23 +218,7 @@ void FullFunctionWidget::insertAppList(QStringList desktopfplist)
     }
 
     listview->addData(m_data);
-    connect(listview, &FullListView::sendItemClickedSignal, this, &FullFunctionWidget::execApplication);
     connect(listview, &FullListView::sendHideMainWindowSignal, this, &FullFunctionWidget::sendHideMainWindowSignal);
-}
-
-/**
- * 执行应用程序
- */
-void FullFunctionWidget::execApplication(QString desktopfp)
-{
-    Q_EMIT sendHideMainWindowSignal();
-    execApp(desktopfp);
-    pointDataStruct pointData;
-    pointData.module = "fullWindow/FullFunctionWidget/execApplication";
-    pointData.function = "Clicked";
-    pointData.functionNum = "";
-    pointData.otherFunction[0] = desktopfp;
-    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullFunctionWidget::on_setAreaScrollBarValue(int value)

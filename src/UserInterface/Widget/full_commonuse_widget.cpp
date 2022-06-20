@@ -157,7 +157,6 @@ void FullCommonUseWidget::initAppListWidget()
     m_listView->installEventFilter(this);
     m_scrollAreaWidLayout->addWidget(m_listView);
     m_listView->setFixedWidth(m_scrollArea->width());
-    connect(m_listView, &FullListView::sendItemClickedSignal, this, &FullCommonUseWidget::execApplication);
     connect(m_listView, &FullListView::sendUpdateAppListSignal, this, &FullCommonUseWidget::updateListViewSlot);
     connect(m_listView, &FullListView::sendHideMainWindowSignal, this, &FullCommonUseWidget::sendHideMainWindowSignal);
     connect(m_listView, &FullListView::sendSetslidebar, this, &FullCommonUseWidget::onSetSlider);
@@ -192,21 +191,6 @@ void FullCommonUseWidget::fillAppList()
 
     m_listView->addData(m_data);
     resizeScrollAreaControls();
-}
-
-/**
- * 执行应用程序
- */
-void FullCommonUseWidget::execApplication(QString desktopfp)
-{
-    Q_EMIT sendHideMainWindowSignal();
-    execApp(desktopfp);
-    pointDataStruct pointData;
-    pointData.module = "fullWindow/commonUseWidget/execApplication";
-    pointData.function = "Clicked";
-    pointData.functionNum = "";
-    pointData.otherFunction[0] = desktopfp;
-    BuriedPointDataSend::getInstance()->setPoint(pointData);
 }
 
 void FullCommonUseWidget::selectFirstItem()

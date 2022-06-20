@@ -173,6 +173,10 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     connect(this, &FullMainWindow::sendSetFocusToResult, m_fullResultPage, &FullSearchResultWidget::selectFirstItemTab);
     connect(fullSelectMenuButton, &QToolButton::clicked, this, &FullMainWindow::on_fullSelectMenuButton_clicked);
     connect(m_fullCommonPage, &FullCommonUseWidget::sendUpdateOtherView, this, &FullMainWindow::sendUpdateOtherView);
+    connect(m_fullFunctionPage, &FullFunctionWidget::sendHideMainWindowSignal, this, &FullMainWindow::fullMainWindowHide);
+    connect(m_fullLetterPage, &FullLetterWidget::sendHideMainWindowSignal, this, &FullMainWindow::fullMainWindowHide);
+    connect(m_fullCommonPage, &FullCommonUseWidget::sendHideMainWindowSignal, this, &FullMainWindow::fullMainWindowHide);
+    connect(m_fullResultPage, &FullSearchResultWidget::sendHideMainWindowSignal, this, &FullMainWindow::fullMainWindowHide);
 }
 
 FullMainWindow::~FullMainWindow()
@@ -184,6 +188,11 @@ void FullMainWindow::updateView()
     m_fullCommonPage->updateListView();
     m_fullFunctionPage->updateAppListView();
     m_fullLetterPage->updateAppListView();
+}
+
+void FullMainWindow::fullMainWindowHide()
+{
+    this->hide();
 }
 
 void FullMainWindow::changeStyle()
