@@ -173,7 +173,6 @@ void MainWindow::registDbusServer()
                 this->show();
                 this->raise();
                 this->activateWindow();
-//                m_collectPushButton->clicked(true);
                 on_collectPushButton_clicked();
                 m_viewWidget->setFocus();
             } else {
