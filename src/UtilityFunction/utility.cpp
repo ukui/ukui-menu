@@ -708,22 +708,32 @@ bool deleteAppRecord(QString desktopfn)
 
 void execApp(QString desktopfp)
 {
-    UkuiMenuInterface interface;
 
-    if (interface.checkKreApp(desktopfp)) {
-        QProcess::startDetached(interface.getAppExec(desktopfp));
-    } else {
-        QString appName = interface.getAppExec(desktopfp);
-        QStringList strList = (appName.replace("\"", "")).split(" ");
+    QDBusInterface iface("com.kylin.AppManager",
+                         "/com/kylin/AppManager",
+                         "com.kylin.AppManager",
+                         QDBusConnection::sessionBus());
+    QDBusReply<bool> res = iface.call("LaunchApp", desktopfp);
 
-        if (QString(strList.at(0)) == "kmplayer") {
-            QProcess::startDetached(strList.at(0));
-            return;
+    if (!res.isValid() || !res) {
+
+        UkuiMenuInterface interface;
+
+        if (interface.checkKreApp(desktopfp)) {
+            QProcess::startDetached(interface.getAppExec(desktopfp));
+        } else {
+            QString appName = interface.getAppExec(desktopfp);
+            QStringList strList = (appName.replace("\"", "")).split(" ");
+
+            if (QString(strList.at(0)) == "kmplayer") {
+                QProcess::startDetached(strList.at(0));
+                return;
+            }
+
+            GDesktopAppInfo *desktopAppInfo = g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
+            g_app_info_launch(G_APP_INFO(desktopAppInfo), nullptr, nullptr, nullptr);
+            g_object_unref(desktopAppInfo);
         }
-
-        GDesktopAppInfo *desktopAppInfo = g_desktop_app_info_new_from_filename(desktopfp.toLocal8Bit().data());
-        g_app_info_launch(G_APP_INFO(desktopAppInfo), nullptr, nullptr, nullptr);
-        g_object_unref(desktopAppInfo);
     }
 
     QFileInfo fileInfo(desktopfp);
