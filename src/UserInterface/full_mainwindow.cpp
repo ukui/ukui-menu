@@ -390,6 +390,10 @@ bool FullMainWindow::event(QEvent *event)
         }
     }
 
+    if (event->type() == QEvent::MouseButtonPress) {
+        this->hide();
+    }
+
     return QWidget::event(event);
 }
 
