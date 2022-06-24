@@ -113,6 +113,17 @@ void RightListView::keyPressEvent(QKeyEvent *e)
     }
 }
 
+void RightListView::onClicked(QModelIndex index)
+{
+    Q_EMIT sendHideMainWindowSignal();
+    QVariant var = listmodel->data(index, Qt::DisplayRole);
+    QString desktopfp = var.value<QStringList>().at(0);
+    if (var.isValid()) {
+        QString desktopfp = var.value<QString>();
+        execApp(desktopfp);
+    }
+}
+
 void RightListView::changeStyleColor(const QColor &color)
 {
     m_styleColor = color;

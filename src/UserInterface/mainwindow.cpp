@@ -214,6 +214,10 @@ void MainWindow::initSignalConnect()
     connect(m_cancelSearchPushButton, &QPushButton::clicked, this, &MainWindow::on_cancelSearchPushButton_clicked);
     connect(m_searchPushButton, &QPushButton::clicked, this, &MainWindow::on_searchPushButton_clicked);
     connect(m_minMaxChangeButton, &QPushButton::clicked, this, &MainWindow::on_minMaxChangeButton_clicked);
+    connect(m_minAllListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_minFuncListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_minLetterListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_collectListView, &RightListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
     QDBusConnection::sessionBus().connect(DBUS_NAME, DBUS_PATH, DBUS_INTERFACE, QString("PanelGeometryRefresh"), this, SLOT(primaryScreenChangeSlot()));
     //监控应用进程开启
     connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
