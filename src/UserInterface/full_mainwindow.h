@@ -52,6 +52,13 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void changeStyle();
+    void initConnect();
+    void initTabOrder();
+    void initMenu();
+    void initAppListUI();
+    void initSearchUI();
+    void initButtonUI();
+    void initLayout();
 
 private:
     QAction *m_allAction = nullptr;

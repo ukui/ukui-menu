@@ -11,12 +11,24 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setAutoFillBackground(false);
-    m_searchAppThread = new SearchAppThread;
     Style::initWidStyle();
-    m_buttonStyle = QString("%1{border-radius:24px; background: rgba(255, 255, 255, 0.1);}"
-                            "%1:hover {border-radius:24px; background: rgba(255, 255, 255, 0.2);}"
-                            "%1:pressed {border-radius:24px; background: rgba(255, 255, 255, 0.3);}");
     this->setFixedSize(Style::m_availableScreenWidth, Style::m_availableScreenHeight);
+    initLayout();
+    initSearchUI();
+    initButtonUI();
+    initAppListUI();
+    initMenu();
+    initTabOrder();
+    changeStyle();
+    initConnect();
+}
+
+FullMainWindow::~FullMainWindow()
+{
+}
+
+void FullMainWindow::initLayout()
+{
     centralwidget = new QWidget(this);
     verticalLayout = new QVBoxLayout(centralwidget);
     verticalLayout->setSpacing(0);
@@ -28,6 +40,46 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     bottomHorizonLayout = new QHBoxLayout();
     bottomHorizonLayout->setSpacing(0);
     bottomHorizonLayout->setContentsMargins(0, 0, 0, 0);
+}
+
+void FullMainWindow::initButtonUI()
+{
+    m_buttonStyle = QString("%1{border-radius:24px; background: rgba(255, 255, 255, 0.1);}"
+                            "%1:hover {border-radius:24px; background: rgba(255, 255, 255, 0.2);}"
+                            "%1:pressed {border-radius:24px; background: rgba(255, 255, 255, 0.3);}");
+    m_lineEdit->setFocusPolicy(Qt::StrongFocus);
+    horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    fullSelectToolButton = new QPushButton(centralwidget);
+//    fullSelectToolButton->setStyleSheet(m_buttonStyle.arg("QToolButton"));
+    fullSelectToolButton->setObjectName(QString::fromUtf8("fullSelectToolButton"));
+    fullSelectToolButton->setMinimumSize(QSize(48, 48));
+    fullSelectToolButton->installEventFilter(this);
+    fullSelectToolButton->setFocus();
+    QIcon selectIcon;
+    selectIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/full-function.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    fullSelectToolButton->setIcon(selectIcon);
+    fullSelectMenuButton = new QToolButton(centralwidget);
+    QIcon menuBottonIcon;
+    fullSelectMenuButton->setStyleSheet("QToolButton{background:transparent;}");
+    fullSelectMenuButton->setProperty("useIconHighlightEffect", 0x0);
+    fullSelectMenuButton->setFixedSize(20, 20);
+    fullSelectMenuButton->setObjectName(QString::fromUtf8("fullSelectMenuButton"));
+    fullSelectMenuButton->setPopupMode(QToolButton::InstantPopup);
+    fullSelectMenuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    fullSelectMenuButton->installEventFilter(this);
+    QPalette palete;
+    palete.setColor(QPalette::NoRole, Qt::white);
+    fullSelectMenuButton->setPalette(palete);
+    minPushButton = new QPushButton(centralwidget);
+    minPushButton->setObjectName(QString::fromUtf8("minPushButton"));
+    minPushButton->setFixedSize(QSize(48, 48));
+    minPushButton->setFlat(true);
+    minPushButton->installEventFilter(this);
+}
+
+void FullMainWindow::initSearchUI()
+{
+    m_searchAppThread = new SearchAppThread;
     m_lineEdit = new QLineEdit(centralwidget);
     m_lineEdit->setFixedSize(QSize(372, 36));
     m_lineEdit->setLayoutDirection(Qt::LeftToRight);
@@ -89,34 +141,10 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     queryWidLayout->addWidget(m_queryIcon);
     queryWidLayout->addWidget(m_queryText);
     queryWidLayout->setAlignment(Qt::AlignCenter);
-    m_lineEdit->setFocusPolicy(Qt::StrongFocus);
-    horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    fullSelectToolButton = new QPushButton(centralwidget);
-//    fullSelectToolButton->setStyleSheet(m_buttonStyle.arg("QToolButton"));
-    fullSelectToolButton->setObjectName(QString::fromUtf8("fullSelectToolButton"));
-    fullSelectToolButton->setMinimumSize(QSize(48, 48));
-    fullSelectToolButton->installEventFilter(this);
-    fullSelectToolButton->setFocus();
-    QIcon selectIcon;
-    selectIcon.addFile(QString::fromUtf8(":/data/img/mainviewwidget/full-function.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    fullSelectToolButton->setIcon(selectIcon);
-    fullSelectMenuButton = new QToolButton(centralwidget);
-    QIcon menuBottonIcon;
-    fullSelectMenuButton->setStyleSheet("QToolButton{background:transparent;}");
-    fullSelectMenuButton->setProperty("useIconHighlightEffect", 0x0);
-    fullSelectMenuButton->setFixedSize(20, 20);
-    fullSelectMenuButton->setObjectName(QString::fromUtf8("fullSelectMenuButton"));
-    fullSelectMenuButton->setPopupMode(QToolButton::InstantPopup);
-    fullSelectMenuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    fullSelectMenuButton->installEventFilter(this);
-    QPalette palete;
-    palete.setColor(QPalette::NoRole, Qt::white);
-    fullSelectMenuButton->setPalette(palete);
-    minPushButton = new QPushButton(centralwidget);
-    minPushButton->setObjectName(QString::fromUtf8("minPushButton"));
-    minPushButton->setFixedSize(QSize(48, 48));
-    minPushButton->setFlat(true);
-    minPushButton->installEventFilter(this);
+}
+
+void FullMainWindow::initAppListUI()
+{
     m_fullStackedWidget = new QStackedWidget(centralwidget);
     m_fullCommonPage = new FullCommonUseWidget(m_fullStackedWidget);
     m_fullStackedWidget->addWidget(m_fullCommonPage);
@@ -138,6 +166,10 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     verticalLayout->addLayout(bottomHorizonLayout);
     this->setCentralWidget(centralwidget);
     m_fullStackedWidget->setCurrentIndex(0);
+}
+
+void FullMainWindow::initMenu()
+{
     m_menu = new QMenu;
     m_allAction = new QAction(m_menu);
     m_letterAction = new QAction(m_menu);
@@ -153,10 +185,17 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     m_menu->addAction(m_funcAction);
     m_allAction->setChecked(true);
     fullSelectMenuButton->setMenu(m_menu);
+}
+
+void FullMainWindow::initTabOrder()
+{
     setTabOrder(m_lineEdit, fullSelectToolButton);
     setTabOrder(fullSelectToolButton, fullSelectMenuButton);
     setTabOrder(fullSelectMenuButton, minPushButton);
-    changeStyle();
+}
+
+void FullMainWindow::initConnect()
+{
     connect(m_lineEdit, &QLineEdit::textChanged, this, &FullMainWindow::searchAppSlot);
     connect(this, &FullMainWindow::sendSearchKeyword, m_searchAppThread, &SearchAppThread::recvSearchKeyword);
     connect(m_searchAppThread, &SearchAppThread::sendSearchResult, this, &FullMainWindow::recvSearchResult);
@@ -177,10 +216,6 @@ FullMainWindow::FullMainWindow(QWidget *parent) :
     connect(m_fullLetterPage, &FullLetterWidget::sendHideMainWindowSignal, this, &FullMainWindow::fullMainWindowHide);
     connect(m_fullCommonPage, &FullCommonUseWidget::sendHideMainWindowSignal, this, &FullMainWindow::fullMainWindowHide);
     connect(m_fullResultPage, &FullSearchResultWidget::sendHideMainWindowSignal, this, &FullMainWindow::fullMainWindowHide);
-}
-
-FullMainWindow::~FullMainWindow()
-{
 }
 
 void FullMainWindow::updateView()
