@@ -52,6 +52,7 @@ void FullListView::initWidget()
     this->setMouseTracking(true);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    setItemAlignment(Qt::AlignCenter);
     this->setGridSize(QSize(Style::m_applistGridSizeWidth, Style::m_applistGridSizeWidth));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     this->setFrameShape(QFrame::NoFrame);//移除边框

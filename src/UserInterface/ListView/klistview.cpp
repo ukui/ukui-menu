@@ -61,6 +61,11 @@ void KListView::paintEvent(QPaintEvent *e)
     QListView::paintEvent(e);
 }
 
+void KListView::mouseMoveEvent(QMouseEvent *e)
+{
+    this->clearFocus();
+}
+
 void KListView::mousePressEvent(QMouseEvent *event)
 {
     if (!(this->indexAt(event->pos()).isValid()) && event->button() == Qt::LeftButton) {
@@ -73,10 +78,13 @@ void KListView::mousePressEvent(QMouseEvent *event)
 
 void KListView::rightClickedSlot(const QPoint &pos)
 {
-    Q_UNUSED(pos)
-
     if (!(this->selectionModel()->selectedIndexes().isEmpty())) {
-        QModelIndex index = this->currentIndex();
+
+        QModelIndex index = indexAt(pos);
+        if(!index.isValid()) {
+             return;
+        }
+
         QVariant var = listmodel->data(index, Qt::DisplayRole);
         QStringList strlist = var.value<QStringList>();
 

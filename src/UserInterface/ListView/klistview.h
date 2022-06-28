@@ -23,6 +23,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *e);
 public:
     void addData(QStringList data);
     void updateData(QStringList data);
