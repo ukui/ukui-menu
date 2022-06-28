@@ -44,7 +44,7 @@ void RightListView::initWidget()
     viewport()->setAutoFillBackground(false);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setViewMode(QListView::IconMode);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setResizeMode(QListView::Adjust);
@@ -52,8 +52,9 @@ void RightListView::initWidget()
     this->setMouseTracking(true);
     this->setMovement(QListView::Static);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    this->setGridSize(QSize(107, 107));
+    this->setGridSize(QSize(105, 105));
     this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    this->verticalScrollBar()->setProperty("drawScrollBarGroove", false);
     this->setFrameShape(QFrame::NoFrame);//移除边框
     connect(this, &RightListView::customContextMenuRequested, this, &RightListView::rightClickedSlot);
     connect(this, &RightListView::clicked, this, &RightListView::onClicked);
@@ -92,6 +93,18 @@ void RightListView::selectFirstItem()
 
 void RightListView::paintEvent(QPaintEvent *e)
 {
+    //滚动条
+    QPalette p = this->verticalScrollBar()->palette();
+    QColor color;
+
+    if (g_curStyle == "ukui-dark") {
+        color = QColor("#26FFFFFF");
+    } else {
+        color = QColor("#1A000000");
+    }
+
+    p.setColor(QPalette::Active, QPalette::Button, color);
+    this->verticalScrollBar()->setPalette(p);
     QListView::paintEvent(e);
 }
 
@@ -133,4 +146,11 @@ void RightListView::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
     this->selectionModel()->clear();
+    this->verticalScrollBar()->setVisible(true);
+}
+
+void RightListView::leaveEvent(QEvent *e)
+{
+    Q_UNUSED(e);
+    this->verticalScrollBar()->setVisible(false);
 }

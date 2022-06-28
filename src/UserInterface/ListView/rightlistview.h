@@ -27,6 +27,7 @@ protected:
     void dropEvent(QDropEvent *event);
     void enterEvent(QEvent *e);
     void paintEvent(QPaintEvent *e);
+    void leaveEvent(QEvent *e);
 
 private:
     RightClickMenu *menu = nullptr; //右键菜单

@@ -391,15 +391,15 @@ void  MainWindow::initCollectWidget()
 {
     //右侧列表区
     m_rightStackedWidget = new QStackedWidget(m_centralwidget);
-    m_rightStackedWidget->setFixedSize(QSize(324, 490));
+    m_rightStackedWidget->setFixedSize(QSize(352, 490));
     m_rightStackedWidget->setFocusPolicy(Qt::StrongFocus);
     m_collectPage = new QWidget();
-    m_collectPage->setFixedSize(QSize(324, 480));
+    m_collectPage->setFixedSize(QSize(332, 480));
     m_rightCollectLayout = new QVBoxLayout(m_collectPage);
     m_rightCollectLayout->setContentsMargins(0, 18, 0, 0);
     //收藏视图
     m_collectListView = new RightListView(m_collectPage);
-    m_collectListView->setFixedSize(QSize(324, 428));
+    m_collectListView->setFixedSize(QSize(332, 420));
     m_collectListView->setAcceptDrops(true);
     m_collectListView->setAutoFillBackground(false);
     m_collectListView->setProperty("showDropIndicator", QVariant(true));
@@ -412,7 +412,7 @@ void  MainWindow::initCollectWidget()
     m_collectListView->setSelectionRectVisible(true);
     m_collectListView->installEventFilter(this);
     m_recentPage = new QWidget();
-    m_recentPage->setFixedSize(QSize(324, 490));
+    m_recentPage->setFixedSize(QSize(352, 490));
     m_rightRecentLayout = new QVBoxLayout(m_recentPage);
     m_rightRecentLayout->setContentsMargins(0, 20, 0, 0);
 }

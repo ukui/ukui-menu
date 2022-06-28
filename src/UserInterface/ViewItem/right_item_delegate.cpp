@@ -18,10 +18,10 @@ void RightItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     if (index.isValid()) {
         QStyleOptionViewItem viewOption(option);//用来在视图中画一个item
         QRectF rect;
-        rect.setX(option.rect.x());
-        rect.setY(option.rect.y());
-        rect.setWidth(option.rect.width());
-        rect.setHeight(option.rect.height());
+        rect.setX(option.rect.x() + 1);
+        rect.setY(option.rect.y() + 1);
+        rect.setWidth(option.rect.width() - 2);
+        rect.setHeight(option.rect.height() - 2);
         //QPainterPath画圆角矩形
         const qreal radius = 10;
         QPainterPath path;
