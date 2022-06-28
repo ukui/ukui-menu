@@ -286,9 +286,11 @@ void MainWindow::initSearchUi()
     m_searchPushButton->setFixedSize(QSize(26, 26));
     m_searchPushButton->setIcon(getCurIcon(":/data/img/mainviewwidget/search.svg", true));
     m_searchPushButton->installEventFilter(this);
+    m_searchPushButton->setToolTip(tr("Search"));
     m_minSelectButton = new QPushButton(m_minMenuPage);
     m_minSelectButton->setFixedSize(QSize(26, 26));
     m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-all.svg", true));
+    m_minSelectButton->setToolTip(tr("All"));
     m_minSelectButton->installEventFilter(this);
     m_selectMenuButton = new RotationLabel(m_minMenuPage);
     m_selectMenuButton->installEventFilter(this);
@@ -1098,6 +1100,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_leftStackedWidget->setCurrentIndex(0);
         m_state = 0;
         m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-all.svg", true));
+        m_minSelectButton->setToolTip(tr("All"));
         m_minSelectTextLabel->setText(tr("All"));
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
@@ -1110,6 +1113,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_leftStackedWidget->setCurrentIndex(1);
         m_state = 1;
         m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-letter.svg", true));
+        m_minSelectButton->setToolTip(tr("Letter"));
         m_minSelectTextLabel->setText(tr("Letter"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
@@ -1122,6 +1126,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_leftStackedWidget->setCurrentIndex(2);
         m_state = 2;
         m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-function.svg", true));
+        m_minSelectButton->setToolTip(tr("Function"));
         m_minSelectTextLabel->setText(tr("Function"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(false);
