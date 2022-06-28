@@ -93,7 +93,7 @@
     <message>
         <location filename="../src/UserInterface/mainwindow.cpp" line="501"/>
         <source>PowerOff</source>
-        <translation>关机</translation>
+        <translation>电源</translation>
     </message>
     <message>
         <source>Search application</source>
