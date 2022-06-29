@@ -639,6 +639,10 @@ void MainWindow::changeStyle()
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     double transparency = getTransparency();
+    QColor curColor = m_windowColor;
+    if ( transparency == 1) {
+        curColor.setAlpha(255);
+    }
     QRect rect = this->rect();
     QPainterPath path;
     //    rect.setTopLeft(QPoint(rect.x()+320,rect.y()));
@@ -655,11 +659,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
     path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
     path.lineTo(rect.topRight() + QPointF(0, radius));
     path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
-    painter.setBrush(m_windowColor);
+    painter.setBrush(curColor);
     painter.setPen(Qt::transparent);
     painter.setOpacity(transparency);
     painter.drawPath(path);
-    //        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     QMainWindow::paintEvent(event);
 }
