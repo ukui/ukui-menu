@@ -68,6 +68,7 @@ QVector<int> TabletWindow::m_keyValueVector = QVector<int>();
 void TabletWindow::initSize()
 {
     Style::initWidStyle();
+    this->move(QApplication::primaryScreen()->geometry().topLeft());
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->setFixedSize(Style::ScreenWidth, Style::ScreenHeight);
     m_leftWidget->setFixedSize(Style::m_leftWidWidth, Style::CenterWindHeight);
@@ -101,6 +102,10 @@ void TabletWindow::initUi()
     ways();
     buttonWidgetShow();
     connect(m_leftWidget, &FunctionWidget::hideTabletWindow, this, &TabletWindow::recvHideMainWindowSlot);
+
+    connect(QApplication::desktop(), &QDesktopWidget::resized, this, &TabletWindow::reloadWidget);
+    connect(QApplication::desktop(), &QDesktopWidget::primaryScreenChanged, this, &TabletWindow::reloadWidget);
+    connect(QApplication::desktop(), &QDesktopWidget::screenCountChanged, this, &TabletWindow::reloadWidget);
 
     if (checkapplist()) {
         directoryChangedSlot();//更新应用列表
@@ -356,7 +361,6 @@ void TabletWindow::modelChanged(bool value)
     QDBusReply<bool> res = m_usrInterface->call("get_current_tabletmode");
 
     if (!res) {
-        initSize();
         reloadWidget();
     }
 
@@ -396,22 +400,28 @@ void TabletWindow::reloadAppList()
     if (!vector.at(0).isEmpty()) {
         QLayoutItem *widItem = m_firstPageLayout->itemAt(1);
         QWidget *wid = widItem->widget();
-        TabletListView *m_listview = qobject_cast<TabletListView *>(wid);
-        m_listview->updateData(vector.at(0));
+        TabletListView *firstListview = qobject_cast<TabletListView *>(wid);
+        firstListview->setFixedSize(Style::FirsPageViewWidth, Style::CenterWindHeight);
+        firstListview->setGridSize(QSize(Style::TabletItemSizeWidthFirst, Style::AppListItemSizeHeight));
+        firstListview->updateData(vector.at(0));
     }
 
     for (int i = 1; i < vector.size(); i++) {
         if (!vector.at(i).isEmpty()) {
             QLayoutItem *widItem = m_scrollAreaWidLayout->itemAt(i);
             QWidget *wid = widItem->widget();
-            TabletListView *m_listview = qobject_cast<TabletListView *>(wid);
-            m_listview->updateData(vector.at(i));
+            TabletListView *otherListview = qobject_cast<TabletListView *>(wid);
+            otherListview->setFixedSize(Style::OtherPageViewWidth, Style::CenterWindHeight);
+            otherListview->setGridSize(QSize(Style::TabletItemSizeWidthOther, Style::AppListItemSizeHeight));
+            otherListview->updateData(vector.at(i));
         }
     }
 }
 
 void TabletWindow::reloadWidget()
 {
+    initSize();
+
     QLayoutItem *child;
 
     if (m_firstPageLayout->count() == 2) {
