@@ -363,7 +363,6 @@ bool FullMainWindow::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-
     if (watched == m_fullSelectMenuButton) {
          if (event->type() == QEvent::MouseButtonPress) {
              selectIconAnimation(true);
