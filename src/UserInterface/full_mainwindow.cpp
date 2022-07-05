@@ -412,8 +412,11 @@ void FullMainWindow::resetEditline()
 {
     m_lineEdit->clear();
     m_lineEdit->clearFocus();
-    m_queryWid->layout()->addWidget(m_queryIcon);
-    m_queryWid->layout()->addWidget(m_queryText);
+    m_fullSelectToolButton->setFocus();
+    if (m_queryWid->layout()->children().isEmpty()) {
+        m_queryWid->layout()->addWidget(m_queryIcon);
+        m_queryWid->layout()->addWidget(m_queryText);
+    }
     m_queryIcon->adjustSize();
     m_queryText->adjustSize();
     m_queryWid->layout()->setAlignment(Qt::AlignCenter);

@@ -226,11 +226,7 @@ void FullSearchResultWidget::selectFirstItemTab()
 void FullSearchResultWidget::repaintWidget()
 {
     m_scrollArea->setFixedSize(Style::m_applistWidWidth, Style::m_applistWidHeight);
-    m_scrollAreaWidLayout->removeWidget(m_listView);
-    m_listView->setParent(nullptr);
-    delete m_listView;
-    initAppListWidget();
-    fillAppList();
+    resizeScrollAreaControls();
     m_scrollAreaWidHeight  = m_scrollAreaWid->height() + 1;
     initVerticalScrollBar();
 }

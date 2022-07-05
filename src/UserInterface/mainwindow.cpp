@@ -160,12 +160,15 @@ void MainWindow::registDbusServer()
         if (this->isVisible())
         {
             this->hide();
+            m_topStackedWidget->setCurrentIndex(0);
+            m_lineEdit->clear();
             this->clearFocus();
             m_isFullScreen = false;
         } else if (m_fullWindow->isVisible())
         {
             m_fullWindow->hide();
             m_fullWindow->clearFocus();
+            m_fullWindow->resetEditline();
             m_isFullScreen = true;
         } else
         {
@@ -675,6 +678,8 @@ bool MainWindow::event(QEvent *event)
         if (QApplication::activeWindow() != this) {
             qDebug() << " * 鼠标点击窗口外部事件";
             this->hide();
+            m_topStackedWidget->setCurrentIndex(0);
+            m_lineEdit->clear();
         }
     }
 
@@ -1298,6 +1303,7 @@ void MainWindow::hideWindow()
 {
     if (m_fullWindow->isVisible()) {
         m_fullWindow->hide();
+        m_fullWindow->resetEditline();
         this->clearFocus();
         m_isFullScreen = true;
         pointDataStruct pointData;
@@ -1307,6 +1313,8 @@ void MainWindow::hideWindow()
         BuriedPointDataSend::getInstance()->setPoint(pointData);
     } else {
         this->hide();
+        m_topStackedWidget->setCurrentIndex(0);
+        m_lineEdit->clear();
         this->clearFocus();
         m_isFullScreen = false;
         pointDataStruct pointData;
