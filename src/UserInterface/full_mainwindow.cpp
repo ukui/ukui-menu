@@ -465,10 +465,6 @@ bool FullMainWindow::event(QEvent *event)
         }
     }
 
-    if (event->type() == QEvent::MouseButtonPress) {
-        this->hide();
-    }
-
     return QWidget::event(event);
 }
 
@@ -494,6 +490,9 @@ void FullMainWindow::searchAppSlot(QString arg)
 void FullMainWindow::mousePressEvent(QMouseEvent *event)
 {
     resetEditline();
+    if (event->button() == Qt::LeftButton) {
+        this->hide();
+    }
     return QMainWindow::mousePressEvent(event);
 }
 

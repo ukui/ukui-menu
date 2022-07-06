@@ -65,7 +65,7 @@ public:
      * @brief Displays the power right-click menu
      * @return return action number
      */
-    int showShutdownMenu(const QPoint &pos);
+    int showShutdownMenu(const QPoint &pos, const bool &isFullWind);
     /**
      * @brief Displays other application right-click menus
      * @param desktopfp: Application desktop file

@@ -130,8 +130,9 @@ void FullSearchResultWidget::on_powerOffButton_clicked()
 
 void FullSearchResultWidget::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
+    Q_UNUSED(pos);
     RightClickMenu m_otherMenu(this);
-    m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(pos));
+    m_otherMenu.showShutdownMenu(m_powerOffButton->mapToGlobal(QPoint(0, 45)), true);
     myDebug() << "SideBarWidget::shutdownBtnRightClickSlot() 开始";
     pointDataStruct pointData;
     pointData.module = "fullWindow/FullSearchResultWidget/powerOffButton";

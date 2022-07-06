@@ -1383,8 +1383,9 @@ void MainWindow::on_powerOffButton_clicked()
 }
 void MainWindow::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
+    Q_UNUSED(pos);
     RightClickMenu m_otherMenu(this);
-    m_otherMenu.showShutdownMenu(this->mapToGlobal(m_centralwidget->rect().bottomRight()));
+    m_otherMenu.showShutdownMenu(this->mapToGlobal(m_centralwidget->rect().bottomRight()), false);
     pointDataStruct pointData;
     pointData.module = "mainWindow/powerOffButton";
     pointData.function = "RightClicked";
