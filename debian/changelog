@@ -1,3 +1,12 @@
+ukui-menu (3.14.0.1) v101; urgency=medium
+
+  * bug号： 115972 【开始菜单】【双屏】镜像模式下，开始菜单显示不全
+  * 任务号：无
+  * 其他改动说明：无
+  * 其他改动影响域：无
+
+ -- lixueman <lixueman@kylinos.cn>  Mon, 04 Jul 2022 11:01:13 +0800
+
 ukui-menu (3.0.1-1) unstable; urgency=medium
 
   * New upstream bugfix release.
