@@ -72,8 +72,8 @@ void KListView::mousePressEvent(QMouseEvent *event)
         Q_EMIT sendHideMainWindowSignal();
     } else {
         pressApp = listmodel->data(this->indexAt(event->pos()), Qt::DisplayRole);
-        return QListView::mousePressEvent(event);
     }
+    return QListView::mousePressEvent(event);
 }
 
 void KListView::rightClickedSlot(const QPoint &pos)

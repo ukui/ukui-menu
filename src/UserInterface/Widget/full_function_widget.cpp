@@ -233,6 +233,8 @@ void FullFunctionWidget::on_setAreaScrollBarValue(int value)
  */
 void FullFunctionWidget::updateAppListView()
 {
+    disconnect(m_scrollArea->verticalScrollBar(), &QScrollBar::valueChanged,
+               this, &FullFunctionWidget::valueChangedSlot);
     //刷新应用列表界面
     QLayoutItem *child;
 
