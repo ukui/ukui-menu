@@ -185,6 +185,8 @@ void MainWindow::registDbusServer()
             }
         }
     });
+
+    repaintWidget();
 }
 
 void MainWindow::initSignalConnect()
@@ -221,7 +223,11 @@ void MainWindow::initSignalConnect()
     connect(m_minFuncListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
     connect(m_minLetterListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
     connect(m_collectListView, &RightListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
-    QDBusConnection::sessionBus().connect(DBUS_NAME, DBUS_PATH, DBUS_INTERFACE, QString("PanelGeometryRefresh"), this, SLOT(primaryScreenChangeSlot()));
+//    QDBusConnection::sessionBus().connect(DBUS_NAME, DBUS_PATH, DBUS_INTERFACE, QString("PanelGeometryRefresh"), this, SLOT(primaryScreenChangeSlot()));
+    connect(QApplication::desktop(), &QDesktopWidget::resized, this, &MainWindow::primaryScreenChangeSlot);
+    connect(QApplication::desktop(), &QDesktopWidget::primaryScreenChanged, this, &MainWindow::primaryScreenChangeSlot);
+    connect(QApplication::desktop(), &QDesktopWidget::screenCountChanged, this, &MainWindow::primaryScreenChangeSlot);
+
     //监控应用进程开启
     connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
         ConvertWinidToDesktop reply;
