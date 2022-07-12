@@ -88,10 +88,10 @@ void TabletDirectoryChangedThread::run()
                 }
             }
 
-            if (desktopfn.contains("small-plugin-manage")){
-                setting->setValue(desktopfn,minindex-1);
+            if (desktopfn.contains("small-plugin-manage") || desktopfn.contains("txeduplatform")) {
+                setting->setValue(desktopfn, minindex - 1);
             } else {
-                setting->setValue(desktopfn,maxindex+1);
+                setting->setValue(desktopfn, maxindex + 1);
             }
 
             setting->sync();
