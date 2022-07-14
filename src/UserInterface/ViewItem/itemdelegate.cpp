@@ -172,6 +172,11 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
                 if ((option.state & QStyle::State_MouseOver) || (option.state & QStyle::State_HasFocus)) {
                     painter->drawPixmap(rect.width() - 25, rect.y() + 15, pixmap);
+                    if (module == 1) {
+                        QToolTip::showText(QCursor::pos(), tr("Open the function sort menu"));
+                    } else if (module == 2) {
+                        QToolTip::showText(QCursor::pos(), tr("Open the alphabetical menu"));
+                    }
                 }
 
                 painter->restore();

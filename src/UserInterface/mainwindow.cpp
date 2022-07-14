@@ -160,12 +160,15 @@ void MainWindow::registDbusServer()
         if (this->isVisible())
         {
             this->hide();
+            m_topStackedWidget->setCurrentIndex(0);
+            m_lineEdit->clear();
             this->clearFocus();
             m_isFullScreen = false;
         } else if (m_fullWindow->isVisible())
         {
             m_fullWindow->hide();
             m_fullWindow->clearFocus();
+            m_fullWindow->resetEditline();
             m_isFullScreen = true;
         } else
         {
@@ -173,7 +176,6 @@ void MainWindow::registDbusServer()
                 this->show();
                 this->raise();
                 this->activateWindow();
-//                m_collectPushButton->clicked(true);
                 on_collectPushButton_clicked();
                 m_viewWidget->setFocus();
             } else {
@@ -183,6 +185,8 @@ void MainWindow::registDbusServer()
             }
         }
     });
+
+    repaintWidget();
 }
 
 void MainWindow::initSignalConnect()
@@ -215,7 +219,15 @@ void MainWindow::initSignalConnect()
     connect(m_cancelSearchPushButton, &QPushButton::clicked, this, &MainWindow::on_cancelSearchPushButton_clicked);
     connect(m_searchPushButton, &QPushButton::clicked, this, &MainWindow::on_searchPushButton_clicked);
     connect(m_minMaxChangeButton, &QPushButton::clicked, this, &MainWindow::on_minMaxChangeButton_clicked);
-    QDBusConnection::sessionBus().connect(DBUS_NAME, DBUS_PATH, DBUS_INTERFACE, QString("PanelGeometryRefresh"), this, SLOT(primaryScreenChangeSlot()));
+    connect(m_minAllListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_minFuncListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_minLetterListView, &ListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+    connect(m_collectListView, &RightListView::sendHideMainWindowSignal, this, &MainWindow::hideWindow);
+//    QDBusConnection::sessionBus().connect(DBUS_NAME, DBUS_PATH, DBUS_INTERFACE, QString("PanelGeometryRefresh"), this, SLOT(primaryScreenChangeSlot()));
+    connect(QApplication::desktop(), &QDesktopWidget::resized, this, &MainWindow::primaryScreenChangeSlot);
+    connect(QApplication::desktop(), &QDesktopWidget::primaryScreenChanged, this, &MainWindow::primaryScreenChangeSlot);
+    connect(QApplication::desktop(), &QDesktopWidget::screenCountChanged, this, &MainWindow::primaryScreenChangeSlot);
+
     //监控应用进程开启
     connect(KWindowSystem::self(), &KWindowSystem::windowAdded, [ = ](WId id) {
         ConvertWinidToDesktop reply;
@@ -283,9 +295,11 @@ void MainWindow::initSearchUi()
     m_searchPushButton->setFixedSize(QSize(26, 26));
     m_searchPushButton->setIcon(getCurIcon(":/data/img/mainviewwidget/search.svg", true));
     m_searchPushButton->installEventFilter(this);
+    m_searchPushButton->setToolTip(tr("Search"));
     m_minSelectButton = new QPushButton(m_minMenuPage);
     m_minSelectButton->setFixedSize(QSize(26, 26));
     m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-all.svg", true));
+    m_minSelectButton->setToolTip(tr("All"));
     m_minSelectButton->installEventFilter(this);
     m_selectMenuButton = new RotationLabel(m_minMenuPage);
     m_selectMenuButton->installEventFilter(this);
@@ -386,15 +400,15 @@ void  MainWindow::initCollectWidget()
 {
     //右侧列表区
     m_rightStackedWidget = new QStackedWidget(m_centralwidget);
-    m_rightStackedWidget->setFixedSize(QSize(324, 490));
+    m_rightStackedWidget->setFixedSize(QSize(352, 490));
     m_rightStackedWidget->setFocusPolicy(Qt::StrongFocus);
     m_collectPage = new QWidget();
-    m_collectPage->setFixedSize(QSize(324, 480));
+    m_collectPage->setFixedSize(QSize(332, 480));
     m_rightCollectLayout = new QVBoxLayout(m_collectPage);
     m_rightCollectLayout->setContentsMargins(0, 18, 0, 0);
     //收藏视图
     m_collectListView = new RightListView(m_collectPage);
-    m_collectListView->setFixedSize(QSize(324, 428));
+    m_collectListView->setFixedSize(QSize(332, 420));
     m_collectListView->setAcceptDrops(true);
     m_collectListView->setAutoFillBackground(false);
     m_collectListView->setProperty("showDropIndicator", QVariant(true));
@@ -407,7 +421,7 @@ void  MainWindow::initCollectWidget()
     m_collectListView->setSelectionRectVisible(true);
     m_collectListView->installEventFilter(this);
     m_recentPage = new QWidget();
-    m_recentPage->setFixedSize(QSize(324, 490));
+    m_recentPage->setFixedSize(QSize(352, 490));
     m_rightRecentLayout = new QVBoxLayout(m_recentPage);
     m_rightRecentLayout->setContentsMargins(0, 20, 0, 0);
 }
@@ -634,6 +648,10 @@ void MainWindow::changeStyle()
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     double transparency = getTransparency();
+    QColor curColor = m_windowColor;
+    if ( transparency == 1) {
+        curColor.setAlpha(255);
+    }
     QRect rect = this->rect();
     QPainterPath path;
     //    rect.setTopLeft(QPoint(rect.x()+320,rect.y()));
@@ -650,11 +668,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
     path.quadTo(rect.bottomRight(), rect.bottomRight() + QPointF(0, -radius));
     path.lineTo(rect.topRight() + QPointF(0, radius));
     path.quadTo(rect.topRight(), rect.topRight() + QPointF(-radius, -0));
-    painter.setBrush(m_windowColor);
+    painter.setBrush(curColor);
     painter.setPen(Qt::transparent);
     painter.setOpacity(transparency);
     painter.drawPath(path);
-    //        setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     QMainWindow::paintEvent(event);
 }
@@ -667,6 +684,8 @@ bool MainWindow::event(QEvent *event)
         if (QApplication::activeWindow() != this) {
             qDebug() << " * 鼠标点击窗口外部事件";
             this->hide();
+            m_topStackedWidget->setCurrentIndex(0);
+            m_lineEdit->clear();
         }
     }
 
@@ -1095,6 +1114,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_leftStackedWidget->setCurrentIndex(0);
         m_state = 0;
         m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-all.svg", true));
+        m_minSelectButton->setToolTip(tr("All"));
         m_minSelectTextLabel->setText(tr("All"));
         m_allAction->setChecked(true);
         m_letterAction->setChecked(false);
@@ -1107,6 +1127,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_leftStackedWidget->setCurrentIndex(1);
         m_state = 1;
         m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-letter.svg", true));
+        m_minSelectButton->setToolTip(tr("Letter"));
         m_minSelectTextLabel->setText(tr("Letter"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(true);
@@ -1119,6 +1140,7 @@ void MainWindow::on_selectMenuButton_triggered(QAction *arg1)
         m_leftStackedWidget->setCurrentIndex(2);
         m_state = 2;
         m_minSelectButton->setIcon(getCurIcon(":/data/img/mainviewwidget/DM-function.svg", true));
+        m_minSelectButton->setToolTip(tr("Function"));
         m_minSelectTextLabel->setText(tr("Function"));
         m_allAction->setChecked(false);
         m_letterAction->setChecked(false);
@@ -1287,6 +1309,7 @@ void MainWindow::hideWindow()
 {
     if (m_fullWindow->isVisible()) {
         m_fullWindow->hide();
+        m_fullWindow->resetEditline();
         this->clearFocus();
         m_isFullScreen = true;
         pointDataStruct pointData;
@@ -1296,6 +1319,8 @@ void MainWindow::hideWindow()
         BuriedPointDataSend::getInstance()->setPoint(pointData);
     } else {
         this->hide();
+        m_topStackedWidget->setCurrentIndex(0);
+        m_lineEdit->clear();
         this->clearFocus();
         m_isFullScreen = false;
         pointDataStruct pointData;
@@ -1364,8 +1389,9 @@ void MainWindow::on_powerOffButton_clicked()
 }
 void MainWindow::on_powerOffButton_customContextMenuRequested(const QPoint &pos)
 {
+    Q_UNUSED(pos);
     RightClickMenu m_otherMenu(this);
-    m_otherMenu.showShutdownMenu(this->mapToGlobal(m_centralwidget->rect().bottomRight()));
+    m_otherMenu.showShutdownMenu(this->mapToGlobal(m_centralwidget->rect().bottomRight()), false);
     pointDataStruct pointData;
     pointData.module = "mainWindow/powerOffButton";
     pointData.function = "RightClicked";

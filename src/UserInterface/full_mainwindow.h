@@ -12,6 +12,7 @@
 #include "full_letter_widget.h"
 #include "searchappthread.h"
 #include "full_searchresult_widget.h"
+#include "rotationlabel.h"
 
 class FullMainWindow : public QMainWindow
 {
@@ -44,7 +45,7 @@ private Q_SLOTS:
     void recvSearchResult(QVector<QStringList> arg);
     void setFocusToButton();
     void on_fullSelectMenuButton_clicked();
-    void fullMainWindowHide();
+    void fullWindowHide();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -52,6 +53,15 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void changeStyle();
+    void initConnect();
+    void initTabOrder();
+    void initMenu();
+    void initAppListUI();
+    void initSearchUI();
+    void initButtonUI();
+    void initLayout();
+    void selectIconAnimation(const bool &flag);
+    void iconAnimationFinished();
 
 private:
     QAction *m_allAction = nullptr;
@@ -66,9 +76,9 @@ private:
     QSpacerItem *horizontalSpacer;
     QLineEdit *m_lineEdit;
     QSpacerItem *horizontalSpacer_2;
-    QPushButton *fullSelectToolButton;
-    QToolButton *fullSelectMenuButton;
-    QPushButton *minPushButton;
+    QPushButton *m_fullSelectToolButton;
+    RotationLabel *m_fullSelectMenuButton;
+    QPushButton *m_minPushButton;
     QStackedWidget *m_fullStackedWidget;
 
     FullCommonUseWidget *m_fullCommonPage;
@@ -81,8 +91,10 @@ private:
     QWidget *m_queryWid = nullptr;
     QLabel *m_queryIcon = nullptr;
     QLabel *m_queryText = nullptr;
-    bool isSearching = false;
+    bool m_isSearching = false;
     QString m_buttonStyle;
+    QPropertyAnimation *iconAnimation = nullptr;
+    MenuBox *m_dropDownMenu = nullptr;
 };
 
 #endif // FULLMAINWINDOW_H

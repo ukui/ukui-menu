@@ -261,7 +261,7 @@ int RightClickMenu::showAppBtnMenu(const QPoint &pos, QString desktopfp)
     return m_actionNumber;
 }
 
-int RightClickMenu::showShutdownMenu(const QPoint &pos)
+int RightClickMenu::showShutdownMenu(const QPoint &pos, const bool &isFullWind)
 {
     m_actionNumber = 0;
     MenuBox m_showShutMenu;
@@ -315,7 +315,12 @@ int RightClickMenu::showShutdownMenu(const QPoint &pos)
     m_showShutMenu.setAttribute(Qt::WA_TranslucentBackground);
     m_showShutMenu.setAttribute(Qt::WA_DeleteOnClose);
     m_showShutMenu.raise();
-    m_showShutMenu.exec(pos);
+    if (isFullWind) {
+        m_showShutMenu.exec(QPoint(pos.x() - m_showShutMenu.sizeHint().width(), pos.y() - m_showShutMenu.sizeHint().height()));
+    } else {
+        m_showShutMenu.exec(pos);
+    }
+
     myDebug() << "RightClickMenu::showShutdownMenu()";
     return m_actionNumber;
 }

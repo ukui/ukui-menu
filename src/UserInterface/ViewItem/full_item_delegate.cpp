@@ -42,7 +42,7 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         rect.setWidth(option.rect.width());
         rect.setHeight(option.rect.height());
         //QPainterPath画圆角矩形
-        const qreal radius = 4;
+        const qreal radius = 26;
         QPainterPath path;
         path.moveTo(rect.topRight() - QPointF(radius, 0));
         path.lineTo(rect.topLeft() + QPointF(radius, 0));
@@ -118,8 +118,8 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         QString appname = pUkuiMenuInterface->getAppName(desktopfp);
         QRect iconRect;
         QRect textRect;
-        iconRect = QRect(/*rect.x()+66*/rect.x() + (rect.width() - Style::AppListIconSize) / 2,
-                                        /*rect.y()+40*/rect.y() + 40,
+        iconRect = QRect(rect.x() + (rect.width() - Style::AppListIconSize) / 2,
+                                        rect.y() + 20,
                                         Style::AppListIconSize,
                                         Style::AppListIconSize);
         icon.paint(painter, iconRect);
@@ -217,5 +217,5 @@ void FullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
 QSize FullItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    return QSize(/*Style::AppListItemSizeWidth*/220, /*Style::AppListItemSizeWidth*/220);
+    return QSize(Style::AppListItemSizeWidth, Style::AppListItemSizeWidth);
 }

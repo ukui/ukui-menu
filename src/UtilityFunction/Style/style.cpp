@@ -152,7 +152,7 @@ void Style::initWidStyle()
             LeftLetterFontSize = 14;
             LeftSpaceBetweenItem = 15;
             AppListIconSize = 86;
-            AppListItemSizeWidth = 150;
+            AppListItemSizeWidth = 168;
             m_applistGridSizeWidth = 220;
             AppSpaceBetweenIconText = 18;
         } else if (m_availableScreenWidth >= 1600 && m_availableScreenWidth < 1920) {
@@ -210,7 +210,7 @@ void Style::initWidStyle()
         QueryLineEditHeight = 30;
         LeftLetterBtnHeight = 25;
         LeftIconSize = 19;
-        DropMenuWidth = 140;
+        DropMenuWidth = 170;
         DropMenuHeight = 112;
         miniIconSize = 8;
         rightViewWidth = 324;
