@@ -864,6 +864,7 @@ bool UkuiMenuInterface::initAppIni()
         QString tencent_chinese = "/usr/share/applications/tencent-chinese-precise-practice.desktop";
         QString tencent_english = "/usr/share/applications/tencent-english-precise-practice.desktop";
         QString smallPluginManage = "/usr/share/applications/small-plugin-manage.desktop";
+        QString txEduPlatform = "/usr/share/applications/txeduplatform.desktop";
         QVector<QStringList> precise_practiceVector;
         QStringList math;
         QStringList english;
@@ -903,7 +904,7 @@ bool UkuiMenuInterface::initAppIni()
                     customizedVector.append(appInfoVector.at(i));
                 } else if (tmp.indexOf("mdm") != -1) {
                     customizedVector.append(appInfoVector.at(i));
-                } else if (tmp.contains(smallPluginManage)) {
+                } else if (tmp.contains(txEduPlatform) || tmp.contains(smallPluginManage)) {
                     preorderAppVector.append(appInfoVector.at(i));
                 } else {
                     appInitVector.append(appInfoVector.at(i));
@@ -912,6 +913,7 @@ bool UkuiMenuInterface::initAppIni()
 
             qSort(appInitVector.begin(), appInitVector.end(), cmpApp); //按中英文字母排序
             qSort(tencentInitVector.begin(), tencentInitVector.end(), cmpApp); //按中英文字母排序
+            qSort(preorderAppVector.begin(), preorderAppVector.end(), cmpApp);
 
             //腾讯应用的精准类应用处理
             if (precise_practiceVector.contains(english)) {
@@ -954,7 +956,7 @@ bool UkuiMenuInterface::initAppIni()
                 QString str = customizedVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
-                setting->setValue(str, i + a);
+                setting->setValue(str, i + a + firstVectorCount);
             }
 
             int b = customizedVector.count();
@@ -963,7 +965,7 @@ bool UkuiMenuInterface::initAppIni()
                 QString str = thirdPartyVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
-                setting->setValue(str, i + a + b);
+                setting->setValue(str, i + a + b + firstVectorCount);
             }
 
             int c = thirdPartyVector.count();
@@ -972,11 +974,11 @@ bool UkuiMenuInterface::initAppIni()
                 QString str = appInitVector.at(i).at(0).section(' ', 0, 0);
                 QStringList list = str.split('/');
                 str = list[list.size() - 1];
-                setting->setValue(str, i + a + b + c);
+                setting->setValue(str, i + a + b + c + firstVectorCount);
             }
 
             int d = appInitVector.count();
-            setting->setValue("kylin-user-guide.desktop", a + b + c + d);
+            setting->setValue("kylin-user-guide.desktop", a + b + c + d + firstVectorCount);
             setting->sync();
             setting->endGroup();
             return 1;
