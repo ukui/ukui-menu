@@ -112,7 +112,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         }
 
         bool bigIcon = index.data(Qt::UserRole + 2).toBool();
-        int iconTopSpace = (rect.height() - Style::AppListIconSize) / 2;
+        int iconTopSpace = (rect.height() - Style::AppListIconSize - Style::AppListTextSize) / 2;
         int iconLeftSpace = (rect.width() - Style::AppListIconSize) / 2;
 
         if (bigIcon) {
@@ -121,18 +121,18 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
                              Style::AppListIconSize + 12,
                              Style::AppListIconSize + 12);
             textRect = QRect(rect.x(),
-                             rect.bottom() - iconTopSpace,
+                             rect.top() + Style::AppListIconSize + iconTopSpace + 10,
                              rect.width(),
-                             iconTopSpace);
+                             Style::AppListTextSize);
         } else {
             iconRect = QRect(rect.x() + iconLeftSpace,
                              rect.y() + iconTopSpace,
                              Style::AppListIconSize,
                              Style::AppListIconSize);
             textRect = QRect(rect.x(),
-                             rect.bottom() - iconTopSpace,
+                             rect.top() + Style::AppListIconSize + iconTopSpace + 10,
                              rect.width(),
-                             iconTopSpace);
+                             Style::AppListTextSize);
         }
 
         QString str;
