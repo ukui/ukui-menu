@@ -153,8 +153,7 @@ void TabletListView::addData(QStringList data)
     Q_FOREACH (QString desktopfp, data) {
         QStandardItem *item = new QStandardItem;
         item->setData(QVariant::fromValue<QString>(desktopfp), Qt::DisplayRole);
-        bool appDis = appDisable(desktopfp);
-        item->setData(QVariant::fromValue<bool>(appDis), Qt::UserRole + 2);
+        item->setData(QVariant::fromValue<bool>(0), Qt::UserRole + 2);
         listmodel->appendRow(item);
     }
 
@@ -169,48 +168,12 @@ void TabletListView::updateData(QStringList data)
     Q_FOREACH (QString desktopfp, data) {
         QStandardItem *p_item = new QStandardItem;
         p_item->setData(QVariant::fromValue<QString>(desktopfp), Qt::DisplayRole);
-        bool appDis = appDisable(desktopfp);
-        p_item->setData(QVariant::fromValue<bool>(appDis), Qt::UserRole + 2);
+        p_item->setData(QVariant::fromValue<bool>(0), Qt::UserRole + 2);
         listmodel->appendRow(p_item);
     }
 
     m_delegate = new TabletFullItemDelegate(this, m_pageNum);
     this->setItemDelegate(m_delegate);
-}
-
-bool TabletListView::appDisable(QString desktopfp)   //判断是否是禁用应用(这个还有问题暂时不会用)
-{
-    QString str;
-    //打开文件.desktop
-    GError **pp_error = nullptr;
-    GKeyFileFlags flags = G_KEY_FILE_NONE;
-    GKeyFile *p_keyfile = g_key_file_new();
-    QByteArray fpbyte = desktopfp.toLocal8Bit();
-    char *p_filepath = fpbyte.data();
-    g_key_file_load_from_file(p_keyfile, p_filepath, flags, pp_error);
-    char *p_name = g_key_file_get_locale_string(p_keyfile, "Desktop Entry", "Exec", nullptr, nullptr);
-    //取出value值
-    QString execnamestr = QString::fromLocal8Bit(p_name);
-    //处理value值
-    str = execnamestr;
-    //    str = execnamestr.section(' ', 0, 0);
-    //    QStringList list = str.split('/');
-    //    str = list[list.size()-1];
-    //关闭文件
-    g_key_file_free(p_keyfile);
-    QString desktopfp1 = str;
-    disableSetting->beginGroup("application");
-    //判断
-    bool bo = disableSetting->contains(desktopfp1.toLocal8Bit().data());// iskey
-    bool bo1 = disableSetting->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool();//isvalue
-    disableSetting->endGroup();
-
-    //qDebug()<<bo<<bo1;
-    if (bo && bo1 == false) {
-        return 1;
-    }
-
-    return 0;
 }
 
 void TabletListView::insertData(QString desktopfp)
@@ -228,19 +191,8 @@ void TabletListView::onClicked(QModelIndex index)
 
     if (var.isValid()) {
         QString desktopfp = var.value<QString>();
-        QFileInfo fileInfo(desktopfp);
-        QString desktopfn = fileInfo.fileName();
-        setting->beginGroup("groupname");
-        bool iscontain = setting->contains(desktopfn);
-        setting->endGroup();
-
         if (!appDisable(desktopfp)) {
             Q_EMIT sendHideMainWindowSignal();
-        }
-
-        if (iscontain) {
-            //            Q_EMIT sendGroupClickSignal(desktopfn);
-        } else {
             Q_EMIT sendItemClickedSignal(desktopfp);
         }
     }
@@ -455,7 +407,7 @@ void TabletListView::mouseReleaseEvent(QMouseEvent *e)
                 QEventLoop loop;
                 QTimer::singleShot(200, &loop, SLOT(quit()));
                 loop.exec();
-                Q_EMIT onClicked(this->indexAt(e->pos()));
+                onClicked(this->indexAt(e->pos()));
             }
         }
     } else {

@@ -54,7 +54,6 @@ public:
     void addData(QStringList data);//字母排序模块添加数据
     void updateData(QStringList data);
     void insertData(QString desktopfp);
-    bool appDisable(QString desktopfp);//判断是否是禁用的应用
     bool isDraging()
     {
         return m_isDraging;

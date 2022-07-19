@@ -594,6 +594,38 @@ bool updateDataBaseTableRecent(QString desktopfn)
     return ret;
 }
 
+bool appDisable(QString desktopfp)
+{
+    //禁用列表
+    QString pathini = QDir::homePath() + "/.cache/ukui-menu/ukui-menu.ini";
+    QSettings disableSetting(pathini, QSettings::IniFormat);
+    //打开文件.desktop
+    GError **error = nullptr;
+    GKeyFileFlags flags = G_KEY_FILE_NONE;
+    GKeyFile *keyfile = g_key_file_new();
+    QByteArray fpbyte = desktopfp.toLocal8Bit();
+    char *filepath = fpbyte.data();
+    g_key_file_load_from_file(keyfile, filepath, flags, error);
+    char *name = g_key_file_get_locale_string(keyfile, "Desktop Entry", "Exec", nullptr, nullptr);
+    //取出value值
+    QString execnamestr = QString::fromLocal8Bit(name);
+    //关闭文件
+    g_key_file_free(keyfile);
+
+    disableSetting.beginGroup("application");
+    //判断禁用
+    disableSetting.sync();
+    bool keyExists = disableSetting.contains(execnamestr.toLocal8Bit().data()); // iskey
+    bool keyValue = disableSetting.QSettings::value(execnamestr.toLocal8Bit().data()).toBool(); //isvalue
+    disableSetting.endGroup();
+
+    if (keyExists && keyValue == false) { //都存在//存在并且为false
+        return true;
+    }
+
+    return false;
+}
+
 bool checkIfLocked(QString desktopfn)
 {
     QSqlDatabase db = QSqlDatabase::database("MainThreadDataBase");
