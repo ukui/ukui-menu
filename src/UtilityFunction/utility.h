@@ -62,6 +62,8 @@ QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
 //图片反黑
 QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
 
+bool appDisable(QString desktopfp);
+
 //调试日志
 void debugLog(QString strMsg);
 QVariantList getScreenGeometryList();

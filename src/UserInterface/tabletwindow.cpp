@@ -40,6 +40,7 @@ TabletWindow::TabletWindow(QWidget *parent) :
     m_scrollAreaWid(new ScrollAreaWid(this)),
     m_backPixmap(new QPixmap),
     m_leftWidget(new FunctionWidget(this)),
+    m_pluginScrollArea(new QScrollArea(this)),
     m_firstPageWidget(new QWidget(this)),
     m_pagemanager(new PageManager()),
     m_buttonBoxLayout(new QHBoxLayout),
@@ -71,11 +72,10 @@ void TabletWindow::initSize()
     this->move(QApplication::primaryScreen()->geometry().topLeft());
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->setFixedSize(Style::ScreenWidth, Style::ScreenHeight);
-    m_leftWidget->setFixedSize(Style::m_leftWidWidth, Style::CenterWindHeight);
-    m_leftWidget->layout()->setContentsMargins(Style::TimeWidgetLeft, Style::TimeWidgetTop, 0, 0);
     m_scrollAreaWid->setFixedHeight(Style::CenterWindHeight);
+    m_pluginScrollArea->setFixedHeight(Style::CenterWindHeight);
     m_scrollArea->setFixedSize(Style::ScreenWidth, Style::CenterWindHeight);
-    m_buttonWidget->setFixedSize(Style::OtherPageViewWidth, 30);
+    m_buttonWidget->setFixedSize(Style::OtherPageViewWidth, Style::ButtonWidHeight);
 }
 
 void TabletWindow::initUi()
@@ -84,8 +84,10 @@ void TabletWindow::initUi()
     this->setAutoFillBackground(false);
     this->setFocusPolicy(Qt::NoFocus);
     m_animationPage.setParent(this);
+    m_pluginScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pluginScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_firstPageWidget->installEventFilter(this);
-    m_buttonBoxLayout->setAlignment(Qt::AlignHCenter);
+    m_buttonBoxLayout->setAlignment(Qt::AlignTop);
     m_buttonBoxLayout->setSpacing(0);
     m_buttonWidget->setLayout(m_buttonBoxLayout);
     m_buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -340,10 +342,12 @@ void TabletWindow::initAppListWidget()
     m_scrollArea->setFocusPolicy(Qt::NoFocus);
     m_scrollArea->viewport()->installEventFilter(this);
     m_scrollAreaWidLayout = new QHBoxLayout(m_scrollAreaWid);
-    m_scrollAreaWidLayout->setContentsMargins(0, 0, 0, 0);
+    m_scrollAreaWidLayout->setContentsMargins(Style::MainWidContexMargin, 0, Style::MainWidContexMargin, 0);
     m_scrollAreaWidLayout->setSpacing(0);
+    m_layout->addStretch();
     m_layout->addWidget(m_scrollArea);
     m_layout->addWidget(m_buttonWidget);
+    m_layout->addStretch();
     m_buttonWidget->installEventFilter(this);
     fillAppList();
 }
@@ -566,7 +570,11 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
         m_firstPageLayout->setSpacing(0);
         m_firstPageLayout->setContentsMargins(0, 0, 0, 0);
         m_firstPageWidget->setLayout(m_firstPageLayout);
-        m_firstPageLayout->addWidget(m_leftWidget);
+        m_firstPageLayout->addWidget(m_pluginScrollArea);
+        m_firstPageLayout->setAlignment(Qt::AlignCenter);
+        m_pluginScrollArea->setFixedWidth(Style::m_leftWidWidth);
+        m_pluginScrollArea->setWidget(m_leftWidget);
+        m_pluginScrollArea->setAlignment(Qt::AlignCenter);
         listview->setFixedSize(Style::FirsPageViewWidth, Style::CenterWindHeight);
         m_firstPageLayout->addWidget(listview);
         m_scrollAreaWidLayout->addWidget(m_firstPageWidget);
@@ -907,7 +915,7 @@ void TabletWindow::buttonWidgetShow()
     m_buttonBoxLayout = new QHBoxLayout;
     m_buttonWidget->setLayout(m_buttonBoxLayout);
     m_buttonBoxLayout->setAlignment(Qt::AlignHCenter);
-    m_buttonBoxLayout->setSpacing(16);
+    m_buttonBoxLayout->setSpacing(0);
     m_buttonBoxLayout->setContentsMargins(0, 0, 0, 0);
 
     for (auto button : m_buttonGroup->buttons()) {

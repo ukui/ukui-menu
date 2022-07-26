@@ -22,6 +22,7 @@
 #include "src/UtilityFunction/utility.h"
 #include "src/UtilityFunction/utility.h"
 #include <QApplication>
+#include "utility.h"
 
 Style::Style()
 {
@@ -58,18 +59,21 @@ int Style::LeftSpaceBetweenItem = 0;
 int Style::m_applistWidWidth = 0;
 int Style::m_applistWidHeight = 0;
 int Style::AppListIconSize = 0;
+int Style::AppListTextSize = 0;
 int Style::AppListBigIconSize = 0;
 int Style::AppListItemSizeWidth = 0;
 int Style::TabletItemSizeWidthOther = 0;
 int Style::TabletItemSizeWidthFirst = 0;
 int Style::FirsPageViewWidth = 0;
 int Style::OtherPageViewWidth = 0;
+int Style::ButtonWidHeight = 0;
 int Style::m_applistGridSizeWidth = 0;
 int Style::AppLeftSpace = 0;
 int Style::AppTopSpace = 0;
 int Style::AppSpaceBetweenIconText = 0;
 int Style::FirstPageSpace = 0;
 int Style::OtherPageSpace = 0;
+int Style::MainWidContexMargin = 0;
 
 //侧边栏primaryScreen
 int Style::SideBarWidWidth = 0;
@@ -228,27 +232,40 @@ void Style::initWidStyle()
         myDebug() << "Hinches" << qApp->desktop()->heightMM();
         myDebug() << "ScreenWidth" << ScreenWidth;
         myDebug() << "ScreenHeight" << ScreenHeight;
+
         appColumn = 6;
         appLine = 4;
         appLineFirst = 4;
-        AppListViewTopMargin = 70;
+        MainWidContexMargin = ScreenWidth * 0.03;
+        AppListViewTopMargin = ScreenHeight * 0.1;
         AppListViewLeftMargin = 52;
-        AppListViewBottomMargin = AppListViewTopMargin - 30;
+        ButtonWidHeight = 20;
+        AppListViewBottomMargin = AppListViewTopMargin - ButtonWidHeight;
         AppListViewRightMargin = 0;
-        m_leftWidWidth = ScreenWidth * 0.3;
+
+        m_leftWidWidth = ScreenWidth * 0.32;
+        if (m_leftWidWidth < 400) {
+            m_leftWidWidth = 400;
+        }
+
         FirsPageViewWidth = ScreenWidth - m_leftWidWidth - 5;
-        appColumnFirst = FirsPageViewWidth / 220;
-        OtherPageViewWidth = ScreenWidth;
+
+        if (g_subProjectCodeName.contains("mavis")) {
+            appColumnFirst = 4;
+        } else {
+            appColumnFirst = FirsPageViewWidth / 220;
+        }
+
         TabletItemSizeWidthFirst = FirsPageViewWidth / appColumnFirst;
+        OtherPageViewWidth = ScreenWidth;
         TabletItemSizeWidthOther = (ScreenWidth - 5) / appColumn;
         CenterWindHeight =  ScreenHeight - AppListViewBottomMargin - AppListViewTopMargin;
         AppListItemSizeHeight = CenterWindHeight / appLine;
         AppListIconSize = 96;
+        AppListTextSize = 20;
         AppListBigIconSize = 108;
         AppTopSpace = (AppListItemSizeHeight - AppListIconSize) / 2;
         AppLeftSpace = (TabletItemSizeWidthFirst - AppListIconSize) / 2;
-        TimeWidgetTop = (CenterWindHeight - 870) / 2;
-        TimeWidgetLeft = (m_leftWidWidth - 400) / 2;
         FirstPageSpace = AppLeftSpace;
         OtherPageSpace = (TabletItemSizeWidthOther - AppListIconSize) / 2;
     }

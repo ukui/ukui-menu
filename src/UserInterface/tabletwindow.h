@@ -112,6 +112,7 @@ private:
     TabletListView *m_listView = nullptr;
     QHBoxLayout *m_firstPageLayout = nullptr;
     QHBoxLayout *m_buttonBoxLayout = nullptr;
+    QVBoxLayout *m_pluginLayout = nullptr;
     QButtonGroup *m_buttonGroup = nullptr;
     QWidget *m_buttonWidget = nullptr;
     QPushButton *m_pageButton = nullptr;
@@ -121,6 +122,7 @@ private:
     QFileSystemWatcher *m_configFileWatcher = nullptr;
     TabletDirectoryChangedThread *m_directoryChangedThread = nullptr;
     QSettings *m_disableAppSet = nullptr;
+    QScrollArea *m_pluginScrollArea = nullptr;
 
     QLabel m_animationPage;
 //    DBus *m_dbus = nullptr;

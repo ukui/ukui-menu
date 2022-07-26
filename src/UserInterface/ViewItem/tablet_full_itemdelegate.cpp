@@ -112,7 +112,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         }
 
         bool bigIcon = index.data(Qt::UserRole + 2).toBool();
-        int iconTopSpace = (rect.height() - Style::AppListIconSize) / 2;
+        int iconTopSpace = (rect.height() - Style::AppListIconSize - Style::AppListTextSize) / 2;
         int iconLeftSpace = (rect.width() - Style::AppListIconSize) / 2;
 
         if (bigIcon) {
@@ -121,47 +121,21 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
                              Style::AppListIconSize + 12,
                              Style::AppListIconSize + 12);
             textRect = QRect(rect.x(),
-                             rect.bottom() - iconTopSpace,
+                             rect.top() + Style::AppListIconSize + iconTopSpace + 10,
                              rect.width(),
-                             iconTopSpace);
+                             Style::AppListTextSize);
         } else {
             iconRect = QRect(rect.x() + iconLeftSpace,
                              rect.y() + iconTopSpace,
                              Style::AppListIconSize,
                              Style::AppListIconSize);
             textRect = QRect(rect.x(),
-                             rect.bottom() - iconTopSpace,
+                             rect.top() + Style::AppListIconSize + iconTopSpace + 10,
                              rect.width(),
-                             iconTopSpace);
+                             Style::AppListTextSize);
         }
 
-        QString str;
-        //打开文件.desktop
-        GError **error = nullptr;
-        GKeyFileFlags flags = G_KEY_FILE_NONE;
-        GKeyFile *keyfile = g_key_file_new();
-        QByteArray fpbyte = desktopfp.toLocal8Bit();
-        char *filepath = fpbyte.data();
-        g_key_file_load_from_file(keyfile, filepath, flags, error);
-        char *name = g_key_file_get_locale_string(keyfile, "Desktop Entry", "Exec", nullptr, nullptr);
-        //取出value值
-        QString execnamestr = QString::fromLocal8Bit(name);
-        //处理value值
-        str = execnamestr;
-        //        str = execnamestr.section(' ', 0, 0);
-        //        QStringList list = str.split('/');
-        //        str = list[list.size()-1];
-        //关闭文件
-        g_key_file_free(keyfile);
-        QString desktopfp1 = str; //不带desktop
-        settt->beginGroup("application");
-        //判断禁用
-        settt->sync();
-        bool bo = settt->contains(desktopfp1.toLocal8Bit().data()); // iskey
-        bool bo1 = settt->QSettings::value(desktopfp1.toLocal8Bit().data()).toBool(); //isvalue
-        settt->endGroup();
-
-        if (bo && bo1 == false) { //都存在//存在并且为false
+        if (appDisable(desktopfp)) { //都存在//存在并且为false
             QPixmap pixmap;
 
             if (bigIcon) {
