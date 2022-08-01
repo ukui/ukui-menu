@@ -568,7 +568,7 @@ void TabletWindow::insertAppList(QStringList desktopfplist)
     if (m_isFirstPage) {
         listview = new TabletListView(this, 0);
         m_firstPageLayout->setSpacing(0);
-        m_firstPageLayout->setContentsMargins(0, 0, 0, 0);
+        m_firstPageLayout->setContentsMargins(Style::MainWidContexMargin, 0, Style::MainWidContexMargin, 0);
         m_firstPageWidget->setLayout(m_firstPageLayout);
         m_firstPageLayout->addWidget(m_pluginScrollArea);
         m_firstPageLayout->setAlignment(Qt::AlignCenter);
