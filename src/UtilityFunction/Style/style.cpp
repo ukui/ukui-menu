@@ -243,12 +243,12 @@ void Style::initWidStyle()
         AppListViewBottomMargin = AppListViewTopMargin - ButtonWidHeight;
         AppListViewRightMargin = 0;
 
-        m_leftWidWidth = ScreenWidth * 0.32;
+        m_leftWidWidth = ScreenWidth * 0.28;
         if (m_leftWidWidth < 400) {
             m_leftWidWidth = 400;
         }
 
-        FirsPageViewWidth = ScreenWidth - m_leftWidWidth - 5;
+        FirsPageViewWidth = ScreenWidth * 0.7 - MainWidContexMargin;
 
         if (g_subProjectCodeName.contains("mavis")) {
             appColumnFirst = 4;
@@ -256,7 +256,7 @@ void Style::initWidStyle()
             appColumnFirst = FirsPageViewWidth / 220;
         }
 
-        TabletItemSizeWidthFirst = FirsPageViewWidth / appColumnFirst;
+        TabletItemSizeWidthFirst = FirsPageViewWidth / appColumnFirst - 1;
         OtherPageViewWidth = ScreenWidth;
         TabletItemSizeWidthOther = (ScreenWidth - 5) / appColumn;
         CenterWindHeight =  ScreenHeight - AppListViewBottomMargin - AppListViewTopMargin;
