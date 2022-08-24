@@ -140,7 +140,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 
             if (bigIcon) {
                 pixmap = icon.pixmap((Style::AppListBigIconSize, Style::AppListBigIconSize), QIcon::Disabled, QIcon::Off); //wgx
-                pixmap = pixmap.scaled(Style::AppListBigIconSize, Style::AppListBigIconSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                pixmap = pixmap.scaled(Style::AppListBigIconSize, Style::AppListBigIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             } else {
                 pixmap = icon.pixmap((Style::AppListIconSize, Style::AppListIconSize), QIcon::Disabled, QIcon::Off); //wgx
             }
@@ -151,7 +151,7 @@ void TabletFullItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 
             if (bigIcon) {
                 mPixmap = icon.pixmap((Style::AppListBigIconSize, Style::AppListBigIconSize)); //wgx
-                mPixmap = mPixmap.scaled(Style::AppListBigIconSize, Style::AppListBigIconSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                mPixmap = mPixmap.scaled(Style::AppListBigIconSize, Style::AppListBigIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             } else {
                 mPixmap = icon.pixmap((Style::AppListIconSize, Style::AppListIconSize)); //wgx
             }
