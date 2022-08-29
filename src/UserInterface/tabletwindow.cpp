@@ -841,8 +841,8 @@ void TabletWindow::backgroundPic()   //const QString &bgPath,QRect rect
     } else if (m_bgOption == "scaled") {
         painter.setPen(QColor(0, 0, 0, 64));//蒙层效果
         painter.setBrush(QColor(0, 0, 0, 64));
-        painter.drawPixmap(this->geometry(), getPaddingPixmap(*m_backPixmap, this->size().width(), this->size().height()));
-        painter.drawRect(this->geometry());
+        painter.drawPixmap(this->rect(), getPaddingPixmap(*m_backPixmap, this->size().width(), this->size().height()));
+        painter.drawRect(this->rect());
     } else if (m_bgOption == "wallpaper") {
         //qDebug() << "---------" << "wallpaper" << "----------";
         int drawedWidth = 0;
