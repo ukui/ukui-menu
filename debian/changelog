@@ -2,6 +2,7 @@ ukui-menu (3.0.3-2) UNRELEASED; urgency=medium
 
   * Bump debhelper from old 12 to 13.
   * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository-Browse.
+  * Use canonical URL in Vcs-Git.
 
  -- Debian Janitor <janitor@jelmer.uk>  Wed, 16 Nov 2022 04:48:37 -0000
 
