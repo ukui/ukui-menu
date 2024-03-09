@@ -125,12 +125,12 @@ QVariantList getScreenGeometry()
 {
     QVariantList list;
     list.clear();
-    QDBusInterface iface(DBUS_NAME,
-                         DBUS_PATH,
-                         DBUS_INTERFACE,
-                         QDBusConnection::sessionBus());
-    QDBusReply<QVariantList> reply=iface.call("GetPrimaryScreenPhysicalGeometry");
-    if(iface.isValid() && reply.isValid())
+    // QDBusInterface iface(DBUS_NAME,
+    //                      DBUS_PATH,
+    //                      DBUS_INTERFACE,
+    //                      QDBusConnection::sessionBus());
+    // QDBusReply<QVariantList> reply=iface.call("GetPrimaryScreenPhysicalGeometry");
+    if(false)
     {
         list=reply.value();
     }
